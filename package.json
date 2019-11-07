@@ -1,0 +1,28 @@
+{
+  "name": "ew-did-registry",
+  "version": "1.0.0",
+  "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no implemented\" && exit 1",
+    "build": "echo \"Error: no implemented\" && exit 1",
+    "lint": "echo \"Error: no implemented\" && exit 1",
+    "fix": "echo \"Error: no implemented\" && exit 1"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "DID",
+    "Registry",
+    "DID Registry"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^3.18.3"
+  }
+}
