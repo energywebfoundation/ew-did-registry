@@ -1,6 +1,6 @@
 {
   "name": "ew-did-registry",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,17 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "lerna": "^3.18.3"
+    "browserify": "^16.5.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^3.0.2",
+    "lerna": "^3.18.3",
+    "tsify": "^4.0.1",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
   }
 }
