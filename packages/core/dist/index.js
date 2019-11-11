@@ -1,8 +1,5 @@
 "use strict";
-var add = function (left, right) {
-    return left + right;
-};
-module.exports = {
-    add: add
-};
+Object.defineProperty(exports, "__esModule", { value: true });
+var add = function (left, right) { return left + right; };
+exports.add = add;
 //# sourceMappingURL=index.js.map
