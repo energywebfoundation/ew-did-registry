@@ -1,4 +1,5 @@
 const { series, src, dest } = require('gulp');
+const del = require('del');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const streamify = require('gulp-streamify');
@@ -16,8 +17,12 @@ const lernaJSON = require('./lerna.json');
 
 const fs = require('fs');
 
-
-
+const packages = [{
+    fileName: 'sample',
+    expose: 'sample',
+    src: path.join(__dirname, 'packages/sample'),
+    config: path.join(__dirname, 'packages/sample/tsconfig.json')
+}];
 
 const uglifyOptions = {
     compress: {
@@ -28,6 +33,11 @@ const uglifyOptions = {
         }
     }
 };
+
+function clean(done) {
+    del([ DEST ]);
+    done();
+}
 
 function version() {
     if (!lernaJSON.version) {
@@ -47,7 +57,7 @@ function version() {
         .pipe(dest('./'));
 }
 
-function bundling() {
+function bundling(package) {
     return browserify({
         basedir: '.',
         debug: true,
@@ -55,7 +65,7 @@ function bundling() {
         insertGlobalVars: false,
         detectGlobals: true,
         bundleExternal: true,
-        entries: [ path.join(__dirname, 'packages/core/src/index.ts') ],
+        entries: [ path.join(package.src, 'src/index.ts') ],
         cache: {},
         packageCache: {}
     })
@@ -72,9 +82,18 @@ function bundling() {
             ]
         })))
         .pipe(streamify(uglify(uglifyOptions)))
-        .pipe(rename('index.min.js'))
+        .pipe(rename(package.fileName + '.min.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(dest(DEST));
 }
 
-exports.default = series(version, bundling);
+function bundleAll() {
+    packages.forEach(function (pckg) {
+        bundling(pckg);
+    })
+}
+
+exports.version = version;
+exports.bundling = bundling;
+exports.default = series(clean, version, bundleAll);
+
