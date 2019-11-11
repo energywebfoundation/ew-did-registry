@@ -68,7 +68,7 @@ function bundling(package) {
         cache: {},
         packageCache: {}
     })
-        .plugin(tsify, { p: package.src})
+        .plugin(tsify, { project: package.src })
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(buffer())
