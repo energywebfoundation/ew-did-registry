@@ -1,5 +1,6 @@
 const { series, src, dest } = require('gulp');
 const fs = require('fs');
+const path = require('path');
 const del = require('del');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
@@ -11,10 +12,9 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const tsify = require('tsify');
-const path = require('path');
+const lernaJSON = require('./lerna.json');
 
 const DEST = path.join(__dirname, 'packages/core/dist/');
-const lernaJSON = require('./lerna.json');
 
 const packages = [{
     fileName: 'core',
@@ -68,20 +68,7 @@ function bundling(package) {
         cache: {},
         packageCache: {}
     })
-        .plugin(tsify, {
-            target: "es5",
-            declaration: true,
-            lib: [
-                "es6",
-                "DOM"
-            ],
-            include: [
-                path.join(package.src, '/src/**/*.ts')
-            ],
-            exclude: [
-                "node_modules"
-            ]
-        })
+        .plugin(tsify)
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(buffer())
