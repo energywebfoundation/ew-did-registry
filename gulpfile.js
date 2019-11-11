@@ -68,6 +68,20 @@ function bundling(package) {
         cache: {},
         packageCache: {}
     })
+        .plugin(tsify, {
+            target: "es5",
+            declaration: true,
+            lib: [
+                "es6",
+                "DOM"
+            ],
+            include: [
+                path.join(package.src, '/src/**/*.ts')
+            ],
+            exclude: [
+                "node_modules"
+            ]
+        })
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(buffer())
