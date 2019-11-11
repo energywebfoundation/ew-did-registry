@@ -93,7 +93,8 @@ function bundleAll() {
     })
 }
 
+exports.clean = clean;
 exports.version = version;
-exports.bundling = bundling;
+exports.bundleAll = bundleAll;
 exports.default = series(clean, version, bundleAll);
 
