@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests",
     "browser-test": "./node_modules/.bin/karma start",
-    "build": "echo \"Error: no implemented\" && exit 1",
+    "build": "gulp",
     "lint": "echo \"Error: no implemented\" && exit 1",
     "fix": "echo \"Error: no implemented\" && exit 1"
   },

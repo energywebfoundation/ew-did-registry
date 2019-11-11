@@ -1,4 +1,5 @@
 const { series, src, dest } = require('gulp');
+const fs = require('fs');
 const del = require('del');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
@@ -15,13 +16,11 @@ const path = require('path');
 const DEST = path.join(__dirname, 'packages/core/dist/');
 const lernaJSON = require('./lerna.json');
 
-const fs = require('fs');
-
 const packages = [{
-    fileName: 'sample',
-    expose: 'sample',
-    src: path.join(__dirname, 'packages/sample'),
-    config: path.join(__dirname, 'packages/sample/tsconfig.json')
+    fileName: 'core',
+    expose: 'Core',
+    src: path.join(__dirname, 'packages/core'),
+    config: path.join(__dirname, 'packages/core/tsconfig.json')
 }];
 
 const uglifyOptions = {
