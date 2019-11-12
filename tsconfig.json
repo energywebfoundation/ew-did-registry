@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "declaration": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "baseUrl": "./packages",
+    "paths": {
+      "@ew-did-registry/*": ["*/src"]
+    },
+    "experimentalDecorators": true
+  }
+}
