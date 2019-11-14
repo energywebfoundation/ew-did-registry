@@ -7,12 +7,12 @@ update_configs:
 `;
 
 const packageTemplate = (dir) => `
-    - package_manager: "javascript"
-      directory: "${dir}"
-      update_schedule: "live"
-      default_reviewers:
-        - ArtemFrantsiian
-        - ni3gavhane
+  - package_manager: "javascript"
+    directory: "${dir}"
+    update_schedule: "live"
+    default_reviewers:
+      - ArtemFrantsiian
+      - ni3gavhane
 `;
 
 function configDependabot() {
