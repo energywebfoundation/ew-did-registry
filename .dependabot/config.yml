@@ -9,7 +9,7 @@ update_configs:
       - ni3gavhane
 
   - package_manager: "javascript"
-    directory: "/packages/*"
+    directory: "/packages/core"
     update_schedule: "live"
     default_reviewers:
       - ArtemFrantsiian

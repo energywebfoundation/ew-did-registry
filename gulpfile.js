@@ -1,5 +1,4 @@
 const { series, src, dest } = require('gulp');
-const fs = require('fs');
 const path = require('path');
 const del = require('del');
 const replace = require('gulp-replace');
@@ -13,6 +12,7 @@ const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const tsify = require('tsify');
 const lernaJSON = require('./lerna.json');
+const confDepBot = require('./.dependabot/');
 
 const DEST = path.join(__dirname, 'build/');
 
@@ -35,6 +35,11 @@ const uglifyOptions = {
 
 function clean(done) {
   del([ DEST ]);
+  done();
+}
+
+function generateDependabotConfig(done) {
+  confDepBot();
   done();
 }
 
@@ -97,5 +102,5 @@ function bundleAll(callback) {
 exports.clean = clean;
 exports.version = version;
 exports.bundleAll = bundleAll;
-exports.default = series(clean, version, bundleAll);
+exports.default = series(clean, generateDependabotConfig, version, bundleAll);
 
