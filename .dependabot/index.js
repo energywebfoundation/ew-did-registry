@@ -25,8 +25,8 @@ function configDependabot() {
 
     stream.write(config);
 
-    directories.forEach(function(directory) {
-        const path = `/packages/${directory}`;
+    directories.forEach((directory, index) => {
+        const path = index ? `/packages/${directory}` : directory;
         stream.write(packageTemplate(path));
     });
 
