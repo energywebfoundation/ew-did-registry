@@ -1,30 +1,34 @@
+const fs = require('fs');
+const path = require('path');
+
+const config = `version: 1
+
+update_configs:
+`;
+
+const packageTemplate = (dir) => `
+    - package_manager: "javascript"
+      directory: "${dir}"
+      update_schedule: "live"
+      default_reviewers:
+        - ArtemFrantsiian
+        - ni3gavhane
+`;
+
 function configDependabot() {
-    const fs = require('fs');
-    const path = require('path');
-    const directories = fs.readdirSync(path.join(__dirname, '../packages'));
+    const directories = [
+        '/',
+        ...fs.readdirSync(path.join(__dirname, '../packages'))
+    ];
+
     const stream = fs.createWriteStream('./.dependabot/config.yml');
 
-    const pckg = '  - package_manager: "javascript"\n';
-    const dir = '    directory: "/"\n';
-    const update = '    update_schedule: "live"\n';
-    const reviewers = '    default_reviewers:\n' +
-        '      - ArtemFrantsiian\n' +
-        '      - ni3gavhane\n';
+    stream.write(config);
 
-    stream.write('version: 1\n\n');
-    stream.write('update_configs:\n');
-    stream.write(pckg);
-    stream.write(dir);
-    stream.write(update);
-    stream.write(reviewers);
-
-    for (const index in directories) {
-        stream.write('\n');
-        stream.write(pckg);
-        stream.write('    directory: "/packages/' + directories[index] + '"\n');
-        stream.write(update);
-        stream.write(reviewers);
-    }
+    directories.forEach(function(directory) {
+        const path = `/packages/${directory}`;
+        stream.write(packageTemplate(path));
+    });
 
     stream.end();
 };

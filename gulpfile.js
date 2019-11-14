@@ -12,7 +12,7 @@ const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const tsify = require('tsify');
 const lernaJSON = require('./lerna.json');
-const confDepBot = require('./.dependabot/');
+const dependabot = require('./.dependabot');
 
 const DEST = path.join(__dirname, 'build/');
 
@@ -39,7 +39,7 @@ function clean(done) {
 }
 
 function generateDependabotConfig(done) {
-  confDepBot();
+  dependabot();
   done();
 }
 
@@ -102,5 +102,5 @@ function bundleAll(callback) {
 exports.clean = clean;
 exports.version = version;
 exports.bundleAll = bundleAll;
-exports.default = series(clean, generateDependabotConfig, version, bundleAll);
-
+exports.dependabot = generateDependabotConfig;
+exports.default = series(clean, version, bundleAll);
