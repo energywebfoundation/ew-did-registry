@@ -1,6 +1,7 @@
 version: 1
 
 update_configs:
+
   - package_manager: "javascript"
     directory: "/"
     update_schedule: "live"
@@ -9,7 +10,7 @@ update_configs:
       - ni3gavhane
 
   - package_manager: "javascript"
-    directory: "/packages/*"
+    directory: "/packages/core"
     update_schedule: "live"
     default_reviewers:
       - ArtemFrantsiian
