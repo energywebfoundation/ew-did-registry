@@ -136,4 +136,4 @@ exports.version = version;
 exports.bundleAll = bundleAll;
 exports.generateDependabotConfig = generateDependabotConfig;
 exports.buildDocs = buildDocs;
-exports.default = series(clean, version, bundleAll);
+exports.default = series(clean, version, bundleAll, buildDocs);
