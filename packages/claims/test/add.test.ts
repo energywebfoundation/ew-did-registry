@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { add } from "../src";
+import { add } from '../src';
 
 describe('add function', () => {
     it('should return 2', () => {
