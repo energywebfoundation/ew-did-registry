@@ -1,10 +1,10 @@
-[@ew-did-registry/core](README.md) › [Globals](globals.md)
+[@ew-did-registry/claims](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/core
+# @ew-did-registry/claims
 
-# @ew-did-registry/core
+# @ew-did-registry/claims
 
-This is the core component of the library
+The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims
 
 ## Structure
 - dist - contains compiled javascript files

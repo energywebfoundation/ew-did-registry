@@ -1,2 +1,3 @@
-export interface IKeyPair {
+export interface IKeys {
+    mock: string;
 }

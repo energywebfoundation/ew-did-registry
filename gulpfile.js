@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+const { exec } = require('child_process');
 
 const { series, src, dest } = require('gulp');
 const replace = require('gulp-replace');
@@ -18,14 +20,15 @@ const tsify = require('tsify');
 const lernaJSON = require('./lerna.json');
 const configDependabot = require('./.dependabot');
 
-const DEST = path.join(__dirname, 'build/');
+const BUILD = path.join(__dirname, 'build/');
+const DOCS = path.join(__dirname, 'docs/');
 
-const packages = [{
-  fileName: 'core',
-  expose: 'Core',
-  src: path.join(__dirname, 'packages/core'),
-  config: path.join(__dirname, 'packages/core/tsconfig.json')
-}];
+const packages = fs.readdirSync(path.join(__dirname, './packages')).map((directory) => ({
+  fileName: directory,
+  expose: directory.split('-').join(),
+  src: path.join(__dirname, `packages/${directory}`),
+  config: path.join(__dirname, `packages/${directory}/tsconfig.json`),
+}));
 
 const uglifyOptions = {
   compress: {
@@ -38,16 +41,16 @@ const uglifyOptions = {
 };
 
 function clean(done) {
-  del([ DEST ]);
+  del([BUILD, DOCS]);
   done();
 }
 
-function version() {
+function changeVersion() {
   if (!lernaJSON.version) {
     throw new Error('version property is missing from lerna.json');
   }
 
-  const version = lernaJSON.version;
+  const { version } = lernaJSON;
   const jsonPattern = /"version": "[.0-9\-a-z]*"/;
   const glob = [
       './package.json',
@@ -88,7 +91,7 @@ function bundling(pckg) {
     .pipe(streamify(uglify(uglifyOptions)))
     .pipe(rename(pckg.fileName + '.min.js'))
     .pipe(sourcemaps.write('./'))
-    .pipe(dest(DEST));
+    .pipe(dest(BUILD));
 }
 
 function bundleAll(done) {
@@ -132,8 +135,8 @@ function buildDocs() {
 }
 
 exports.clean = clean;
-exports.version = version;
+exports.changeVersion = changeVersion;
 exports.bundleAll = bundleAll;
 exports.generateDependabotConfig = generateDependabotConfig;
 exports.buildDocs = buildDocs;
-exports.default = series(clean, version, bundleAll, buildDocs);
+exports.default = series(clean, changeVersion, bundleAll, buildDocs);

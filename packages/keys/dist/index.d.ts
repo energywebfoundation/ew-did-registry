@@ -1,3 +1,3 @@
-import { IKeyPair } from './interface';
+import { IKeys } from "./interface";
 declare const add: (left: number, right: number) => number;
-export { add, IKeyPair, };
+export { add, IKeys, };
