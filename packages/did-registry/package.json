@@ -1,5 +1,5 @@
 {
-  "name": "@ew-did-registry/core",
+  "name": "@ew-did-registry/did-registry",
   "version": "1.0.0",
   "description": "The core component of the EW DID Registry library",
   "main": "./dist/index.js",
@@ -22,5 +22,11 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@ew-did-registry/claims": "^1.0.0",
+    "@ew-did-registry/did": "^1.0.0",
+    "@ew-did-registry/did-document": "^1.0.0",
+    "@ew-did-registry/keys": "^1.0.0"
+  }
 }
