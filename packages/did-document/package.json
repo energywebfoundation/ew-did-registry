@@ -1,0 +1,26 @@
+{
+  "name": "@ew-did-registry/did-document",
+  "version": "1.0.0",
+  "description": "The package provides the necessary functionality for the client to work with DID Documents",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "Document",
+    "DID-Document",
+    "DID"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "ISC"
+}

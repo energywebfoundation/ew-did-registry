@@ -1,0 +1,24 @@
+{
+  "name": "@ew-did-registry/did",
+  "version": "1.0.0",
+  "description": "The interface of a Decentralised Identity",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "DID"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "ISC"
+}
