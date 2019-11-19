@@ -18,9 +18,10 @@
     "ecmaVersion": 2018
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint", "import"
   ],
   "rules": {
+    "import/no-unresolved": "error",
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0
   }

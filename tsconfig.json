@@ -12,10 +12,6 @@
       "ESNext",
       "DOM"
     ],
-    "baseUrl": "./packages",
-    "paths": {
-      "@ew-did-registry/*": ["*/src"]
-    },
     "experimentalDecorators": true
   }
 }
