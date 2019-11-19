@@ -25,7 +25,7 @@ const DOCS = path.join(__dirname, 'docs/');
 
 const packages = fs.readdirSync(path.join(__dirname, './packages')).map((directory) => ({
   fileName: directory,
-  expose: directory.split('-').join(),
+  expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
   src: path.join(__dirname, `packages/${directory}`),
   config: path.join(__dirname, `packages/${directory}/tsconfig.json`),
 }));

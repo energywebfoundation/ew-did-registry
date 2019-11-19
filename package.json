@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests",
-    "build": "./node_modules/.bin/gulp",
+    "build": "./node_modules/.bin/lerna run compile --parallel --stream && ./node_modules/.bin/gulp",
     "test:browsers": "./node_modules/.bin/karma start",
     "lint": "./node_modules/.bin/lerna run lint --parallel --stream",
     "fix": "./node_modules/.bin/lerna run fix --parallel --stream"

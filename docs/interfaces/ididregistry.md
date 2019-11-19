@@ -2,6 +2,8 @@
 
 # Interface: IDIDRegistry
 
+This is responsible for registration and lifecycle management of DID
+
 ## Hierarchy
 
 * **IDIDRegistry**
@@ -25,7 +27,9 @@
 
 • **claims**: *IClaims*
 
-*Defined in [did-registry/src/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/did-registry/src/interface.ts#L17)*
+*Defined in [did-registry/src/interface.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/did-registry/src/interface.ts#L21)*
+
+IClaims exposes functionality needed to manage Private and Public claims
 
 ___
 
@@ -33,14 +37,9 @@ ___
 
 • **did**: *IDID*
 
-*Defined in [did-registry/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/did-registry/src/interface.ts#L15)*
-
-This is responsible for registration and lifecycle management of DID
+*Defined in [did-registry/src/interface.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/did-registry/src/interface.ts#L13)*
 
 IDID specifies the interface for decentralised identities
-IDIDDocument exposes methods to operate with DID Documents
-IClaims exposes functionality needed to manage Private and Public claims
-IKeys is responsible for key management, signing, as well as verification of signature
 
 ___
 
@@ -48,7 +47,9 @@ ___
 
 • **didDocument**: *IDIDDocument*
 
-*Defined in [did-registry/src/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/did-registry/src/interface.ts#L16)*
+*Defined in [did-registry/src/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/did-registry/src/interface.ts#L17)*
+
+IDIDDocument exposes methods to operate with DID Documents
 
 ___
 
@@ -56,7 +57,9 @@ ___
 
 • **keys**: *IKeys*
 
-*Defined in [did-registry/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/did-registry/src/interface.ts#L18)*
+*Defined in [did-registry/src/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/did-registry/src/interface.ts#L25)*
+
+IKeys is responsible for key management, signing, as well as verification of signature
 
 ## Methods
 
@@ -64,7 +67,7 @@ ___
 
 ▸ **addProvider**(`provider`: string): *void*
 
-*Defined in [did-registry/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/did-registry/src/interface.ts#L20)*
+*Defined in [did-registry/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/did-registry/src/interface.ts#L27)*
 
 **Parameters:**
 

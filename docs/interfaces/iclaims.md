@@ -18,4 +18,4 @@
 
 • **mock**: *string*
 
-*Defined in [claims/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/2a6bbe8/packages/claims/src/interface.ts#L2)*
+*Defined in [claims/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/b6732be/packages/claims/src/interface.ts#L2)*

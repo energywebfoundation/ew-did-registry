@@ -3,18 +3,25 @@ import { IDIDDocument } from '@ew-did-registry/did-document';
 import { IClaims } from '@ew-did-registry/claims';
 import { IKeys } from '@ew-did-registry/keys';
 
+/**
+ * This is responsible for registration and lifecycle management of DID
+ */
 export interface IDIDRegistry {
     /**
-     * This is responsible for registration and lifecycle management of DID
-     *
      * IDID specifies the interface for decentralised identities
-     * IDIDDocument exposes methods to operate with DID Documents
-     * IClaims exposes functionality needed to manage Private and Public claims
-     * IKeys is responsible for key management, signing, as well as verification of signature
      */
     did: IDID;
+    /**
+     * IDIDDocument exposes methods to operate with DID Documents
+     */
     didDocument: IDIDDocument;
+    /**
+     * IClaims exposes functionality needed to manage Private and Public claims
+     */
     claims: IClaims;
+    /**
+     * IKeys is responsible for key management, signing, as well as verification of signature
+     */
     keys: IKeys;
 
     addProvider(provider: string): void;
