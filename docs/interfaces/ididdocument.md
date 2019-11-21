@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
 
 # Interface: IDIDDocument
 
@@ -18,4 +18,4 @@
 
 • **mock**: *string*
 
-*Defined in [did-document/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/did-document/src/interface.ts#L2)*
+Defined in did-document/src/interface.ts:2

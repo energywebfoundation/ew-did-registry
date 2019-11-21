@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaims](iclaims.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IClaims](iclaims.md)
 
 # Interface: IClaims
 
@@ -18,4 +18,4 @@
 
 • **mock**: *string*
 
-*Defined in [claims/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/claims/src/interface.ts#L2)*
+Defined in claims/src/interface.ts:2

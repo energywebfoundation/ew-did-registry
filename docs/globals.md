@@ -1,6 +1,6 @@
-[@ew-did-registry/claims](README.md) › [Globals](globals.md)
+[@ew-did-registry/did](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/claims
+# @ew-did-registry/did
 
 ## Index
 
@@ -22,7 +22,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/claims/src/index.ts#L4)*
+Defined in did/src/index.ts:4
 
 **Parameters:**
 
@@ -35,7 +35,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/did/src/index.ts#L4)*
+Defined in claims/src/index.ts:4
 
 **Parameters:**
 
@@ -48,7 +48,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/did-document/src/index.ts#L4)*
+Defined in did-document/src/index.ts:4
 
 **Parameters:**
 
@@ -61,7 +61,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/did-registry/src/index.ts#L1)*
+Defined in keys/src/index.ts:3
 
 **Parameters:**
 
@@ -74,7 +74,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [keys/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/b3619a4/packages/keys/src/index.ts#L4)*
+Defined in did-registry/src/index.ts:1
 
 **Parameters:**
 
