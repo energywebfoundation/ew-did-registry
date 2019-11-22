@@ -1,3 +1,5 @@
+import { Networks } from './models';
+
 export interface IDID {
     /**
      * private members:
@@ -17,12 +19,12 @@ export interface IDID {
      * @param {string} id
      * @returns {void}
      */
-    set(network: string, id: string): void;
+    set(network: Networks, id: string): void;
 
     /**
      * Gets a DID for a particular network
      * @param {string} did
      * @returns {string | undefined}
      */
-    get(network: string): string | undefined;
+    get(network: Networks): string | undefined;
 }
