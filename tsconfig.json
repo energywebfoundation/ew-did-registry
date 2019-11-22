@@ -7,7 +7,6 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "outDir": "./dist",
     "lib": [
       "ESNext",
       "DOM"
