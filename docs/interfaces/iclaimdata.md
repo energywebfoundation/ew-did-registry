@@ -22,4 +22,4 @@
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/claims/src/models/index.ts#L8)*
+*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/7bc127f/packages/claims/src/models/index.ts#L8)*

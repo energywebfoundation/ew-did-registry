@@ -15,7 +15,7 @@
 
 • **EnergyWeb**: = "ewc"
 
-*Defined in [did/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/did/src/models/index.ts#L7)*
+*Defined in [did/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/7bc127f/packages/did/src/models/index.ts#L7)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **Ethereum**: = "eth"
 
-*Defined in [did/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/did/src/models/index.ts#L6)*
+*Defined in [did/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/7bc127f/packages/did/src/models/index.ts#L6)*
