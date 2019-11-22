@@ -7,6 +7,7 @@
 ### Enumerations
 
 * [ClaimType](enums/claimtype.md)
+* [Networks](enums/networks.md)
 
 ### Interfaces
 
@@ -31,7 +32,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/index.ts#L3)*
+*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/claims/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -44,7 +45,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/did/src/index.ts#L3)*
+*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/did/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -57,7 +58,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/did-document/src/index.ts#L3)*
+*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/did-document/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -70,7 +71,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/did-registry/src/index.ts#L1)*
+*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/did-registry/src/index.ts#L1)*
 
 **Parameters:**
 
@@ -83,7 +84,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/keys/src/index.ts#L3)*
+*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9712f46/packages/keys/src/index.ts#L3)*
 
 **Parameters:**
 

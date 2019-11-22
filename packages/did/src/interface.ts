@@ -1,3 +1,5 @@
+import { Networks } from "./models";
+
 export interface IDID {
     /**
      * private members:
