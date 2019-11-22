@@ -21,7 +21,7 @@
 
 ▸ **createPrivateClaim**(`data`: [IClaimData](iclaimdata.md), `didIssuer`: string): *[IPrivateClaim](iprivateclaim.md)*
 
-*Defined in [claims/src/interface.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/interface.ts#L26)*
+*Defined in [claims/src/interface.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/interface.ts#L26)*
 
 Create Private Claim by providing claim data and Issuer's DID
 
@@ -40,7 +40,7 @@ ___
 
 ▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: number[]): *[IProofClaim](iproofclaim.md)*
 
-*Defined in [claims/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/interface.ts#L34)*
+*Defined in [claims/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/interface.ts#L34)*
 
 Create Proof Claim with claim data and hashed claim fields
 
@@ -59,7 +59,7 @@ ___
 
 ▸ **createPublicClaim**(`data`: [IClaimData](iclaimdata.md)): *[IClaim](iclaim.md)*
 
-*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/interface.ts#L18)*
+*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/interface.ts#L18)*
 
 Create Public Claim with claim data
 
@@ -77,7 +77,7 @@ ___
 
 ▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *[IClaim](iclaim.md)*
 
-*Defined in [claims/src/interface.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/interface.ts#L42)*
+*Defined in [claims/src/interface.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/interface.ts#L42)*
 
 Provided with JWT this method will generate a Claim
 
