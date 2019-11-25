@@ -5,7 +5,7 @@ export interface IDID {
      * dids: IDidStore;
      */
     /**
-     * Sets a DID for a particular network (inferred from DID)
+     * Sets a DID for a particular network (inferred from DID provided)
      * @param {string} did
      * @returns {void}
      */
