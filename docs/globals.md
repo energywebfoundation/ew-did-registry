@@ -37,7 +37,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/claims/src/index.ts#L3)*
+*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/claims/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -50,7 +50,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/did/src/index.ts#L3)*
+*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/did/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -63,7 +63,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/did-document/src/index.ts#L3)*
+*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/did-document/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -76,7 +76,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/did-registry/src/index.ts#L1)*
+*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/did-registry/src/index.ts#L1)*
 
 **Parameters:**
 
@@ -89,7 +89,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [jwt/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/jwt/src/index.ts#L3)*
+*Defined in [jwt/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/jwt/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -102,7 +102,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f033610/packages/keys/src/index.ts#L3)*
+*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/keys/src/index.ts#L3)*
 
 **Parameters:**
 
