@@ -36,5 +36,6 @@ export interface IClaims {
      * @param {ClaimType} type
      * @returns {IVerificationClaim | PrivateClaim | IProofClaim}
      */
+    // eslint-disable-next-line max-len
     generateClaimFromToken(token: string, type: ClaimType): IVerificationClaim | IPrivateClaim | IProofClaim;
 }
