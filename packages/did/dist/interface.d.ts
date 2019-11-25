@@ -8,7 +8,7 @@ export interface IDID {
      * @param {string} did
      * @returns {void}
      */
-    setDid(did: string): void;
+    set(did: string): void;
     /**
      * Sets a DID for the provided network
      * @param {string} network
