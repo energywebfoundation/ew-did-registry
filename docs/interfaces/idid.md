@@ -8,14 +8,58 @@
 
 ## Index
 
-### Properties
+### Methods
 
-* [mock](idid.md#mock)
+* [get](idid.md#get)
+* [set](idid.md#set)
 
-## Properties
+## Methods
 
-###  mock
+###  get
 
-• **mock**: *string*
+▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
 
-*Defined in [did/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/did/src/interface.ts#L2)*
+*Defined in [did/src/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did/src/interface.ts#L29)*
+
+Gets a DID for a particular network
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`network` | [Networks](../enums/networks.md) |
+
+**Returns:** *string | undefined*
+
+___
+
+###  set
+
+▸ **set**(`did`: string): *void*
+
+*Defined in [did/src/interface.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did/src/interface.ts#L14)*
+
+Sets a DID for a particular network (inferred from DID provided)
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did` | string |
+
+**Returns:** *void*
+
+▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *void*
+
+*Defined in [did/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did/src/interface.ts#L22)*
+
+Sets a DID for the provided network
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`network` | [Networks](../enums/networks.md) |
+`id` | string |
+
+**Returns:** *void*
