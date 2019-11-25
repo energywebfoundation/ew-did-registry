@@ -7,7 +7,7 @@ export interface IDID {
      */
 
     /**
-     * Sets a DID for a particular network (inferred from DID)
+     * Sets a DID for a particular network (inferred from DID provided)
      * @param {string} did
      * @returns {void}
      */
