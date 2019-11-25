@@ -7,6 +7,7 @@
 ### Enumerations
 
 * [ClaimType](enums/claimtype.md)
+* [Networks](enums/networks.md)
 
 ### Interfaces
 
@@ -16,6 +17,8 @@
 * [IDID](interfaces/idid.md)
 * [IDIDDocument](interfaces/ididdocument.md)
 * [IDIDRegistry](interfaces/ididregistry.md)
+* [IDidStore](interfaces/ididstore.md)
+* [IJWT](interfaces/ijwt.md)
 * [IKeys](interfaces/ikeys.md)
 * [IPrivateClaim](interfaces/iprivateclaim.md)
 * [IProofClaim](interfaces/iproofclaim.md)
@@ -30,7 +33,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/claims/src/index.ts#L3)*
+*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/claims/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -43,7 +46,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/did/src/index.ts#L3)*
+*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -56,7 +59,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/did-document/src/index.ts#L3)*
+*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did-document/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -69,7 +72,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/did-registry/src/index.ts#L1)*
+Defined in jwt/src/index.ts:3
 
 **Parameters:**
 
@@ -82,7 +85,20 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5539cfd/packages/keys/src/index.ts#L3)*
+*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/did-registry/src/index.ts#L1)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`left` | number |
+`right` | number |
+
+**Returns:** *number*
+
+▸ **add**(`left`: number, `right`: number): *number*
+
+*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/42a382a/packages/keys/src/index.ts#L3)*
 
 **Parameters:**
 
