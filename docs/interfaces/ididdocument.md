@@ -19,9 +19,9 @@ This interface is a factory of Lite and Full DID Documents
 
 ###  createFull
 
-▸ **createFull**(`did`: [IDID](idid.md), `resolver`: IResolver): *[IDIDDocumentFull](ididdocumentfull.md)*
+▸ **createFull**(`did`: string, `resolver`: IResolver): *[IDIDDocumentFull](ididdocumentfull.md)*
 
-*Defined in [did-document/src/interface.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/interface.ts#L33)*
+*Defined in [did-document/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/interface.ts#L32)*
 
 Provided with the DID and Resolver, full version of DID Document is returned
 
@@ -29,7 +29,7 @@ Provided with the DID and Resolver, full version of DID Document is returned
 
 Name | Type |
 ------ | ------ |
-`did` | [IDID](idid.md) |
+`did` | string |
 `resolver` | IResolver |
 
 **Returns:** *[IDIDDocumentFull](ididdocumentfull.md)*
@@ -38,9 +38,9 @@ ___
 
 ###  createLite
 
-▸ **createLite**(`did`: [IDID](idid.md), `resolver`: IResolver): *[IDIDDocumentLite](ididdocumentlite.md)*
+▸ **createLite**(`did`: string, `resolver`: IResolver): *[IDIDDocumentLite](ididdocumentlite.md)*
 
-*Defined in [did-document/src/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/interface.ts#L25)*
+*Defined in [did-document/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/interface.ts#L24)*
 
 Provided with the DID and Resolver, lite version of DID Document is returned
 
@@ -48,7 +48,7 @@ Provided with the DID and Resolver, lite version of DID Document is returned
 
 Name | Type |
 ------ | ------ |
-`did` | [IDID](idid.md) |
+`did` | string |
 `resolver` | IResolver |
 
 **Returns:** *[IDIDDocumentLite](ididdocumentlite.md)*

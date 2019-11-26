@@ -1,5 +1,4 @@
 import { IResolver } from '@ew-did-registry/resolver';
-import { IDID } from '../../did/src';
 import { IDIDDocumentLite } from './lite';
 import { IDIDDocumentFull } from './full';
 
@@ -10,7 +9,7 @@ export interface IDIDDocument {
 
     /**
      * Constructor takes DID of the subject of interest
-     * constructor(did:IDID);
+     * constructor(did:string);
      *
      * Private member:
      * did;
@@ -18,17 +17,17 @@ export interface IDIDDocument {
 
     /**
      * Provided with the DID and Resolver, lite version of DID Document is returned
-     * @param {IDID} did
+     * @param {string} did
      * @param {IResolver} resolver
      * @returns {IDIDDocumentLite}
      */
-    createLite(did: IDID, resolver: IResolver): IDIDDocumentLite;
+    createLite(did: string, resolver: IResolver): IDIDDocumentLite;
 
     /**
      * Provided with the DID and Resolver, full version of DID Document is returned
-     * @param {IDID} did
+     * @param {string} did
      * @param {IResolver} resolver
      * @returns {IDIDDocumentFull}
      */
-    createFull(did: IDID, resolver: IResolver): IDIDDocumentFull;
+    createFull(did: string, resolver: IResolver): IDIDDocumentFull;
 }

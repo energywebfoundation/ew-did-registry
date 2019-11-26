@@ -15,7 +15,7 @@ export interface IDID {
 
     /**
      * Sets a DID for the provided network
-     * @param {string} network
+     * @param {Networks} network
      * @param {string} id
      * @returns {void}
      */
@@ -23,7 +23,7 @@ export interface IDID {
 
     /**
      * Gets a DID for a particular network
-     * @param {string} did
+     * @param {Networks} network
      * @returns {string | undefined}
      */
 

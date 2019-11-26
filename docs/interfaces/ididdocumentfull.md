@@ -32,7 +32,7 @@ This interface extends lite DID Document interface
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[did](ididdocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/lite/interface.ts#L17)*
+*Defined in [did-document/src/lite/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L17)*
 
 DID of Document subject is stored in DID Documents
 
@@ -42,7 +42,7 @@ DID of Document subject is stored in DID Documents
 
 ▸ **create**(`context`: string): *boolean*
 
-*Defined in [did-document/src/full/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/full/interface.ts#L16)*
+*Defined in [did-document/src/full/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/full/interface.ts#L16)*
 
 New DID Document is registered on the Blockchain with the provided context,
 if no Document existed for the specified DID
@@ -61,7 +61,7 @@ ___
 
 ▸ **deactivate**(): *boolean*
 
-*Defined in [did-document/src/full/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/full/interface.ts#L30)*
+*Defined in [did-document/src/full/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/full/interface.ts#L30)*
 
 On success the status of the DID Document is changed from “active” to “deactivated”.
 
@@ -75,7 +75,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[read](ididdocumentlite.md#read)*
 
-*Defined in [did-document/src/lite/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/lite/interface.ts#L25)*
+*Defined in [did-document/src/lite/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L25)*
 
 Fetches the specified data/attributes from DID Document
 
@@ -94,7 +94,7 @@ ___
 
 ▸ **update**(`attribute`: string, `data`: [IUpdateParameters](iupdateparameters.md)): *boolean*
 
-*Defined in [did-document/src/full/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/full/interface.ts#L24)*
+*Defined in [did-document/src/full/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/full/interface.ts#L24)*
 
 Provided with necessary parameters, method updates relevant attributes of the DID Document
 

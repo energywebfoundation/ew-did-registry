@@ -26,7 +26,7 @@ Interface describes the lite version of DID Document with only read functionalit
 
 • **did**: *string*
 
-*Defined in [did-document/src/lite/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/lite/interface.ts#L17)*
+*Defined in [did-document/src/lite/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L17)*
 
 DID of Document subject is stored in DID Documents
 
@@ -36,7 +36,7 @@ DID of Document subject is stored in DID Documents
 
 ▸ **read**(`attribute`: string, `type?`: string): *string*
 
-*Defined in [did-document/src/lite/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/did-document/src/lite/interface.ts#L25)*
+*Defined in [did-document/src/lite/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L25)*
 
 Fetches the specified data/attributes from DID Document
 
