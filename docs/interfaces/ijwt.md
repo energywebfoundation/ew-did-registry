@@ -18,4 +18,4 @@
 
 • **mock**: *string*
 
-*Defined in [jwt/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/jwt/src/interface.ts#L2)*
+*Defined in [jwt/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/199c41e/packages/jwt/src/interface.ts#L2)*

@@ -22,5 +22,8 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+  "@ew-did-registry/resolver": "^1.0.0"
+}
 }
