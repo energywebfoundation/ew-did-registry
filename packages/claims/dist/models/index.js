@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * This enumerated type specifies available Claim Types
+ */
 var ClaimType;
 (function (ClaimType) {
     ClaimType[ClaimType["Public"] = 0] = "Public";

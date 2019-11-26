@@ -1,31 +1,32 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IVerificationClaim](iverificationclaim.md)
 
-# Interface: IProofClaim
+# Interface: IVerificationClaim
 
-This interface extends a more general Claim interface
-and specifies Proof interface, which is used to create
-proof of knowledge of claim data and provides a method
-to verify if the provided proof is valid
+Verification Claim interface specifies methods to verify and approve claims
+and is used by Private and Public Claims
 
 ## Hierarchy
 
 * [IClaim](iclaim.md)
 
-  ↳ **IProofClaim**
+  ↳ **IVerificationClaim**
+
+  ↳ [IPrivateClaim](iprivateclaim.md)
 
 ## Index
 
 ### Properties
 
-* [claimData](iproofclaim.md#claimdata)
-* [jwt](iproofclaim.md#jwt)
-* [keyPair](iproofclaim.md#keypair)
-* [token](iproofclaim.md#token)
+* [claimData](iverificationclaim.md#claimdata)
+* [jwt](iverificationclaim.md#jwt)
+* [keyPair](iverificationclaim.md#keypair)
+* [token](iverificationclaim.md#token)
 
 ### Methods
 
-* [getDid](iproofclaim.md#getdid)
-* [verify](iproofclaim.md#verify)
+* [approve](iverificationclaim.md#approve)
+* [getDid](iverificationclaim.md#getdid)
+* [verify](iverificationclaim.md#verify)
 
 ## Properties
 
@@ -77,6 +78,18 @@ claimToken stores the actual serialised JWT in a string format
 
 ## Methods
 
+###  approve
+
+▸ **approve**(): *string*
+
+*Defined in [claims/src/models/index.ts:82](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/claims/src/models/index.ts#L82)*
+
+Method signs the claim and return the serialised JWT
+
+**Returns:** *string*
+
+___
+
 ###  getDid
 
 ▸ **getDid**(): *string*
@@ -93,16 +106,10 @@ ___
 
 ###  verify
 
-▸ **verify**(`privateToken`: string): *boolean*
+▸ **verify**(): *boolean*
 
-*Defined in [claims/src/proof/interface.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/claims/src/proof/interface.ts#L21)*
+*Defined in [claims/src/models/index.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/claims/src/models/index.ts#L76)*
 
-To verify the claim, private token (JWT) representing the claim should be provided
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`privateToken` | string |
+verify check if the given Claim was signed correctly
 
 **Returns:** *boolean*
