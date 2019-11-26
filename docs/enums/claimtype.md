@@ -2,6 +2,8 @@
 
 # Enumeration: ClaimType
 
+This enumerated type specifies available Claim Types
+
 ## Index
 
 ### Enumeration members
@@ -16,7 +18,7 @@
 
 • **Private**:
 
-*Defined in [claims/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/models/index.ts#L3)*
+*Defined in [claims/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/models/index.ts#L9)*
 
 ___
 
@@ -24,7 +26,7 @@ ___
 
 • **Proof**:
 
-*Defined in [claims/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/models/index.ts#L4)*
+*Defined in [claims/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/models/index.ts#L10)*
 
 ___
 
@@ -32,4 +34,4 @@ ___
 
 • **Public**:
 
-*Defined in [claims/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/4bbd80b/packages/claims/src/models/index.ts#L2)*
+*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/models/index.ts#L8)*

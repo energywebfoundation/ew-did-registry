@@ -1,32 +1,32 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IPrivateClaim](iprivateclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IVerificationClaim](iverificationclaim.md)
 
-# Interface: IPrivateClaim
+# Interface: IVerificationClaim
 
-This interface extends a more general Verification Claim interface
-and specifies Private Claim interface, which is used to generate and
-verify Private Claims
+Verification Claim interface specifies methods to verify and approve claims
+and is used by Private and Public Claims
 
 ## Hierarchy
 
-  ↳ [IVerificationClaim](iverificationclaim.md)
+* [IClaim](iclaim.md)
 
-  ↳ **IPrivateClaim**
+  ↳ **IVerificationClaim**
+
+  ↳ [IPrivateClaim](iprivateclaim.md)
 
 ## Index
 
 ### Properties
 
-* [claimData](iprivateclaim.md#claimdata)
-* [jwt](iprivateclaim.md#jwt)
-* [keyPair](iprivateclaim.md#keypair)
-* [token](iprivateclaim.md#token)
+* [claimData](iverificationclaim.md#claimdata)
+* [jwt](iverificationclaim.md#jwt)
+* [keyPair](iverificationclaim.md#keypair)
+* [token](iverificationclaim.md#token)
 
 ### Methods
 
-* [approve](iprivateclaim.md#approve)
-* [getDid](iprivateclaim.md#getdid)
-* [verify](iprivateclaim.md#verify)
-* [verifyPayload](iprivateclaim.md#verifypayload)
+* [approve](iverificationclaim.md#approve)
+* [getDid](iverificationclaim.md#getdid)
+* [verify](iverificationclaim.md#verify)
 
 ## Properties
 
@@ -82,8 +82,6 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **approve**(): *string*
 
-*Inherited from [IVerificationClaim](iverificationclaim.md).[approve](iverificationclaim.md#approve)*
-
 *Defined in [claims/src/models/index.ts:82](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/models/index.ts#L82)*
 
 Method signs the claim and return the serialised JWT
@@ -110,28 +108,8 @@ ___
 
 ▸ **verify**(): *boolean*
 
-*Inherited from [IVerificationClaim](iverificationclaim.md).[verify](iverificationclaim.md#verify)*
-
 *Defined in [claims/src/models/index.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/models/index.ts#L76)*
 
 verify check if the given Claim was signed correctly
-
-**Returns:** *boolean*
-
-___
-
-###  verifyPayload
-
-▸ **verifyPayload**(`hashedFields`: number[]): *boolean*
-
-*Defined in [claims/src/private/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/2427e29/packages/claims/src/private/interface.ts#L20)*
-
-To verify that the Issuer constructed the JWT correctly, hashed claim fields are provided
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`hashedFields` | number[] |
 
 **Returns:** *boolean*
