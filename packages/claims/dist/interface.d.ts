@@ -1,7 +1,9 @@
-import { IClaim } from './public';
 import { IPrivateClaim } from './private';
 import { IProofClaim } from './proof';
-import { ClaimType, IClaimData } from './models';
+import { ClaimType, IClaimData, IVerificationClaim } from './models';
+/**
+ * IClaims interface is a factory to create Public, Private, and Proof Claims
+ */
 export interface IClaims {
     /**
      * private members:
@@ -13,7 +15,7 @@ export interface IClaims {
      * @param {IClaimData} data
      * @returns {IClaim}
      */
-    createPublicClaim(data: IClaimData): IClaim;
+    createPublicClaim(data: IClaimData): IVerificationClaim;
     /**
      * Create Private Claim by providing claim data and Issuer's DID
      * @param {IClaimData} data
@@ -32,7 +34,7 @@ export interface IClaims {
      * Provided with JWT this method will generate a Claim
      * @param {string} token
      * @param {ClaimType} type
-     * @returns {IClaim}
+     * @returns {IVerificationClaim | PrivateClaim | IProofClaim}
      */
-    generateClaimFromToken(token: string, type: ClaimType): IClaim;
+    generateClaimFromToken(token: string, type: ClaimType): IVerificationClaim | IPrivateClaim | IProofClaim;
 }

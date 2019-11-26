@@ -1,7 +1,7 @@
 {
-  "name": "@ew-did-registry/claims",
+  "name": "@ew-did-registry/jwt",
   "version": "1.0.0",
-  "description": "The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims",
+  "description": "The package manages JWTs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -14,17 +14,12 @@
     "Energy",
     "EnergyWeb",
     "EW",
-    "Claims",
-    "DID",
-    "DID Claims"
+    "JWT",
+    "DID JWT"
   ],
   "author": {
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
-  "dependencies": {
-    "@ew-did-registry/keys": "^1.0.0",
-    "@ew-did-registry/jwt": "^1.0.0"
-  }
+  "license": "ISC"
 }
