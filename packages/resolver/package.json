@@ -1,7 +1,7 @@
 {
-  "name": "@ew-did-registry/did-document",
+  "name": "@ew-did-registry/resolver",
   "version": "1.0.0",
-  "description": "The package provides the necessary functionality for the client to work with DID Documents",
+  "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -14,16 +14,12 @@
     "Energy",
     "EnergyWeb",
     "EW",
-    "Document",
-    "DID-Document",
-    "DID"
+    "Resolver",
+    "DID Resolver"
   ],
   "author": {
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
-  "dependencies": {
-  "@ew-did-registry/resolver": "^1.0.0"
-}
+  "license": "ISC"
 }

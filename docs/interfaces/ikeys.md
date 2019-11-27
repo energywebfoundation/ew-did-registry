@@ -24,7 +24,7 @@
 
 • **privateKey**: *string*
 
-*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/keys/src/interface.ts#L5)*
+*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/keys/src/interface.ts#L5)*
 
 Private key in hex format
 
@@ -34,7 +34,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/keys/src/interface.ts#L10)*
+*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/keys/src/interface.ts#L10)*
 
 Public key in hex format
 
@@ -44,7 +44,7 @@ Public key in hex format
 
 ▸ **sign**(`data`: string, `privateKey?`: string): *string*
 
-*Defined in [keys/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/keys/src/interface.ts#L18)*
+*Defined in [keys/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/keys/src/interface.ts#L18)*
 
 Sign the data with private key
 
@@ -63,7 +63,7 @@ ___
 
 ▸ **verify**(`data`: string, `signature`: string, `publicKey?`: string): *boolean*
 
-*Defined in [keys/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/9a25d81/packages/keys/src/interface.ts#L27)*
+*Defined in [keys/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/keys/src/interface.ts#L27)*
 
 Verify the signature accordance to data with public key
 
