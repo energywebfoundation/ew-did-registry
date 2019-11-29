@@ -1,3 +1,5 @@
+import { IDIDDocument } from '../models';
+
 /**
  * Interface describes the lite version of DID Document with only read functionality
  */
@@ -15,6 +17,11 @@ export interface IDIDDocumentLite {
      * DID of Document subject is stored in DID Documents
      */
     did: string;
+
+    /**
+     * Resolved DID Document
+     */
+    didDocument: IDIDDocument;
 
     /**
      * Fetches the specified data/attributes from DID Document

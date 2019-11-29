@@ -15,6 +15,7 @@ Interface describes the lite version of DID Document with only read functionalit
 ### Properties
 
 * [did](ididdocumentlite.md#did)
+* [didDocument](ididdocumentlite.md#diddocument)
 
 ### Methods
 
@@ -26,9 +27,19 @@ Interface describes the lite version of DID Document with only read functionalit
 
 • **did**: *string*
 
-*Defined in [did-document/src/lite/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L17)*
+*Defined in [did-document/src/lite/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/79c6f03/packages/did-document/src/lite/interface.ts#L19)*
 
 DID of Document subject is stored in DID Documents
+
+___
+
+###  didDocument
+
+• **didDocument**: *[IDIDDocument](ididdocument.md)*
+
+*Defined in [did-document/src/lite/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/79c6f03/packages/did-document/src/lite/interface.ts#L24)*
+
+Resolved DID Document
 
 ## Methods
 
@@ -36,7 +47,7 @@ DID of Document subject is stored in DID Documents
 
 ▸ **read**(`attribute`: string, `type?`: string): *string*
 
-*Defined in [did-document/src/lite/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/0fe06b3/packages/did-document/src/lite/interface.ts#L25)*
+*Defined in [did-document/src/lite/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/79c6f03/packages/did-document/src/lite/interface.ts#L32)*
 
 Fetches the specified data/attributes from DID Document
 
