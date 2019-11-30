@@ -1,4 +1,4 @@
-import { IResolver } from '@ew-did-registry/resolver';
+import { IResolver, IOperator } from '@ew-did-registry/resolver';
 import { IDIDDocumentLite } from './lite';
 import { IDIDDocumentFull } from './full';
 
@@ -26,8 +26,8 @@ export interface IDIDDocument {
     /**
      * Provided with the DID and Resolver, full version of DID Document is returned
      * @param {string} did
-     * @param {IResolver} resolver
+     * @param {IOperator} operator
      * @returns {IDIDDocumentFull}
      */
-    createFull(did: string, resolver: IResolver): IDIDDocumentFull;
+    createFull(did: string, operator: IOperator): IDIDDocumentFull;
 }
