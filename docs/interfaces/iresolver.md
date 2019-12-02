@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
 
 # Interface: IResolver
 
@@ -20,4 +20,4 @@
 
 • **mock**: *string*
 
-Defined in resolver/src/interface.ts:2
+*Defined in [resolver/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/resolver/src/interface.ts#L2)*

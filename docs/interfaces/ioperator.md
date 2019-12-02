@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IOperator](ioperator.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IOperator](ioperator.md)
 
 # Interface: IOperator
 
@@ -22,4 +22,4 @@
 
 *Overrides [IResolver](iresolver.md).[mock](iresolver.md#mock)*
 
-Defined in resolver/src/interface.ts:6
+*Defined in [resolver/src/interface.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/resolver/src/interface.ts#L6)*

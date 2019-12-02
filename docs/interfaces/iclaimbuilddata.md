@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaimBuildData](iclaimbuilddata.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IClaimBuildData](iclaimbuilddata.md)
 
 # Interface: IClaimBuildData
 
@@ -28,7 +28,7 @@ each of the Claim types
 
 • **claimData**? : *[IClaimData](iclaimdata.md)*
 
-Defined in claims/src/models/index.ts:30
+*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/claims/src/models/index.ts#L30)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **jwt**: *IJWT*
 
-Defined in claims/src/models/index.ts:27
+*Defined in [claims/src/models/index.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/claims/src/models/index.ts#L27)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-Defined in claims/src/models/index.ts:28
+*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/claims/src/models/index.ts#L28)*
 
 ___
 
@@ -52,4 +52,4 @@ ___
 
 • **token**? : *string*
 
-Defined in claims/src/models/index.ts:29
+*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/claims/src/models/index.ts#L29)*
