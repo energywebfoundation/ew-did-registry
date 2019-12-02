@@ -16,7 +16,7 @@
 
 • **HTTPProvider**:
 
-*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/did-resolver/src/models/index.ts#L2)*
+*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/models/index.ts#L2)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **IPCProvider**:
 
-*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/did-resolver/src/models/index.ts#L3)*
+*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/models/index.ts#L3)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **WebsocketProvider**:
 
-*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/did-resolver/src/models/index.ts#L4)*
+*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/models/index.ts#L4)*
