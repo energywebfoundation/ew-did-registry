@@ -25,11 +25,9 @@
   "license": "ISC",
   "dependencies": {
     "ecies-parity": "^0.1.1",
-    "elliptic": "^6.5.2",
-    "node-forge": "^0.9.1"
+    "elliptic": "^6.5.2"
   },
   "devDependencies": {
-    "@types/elliptic": "^6.4.10",
-    "@types/node-forge": "^0.9.0"
+    "@types/elliptic": "^6.4.10"
   }
 }
