@@ -1,10 +1,10 @@
-import { IResolver, IOperator } from '@ew-did-registry/resolver';
+import { IResolver, IOperator } from '@ew-did-registry/did-resolver';
 import { IDIDDocumentLite } from './lite';
 import { IDIDDocumentFull } from './full';
 /**
  * This interface is a factory of Lite and Full DID Documents
  */
-export interface IDIDDocument {
+export interface IDIDDocumentFactory {
     /**
      * Constructor takes DID of the subject of interest
      * constructor(did:string);
