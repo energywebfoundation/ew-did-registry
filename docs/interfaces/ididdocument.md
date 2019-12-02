@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
 
 # Interface: IDIDDocument
 
@@ -33,7 +33,7 @@ This interface is a factory of Lite and Full DID Documents
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-*Defined in [did-document/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L10)*
+*Defined in [did-document/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L10)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **context**: *string*
 
-*Defined in [did-document/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L7)*
+*Defined in [did-document/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L7)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **created**: *string*
 
-*Defined in [did-document/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L13)*
+*Defined in [did-document/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L13)*
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 • **delegates**: *string[]*
 
-*Defined in [did-document/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L11)*
+*Defined in [did-document/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L11)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-document/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L8)*
+*Defined in [did-document/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L8)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-document/src/models/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L15)*
+*Defined in [did-document/src/models/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L15)*
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-*Defined in [did-document/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L9)*
+*Defined in [did-document/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L9)*
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 • **service**: *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-*Defined in [did-document/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L12)*
+*Defined in [did-document/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L12)*
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 • **updated**: *string*
 
-*Defined in [did-document/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/models/index.ts#L14)*
+*Defined in [did-document/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/models/index.ts#L14)*
 
 ## Methods
 
@@ -105,7 +105,7 @@ ___
 
 ▸ **createFull**(`did`: string, `operator`: IOperator): *[IDIDDocumentFull](ididdocumentfull.md)*
 
-*Defined in [did-document/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/interface.ts#L32)*
+*Defined in [did-document/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/interface.ts#L32)*
 
 Provided with the DID and Resolver, full version of DID Document is returned
 
@@ -124,7 +124,7 @@ ___
 
 ▸ **createLite**(`did`: string, `resolver`: IResolver): *[IDIDDocumentLite](ididdocumentlite.md)*
 
-*Defined in [did-document/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/interface.ts#L24)*
+*Defined in [did-document/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/interface.ts#L24)*
 
 Provided with the DID and Resolver, lite version of DID Document is returned
 

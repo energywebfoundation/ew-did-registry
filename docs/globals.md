@@ -1,6 +1,6 @@
-[@ew-did-registry/did](README.md) › [Globals](globals.md)
+[@ew-did-registry/claims](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/did
+# @ew-did-registry/claims
 
 ## Index
 
@@ -61,7 +61,7 @@
 
 • **ec**: *ec‹›* =  new EC('secp256k1')
 
-*Defined in [keys/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/index.ts#L10)*
+*Defined in [keys/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/index.ts#L10)*
 
 ## Functions
 
@@ -69,7 +69,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did/src/index.ts#L3)*
+*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/claims/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -82,7 +82,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/claims/src/index.ts#L3)*
+*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -95,7 +95,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-document/src/index.ts#L3)*
+*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -108,7 +108,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [jwt/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/jwt/src/index.ts#L3)*
+*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-registry/src/index.ts#L1)*
 
 **Parameters:**
 
@@ -121,7 +121,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/did-registry/src/index.ts#L1)*
+*Defined in [jwt/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/jwt/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -134,7 +134,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [resolver/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/resolver/src/index.ts#L3)*
+*Defined in [resolver/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/resolver/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -151,7 +151,7 @@ ___
 
 ▸ **sha256**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/functions/index.ts#L16)*
+*Defined in [keys/src/functions/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/functions/index.ts#L16)*
 
 **Parameters:**
 
@@ -167,11 +167,11 @@ Name | Type |
 
 ### ▪ **ECDSA_PATTERNS**: *object*
 
-*Defined in [keys/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/models/index.ts#L6)*
+*Defined in [keys/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/models/index.ts#L6)*
 
 ▪ **secp256k1**: *object*
 
-*Defined in [keys/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/models/index.ts#L7)*
+*Defined in [keys/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/models/index.ts#L7)*
 
 * **PRIVATE_KEY**: *RegExp‹›* =  /^[a-f0-9]{64}$/
 
@@ -185,13 +185,13 @@ ___
 
 ### ▪ **hex**: *object*
 
-*Defined in [keys/src/functions/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/functions/index.ts#L3)*
+*Defined in [keys/src/functions/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/functions/index.ts#L3)*
 
 ###  encode
 
 ▸ **encode**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/3229236/packages/keys/src/functions/index.ts#L4)*
+*Defined in [keys/src/functions/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/functions/index.ts#L4)*
 
 **Parameters:**
 
