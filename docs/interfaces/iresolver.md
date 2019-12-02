@@ -18,9 +18,9 @@
 
 ###  read
 
-▸ **read**(`did`: string): *[IDIDDocument](ididdocument.md)*
+▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-*Defined in [did-resolver/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/interface.ts#L20)*
+*Defined in [did-resolver/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/interface.ts#L20)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -32,4 +32,4 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *[IDIDDocument](ididdocument.md)*
+**Returns:** *Promise‹[IDIDDocument](ididdocument.md)›*

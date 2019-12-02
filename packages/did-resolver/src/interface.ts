@@ -17,7 +17,7 @@ export interface IResolver {
      * @param {string} did
      * @returns {IDIDDocument}
      */
-    read(did: string): IDIDDocument;
+    read(did: string): Promise<IDIDDocument>;
 }
 
 export interface IOperator extends IResolver {
@@ -27,7 +27,7 @@ export interface IOperator extends IResolver {
      * @param {string} context
      * @returns {boolean}
      */
-    create(did: string, context: string): boolean;
+    create(did: string, context: string): Promise<boolean>;
 
     /**
      * Updates relevant attribute of the DID Document
@@ -36,7 +36,7 @@ export interface IOperator extends IResolver {
      * @param {string|object} value
      * @returns {boolean}
      */
-    update(did: string, attribute: string, value: string | object): boolean;
+    update(did: string, attribute: string, value: string | object): Promise<boolean>;
 
     /**
      * Attempts to deactivate the DID Document for a given DID.
@@ -45,5 +45,5 @@ export interface IOperator extends IResolver {
      * @param {string} did
      * @returns {boolean}
      */
-    deactivate(did: string): boolean;
+    deactivate(did: string): Promise<boolean>;
 }

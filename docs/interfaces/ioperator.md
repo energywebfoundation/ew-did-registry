@@ -21,9 +21,9 @@
 
 ###  create
 
-▸ **create**(`did`: string, `context`: string): *boolean*
+▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/interface.ts#L30)*
+*Defined in [did-resolver/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/interface.ts#L30)*
 
 Registers a DID-Document for a given DID, and defines the provided context
 
@@ -34,15 +34,15 @@ Name | Type |
 `did` | string |
 `context` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  deactivate
 
-▸ **deactivate**(`did`: string): *boolean*
+▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/interface.ts#L48)*
+*Defined in [did-resolver/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/interface.ts#L48)*
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -54,17 +54,17 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  read
 
-▸ **read**(`did`: string): *[IDIDDocument](ididdocument.md)*
+▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-*Defined in [did-resolver/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/interface.ts#L20)*
+*Defined in [did-resolver/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/interface.ts#L20)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -76,15 +76,15 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *[IDIDDocument](ididdocument.md)*
+**Returns:** *Promise‹[IDIDDocument](ididdocument.md)›*
 
 ___
 
 ###  update
 
-▸ **update**(`did`: string, `attribute`: string, `value`: string | object): *boolean*
+▸ **update**(`did`: string, `attribute`: string, `value`: string | object): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/ac13f0a/packages/did-resolver/src/interface.ts#L39)*
+*Defined in [did-resolver/src/interface.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/interface.ts#L39)*
 
 Updates relevant attribute of the DID Document
 
@@ -96,4 +96,4 @@ Name | Type |
 `attribute` | string |
 `value` | string &#124; object |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
