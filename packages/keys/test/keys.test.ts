@@ -28,12 +28,11 @@ describe('[KEYS PACKAGE]', () => {
         expect(keys.publicKey).to.match(ECDSA_PATTERNS.secp256k1.PUBLIC_KEY);
     });
 
-    it('construct new keys with private key', () => {
+    it('construct new keys with public key', () => {
         const keyPair = Keys.generateKeyPair();
-        const keys = new Keys({ privateKey: keyPair.privateKey });
+        const keys = new Keys({ publicKey: keyPair.publicKey });
 
-        expect(keys.privateKey).is.equal(keyPair.privateKey);
-        expect(keys.privateKey).to.match(ECDSA_PATTERNS.secp256k1.PRIVATE_KEY);
+        expect(keys.privateKey).is.equal(undefined);
         expect(keys.publicKey).to.match(ECDSA_PATTERNS.secp256k1.PUBLIC_KEY);
     });
 
@@ -63,6 +62,14 @@ describe('[KEYS PACKAGE]', () => {
         const signature = keys.sign(data);
         expect(keys.verify(data, signature)).is.true;
     });
+
+	it('verify the data with valid signature and provided public key', () => {
+		const keysAlice = new Keys();
+		const keysBob = new Keys();
+		const data = 'test';
+		const signature = keysAlice.sign(data);
+		expect(keysBob.verify(data, signature, keysAlice.publicKey)).is.true;
+	});
 
 	it('verify the data with invalid signature', () => {
 		const keysAlice = new Keys();

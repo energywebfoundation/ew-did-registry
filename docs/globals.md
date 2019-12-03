@@ -82,7 +82,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did/src/index.ts#L3)*
+Defined in did/src/index.ts:3
 
 **Parameters:**
 
@@ -95,7 +95,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/index.ts#L3)*
+Defined in did-document/src/index.ts:3
 
 **Parameters:**
 
