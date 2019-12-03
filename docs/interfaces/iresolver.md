@@ -20,4 +20,4 @@
 
 • **mock**: *string*
 
-*Defined in [resolver/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/resolver/src/interface.ts#L2)*
+*Defined in [resolver/src/interface.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/6d3e889/packages/resolver/src/interface.ts#L2)*
