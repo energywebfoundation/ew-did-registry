@@ -11,7 +11,7 @@ COPY packages/jwt/package.json ./packages/jwt/
 COPY packages/keys/package.json ./pagit ckages/keys/
 COPY packages/resolver/package.json ./packages/resolver/
 
-RUN npm install
+RUN npm install && npm run installPackageDependencies
 
 COPY . .
 

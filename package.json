@@ -9,7 +9,7 @@
     "test:browsers": "./node_modules/.bin/karma start",
     "lint": "./node_modules/.bin/lerna run lint --parallel --stream",
     "fix": "./node_modules/.bin/lerna run fix --parallel --stream",
-    "postinstall": "find ./packages/* -name package.json -maxdepth 1 -execdir npm install \\;"
+    "installPackageDependencies": "find ./packages/* -name package.json -maxdepth 1 -execdir npm install \\;"
   },
   "keywords": [
     "Energy",
