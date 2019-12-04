@@ -8,7 +8,8 @@
     "build": "./node_modules/.bin/lerna run compile --parallel --stream && ./node_modules/.bin/gulp",
     "test:browsers": "./node_modules/.bin/karma start",
     "lint": "./node_modules/.bin/lerna run lint --parallel --stream",
-    "fix": "./node_modules/.bin/lerna run fix --parallel --stream"
+    "fix": "./node_modules/.bin/lerna run fix --parallel --stream",
+    "postinstall": "find ./packages/* -name package.json -maxdepth 1 -execdir npm install \\;"
   },
   "keywords": [
     "Energy",

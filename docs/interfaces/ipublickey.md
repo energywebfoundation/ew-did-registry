@@ -27,7 +27,7 @@
 
 • **controller**: *string*
 
-*Defined in [did-document/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L28)*
+*Defined in [did-document/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L28)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **ethereumAddress**? : *string*
 
-*Defined in [did-document/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L29)*
+*Defined in [did-document/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L29)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-document/src/models/index.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L26)*
+*Defined in [did-document/src/models/index.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L26)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **publicKeyBase58**? : *string*
 
-*Defined in [did-document/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L31)*
+*Defined in [did-document/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L31)*
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 • **publicKeyBase64**? : *string*
 
-*Defined in [did-document/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L30)*
+*Defined in [did-document/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L30)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **publicKeyHex**? : *string*
 
-*Defined in [did-document/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L32)*
+*Defined in [did-document/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L32)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 • **publicKeyJwk**? : *string*
 
-*Defined in [did-document/src/models/index.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L34)*
+*Defined in [did-document/src/models/index.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L34)*
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 • **publicKeyMultibase**? : *string*
 
-*Defined in [did-document/src/models/index.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L35)*
+*Defined in [did-document/src/models/index.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L35)*
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **publicKeyPem**? : *string*
 
-*Defined in [did-document/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L33)*
+*Defined in [did-document/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L33)*
 
 ___
 
@@ -99,4 +99,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-document/src/models/index.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/dae0af4/packages/did-document/src/models/index.ts#L27)*
+*Defined in [did-document/src/models/index.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/066079e/packages/did-document/src/models/index.ts#L27)*
