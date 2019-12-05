@@ -6,30 +6,30 @@
 
 ### Enumeration members
 
-* [HTTPProvider](providertypes.md#httpprovider)
-* [IPCProvider](providertypes.md#ipcprovider)
-* [WebsocketProvider](providertypes.md#websocketprovider)
+* [HTTP](providertypes.md#http)
+* [IPC](providertypes.md#ipc)
+* [Websocket](providertypes.md#websocket)
 
 ## Enumeration members
 
-###  HTTPProvider
+###  HTTP
 
-• **HTTPProvider**:
+• **HTTP**:
 
-*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/models/index.ts#L2)*
-
-___
-
-###  IPCProvider
-
-• **IPCProvider**:
-
-*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/models/index.ts#L3)*
+*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/5d189a3/packages/did-resolver/src/models/index.ts#L2)*
 
 ___
 
-###  WebsocketProvider
+###  IPC
 
-• **WebsocketProvider**:
+• **IPC**:
 
-*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/did-resolver/src/models/index.ts#L4)*
+*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5d189a3/packages/did-resolver/src/models/index.ts#L3)*
+
+___
+
+###  Websocket
+
+• **Websocket**:
+
+*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/5d189a3/packages/did-resolver/src/models/index.ts#L4)*

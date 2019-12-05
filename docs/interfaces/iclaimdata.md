@@ -28,4 +28,4 @@ DID is a required property for every Claim
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/81df0e4/packages/claims/src/models/index.ts#L18)*
+*Defined in [claims/src/models/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/5d189a3/packages/claims/src/models/index.ts#L18)*
