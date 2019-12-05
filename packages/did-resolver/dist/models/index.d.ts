@@ -1,7 +1,7 @@
 export declare enum ProviderTypes {
-    HTTPProvider = 0,
-    IPCProvider = 1,
-    WebsocketProvider = 2
+    HTTP = 0,
+    IPC = 1,
+    Websocket = 2
 }
 /**
  * Specifies current Provider

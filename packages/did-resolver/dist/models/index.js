@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var ProviderTypes;
 (function (ProviderTypes) {
-    ProviderTypes[ProviderTypes["HTTPProvider"] = 0] = "HTTPProvider";
-    ProviderTypes[ProviderTypes["IPCProvider"] = 1] = "IPCProvider";
-    ProviderTypes[ProviderTypes["WebsocketProvider"] = 2] = "WebsocketProvider";
+    ProviderTypes[ProviderTypes["HTTP"] = 0] = "HTTP";
+    ProviderTypes[ProviderTypes["IPC"] = 1] = "IPC";
+    ProviderTypes[ProviderTypes["Websocket"] = 2] = "Websocket";
 })(ProviderTypes = exports.ProviderTypes || (exports.ProviderTypes = {}));
 //# sourceMappingURL=index.js.map
