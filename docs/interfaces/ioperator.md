@@ -22,4 +22,4 @@
 
 *Overrides [IResolver](iresolver.md).[mock](iresolver.md#mock)*
 
-*Defined in [resolver/src/interface.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/3bdb691/packages/resolver/src/interface.ts#L6)*
+*Defined in [resolver/src/interface.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/1e9cd0b/packages/resolver/src/interface.ts#L6)*
