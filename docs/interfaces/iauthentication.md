@@ -19,7 +19,7 @@
 
 • **publicKey**: *string*
 
-*Defined in [did-document/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/did-document/src/models/index.ts#L40)*
+Defined in did-document/src/models/index.ts:40
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-document/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/573253b/packages/did-document/src/models/index.ts#L39)*
+Defined in did-document/src/models/index.ts:39
