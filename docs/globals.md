@@ -1,6 +1,6 @@
-[@ew-did-registry/did](README.md) › [Globals](globals.md)
+[@ew-did-registry/claims](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/did
+# @ew-did-registry/claims
 
 ## Index
 
@@ -69,6 +69,19 @@ Defined in keys/src/index.ts:10
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
+Defined in claims/src/index.ts:3
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`left` | number |
+`right` | number |
+
+**Returns:** *number*
+
+▸ **add**(`left`: number, `right`: number): *number*
+
 Defined in did/src/index.ts:3
 
 **Parameters:**
@@ -83,19 +96,6 @@ Name | Type |
 ▸ **add**(`left`: number, `right`: number): *number*
 
 Defined in did-document/src/index.ts:3
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`left` | number |
-`right` | number |
-
-**Returns:** *number*
-
-▸ **add**(`left`: number, `right`: number): *number*
-
-Defined in claims/src/index.ts:3
 
 **Parameters:**
 

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
 
 # Interface: IResolver
 

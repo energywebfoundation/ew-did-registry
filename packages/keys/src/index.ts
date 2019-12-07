@@ -45,25 +45,25 @@ class Keys implements IKeys {
         }
     }
 
-	/**
-	 * Decrypt the encrypted data that is given in hex format
-	 *
-	 * @example
-	 * ```typescript
-	 * import { Keys } from '@ew-did-registry/keys';
-	 *
-	 * const keysAlice = new Keys();
-	 * const keysBob = new Keys();
-	 * const data = 'test';
-	 * const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
-	 * const decrypted = await keysBob.decrypt(encrypted);
-	 * console.log(decrypted); // 'test'
-	 * ```
-	 *
-	 * @param {string} encrypted
-	 * @param {string} publicKey
-	 * @returns {Promise<string>}
-	 */
+    /**
+     * Decrypt the encrypted data that is given in hex format
+     *
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const keysAlice = new Keys();
+     * const keysBob = new Keys();
+     * const data = 'test';
+     * const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
+     * const decrypted = await keysBob.decrypt(encrypted);
+     * console.log(decrypted); // 'test'
+     * ```
+     *
+     * @param {string} encrypted
+     * @param {string} publicKey
+     * @returns {Promise<string>}
+     */
     async decrypt(encrypted: string, publicKey?: string): Promise<string> {
         const encryptedBuffer = Buffer.from(encrypted, 'hex');
         const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
@@ -71,24 +71,24 @@ class Keys implements IKeys {
         return data.toString();
     }
 
-	/**
-	 * Encrypt the data that is given in utf-8 string
-	 *
-	 * @example
-	 * ```typescript
-	 * import { Keys } from '@ew-did-registry/keys';
-	 *
-	 * const keysAlice = new Keys();
-	 * const keysBob = new Keys();
-	 * const data = 'test';
-	 * const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
-	 * console.log(encrypted); // hex symbols string
-	 * ```
-	 *
-	 * @param {string} data
-	 * @param {string} publicKeyTo
-	 * @returns {Promise<string>}
-	 */
+    /**
+     * Encrypt the data that is given in utf-8 string
+     *
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const keysAlice = new Keys();
+     * const keysBob = new Keys();
+     * const data = 'test';
+     * const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
+     * console.log(encrypted); // hex symbols string
+     * ```
+     *
+     * @param {string} data
+     * @param {string} publicKeyTo
+     * @returns {Promise<string>}
+     */
     async encrypt(data: string, publicKeyTo?: string): Promise<string> {
         const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
         const dataBuffer = Buffer.from(data);
@@ -97,23 +97,23 @@ class Keys implements IKeys {
         return encrypted.toString('hex');
     }
 
-	/**
-	 * Sign the data
-	 *
-	 * @example
-	 * ```typescript
-	 * import { Keys } from '@ew-did-registry/keys';
-	 *
-	 * const keys = new Keys();
-	 * const data = 'test';
-	 * const signature = keys.sign(data);
-	 * console.log(signature); // 128 hex symbols string
-	 * ```
-	 *
-	 * @param {string} data
-	 * @param {string} privateKey
-	 * @returns {string}
-	 */
+    /**
+     * Sign the data
+     *
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const keys = new Keys();
+     * const data = 'test';
+     * const signature = keys.sign(data);
+     * console.log(signature); // 128 hex symbols string
+     * ```
+     *
+     * @param {string} data
+     * @param {string} privateKey
+     * @returns {string}
+     */
     sign(data: string, privateKey?: string): string {
         let keyPair = this._keyPair;
         if (privateKey) {
@@ -130,24 +130,24 @@ class Keys implements IKeys {
         return signature.r.toString(16, 64) + signature.s.toString(16, 64);
     }
 
-	/**
-	 * Verify the signature
-	 *
-	 * @example
-	 * ```typescript
-	 * import { Keys } from '@ew-did-registry/keys';
-	 *
-	 * const keys = new Keys();
-	 * const data = 'test';
-	 * const signature = keys.sign(data);
-	 * console.log(keys.verify(signature)); // true
-	 * ```
-	 *
-	 * @param {string} data
-	 * @param {string} signature
-	 * @param {string} publicKey
-	 * @returns {boolean}
-	 */
+    /**
+     * Verify the signature
+     *
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const keys = new Keys();
+     * const data = 'test';
+     * const signature = keys.sign(data);
+     * console.log(keys.verify(signature)); // true
+     * ```
+     *
+     * @param {string} data
+     * @param {string} signature
+     * @param {string} publicKey
+     * @returns {boolean}
+     */
     verify(data: string, signature: string, publicKey?: string): boolean {
         let keyPair = this._keyPair;
         if (publicKey) {
@@ -169,10 +169,10 @@ class Keys implements IKeys {
      * import { Keys } from '@ew-did-registry/keys';
      *
      * const keyPair = Keys.generateKeyPair();
-	 * console.log(keyPair.privateKey) // 64 hex symbols string
-	 * console.log(keyPair.publicKey) // 66 hex symbols string
+     * console.log(keyPair.privateKey) // 64 hex symbols string
+     * console.log(keyPair.publicKey) // 66 hex symbols string
      * ```
-	 *
+     *
      * @returns {KeyPair}
      */
     static generateKeyPair(): KeyPair {
