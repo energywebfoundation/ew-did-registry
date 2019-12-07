@@ -1,7 +1,7 @@
 export enum ProviderTypes {
     HTTP,
     IPC,
-    Websocket,
+    WebSocket,
 }
 
 /**

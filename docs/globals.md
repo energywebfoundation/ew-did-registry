@@ -50,7 +50,7 @@
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/claims/src/index.ts#L3)*
+Defined in claims/src/index.ts:3
 
 **Parameters:**
 
@@ -63,7 +63,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did/src/index.ts#L3)*
+Defined in did/src/index.ts:3
 
 **Parameters:**
 
@@ -76,7 +76,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-document/src/index.ts#L3)*
+Defined in did-document/src/index.ts:3
 
 **Parameters:**
 
@@ -89,7 +89,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-registry/src/index.ts#L1)*
+Defined in did-registry/src/index.ts:1
 
 **Parameters:**
 
@@ -102,7 +102,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-resolver/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-resolver/src/index.ts#L4)*
+Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
 
@@ -115,7 +115,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [jwt/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/jwt/src/index.ts#L3)*
+Defined in jwt/src/index.ts:3
 
 **Parameters:**
 
@@ -128,7 +128,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [keys/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/keys/src/index.ts#L3)*
+Defined in keys/src/index.ts:3
 
 **Parameters:**
 

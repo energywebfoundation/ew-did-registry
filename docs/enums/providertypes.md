@@ -8,7 +8,7 @@
 
 * [HTTP](providertypes.md#http)
 * [IPC](providertypes.md#ipc)
-* [Websocket](providertypes.md#websocket)
+* [WebSocket](providertypes.md#websocket)
 
 ## Enumeration members
 
@@ -16,7 +16,7 @@
 
 • **HTTP**:
 
-*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-resolver/src/models/index.ts#L2)*
+Defined in did-resolver/src/models/index.ts:2
 
 ___
 
@@ -24,12 +24,12 @@ ___
 
 • **IPC**:
 
-*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-resolver/src/models/index.ts#L3)*
+Defined in did-resolver/src/models/index.ts:3
 
 ___
 
-###  Websocket
+###  WebSocket
 
-• **Websocket**:
+• **WebSocket**:
 
-*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/bc732e8/packages/did-resolver/src/models/index.ts#L4)*
+Defined in did-resolver/src/models/index.ts:4
