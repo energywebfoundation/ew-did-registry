@@ -8,6 +8,7 @@
 
 * [ClaimType](enums/claimtype.md)
 * [Networks](enums/networks.md)
+* [ProviderTypes](enums/providertypes.md)
 
 ### Classes
 
@@ -22,6 +23,7 @@
 * [IClaims](interfaces/iclaims.md)
 * [IDID](interfaces/idid.md)
 * [IDIDDocument](interfaces/ididdocument.md)
+* [IDIDDocumentFactory](interfaces/ididdocumentfactory.md)
 * [IDIDDocumentFull](interfaces/ididdocumentfull.md)
 * [IDIDDocumentLite](interfaces/ididdocumentlite.md)
 * [IDIDRegistry](interfaces/ididregistry.md)
@@ -34,8 +36,10 @@
 * [IPrivateClaimBuildData](interfaces/iprivateclaimbuilddata.md)
 * [IProofClaim](interfaces/iproofclaim.md)
 * [IProofClaimBuildData](interfaces/iproofclaimbuilddata.md)
+* [IProvider](interfaces/iprovider.md)
 * [IPublicKey](interfaces/ipublickey.md)
 * [IResolver](interfaces/iresolver.md)
+* [IResolverSettings](interfaces/iresolversettings.md)
 * [IServiceEndpoint](interfaces/iserviceendpoint.md)
 * [IUpdateParameters](interfaces/iupdateparameters.md)
 * [IVerificationClaim](interfaces/iverificationclaim.md)
@@ -121,7 +125,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in jwt/src/index.ts:3
+Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
 

@@ -27,7 +27,7 @@
 
 • **controller**: *string*
 
-Defined in did-document/src/models/index.ts:28
+Defined in did-resolver/src/models/index.ts:48
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **ethereumAddress**? : *string*
 
-Defined in did-document/src/models/index.ts:29
+Defined in did-resolver/src/models/index.ts:49
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-document/src/models/index.ts:26
+Defined in did-resolver/src/models/index.ts:46
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **publicKeyBase58**? : *string*
 
-Defined in did-document/src/models/index.ts:31
+Defined in did-resolver/src/models/index.ts:51
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 • **publicKeyBase64**? : *string*
 
-Defined in did-document/src/models/index.ts:30
+Defined in did-resolver/src/models/index.ts:50
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **publicKeyHex**? : *string*
 
-Defined in did-document/src/models/index.ts:32
+Defined in did-resolver/src/models/index.ts:52
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 • **publicKeyJwk**? : *string*
 
-Defined in did-document/src/models/index.ts:34
+Defined in did-resolver/src/models/index.ts:54
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 • **publicKeyMultibase**? : *string*
 
-Defined in did-document/src/models/index.ts:35
+Defined in did-resolver/src/models/index.ts:55
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **publicKeyPem**? : *string*
 
-Defined in did-document/src/models/index.ts:33
+Defined in did-resolver/src/models/index.ts:53
 
 ___
 
@@ -99,4 +99,4 @@ ___
 
 • **type**: *string*
 
-Defined in did-document/src/models/index.ts:27
+Defined in did-resolver/src/models/index.ts:47

@@ -45,7 +45,7 @@ ___
 
 ###  didDocument
 
-• **didDocument**: *IDIDDocument*
+• **didDocument**: *IDIDDocumentFactory*
 
 Defined in did-registry/src/interface.ts:17
 
