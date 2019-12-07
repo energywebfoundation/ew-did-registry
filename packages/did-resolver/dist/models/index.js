@@ -4,6 +4,6 @@ var ProviderTypes;
 (function (ProviderTypes) {
     ProviderTypes[ProviderTypes["HTTP"] = 0] = "HTTP";
     ProviderTypes[ProviderTypes["IPC"] = 1] = "IPC";
-    ProviderTypes[ProviderTypes["Websocket"] = 2] = "Websocket";
+    ProviderTypes[ProviderTypes["WebSocket"] = 2] = "WebSocket";
 })(ProviderTypes = exports.ProviderTypes || (exports.ProviderTypes = {}));
 //# sourceMappingURL=index.js.map
