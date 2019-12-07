@@ -2,8 +2,6 @@
 
 # Interface: IDIDDocument
 
-This interface is a factory of Lite and Full DID Documents
-
 ## Hierarchy
 
 * **IDIDDocument**
@@ -22,18 +20,13 @@ This interface is a factory of Lite and Full DID Documents
 * [service](ididdocument.md#service)
 * [updated](ididdocument.md#updated)
 
-### Methods
-
-* [createFull](ididdocument.md#createfull)
-* [createLite](ididdocument.md#createlite)
-
 ## Properties
 
 ###  authentication
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-Defined in did-document/src/models/index.ts:10
+Defined in did-resolver/src/models/index.ts:30
 
 ___
 
@@ -41,7 +34,7 @@ ___
 
 • **context**: *string*
 
-Defined in did-document/src/models/index.ts:7
+Defined in did-resolver/src/models/index.ts:27
 
 ___
 
@@ -49,7 +42,7 @@ ___
 
 • **created**: *string*
 
-Defined in did-document/src/models/index.ts:13
+Defined in did-resolver/src/models/index.ts:33
 
 ___
 
@@ -57,7 +50,7 @@ ___
 
 • **delegates**: *string[]*
 
-Defined in did-document/src/models/index.ts:11
+Defined in did-resolver/src/models/index.ts:31
 
 ___
 
@@ -65,7 +58,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-document/src/models/index.ts:8
+Defined in did-resolver/src/models/index.ts:28
 
 ___
 
@@ -73,7 +66,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-Defined in did-document/src/models/index.ts:15
+Defined in did-resolver/src/models/index.ts:35
 
 ___
 
@@ -81,7 +74,7 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-Defined in did-document/src/models/index.ts:9
+Defined in did-resolver/src/models/index.ts:29
 
 ___
 
@@ -89,7 +82,7 @@ ___
 
 • **service**: *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-Defined in did-document/src/models/index.ts:12
+Defined in did-resolver/src/models/index.ts:32
 
 ___
 
@@ -97,7 +90,7 @@ ___
 
 • **updated**: *string*
 
-Defined in did-document/src/models/index.ts:14
+Defined in did-resolver/src/models/index.ts:34
 
 ## Methods
 

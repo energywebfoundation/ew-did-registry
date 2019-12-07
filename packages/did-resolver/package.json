@@ -1,5 +1,5 @@
 {
-  "name": "@ew-did-registry/resolver",
+  "name": "@ew-did-registry/did-resolver",
   "version": "1.0.0",
   "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",

@@ -8,6 +8,7 @@
 
 * [ClaimType](enums/claimtype.md)
 * [Networks](enums/networks.md)
+* [ProviderTypes](enums/providertypes.md)
 
 ### Interfaces
 
@@ -18,6 +19,7 @@
 * [IClaims](interfaces/iclaims.md)
 * [IDID](interfaces/idid.md)
 * [IDIDDocument](interfaces/ididdocument.md)
+* [IDIDDocumentFactory](interfaces/ididdocumentfactory.md)
 * [IDIDDocumentFull](interfaces/ididdocumentfull.md)
 * [IDIDDocumentLite](interfaces/ididdocumentlite.md)
 * [IDIDRegistry](interfaces/ididregistry.md)
@@ -30,8 +32,10 @@
 * [IPrivateClaimBuildData](interfaces/iprivateclaimbuilddata.md)
 * [IProofClaim](interfaces/iproofclaim.md)
 * [IProofClaimBuildData](interfaces/iproofclaimbuilddata.md)
+* [IProvider](interfaces/iprovider.md)
 * [IPublicKey](interfaces/ipublickey.md)
 * [IResolver](interfaces/iresolver.md)
+* [IResolverSettings](interfaces/iresolversettings.md)
 * [IServiceEndpoint](interfaces/iserviceendpoint.md)
 * [IUpdateParameters](interfaces/iupdateparameters.md)
 * [IVerificationClaim](interfaces/iverificationclaim.md)
@@ -72,6 +76,19 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
+Defined in did-document/src/index.ts:3
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`left` | number |
+`right` | number |
+
+**Returns:** *number*
+
+▸ **add**(`left`: number, `right`: number): *number*
+
 Defined in did-registry/src/index.ts:1
 
 **Parameters:**
@@ -85,7 +102,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in did-document/src/index.ts:3
+Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
 
@@ -112,19 +129,6 @@ Name | Type |
 ▸ **add**(`left`: number, `right`: number): *number*
 
 Defined in keys/src/index.ts:3
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`left` | number |
-`right` | number |
-
-**Returns:** *number*
-
-▸ **add**(`left`: number, `right`: number): *number*
-
-Defined in resolver/src/index.ts:3
 
 **Parameters:**
 
