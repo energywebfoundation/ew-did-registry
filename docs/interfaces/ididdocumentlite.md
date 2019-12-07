@@ -35,7 +35,7 @@ ___
 
 ###  didDocument
 
-• **didDocument**: *[IDIDDocument](ididdocument.md)*
+• **didDocument**: *IDIDDocument*
 
 Defined in did-document/src/lite/interface.ts:24
 

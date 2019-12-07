@@ -76,4 +76,4 @@ Name | Type |
 `publicKey` | string |
 `options?` | object |
 
-**Returns:** *Promise‹object›*
+Defined in jwt/src/interface.ts:2

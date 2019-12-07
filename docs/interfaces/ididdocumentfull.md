@@ -41,7 +41,7 @@ ___
 
 ###  didDocument
 
-• **didDocument**: *[IDIDDocument](ididdocument.md)*
+• **didDocument**: *IDIDDocument*
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[didDocument](ididdocumentlite.md#diddocument)*
 

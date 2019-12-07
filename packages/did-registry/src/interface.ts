@@ -1,5 +1,5 @@
 import { IDID } from '@ew-did-registry/did';
-import { IDIDDocument } from '@ew-did-registry/did-document';
+import { IDIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IClaims } from '@ew-did-registry/claims';
 import { IKeys } from '@ew-did-registry/keys';
 
@@ -14,7 +14,7 @@ export interface IDIDRegistry {
     /**
      * IDIDDocument exposes methods to operate with DID Documents
      */
-    didDocument: IDIDDocument;
+    didDocument: IDIDDocumentFactory;
     /**
      * IClaims exposes functionality needed to manage Private and Public claims
      */

@@ -1,3 +1,3 @@
-import { IDIDDocument } from './interface';
+import { IDIDDocumentFactory } from './interface';
 declare const add: (left: number, right: number) => number;
-export { add, IDIDDocument, };
+export { add, IDIDDocumentFactory, };
