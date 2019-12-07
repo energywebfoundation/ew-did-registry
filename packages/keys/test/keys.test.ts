@@ -50,10 +50,10 @@ describe('[KEYS PACKAGE]', () => {
     });
 
 	it('sign the data', () => {
-		const keys = new Keys();
-		const data = 'test';
-		const signature = keys.sign(data);
-		expect(signature).to.match(ECDSA_PATTERNS.secp256k1.SIGNATURE);
+        const keys = new Keys();
+        const data = 'test';
+        const signature = keys.sign(data);
+        expect(signature).to.match(ECDSA_PATTERNS.secp256k1.SIGNATURE);
 	});
 
     it('verify the data with valid signature', () => {
@@ -64,36 +64,36 @@ describe('[KEYS PACKAGE]', () => {
     });
 
 	it('verify the data with valid signature and provided public key', () => {
-		const keysAlice = new Keys();
-		const keysBob = new Keys();
-		const data = 'test';
-		const signature = keysAlice.sign(data);
-		expect(keysBob.verify(data, signature, keysAlice.publicKey)).is.true;
+        const keysAlice = new Keys();
+        const keysBob = new Keys();
+        const data = 'test';
+        const signature = keysAlice.sign(data);
+        expect(keysBob.verify(data, signature, keysAlice.publicKey)).is.true;
 	});
 
 	it('verify the data with invalid signature', () => {
-		const keysAlice = new Keys();
-		const keysBob = new Keys();
-		const data = 'test';
-		const signature = keysAlice.sign(data);
-		expect(keysBob.verify(data, signature)).is.false;
+        const keysAlice = new Keys();
+        const keysBob = new Keys();
+        const data = 'test';
+        const signature = keysAlice.sign(data);
+        expect(keysBob.verify(data, signature)).is.false;
 	});
 
 	it('encrypt the data', async () => {
-		const keysAlice = new Keys();
-		const keysBob = new Keys();
-		const data = 'test';
-		const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
-		expect(encrypted).to.match(/^[a-f0-9]+$/);
+        const keysAlice = new Keys();
+        const keysBob = new Keys();
+        const data = 'test';
+        const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
+        expect(encrypted).to.match(/^[a-f0-9]+$/);
 	});
 
     it('decrypt the data', async () => {
         const keysAlice = new Keys();
         const keysBob = new Keys();
-		const data = 'test';
-		const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
-		const decrypted = await keysBob.decrypt(encrypted);
-		expect(decrypted).is.equal(data);
+        const data = 'test';
+        const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
+        const decrypted = await keysBob.decrypt(encrypted);
+        expect(decrypted).is.equal(data);
     });
 
 });

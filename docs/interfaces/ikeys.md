@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IKeys](ikeys.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IKeys](ikeys.md)
 
 # Interface: IKeys
 
@@ -30,7 +30,7 @@
 
 • **privateKey**: *string*
 
-*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L5)*
+Defined in keys/src/interface.ts:5
 
 Private key in hex format
 
@@ -40,7 +40,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L10)*
+Defined in keys/src/interface.ts:10
 
 Public key in hex format
 
@@ -50,7 +50,7 @@ Public key in hex format
 
 ▸ **decrypt**(`encrypted`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L43)*
+Defined in keys/src/interface.ts:43
 
 Decryption
 
@@ -69,7 +69,7 @@ ___
 
 ▸ **encrypt**(`data`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L35)*
+Defined in keys/src/interface.ts:35
 
 Encryption
 
@@ -88,7 +88,7 @@ ___
 
 ▸ **sign**(`data`: string, `privateKey?`: string): *string*
 
-*Defined in [keys/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L18)*
+Defined in keys/src/interface.ts:18
 
 Sign the data with private key
 
@@ -107,7 +107,7 @@ ___
 
 ▸ **verify**(`data`: string, `signature`: string, `publicKey?`: string): *boolean*
 
-*Defined in [keys/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/keys/src/interface.ts#L27)*
+Defined in keys/src/interface.ts:27
 
 Verify the signature accordance to data with public key
 

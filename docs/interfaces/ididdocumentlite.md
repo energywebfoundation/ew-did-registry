@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocumentLite](ididdocumentlite.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDIDDocumentLite](ididdocumentlite.md)
 
 # Interface: IDIDDocumentLite
 
@@ -27,7 +27,7 @@ Interface describes the lite version of DID Document with only read functionalit
 
 • **did**: *string*
 
-*Defined in [did-document/src/lite/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/lite/interface.ts#L19)*
+Defined in did-document/src/lite/interface.ts:19
 
 DID of Document subject is stored in DID Documents
 
@@ -37,7 +37,7 @@ ___
 
 • **didDocument**: *[IDIDDocument](ididdocument.md)*
 
-*Defined in [did-document/src/lite/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/lite/interface.ts#L24)*
+Defined in did-document/src/lite/interface.ts:24
 
 Resolved DID Document
 
@@ -47,7 +47,7 @@ Resolved DID Document
 
 ▸ **read**(`attribute`: string, `type?`: string): *string*
 
-*Defined in [did-document/src/lite/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/b56724d/packages/did-document/src/lite/interface.ts#L32)*
+Defined in did-document/src/lite/interface.ts:32
 
 Fetches the specified data/attributes from DID Document
 

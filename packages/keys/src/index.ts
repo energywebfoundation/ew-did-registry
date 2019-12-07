@@ -65,10 +65,10 @@ class Keys implements IKeys {
 	 * @returns {Promise<string>}
 	 */
     async decrypt(encrypted: string, publicKey?: string): Promise<string> {
-		const encryptedBuffer = Buffer.from(encrypted, 'hex');
-		const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-		const data = await ecies.decrypt(privateKeyBuffer, encryptedBuffer);
-		return data.toString();
+        const encryptedBuffer = Buffer.from(encrypted, 'hex');
+        const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
+        const data = await ecies.decrypt(privateKeyBuffer, encryptedBuffer);
+        return data.toString();
     }
 
 	/**
@@ -90,11 +90,11 @@ class Keys implements IKeys {
 	 * @returns {Promise<string>}
 	 */
     async encrypt(data: string, publicKeyTo?: string): Promise<string> {
-		const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
-		const dataBuffer = Buffer.from(data);
-		const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-		const encrypted = await ecies.encrypt(publicKeyToBuffer, dataBuffer, { ephemPrivateKey: privateKeyBuffer });
-		return encrypted.toString('hex');
+        const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
+        const dataBuffer = Buffer.from(data);
+        const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
+        const encrypted = await ecies.encrypt(publicKeyToBuffer, dataBuffer, { ephemPrivateKey: privateKeyBuffer });
+        return encrypted.toString('hex');
     }
 
 	/**
@@ -157,7 +157,7 @@ class Keys implements IKeys {
         const r = new BN(signature.slice(0, 64), 16);
         const s = new BN(signature.slice(64, 128), 16);
 
-		const hash = sha256(data);
+        const hash = sha256(data);
         return keyPair.verify(hash, { r, s });
     }
 
