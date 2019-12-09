@@ -22,7 +22,7 @@ Specifies current Provider
 
 • **options**? : *object*
 
-Defined in did-resolver/src/models/index.ts:13
+*Defined in [did-resolver/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/did-resolver/src/models/index.ts#L13)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/index.ts:12
+*Defined in [did-resolver/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/did-resolver/src/models/index.ts#L12)*
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 • **uri**: *string*
 
-Defined in did-resolver/src/models/index.ts:11
+*Defined in [did-resolver/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/did-resolver/src/models/index.ts#L11)*

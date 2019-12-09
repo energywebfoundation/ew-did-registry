@@ -27,5 +27,7 @@ export interface IJWT {
      * @param {object} options
      * @returns {object}
      */
-    decode(token: string, options?: object): object;
+    decode(token: string, options?: object): string | {
+        [key: string]: any;
+    };
 }

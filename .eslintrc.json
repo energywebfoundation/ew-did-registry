@@ -23,6 +23,7 @@
   ],
   "rules": {
     "import/no-unresolved": "error",
+    "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0
   },

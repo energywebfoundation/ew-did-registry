@@ -8,6 +8,10 @@ The JWT exposes methods to create/sign, verify, and decode JSON web tokens
 
 * **IJWT**
 
+## Implemented by
+
+* [JWT](../classes/jwt.md)
+
 ## Index
 
 ### Methods
@@ -20,9 +24,9 @@ The JWT exposes methods to create/sign, verify, and decode JSON web tokens
 
 ###  decode
 
-▸ **decode**(`token`: string, `options?`: object): *object*
+▸ **decode**(`token`: string, `options?`: object): *string | object*
 
-Defined in jwt/src/interface.ts:32
+*Defined in [jwt/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/interface.ts#L32)*
 
 Method decodes JWT without checking the signature. This can be useful in cases,
 where Public Key of the signer is yet to be retrieved using claim data stored in JWT.
@@ -35,7 +39,7 @@ Name | Type |
 `token` | string |
 `options?` | object |
 
-**Returns:** *object*
+**Returns:** *string | object*
 
 ___
 
@@ -43,7 +47,7 @@ ___
 
 ▸ **sign**(`payload`: object, `options?`: object): *Promise‹string›*
 
-Defined in jwt/src/interface.ts:11
+*Defined in [jwt/src/interface.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/interface.ts#L11)*
 
 Method accepts claim payload and options, and returns a string Promise
 
@@ -62,7 +66,7 @@ ___
 
 ▸ **verify**(`token`: string, `publicKey`: string, `options?`: object): *Promise‹object›*
 
-Defined in jwt/src/interface.ts:22
+*Defined in [jwt/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/interface.ts#L22)*
 
 Method accepts the token, publicKey of signing entity, as well as options
 Decoded JWT is returned in the Promise, if the signature is correct, otherwise
@@ -76,4 +80,4 @@ Name | Type |
 `publicKey` | string |
 `options?` | object |
 
-Defined in jwt/src/interface.ts:2
+**Returns:** *Promise‹object›*
