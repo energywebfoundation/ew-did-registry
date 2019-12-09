@@ -10,6 +10,10 @@
 * [Networks](enums/networks.md)
 * [ProviderTypes](enums/providertypes.md)
 
+### Classes
+
+* [Keys](classes/keys.md)
+
 ### Interfaces
 
 * [IAuthentication](interfaces/iauthentication.md)
@@ -39,10 +43,29 @@
 * [IServiceEndpoint](interfaces/iserviceendpoint.md)
 * [IUpdateParameters](interfaces/iupdateparameters.md)
 * [IVerificationClaim](interfaces/iverificationclaim.md)
+* [KeyPair](interfaces/keypair.md)
+
+### Variables
+
+* [ec](globals.md#const-ec)
 
 ### Functions
 
 * [add](globals.md#const-add)
+* [sha256](globals.md#const-sha256)
+
+### Object literals
+
+* [ECDSA_PATTERNS](globals.md#const-ecdsa_patterns)
+* [hex](globals.md#const-hex)
+
+## Variables
+
+### `Const` ec
+
+• **ec**: *ec‹›* =  new EC('secp256k1')
+
+Defined in keys/src/index.ts:10
 
 ## Functions
 
@@ -115,7 +138,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in jwt/src/index.ts:3
+Defined in resolver/src/index.ts:3
 
 **Parameters:**
 
@@ -126,15 +149,58 @@ Name | Type |
 
 **Returns:** *number*
 
-▸ **add**(`left`: number, `right`: number): *number*
+___
 
-Defined in keys/src/index.ts:3
+### `Const` sha256
+
+▸ **sha256**(`data`: string): *string*
+
+Defined in keys/src/functions/index.ts:16
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`left` | number |
-`right` | number |
+`data` | string |
 
-**Returns:** *number*
+**Returns:** *string*
+
+## Object literals
+
+### `Const` ECDSA_PATTERNS
+
+### ▪ **ECDSA_PATTERNS**: *object*
+
+Defined in keys/src/models/index.ts:6
+
+▪ **secp256k1**: *object*
+
+Defined in keys/src/models/index.ts:7
+
+* **PRIVATE_KEY**: *RegExp‹›* =  /^[a-f0-9]{64}$/
+
+* **PUBLIC_KEY**: *RegExp‹›* =  /^[a-f0-9]{66}$/
+
+* **SIGNATURE**: *RegExp‹›* =  /^[a-f0-9]{128}$/
+
+___
+
+### `Const` hex
+
+### ▪ **hex**: *object*
+
+Defined in keys/src/functions/index.ts:3
+
+###  encode
+
+▸ **encode**(`data`: string): *string*
+
+Defined in keys/src/functions/index.ts:4
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`data` | string |
+
+**Returns:** *string*

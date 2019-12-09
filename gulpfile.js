@@ -128,6 +128,7 @@ function buildDocs() {
       stripInternal: true,
       suppressExcessPropertyErrors: true,
       suppressImplicitAnyIndexErrors: true,
+      esModuleInterop: true,
       mode: 'file',
       plugins: ['typedoc-plugin-markdown']
       // externalPattern: '**/node_modules/**',

@@ -6,6 +6,10 @@
 
 * **IKeys**
 
+## Implemented by
+
+* [Keys](../classes/keys.md)
+
 ## Index
 
 ### Properties
@@ -15,6 +19,8 @@
 
 ### Methods
 
+* [decrypt](ikeys.md#decrypt)
+* [encrypt](ikeys.md#encrypt)
 * [sign](ikeys.md#sign)
 * [verify](ikeys.md#verify)
 
@@ -39,6 +45,44 @@ Defined in keys/src/interface.ts:10
 Public key in hex format
 
 ## Methods
+
+###  decrypt
+
+▸ **decrypt**(`encrypted`: string, `publicKeyTo?`: string): *Promise‹string›*
+
+Defined in keys/src/interface.ts:43
+
+Decryption
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`encrypted` | string |
+`publicKeyTo?` | string |
+
+**Returns:** *Promise‹string›*
+
+___
+
+###  encrypt
+
+▸ **encrypt**(`data`: string, `publicKeyTo?`: string): *Promise‹string›*
+
+Defined in keys/src/interface.ts:35
+
+Encryption
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`data` | string |
+`publicKeyTo?` | string |
+
+**Returns:** *Promise‹string›*
+
+___
 
 ###  sign
 

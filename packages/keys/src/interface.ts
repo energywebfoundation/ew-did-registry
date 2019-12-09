@@ -25,4 +25,20 @@ export interface IKeys {
      * @returns {boolean}
      */
     verify(data: string, signature: string, publicKey?: string): boolean;
+
+    /**
+     * Encryption
+     * @param {string} data
+     * @param {string} publicKeyTo
+     * @returns {string}
+     */
+    encrypt(data: string, publicKeyTo?: string): Promise<string>;
+
+    /**
+     * Decryption
+     * @param {string} encrypted
+     * @param {string} publicKeyTo
+     * @returns {string}
+     */
+    decrypt(encrypted: string, publicKeyTo?: string): Promise<string>;
 }
