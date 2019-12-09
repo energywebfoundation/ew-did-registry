@@ -35,7 +35,7 @@
 
 \+ **new Keys**(`__namedParameters`: object): *[Keys](keys.md)*
 
-*Defined in [keys/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L22)*
+*Defined in [keys/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L22)*
 
 **Parameters:**
 
@@ -56,7 +56,7 @@ Name | Type | Description |
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[privateKey](../interfaces/ikeys.md#privatekey)*
 
-*Defined in [keys/src/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L18)*
+*Defined in [keys/src/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L18)*
 
 Private Key of secp256k1
 
@@ -68,7 +68,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[publicKey](../interfaces/ikeys.md#publickey)*
 
-*Defined in [keys/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L22)*
+*Defined in [keys/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L22)*
 
 Public Key of secp256k1
 
@@ -80,7 +80,7 @@ Public Key of secp256k1
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:67](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L67)*
+*Defined in [keys/src/index.ts:67](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L67)*
 
 Decrypt the encrypted data that is given in hex format
 
@@ -113,7 +113,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:92](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L92)*
+*Defined in [keys/src/index.ts:92](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L92)*
 
 Encrypt the data that is given in utf-8 string
 
@@ -145,7 +145,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:117](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L117)*
+*Defined in [keys/src/index.ts:117](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L117)*
 
 Sign the data
 
@@ -176,7 +176,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:151](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L151)*
+*Defined in [keys/src/index.ts:151](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L151)*
 
 Verify the signature
 
@@ -206,7 +206,7 @@ ___
 
 ▸ **generateKeyPair**(): *[KeyPair](../interfaces/keypair.md)*
 
-*Defined in [keys/src/index.ts:178](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/keys/src/index.ts#L178)*
+*Defined in [keys/src/index.ts:178](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/keys/src/index.ts#L178)*
 
 Generates new key pair for secp256k1 algorithm.
 

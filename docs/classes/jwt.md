@@ -28,7 +28,7 @@
 
 \+ **new JWT**(`keyPair`: IKeys): *[JWT](jwt.md)*
 
-*Defined in [jwt/src/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/index.ts#L11)*
+*Defined in [jwt/src/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/jwt/src/index.ts#L11)*
 
 Key pair has to be passed on construction to JWT
 
@@ -48,7 +48,7 @@ Name | Type | Description |
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/index.ts#L129)*
+*Defined in [jwt/src/index.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/jwt/src/index.ts#L130)*
 
 Return decoded JWT payload without verifying signature
 
@@ -89,7 +89,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/index.ts#L47)*
+*Defined in [jwt/src/index.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/jwt/src/index.ts#L47)*
 
 Sign payload and return JWT
 
@@ -128,7 +128,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/1401544/packages/jwt/src/index.ts#L91)*
+*Defined in [jwt/src/index.ts:92](https://github.com/energywebfoundation/ew-did-registry/blob/45071f2/packages/jwt/src/index.ts#L92)*
 
 If the signature is correct, method returns decoded JWT payload
 

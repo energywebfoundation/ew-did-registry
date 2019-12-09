@@ -92,7 +92,7 @@ declare class JWT implements IJWT {
      * @returns string | { [key: string]: any }
      */
     decode(token: string, options?: object): string | {
-        [key: string]: any;
+        [key: string]: string | object;
     };
 }
 export { JWT, IJWT, };

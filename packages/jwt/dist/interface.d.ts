@@ -28,6 +28,6 @@ export interface IJWT {
      * @returns {object}
      */
     decode(token: string, options?: object): string | {
-        [key: string]: any;
+        [key: string]: string | object;
     };
 }

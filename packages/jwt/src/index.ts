@@ -8,7 +8,7 @@ import { IJWT } from './interface';
 class JWT implements IJWT {
   private readonly keyPair: IKeys;
 
-  private keyEncoder: any;
+  private keyEncoder: KeyEncoder;
 
   /**
    * Key pair has to be passed on construction to JWT
@@ -48,6 +48,7 @@ class JWT implements IJWT {
     return new Promise(
       (resolve, reject) => {
         const pemPrivateKey = this.keyEncoder.encodePrivate(this.keyPair.privateKey, 'raw', 'pem');
+
         jwt.sign(payload, pemPrivateKey, options, (error: Error, token: string) => {
           if (error) reject(error);
 
@@ -126,7 +127,7 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns string | { [key: string]: any }
    */
-  decode(token: string, options?: object): string | { [key: string]: any } {
+  decode(token: string, options?: object): string | { [key: string]: string | object } {
     return jwt.decode(token, options);
   }
 }
