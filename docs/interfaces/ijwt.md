@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IJWT](ijwt.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IJWT](ijwt.md)
 
 # Interface: IJWT
 
@@ -76,4 +76,4 @@ Name | Type |
 `publicKey` | string |
 `options?` | object |
 
-Defined in jwt/src/interface.ts:2
+**Returns:** *Promise‹object›*

@@ -1,10 +1,14 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
 
 # Interface: IDID
 
 ## Hierarchy
 
 * **IDID**
+
+## Implemented by
+
+* [DID](../classes/did.md)
 
 ## Index
 

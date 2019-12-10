@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IPublicKey](ipublickey.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IPublicKey](ipublickey.md)
 
 # Interface: IPublicKey
 

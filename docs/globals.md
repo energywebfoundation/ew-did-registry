@@ -1,6 +1,6 @@
-[@ew-did-registry/claims](README.md) › [Globals](globals.md)
+[@ew-did-registry/did](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/claims
+# @ew-did-registry/did
 
 ## Index
 
@@ -12,6 +12,7 @@
 
 ### Classes
 
+* [DID](classes/did.md)
 * [Keys](classes/keys.md)
 
 ### Interfaces
@@ -86,7 +87,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in did/src/index.ts:3
+Defined in did-registry/src/index.ts:1
 
 **Parameters:**
 
@@ -112,19 +113,6 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in did-registry/src/index.ts:1
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`left` | number |
-`right` | number |
-
-**Returns:** *number*
-
-▸ **add**(`left`: number, `right`: number): *number*
-
 Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
@@ -138,7 +126,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in resolver/src/index.ts:3
+Defined in jwt/src/index.ts:3
 
 **Parameters:**
 
