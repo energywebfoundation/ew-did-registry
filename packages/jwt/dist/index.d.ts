@@ -2,7 +2,6 @@ import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
 declare class JWT implements IJWT {
     private readonly keyPair;
-    private keyEncoder;
     /**
      * Key pair has to be passed on construction to JWT
      * @param {Keys} keyPair

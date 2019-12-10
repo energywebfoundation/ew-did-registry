@@ -48,6 +48,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = __importStar(require("jsonwebtoken"));
 var key_encoder_1 = __importDefault(require("key-encoder"));
+var keyEncoder = new key_encoder_1.default('secp256k1');
 var JWT = /** @class */ (function () {
     /**
      * Key pair has to be passed on construction to JWT
@@ -55,7 +56,6 @@ var JWT = /** @class */ (function () {
      */
     function JWT(keyPair) {
         this.keyPair = keyPair;
-        this.keyEncoder = new key_encoder_1.default('secp256k1');
     }
     /**
      * Sign payload and return JWT
@@ -87,7 +87,7 @@ var JWT = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var pemPrivateKey = _this.keyEncoder.encodePrivate(_this.keyPair.privateKey, 'raw', 'pem');
+                        var pemPrivateKey = keyEncoder.encodePrivate(_this.keyPair.privateKey, 'raw', 'pem');
                         jwt.sign(payload, pemPrivateKey, options, function (error, token) {
                             if (error)
                                 reject(error);
@@ -130,10 +130,9 @@ var JWT = /** @class */ (function () {
      */
     JWT.prototype.verify = function (token, publicKey, options) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var pemPublicKey = _this.keyEncoder.encodePublic(publicKey, 'raw', 'pem');
+                        var pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');
                         jwt.verify(token, pemPublicKey, options, function (error, payload) {
                             if (error)
                                 reject(error);

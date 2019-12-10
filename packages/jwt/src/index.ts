@@ -4,11 +4,10 @@ import KeyEncoder from 'key-encoder';
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
 
+const keyEncoder = new KeyEncoder('secp256k1');
 
 class JWT implements IJWT {
   private readonly keyPair: IKeys;
-
-  private keyEncoder: KeyEncoder;
 
   /**
    * Key pair has to be passed on construction to JWT
@@ -16,7 +15,6 @@ class JWT implements IJWT {
    */
   constructor(keyPair: IKeys) {
     this.keyPair = keyPair;
-    this.keyEncoder = new KeyEncoder('secp256k1');
   }
 
   /**
@@ -47,7 +45,7 @@ class JWT implements IJWT {
   async sign(payload: object, options?: object): Promise<string> {
     return new Promise(
       (resolve, reject) => {
-        const pemPrivateKey = this.keyEncoder.encodePrivate(this.keyPair.privateKey, 'raw', 'pem');
+        const pemPrivateKey = keyEncoder.encodePrivate(this.keyPair.privateKey, 'raw', 'pem');
 
         jwt.sign(payload, pemPrivateKey, options, (error: Error, token: string) => {
           if (error) reject(error);
@@ -92,7 +90,7 @@ class JWT implements IJWT {
   async verify(token: string, publicKey: string, options?: object): Promise<object> {
     return new Promise(
       (resolve, reject) => {
-        const pemPublicKey = this.keyEncoder.encodePublic(publicKey, 'raw', 'pem');
+        const pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');
         jwt.verify(token, pemPublicKey, options, (error: Error, payload: object) => {
           if (error) reject(error);
 
