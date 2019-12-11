@@ -1,6 +1,6 @@
-[@ew-did-registry/claims](README.md) › [Globals](globals.md)
+[@ew-did-registry/did](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/claims
+# @ew-did-registry/did
 
 ## Index
 
@@ -100,7 +100,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in did-registry/src/index.ts:1
+Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
 
@@ -113,7 +113,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-Defined in did-resolver/src/index.ts:4
+Defined in did-registry/src/index.ts:1
 
 **Parameters:**
 

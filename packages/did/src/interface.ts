@@ -19,13 +19,12 @@ export interface IDID {
      * @param {string} id
      * @returns {void}
      */
-    set(network: Networks, id: string): IDID;
+    set(network: string, id: string): IDID;
 
     /**
      * Gets a DID for a particular network
      * @param {Networks} network
      * @returns {string | undefined}
      */
-
-    get(network: Networks): string | undefined;
+    get(network: string): string | undefined;
 }

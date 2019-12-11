@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
 
 # Interface: IDID
 
@@ -21,9 +21,9 @@
 
 ###  get
 
-▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
+▸ **get**(`network`: string): *string | undefined*
 
-Defined in did/src/interface.ts:30
+Defined in did/src/interface.ts:29
 
 Gets a DID for a particular network
 
@@ -31,7 +31,7 @@ Gets a DID for a particular network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 
 **Returns:** *string | undefined*
 
@@ -53,7 +53,7 @@ Name | Type |
 
 **Returns:** *[IDID](idid.md)*
 
-▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *[IDID](idid.md)*
+▸ **set**(`network`: string, `id`: string): *[IDID](idid.md)*
 
 Defined in did/src/interface.ts:22
 
@@ -63,7 +63,7 @@ Sets a DID for the provided network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 `id` | string |
 
 **Returns:** *[IDID](idid.md)*
