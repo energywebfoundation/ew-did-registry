@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
 
 # Interface: IProvider
 

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [DID](did.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DID](did.md)
 
 # Class: DID
 
@@ -25,7 +25,7 @@
 
 *Implementation of [IDID](../interfaces/idid.md)*
 
-Defined in did/src/index.ts:34
+Defined in did/src/index.ts:33
 
 Gets a DID for a particular network
 
@@ -50,11 +50,11 @@ ___
 
 ###  set
 
-▸ **set**(`did`: string): *void*
+▸ **set**(`did`: string): *[IDID](../interfaces/idid.md)*
 
 *Implementation of [IDID](../interfaces/idid.md)*
 
-Defined in did/src/index.ts:58
+Defined in did/src/index.ts:56
 
 Sets a DID for a particular network (inferred from DID provided)
 
@@ -73,4 +73,4 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `did` | string |   |
 
-**Returns:** *void*
+**Returns:** *[IDID](../interfaces/idid.md)*

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
 
 # Interface: IDID
 
@@ -39,7 +39,7 @@ ___
 
 ###  set
 
-▸ **set**(`did`: string): *void*
+▸ **set**(`did`: string): *[IDID](idid.md)*
 
 Defined in did/src/interface.ts:14
 
@@ -51,9 +51,9 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*
 
-▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *void*
+▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *[IDID](idid.md)*
 
 Defined in did/src/interface.ts:22
 
@@ -66,4 +66,4 @@ Name | Type |
 `network` | [Networks](../enums/networks.md) |
 `id` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*

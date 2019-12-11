@@ -15,9 +15,24 @@ describe('[DID PACKAGE]', () => {
     expect(() => { instance.set(did); }).to.not.throw();
   });
 
-  it('Setting an invalid DID should throw an error', async () => {
+  it('Setting a valid DID should return an instanse of DID', async () => {
+    const did = 'did:eth:method_specific_id';
+    expect(instance.set(did)).to.be.instanceOf(DID);
+  });
+
+  it('Setting malformed DID should throw an error', async () => {
     const did = 'INVALID:DID';
     expect(() => { instance.set(did); }).to.throw('Wrong DID scheme');
+  });
+
+  it('Setting DID with malformed network should throw an error', async () => {
+    const did = 'did:my network:specific_id';
+    expect(() => { instance.set(did); }).to.throw('Wrong DID scheme');
+  });
+
+  it('Setting DID with nonexistent network should throw an error', async () => {
+    const did = 'did:my_network:specific_id';
+    expect(() => { instance.set(did); }).to.throw('Invalid network');
   });
 
   it('Setting a valid ID and network should not throw an error',
@@ -25,6 +40,13 @@ describe('[DID PACKAGE]', () => {
       const network = Networks.Ethereum;
       const id = 'method_specific_id';
       expect(() => { instance.set(network, id); }).to.not.throw();
+    });
+
+  it('Setting a valid ID and network should not return an instance of DID',
+    async () => {
+      const network = Networks.Ethereum;
+      const id = 'method_specific_id';
+      expect(instance.set(network, id)).to.be.instanceOf(DID);
     });
 
   it('Setting a valid ID and invalid network should throw an error',

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
 
 # Interface: IClaim
 

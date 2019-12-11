@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ClaimType](claimtype.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ClaimType](claimtype.md)
 
 # Enumeration: ClaimType
 

@@ -3,7 +3,6 @@ import { Networks } from './models';
 
 /* eslint-disable no-underscore-dangle */
 class DID implements IDID {
-
   /**
    * Mappings from networks to DIDs
    */
@@ -32,10 +31,9 @@ class DID implements IDID {
    * @returns { string|undefined }
    */
   get(network: Networks): string | undefined {
-    if (!Object.values(Networks).includes(network)) {
-      return undefined;
+    if (!this.isValidNetwork(network)) {
+      throw new Error('Invalid network');
     }
-
     return this._dids.get(network);
   }
 
@@ -55,7 +53,7 @@ class DID implements IDID {
    *
    * @returns {void}
    */
-  set(did: string): void;
+  set(did: string): IDID;
 
   /**
    * Sets a DID for the provided network
@@ -75,13 +73,11 @@ class DID implements IDID {
    * @returns {void}
    */
   // eslint-disable-next-line no-dupe-class-members
-  set(network: Networks | string, id?: string): void {
+  set(network: Networks | string, id?: string): IDID {
     if (network.startsWith('did:')) {
-      this.setDid(network);
-      return;
+      return this.setDid(network);
     }
-    const did = `did:${network}:${id}`;
-    this.setDid(did);
+    return this.setDid(`did:${network}:${id}`);
   }
 
   private setDid(did: string) {
@@ -89,11 +85,16 @@ class DID implements IDID {
     if (!parts) {
       throw new Error('Wrong DID scheme');
     }
-    const method = parts[1];
-    if (!Object.values(Networks).includes(method as Networks)) {
+    const network = parts[1] as Networks;
+    if (!this.isValidNetwork(network)) {
       throw new Error('Invalid network');
     }
-    this._dids.set(method as Networks, did);
+    this._dids.set(network, did);
+    return this;
+  }
+
+  private isValidNetwork(network: Networks): boolean {
+    return Object.values(Networks).includes(network);
   }
 }
 

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDIDDocumentFactory](ididdocumentfactory.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocumentFactory](ididdocumentfactory.md)
 
 # Interface: IDIDDocumentFactory
 
