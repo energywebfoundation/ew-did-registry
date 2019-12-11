@@ -1,12 +1,12 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
 declare class JWT implements IJWT {
-    private readonly keyPair;
+    private readonly _keys;
     /**
      * Key pair has to be passed on construction to JWT
-     * @param {Keys} keyPair
+     * @param {Keys} keys
      */
-    constructor(keyPair: IKeys);
+    constructor(keys: IKeys);
     /**
      * Sign payload and return JWT
      *
@@ -41,8 +41,8 @@ declare class JWT implements IJWT {
      * import { Keys } from '@ew-did-registry/keys';
      * import { JWT } from '@ew-did-registry/jwt';
      *
-     * const AliceKeyPair = Keys.generateKeyPair();
-     * const BobKeyPair = Keys.generateKeyPair();
+     * const AliceKeyPair = new Keys();
+     * const BobKeyPair = new Keys();
      * const jwtAlice = new JWT(AliceKeyPair);
      * const jwtBob = new JWT(BobKeyPair);
      * const payload = {claim: 'test'};

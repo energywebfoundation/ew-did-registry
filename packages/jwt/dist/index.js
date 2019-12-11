@@ -52,10 +52,10 @@ var keyEncoder = new key_encoder_1.default('secp256k1');
 var JWT = /** @class */ (function () {
     /**
      * Key pair has to be passed on construction to JWT
-     * @param {Keys} keyPair
+     * @param {Keys} keys
      */
-    function JWT(keyPair) {
-        this.keyPair = keyPair;
+    function JWT(keys) {
+        this._keys = keys;
     }
     /**
      * Sign payload and return JWT
@@ -87,7 +87,7 @@ var JWT = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var pemPrivateKey = keyEncoder.encodePrivate(_this.keyPair.privateKey, 'raw', 'pem');
+                        var pemPrivateKey = keyEncoder.encodePrivate(_this._keys.privateKey, 'raw', 'pem');
                         jwt.sign(payload, pemPrivateKey, options, function (error, token) {
                             if (error)
                                 reject(error);
@@ -105,8 +105,8 @@ var JWT = /** @class */ (function () {
      * import { Keys } from '@ew-did-registry/keys';
      * import { JWT } from '@ew-did-registry/jwt';
      *
-     * const AliceKeyPair = Keys.generateKeyPair();
-     * const BobKeyPair = Keys.generateKeyPair();
+     * const AliceKeyPair = new Keys();
+     * const BobKeyPair = new Keys();
      * const jwtAlice = new JWT(AliceKeyPair);
      * const jwtBob = new JWT(BobKeyPair);
      * const payload = {claim: 'test'};

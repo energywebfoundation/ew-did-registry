@@ -26,9 +26,9 @@
 
 ###  constructor
 
-\+ **new JWT**(`keyPair`: IKeys): *[JWT](jwt.md)*
+\+ **new JWT**(`keys`: IKeys): *[JWT](jwt.md)*
 
-*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/4e486b2/packages/jwt/src/index.ts#L10)*
+*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/jwt/src/index.ts#L10)*
 
 Key pair has to be passed on construction to JWT
 
@@ -36,7 +36,7 @@ Key pair has to be passed on construction to JWT
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`keyPair` | IKeys |   |
+`keys` | IKeys |   |
 
 **Returns:** *[JWT](jwt.md)*
 
@@ -48,7 +48,7 @@ Name | Type | Description |
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:128](https://github.com/energywebfoundation/ew-did-registry/blob/4e486b2/packages/jwt/src/index.ts#L128)*
+*Defined in [jwt/src/index.ts:128](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/jwt/src/index.ts#L128)*
 
 Return decoded JWT payload without verifying signature
 
@@ -89,7 +89,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/4e486b2/packages/jwt/src/index.ts#L45)*
+*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/jwt/src/index.ts#L45)*
 
 Sign payload and return JWT
 
@@ -128,7 +128,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:90](https://github.com/energywebfoundation/ew-did-registry/blob/4e486b2/packages/jwt/src/index.ts#L90)*
+*Defined in [jwt/src/index.ts:90](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/jwt/src/index.ts#L90)*
 
 If the signature is correct, method returns decoded JWT payload
 
@@ -137,8 +137,8 @@ If the signature is correct, method returns decoded JWT payload
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
 
-const AliceKeyPair = Keys.generateKeyPair();
-const BobKeyPair = Keys.generateKeyPair();
+const AliceKeyPair = new Keys();
+const BobKeyPair = new Keys();
 const jwtAlice = new JWT(AliceKeyPair);
 const jwtBob = new JWT(BobKeyPair);
 const payload = {claim: 'test'};
