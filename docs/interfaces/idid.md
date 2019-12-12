@@ -19,7 +19,7 @@
 
 ▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
 
-*Defined in [did/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/did/src/interface.ts#L30)*
+*Defined in [did/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L30)*
 
 Gets a DID for a particular network
 
@@ -37,7 +37,7 @@ ___
 
 ▸ **set**(`did`: string): *void*
 
-*Defined in [did/src/interface.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/did/src/interface.ts#L14)*
+*Defined in [did/src/interface.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L14)*
 
 Sets a DID for a particular network (inferred from DID provided)
 
@@ -51,7 +51,7 @@ Name | Type |
 
 ▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *void*
 
-*Defined in [did/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/c915f86/packages/did/src/interface.ts#L22)*
+*Defined in [did/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L22)*
 
 Sets a DID for the provided network
 

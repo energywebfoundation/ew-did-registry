@@ -15,7 +15,7 @@ declare class JWT implements IJWT {
      * import { Keys } from '@ew-did-registry/keys';
      * import { JWT } from '@ew-did-registry/jwt';
      *
-     * const keyPair = Keys.generateKeyPair();
+     * const keyPair = new Keys();
      * const jwt = new JWT(keyPair);
      * const payload = {claim: 'test'};
      * let token;
@@ -73,10 +73,10 @@ declare class JWT implements IJWT {
      * import { Keys } from '@ew-did-registry/keys';
      * import { JWT } from '@ew-did-registry/jwt';
      *
-     * const AliceKeyPair = Keys.generateKeyPair();
-     * const BobKeyPair = Keys.generateKeyPair();
+     * const AliceKeyPair = new Keys();
+     * const BobKeyPair = new Keys();
      * const jwtAlice = new JWT(AliceKeyPair);
-     * const jwtBob = new JWT(jwtBob);
+     * const jwtBob = new JWT(BobKeyPair);
      * const payload = {claim: 'test'};
      *
      * const token = await jwtAlice.sign(payload, { algorithm: 'ES256' });
