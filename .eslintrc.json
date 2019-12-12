@@ -23,10 +23,12 @@
   ],
   "rules": {
     "import/no-unresolved": "error",
+    "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0,
     "import/extensions": "off",
-    "space-infix-ops": ["error", { "int32Hint": false }]
+    "space-infix-ops": ["error", { "int32Hint": false }],
+    "no-underscore-dangle": 0
   },
   "settings": {
     "import/resolver": {
