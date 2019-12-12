@@ -1,63 +1,68 @@
 import { IKeys } from '@ew-did-registry/keys';
+// import { IDidDocument } from '@ew-did-registry/did-resolver';
+import { JWT } from '@ew-did-registry/jwt';
 import { IClaims } from './interface';
 import { IPrivateClaim, PrivateClaim } from './private';
 import { ClaimType, IClaimData, IVerificationClaim } from './models';
 import { IProofClaim, ProofClaim } from './proof';
-import { IDIDDocument } from '../../did-resolver/src';
-import VerificationClaim from './public/verificationClaim';
+import { VerificationClaim } from './public';
 
 class Claims implements IClaims {
-  private _didDocument: IDidDocument;
+  // private _didDocument: IDidDocument;
 
   private _keyPair: IKeys;
 
-  constructor(keyPair: IKeys, didDocument: IDIDDocument) {
+  constructor(keyPair: IKeys/*, didDocument: IDidDocument*/) {
     this._keyPair = keyPair;
-    this._didDocument = didDocument;
+    // this._didDocument = didDocument;
   }
 
-  createPublicClaim(claimData: IClaimData): IVerificationClaim {
+  async createPublicClaim(claimData: IClaimData): Promise<IVerificationClaim> {
+    const jwt = new JWT(this._keyPair);
+    const token = await jwt.sign(claimData);
     return new VerificationClaim({
-      jwt: null,
+      jwt,
       keyPair: this._keyPair,
-      claimData,
-      token: null,
+      token,
     });
   }
 
-  createPrivateClaim(claimData: IClaimData, didIssuer: string): IPrivateClaim {
+  async createPrivateClaim(claimData: IClaimData, didIssuer: string): Promise<IPrivateClaim> {
+    const jwt = new JWT(this._keyPair);
+    const token = await jwt.sign(claimData);
     return new PrivateClaim({
-      jwt: null,
+      jwt,
       keyPair: this._keyPair,
-      token: null,
-      claimData,
+      token,
       issuerDid: didIssuer,
     });
   }
 
-  createProofClaim(claimData: IClaimData, hashedFields: number[]): IProofClaim {
+  async createProofClaim(claimData: IClaimData, hashedFields: number[]): Promise<IProofClaim> {
+    const jwt = new JWT(this._keyPair);
+    const token = await jwt.sign(claimData);
     return new ProofClaim({
-      jwt: null,
+      jwt,
       keyPair: this._keyPair,
-      token: null,
-      claimData,
+      token,
       hashedFields,
     });
   }
 
-  generateClaimFromToken(token: string, type: ClaimType):
-      IVerificationClaim | IPrivateClaim | IProofClaim {
-    const jwt = null; // JWT.decode(token)
-    const { claimData, hashedFields, didIssuer } = jwt;
+  async generateClaimFromToken(token: string, type: ClaimType):
+      Promise<IVerificationClaim | IPrivateClaim | IProofClaim> {
+    const jwt = new JWT(this._keyPair);
+    // @ts-ignore
+    const { claimData, hashedFields, didIssuer } = await jwt.verify(token, this._keyPair.publicKey);
     switch (type) {
       case ClaimType.Public:
-        return this.createPublicClaim(claimData);
+        return await this.createPublicClaim(claimData);
       case ClaimType.Private:
-        return this.createPrivateClaim(claimData, hashedFields);
+        return await this.createPrivateClaim(claimData, hashedFields);
       case ClaimType.Proof:
-        return this.createProofClaim(claimData, didIssuer);
+        return await this.createProofClaim(claimData, didIssuer);
       default:
-        return this.createPublicClaim(claimData);
+        return await this.createPublicClaim(claimData);
     }
   }
 }

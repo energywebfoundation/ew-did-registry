@@ -11,7 +11,7 @@ export interface IClaims {
     /**
      * private members:
      * didDocument: IDidDocument
-     * keyPair: IKeyPair;
+     * keyPair: IKeys;
      */
 
     /**
@@ -19,7 +19,7 @@ export interface IClaims {
      * @param {IClaimData} data
      * @returns {IClaim}
      */
-    createPublicClaim(data: IClaimData): IVerificationClaim;
+    createPublicClaim(data: IClaimData): Promise<IVerificationClaim>;
 
     /**
      * Create Private Claim by providing claim data and Issuer's DID
@@ -27,7 +27,7 @@ export interface IClaims {
      * @param {string} didIssuer
      * @returns {IPrivateClaim}
      */
-    createPrivateClaim(data: IClaimData, didIssuer: string): IPrivateClaim;
+    createPrivateClaim(data: IClaimData, didIssuer: string): Promise<IPrivateClaim>;
 
     /**
      * Create Proof Claim with claim data and hashed claim fields
@@ -35,7 +35,7 @@ export interface IClaims {
      * @param {number[]} hashedFields
      * @returns {IProofClaim}
      */
-    createProofClaim(data: IClaimData, hashedFields: number[]): IProofClaim;
+    createProofClaim(data: IClaimData, hashedFields: number[]): Promise<IProofClaim>;
 
     /**
      * Provided with JWT this method will generate a Claim
@@ -44,5 +44,5 @@ export interface IClaims {
      * @returns {IVerificationClaim | PrivateClaim | IProofClaim}
      */
     generateClaimFromToken(token: string, type: ClaimType):
-        IVerificationClaim | IPrivateClaim | IProofClaim;
+        Promise<IVerificationClaim | IPrivateClaim | IProofClaim>;
 }
