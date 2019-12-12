@@ -1,4 +1,4 @@
-import {ec as EC} from 'elliptic';
+import { ec as EC } from 'elliptic';
 import BN from 'bn.js';
 // @ts-ignore
 import ecies from 'ecies-parity';
@@ -16,6 +16,7 @@ class Keys implements IKeys {
      * Private Key of secp256k1
      */
     privateKey: string;
+
     /**
      * Public Key of secp256k1
      */
@@ -26,23 +27,23 @@ class Keys implements IKeys {
      * @param {string} publicKey
      */
     constructor({ privateKey, publicKey }: KeyPair = {}) {
-        if (privateKey && publicKey) {
-            this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
-            this.privateKey = privateKey;
-            this.publicKey = publicKey;
-        } else if (privateKey) {
-            this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
-            this.privateKey = privateKey;
-            this.publicKey = this._keyPair.getPublic(true, 'hex').padStart(66, '0');
-        } else if (publicKey) {
-            this._keyPair = ec.keyFromPublic(publicKey, 'hex');
-            this.publicKey = publicKey;
-        } else {
-            const { privateKey, publicKey } = Keys.generateKeyPair();
-            this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
-            this.privateKey = privateKey;
-            this.publicKey = publicKey;
-        }
+      if (privateKey && publicKey) {
+        this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+      } else if (privateKey) {
+        this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
+        this.privateKey = privateKey;
+        this.publicKey = this._keyPair.getPublic(true, 'hex').padStart(66, '0');
+      } else if (publicKey) {
+        this._keyPair = ec.keyFromPublic(publicKey, 'hex');
+        this.publicKey = publicKey;
+      } else {
+        const { privateKey, publicKey } = Keys.generateKeyPair();
+        this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+      }
     }
 
     /**
@@ -65,10 +66,10 @@ class Keys implements IKeys {
      * @returns {Promise<string>}
      */
     async decrypt(encrypted: string, publicKey?: string): Promise<string> {
-        const encryptedBuffer = Buffer.from(encrypted, 'hex');
-        const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-        const data = await ecies.decrypt(privateKeyBuffer, encryptedBuffer);
-        return data.toString();
+      const encryptedBuffer = Buffer.from(encrypted, 'hex');
+      const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
+      const data = await ecies.decrypt(privateKeyBuffer, encryptedBuffer);
+      return data.toString();
     }
 
     /**
@@ -90,11 +91,17 @@ class Keys implements IKeys {
      * @returns {Promise<string>}
      */
     async encrypt(data: string, publicKeyTo?: string): Promise<string> {
-        const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
-        const dataBuffer = Buffer.from(data);
-        const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-        const encrypted = await ecies.encrypt(publicKeyToBuffer, dataBuffer, { ephemPrivateKey: privateKeyBuffer });
-        return encrypted.toString('hex');
+      const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
+      const dataBuffer = Buffer.from(data);
+      const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
+      const encrypted = await ecies.encrypt(
+        publicKeyToBuffer,
+        dataBuffer,
+        {
+          ephemPrivateKey: privateKeyBuffer,
+        },
+      );
+      return encrypted.toString('hex');
     }
 
     /**
@@ -115,19 +122,19 @@ class Keys implements IKeys {
      * @returns {string}
      */
     sign(data: string, privateKey?: string): string {
-        let keyPair = this._keyPair;
-        if (privateKey) {
-            keyPair = ec.keyFromPrivate(privateKey, 'hex');
-        }
+      let keyPair = this._keyPair;
+      if (privateKey) {
+        keyPair = ec.keyFromPrivate(privateKey, 'hex');
+      }
 
-        const hash = sha256(data);
+      const hash = sha256(data);
 
-        const signature = keyPair.sign(hash, "hex", {
-            canonical: true,
-            pers: true,
-        });
+      const signature = keyPair.sign(hash, 'hex', {
+        canonical: true,
+        pers: true,
+      });
 
-        return signature.r.toString(16, 64) + signature.s.toString(16, 64);
+      return signature.r.toString(16, 64) + signature.s.toString(16, 64);
     }
 
     /**
@@ -149,16 +156,16 @@ class Keys implements IKeys {
      * @returns {boolean}
      */
     verify(data: string, signature: string, publicKey?: string): boolean {
-        let keyPair = this._keyPair;
-        if (publicKey) {
-            keyPair = ec.keyFromPublic(publicKey, 'hex');
-        }
+      let keyPair = this._keyPair;
+      if (publicKey) {
+        keyPair = ec.keyFromPublic(publicKey, 'hex');
+      }
 
-        const r = new BN(signature.slice(0, 64), 16);
-        const s = new BN(signature.slice(64, 128), 16);
+      const r = new BN(signature.slice(0, 64), 16);
+      const s = new BN(signature.slice(64, 128), 16);
 
-        const hash = sha256(data);
-        return keyPair.verify(hash, { r, s });
+      const hash = sha256(data);
+      return keyPair.verify(hash, { r, s });
     }
 
     /**
@@ -176,15 +183,15 @@ class Keys implements IKeys {
      * @returns {KeyPair}
      */
     static generateKeyPair(): KeyPair {
-        const keyPair = ec.genKeyPair();
-        return {
-            privateKey: keyPair.getPrivate('hex').padStart(64, '0'),
-            publicKey: keyPair.getPublic(true, 'hex').padStart(66, '0'),
-        };
+      const keyPair = ec.genKeyPair();
+      return {
+        privateKey: keyPair.getPrivate('hex').padStart(64, '0'),
+        publicKey: keyPair.getPublic(true, 'hex').padStart(66, '0'),
+      };
     }
 }
 
 export {
-    Keys,
-    IKeys,
+  Keys,
+  IKeys,
 };
