@@ -135,7 +135,9 @@ var Keys = /** @class */ (function () {
                         publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
                         dataBuffer = Buffer.from(data);
                         privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-                        return [4 /*yield*/, ecies_parity_1.default.encrypt(publicKeyToBuffer, dataBuffer, { ephemPrivateKey: privateKeyBuffer })];
+                        return [4 /*yield*/, ecies_parity_1.default.encrypt(publicKeyToBuffer, dataBuffer, {
+                                ephemPrivateKey: privateKeyBuffer,
+                            })];
                     case 1:
                         encrypted = _a.sent();
                         return [2 /*return*/, encrypted.toString('hex')];
@@ -166,7 +168,7 @@ var Keys = /** @class */ (function () {
             keyPair = ec.keyFromPrivate(privateKey, 'hex');
         }
         var hash = functions_1.sha256(data);
-        var signature = keyPair.sign(hash, "hex", {
+        var signature = keyPair.sign(hash, 'hex', {
             canonical: true,
             pers: true,
         });
