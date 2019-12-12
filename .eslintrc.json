@@ -26,7 +26,9 @@
     "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0,
-    "no-underscore-dangle": 0
+    "import/extensions": 0,
+    "no-underscore-dangle": "off",
+    "space-infix-ops": ["error", { "int32Hint": false }]
   },
   "settings": {
     "import/resolver": {

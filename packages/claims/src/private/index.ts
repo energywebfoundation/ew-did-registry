@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { IPrivateClaim } from './interface';
 import { VerificationClaim } from '../public';
 import { IPrivateClaimBuildData } from '../models';

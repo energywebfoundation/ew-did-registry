@@ -1,5 +1,4 @@
 import { IKeys } from '@ew-did-registry/keys';
-import { IJWT } from '@ew-did-registry/jwt';
 import { IClaims } from './interface';
 import { IPrivateClaim, PrivateClaim } from './private';
 import { ClaimType, IClaimData, IVerificationClaim } from './models';
