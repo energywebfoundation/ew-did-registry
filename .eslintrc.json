@@ -24,7 +24,9 @@
   "rules": {
     "import/no-unresolved": "error",
     "import/prefer-default-export": 0,
-    "@typescript-eslint/interface-name-prefix": 0
+    "@typescript-eslint/interface-name-prefix": 0,
+    "import/extensions": "off",
+    "space-infix-ops": ["error", { "int32Hint": false }]
   },
   "settings": {
     "import/resolver": {

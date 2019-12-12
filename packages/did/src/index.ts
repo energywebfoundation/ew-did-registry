@@ -1,5 +1,5 @@
 import { IDID } from './interface';
-import { Networks } from './models';
+import { DID_SCHEME_PATTERNS, Networks } from './models';
 
 /* eslint-disable no-underscore-dangle */
 class DID implements IDID {
@@ -7,18 +7,6 @@ class DID implements IDID {
    * Mappings from networks to DIDs
    */
   private _dids: Map<string, string> = new Map();
-
-  /**
-   * DID specification rule for method-name
-   * The pattern allows an empty identifier to identify a method or did-registry
-   * See [Issue 34] {@link https://github.com/w3c/did-core/issues/34}
-   */
-  private _networkPattern=/[a-z]+/;
-
-  /**
-   * DID specification rule for method-specific-id
-   */
-  private _idPattern=/[\w.-]*(:[\w.-]*)*/;
 
   /**
    * Gets a DID for a particular network
@@ -92,10 +80,10 @@ class DID implements IDID {
     if (id === undefined) {
       throw new Error('DID must consist of three parts separated by a colon');
     }
-    if (!this._networkPattern.test(network)) {
+    if (!DID_SCHEME_PATTERNS.NETWORK_PATTERN.test(network)) {
       throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
     }
-    if (!this._idPattern.test(id)) {
+    if (!DID_SCHEME_PATTERNS.ID_PATTERN.test(id)) {
       throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
     }
     this._dids.set(network, did);

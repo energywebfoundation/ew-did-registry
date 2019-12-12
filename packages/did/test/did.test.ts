@@ -21,7 +21,7 @@ describe('[DID PACKAGE]', () => {
   });
 
   it('Setting DID without id should not throw an error', async () => {
-    const did = 'did:my_method:';
+    const did = 'did:mymethod001:';
     expect(() => { instance.set(did); }).to.not.throw();
   });
 
@@ -46,7 +46,7 @@ describe('[DID PACKAGE]', () => {
 
   it('Setting a valid ID and not predefined network should not throw an error',
     async () => {
-      const network = 'my_network';
+      const network = 'mynetwork001';
       const id = 'method_specific_id';
       expect(() => { instance.set(network, id); }).to.not.throw();
     });
