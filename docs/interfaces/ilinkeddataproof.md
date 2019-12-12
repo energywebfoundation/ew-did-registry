@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ILinkedDataProof](ilinkeddataproof.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ILinkedDataProof](ilinkeddataproof.md)
 
 # Interface: ILinkedDataProof
 

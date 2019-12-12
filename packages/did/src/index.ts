@@ -80,10 +80,10 @@ class DID implements IDID {
     if (id === undefined) {
       throw new Error('DID must consist of three parts separated by a colon');
     }
-    if (!DID_SCHEME_PATTERNS.NETWORK_PATTERN.test(network)) {
+    if (!DID_SCHEME_PATTERNS.NETWORK.test(network)) {
       throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
     }
-    if (!DID_SCHEME_PATTERNS.ID_PATTERN.test(id)) {
+    if (!DID_SCHEME_PATTERNS.ID.test(id)) {
       throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
     }
     this._dids.set(network, did);

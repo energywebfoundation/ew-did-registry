@@ -1,6 +1,6 @@
-[@ew-did-registry/claims](README.md) › [Globals](globals.md)
+[@ew-did-registry/did](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/claims
+# @ew-did-registry/did
 
 ## Index
 
@@ -162,23 +162,22 @@ Name | Type |
 
 Defined in did/src/models/index.ts:10
 
-###  ID_PATTERN
+###  ID
 
-• **ID_PATTERN**: *RegExp‹›* =  /^[\w.-]*(:[\w.-]*)*$/
+• **ID**: *RegExp‹›* =  /^[\w.-]*(:[\w.-]*)*$/
 
-Defined in did/src/models/index.ts:20
+Defined in did/src/models/index.ts:19
 
 DID specification rule for method-specific-id
-
-###  NETWORK_PATTERN
-
-• **NETWORK_PATTERN**: *RegExp‹›* =  /^[a-z0-9]+$/
-
-Defined in did/src/models/index.ts:16
-
 DID specification rule for method-name
 The pattern allows an empty identifier to identify a method or did-registry
 See [Issue 34] [https://github.com/w3c/did-core/issues/34](https://github.com/w3c/did-core/issues/34)
+
+###  NETWORK
+
+• **NETWORK**: *RegExp‹›* =  /^[a-z0-9]+$/
+
+Defined in did/src/models/index.ts:12
 
 ___
 
