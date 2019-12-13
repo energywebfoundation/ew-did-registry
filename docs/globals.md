@@ -1,6 +1,6 @@
-[@ew-did-registry/claims](README.md) › [Globals](globals.md)
+[@ew-did-registry/did](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/claims
+# @ew-did-registry/did
 
 ## Index
 
@@ -12,6 +12,7 @@
 
 ### Classes
 
+* [DID](classes/did.md)
 * [JWT](classes/jwt.md)
 * [Keys](classes/keys.md)
 
@@ -61,6 +62,7 @@
 
 ### Object literals
 
+* [DID_SCHEME_PATTERNS](globals.md#const-did_scheme_patterns)
 * [ECDSA_PATTERNS](globals.md#const-ecdsa_patterns)
 * [hex](globals.md#const-hex)
 
@@ -162,6 +164,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
+Defined in jwt/src/index.ts:3
 *Defined in [did-resolver/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/index.ts#L4)*
 
 **Parameters:**
@@ -190,6 +193,31 @@ Name | Type |
 **Returns:** *string*
 
 ## Object literals
+
+### `Const` DID_SCHEME_PATTERNS
+
+### ▪ **DID_SCHEME_PATTERNS**: *object*
+
+Defined in did/src/models/index.ts:10
+
+###  ID
+
+• **ID**: *RegExp‹›* =  /^[\w.-]*(:[\w.-]*)*$/
+
+Defined in did/src/models/index.ts:19
+
+DID specification rule for method-specific-id
+DID specification rule for method-name
+The pattern allows an empty identifier to identify a method or did-registry
+See [Issue 34] [https://github.com/w3c/did-core/issues/34](https://github.com/w3c/did-core/issues/34)
+
+###  NETWORK
+
+• **NETWORK**: *RegExp‹›* =  /^[a-z0-9]+$/
+
+Defined in did/src/models/index.ts:12
+
+___
 
 ### `Const` ECDSA_PATTERNS
 

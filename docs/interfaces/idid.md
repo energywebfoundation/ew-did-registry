@@ -1,10 +1,14 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
 
 # Interface: IDID
 
 ## Hierarchy
 
 * **IDID**
+
+## Implemented by
+
+* [DID](../classes/did.md)
 
 ## Index
 
@@ -17,7 +21,7 @@
 
 ###  get
 
-▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
+▸ **get**(`network`: string): *string | undefined*
 
 *Defined in [did/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L30)*
 
@@ -27,7 +31,7 @@ Gets a DID for a particular network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 
 **Returns:** *string | undefined*
 
@@ -35,7 +39,7 @@ ___
 
 ###  set
 
-▸ **set**(`did`: string): *void*
+▸ **set**(`did`: string): *[IDID](idid.md)*
 
 *Defined in [did/src/interface.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L14)*
 
@@ -47,9 +51,9 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*
 
-▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *void*
+▸ **set**(`network`: string, `id`: string): *[IDID](idid.md)*
 
 *Defined in [did/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did/src/interface.ts#L22)*
 
@@ -59,7 +63,7 @@ Sets a DID for the provided network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 `id` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*

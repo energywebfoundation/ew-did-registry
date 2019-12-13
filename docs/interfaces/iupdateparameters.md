@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IUpdateParameters](iupdateparameters.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IUpdateParameters](iupdateparameters.md)
 
 # Interface: IUpdateParameters
 

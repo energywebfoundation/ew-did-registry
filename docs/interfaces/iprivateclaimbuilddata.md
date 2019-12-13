@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IPrivateClaimBuildData](iprivateclaimbuilddata.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IPrivateClaimBuildData](iprivateclaimbuilddata.md)
 
 # Interface: IPrivateClaimBuildData
 
