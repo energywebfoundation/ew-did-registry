@@ -1,5 +1,5 @@
 import { IKeys } from '@ew-did-registry/keys';
-// import { IDidDocument } from '@ew-did-registry/did-resolver';
+import { IDidDocument } from '@ew-did-registry/did-resolver';
 import { JWT } from '@ew-did-registry/jwt';
 import { IClaims } from './interface';
 import { IPrivateClaim, PrivateClaim } from './private';
@@ -8,15 +8,44 @@ import { IProofClaim, ProofClaim } from './proof';
 import { VerificationClaim } from './public';
 
 class Claims implements IClaims {
-  // private _didDocument: IDidDocument;
+  /**
+   * Did document describing the subject for which this factory creates the claims
+   */
+  private _didDocument: IDidDocument;
 
-  private _keyPair: IKeys;
+  /**
+   * Subject keypair
+   */
+  private readonly _keyPair: IKeys;
 
-  constructor(keyPair: IKeys/*, didDocument: IDidDocument*/) {
+  /**
+   *
+   * @param {IKeys} keyPair
+   * @param {IDidDocumetn} didDocument
+   */
+  constructor(keyPair: IKeys) {
     this._keyPair = keyPair;
-    // this._didDocument = didDocument;
   }
 
+  /**
+   * Creates verifiable claim with data about subject provided in claimData
+   *
+   * @example
+   * ```typescript
+   * import { Claims } from '@ew-did-registry/claims';
+   * import { Networks } from '@ew-did-registry/did';
+   *
+   * const claims = new Claims(keys);
+   * const claimData = {
+   *     did: 'did:Networks.Ethereum:my_id',
+   *     data: 'data'
+   * };
+   * const claim = await claims.createPublicClaim(claimData);
+   * ```
+   * @param {IClaimData } claimData
+   *
+   * @return {Promise<IVerificationClaim>}
+   */
   async createPublicClaim(claimData: IClaimData): Promise<IVerificationClaim> {
     const jwt = new JWT(this._keyPair);
     const token = await jwt.sign(claimData);
@@ -27,6 +56,27 @@ class Claims implements IClaims {
     });
   }
 
+  /**
+   * Creates claim which will be sent in encoded form to the didIssuer
+   *
+   * @example
+   * ```typescript
+   * import { Claims } from '@ew-did-registry/claims';
+   * import { Networks } from '@ew-did-registry/did';
+   *
+   * const claims = new Claims(keys);
+   * const claimData = {
+   *     did: 'did:Networks.Ethereum:my_id',
+   *     data: 'secret data'
+   * };
+   * const didIssuer = 'did:Networks.Ethereum:issuer_id';
+   * const claim = await claims.createPrivateClaim(claimData, didIssuer);
+   * ```
+   * @param {IClaimData } claimData
+   * @param {string} didIssuer
+   *
+   * @return {Promise<IPrivateClaim>}
+   */
   async createPrivateClaim(claimData: IClaimData, didIssuer: string): Promise<IPrivateClaim> {
     const jwt = new JWT(this._keyPair);
     const token = await jwt.sign(claimData);
@@ -38,6 +88,27 @@ class Claims implements IClaims {
     });
   }
 
+  /**
+   * Creates claim with verifiable data in hashedFields
+   *
+   * @example
+   * ```typescript
+   * import { Claims } from '@ew-did-registry/claims';
+   * import { Networks } from '@ew-did-registry/did';
+   *
+   * const claims = new Claims(keys);
+   * const claimData = {
+   *     did: 'did:Networks.Ethereum:my_id',
+   *     data: 'secret data'
+   * };
+   * const hashedFields = [123, 456];
+   * const claim = await claims.createProofClaim(claimData, hashedFields);
+   * ```
+   * @param {IClaimData } claimData
+   * @param {number[]} hashedFields
+   *
+   * @return {Promise<IPrivateClaim>}
+   */
   async createProofClaim(claimData: IClaimData, hashedFields: number[]): Promise<IProofClaim> {
     const jwt = new JWT(this._keyPair);
     const token = await jwt.sign(claimData);
@@ -49,6 +120,23 @@ class Claims implements IClaims {
     });
   }
 
+  /**
+   * Creates claim of the specified type from the serialized claim
+   *
+   * @example
+   * ```typescript
+   * import { Claims, ClaimType } from '@ew-did-registry/claims';
+   *
+   * const keys = new Keys();
+   * const claims = new Claims(keys);
+   * const claim = claims.generateClaimFromToken(
+   * ```
+   *
+   * @param { string } token
+   * @param { ClaimType } type
+   *
+   * @return Promise<IVerificationClaim | IPrivateClaim | IProofClaim>
+   */
   async generateClaimFromToken(token: string, type: ClaimType):
       Promise<IVerificationClaim | IPrivateClaim | IProofClaim> {
     const jwt = new JWT(this._keyPair);
@@ -56,13 +144,13 @@ class Claims implements IClaims {
     const { claimData, hashedFields, didIssuer } = await jwt.verify(token, this._keyPair.publicKey);
     switch (type) {
       case ClaimType.Public:
-        return await this.createPublicClaim(claimData);
+        return this.createPublicClaim(claimData);
       case ClaimType.Private:
-        return await this.createPrivateClaim(claimData, hashedFields);
+        return this.createPrivateClaim(claimData, hashedFields);
       case ClaimType.Proof:
-        return await this.createProofClaim(claimData, didIssuer);
+        return this.createProofClaim(claimData, didIssuer);
       default:
-        return await this.createPublicClaim(claimData);
+        return this.createPublicClaim(claimData);
     }
   }
 }
@@ -70,4 +158,9 @@ class Claims implements IClaims {
 export {
   IClaims,
   Claims,
+  IClaimData,
+  ClaimType,
+  IVerificationClaim,
+  IPrivateClaim,
+  IProofClaim,
 };
