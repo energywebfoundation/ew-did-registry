@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
 
 # Interface: IAuthentication
 
