@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
 
 # Interface: IProvider
 
@@ -22,7 +22,7 @@ Specifies current Provider
 
 • **options**? : *object*
 
-*Defined in [did-resolver/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L13)*
+*Defined in [did-resolver/src/models/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L15)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-*Defined in [did-resolver/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L12)*
+*Defined in [did-resolver/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L14)*
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 • **uri**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L11)*
+*Defined in [did-resolver/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L13)*

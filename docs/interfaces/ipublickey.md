@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IPublicKey](ipublickey.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IPublicKey](ipublickey.md)
 
 # Interface: IPublicKey
 
@@ -27,7 +27,7 @@
 
 • **controller**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L48)*
+*Defined in [did-resolver/src/models/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L50)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **ethereumAddress**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L49)*
+*Defined in [did-resolver/src/models/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L51)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L46)*
+*Defined in [did-resolver/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L48)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **publicKeyBase58**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L51)*
+*Defined in [did-resolver/src/models/index.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L53)*
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 • **publicKeyBase64**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L50)*
+*Defined in [did-resolver/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L52)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **publicKeyHex**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L52)*
+*Defined in [did-resolver/src/models/index.ts:54](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L54)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 • **publicKeyJwk**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:54](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L54)*
+*Defined in [did-resolver/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L56)*
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 • **publicKeyMultibase**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:55](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L55)*
+*Defined in [did-resolver/src/models/index.ts:57](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L57)*
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **publicKeyPem**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L53)*
+*Defined in [did-resolver/src/models/index.ts:55](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L55)*
 
 ___
 
@@ -99,4 +99,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L47)*
+*Defined in [did-resolver/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L49)*

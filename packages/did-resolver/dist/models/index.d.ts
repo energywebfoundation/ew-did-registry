@@ -1,3 +1,4 @@
+import { ParamType } from 'ethers/utils';
 export declare enum ProviderTypes {
     HTTP = 0,
     IPC = 1,
@@ -17,18 +18,18 @@ export interface IProvider {
  */
 export interface IResolverSettings {
     provider?: IProvider;
-    abi?: string;
+    abi?: Array<string | ParamType>;
     address?: string;
 }
 export interface IDIDDocument {
-    context: string;
+    '@context': string;
     id: string;
     publicKey: IPublicKey[];
     authentication: Array<IAuthentication | string>;
-    delegates: string[];
-    service: IServiceEndpoint[];
-    created: string;
-    updated: string;
+    delegates?: string[];
+    service?: IServiceEndpoint[];
+    created?: string;
+    updated?: string;
     proof?: ILinkedDataProof;
 }
 export interface IServiceEndpoint {
@@ -58,4 +59,43 @@ export interface ILinkedDataProof {
     created: string;
     creator: string;
     signatureValue: string;
+}
+export interface ISmartContractEvent {
+    name: string;
+    signature: string;
+    topic: string;
+    values: {
+        identity: string;
+        delegateType: string;
+        delegate: string;
+        validTo: {
+            _hex: string;
+        };
+        previousChange: object;
+        name?: string;
+        value?: string;
+    };
+    value?: string;
+}
+export interface IDIDLogData {
+    owner: string;
+    publicKey: {
+        [key: string]: IPublicKey;
+    };
+    authentication: {
+        [key: string]: string;
+    };
+    delegates?: string[];
+    serviceEndpoints?: {
+        [key: string]: IServiceEndpoint;
+    };
+    created?: string;
+    updated?: string;
+    proof?: ILinkedDataProof;
+    attributes?: Map<string, {
+        [key: string]: string;
+    }>;
+}
+export interface IHandlers {
+    [key: string]: (event: ISmartContractEvent, etherAddress: string, document: IDIDLogData) => IDIDLogData;
 }

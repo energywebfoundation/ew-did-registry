@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IResolverSettings](iresolversettings.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolverSettings](iresolversettings.md)
 
 # Interface: IResolverSettings
 
@@ -21,9 +21,9 @@ address of the smart contract representing DID Registry
 
 ### `Optional` abi
 
-• **abi**? : *string*
+• **abi**? : *Array‹string | ParamType›*
 
-*Defined in [did-resolver/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L22)*
+*Defined in [did-resolver/src/models/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L24)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **address**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L23)*
+*Defined in [did-resolver/src/models/index.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L25)*
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 • **provider**? : *[IProvider](iprovider.md)*
 
-*Defined in [did-resolver/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L21)*
+*Defined in [did-resolver/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L23)*
