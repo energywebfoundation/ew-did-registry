@@ -1,5 +1,4 @@
-import ethers from 'ethers';
-import BN from 'bn.js';
+import { ethers } from 'ethers';
 
 import {
   IDIDDocument,
@@ -126,14 +125,9 @@ const updateDocument = (event: ISmartContractEvent,
   eventName: string,
   etherAddress: string,
   document: IDIDLogData) => {
-  const now = new BN(Math.floor(new Date().getTime() / 1000));
+  const now = new ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
 
-  const valid = event.values.validTo;
-
-  let validTo;
-  if (valid) {
-    validTo = new BN(valid._hex, 'hex');
-  }
+  const { validTo } = event.values;
 
   if (validTo && validTo.gt(now)) {
     const handler = handlers[eventName];

@@ -22,7 +22,7 @@
 
 • **name**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L73)*
+*Defined in [did-resolver/src/models/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L73)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **signature**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:74](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L74)*
+*Defined in [did-resolver/src/models/index.ts:74](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L74)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **topic**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:75](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L75)*
+*Defined in [did-resolver/src/models/index.ts:75](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L75)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **value**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L85)*
+*Defined in [did-resolver/src/models/index.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L85)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **values**: *object*
 
-*Defined in [did-resolver/src/models/index.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/models/index.ts#L76)*
+*Defined in [did-resolver/src/models/index.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L76)*
 
 #### Type declaration:
 
@@ -68,8 +68,6 @@ ___
 
 * **previousChange**: *object*
 
-* **validTo**(): *object*
-
-  * **_hex**: *string*
+* **validTo**: *BigNumber*
 
 * **value**? : *string*

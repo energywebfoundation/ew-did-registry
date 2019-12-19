@@ -253,4 +253,3 @@ export const defaultResolverSettings = {
 };
 
 export const matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-export const matchingPatternDid = /^did\/method\/(\w+)/;

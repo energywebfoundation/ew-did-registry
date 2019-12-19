@@ -24,18 +24,19 @@
 
 ###  constructor
 
-\+ **new Resolver**(`keys`: IKeys, `settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
+\+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/index.ts#L18)*
+*Defined in [did-resolver/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/index.ts#L10)*
 
-Key pair has to be passed on construction to JWT
+Constructor
+
+Settings have to be passed to construct resolver
 
 **Parameters:**
 
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
-`keys` | IKeys | - |   |
-`settings` | [IResolverSettings](../interfaces/iresolversettings.md) |  defaultResolverSettings | - |
+`settings` | [IResolverSettings](../interfaces/iresolversettings.md) |  defaultResolverSettings |   |
 
 **Returns:** *[Resolver](resolver.md)*
 
@@ -47,7 +48,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b6dc9ee/packages/did-resolver/src/index.ts#L29)*
+*Defined in [did-resolver/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/index.ts#L22)*
 
 **Parameters:**
 

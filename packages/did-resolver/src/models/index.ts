@@ -1,4 +1,4 @@
-import { ParamType } from 'ethers/utils';
+import { ParamType, BigNumber } from 'ethers/utils';
 
 export enum ProviderTypes {
     HTTP,
@@ -77,7 +77,7 @@ export interface ISmartContractEvent {
         identity: string;
         delegateType: string;
         delegate: string;
-        validTo: { _hex: string };
+        validTo: BigNumber;
         previousChange: object;
         name?: string;
         value?: string;

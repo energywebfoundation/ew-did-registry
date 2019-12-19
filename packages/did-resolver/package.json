@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts --timeout 500000",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
@@ -23,8 +23,10 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/keys": "^1.0.0",
     "bn.js": "^5.0.0",
     "ethers": "^4.0.40"
+  },
+  "devDependencies": {
+    "chai-interface": "^2.0.3"
   }
 }
