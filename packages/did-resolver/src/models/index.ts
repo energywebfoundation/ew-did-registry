@@ -1,3 +1,5 @@
+export { default as Operator } from './operator';
+
 export enum ProviderTypes {
     HTTP,
     IPC,
