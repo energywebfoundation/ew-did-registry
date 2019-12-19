@@ -21,7 +21,7 @@
 
 • **description**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:44](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L44)*
+*Defined in [did-resolver/src/models/index.ts:44](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L44)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:41](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L41)*
+*Defined in [did-resolver/src/models/index.ts:41](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L41)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **serviceEndpoint**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L43)*
+*Defined in [did-resolver/src/models/index.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L43)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L42)*
+*Defined in [did-resolver/src/models/index.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L42)*

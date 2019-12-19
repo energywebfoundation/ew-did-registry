@@ -22,7 +22,7 @@ Specifies current Provider
 
 • **options**? : *object*
 
-*Defined in [did-resolver/src/models/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L15)*
+*Defined in [did-resolver/src/models/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L15)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-*Defined in [did-resolver/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L14)*
+*Defined in [did-resolver/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L14)*
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 • **uri**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L13)*
+*Defined in [did-resolver/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/did-resolver/src/models/index.ts#L13)*
