@@ -36,4 +36,3 @@ export declare const defaultResolverSettings: {
     address: string;
 };
 export declare const matchingPatternDidEvents: RegExp;
-export declare const matchingPatternDid: RegExp;

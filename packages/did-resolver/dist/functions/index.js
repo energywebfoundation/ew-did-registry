@@ -35,18 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var ethers_1 = __importDefault(require("ethers"));
-var bn_js_1 = __importDefault(require("bn.js"));
+var ethers_1 = require("ethers");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, id, document) {
     var publicKeyID = id + "#delegate-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined) {
         var delegateType = event.values.delegateType;
-        var stringDelegateType = ethers_1.default.utils.parseBytes32String(delegateType);
+        var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(delegateType);
         switch (stringDelegateType) {
             case 'sigAuth':
                 document.authentication[publicKeyID] = publicKeyID;
@@ -68,7 +64,7 @@ var handleDelegateChange = function (event, id, document) {
 var handleAttributeChange = function (event, etherAddress, document) {
     var attributeType = event.values.name;
     // console.log(`attributeType length is ${attributeType.length}`);
-    var stringAttributeType = ethers_1.default.utils.parseBytes32String(attributeType);
+    var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
     var match = stringAttributeType.match(constants_1.matchingPatternDidEvents);
     // console.log(match);
     if (match) {
@@ -135,12 +131,8 @@ var handlers = {
     DIDAttributeChanged: handleAttributeChange,
 };
 var updateDocument = function (event, eventName, etherAddress, document) {
-    var now = new bn_js_1.default(Math.floor(new Date().getTime() / 1000));
-    var valid = event.values.validTo;
-    var validTo;
-    if (valid) {
-        validTo = new bn_js_1.default(valid._hex, 'hex');
-    }
+    var now = new ethers_1.ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
+    var validTo = event.values.validTo;
     if (validTo && validTo.gt(now)) {
         var handler = handlers[eventName];
         return handler(event, etherAddress, document);
@@ -149,7 +141,7 @@ var updateDocument = function (event, eventName, etherAddress, document) {
 };
 var getEventsFromBlock = function (block, etherAddress, document, provider, resolverSettings) { return new Promise(function (resolve, reject) {
     var topics = [null, "0x000000000000000000000000" + etherAddress.slice(2)];
-    var smartContractInterface = new ethers_1.default.utils.Interface(resolverSettings.abi);
+    var smartContractInterface = new ethers_1.ethers.utils.Interface(resolverSettings.abi);
     provider.getLogs({
         address: resolverSettings.address,
         fromBlock: block.toNumber(),
@@ -157,8 +149,8 @@ var getEventsFromBlock = function (block, etherAddress, document, provider, reso
         topics: topics,
     }).then(function (Log) {
         var event = smartContractInterface.parseLog(Log[0]);
-        console.log('This is out event:\n');
-        console.log(event);
+        // console.log('This is out event:\n');
+        // console.log(event);
         var eventName = event.name;
         updateDocument(event, eventName, etherAddress, document);
         resolve(event.values.previousChange);
@@ -171,8 +163,8 @@ exports.fetchDataFromEvents = function (etherAddress, document, resolverSettings
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                provider = new ethers_1.default.providers.JsonRpcProvider(resolverSettings.provider.uri);
-                contract = new ethers_1.default.Contract(resolverSettings.address, resolverSettings.abi, provider);
+                provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uri);
+                contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
                 return [4 /*yield*/, contract.changed(etherAddress)];
             case 1:
                 previousChangedBlock = _b.sent();

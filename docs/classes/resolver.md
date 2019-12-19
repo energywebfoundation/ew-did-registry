@@ -26,7 +26,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/index.ts#L10)*
+*Defined in [did-resolver/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/index.ts#L10)*
 
 Constructor
 
@@ -48,7 +48,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/index.ts#L22)*
+*Defined in [did-resolver/src/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/index.ts#L22)*
 
 **Parameters:**
 

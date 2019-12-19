@@ -38,16 +38,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var constants_1 = require("./constants");
 var functions_1 = require("./functions");
-var add = function (left, right) { return left + right; };
-exports.add = add;
 var Resolver = /** @class */ (function () {
     /**
-     * Key pair has to be passed on construction to JWT
-     * @param {Keys} keys
+     * Constructor
+     *
+     * Settings have to be passed to construct resolver
+     * @param {IResolverSettings} settings
      */
-    function Resolver(keys, settings) {
+    function Resolver(settings) {
         if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
-        this._keys = keys;
         this._settings = settings;
     }
     Resolver.prototype.read = function (did) {
@@ -57,12 +56,11 @@ var Resolver = /** @class */ (function () {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var match, id, document, didDocument, error_1;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var _a, id, document, didDocument, error_1;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
-                                    match = did.match(constants_1.matchingPatternDidEvents);
-                                    id = match[2];
+                                    _a = did.split(':'), id = _a[2];
                                     document = {
                                         owner: undefined,
                                         authentication: {},
@@ -70,17 +68,17 @@ var Resolver = /** @class */ (function () {
                                         serviceEndpoints: {},
                                         attributes: new Map(),
                                     };
-                                    _a.label = 1;
+                                    _b.label = 1;
                                 case 1:
-                                    _a.trys.push([1, 3, , 4]);
+                                    _b.trys.push([1, 3, , 4]);
                                     return [4 /*yield*/, functions_1.fetchDataFromEvents(id, document, this._settings)];
                                 case 2:
-                                    _a.sent();
+                                    _b.sent();
                                     didDocument = functions_1.wrapDidDocument(id, document);
                                     resolve(didDocument);
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    error_1 = _a.sent();
+                                    error_1 = _b.sent();
                                     reject(error_1);
                                     return [3 /*break*/, 4];
                                 case 4: return [2 /*return*/];
@@ -92,4 +90,5 @@ var Resolver = /** @class */ (function () {
     };
     return Resolver;
 }());
+exports.Resolver = Resolver;
 //# sourceMappingURL=index.js.map

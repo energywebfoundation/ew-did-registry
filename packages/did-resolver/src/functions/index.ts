@@ -152,8 +152,8 @@ const getEventsFromBlock = (block: ethers.utils.BigNumber,
     topics,
   }).then((Log) => {
     const event = smartContractInterface.parseLog(Log[0]);
-    console.log('This is out event:\n');
-    console.log(event);
+    // console.log('This is out event:\n');
+    // console.log(event);
     const eventName = event.name;
     updateDocument(event, eventName, etherAddress, document);
 
@@ -178,8 +178,13 @@ export const fetchDataFromEvents = async (etherAddress: string,
   }
   while (previousChangedBlock.toNumber() !== 0) {
     // eslint-disable-next-line no-await-in-loop
-    previousChangedBlock = await getEventsFromBlock(previousChangedBlock,
-      etherAddress, document, provider, resolverSettings);
+    previousChangedBlock = await getEventsFromBlock(
+      previousChangedBlock,
+      etherAddress,
+      document,
+      provider,
+      resolverSettings,
+    );
   }
 };
 

@@ -23,7 +23,7 @@ address of the smart contract representing DID Registry
 
 • **abi**? : *Array‹string | ParamType›*
 
-*Defined in [did-resolver/src/models/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L24)*
+*Defined in [did-resolver/src/models/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L24)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **address**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L25)*
+*Defined in [did-resolver/src/models/index.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L25)*
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 • **provider**? : *[IProvider](iprovider.md)*
 
-*Defined in [did-resolver/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-resolver/src/models/index.ts#L23)*
+*Defined in [did-resolver/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-resolver/src/models/index.ts#L23)*

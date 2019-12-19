@@ -19,7 +19,7 @@
 
 • **type**? : *string*
 
-*Defined in [did-document/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-document/src/models/index.ts#L3)*
+*Defined in [did-document/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-document/src/models/index.ts#L3)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **value**: *string | object*
 
-*Defined in [did-document/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/a4f69d5/packages/did-document/src/models/index.ts#L2)*
+*Defined in [did-document/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/98fc454/packages/did-document/src/models/index.ts#L2)*
