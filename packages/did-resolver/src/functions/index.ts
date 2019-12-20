@@ -52,7 +52,6 @@ const handleAttributeChange = (
   // console.log(`attributeType length is ${attributeType.length}`);
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
   const match = stringAttributeType.match(matchingPatternDidEvents);
-  // console.log(match);
   if (match) {
     const section = match[1];
     const algo = match[2];
@@ -72,7 +71,10 @@ const handleAttributeChange = (
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = event.value.slice(2);
+              pk.publicKeyHex = Buffer.from(
+                event.values.value.slice(2),
+                'hex',
+              ).toString();
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(
@@ -198,7 +200,13 @@ export const fetchDataFromEvents = async (
 
   const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
-  let previousChangedBlock = await contract.changed(blockchainAddress);
+  let previousChangedBlock;
+  try {
+    previousChangedBlock = await contract.changed(blockchainAddress);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Blockchain address did not interact with smart contract');
+  }
 
   if (previousChangedBlock) {
     document.owner = await contract.owners(blockchainAddress);
@@ -244,5 +252,6 @@ export const wrapDidDocument = (
   if (document.serviceEndpoints !== undefined) {
     didDocument.service = Object.values(document.serviceEndpoints);
   }
+  console.log(didDocument);
   return didDocument;
 };

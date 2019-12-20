@@ -241,7 +241,7 @@ var abi1056 = [
     },
 ];
 var defaultProvider = {
-    uri: 'http://volta-rpc.energyweb.org/',
+    uriOrInfo: 'http://volta-rpc.energyweb.org/',
     type: models_1.ProviderTypes.HTTP,
 };
 exports.defaultResolverSettings = {
@@ -250,4 +250,5 @@ exports.defaultResolverSettings = {
     address: address1056,
 };
 exports.matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
+exports.matchingPatternDid = /did:[a-z]+:0x[]/;
 //# sourceMappingURL=index.js.map

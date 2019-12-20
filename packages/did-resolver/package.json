@@ -27,6 +27,10 @@
     "ethers": "^4.0.40"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "chai-interface": "^2.0.3"
   }
 }

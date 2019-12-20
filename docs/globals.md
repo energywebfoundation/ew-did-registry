@@ -58,6 +58,7 @@
 * [ec](globals.md#const-ec)
 * [keyEncoder](globals.md#const-keyencoder)
 * [keyPairAlice](globals.md#let-keypairalice)
+* [matchingPatternDid](globals.md#const-matchingpatterndid)
 * [matchingPatternDidEvents](globals.md#const-matchingpatterndidevents)
 * [payload](globals.md#let-payload)
 * [token](globals.md#let-token)
@@ -325,7 +326,7 @@
   },
 ]
 
-*Defined in [did-resolver/src/constants/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L5)*
+*Defined in [did-resolver/src/constants/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L5)*
 
 ___
 
@@ -333,7 +334,7 @@ ___
 
 • **address1056**: *"0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af"* = "0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af"
 
-*Defined in [did-resolver/src/constants/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L3)*
+*Defined in [did-resolver/src/constants/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L3)*
 
 ___
 
@@ -341,7 +342,7 @@ ___
 
 • **ec**: *ec‹›* =  new EC('secp256k1')
 
-*Defined in [keys/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/index.ts#L10)*
+*Defined in [keys/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/index.ts#L10)*
 
 ___
 
@@ -349,7 +350,7 @@ ___
 
 • **keyEncoder**: *KeyEncoder‹›* =  new KeyEncoder('secp256k1')
 
-*Defined in [jwt/src/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/jwt/src/index.ts#L7)*
+*Defined in [jwt/src/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/jwt/src/index.ts#L7)*
 
 ___
 
@@ -357,7 +358,15 @@ ___
 
 • **keyPairAlice**: *IKeys*
 
-*Defined in [jwt/test/jwt.test.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/jwt/test/jwt.test.ts#L8)*
+*Defined in [jwt/test/jwt.test.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/jwt/test/jwt.test.ts#L8)*
+
+___
+
+### `Const` matchingPatternDid
+
+• **matchingPatternDid**: *RegExp‹›* =  /did:[a-z]+:0x[A-Za-z0-9]{40}/
+
+*Defined in [did-resolver/src/constants/index.ts:256](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L256)*
 
 ___
 
@@ -365,7 +374,7 @@ ___
 
 • **matchingPatternDidEvents**: *RegExp‹›* =  /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/
 
-*Defined in [did-resolver/src/constants/index.ts:255](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L255)*
+*Defined in [did-resolver/src/constants/index.ts:255](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L255)*
 
 ___
 
@@ -373,7 +382,7 @@ ___
 
 • **payload**: *object*
 
-*Defined in [jwt/test/jwt.test.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/jwt/test/jwt.test.ts#L6)*
+*Defined in [jwt/test/jwt.test.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/jwt/test/jwt.test.ts#L6)*
 
 ___
 
@@ -381,7 +390,7 @@ ___
 
 • **token**: *string*
 
-*Defined in [jwt/test/jwt.test.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/jwt/test/jwt.test.ts#L7)*
+*Defined in [jwt/test/jwt.test.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/jwt/test/jwt.test.ts#L7)*
 
 ## Functions
 
@@ -389,7 +398,7 @@ ___
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/claims/src/index.ts#L3)*
+*Defined in [claims/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/claims/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -402,7 +411,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-document/src/index.ts#L3)*
+*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-document/src/index.ts#L3)*
 
 **Parameters:**
 
@@ -415,7 +424,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-registry/src/index.ts#L1)*
+*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-registry/src/index.ts#L1)*
 
 **Parameters:**
 
@@ -432,7 +441,7 @@ ___
 
 ▸ **fetchDataFromEvents**(`did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `resolverSettings`: [IResolverSettings](interfaces/iresolversettings.md)): *Promise‹void›*
 
-*Defined in [did-resolver/src/functions/index.ts:179](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L179)*
+*Defined in [did-resolver/src/functions/index.ts:181](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L181)*
 
 **Parameters:**
 
@@ -450,7 +459,7 @@ ___
 
 ▸ **getEventsFromBlock**(`block`: BigNumber, `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `provider`: JsonRpcProvider, `resolverSettings`: [IResolverSettings](interfaces/iresolversettings.md)): *Promise‹unknown›*
 
-*Defined in [did-resolver/src/functions/index.ts:150](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L150)*
+*Defined in [did-resolver/src/functions/index.ts:152](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L152)*
 
 **Parameters:**
 
@@ -470,7 +479,7 @@ ___
 
 ▸ **handleAttributeChange**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md)): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-*Defined in [did-resolver/src/functions/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L45)*
+*Defined in [did-resolver/src/functions/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L45)*
 
 **Parameters:**
 
@@ -488,7 +497,7 @@ ___
 
 ▸ **handleDelegateChange**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md)): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-*Defined in [did-resolver/src/functions/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L15)*
+*Defined in [did-resolver/src/functions/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L15)*
 
 **Parameters:**
 
@@ -506,7 +515,7 @@ ___
 
 ▸ **sha256**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/functions/index.ts#L16)*
+*Defined in [keys/src/functions/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/functions/index.ts#L16)*
 
 **Parameters:**
 
@@ -522,7 +531,7 @@ ___
 
 ▸ **updateDocument**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `eventName`: string, `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md)): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-*Defined in [did-resolver/src/functions/index.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L132)*
+*Defined in [did-resolver/src/functions/index.ts:134](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L134)*
 
 **Parameters:**
 
@@ -541,7 +550,7 @@ ___
 
 ▸ **wrapDidDocument**(`did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `context`: string): *[IDIDDocument](interfaces/ididdocument.md)*
 
-*Defined in [did-resolver/src/functions/index.ts:220](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L220)*
+*Defined in [did-resolver/src/functions/index.ts:228](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L228)*
 
 **Parameters:**
 
@@ -559,13 +568,13 @@ Name | Type | Default |
 
 ### ▪ **DID_SCHEME_PATTERNS**: *object*
 
-*Defined in [did/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did/src/models/index.ts#L10)*
+*Defined in [did/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did/src/models/index.ts#L10)*
 
 ###  ID
 
 • **ID**: *RegExp‹›* =  /^[\w.-]*(:[\w.-]*)*$/
 
-*Defined in [did/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did/src/models/index.ts#L19)*
+*Defined in [did/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did/src/models/index.ts#L19)*
 
 DID specification rule for method-specific-id
 DID specification rule for method-name
@@ -576,7 +585,7 @@ See [Issue 34] [https://github.com/w3c/did-core/issues/34](https://github.com/w3
 
 • **NETWORK**: *RegExp‹›* =  /^[a-z0-9]+$/
 
-*Defined in [did/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did/src/models/index.ts#L12)*
+*Defined in [did/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did/src/models/index.ts#L12)*
 
 ___
 
@@ -584,11 +593,11 @@ ___
 
 ### ▪ **ECDSA_PATTERNS**: *object*
 
-*Defined in [keys/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/models/index.ts#L6)*
+*Defined in [keys/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/models/index.ts#L6)*
 
 ▪ **secp256k1**: *object*
 
-*Defined in [keys/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/models/index.ts#L7)*
+*Defined in [keys/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/models/index.ts#L7)*
 
 * **PRIVATE_KEY**: *RegExp‹›* =  /^[a-f0-9]{64}$/
 
@@ -602,19 +611,19 @@ ___
 
 ### ▪ **defaultProvider**: *object*
 
-*Defined in [did-resolver/src/constants/index.ts:244](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L244)*
+*Defined in [did-resolver/src/constants/index.ts:244](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L244)*
 
 ###  type
 
 • **type**: *[ProviderTypes](enums/providertypes.md)* =  ProviderTypes.HTTP
 
-*Defined in [did-resolver/src/constants/index.ts:246](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L246)*
+*Defined in [did-resolver/src/constants/index.ts:246](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L246)*
 
 ###  uriOrInfo
 
 • **uriOrInfo**: *string* = "http://volta-rpc.energyweb.org/"
 
-*Defined in [did-resolver/src/constants/index.ts:245](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L245)*
+*Defined in [did-resolver/src/constants/index.ts:245](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L245)*
 
 ___
 
@@ -622,25 +631,25 @@ ___
 
 ### ▪ **defaultResolverSettings**: *object*
 
-*Defined in [did-resolver/src/constants/index.ts:249](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L249)*
+*Defined in [did-resolver/src/constants/index.ts:249](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L249)*
 
 ###  abi
 
 • **abi**: *object | object[]* =  abi1056
 
-*Defined in [did-resolver/src/constants/index.ts:251](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L251)*
+*Defined in [did-resolver/src/constants/index.ts:251](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L251)*
 
 ###  address
 
 • **address**: *string* =  address1056
 
-*Defined in [did-resolver/src/constants/index.ts:252](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L252)*
+*Defined in [did-resolver/src/constants/index.ts:252](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L252)*
 
 ###  provider
 
 • **provider**: *object* =  defaultProvider
 
-*Defined in [did-resolver/src/constants/index.ts:250](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/constants/index.ts#L250)*
+*Defined in [did-resolver/src/constants/index.ts:250](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/constants/index.ts#L250)*
 
 #### Type declaration:
 
@@ -654,19 +663,19 @@ ___
 
 ### ▪ **handlers**: *object*
 
-*Defined in [did-resolver/src/functions/index.ts:127](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L127)*
+*Defined in [did-resolver/src/functions/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L129)*
 
 ###  DIDAttributeChanged
 
 • **DIDAttributeChanged**: *[handleAttributeChange](undefined)* =  handleAttributeChange
 
-*Defined in [did-resolver/src/functions/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L129)*
+*Defined in [did-resolver/src/functions/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L131)*
 
 ###  DIDDelegateChanged
 
 • **DIDDelegateChanged**: *[handleDelegateChange](undefined)* =  handleDelegateChange
 
-*Defined in [did-resolver/src/functions/index.ts:128](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/functions/index.ts#L128)*
+*Defined in [did-resolver/src/functions/index.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/did-resolver/src/functions/index.ts#L130)*
 
 ___
 
@@ -674,13 +683,13 @@ ___
 
 ### ▪ **hex**: *object*
 
-*Defined in [keys/src/functions/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/functions/index.ts#L3)*
+*Defined in [keys/src/functions/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/functions/index.ts#L3)*
 
 ###  encode
 
 ▸ **encode**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/keys/src/functions/index.ts#L4)*
+*Defined in [keys/src/functions/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/5bc20a7/packages/keys/src/functions/index.ts#L4)*
 
 **Parameters:**
 

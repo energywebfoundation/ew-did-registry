@@ -1,16 +1,16 @@
-import { ParamType, BigNumber } from 'ethers/utils';
+import { ParamType, BigNumber, ConnectionInfo, Networkish } from 'ethers/utils';
 export declare enum ProviderTypes {
     HTTP = 0,
-    IPC = 1,
-    WebSocket = 2
+    IPC = 1
 }
 /**
  * Specifies current Provider
  */
 export interface IProvider {
-    uri: string;
     type: ProviderTypes;
-    options?: object;
+    uriOrInfo?: string | ConnectionInfo;
+    path?: string;
+    network?: Networkish;
 }
 /**
  * Resolver requires provider, as well as application binary interface and

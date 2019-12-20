@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
+var models_1 = require("../models");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, did, document) {
     var _a = did.split(':'), blockchainAddress = _a[2];
@@ -139,7 +140,7 @@ var updateDocument = function (event, eventName, did, document) {
         var handler = handlers[eventName];
         return handler(event, did, document);
     }
-    return true;
+    return document;
 };
 var getEventsFromBlock = function (block, did, document, provider, resolverSettings) { return new Promise(function (resolve, reject) {
     var _a = did.split(':'), blockchainAddress = _a[2];
@@ -167,7 +168,12 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings) { retur
         switch (_c.label) {
             case 0:
                 _a = did.split(':'), blockchainAddress = _a[2];
-                provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uri);
+                if (resolverSettings.provider.type === models_1.ProviderTypes.HTTP) {
+                    provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uriOrInfo, resolverSettings.provider.network);
+                }
+                else if (resolverSettings.provider.type === models_1.ProviderTypes.IPC) {
+                    provider = new ethers_1.ethers.providers.IpcProvider(resolverSettings.provider.path, resolverSettings.provider.network);
+                }
                 contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
                 return [4 /*yield*/, contract.changed(blockchainAddress)];
             case 1:
@@ -214,6 +220,7 @@ exports.wrapDidDocument = function (did, document, context) {
     if (document.serviceEndpoints !== undefined) {
         didDocument.service = Object.values(document.serviceEndpoints);
     }
+    console.log(didDocument);
     return didDocument;
 };
 //# sourceMappingURL=index.js.map
