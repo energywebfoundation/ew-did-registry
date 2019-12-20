@@ -38,8 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
 var constants_1 = require("../constants");
-var handleDelegateChange = function (event, id, document) {
-    var publicKeyID = id + "#delegate-" + event.values.delegate;
+var handleDelegateChange = function (event, did, document) {
+    var _a = did.split(':'), blockchainAddress = _a[2];
+    var publicKeyID = blockchainAddress + "#delegate-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined) {
         var delegateType = event.values.delegateType;
         var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(delegateType);
@@ -51,7 +52,7 @@ var handleDelegateChange = function (event, id, document) {
                 document.publicKey[publicKeyID] = {
                     id: publicKeyID,
                     type: 'Secp256k1VerificationKey2018',
-                    controller: "did:ewc:" + id,
+                    controller: did,
                     ethereumAddress: event.values.delegate,
                 };
                 break;
@@ -61,7 +62,8 @@ var handleDelegateChange = function (event, id, document) {
     }
     return document;
 };
-var handleAttributeChange = function (event, etherAddress, document) {
+var handleAttributeChange = function (event, did, document) {
+    var _a = did.split(':'), blockchainAddress = _a[2];
     var attributeType = event.values.name;
     // console.log(`attributeType length is ${attributeType.length}`);
     var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
@@ -77,9 +79,9 @@ var handleAttributeChange = function (event, etherAddress, document) {
                 // eslint-disable-next-line no-case-declarations
                 var pk = {
                     // method should be defined from did provided
-                    id: "did:ewc:" + etherAddress + "#key-" + type,
+                    id: did + "#key-" + type,
                     type: "" + algo + type,
-                    controller: etherAddress,
+                    controller: blockchainAddress,
                 };
                 if (document.publicKey[pk.id] === undefined) {
                     switch (encoding) {
@@ -106,7 +108,7 @@ var handleAttributeChange = function (event, etherAddress, document) {
             case 'svc':
                 if (document.serviceEndpoints[algo] === undefined) {
                     document.serviceEndpoints[algo] = {
-                        id: "did:ewc:" + etherAddress + "#" + algo,
+                        id: did + "#" + algo,
                         type: algo,
                         serviceEndpoint: Buffer.from(event.values.value.slice(2), 'hex').toString(),
                     };
@@ -130,17 +132,18 @@ var handlers = {
     DIDDelegateChanged: handleDelegateChange,
     DIDAttributeChanged: handleAttributeChange,
 };
-var updateDocument = function (event, eventName, etherAddress, document) {
+var updateDocument = function (event, eventName, did, document) {
     var now = new ethers_1.ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
     var validTo = event.values.validTo;
     if (validTo && validTo.gt(now)) {
         var handler = handlers[eventName];
-        return handler(event, etherAddress, document);
+        return handler(event, did, document);
     }
     return true;
 };
-var getEventsFromBlock = function (block, etherAddress, document, provider, resolverSettings) { return new Promise(function (resolve, reject) {
-    var topics = [null, "0x000000000000000000000000" + etherAddress.slice(2)];
+var getEventsFromBlock = function (block, did, document, provider, resolverSettings) { return new Promise(function (resolve, reject) {
+    var _a = did.split(':'), blockchainAddress = _a[2];
+    var topics = [null, "0x000000000000000000000000" + blockchainAddress.slice(2)];
     var smartContractInterface = new ethers_1.ethers.utils.Interface(resolverSettings.abi);
     provider.getLogs({
         address: resolverSettings.address,
@@ -152,51 +155,51 @@ var getEventsFromBlock = function (block, etherAddress, document, provider, reso
         // console.log('This is out event:\n');
         // console.log(event);
         var eventName = event.name;
-        updateDocument(event, eventName, etherAddress, document);
+        updateDocument(event, eventName, did, document);
         resolve(event.values.previousChange);
     }).catch(function (error) {
         reject(error);
     });
 }); };
-exports.fetchDataFromEvents = function (etherAddress, document, resolverSettings) { return __awaiter(void 0, void 0, void 0, function () {
-    var provider, contract, previousChangedBlock, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+exports.fetchDataFromEvents = function (did, document, resolverSettings) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, blockchainAddress, provider, contract, previousChangedBlock, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
+                _a = did.split(':'), blockchainAddress = _a[2];
                 provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uri);
                 contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
-                return [4 /*yield*/, contract.changed(etherAddress)];
+                return [4 /*yield*/, contract.changed(blockchainAddress)];
             case 1:
-                previousChangedBlock = _b.sent();
+                previousChangedBlock = _c.sent();
                 if (!previousChangedBlock) return [3 /*break*/, 3];
-                _a = document;
-                return [4 /*yield*/, contract.owners(etherAddress)];
+                _b = document;
+                return [4 /*yield*/, contract.owners(blockchainAddress)];
             case 2:
-                _a.owner = _b.sent();
+                _b.owner = _c.sent();
                 return [3 /*break*/, 4];
             case 3:
-                document.owner = etherAddress;
-                _b.label = 4;
+                document.owner = blockchainAddress;
+                _c.label = 4;
             case 4:
                 if (!(previousChangedBlock.toNumber() !== 0)) return [3 /*break*/, 6];
-                return [4 /*yield*/, getEventsFromBlock(previousChangedBlock, etherAddress, document, provider, resolverSettings)];
+                return [4 /*yield*/, getEventsFromBlock(previousChangedBlock, did, document, provider, resolverSettings)];
             case 5:
                 // eslint-disable-next-line no-await-in-loop
-                previousChangedBlock = _b.sent();
+                previousChangedBlock = _c.sent();
                 return [3 /*break*/, 4];
             case 6: return [2 /*return*/];
         }
     });
 }); };
-exports.wrapDidDocument = function (address, document, context) {
+exports.wrapDidDocument = function (did, document, context) {
     if (context === void 0) { context = 'https://www.w3.org/ns/did/v1'; }
-    var did = "did:ewc:" + address;
     var publicKey = [
         {
             id: did + "#owner",
             type: 'Secp256k1VerificationKey2018',
             controller: did,
-            ethereumAddress: address,
+            ethereumAddress: did,
         },
     ];
     var authentication = [

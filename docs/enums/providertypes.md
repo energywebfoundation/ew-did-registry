@@ -8,7 +8,6 @@
 
 * [HTTP](providertypes.md#http)
 * [IPC](providertypes.md#ipc)
-* [WebSocket](providertypes.md#websocket)
 
 ## Enumeration members
 
@@ -16,7 +15,7 @@
 
 • **HTTP**:
 
-*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/did-resolver/src/models/index.ts#L4)*
+*Defined in [did-resolver/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/models/index.ts#L9)*
 
 ___
 
@@ -24,12 +23,4 @@ ___
 
 • **IPC**:
 
-*Defined in [did-resolver/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/did-resolver/src/models/index.ts#L5)*
-
-___
-
-###  WebSocket
-
-• **WebSocket**:
-
-*Defined in [did-resolver/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/did-resolver/src/models/index.ts#L6)*
+*Defined in [did-resolver/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/models/index.ts#L10)*

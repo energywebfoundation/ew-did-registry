@@ -7,11 +7,15 @@ import {
   IResolverSettings,
   IPublicKey,
   IHandlers,
+  ProviderTypes,
 } from '../models';
 
 import { matchingPatternDidEvents } from '../constants';
 
-const handleDelegateChange = (event: ISmartContractEvent, did: string, document: IDIDLogData) => {
+const handleDelegateChange = (
+  event: ISmartContractEvent,
+  did: string, document: IDIDLogData,
+): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
   const publicKeyID = `${blockchainAddress}#delegate-${event.values.delegate}`;
 
@@ -38,9 +42,11 @@ const handleDelegateChange = (event: ISmartContractEvent, did: string, document:
   return document;
 };
 
-const handleAttributeChange = (event: ISmartContractEvent,
+const handleAttributeChange = (
+  event: ISmartContractEvent,
   did: string,
-  document: IDIDLogData) => {
+  document: IDIDLogData,
+): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
   const attributeType = event.values.name;
   // console.log(`attributeType length is ${attributeType.length}`);
@@ -123,10 +129,12 @@ const handlers: IHandlers = {
   DIDAttributeChanged: handleAttributeChange,
 };
 
-const updateDocument = (event: ISmartContractEvent,
+const updateDocument = (
+  event: ISmartContractEvent,
   eventName: string,
   did: string,
-  document: IDIDLogData) => {
+  document: IDIDLogData,
+): IDIDLogData => {
   const now = new ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
 
   const { validTo } = event.values;
@@ -136,14 +144,16 @@ const updateDocument = (event: ISmartContractEvent,
     return handler(event, did, document);
   }
 
-  return true;
+  return document;
 };
 
-const getEventsFromBlock = (block: ethers.utils.BigNumber,
+const getEventsFromBlock = (
+  block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.JsonRpcProvider,
-  resolverSettings: IResolverSettings) => new Promise((resolve, reject) => {
+  resolverSettings: IResolverSettings,
+): Promise<unknown> => new Promise((resolve, reject) => {
   const [, , blockchainAddress] = did.split(':');
   const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2)}`];
   const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
@@ -170,12 +180,26 @@ export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
   resolverSettings: IResolverSettings,
-) => {
+): Promise<void> => {
   const [, , blockchainAddress] = did.split(':');
-  const provider = new ethers.providers.JsonRpcProvider(resolverSettings.provider.uri);
+
+  let provider;
+  if (resolverSettings.provider.type === ProviderTypes.HTTP) {
+    provider = new ethers.providers.JsonRpcProvider(
+      resolverSettings.provider.uriOrInfo,
+      resolverSettings.provider.network,
+    );
+  } else if (resolverSettings.provider.type === ProviderTypes.IPC) {
+    provider = new ethers.providers.IpcProvider(
+      resolverSettings.provider.path,
+      resolverSettings.provider.network,
+    );
+  }
+
   const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
   let previousChangedBlock = await contract.changed(blockchainAddress);
+
   if (previousChangedBlock) {
     document.owner = await contract.owners(blockchainAddress);
   } else {
@@ -193,7 +217,11 @@ export const fetchDataFromEvents = async (
   }
 };
 
-export const wrapDidDocument = (did: string, document: IDIDLogData, context = 'https://www.w3.org/ns/did/v1') => {
+export const wrapDidDocument = (
+  did: string,
+  document: IDIDLogData,
+  context = 'https://www.w3.org/ns/did/v1',
+): IDIDDocument => {
   const publicKey: IPublicKey[] = [
     {
       id: `${did}#owner`,

@@ -19,7 +19,7 @@
 
 • **publicKey**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:62](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/did-resolver/src/models/index.ts#L62)*
+*Defined in [did-resolver/src/models/index.ts:67](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/models/index.ts#L67)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/did-resolver/src/models/index.ts#L61)*
+*Defined in [did-resolver/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/809ce1c/packages/did-resolver/src/models/index.ts#L66)*

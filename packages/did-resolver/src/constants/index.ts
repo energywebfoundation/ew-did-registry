@@ -242,7 +242,7 @@ const abi1056 = [
 ];
 
 const defaultProvider = {
-  uri: 'http://volta-rpc.energyweb.org/',
+  uriOrInfo: 'http://volta-rpc.energyweb.org/',
   type: ProviderTypes.HTTP,
 };
 

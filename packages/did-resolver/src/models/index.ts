@@ -1,18 +1,23 @@
-import { ParamType, BigNumber } from 'ethers/utils';
+import {
+  ParamType,
+  BigNumber,
+  ConnectionInfo,
+  Networkish,
+} from 'ethers/utils';
 
 export enum ProviderTypes {
     HTTP,
     IPC,
-    WebSocket,
 }
 
 /**
  * Specifies current Provider
  */
 export interface IProvider {
-    uri: string;
     type: ProviderTypes;
-    options?: object;
+    uriOrInfo?: string | ConnectionInfo;
+    path?: string;
+    network?: Networkish;
 }
 
 /**
