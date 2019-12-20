@@ -28,7 +28,7 @@ each of the Claim types
 
 • **claimData**? : *[IClaimData](iclaimdata.md)*
 
-*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/claims/src/models/index.ts#L30)*
+*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/claims/src/models/index.ts#L30)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **jwt**: *IJWT*
 
-*Defined in [claims/src/models/index.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/claims/src/models/index.ts#L27)*
+*Defined in [claims/src/models/index.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/claims/src/models/index.ts#L27)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/claims/src/models/index.ts#L28)*
+*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/claims/src/models/index.ts#L28)*
 
 ___
 
@@ -52,4 +52,4 @@ ___
 
 • **token**? : *string*
 
-*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/8eb572c/packages/claims/src/models/index.ts#L29)*
+*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/4f4b6da/packages/claims/src/models/index.ts#L29)*

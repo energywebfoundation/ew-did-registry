@@ -23,7 +23,6 @@ class Resolver implements IResolver {
       return new Promise(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve, reject) => {
-          const [, , id] = did.split(':');
           const document: IDIDLogData = {
             owner: undefined,
             authentication: {},
@@ -32,8 +31,8 @@ class Resolver implements IResolver {
             attributes: new Map(),
           };
           try {
-            await fetchDataFromEvents(id, document, this._settings);
-            const didDocument = wrapDidDocument(id, document);
+            await fetchDataFromEvents(did, document, this._settings);
+            const didDocument = wrapDidDocument(did, document);
             resolve(didDocument);
           } catch (error) {
             reject(error);

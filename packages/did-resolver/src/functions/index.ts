@@ -11,8 +11,9 @@ import {
 
 import { matchingPatternDidEvents } from '../constants';
 
-const handleDelegateChange = (event: ISmartContractEvent, id: string, document: IDIDLogData) => {
-  const publicKeyID = `${id}#delegate-${event.values.delegate}`;
+const handleDelegateChange = (event: ISmartContractEvent, did: string, document: IDIDLogData) => {
+  const [, , blockchainAddress] = did.split(':');
+  const publicKeyID = `${blockchainAddress}#delegate-${event.values.delegate}`;
 
   if (document.publicKey[publicKeyID] === undefined) {
     const { delegateType } = event.values;
@@ -25,7 +26,7 @@ const handleDelegateChange = (event: ISmartContractEvent, id: string, document: 
         document.publicKey[publicKeyID] = {
           id: publicKeyID,
           type: 'Secp256k1VerificationKey2018',
-          controller: `did:ewc:${id}`,
+          controller: did,
           ethereumAddress: event.values.delegate,
         };
         break;
@@ -38,8 +39,9 @@ const handleDelegateChange = (event: ISmartContractEvent, id: string, document: 
 };
 
 const handleAttributeChange = (event: ISmartContractEvent,
-  etherAddress: string,
+  did: string,
   document: IDIDLogData) => {
+  const [, , blockchainAddress] = did.split(':');
   const attributeType = event.values.name;
   // console.log(`attributeType length is ${attributeType.length}`);
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
@@ -55,9 +57,9 @@ const handleAttributeChange = (event: ISmartContractEvent,
         // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `did:ewc:${etherAddress}#key-${type}`,
+          id: `${did}#key-${type}`,
           type: `${algo}${type}`,
-          controller: etherAddress,
+          controller: blockchainAddress,
         };
         if (document.publicKey[pk.id] === undefined) {
           switch (encoding) {
@@ -93,7 +95,7 @@ const handleAttributeChange = (event: ISmartContractEvent,
       case 'svc':
         if (document.serviceEndpoints[algo] === undefined) {
           document.serviceEndpoints[algo] = {
-            id: `did:ewc:${etherAddress}#${algo}`,
+            id: `${did}#${algo}`,
             type: algo,
             serviceEndpoint: Buffer.from(
               event.values.value.slice(2),
@@ -123,7 +125,7 @@ const handlers: IHandlers = {
 
 const updateDocument = (event: ISmartContractEvent,
   eventName: string,
-  etherAddress: string,
+  did: string,
   document: IDIDLogData) => {
   const now = new ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
 
@@ -131,18 +133,19 @@ const updateDocument = (event: ISmartContractEvent,
 
   if (validTo && validTo.gt(now)) {
     const handler = handlers[eventName];
-    return handler(event, etherAddress, document);
+    return handler(event, did, document);
   }
 
   return true;
 };
 
 const getEventsFromBlock = (block: ethers.utils.BigNumber,
-  etherAddress: string,
+  did: string,
   document: IDIDLogData,
   provider: ethers.providers.JsonRpcProvider,
   resolverSettings: IResolverSettings) => new Promise((resolve, reject) => {
-  const topics = [null, `0x000000000000000000000000${etherAddress.slice(2)}`];
+  const [, , blockchainAddress] = did.split(':');
+  const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2)}`];
   const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
 
   provider.getLogs({
@@ -155,7 +158,7 @@ const getEventsFromBlock = (block: ethers.utils.BigNumber,
     // console.log('This is out event:\n');
     // console.log(event);
     const eventName = event.name;
-    updateDocument(event, eventName, etherAddress, document);
+    updateDocument(event, eventName, did, document);
 
     resolve(event.values.previousChange);
   }).catch((error) => {
@@ -163,24 +166,26 @@ const getEventsFromBlock = (block: ethers.utils.BigNumber,
   });
 });
 
-export const fetchDataFromEvents = async (etherAddress: string,
+export const fetchDataFromEvents = async (
+  did: string,
   document: IDIDLogData,
-  resolverSettings: IResolverSettings) => {
+  resolverSettings: IResolverSettings,
+) => {
+  const [, , blockchainAddress] = did.split(':');
   const provider = new ethers.providers.JsonRpcProvider(resolverSettings.provider.uri);
-
   const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
-  let previousChangedBlock = await contract.changed(etherAddress);
+  let previousChangedBlock = await contract.changed(blockchainAddress);
   if (previousChangedBlock) {
-    document.owner = await contract.owners(etherAddress);
+    document.owner = await contract.owners(blockchainAddress);
   } else {
-    document.owner = etherAddress;
+    document.owner = blockchainAddress;
   }
   while (previousChangedBlock.toNumber() !== 0) {
     // eslint-disable-next-line no-await-in-loop
     previousChangedBlock = await getEventsFromBlock(
       previousChangedBlock,
-      etherAddress,
+      did,
       document,
       provider,
       resolverSettings,
@@ -188,14 +193,13 @@ export const fetchDataFromEvents = async (etherAddress: string,
   }
 };
 
-export const wrapDidDocument = (address: string, document: IDIDLogData, context = 'https://www.w3.org/ns/did/v1') => {
-  const did = `did:ewc:${address}`;
+export const wrapDidDocument = (did: string, document: IDIDLogData, context = 'https://www.w3.org/ns/did/v1') => {
   const publicKey: IPublicKey[] = [
     {
       id: `${did}#owner`,
       type: 'Secp256k1VerificationKey2018',
       controller: did,
-      ethereumAddress: address,
+      ethereumAddress: did,
     },
   ];
 
