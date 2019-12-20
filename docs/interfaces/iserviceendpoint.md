@@ -21,7 +21,7 @@
 
 • **description**? : *string*
 
-Defined in did-resolver/src/models/index.ts:44
+Defined in did-resolver/src/models/index.ts:46
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/index.ts:41
+Defined in did-resolver/src/models/index.ts:43
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **serviceEndpoint**: *string*
 
-Defined in did-resolver/src/models/index.ts:43
+Defined in did-resolver/src/models/index.ts:45
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/index.ts:42
+Defined in did-resolver/src/models/index.ts:44

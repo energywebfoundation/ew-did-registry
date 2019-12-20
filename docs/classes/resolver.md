@@ -26,16 +26,19 @@
 
 ###  constructor
 
-\+ **new Resolver**(`keys`: IKeys, `settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
+\+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/index.ts:12
+Defined in did-resolver/src/models/resolver.ts:10
+
+Constructor
+
+Settings have to be passed to construct resolver
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`settings` | [IResolverSettings](../interfaces/iresolversettings.md) |
+Name | Type | Default | Description |
+------ | ------ | ------ | ------ |
+`settings` | [IResolverSettings](../interfaces/iresolversettings.md) |  defaultResolverSettings |   |
 
 **Returns:** *[Resolver](resolver.md)*
 
@@ -47,7 +50,7 @@ Name | Type |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/index.ts:19
+Defined in did-resolver/src/models/resolver.ts:22
 
 **Parameters:**
 

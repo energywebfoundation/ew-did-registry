@@ -27,7 +27,7 @@
 
 ▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:30
+Defined in did-resolver/src/interface.ts:29
 
 Registers a DID-Document for a given DID, and defines the provided context
 
@@ -46,7 +46,7 @@ ___
 
 ▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:48
+Defined in did-resolver/src/interface.ts:47
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -68,7 +68,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-Defined in did-resolver/src/interface.ts:20
+Defined in did-resolver/src/interface.ts:19
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -88,7 +88,7 @@ ___
 
 ▸ **update**(`did`: string, `attribute`: string, `value`: string | object): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:39
+Defined in did-resolver/src/interface.ts:38
 
 Updates relevant attribute of the DID Document
 

@@ -10,6 +10,11 @@ class Operator extends Resolver implements IOperator {
   private _didRegistry: Contract;
 
   /**
+   *
+   */
+  private readonly _keys: IKeys;
+
+  /**
    * Ethereum blockchain provider
    */
   private readonly _provider: ethers.providers.BaseProvider;
@@ -20,15 +25,16 @@ class Operator extends Resolver implements IOperator {
    * controller in a subsequent operations with DID document
    * @param { IResolverSettings } setting - blockchain provider setting
    */
-  constructor(keys: IKeys, setting: IResolverSettings) {
-    super(keys, setting);
+  constructor(keys: IKeys, settings?: IResolverSettings) {
+    super(settings);
+    this._keys = keys;
     const {
       address, abi,
     } = this._settings;
     const { privateKey } = this._keys;
     this._provider = this._getProvider();
     const wallet = new ethers.Wallet(privateKey, this._provider);
-    this._didRegistry = new ethers.Contract(address, JSON.parse(abi), wallet);
+    this._didRegistry = new ethers.Contract(address, abi, wallet);
   }
 
   /**

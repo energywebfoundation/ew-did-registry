@@ -22,7 +22,7 @@ Specifies current Provider
 
 • **options**? : *object*
 
-Defined in did-resolver/src/models/index.ts:15
+Defined in did-resolver/src/models/index.ts:17
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/index.ts:14
+Defined in did-resolver/src/models/index.ts:16
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 • **uri**: *string*
 
-Defined in did-resolver/src/models/index.ts:13
+Defined in did-resolver/src/models/index.ts:15

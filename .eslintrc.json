@@ -28,7 +28,9 @@
     "@typescript-eslint/interface-name-prefix": 0,
     "import/extensions": "off",
     "space-infix-ops": ["error", { "int32Hint": false }],
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "no-param-reassign": 0,
+    "space-before-function-paren": 0
   },
   "settings": {
     "import/resolver": {

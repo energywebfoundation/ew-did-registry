@@ -30,18 +30,18 @@
 
 ###  constructor
 
-\+ **new Operator**(`keys`: IKeys, `setting`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Operator](operator.md)*
+\+ **new Operator**(`keys`: IKeys, `settings?`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Operator](operator.md)*
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-Defined in did-resolver/src/models/operator.ts:15
+Defined in did-resolver/src/models/operator.ts:20
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
 `keys` | IKeys | identifies an account which acts as a controller in a subsequent operations with DID document |
-`setting` | [IResolverSettings](../interfaces/iresolversettings.md) | blockchain provider setting  |
+`settings?` | [IResolverSettings](../interfaces/iresolversettings.md) | - |
 
 **Returns:** *[Operator](operator.md)*
 
@@ -53,7 +53,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:40
+Defined in did-resolver/src/models/operator.ts:46
 
 Empty for current implementation
 
@@ -74,7 +74,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:67
+Defined in did-resolver/src/models/operator.ts:73
 
 Revokes specified attribute from DID document
 
@@ -114,7 +114,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/index.ts:19
+Defined in did-resolver/src/models/resolver.ts:22
 
 **Parameters:**
 
@@ -130,7 +130,7 @@ ___
 
 ▸ **update**(`did`: string, `attribute`: string, `value`: string | object, `validity?`: number): *Promise‹boolean›*
 
-Defined in did-resolver/src/models/operator.ts:119
+Defined in did-resolver/src/models/operator.ts:125
 
 Sets attribute value in Did document identified by the did
 

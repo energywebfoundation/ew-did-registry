@@ -21,7 +21,7 @@
 
 • **created**: *string*
 
-Defined in did-resolver/src/models/index.ts:67
+Defined in did-resolver/src/models/index.ts:69
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **creator**: *string*
 
-Defined in did-resolver/src/models/index.ts:68
+Defined in did-resolver/src/models/index.ts:70
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **signatureValue**: *string*
 
-Defined in did-resolver/src/models/index.ts:69
+Defined in did-resolver/src/models/index.ts:71
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/index.ts:66
+Defined in did-resolver/src/models/index.ts:68

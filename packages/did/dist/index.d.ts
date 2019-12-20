@@ -6,20 +6,19 @@ declare class DID implements IDID {
      */
     private _dids;
     /**
-     * DID general scheme
-     * ToDo: make compatible with RFC3986
-     */
-    private _scheme;
-    /**
      * Gets a DID for a particular network
      *
      * @example
      * ```typescript
-     * import { DID } from '@ew-did-registry/did';
+     * import { DID, Network } from '@ew-did-registry/did';
      *
      * const did = new DID();
-     * did.set('eth', 'method_specific_id');
-     * console.log(did.get('eth')); // 'did:eth:method_specific_id'
+     * did.set('bitcoin', 'method_specific_id');
+     * console.log(did.get('bitcoin')); // 'did:bitcoin:method_specific_id'
+     *
+     * const did = new DID();
+     * did.set(Networks.Ethereum, 'method_specific_id');
+     * console.log(did.get(Networks.Ethereum)); // 'did:eth:method_specific_id'
      * ```
      *
      * @param { Networks } network
@@ -43,7 +42,7 @@ declare class DID implements IDID {
      *
      * @returns {void}
      */
-    set(did: string): void;
-    private setDid;
+    set(did: string): IDID;
+    private _setDid;
 }
 export { IDID, DID, Networks, };

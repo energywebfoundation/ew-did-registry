@@ -16,7 +16,7 @@
 
 • **HTTP**:
 
-Defined in did-resolver/src/models/index.ts:4
+Defined in did-resolver/src/models/index.ts:6
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **IPC**:
 
-Defined in did-resolver/src/models/index.ts:5
+Defined in did-resolver/src/models/index.ts:7
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **WebSocket**:
 
-Defined in did-resolver/src/models/index.ts:6
+Defined in did-resolver/src/models/index.ts:8

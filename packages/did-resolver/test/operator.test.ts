@@ -7,23 +7,11 @@ import RegistryContractAbi from './RegistryContractAbi';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', () => {
-  const abi = JSON.stringify(RegistryContractAbi);
-  const address = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
-  const uri = 'https://volta-rpc.energyweb.org/';
-  const type = ProviderTypes.HTTP;
-  const resolverSettings = {
-    abi,
-    address,
-    provider: {
-      uri,
-      type,
-    },
-  };
   const keys = new Keys({
     privateKey: '9a843e79a455a368c3031ffc3974e04e04f0553f2464b89074f901dea713c357',
     publicKey: '0361652cea564db2c9ef4d5859705376cbe5628e47490022a3b4535764d3f08efe',
   });
-  const operator = new Operator(keys, resolverSettings);
+  const operator = new Operator(keys);
   const identity = '0x0126B7A16967114f3E261c36E9D99629D73caAeA';
 
   it('update attribute should resolve with true', async () => {
@@ -32,6 +20,7 @@ describe('[DID-OPERATOR]', () => {
     const value = 'test value';
     const validity = 100;
     const result = await operator.update(did, attribute, value, validity);
+    // eslint-disable-next-line no-unused-expressions
     expect(result).to.be.true;
   });
 

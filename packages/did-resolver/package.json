@@ -25,6 +25,11 @@
   "dependencies": {
     "@ew-did-registry/did": "file:../did",
     "@ew-did-registry/keys": "file:../keys",
+    "ethers": "^4.0.40",
+    "bn.js": "^5.0.0",
     "ethers": "^4.0.40"
+  },
+  "devDependencies": {
+    "chai-interface": "^2.0.3"
   }
 }
