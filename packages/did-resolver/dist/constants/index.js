@@ -250,5 +250,5 @@ exports.defaultResolverSettings = {
     address: address1056,
 };
 exports.matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-exports.matchingPatternDid = /did:[a-z]+:0x[A-Za-z0-9]{40}/;
+exports.matchingPatternDid = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
 //# sourceMappingURL=index.js.map

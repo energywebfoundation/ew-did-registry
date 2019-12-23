@@ -20,14 +20,18 @@ const handleDelegateChange = (
   validTo: BigNumber,
 ): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
-  const publicKeyID = `${blockchainAddress}#delegate-${event.values.delegate}`;
+  const publicKeyID = `${did}#delegate-${event.values.delegate}`;
 
   if (document.publicKey[publicKeyID] === undefined) {
     const { delegateType } = event.values;
     const stringDelegateType = ethers.utils.parseBytes32String(delegateType);
     switch (stringDelegateType) {
       case 'sigAuth':
-        document.authentication[publicKeyID] = publicKeyID;
+        document.authentication[publicKeyID] = {
+          type: 'sigAuth',
+          publicKey: publicKeyID,
+          validity: validTo,
+        };
         // eslint-disable-next-line no-fallthrough
       case 'veriKey':
         document.publicKey[publicKeyID] = {
@@ -244,7 +248,10 @@ export const wrapDidDocument = (
   ];
 
   const authentication = [
-    `${did}#owner`,
+    {
+      type: 'owner',
+      publicKey: `${did}#owner`,
+    },
   ];
 
   const didDocument: IDIDDocument = {
@@ -266,7 +273,11 @@ export const wrapDidDocument = (
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.authentication) {
-    didDocument.authentication.push(document.authentication[key]);
+    const authenticator = document.authentication[key];
+    if (authenticator.validity.gt(now)) {
+      delete authenticator.validity;
+      didDocument.authentication.push(authenticator);
+    }
   }
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax

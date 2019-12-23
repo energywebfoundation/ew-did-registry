@@ -37,6 +37,7 @@ class Resolver implements IResolver {
           try {
             await fetchDataFromEvents(did, document, this._settings);
             const didDocument = wrapDidDocument(did, document);
+            console.log(didDocument);
             resolve(didDocument);
           } catch (error) {
             if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {

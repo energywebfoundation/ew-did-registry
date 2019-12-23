@@ -96,7 +96,7 @@ export interface ISmartContractEvent {
 export interface IDIDLogData {
     owner: string;
     publicKey: { [key: string]: IPublicKey };
-    authentication: { [key: string]: string };
+    authentication: { [key: string]: IAuthentication };
     delegates?: string[];
     serviceEndpoints?: { [key: string]: IServiceEndpoint };
     created?: string;
