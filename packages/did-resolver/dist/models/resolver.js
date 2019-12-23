@@ -56,10 +56,13 @@ var Resolver = /** @class */ (function () {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var document, didDocument, error_1;
+                        var document, didDocument, error_1, didDocument;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
+                                    if (!constants_1.matchingPatternDid.test(did)) {
+                                        reject(new Error('Invalid did provided'));
+                                    }
                                     document = {
                                         owner: undefined,
                                         authentication: {},
@@ -78,6 +81,10 @@ var Resolver = /** @class */ (function () {
                                     return [3 /*break*/, 4];
                                 case 3:
                                     error_1 = _a.sent();
+                                    if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
+                                        didDocument = functions_1.wrapDidDocument(did, document);
+                                        resolve(didDocument);
+                                    }
                                     reject(error_1);
                                     return [3 /*break*/, 4];
                                 case 4: return [2 /*return*/];

@@ -69,7 +69,6 @@ var handleAttributeChange = function (event, did, document) {
     // console.log(`attributeType length is ${attributeType.length}`);
     var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
     var match = stringAttributeType.match(constants_1.matchingPatternDidEvents);
-    // console.log(match);
     if (match) {
         var section = match[1];
         var algo = match[2];
@@ -89,7 +88,7 @@ var handleAttributeChange = function (event, did, document) {
                         case null:
                         case undefined:
                         case 'hex':
-                            pk.publicKeyHex = event.value.slice(2);
+                            pk.publicKeyHex = Buffer.from(event.values.value.slice(2), 'hex').toString();
                             break;
                         case 'base64':
                             pk.publicKeyBase64 = Buffer.from(event.values.value.slice(2), 'hex').toString('base64');
@@ -163,7 +162,7 @@ var getEventsFromBlock = function (block, did, document, provider, resolverSetti
     });
 }); };
 exports.fetchDataFromEvents = function (did, document, resolverSettings) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, blockchainAddress, provider, contract, previousChangedBlock, _b;
+    var _a, blockchainAddress, provider, contract, previousChangedBlock, error_1, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -175,26 +174,35 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings) { retur
                     provider = new ethers_1.ethers.providers.IpcProvider(resolverSettings.provider.path, resolverSettings.provider.network);
                 }
                 contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
-                return [4 /*yield*/, contract.changed(blockchainAddress)];
+                _c.label = 1;
             case 1:
-                previousChangedBlock = _c.sent();
-                if (!previousChangedBlock) return [3 /*break*/, 3];
-                _b = document;
-                return [4 /*yield*/, contract.owners(blockchainAddress)];
+                _c.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, contract.changed(blockchainAddress)];
             case 2:
-                _b.owner = _c.sent();
+                previousChangedBlock = _c.sent();
                 return [3 /*break*/, 4];
             case 3:
-                document.owner = blockchainAddress;
-                _c.label = 4;
+                error_1 = _c.sent();
+                console.log(error_1);
+                throw new Error('Blockchain address did not interact with smart contract');
             case 4:
-                if (!(previousChangedBlock.toNumber() !== 0)) return [3 /*break*/, 6];
-                return [4 /*yield*/, getEventsFromBlock(previousChangedBlock, did, document, provider, resolverSettings)];
+                if (!previousChangedBlock) return [3 /*break*/, 6];
+                _b = document;
+                return [4 /*yield*/, contract.owners(blockchainAddress)];
             case 5:
+                _b.owner = _c.sent();
+                return [3 /*break*/, 7];
+            case 6:
+                document.owner = blockchainAddress;
+                _c.label = 7;
+            case 7:
+                if (!(previousChangedBlock.toNumber() !== 0)) return [3 /*break*/, 9];
+                return [4 /*yield*/, getEventsFromBlock(previousChangedBlock, did, document, provider, resolverSettings)];
+            case 8:
                 // eslint-disable-next-line no-await-in-loop
                 previousChangedBlock = _c.sent();
-                return [3 /*break*/, 4];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

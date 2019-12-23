@@ -1,7 +1,6 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-
 import { Resolver, IResolver } from '../src';
 
 describe('[RESOLVER PACKAGE]', function() {
@@ -35,5 +34,4 @@ describe('[RESOLVER PACKAGE]', function() {
     const didDocument = await resolver.read(did);
     expect(didDocument).include.keys('@context', 'id', 'publicKey', 'authentication', 'service');
   });
-
 });

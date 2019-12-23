@@ -25,6 +25,7 @@ class Resolver implements IResolver {
         async (resolve, reject) => {
           if (!matchingPatternDid.test(did)) {
             reject(new Error('Invalid did provided'));
+            return;
           }
           const document: IDIDLogData = {
             owner: undefined,

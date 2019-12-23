@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { BigNumber } from 'ethers/utils';
 
 import {
   IDIDDocument,
@@ -14,7 +15,9 @@ import { matchingPatternDidEvents } from '../constants';
 
 const handleDelegateChange = (
   event: ISmartContractEvent,
-  did: string, document: IDIDLogData,
+  did: string,
+  document: IDIDLogData,
+  validTo: BigNumber,
 ): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
   const publicKeyID = `${blockchainAddress}#delegate-${event.values.delegate}`;
@@ -32,6 +35,7 @@ const handleDelegateChange = (
           type: 'Secp256k1VerificationKey2018',
           controller: did,
           ethereumAddress: event.values.delegate,
+          validity: validTo,
         };
         break;
       default:
@@ -46,10 +50,10 @@ const handleAttributeChange = (
   event: ISmartContractEvent,
   did: string,
   document: IDIDLogData,
+  validTo: BigNumber,
 ): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
   const attributeType = event.values.name;
-  // console.log(`attributeType length is ${attributeType.length}`);
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
   const match = stringAttributeType.match(matchingPatternDidEvents);
   if (match) {
@@ -65,6 +69,7 @@ const handleAttributeChange = (
           id: `${did}#key-${type}`,
           type: `${algo}${type}`,
           controller: blockchainAddress,
+          validity: validTo,
         };
         if (document.publicKey[pk.id] === undefined) {
           switch (encoding) {
@@ -109,6 +114,7 @@ const handleAttributeChange = (
               event.values.value.slice(2),
               'hex',
             ).toString(),
+            validity: validTo,
           };
           return document;
         }
@@ -119,6 +125,7 @@ const handleAttributeChange = (
   } else if (document.attributes.get(stringAttributeType) === undefined) {
     const attributeData = {
       attribute: Buffer.from(event.values.value.slice(2), 'hex').toString(),
+      validity: validTo,
     };
     document.attributes.set(stringAttributeType, attributeData);
     return document;
@@ -137,13 +144,11 @@ const updateDocument = (
   did: string,
   document: IDIDLogData,
 ): IDIDLogData => {
-  const now = new ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
-
   const { validTo } = event.values;
 
-  if (validTo && validTo.gt(now)) {
+  if (validTo) {
     const handler = handlers[eventName];
-    return handler(event, did, document);
+    return handler(event, did, document, validTo);
   }
 
   return document;
@@ -167,8 +172,6 @@ const getEventsFromBlock = (
     topics,
   }).then((Log) => {
     const event = smartContractInterface.parseLog(Log[0]);
-    // console.log('This is out event:\n');
-    // console.log(event);
     const eventName = event.name;
     updateDocument(event, eventName, did, document);
 
@@ -204,7 +207,6 @@ export const fetchDataFromEvents = async (
   try {
     previousChangedBlock = await contract.changed(blockchainAddress);
   } catch (error) {
-    console.log(error);
     throw new Error('Blockchain address did not interact with smart contract');
   }
 
@@ -230,6 +232,8 @@ export const wrapDidDocument = (
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
+  const now = new BigNumber(Math.floor(new Date().getTime() / 1000));
+
   const publicKey: IPublicKey[] = [
     {
       id: `${did}#owner`,
@@ -246,12 +250,33 @@ export const wrapDidDocument = (
   const didDocument: IDIDDocument = {
     '@context': context,
     id: did,
-    publicKey: publicKey.concat(Object.values(document.publicKey)),
-    authentication: authentication.concat(Object.values(document.authentication)),
+    publicKey,
+    authentication,
+    service: [],
   };
-  if (document.serviceEndpoints !== undefined) {
-    didDocument.service = Object.values(document.serviceEndpoints);
+
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const key in document.publicKey) {
+    const pubKey = document.publicKey[key];
+    if (pubKey.validity.gt(now)) {
+      delete pubKey.validity;
+      didDocument.publicKey.push(pubKey);
+    }
   }
-  console.log(didDocument);
+
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const key in document.authentication) {
+    didDocument.authentication.push(document.authentication[key]);
+  }
+
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const key in document.serviceEndpoints) {
+    const serviceEndpoint = document.serviceEndpoints[key];
+    if (serviceEndpoint.validity.gt(now)) {
+      delete serviceEndpoint.validity;
+      didDocument.service.push(serviceEndpoint);
+    }
+  }
+
   return didDocument;
 };
