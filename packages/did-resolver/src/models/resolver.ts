@@ -7,7 +7,7 @@ class Resolver implements IResolver {
     /*
      * Stores resolver settings, such as abi, contract address, and IProvider
      */
-    private readonly _settings: IResolverSettings;
+    protected readonly _settings: IResolverSettings;
 
     /**
      * Constructor

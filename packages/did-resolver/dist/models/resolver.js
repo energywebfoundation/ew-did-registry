@@ -62,6 +62,7 @@ var Resolver = /** @class */ (function () {
                                 case 0:
                                     if (!constants_1.matchingPatternDid.test(did)) {
                                         reject(new Error('Invalid did provided'));
+                                        return [2 /*return*/];
                                     }
                                     document = {
                                         owner: undefined,

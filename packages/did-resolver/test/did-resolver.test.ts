@@ -32,6 +32,8 @@ describe('[RESOLVER PACKAGE]', function() {
   it('resolver should return did-document', async () => {
     const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDocument = await resolver.read(did);
+    expect(did).to.deep.equal(didDocument.id);
     expect(didDocument).include.keys('@context', 'id', 'publicKey', 'authentication', 'service');
   });
+
 });

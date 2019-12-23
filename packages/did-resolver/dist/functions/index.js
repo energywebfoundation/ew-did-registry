@@ -37,9 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
+var utils_1 = require("ethers/utils");
 var models_1 = require("../models");
 var constants_1 = require("../constants");
-var handleDelegateChange = function (event, did, document) {
+var handleDelegateChange = function (event, did, document, validTo) {
     var _a = did.split(':'), blockchainAddress = _a[2];
     var publicKeyID = blockchainAddress + "#delegate-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined) {
@@ -55,6 +56,7 @@ var handleDelegateChange = function (event, did, document) {
                     type: 'Secp256k1VerificationKey2018',
                     controller: did,
                     ethereumAddress: event.values.delegate,
+                    validity: validTo,
                 };
                 break;
             default:
@@ -63,10 +65,9 @@ var handleDelegateChange = function (event, did, document) {
     }
     return document;
 };
-var handleAttributeChange = function (event, did, document) {
+var handleAttributeChange = function (event, did, document, validTo) {
     var _a = did.split(':'), blockchainAddress = _a[2];
     var attributeType = event.values.name;
-    // console.log(`attributeType length is ${attributeType.length}`);
     var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
     var match = stringAttributeType.match(constants_1.matchingPatternDidEvents);
     if (match) {
@@ -82,6 +83,7 @@ var handleAttributeChange = function (event, did, document) {
                     id: did + "#key-" + type,
                     type: "" + algo + type,
                     controller: blockchainAddress,
+                    validity: validTo,
                 };
                 if (document.publicKey[pk.id] === undefined) {
                     switch (encoding) {
@@ -111,6 +113,7 @@ var handleAttributeChange = function (event, did, document) {
                         id: did + "#" + algo,
                         type: algo,
                         serviceEndpoint: Buffer.from(event.values.value.slice(2), 'hex').toString(),
+                        validity: validTo,
                     };
                     return document;
                 }
@@ -122,6 +125,7 @@ var handleAttributeChange = function (event, did, document) {
     else if (document.attributes.get(stringAttributeType) === undefined) {
         var attributeData = {
             attribute: Buffer.from(event.values.value.slice(2), 'hex').toString(),
+            validity: validTo,
         };
         document.attributes.set(stringAttributeType, attributeData);
         return document;
@@ -133,11 +137,10 @@ var handlers = {
     DIDAttributeChanged: handleAttributeChange,
 };
 var updateDocument = function (event, eventName, did, document) {
-    var now = new ethers_1.ethers.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
     var validTo = event.values.validTo;
-    if (validTo && validTo.gt(now)) {
+    if (validTo) {
         var handler = handlers[eventName];
-        return handler(event, did, document);
+        return handler(event, did, document, validTo);
     }
     return document;
 };
@@ -152,8 +155,6 @@ var getEventsFromBlock = function (block, did, document, provider, resolverSetti
         topics: topics,
     }).then(function (Log) {
         var event = smartContractInterface.parseLog(Log[0]);
-        // console.log('This is out event:\n');
-        // console.log(event);
         var eventName = event.name;
         updateDocument(event, eventName, did, document);
         resolve(event.values.previousChange);
@@ -183,7 +184,6 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings) { retur
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _c.sent();
-                console.log(error_1);
                 throw new Error('Blockchain address did not interact with smart contract');
             case 4:
                 if (!previousChangedBlock) return [3 /*break*/, 6];
@@ -208,6 +208,7 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings) { retur
 }); };
 exports.wrapDidDocument = function (did, document, context) {
     if (context === void 0) { context = 'https://www.w3.org/ns/did/v1'; }
+    var now = new utils_1.BigNumber(Math.floor(new Date().getTime() / 1000));
     var publicKey = [
         {
             id: did + "#owner",
@@ -222,13 +223,30 @@ exports.wrapDidDocument = function (did, document, context) {
     var didDocument = {
         '@context': context,
         id: did,
-        publicKey: publicKey.concat(Object.values(document.publicKey)),
-        authentication: authentication.concat(Object.values(document.authentication)),
+        publicKey: publicKey,
+        authentication: authentication,
+        service: [],
     };
-    if (document.serviceEndpoints !== undefined) {
-        didDocument.service = Object.values(document.serviceEndpoints);
+    // eslint-disable-next-line guard-for-in,no-restricted-syntax
+    for (var key in document.publicKey) {
+        var pubKey = document.publicKey[key];
+        if (pubKey.validity.gt(now)) {
+            delete pubKey.validity;
+            didDocument.publicKey.push(pubKey);
+        }
     }
-    console.log(didDocument);
+    // eslint-disable-next-line guard-for-in,no-restricted-syntax
+    for (var key in document.authentication) {
+        didDocument.authentication.push(document.authentication[key]);
+    }
+    // eslint-disable-next-line guard-for-in,no-restricted-syntax
+    for (var key in document.serviceEndpoints) {
+        var serviceEndpoint = document.serviceEndpoints[key];
+        if (serviceEndpoint.validity.gt(now)) {
+            delete serviceEndpoint.validity;
+            didDocument.service.push(serviceEndpoint);
+        }
+    }
     return didDocument;
 };
 //# sourceMappingURL=index.js.map
