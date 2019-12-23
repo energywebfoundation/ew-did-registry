@@ -10,7 +10,7 @@
 
 * \[ **key**: *string*\]: function
 
-▸ (`event`: [ISmartContractEvent](ismartcontractevent.md), `etherAddress`: string, `document`: [IDIDLogData](ididlogdata.md)): *[IDIDLogData](ididlogdata.md)*
+▸ (`event`: [ISmartContractEvent](ismartcontractevent.md), `etherAddress`: string, `document`: [IDIDLogData](ididlogdata.md), `validTo`: BigNumber): *[IDIDLogData](ididlogdata.md)*
 
 **Parameters:**
 
@@ -19,3 +19,4 @@ Name | Type |
 `event` | [ISmartContractEvent](ismartcontractevent.md) |
 `etherAddress` | string |
 `document` | [IDIDLogData](ididlogdata.md) |
+`validTo` | BigNumber |

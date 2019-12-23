@@ -23,13 +23,15 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did": "file:../did",
     "@ew-did-registry/keys": "file:../keys",
     "bn.js": "^5.0.0",
     "ethers": "^4.0.40"
   },
   "devDependencies": {
     "chai-interface": "^2.0.3",
-    "eslint-plugin-chai-friendly": "^0.5.0"
+    "eslint-plugin-chai-friendly": "^0.5.0",
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "chai": "^4.2.0"
   }
 }

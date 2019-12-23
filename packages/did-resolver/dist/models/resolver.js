@@ -56,11 +56,14 @@ var Resolver = /** @class */ (function () {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, id, document, didDocument, error_1;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var document, didDocument, error_1, didDocument;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
                                 case 0:
-                                    _a = did.split(':'), id = _a[2];
+                                    if (!constants_1.matchingPatternDid.test(did)) {
+                                        reject(new Error('Invalid did provided'));
+                                        return [2 /*return*/];
+                                    }
                                     document = {
                                         owner: undefined,
                                         authentication: {},
@@ -68,17 +71,21 @@ var Resolver = /** @class */ (function () {
                                         serviceEndpoints: {},
                                         attributes: new Map(),
                                     };
-                                    _b.label = 1;
+                                    _a.label = 1;
                                 case 1:
-                                    _b.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(id, document, this._settings)];
+                                    _a.trys.push([1, 3, , 4]);
+                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, document, this._settings)];
                                 case 2:
-                                    _b.sent();
-                                    didDocument = functions_1.wrapDidDocument(id, document);
+                                    _a.sent();
+                                    didDocument = functions_1.wrapDidDocument(did, document);
                                     resolve(didDocument);
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    error_1 = _b.sent();
+                                    error_1 = _a.sent();
+                                    if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
+                                        didDocument = functions_1.wrapDidDocument(did, document);
+                                        resolve(didDocument);
+                                    }
                                     reject(error_1);
                                     return [3 /*break*/, 4];
                                 case 4: return [2 /*return*/];

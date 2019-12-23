@@ -1,7 +1,7 @@
 import { ProviderTypes } from '../models';
 export declare const defaultResolverSettings: {
     provider: {
-        uri: string;
+        uriOrInfo: string;
         type: ProviderTypes;
     };
     abi: ({
@@ -36,3 +36,4 @@ export declare const defaultResolverSettings: {
     address: string;
 };
 export declare const matchingPatternDidEvents: RegExp;
+export declare const matchingPatternDid: RegExp;

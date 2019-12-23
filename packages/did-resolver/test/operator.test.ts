@@ -179,9 +179,9 @@ describe('[DID-OPERATOR]', function () {
     // await operator.update(did, attribute, updateData, validity);
     // document = await operator.read(did);
     // console.log('document before deactivation:', document);
-    const result = await operator.deactivate(did);
+    // const result = await operator.deactivate(did);
     // expect(result).to.be.true;
-    const document = await operator.read(did);
-    console.log('document after deactivation:', document);
+    // const document = await operator.read(did);
+    // console.log('document after deactivation:', document);
   });
 });

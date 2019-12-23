@@ -242,7 +242,7 @@ const abi1056 = [
 ];
 
 const defaultProvider = {
-  uri: 'http://volta-rpc.energyweb.org/',
+  uriOrInfo: 'http://volta-rpc.energyweb.org/',
   type: ProviderTypes.HTTP,
 };
 
@@ -253,7 +253,7 @@ export const defaultResolverSettings = {
 };
 
 export const matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-export const matchingPatternDid = /did:[a-z]+:0x[A-Za-z0-9]{40}/;
+export const matchingPatternDid = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
 export const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 export const delegatePubKeyIdPattern = `^${ethAddrPattern}#delegate-(${ethAddrPattern})$`;
 export const pubKeyIdPattern = `^did:ewc:${ethAddrPattern}#key-(sigAuth|veriKey)$`;

@@ -1,6 +1,6 @@
 import { IResolver } from '../interface';
 import { IDIDDocument, IDIDLogData, IResolverSettings } from './index';
-import { defaultResolverSettings } from '../constants';
+import { defaultResolverSettings, matchingPatternDid } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 class Resolver implements IResolver {
@@ -23,7 +23,10 @@ class Resolver implements IResolver {
       return new Promise(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve, reject) => {
-          const [, , id] = did.split(':');
+          if (!matchingPatternDid.test(did)) {
+            reject(new Error('Invalid did provided'));
+            return;
+          }
           const document: IDIDLogData = {
             owner: undefined,
             authentication: {},
@@ -32,10 +35,14 @@ class Resolver implements IResolver {
             attributes: new Map(),
           };
           try {
-            await fetchDataFromEvents(id, document, this._settings);
-            const didDocument = wrapDidDocument(id, document);
+            await fetchDataFromEvents(did, document, this._settings);
+            const didDocument = wrapDidDocument(did, document);
             resolve(didDocument);
           } catch (error) {
+            if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+              const didDocument = wrapDidDocument(did, document);
+              resolve(didDocument);
+            }
             reject(error);
           }
         },

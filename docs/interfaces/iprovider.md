@@ -12,17 +12,26 @@ Specifies current Provider
 
 ### Properties
 
-* [options](iprovider.md#optional-options)
+* [network](iprovider.md#optional-network)
+* [path](iprovider.md#optional-path)
 * [type](iprovider.md#type)
-* [uri](iprovider.md#uri)
+* [uriOrInfo](iprovider.md#optional-uriorinfo)
 
 ## Properties
 
-### `Optional` options
+### `Optional` network
 
-• **options**? : *object*
+• **network**? : *Networkish*
 
-Defined in did-resolver/src/models/index.ts:17
+*Defined in [did-resolver/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L20)*
+
+___
+
+### `Optional` path
+
+• **path**? : *string*
+
+*Defined in [did-resolver/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L19)*
 
 ___
 
@@ -30,12 +39,12 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/index.ts:16
+*Defined in [did-resolver/src/models/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L17)*
 
 ___
 
-###  uri
+### `Optional` uriOrInfo
 
-• **uri**: *string*
+• **uriOrInfo**? : *string | ConnectionInfo*
 
-Defined in did-resolver/src/models/index.ts:15
+*Defined in [did-resolver/src/models/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L18)*

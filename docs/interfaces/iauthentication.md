@@ -12,6 +12,7 @@
 
 * [publicKey](iauthentication.md#publickey)
 * [type](iauthentication.md#type)
+* [validity](iauthentication.md#optional-validity)
 
 ## Properties
 
@@ -19,7 +20,7 @@
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/index.ts:65
+*Defined in [did-resolver/src/models/index.ts:69](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L69)*
 
 ___
 
@@ -27,4 +28,12 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/index.ts:64
+*Defined in [did-resolver/src/models/index.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L68)*
+
+___
+
+### `Optional` validity
+
+• **validity**? : *BigNumber*
+
+*Defined in [did-resolver/src/models/index.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L70)*
