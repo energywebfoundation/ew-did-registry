@@ -64,7 +64,10 @@ const handleAttributeChange = (event: ISmartContractEvent,
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = event.value.slice(2);
+              pk.publicKeyHex = Buffer.from(
+                event.values.value.slice(2),
+                'hex',
+              ).toString('hex');
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(

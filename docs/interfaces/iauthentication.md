@@ -19,7 +19,7 @@
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/index.ts:64
+Defined in did-resolver/src/models/index.ts:65
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/index.ts:63
+Defined in did-resolver/src/models/index.ts:64

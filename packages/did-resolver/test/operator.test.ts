@@ -1,113 +1,187 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { expect, assert } from 'chai';
+import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
+import { Wallet } from 'ethers';
 import Operator from '../src/models/operator';
-import { ProviderTypes } from '../src/models';
-import RegistryContractAbi from './RegistryContractAbi';
+import {
+  Algorithms, DIDAttribute, Encoding, IUpdateData, PubKeyType,
+} from '../src/models';
 
 const { fail } = assert;
-describe('[DID-OPERATOR]', () => {
+describe('[DID-OPERATOR]', function () {
+  this.timeout(0);
   const keys = new Keys({
     privateKey: '9a843e79a455a368c3031ffc3974e04e04f0553f2464b89074f901dea713c357',
     publicKey: '0361652cea564db2c9ef4d5859705376cbe5628e47490022a3b4535764d3f08efe',
   });
   const operator = new Operator(keys);
   const identity = '0x0126B7A16967114f3E261c36E9D99629D73caAeA';
+  const validity = 10 * 60 * 1000;
+  const did = `did:ewc:${identity}`;
 
-  it('update attribute should resolve with true', async () => {
-    const did = `did:eth:${identity}`;
-    const attribute = 'test name';
-    const value = 'test value';
-    const validity = 100;
-    const result = await operator.update(did, attribute, value, validity);
-    // eslint-disable-next-line no-unused-expressions
-    expect(result).to.be.true;
-  });
-
-  it('setting public key attribute should update DID document', async () => {
-    const did = `did:eth:${identity}`;
-    const attribute = 'publicKey';
-    const value = [
-      {
-        id: `${did}keys-1`,
-        type: 'RsaVerificationKey2019',
-        controller: did,
-        publicKeyPem: 'BEGIN PUBLIC KEY...END PUBLIC KEY',
-      },
-    ];
-    const validity = 100;
-    // const result = await operator.update(did, attribute, value, validity);
-    // const document = await operator.read(did);
-    // expect(document.id).to.equal(identity);
-    // expect(document.publicKey).to.equal(value);
+  // it('setting public key attribute should update public keys of DID document', async () => {
+  //   const attribute = DIDAttribute.PublicKey;
+  //   const updateData: IUpdateData = {
+  //     algo: Algorithms.ED25519,
+  //     type: PropType.VerificationKey2018,
+  //     encoding: Encoding.HEX,
+  //     value: new Keys().publicKey,
+  //   };
+  //   const result = await operator.update(did, attribute, updateData, validity);
+  //   const document = await operator.read(did);
+  //   // console.log('document:', document);
+  //   expect(document.id).equal(did);
+  //   const publicKey = document.publicKey.find(
+  //     (pk) => pk.publicKeyHex === updateData.value.slice(2)
+  //   );
+  //   // console.log('public key:', publicKey);
+  //   // eslint-disable-next-line no-unused-expressions
+  //   expect(publicKey).not.null;
+  // });
+  //
+  // it('adding a delegate with a delegation type of VerificationKey should add a public key',
+  //   async () => {
+  //     const attribute = DIDAttribute.Authenticate;
+  //     const delegate = new Wallet(new Keys().privateKey);
+  //     const updateData: IUpdateData = {
+  //       algo:
+  //       Algorithms.ED25519, type: PropType.VerificationKey2018, encoding: Encoding.HEX, delegate:
+  //       delegate.address,
+  //     };
+  //     const updated = await operator.update(did, attribute, updateData, validity);
+  //     expect(updated).to.be.true;
+  //     const document = await operator.read(did);
+  //     console.log('document:', document);
+  //     expect(document.id).equal(did);
+  //     const
+  //       authMethod = document.publicKey.find(
+  //         (pk) => pk.id === `${identity}#delegate-${updateData.delegate}`,
+  //       );
+  //     console.log('auth method:', authMethod);
+  //     expect(authMethod).include({
+  //       type: 'Secp256k1VerificationKey2018',
+  //       controller: did,
+  //       ethereumAddress: updateData.delegate,
+  //     });
+  //   });
+  //
+  // it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
+  //    key and reference on it in authentication section of the DID document`, async () => {
+  //   const attribute = DIDAttribute.Authenticate;
+  //   const delegate = new Wallet(new Keys().privateKey);
+  //   const updateData: IUpdateData = {
+  //     algo: Algorithms.ED25519,
+  //     type: PropType.SignatureAuthentication2018,
+  //     encoding: Encoding.HEX,
+  //     delegate: delegate.address,
+  //   };
+  //   const updated = await operator.update(did, attribute, updateData, validity);
+  //   expect(updated).to.be.true;
+  //   const document = await operator.read(did);
+  //   console.log('document:', document);
+  //   expect(document.id).equal(did);
+  //   const publicKeyId = `${identity}#delegate-${updateData.delegate}`;
+  //   expect(document.authentication).to.be.an('array').that.includes(publicKeyId);
+  //   const authMethod = document.publicKey.find(
+  //     (pk) => pk.id === publicKeyId,
+  //   );
+  //   // console.log('auth method:', authMethod);
+  //   expect(authMethod).include({
+  //     type: 'Secp256k1VerificationKey2018',
+  //     controller: did,
+  //     ethereumAddress: updateData.delegate,
+  //   });
+  // });
+  //
+  it('service endpoint update should add an entry in service section of the DID document', async () => {
+  //   const attribute = DIDAttribute.ServicePoint;
+  //   const endpoint = 'https://example.com';
+  //   const updateData: IUpdateData = {
+  //     algo: Algorithms.ED25519,
+  //     type: PropType.VerificationKey2018,
+  //     encoding: Encoding.HEX,
+  //     value: endpoint,
+  //   };
+  //   const updated = await operator.update(did, attribute, updateData, validity);
+  //   expect(updated).to.be.true;
+  //   const document = await operator.read(did);
+  //   console.log('document:', document);
+  //   expect(document.id).equal(did);
+  //   expect(document.service.find(
+  //     (sv) => sv.type === updateData.algo && sv.serviceEndpoint === endpoint,
+  //   )).not.null;
   });
 
   it('setting attribute on invalid did should throw an error', async () => {
-    const did = `did:${identity}`;
-    const attribute = 'test name';
-    const value = 'test value';
-    const validity = 100;
+    const invalidDid = `did:${identity}`;
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: new Keys().publicKey,
+    };
     try {
-      await operator.update(did, attribute, value, validity);
+      const result = await operator.update(invalidDid, attribute, updateData, validity);
       fail('Error was not thrown');
     } catch (e) {
       expect(e.message).to.equal('Invalid DID');
     }
   });
 
-  it(
-    'setting attribute with name taking more than 31 bytes should throw an error',
-    async () => {
-      const did = `did:eth:${identity}`;
-      const attribute = 'A'.repeat(32);
-      const value = 'test value';
-      const validity = 100;
-      try {
-        await operator.update(did, attribute, value, validity);
-        fail(
-          'The error "bytes32 string must be less than 32 bytes" was not thrown',
-        );
-      } catch (e) {
-        expect(e.message)
-          .to
-          .equal('bytes32 string must be less than 32 bytes');
-      }
-    },
-  );
-
   it('setting attribute with negative validity should throw an error', async () => {
-    const did = `did:eth:${identity}`;
-    const attribute = 'test name';
-    const value = 'test value';
-    const validity = -1;
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: new Keys().publicKey,
+    };
     try {
-      await operator.update(did, attribute, value, validity);
+      await operator.update(did, attribute, updateData, -100);
       fail(
-        'The error "Validity must be non negative value" was not thrown',
+        'Error was not thrown',
       );
     } catch (e) {
       expect(e.message).to.equal('Validity must be non negative value');
     }
   });
 
-  it('deactivating of active document should resolve with true', async () => {
-    // const did = `did:eth:${identity}`;
-    // const document = await operator.read(did);
-    // console.dir(document);
-    //   const validity = 0;
-    //   const result = await operator.deactivate(did);
-    //   expect(result).to.be.true;
-  });
-
-  it('deactivating of inactive document should throw an error', async () => {
-    //   const did = `did:eth:${identity}`;
-    //   const document = operator.read(did);
-    //   const validity = 0;
-    //   const result = await operator.deactivate(did);
-    //   try {
-    //     await operator.deactivate(did);
-    //   } catch (e) {
-    //     expect(e.message).to.equal('Document not active');
-    //   }
+  it('deactivating of document should resolve with true', async () => {
+    // add public key
+    // let attribute = DIDAttribute.PublicKey;
+    // let updateData: IUpdateData = {
+    //   algo: Algorithms.ED25519,
+    //   type: PubKeyType.VerificationKey2018,
+    //   encoding: Encoding.HEX,
+    //   value: new Keys().publicKey,
+    // };
+    // await operator.update(did, attribute, updateData, validity);
+    // add authentication method
+    // attribute = DIDAttribute.Authenticate;
+    // const delegate = new Wallet(new Keys().privateKey);
+    // updateData = {
+    //   algo: Algorithms.ED25519,
+    //   type: PubKeyType.SignatureAuthentication2018,
+    //   encoding: Encoding.HEX,
+    //   delegate: delegate.address,
+    // };
+    // await operator.update(did, attribute, updateData, validity);
+    // add service endpoint
+    // attribute = DIDAttribute.ServicePoint;
+    // const endpoint = 'https://example.com';
+    // updateData = {
+    //   algo: Algorithms.ED25519,
+    //   type: PubKeyType.VerificationKey2018,
+    //   encoding: Encoding.HEX,
+    //   value: endpoint,
+    // };
+    // await operator.update(did, attribute, updateData, validity);
+    // document = await operator.read(did);
+    // console.log('document before deactivation:', document);
+    const result = await operator.deactivate(did);
+    // expect(result).to.be.true;
+    const document = await operator.read(did);
+    console.log('document after deactivation:', document);
   });
 });

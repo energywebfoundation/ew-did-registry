@@ -22,7 +22,7 @@
 
 • **name**: *string*
 
-Defined in did-resolver/src/models/index.ts:75
+Defined in did-resolver/src/models/index.ts:76
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **signature**: *string*
 
-Defined in did-resolver/src/models/index.ts:76
+Defined in did-resolver/src/models/index.ts:77
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **topic**: *string*
 
-Defined in did-resolver/src/models/index.ts:77
+Defined in did-resolver/src/models/index.ts:78
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/index.ts:87
+Defined in did-resolver/src/models/index.ts:88
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **values**: *object*
 
-Defined in did-resolver/src/models/index.ts:78
+Defined in did-resolver/src/models/index.ts:79
 
 #### Type declaration:
 

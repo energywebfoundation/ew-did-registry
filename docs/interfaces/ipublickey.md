@@ -6,6 +6,10 @@
 
 * **IPublicKey**
 
+## Indexable
+
+* \[ **key**: *string*\]: string
+
 ## Index
 
 ### Properties

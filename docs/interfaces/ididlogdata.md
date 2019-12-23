@@ -26,7 +26,7 @@
 
 • **attributes**? : *Map‹string, object›*
 
-Defined in did-resolver/src/models/index.ts:99
+Defined in did-resolver/src/models/index.ts:100
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **authentication**: *object*
 
-Defined in did-resolver/src/models/index.ts:93
+Defined in did-resolver/src/models/index.ts:94
 
 #### Type declaration:
 
@@ -46,7 +46,7 @@ ___
 
 • **created**? : *string*
 
-Defined in did-resolver/src/models/index.ts:96
+Defined in did-resolver/src/models/index.ts:97
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **delegates**? : *string[]*
 
-Defined in did-resolver/src/models/index.ts:94
+Defined in did-resolver/src/models/index.ts:95
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 • **owner**: *string*
 
-Defined in did-resolver/src/models/index.ts:91
+Defined in did-resolver/src/models/index.ts:92
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-Defined in did-resolver/src/models/index.ts:98
+Defined in did-resolver/src/models/index.ts:99
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 • **publicKey**: *object*
 
-Defined in did-resolver/src/models/index.ts:92
+Defined in did-resolver/src/models/index.ts:93
 
 #### Type declaration:
 
@@ -90,7 +90,7 @@ ___
 
 • **serviceEndpoints**? : *object*
 
-Defined in did-resolver/src/models/index.ts:95
+Defined in did-resolver/src/models/index.ts:96
 
 #### Type declaration:
 
@@ -102,4 +102,4 @@ ___
 
 • **updated**? : *string*
 
-Defined in did-resolver/src/models/index.ts:97
+Defined in did-resolver/src/models/index.ts:98

@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts --timeout 50000",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
@@ -25,11 +25,11 @@
   "dependencies": {
     "@ew-did-registry/did": "file:../did",
     "@ew-did-registry/keys": "file:../keys",
-    "ethers": "^4.0.40",
     "bn.js": "^5.0.0",
     "ethers": "^4.0.40"
   },
   "devDependencies": {
-    "chai-interface": "^2.0.3"
+    "chai-interface": "^2.0.3",
+    "eslint-plugin-chai-friendly": "^0.5.0"
   }
 }

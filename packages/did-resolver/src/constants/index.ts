@@ -1,4 +1,4 @@
-import { ProviderTypes } from '../models';
+import { Algorithms, ProviderTypes, PubKeyType } from '../models';
 
 const address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
 
@@ -253,3 +253,8 @@ export const defaultResolverSettings = {
 };
 
 export const matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
+export const matchingPatternDid = /did:[a-z]+:0x[A-Za-z0-9]{40}/;
+export const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+export const delegatePubKeyIdPattern = `^${ethAddrPattern}#delegate-(${ethAddrPattern})$`;
+export const pubKeyIdPattern = `^did:ewc:${ethAddrPattern}#key-(sigAuth|veriKey)$`;
+export const serviceIdPattern = `^did:ewc:${ethAddrPattern}#([A-Za-z0-9]+)$`;

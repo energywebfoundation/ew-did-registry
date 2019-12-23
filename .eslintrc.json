@@ -19,7 +19,8 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "import"
+    "import",
+    "chai-friendly"
   ],
   "rules": {
     "import/no-unresolved": "error",
@@ -30,7 +31,9 @@
     "space-infix-ops": ["error", { "int32Hint": false }],
     "no-underscore-dangle": 0,
     "no-param-reassign": 0,
-    "space-before-function-paren": 0
+    "space-before-function-paren": 0,
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
   },
   "settings": {
     "import/resolver": {

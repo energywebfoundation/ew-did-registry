@@ -6,9 +6,13 @@
 
 ### Enumerations
 
+* [Algorithms](enums/algorithms.md)
 * [ClaimType](enums/claimtype.md)
+* [DIDAttribute](enums/didattribute.md)
+* [Encoding](enums/encoding.md)
 * [Networks](enums/networks.md)
 * [ProviderTypes](enums/providertypes.md)
+* [PubKeyType](enums/pubkeytype.md)
 
 ### Classes
 
@@ -48,20 +52,29 @@
 * [IResolverSettings](interfaces/iresolversettings.md)
 * [IServiceEndpoint](interfaces/iserviceendpoint.md)
 * [ISmartContractEvent](interfaces/ismartcontractevent.md)
+* [IUpdateData](interfaces/iupdatedata.md)
 * [IUpdateParameters](interfaces/iupdateparameters.md)
 * [IVerificationClaim](interfaces/iverificationclaim.md)
 * [KeyPair](interfaces/keypair.md)
 
 ### Variables
 
+* [Authenticate](globals.md#authenticate)
+* [PublicKey](globals.md#publickey)
+* [ServicePoint](globals.md#servicepoint)
 * [abi1056](globals.md#const-abi1056)
 * [address1056](globals.md#const-address1056)
+* [delegatePubKeyIdPattern](globals.md#const-delegatepubkeyidpattern)
 * [ec](globals.md#const-ec)
+* [ethAddrPattern](globals.md#const-ethaddrpattern)
 * [fail](globals.md#fail)
 * [keyEncoder](globals.md#const-keyencoder)
 * [keyPairAlice](globals.md#let-keypairalice)
+* [matchingPatternDid](globals.md#const-matchingpatterndid)
 * [matchingPatternDidEvents](globals.md#const-matchingpatterndidevents)
 * [payload](globals.md#let-payload)
+* [pubKeyIdPattern](globals.md#const-pubkeyidpattern)
+* [serviceIdPattern](globals.md#const-serviceidpattern)
 * [token](globals.md#let-token)
 
 ### Functions
@@ -85,6 +98,30 @@
 * [hex](globals.md#const-hex)
 
 ## Variables
+
+###  Authenticate
+
+• **Authenticate**: *[Authenticate](enums/didattribute.md#authenticate)*
+
+Defined in did-resolver/src/models/operator.ts:23
+
+___
+
+###  PublicKey
+
+• **PublicKey**: *[PublicKey](enums/didattribute.md#publickey)*
+
+Defined in did-resolver/src/models/operator.ts:23
+
+___
+
+###  ServicePoint
+
+• **ServicePoint**: *[ServicePoint](enums/didattribute.md#servicepoint)*
+
+Defined in did-resolver/src/models/operator.ts:23
+
+___
 
 ### `Const` abi1056
 
@@ -339,6 +376,14 @@ Defined in did-resolver/src/constants/index.ts:3
 
 ___
 
+### `Const` delegatePubKeyIdPattern
+
+• **delegatePubKeyIdPattern**: *string* =  `^${ethAddrPattern}#delegate-(${ethAddrPattern})$`
+
+Defined in did-resolver/src/constants/index.ts:258
+
+___
+
 ### `Const` ec
 
 • **ec**: *ec‹›* =  new EC('secp256k1')
@@ -347,11 +392,19 @@ Defined in keys/src/index.ts:10
 
 ___
 
+### `Const` ethAddrPattern
+
+• **ethAddrPattern**: *"0x[A-Fa-f0-9]{40}"* = "0x[A-Fa-f0-9]{40}"
+
+Defined in did-resolver/src/constants/index.ts:257
+
+___
+
 ###  fail
 
 • **fail**: *fail*
 
-Defined in did-resolver/test/operator.test.ts:8
+Defined in did-resolver/test/operator.test.ts:10
 
 ___
 
@@ -371,6 +424,14 @@ Defined in jwt/test/jwt.test.ts:8
 
 ___
 
+### `Const` matchingPatternDid
+
+• **matchingPatternDid**: *RegExp‹›* =  /did:[a-z]+:0x[A-Za-z0-9]{40}/
+
+Defined in did-resolver/src/constants/index.ts:256
+
+___
+
 ### `Const` matchingPatternDidEvents
 
 • **matchingPatternDidEvents**: *RegExp‹›* =  /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/
@@ -384,6 +445,22 @@ ___
 • **payload**: *object*
 
 Defined in jwt/test/jwt.test.ts:6
+
+___
+
+### `Const` pubKeyIdPattern
+
+• **pubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#key-(sigAuth|veriKey)$`
+
+Defined in did-resolver/src/constants/index.ts:259
+
+___
+
+### `Const` serviceIdPattern
+
+• **serviceIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#([A-Za-z0-9]+)$`
+
+Defined in did-resolver/src/constants/index.ts:260
 
 ___
 
@@ -442,7 +519,7 @@ ___
 
 ▸ **fetchDataFromEvents**(`etherAddress`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `resolverSettings`: [IResolverSettings](interfaces/iresolversettings.md)): *Promise‹void›*
 
-Defined in did-resolver/src/functions/index.ts:166
+Defined in did-resolver/src/functions/index.ts:169
 
 **Parameters:**
 
@@ -460,7 +537,7 @@ ___
 
 ▸ **getEventsFromBlock**(`block`: BigNumber, `etherAddress`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `provider`: JsonRpcProvider, `resolverSettings`: [IResolverSettings](interfaces/iresolversettings.md)): *Promise‹unknown›*
 
-Defined in did-resolver/src/functions/index.ts:140
+Defined in did-resolver/src/functions/index.ts:143
 
 **Parameters:**
 
@@ -532,7 +609,7 @@ ___
 
 ▸ **updateDocument**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `eventName`: string, `etherAddress`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md)): *true | [IDIDLogData](interfaces/ididlogdata.md)*
 
-Defined in did-resolver/src/functions/index.ts:124
+Defined in did-resolver/src/functions/index.ts:127
 
 **Parameters:**
 
@@ -551,7 +628,7 @@ ___
 
 ▸ **wrapDidDocument**(`address`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `context`: string): *[IDIDDocument](interfaces/ididdocument.md)*
 
-Defined in did-resolver/src/functions/index.ts:191
+Defined in did-resolver/src/functions/index.ts:194
 
 **Parameters:**
 
@@ -664,19 +741,19 @@ ___
 
 ### ▪ **handlers**: *object*
 
-Defined in did-resolver/src/functions/index.ts:119
+Defined in did-resolver/src/functions/index.ts:122
 
 ###  DIDAttributeChanged
 
 • **DIDAttributeChanged**: *handleAttributeChange* =  handleAttributeChange
 
-Defined in did-resolver/src/functions/index.ts:121
+Defined in did-resolver/src/functions/index.ts:124
 
 ###  DIDDelegateChanged
 
 • **DIDDelegateChanged**: *handleDelegateChange* =  handleDelegateChange
 
-Defined in did-resolver/src/functions/index.ts:120
+Defined in did-resolver/src/functions/index.ts:123
 
 ___
 
