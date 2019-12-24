@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
 
 # Interface: IDIDDocument
 
@@ -26,7 +26,7 @@
 
 • **@context**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L34)*
+Defined in did-resolver/src/models/resolver.ts:59
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-*Defined in [did-resolver/src/models/index.ts:37](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L37)*
+Defined in did-resolver/src/models/resolver.ts:62
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **created**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L40)*
+Defined in did-resolver/src/models/resolver.ts:65
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **delegates**? : *string[]*
 
-*Defined in [did-resolver/src/models/index.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L38)*
+Defined in did-resolver/src/models/resolver.ts:63
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L35)*
+Defined in did-resolver/src/models/resolver.ts:60
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-resolver/src/models/index.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L42)*
+Defined in did-resolver/src/models/resolver.ts:67
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-*Defined in [did-resolver/src/models/index.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L36)*
+Defined in did-resolver/src/models/resolver.ts:61
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 • **service**? : *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-*Defined in [did-resolver/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L39)*
+Defined in did-resolver/src/models/resolver.ts:64
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 • **updated**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:41](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L41)*
+Defined in did-resolver/src/models/resolver.ts:66

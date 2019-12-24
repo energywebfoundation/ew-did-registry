@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
 
 # Class: Operator
 
@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-Defined in did-resolver/src/models/operator.ts:41
+Defined in did-resolver/src/models/operator.ts:67
 
 **Parameters:**
 
@@ -52,9 +52,9 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:67
+Defined in did-resolver/src/models/operator.ts:93
 
-Empty for current implementation
+Empty for this implementation
 
 **Parameters:**
 
@@ -73,26 +73,18 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:175
+Defined in did-resolver/src/models/operator.ts:155
 
-Revokes specified attribute from DID document
+Revokes authentication methods, public keys and delegates from DID document
 
 **`example`** 
 ```typescript
-import { Operator, ProviderTypes } from '@ew-did-registry/did-resolver';
+import { Operator } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 
-const keys = new Keys();
-const resolverSettings = {
-abi, // abi of the ERC1056 compliant smart-contract
-address, // ethereum address of the smart-contract
-  provider: {
-    uri: 'https://volta-rpc.energyweb.org/',
-    type: ProviderTypes.HTTP,
-  }
-};
-const operator = new Operator(keys, resolverSettings);
-const updated = operator.deactivate(did);
+const ownerKeys = new Keys();
+const operator = new Operator(ownerKeys);
+const updated = await operator.deactivate(did);
 ```
 
 **Parameters:**
@@ -113,7 +105,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/models/resolver.ts:22
+Defined in did-resolver/src/models/resolver.ts:139
 
 **Parameters:**
 
@@ -127,28 +119,30 @@ ___
 
 ###  update
 
-▸ **update**(`did`: string, `attribute`: string, `value`: string | object, `validity`: number | BigNumber): *Promise‹boolean›*
+▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-resolver/src/models/operator.ts:100
+*Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Sets attribute value in Did document identified by the did
+Defined in did-resolver/src/models/operator.ts:127
+
+Sets attribute value in DID document identified by the did
 
 **`example`** 
 ```typescript
-import { Operator, ProviderTypes } from '@ew-did-registry/did-resolver';
+import { Operator, DIDAttribute } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 
-const keys = new Keys();
-const resolverSettings = {
-abi, // abi of the ERC1056 compliant smart-contract
-address, // ethereum address of the smart-contract
-  provider: {
-    uri: 'https://volta-rpc.energyweb.org/',
-    type: ProviderTypes.HTTP,
-  }
+const ownerKeys = new Keys();
+const operator = new Operator(ownerKeys);
+const pKey = DIDAttribute.PublicKey;
+const updateData = {
+    algo: Algorithms.ED25519,
+    type: PubKeyType.VerificationKey2018,
+    encoding: Encoding.HEX,
+    value: new Keys().publicKey,
 };
-const operator = new Operator(keys, resolverSettings);
-const updated = operator.update(did, Attributes.service, "DrivingLicense");
+const validity = 10 * 60 * 1000;
+const updated = await operator.update(did, pKey, updateData, validity);
 ```
 
 **Parameters:**
@@ -156,8 +150,8 @@ const updated = operator.update(did, Attributes.service, "DrivingLicense");
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
 `did` | string | - | did associated with DID document |
-`attribute` | string | - | attribute name. Must be 31 bytes or shorter |
-`value` | string &#124; object | - | attribute value |
+`didAttribute` | [DIDAttribute](../enums/didattribute.md) | - | specifies updated section in DID document. Must be 31 bytes or shorter |
+`updateData` | [IUpdateData](../interfaces/iupdatedata.md) | - | - |
 `validity` | number &#124; BigNumber |  ethers.constants.MaxUint256 | time in milliseconds during which                              attribute will be valid  |
 
 **Returns:** *Promise‹boolean›*

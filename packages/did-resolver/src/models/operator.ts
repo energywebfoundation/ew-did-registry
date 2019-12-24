@@ -2,17 +2,14 @@
 import { Contract, ethers, Wallet } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { BigNumber } from 'ethers/utils';
-import { IOperator, Resolver } from '../index';
+import { IOperator } from '../index';
 import {
-  Algorithms,
-  DIDAttribute,
-  Encoding,
+  Resolver,
+  IAuthentication,
   IPublicKey,
   IServiceEndpoint,
-  IUpdateData,
   ProviderTypes,
-  PubKeyType,
-} from './index';
+} from './resolver';
 import {
   delegatePubKeyIdPattern,
   matchingPatternDid,
@@ -20,9 +17,38 @@ import {
   serviceIdPattern,
 } from '../constants';
 
+export enum DIDAttribute {
+  PublicKey = 'pub', Authenticate = 'auth', ServicePoint = 'svc'
+}
+
+export enum PubKeyType {
+  SignatureAuthentication2018 = 'sigAuth', VerificationKey2018 = 'veriKey'
+}
+
+export enum Encoding {
+  HEX = 'hex', BASE64 = 'base64', PEM = 'pem', BASE58 = 'base58'
+}
+
+export enum Algorithms {
+  ED25519 = 'Ed25519'
+}
+
+/**
+ * Data used to update DID Document. To update the public key you need to set its value in value
+ * field, and to set authentication method, the delegate ethereum address must be set in the
+ * delegate field
+ */
+export interface IUpdateData {
+  encoding: Encoding;
+  algo: Algorithms;
+  type: PubKeyType;
+  value?: string;
+  delegate?: string;
+}
+
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
-class Operator extends Resolver implements IOperator {
+export class Operator extends Resolver implements IOperator {
   /**
    * ERC-1056 compliant ethereum smart-contract
    */
@@ -59,7 +85,7 @@ class Operator extends Resolver implements IOperator {
   }
 
   /**
-   * Empty for current implementation
+   * Empty for this implementation
    * @param did
    * @param context
    */
@@ -69,29 +95,30 @@ class Operator extends Resolver implements IOperator {
   }
 
   /**
-   * Sets attribute value in Did document identified by the did
+   * Sets attribute value in DID document identified by the did
    *
    * @example
    *```typescript
-   *import { Operator, ProviderTypes } from '@ew-did-registry/did-resolver';
+   *import { Operator, DIDAttribute } from '@ew-did-registry/did-resolver';
    *import { Keys } from '@ew-did-registry/keys';
    *
-   * const keys = new Keys();
-   * const resolverSettings = {
-   * abi, // abi of the ERC1056 compliant smart-contract
-   * address, // ethereum address of the smart-contract
-   *   provider: {
-   *     uri: 'https://volta-rpc.energyweb.org/',
-   *     type: ProviderTypes.HTTP,
-   *   }
+   * const ownerKeys = new Keys();
+   * const operator = new Operator(ownerKeys);
+   * const pKey = DIDAttribute.PublicKey;
+   * const updateData = {
+   *     algo: Algorithms.ED25519,
+   *     type: PubKeyType.VerificationKey2018,
+   *     encoding: Encoding.HEX,
+   *     value: new Keys().publicKey,
    * };
-   * const operator = new Operator(keys, resolverSettings);
-   * const updated = operator.update(did, Attributes.service, "DrivingLicense");
+   * const validity = 10 * 60 * 1000;
+   * const updated = await operator.update(did, pKey, updateData, validity);
    * ```
    *
    * @param { string } did - did associated with DID document
-   * @param { string } attribute - attribute name. Must be 31 bytes or shorter
-   * @param { string|object } value - attribute value
+   * @param { DIDAttribute } didAttribute - specifies updated section in DID document. Must be 31
+   * bytes or shorter
+   * @param { IUpdateData } updateData
    * @param { number } validity - time in milliseconds during which
    *                              attribute will be valid
    *
@@ -99,75 +126,28 @@ class Operator extends Resolver implements IOperator {
    */
   async update(
     did: string,
-    attribute: string,
-    value: string | object,
+    didAttribute: DIDAttribute,
+    updateData: IUpdateData,
     validity: number | BigNumber = ethers.constants.MaxUint256,
   ): Promise<boolean> {
-    const updateData = value as IUpdateData;
-    const didAttribute = attribute as DIDAttribute;
-    const attributeName = Operator._composeAttributeName(didAttribute, updateData);
-    const identity = Operator._parseDid(did);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(
-      didAttribute === PublicKey || didAttribute === ServicePoint
-        ? updateData.value
-        : updateData.delegate,
-    );
-    if (validity < 0) {
-      throw new Error('Validity must be non negative value');
-    }
     const registry = this._didRegistry;
-    const updateMethod = didAttribute === PublicKey || didAttribute === ServicePoint
+    const method = didAttribute === PublicKey || didAttribute === ServicePoint
       ? registry.setAttribute
       : registry.addDelegate;
-    console.log(`attribute name:${attributeName}`);
-    console.log('update data:', updateData);
-    // console.log('bytes of attr name:', bytesOfAttribute);
-    // console.log('bytes of attr value:', bytesOfValue);
-    try {
-      const tx = await updateMethod(
-        identity,
-        bytesOfAttribute,
-        bytesOfValue,
-        validity,
-      );
-      const receipt = await tx.wait();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      // console.log('update receipt:', receipt);
-      const event = receipt.events.find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (e: any) => (e.event === 'DIDAttributeChanged' && attributeName === PublicKey)
-          || (e.event === 'DIDAttributeChanged' && didAttribute === ServicePoint)
-          || (e.event === 'DIDDelegateChanged' && didAttribute === Authenticate)
-        ,
-      );
-      // console.log('update event: ', event);
-      return !!event;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
+    return this._sendTransaction(method, did, didAttribute, updateData, validity);
   }
 
   /**
-   * Revokes specified attribute from DID document
+   * Revokes authentication methods, public keys and delegates from DID document
    *
    * @example
    * ```typescript
-   *import { Operator, ProviderTypes } from '@ew-did-registry/did-resolver';
+   *import { Operator } from '@ew-did-registry/did-resolver';
    *import { Keys } from '@ew-did-registry/keys';
    *
-   * const keys = new Keys();
-   * const resolverSettings = {
-   * abi, // abi of the ERC1056 compliant smart-contract
-   * address, // ethereum address of the smart-contract
-   *   provider: {
-   *     uri: 'https://volta-rpc.energyweb.org/',
-   *     type: ProviderTypes.HTTP,
-   *   }
-   * };
-   * const operator = new Operator(keys, resolverSettings);
-   * const updated = operator.deactivate(did);
+   * const ownerKeys = new Keys();
+   * const operator = new Operator(ownerKeys);
+   * const updated = await operator.deactivate(did);
    * ```
    *
    * @param { string } did
@@ -175,26 +155,30 @@ class Operator extends Resolver implements IOperator {
   async deactivate(did: string): Promise<boolean> {
     const document = await this.read(did);
     const authRevoked = await this._revokeAuthentications(
-      did, document.authentication as string[],
+      did,
+      document.authentication as IAuthentication[],
+      document.publicKey,
     );
-    // const pubKeysRevoked = await this._revokePublicKeys(did, document.publicKey);
-    // const endpointsRevoked = await this._revokeServices(did, document.service);
-    // return authRevoked && pubKeysRevoked && endpointsRevoked;
-    return true;
+    const pubKeysRevoked = await this._revokePublicKeys(did, document.publicKey);
+    const endpointsRevoked = await this._revokeServices(did, document.service);
+    return authRevoked && pubKeysRevoked && endpointsRevoked;
   }
 
-  private async _revokeAuthentications(did: string, auths: string[]): Promise<boolean> {
+  private async _revokeAuthentications(
+    did: string,
+    auths: IAuthentication[],
+    publicKeys: IPublicKey[],
+  ): Promise<boolean> {
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     console.log('nonce=', nonce);
     // eslint-disable-next-line no-restricted-syntax
+    const method = this._didRegistry.revokeDelegate;
     for (const auth of auths) {
-      console.log('auth:', auth);
-      const match = auth.match(delegatePubKeyIdPattern);
+      const match = auth.publicKey.match(delegatePubKeyIdPattern);
       // eslint-disable-next-line no-continue
       if (!match) continue;
       const delegateAddress = match[1];
-      console.log('delegate address:', delegateAddress);
       const didAttribute = DIDAttribute.Authenticate;
       const updateData: IUpdateData = {
         algo: Algorithms.ED25519,
@@ -202,26 +186,31 @@ class Operator extends Resolver implements IOperator {
         encoding: Encoding.HEX,
         delegate: delegateAddress,
       };
-      const identity = Operator._parseDid(did);
-      const attributeName = Operator._composeAttributeName(didAttribute, updateData);
-      const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-      const bytesOfValue = this._hexify(updateData.delegate);
-      try {
-        const tx = await this._didRegistry.revokeDelegate(
-          identity,
-          bytesOfAttribute,
-          bytesOfValue,
-          {
-            nonce,
-          },
-        );
-        const receipt = await tx.wait();
-        const event = receipt.events.find(
-          (e: any) => (e.event === 'DIDDelegateChanged'),
-        );
-        console.log('store delegate event into block:', event.blockNumber);
-      } catch (e) {
-        console.error(e);
+      const revoked = await this._sendTransaction(
+        method, did, didAttribute, updateData, null, { nonce },
+      );
+      if (!revoked) {
+        return false;
+      }
+      nonce += 1;
+    }
+    for (const pk of publicKeys) {
+      const match = pk.id.match(delegatePubKeyIdPattern);
+      // eslint-disable-next-line no-continue
+      if (!match) continue;
+      const type = match[1];
+      const didAttribute = Authenticate;
+      const delegateAddress = pk.ethereumAddress;
+      const updateData: IUpdateData = {
+        algo: Algorithms.ED25519,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: delegateAddress,
+      };
+      const revoked = await this._sendTransaction(
+        method, did, didAttribute, updateData, null, { nonce },
+      );
+      if (!revoked) {
         return false;
       }
       nonce += 1;
@@ -230,10 +219,10 @@ class Operator extends Resolver implements IOperator {
   }
 
   private async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
+    const sender = this._wallet.address;
+    let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const pk of publicKeys) {
-      console.log('pk.id=', pk.id);
       const match = pk.id.match(pubKeyIdPattern);
-      console.log('match of pub key:', match);
       // eslint-disable-next-line no-continue
       if (!match) continue;
       const type = match[1];
@@ -243,39 +232,21 @@ class Operator extends Resolver implements IOperator {
         const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
         return pk[`publicKey${suffix}`];
       });
-      console.log('encoding:', encoding);
       if (!encoding) {
         throw new Error('Unknown encoding');
       }
-      const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`];
-      console.log('value of pub key:', value);
+      const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
       const updateData: IUpdateData = {
         algo: Algorithms.ED25519,
         type: match[1] as PubKeyType,
         encoding,
         value,
       };
-      const identity = Operator._parseDid(did);
-      const attributeName = Operator._composeAttributeName(didAttribute, updateData);
-      const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-      const bytesOfValue = this._hexify(updateData.value);
-      const sender = this._wallet.address;
-      let nonce = await this._didRegistry.provider.getTransactionCount(sender);
-      try {
-        const tx = await this._didRegistry.revokeAttribute(
-          identity,
-          bytesOfAttribute,
-          bytesOfValue,
-          {
-            nonce,
-          },
-        );
-        const receipt = await tx.wait();
-        const event = receipt.events.find(
-          (e: any) => (e.event === 'DIDAttributeChanged'),
-        );
-      } catch (e) {
-        console.error(e);
+      const method = this._didRegistry.revokeAttribute;
+      const revoked = await this._sendTransaction(
+        method, did, didAttribute, updateData, null, { nonce },
+      );
+      if (!revoked) {
         return false;
       }
       nonce += 1;
@@ -289,7 +260,7 @@ class Operator extends Resolver implements IOperator {
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
       const match = service.id.match(serviceIdPattern);
-      const algo = match[1];
+      const algo = match[1] as Algorithms;
       const value = service.serviceEndpoint;
       const didAttribute = DIDAttribute.ServicePoint;
       revoked = revoked && await this._sendTransaction(
@@ -317,29 +288,36 @@ class Operator extends Resolver implements IOperator {
       nonce?: number;
     },
   ): Promise<boolean> {
+    if (validity && validity < 0) {
+      throw new Error('Validity must be non negative value');
+    }
     const identity = Operator._parseDid(did);
     const attributeName = Operator._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(updateData.value);
-    const sender = this._wallet.address;
-    console.log('validity || overrides:', validity || overrides);
-    console.log('validity && overrides:', validity && overrides);
-    // try {
-    //   const tx = await method(
-    //     identity,
-    //     bytesOfAttribute,
-    //     bytesOfValue,
-    //     validity || overrides,
-    //     validity && overrides,
-    //   );
-    //   const receipt = await tx.wait();
-    //   const event = receipt.events.find(
-    //     (e: any) => (e.event === 'DIDAttributeChanged'),
-    //   );
-    // } catch (e) {
-    //   console.error(e);
-    //   return false;
-    // }
+    const bytesOfValue = this._hexify(
+      didAttribute === PublicKey || didAttribute === ServicePoint
+        ? updateData.value
+        : updateData.delegate,
+    );
+    const argums = [identity,
+      bytesOfAttribute,
+      bytesOfValue,
+      validity || overrides,
+      validity && overrides,
+    ];
+    try {
+      const tx = await method(...argums.filter((a) => a));
+      const receipt = await tx.wait();
+      const event = receipt.events.find(
+        (e: any) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
+          || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
+          || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
+      );
+      if (!event) return false;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
     return true;
   }
 
@@ -373,7 +351,7 @@ class Operator extends Resolver implements IOperator {
     const { provider } = this._settings;
     switch (provider.type) {
       case ProviderTypes.HTTP:
-        return new ethers.providers.JsonRpcProvider(provider.uri);
+        return new ethers.providers.JsonRpcProvider(provider.uriOrInfo);
       default:
         return ethers.getDefaultProvider();
     }
@@ -387,5 +365,3 @@ class Operator extends Resolver implements IOperator {
     return id;
   }
 }
-
-export default Operator;

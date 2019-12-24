@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
 
 # Enumeration: Algorithms
 
@@ -14,4 +14,4 @@
 
 • **ED25519**: = "Ed25519"
 
-Defined in did-resolver/src/models/index.ts:135
+Defined in did-resolver/src/models/operator.ts:33

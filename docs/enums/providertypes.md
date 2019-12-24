@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ProviderTypes](providertypes.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ProviderTypes](providertypes.md)
 
 # Enumeration: ProviderTypes
 
@@ -15,7 +15,7 @@
 
 • **HTTP**:
 
-*Defined in [did-resolver/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L9)*
+Defined in did-resolver/src/models/resolver.ts:41
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **IPC**:
 
-*Defined in [did-resolver/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/dfdee88/packages/did-resolver/src/models/index.ts#L10)*
+Defined in did-resolver/src/models/resolver.ts:42

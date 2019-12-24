@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [PubKeyType](pubkeytype.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [PubKeyType](pubkeytype.md)
 
 # Enumeration: PubKeyType
 
@@ -15,7 +15,7 @@
 
 • **SignatureAuthentication2018**: = "sigAuth"
 
-Defined in did-resolver/src/models/index.ts:114
+Defined in did-resolver/src/models/operator.ts:25
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **VerificationKey2018**: = "veriKey"
 
-Defined in did-resolver/src/models/index.ts:114
+Defined in did-resolver/src/models/operator.ts:25

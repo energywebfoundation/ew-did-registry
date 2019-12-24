@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
 
 # Enumeration: Encoding
 
@@ -17,7 +17,7 @@
 
 • **BASE58**: = "base58"
 
-Defined in did-resolver/src/models/index.ts:118
+Defined in did-resolver/src/models/operator.ts:29
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **BASE64**: = "base64"
 
-Defined in did-resolver/src/models/index.ts:118
+Defined in did-resolver/src/models/operator.ts:29
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **HEX**: = "hex"
 
-Defined in did-resolver/src/models/index.ts:118
+Defined in did-resolver/src/models/operator.ts:29
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **PEM**: = "pem"
 
-Defined in did-resolver/src/models/index.ts:118
+Defined in did-resolver/src/models/operator.ts:29

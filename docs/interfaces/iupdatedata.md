@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IUpdateData](iupdatedata.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IUpdateData](iupdatedata.md)
 
 # Interface: IUpdateData
 
@@ -24,9 +24,9 @@ delegate field
 
 ###  algo
 
-• **algo**: *string*
+• **algo**: *[Algorithms](../enums/algorithms.md)*
 
-Defined in did-resolver/src/models/index.ts:128
+Defined in did-resolver/src/models/operator.ts:43
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **delegate**? : *string*
 
-Defined in did-resolver/src/models/index.ts:131
+Defined in did-resolver/src/models/operator.ts:46
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **encoding**: *[Encoding](../enums/encoding.md)*
 
-Defined in did-resolver/src/models/index.ts:127
+Defined in did-resolver/src/models/operator.ts:42
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **type**: *[PubKeyType](../enums/pubkeytype.md)*
 
-Defined in did-resolver/src/models/index.ts:129
+Defined in did-resolver/src/models/operator.ts:44
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/index.ts:130
+Defined in did-resolver/src/models/operator.ts:45
