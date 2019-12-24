@@ -3,10 +3,9 @@ import { IDIDDocument } from './models';
 export interface IResolver {
     /**
      * Constructor takes keys and resolver settings to create a new Resolver
-     * constructor(keys: IKeys, settings?: IResolverSettings);
+     * constructor(settings?: IResolverSettings);
      *
      * Private members:
-     *   keys;
      *   settings;
      */
 

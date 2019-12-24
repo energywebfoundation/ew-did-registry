@@ -1,16 +1,23 @@
+import {
+  ParamType,
+  BigNumber,
+  ConnectionInfo,
+  Networkish,
+} from 'ethers/utils';
+
 export enum ProviderTypes {
     HTTP,
     IPC,
-    WebSocket,
 }
 
 /**
  * Specifies current Provider
  */
 export interface IProvider {
-    uri: string;
     type: ProviderTypes;
-    options?: object;
+    uriOrInfo?: string | ConnectionInfo;
+    path?: string;
+    network?: Networkish;
 }
 
 /**
@@ -19,19 +26,19 @@ export interface IProvider {
  */
 export interface IResolverSettings {
     provider?: IProvider;
-    abi?: string;
+    abi?: Array<string | ParamType>;
     address?: string;
 }
 
 export interface IDIDDocument {
-    context: string;
+    '@context': string;
     id: string;
     publicKey: IPublicKey[];
     authentication: Array<IAuthentication | string>;
-    delegates: string[];
-    service: IServiceEndpoint[];
-    created: string;
-    updated: string;
+    delegates?: string[];
+    service?: IServiceEndpoint[];
+    created?: string;
+    updated?: string;
     proof?: ILinkedDataProof;
 }
 
@@ -40,6 +47,7 @@ export interface IServiceEndpoint {
     type: string;
     serviceEndpoint: string;
     description?: string;
+    validity?: BigNumber;
 }
 
 export interface IPublicKey {
@@ -53,11 +61,13 @@ export interface IPublicKey {
     publicKeyPem?: string;
     publicKeyJwk?: string;
     publicKeyMultibase?: string;
+    validity?: BigNumber;
 }
 
 export interface IAuthentication {
     type: string;
     publicKey: string;
+    validity?: BigNumber;
 }
 
 export interface ILinkedDataProof {
@@ -65,4 +75,39 @@ export interface ILinkedDataProof {
     created: string;
     creator: string;
     signatureValue: string;
+}
+
+export interface ISmartContractEvent {
+    name: string;
+    signature: string;
+    topic: string;
+    values: {
+        identity: string;
+        delegateType: string;
+        delegate: string;
+        validTo: BigNumber;
+        previousChange: object;
+        name?: string;
+        value?: string;
+    };
+    value?: string;
+}
+
+export interface IDIDLogData {
+    owner: string;
+    publicKey: { [key: string]: IPublicKey };
+    authentication: { [key: string]: IAuthentication };
+    delegates?: string[];
+    serviceEndpoints?: { [key: string]: IServiceEndpoint };
+    created?: string;
+    updated?: string;
+    proof?: ILinkedDataProof;
+    attributes?: Map<string, { [key: string]: string | object}>;
+}
+
+export interface IHandlers {
+    [key: string]: (event: ISmartContractEvent,
+                    etherAddress: string,
+                    document: IDIDLogData,
+                    validTo: BigNumber) => IDIDLogData;
 }

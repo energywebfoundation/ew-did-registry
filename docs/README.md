@@ -1,10 +1,10 @@
-[@ew-did-registry/did](README.md) › [Globals](globals.md)
+[@ew-did-registry/claims](README.md) › [Globals](globals.md)
 
-# @ew-did-registry/did
+# @ew-did-registry/claims
 
-# @ew-did-registry/did
+# @ew-did-registry/claims
 
-This is the interface of a decentralised identity used in this library
+The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims
 
 ## Structure
 - dist - contains compiled javascript files

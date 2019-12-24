@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ProviderTypes](providertypes.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ProviderTypes](providertypes.md)
 
 # Enumeration: ProviderTypes
 
@@ -8,7 +8,6 @@
 
 * [HTTP](providertypes.md#http)
 * [IPC](providertypes.md#ipc)
-* [WebSocket](providertypes.md#websocket)
 
 ## Enumeration members
 
@@ -16,7 +15,7 @@
 
 • **HTTP**:
 
-*Defined in [did-resolver/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L2)*
+*Defined in [did-resolver/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L9)*
 
 ___
 
@@ -24,12 +23,4 @@ ___
 
 • **IPC**:
 
-*Defined in [did-resolver/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L3)*
-
-___
-
-###  WebSocket
-
-• **WebSocket**:
-
-*Defined in [did-resolver/src/models/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/models/index.ts#L4)*
+*Defined in [did-resolver/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L10)*
