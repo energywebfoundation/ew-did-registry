@@ -10,17 +10,26 @@
 
 ### Properties
 
+* [block](iauthentication.md#optional-block)
 * [publicKey](iauthentication.md#publickey)
 * [type](iauthentication.md#type)
 * [validity](iauthentication.md#optional-validity)
 
 ## Properties
 
+### `Optional` block
+
+• **block**? : *number*
+
+*Defined in [did-resolver/src/models/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L73)*
+
+___
+
 ###  publicKey
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:67
+*Defined in [did-resolver/src/models/index.ts:71](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L71)*
 
 ___
 
@@ -28,7 +37,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:66
+*Defined in [did-resolver/src/models/index.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L70)*
 
 ___
 
@@ -36,4 +45,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:68
+*Defined in [did-resolver/src/models/index.ts:72](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L72)*

@@ -10,7 +10,6 @@
 
 ## Implemented by
 
-* [Operator](../classes/operator.md)
 * [Resolver](../classes/resolver.md)
 
 ## Index
@@ -25,7 +24,7 @@
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-Defined in did-resolver/src/interface.ts:27
+*Defined in [did-resolver/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/interface.ts#L19)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
