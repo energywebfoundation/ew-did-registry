@@ -1,3 +1,5 @@
+import { ProviderTypes } from '../models';
+
 export const address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
 
 export const abi1056 = [
@@ -238,6 +240,17 @@ export const abi1056 = [
     type: 'function',
   },
 ];
+
+export const defaultProvider = {
+  uriOrInfo: 'http://volta-rpc.energyweb.org/',
+  type: ProviderTypes.HTTP,
+};
+
+export const defaultResolverSettings = {
+  provider: defaultProvider,
+  abi: abi1056,
+  address: address1056,
+};
 
 export const matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
 export const matchingPatternDid = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;

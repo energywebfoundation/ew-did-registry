@@ -364,7 +364,7 @@ ___
   },
 ]
 
-Defined in did-resolver/src/constants/constants.ts:3
+Defined in did-resolver/src/constants/constants.ts:5
 
 ___
 
@@ -372,7 +372,7 @@ ___
 
 • **address1056**: *"0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af"* = "0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af"
 
-Defined in did-resolver/src/constants/constants.ts:1
+Defined in did-resolver/src/constants/constants.ts:3
 
 ___
 
@@ -380,7 +380,7 @@ ___
 
 • **delegatePubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#delegate-(${ethAddrPattern})$`
 
-Defined in did-resolver/src/constants/constants.ts:245
+Defined in did-resolver/src/constants/constants.ts:258
 
 ___
 
@@ -396,7 +396,7 @@ ___
 
 • **ethAddrPattern**: *"0x[A-Fa-f0-9]{40}"* = "0x[A-Fa-f0-9]{40}"
 
-Defined in did-resolver/src/constants/constants.ts:244
+Defined in did-resolver/src/constants/constants.ts:257
 
 ___
 
@@ -428,7 +428,7 @@ ___
 
 • **matchingPatternDid**: *RegExp‹›* =  /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/
 
-Defined in did-resolver/src/constants/constants.ts:243
+Defined in did-resolver/src/constants/constants.ts:256
 
 ___
 
@@ -436,7 +436,7 @@ ___
 
 • **matchingPatternDidEvents**: *RegExp‹›* =  /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/
 
-Defined in did-resolver/src/constants/constants.ts:242
+Defined in did-resolver/src/constants/constants.ts:255
 
 ___
 
@@ -452,7 +452,7 @@ ___
 
 • **pubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#key-(sigAuth|veriKey)$`
 
-Defined in did-resolver/src/constants/constants.ts:246
+Defined in did-resolver/src/constants/constants.ts:259
 
 ___
 
@@ -460,7 +460,7 @@ ___
 
 • **serviceIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#([A-Za-z0-9]+)$`
 
-Defined in did-resolver/src/constants/constants.ts:247
+Defined in did-resolver/src/constants/constants.ts:260
 
 ___
 
@@ -692,19 +692,19 @@ ___
 
 ### ▪ **defaultProvider**: *object*
 
-Defined in did-resolver/src/implementations/resolver.ts:8
+Defined in did-resolver/src/constants/constants.ts:244
 
 ###  type
 
 • **type**: *[ProviderTypes](enums/providertypes.md)* =  ProviderTypes.HTTP
 
-Defined in did-resolver/src/implementations/resolver.ts:10
+Defined in did-resolver/src/constants/constants.ts:246
 
 ###  uriOrInfo
 
 • **uriOrInfo**: *string* = "http://volta-rpc.energyweb.org/"
 
-Defined in did-resolver/src/implementations/resolver.ts:9
+Defined in did-resolver/src/constants/constants.ts:245
 
 ___
 
@@ -712,25 +712,25 @@ ___
 
 ### ▪ **defaultResolverSettings**: *object*
 
-Defined in did-resolver/src/implementations/resolver.ts:13
+Defined in did-resolver/src/constants/constants.ts:249
 
 ###  abi
 
 • **abi**: *object | object[]* =  abi1056
 
-Defined in did-resolver/src/implementations/resolver.ts:15
+Defined in did-resolver/src/constants/constants.ts:251
 
 ###  address
 
 • **address**: *string* =  address1056
 
-Defined in did-resolver/src/implementations/resolver.ts:16
+Defined in did-resolver/src/constants/constants.ts:252
 
 ###  provider
 
 • **provider**: *object* =  defaultProvider
 
-Defined in did-resolver/src/implementations/resolver.ts:14
+Defined in did-resolver/src/constants/constants.ts:250
 
 #### Type declaration:
 

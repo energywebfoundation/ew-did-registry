@@ -105,7 +105,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/implementations/resolver.ts:35
+Defined in did-resolver/src/implementations/resolver.ts:26
 
 **Parameters:**
 

@@ -1,20 +1,11 @@
 import { IResolver } from '../interface';
-import { matchingPatternDid, abi1056, address1056 } from '../constants';
+import {
+  matchingPatternDid, defaultResolverSettings,
+} from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 import {
-  ProviderTypes, IResolverSettings, IDIDDocument, IDIDLogData,
+  IResolverSettings, IDIDDocument, IDIDLogData,
 } from '../models';
-
-const defaultProvider = {
-  uriOrInfo: 'http://volta-rpc.energyweb.org/',
-  type: ProviderTypes.HTTP,
-};
-
-const defaultResolverSettings = {
-  provider: defaultProvider,
-  abi: abi1056,
-  address: address1056,
-};
 
 export class Resolver implements IResolver {
     /*
