@@ -78,6 +78,7 @@ var Resolver = /** @class */ (function () {
                                 case 2:
                                     _a.sent();
                                     didDocument = functions_1.wrapDidDocument(did, document);
+                                    console.log(didDocument);
                                     resolve(didDocument);
                                     return [3 /*break*/, 4];
                                 case 3:

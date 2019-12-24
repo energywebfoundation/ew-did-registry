@@ -84,7 +84,7 @@ export interface IDIDLogData {
         [key: string]: IPublicKey;
     };
     authentication: {
-        [key: string]: string;
+        [key: string]: IAuthentication;
     };
     delegates?: string[];
     serviceEndpoints?: {

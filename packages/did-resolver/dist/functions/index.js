@@ -42,13 +42,17 @@ var models_1 = require("../models");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, did, document, validTo) {
     var _a = did.split(':'), blockchainAddress = _a[2];
-    var publicKeyID = blockchainAddress + "#delegate-" + event.values.delegate;
+    var publicKeyID = did + "#delegate-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined) {
         var delegateType = event.values.delegateType;
         var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(delegateType);
         switch (stringDelegateType) {
             case 'sigAuth':
-                document.authentication[publicKeyID] = publicKeyID;
+                document.authentication[publicKeyID] = {
+                    type: 'sigAuth',
+                    publicKey: publicKeyID,
+                    validity: validTo,
+                };
             // eslint-disable-next-line no-fallthrough
             case 'veriKey':
                 document.publicKey[publicKeyID] = {
@@ -218,7 +222,10 @@ exports.wrapDidDocument = function (did, document, context) {
         },
     ];
     var authentication = [
-        did + "#owner",
+        {
+            type: 'owner',
+            publicKey: did + "#owner",
+        },
     ];
     var didDocument = {
         '@context': context,
@@ -237,7 +244,11 @@ exports.wrapDidDocument = function (did, document, context) {
     }
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (var key in document.authentication) {
-        didDocument.authentication.push(document.authentication[key]);
+        var authenticator = document.authentication[key];
+        if (authenticator.validity.gt(now)) {
+            delete authenticator.validity;
+            didDocument.authentication.push(authenticator);
+        }
     }
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (var key in document.serviceEndpoints) {

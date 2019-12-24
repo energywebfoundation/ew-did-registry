@@ -24,5 +24,5 @@ export interface IDIDDocumentLite {
      * @param {string} type
      * @returns {strings}
      */
-    read(attribute: string, type?: string): string;
+    read(attribute: string, type?: string): string | object;
 }
