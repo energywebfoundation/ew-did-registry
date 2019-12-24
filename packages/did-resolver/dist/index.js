@@ -1,5 +1,8 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var add = function (left, right) { return left + right; };
-exports.add = add;
+var resolver_1 = __importDefault(require("./models/resolver"));
+exports.Resolver = resolver_1.default;
 //# sourceMappingURL=index.js.map

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IOperator](ioperator.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IOperator](ioperator.md)
 
 # Interface: IOperator
 
@@ -23,7 +23,7 @@
 
 ▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/interface.ts#L30)*
+*Defined in [did-resolver/src/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/interface.ts#L29)*
 
 Registers a DID-Document for a given DID, and defines the provided context
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/interface.ts#L48)*
+*Defined in [did-resolver/src/interface.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/interface.ts#L47)*
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -64,7 +64,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-*Defined in [did-resolver/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/interface.ts#L20)*
+*Defined in [did-resolver/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/interface.ts#L19)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -84,7 +84,7 @@ ___
 
 ▸ **update**(`did`: string, `attribute`: string, `value`: string | object): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/a7d7702/packages/did-resolver/src/interface.ts#L39)*
+*Defined in [did-resolver/src/interface.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/interface.ts#L38)*
 
 Updates relevant attribute of the DID Document
 

@@ -9,22 +9,21 @@ var DID = /** @class */ (function () {
          * Mappings from networks to DIDs
          */
         this._dids = new Map();
-        /**
-         * DID general scheme
-         * ToDo: make compatible with RFC3986
-         */
-        this._scheme = /^did:(\w+):(\w+)$/;
     }
     /**
      * Gets a DID for a particular network
      *
      * @example
      * ```typescript
-     * import { DID } from '@ew-did-registry/did';
+     * import { DID, Network } from '@ew-did-registry/did';
      *
      * const did = new DID();
-     * did.set('eth', 'method_specific_id');
-     * console.log(did.get('eth')); // 'did:eth:method_specific_id'
+     * did.set('bitcoin', 'method_specific_id');
+     * console.log(did.get('bitcoin')); // 'did:bitcoin:method_specific_id'
+     *
+     * const did = new DID();
+     * did.set(Networks.Ethereum, 'method_specific_id');
+     * console.log(did.get(Networks.Ethereum)); // 'did:eth:method_specific_id'
      * ```
      *
      * @param { Networks } network
@@ -32,9 +31,6 @@ var DID = /** @class */ (function () {
      * @returns { string|undefined }
      */
     DID.prototype.get = function (network) {
-        if (!Object.values(models_1.Networks).includes(network)) {
-            return undefined;
-        }
         return this._dids.get(network);
     };
     /**
@@ -57,22 +53,23 @@ var DID = /** @class */ (function () {
     // eslint-disable-next-line no-dupe-class-members
     DID.prototype.set = function (network, id) {
         if (network.startsWith('did:')) {
-            this.setDid(network);
-            return;
+            return this._setDid(network);
         }
-        var did = "did:" + network + ":" + id;
-        this.setDid(did);
+        return this._setDid("did:" + network + ":" + id);
     };
-    DID.prototype.setDid = function (did) {
-        var parts = did.match(this._scheme);
-        if (!parts) {
-            throw new Error('Wrong DID scheme');
+    DID.prototype._setDid = function (did) {
+        var _a = did.split(':'), network = _a[1], id = _a[2];
+        if (id === undefined) {
+            throw new Error('DID must consist of three parts separated by a colon');
         }
-        var method = parts[1];
-        if (!Object.values(models_1.Networks).includes(method)) {
-            throw new Error('Invalid network');
+        if (!models_1.DID_SCHEME_PATTERNS.NETWORK.test(network)) {
+            throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
         }
-        this._dids.set(method, did);
+        if (!models_1.DID_SCHEME_PATTERNS.ID.test(id)) {
+            throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
+        }
+        this._dids.set(network, did);
+        return this;
     };
     return DID;
 }());
