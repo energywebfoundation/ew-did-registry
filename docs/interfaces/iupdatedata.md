@@ -26,7 +26,7 @@ delegate field
 
 • **algo**: *[Algorithms](../enums/algorithms.md)*
 
-Defined in did-resolver/src/models/operator.ts:43
+Defined in did-resolver/src/models/operator.ts:24
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **delegate**? : *string*
 
-Defined in did-resolver/src/models/operator.ts:46
+Defined in did-resolver/src/models/operator.ts:27
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **encoding**: *[Encoding](../enums/encoding.md)*
 
-Defined in did-resolver/src/models/operator.ts:42
+Defined in did-resolver/src/models/operator.ts:23
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **type**: *[PubKeyType](../enums/pubkeytype.md)*
 
-Defined in did-resolver/src/models/operator.ts:44
+Defined in did-resolver/src/models/operator.ts:25
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/operator.ts:45
+Defined in did-resolver/src/models/operator.ts:26

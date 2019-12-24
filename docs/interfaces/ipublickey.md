@@ -32,7 +32,7 @@
 
 • **controller**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:59
+Defined in did-resolver/src/models/resolver.ts:53
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **ethereumAddress**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:60
+Defined in did-resolver/src/models/resolver.ts:54
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:57
+Defined in did-resolver/src/models/resolver.ts:51
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **publicKeyBase58**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:62
+Defined in did-resolver/src/models/resolver.ts:56
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **publicKeyBase64**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:61
+Defined in did-resolver/src/models/resolver.ts:55
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **publicKeyHex**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:63
+Defined in did-resolver/src/models/resolver.ts:57
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 • **publicKeyJwk**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:65
+Defined in did-resolver/src/models/resolver.ts:59
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 • **publicKeyMultibase**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:66
+Defined in did-resolver/src/models/resolver.ts:60
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 • **publicKeyPem**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:64
+Defined in did-resolver/src/models/resolver.ts:58
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:58
+Defined in did-resolver/src/models/resolver.ts:52
 
 ___
 
@@ -112,4 +112,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:67
+Defined in did-resolver/src/models/resolver.ts:61

@@ -103,7 +103,7 @@
 
 • **Authenticate**: *[Authenticate](enums/didattribute.md#authenticate)*
 
-Defined in did-resolver/src/models/operator.ts:49
+Defined in did-resolver/src/implementations/operator.ts:25
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **PublicKey**: *[PublicKey](enums/didattribute.md#publickey)*
 
-Defined in did-resolver/src/models/operator.ts:49
+Defined in did-resolver/src/implementations/operator.ts:25
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 • **ServicePoint**: *[ServicePoint](enums/didattribute.md#servicepoint)*
 
-Defined in did-resolver/src/models/operator.ts:49
+Defined in did-resolver/src/implementations/operator.ts:25
 
 ___
 
@@ -692,19 +692,19 @@ ___
 
 ### ▪ **defaultProvider**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:119
+Defined in did-resolver/src/implementations/resolver.ts:8
 
 ###  type
 
 • **type**: *[ProviderTypes](enums/providertypes.md)* =  ProviderTypes.HTTP
 
-Defined in did-resolver/src/models/resolver.ts:121
+Defined in did-resolver/src/implementations/resolver.ts:10
 
 ###  uriOrInfo
 
 • **uriOrInfo**: *string* = "http://volta-rpc.energyweb.org/"
 
-Defined in did-resolver/src/models/resolver.ts:120
+Defined in did-resolver/src/implementations/resolver.ts:9
 
 ___
 
@@ -712,25 +712,25 @@ ___
 
 ### ▪ **defaultResolverSettings**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:124
+Defined in did-resolver/src/implementations/resolver.ts:13
 
 ###  abi
 
 • **abi**: *object | object[]* =  abi1056
 
-Defined in did-resolver/src/models/resolver.ts:126
+Defined in did-resolver/src/implementations/resolver.ts:15
 
 ###  address
 
 • **address**: *string* =  address1056
 
-Defined in did-resolver/src/models/resolver.ts:127
+Defined in did-resolver/src/implementations/resolver.ts:16
 
 ###  provider
 
 • **provider**: *object* =  defaultProvider
 
-Defined in did-resolver/src/models/resolver.ts:125
+Defined in did-resolver/src/implementations/resolver.ts:14
 
 #### Type declaration:
 

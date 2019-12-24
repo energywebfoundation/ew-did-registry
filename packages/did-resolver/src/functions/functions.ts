@@ -9,7 +9,7 @@ import {
   IPublicKey,
   IHandlers,
   ProviderTypes,
-} from '../models/resolver';
+} from '../models';
 
 import { matchingPatternDidEvents } from '../constants';
 

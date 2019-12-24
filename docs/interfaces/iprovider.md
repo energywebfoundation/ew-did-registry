@@ -23,7 +23,7 @@ Specifies current Provider
 
 • **network**? : *Networkish*
 
-Defined in did-resolver/src/models/resolver.ts:23
+Defined in did-resolver/src/models/resolver.ts:17
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **path**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:22
+Defined in did-resolver/src/models/resolver.ts:16
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/resolver.ts:20
+Defined in did-resolver/src/models/resolver.ts:14
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 • **uriOrInfo**? : *string | ConnectionInfo*
 
-Defined in did-resolver/src/models/resolver.ts:21
+Defined in did-resolver/src/models/resolver.ts:15

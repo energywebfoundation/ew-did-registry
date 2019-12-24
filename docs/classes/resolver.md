@@ -28,7 +28,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/models/resolver.ts:134
+Defined in did-resolver/src/implementations/resolver.ts:23
 
 Constructor
 
@@ -50,7 +50,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/models/resolver.ts:146
+Defined in did-resolver/src/implementations/resolver.ts:35
 
 **Parameters:**
 

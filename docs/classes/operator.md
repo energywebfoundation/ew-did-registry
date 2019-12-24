@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-Defined in did-resolver/src/models/operator.ts:64
+Defined in did-resolver/src/implementations/operator.ts:40
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:90
+Defined in did-resolver/src/implementations/operator.ts:66
 
 Empty for this implementation
 
@@ -73,7 +73,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:154
+Defined in did-resolver/src/implementations/operator.ts:130
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -105,7 +105,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/models/resolver.ts:146
+Defined in did-resolver/src/implementations/resolver.ts:35
 
 **Parameters:**
 
@@ -123,7 +123,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:126
+Defined in did-resolver/src/implementations/operator.ts:102
 
 Sets attribute value in DID document identified by the did
 

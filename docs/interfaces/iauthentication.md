@@ -20,7 +20,7 @@
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:73
+Defined in did-resolver/src/models/resolver.ts:67
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:72
+Defined in did-resolver/src/models/resolver.ts:66
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:74
+Defined in did-resolver/src/models/resolver.ts:68

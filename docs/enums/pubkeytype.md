@@ -15,7 +15,7 @@
 
 • **SignatureAuthentication2018**: = "sigAuth"
 
-Defined in did-resolver/src/models/operator.ts:25
+Defined in did-resolver/src/models/operator.ts:6
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **VerificationKey2018**: = "veriKey"
 
-Defined in did-resolver/src/models/operator.ts:25
+Defined in did-resolver/src/models/operator.ts:6

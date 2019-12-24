@@ -16,7 +16,7 @@
 
 • **Authenticate**: = "auth"
 
-Defined in did-resolver/src/models/operator.ts:21
+Defined in did-resolver/src/models/operator.ts:2
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **PublicKey**: = "pub"
 
-Defined in did-resolver/src/models/operator.ts:21
+Defined in did-resolver/src/models/operator.ts:2
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **ServicePoint**: = "svc"
 
-Defined in did-resolver/src/models/operator.ts:21
+Defined in did-resolver/src/models/operator.ts:2

@@ -23,7 +23,7 @@ address of the smart contract representing DID Registry
 
 • **abi**? : *Array‹string | ParamType›*
 
-Defined in did-resolver/src/models/resolver.ts:32
+Defined in did-resolver/src/models/resolver.ts:26
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **address**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:33
+Defined in did-resolver/src/models/resolver.ts:27
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 • **provider**? : *[IProvider](iprovider.md)*
 
-Defined in did-resolver/src/models/resolver.ts:31
+Defined in did-resolver/src/models/resolver.ts:25
