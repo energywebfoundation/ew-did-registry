@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
 
 # Enumeration: Encoding
 

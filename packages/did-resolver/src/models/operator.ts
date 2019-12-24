@@ -30,7 +30,7 @@ export enum Encoding {
 }
 
 export enum Algorithms {
-  ED25519 = 'Ed25519'
+  ED25519 = 'Ed25519', RSA = 'rsa', ECDSA = 'ecdsa'
 }
 
 /**
@@ -54,9 +54,6 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
-  /**
-   *
-   */
   private readonly _keys: IKeys;
 
   private readonly _wallet: Wallet;
@@ -99,7 +96,9 @@ export class Operator extends Resolver implements IOperator {
    *
    * @example
    *```typescript
-   *import { Operator, DIDAttribute } from '@ew-did-registry/did-resolver';
+   *import {
+   * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
+   * } from '@ew-did-registry/did-resolver';
    *import { Keys } from '@ew-did-registry/keys';
    *
    * const ownerKeys = new Keys();
@@ -171,7 +170,6 @@ export class Operator extends Resolver implements IOperator {
   ): Promise<boolean> {
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
-    console.log('nonce=', nonce);
     // eslint-disable-next-line no-restricted-syntax
     const method = this._didRegistry.revokeDelegate;
     for (const auth of auths) {
@@ -198,7 +196,6 @@ export class Operator extends Resolver implements IOperator {
       const match = pk.id.match(delegatePubKeyIdPattern);
       // eslint-disable-next-line no-continue
       if (!match) continue;
-      const type = match[1];
       const didAttribute = Authenticate;
       const delegateAddress = pk.ethereumAddress;
       const updateData: IUpdateData = {
@@ -225,7 +222,6 @@ export class Operator extends Resolver implements IOperator {
       const match = pk.id.match(pubKeyIdPattern);
       // eslint-disable-next-line no-continue
       if (!match) continue;
-      const type = match[1];
       const didAttribute = DIDAttribute.PublicKey;
       const encodings = Object.values(Encoding);
       const encoding = encodings.find((e) => {

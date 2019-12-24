@@ -1,70 +1,55 @@
-import { IResolver } from '../interface';
-import { IDIDDocument, IDIDLogData, IResolverSettings } from './index';
-import { defaultResolverSettings, matchingPatternDid } from '../constants';
-import { fetchDataFromEvents, wrapDidDocument } from '../functions';
-
-class Resolver implements IResolver {
-    /*
-     * Stores resolver settings, such as abi, contract address, and IProvider
-     */
-    protected readonly _settings: IResolverSettings;
-
-    /**
-     * Constructor
-     *
-     * Settings have to be passed to construct resolver
-     * @param {IResolverSettings} settings
-     */
-    constructor(settings: IResolverSettings = defaultResolverSettings) {
-      this._settings = settings;
-    }
-
-    async read(did: string): Promise<IDIDDocument> {
-      return new Promise(
-        // eslint-disable-next-line no-async-promise-executor
-        async (resolve, reject) => {
-          if (!matchingPatternDid.test(did)) {
-            reject(new Error('Invalid did provided'));
-            return;
-          }
-          const document: IDIDLogData = {
-            owner: undefined,
-            authentication: {},
-            publicKey: {},
-            serviceEndpoints: {},
-            attributes: new Map(),
-          };
-          try {
-            await fetchDataFromEvents(did, document, this._settings);
-            const didDocument = wrapDidDocument(did, document);
-            console.log(didDocument);
-            resolve(didDocument);
-          } catch (error) {
-            if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-              const didDocument = wrapDidDocument(did, document);
-              resolve(didDocument);
-            }
-            reject(error);
-          }
-        },
-      );
-    }
-}
-
-export default Resolver;
 import {
-  BigNumber, ConnectionInfo, Networkish, ParamType,
+  ParamType,
+  BigNumber,
+  ConnectionInfo,
+  Networkish,
 } from 'ethers/utils';
 import { IResolver } from '../interface';
-import { abi1056, address1056, matchingPatternDid } from '../constants';
-// import { defaultResolverSettings, matchingPatternDid } from '../constants';
+import { matchingPatternDid, abi1056, address1056 } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
-console.log('--- importing resolver.ts');
+export enum ProviderTypes {
+  HTTP,
+  IPC,
+}
 
-export interface IAuthentication {
+/**
+ * Specifies current Provider
+ */
+export interface IProvider {
+  type: ProviderTypes;
+  uriOrInfo?: string | ConnectionInfo;
+  path?: string;
+  network?: Networkish;
+}
+
+/**
+ * Resolver requires provider, as well as application binary interface and
+ * address of the smart contract representing DID Registry
+ */
+export interface IResolverSettings {
+  provider?: IProvider;
+  abi?: Array<string | ParamType>;
+  address?: string;
+}
+
+export interface IDIDDocument {
+  '@context': string;
+  id: string;
+  publicKey: IPublicKey[];
+  authentication: Array<IAuthentication | string>;
+  delegates?: string[];
+  service?: IServiceEndpoint[];
+  created?: string;
+  updated?: string;
+  proof?: ILinkedDataProof;
+}
+
+export interface IServiceEndpoint {
+  id: string;
   type: string;
-  publicKey: string;
+  serviceEndpoint: string;
+  description?: string;
   validity?: BigNumber;
 }
 
@@ -83,42 +68,10 @@ export interface IPublicKey {
   [key: string]: string|BigNumber;
 }
 
-export interface IServiceEndpoint {
-  id: string;
+export interface IAuthentication {
   type: string;
-  serviceEndpoint: string;
-  description?: string;
+  publicKey: string;
   validity?: BigNumber;
-}
-
-export enum ProviderTypes {
-  HTTP,
-  IPC,
-}
-
-export interface IProvider {
-  type: ProviderTypes;
-  uriOrInfo?: string | ConnectionInfo;
-  path?: string;
-  network?: Networkish;
-}
-
-export interface IResolverSettings {
-  provider?: IProvider;
-  abi?: Array<string | ParamType>;
-  address?: string;
-}
-
-export interface IDIDDocument {
-  '@context': string;
-  id: string;
-  publicKey: IPublicKey[];
-  authentication: Array<IAuthentication | string>;
-  delegates?: string[];
-  service?: IServiceEndpoint[];
-  created?: string;
-  updated?: string;
-  proof?: ILinkedDataProof;
 }
 
 export interface ILinkedDataProof {
@@ -175,52 +128,49 @@ const defaultResolverSettings = {
 };
 
 export class Resolver implements IResolver {
-  /*
-   * Stores resolver settings, such as abi, contract address, and IProvider
-   */
-  protected readonly _settings: IResolverSettings;
+    /*
+     * Stores resolver settings, such as abi, contract address, and IProvider
+     */
+    protected readonly _settings: IResolverSettings;
 
-  /**
-   * Constructor
-   *
-   * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
-   */
-  constructor(settings: IResolverSettings = defaultResolverSettings) {
-    this._settings = settings;
-  }
+    /**
+     * Constructor
+     *
+     * Settings have to be passed to construct resolver
+     * @param {IResolverSettings} settings
+     */
+    constructor(settings: IResolverSettings = defaultResolverSettings) {
+      this._settings = settings;
+    }
 
-  async read(did: string): Promise<IDIDDocument> {
-    return new Promise(
-      // eslint-disable-next-line no-async-promise-executor
-      async (resolve, reject) => {
-        if (!matchingPatternDid.test(did)) {
-          reject(new Error('Invalid did provided'));
-          return;
-        }
-        const document: IDIDLogData = {
-          owner: undefined,
-          authentication: {},
-          publicKey: {},
-          serviceEndpoints: {},
-          attributes: new Map(),
-        };
-        try {
-          await fetchDataFromEvents(did, document, this._settings);
-          const didDocument = wrapDidDocument(did, document);
-          resolve(didDocument);
-        } catch (error) {
-          if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-            const didDocument = wrapDidDocument(did, document);
-            resolve(didDocument);
+    async read(did: string): Promise<IDIDDocument> {
+      return new Promise(
+        // eslint-disable-next-line no-async-promise-executor
+        async (resolve, reject) => {
+          if (!matchingPatternDid.test(did)) {
+            reject(new Error('Invalid did provided'));
+            return;
           }
-          reject(error);
-        }
-      },
-    );
-  }
+          const document: IDIDLogData = {
+            owner: undefined,
+            authentication: {},
+            publicKey: {},
+            serviceEndpoints: {},
+            attributes: new Map(),
+          };
+          try {
+            await fetchDataFromEvents(did, document, this._settings);
+            const didDocument = wrapDidDocument(did, document);
+            // console.log(didDocument);
+            resolve(didDocument);
+          } catch (error) {
+            if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+              const didDocument = wrapDidDocument(did, document);
+              resolve(didDocument);
+            }
+            reject(error);
+          }
+        },
+      );
+    }
 }
-
-console.log('--- imported resolver.ts');
-
-// export default Resolver;

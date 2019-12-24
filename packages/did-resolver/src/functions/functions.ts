@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { BigNumber } from 'ethers/utils';
+import { BigNumber, Interface } from 'ethers/utils';
 
 import {
   IDIDDocument,
@@ -163,14 +163,14 @@ const getEventsFromBlock = (
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.JsonRpcProvider,
-  resolverSettings: IResolverSettings,
+  smartContractInterface: Interface,
+  smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
   const [, , blockchainAddress] = did.split(':');
   const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2)}`];
-  const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
 
   provider.getLogs({
-    address: resolverSettings.address,
+    address: smartContractAddress,
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
     topics,
@@ -219,6 +219,9 @@ export const fetchDataFromEvents = async (
   } else {
     document.owner = blockchainAddress;
   }
+
+  const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
+  const smartContractAddress = resolverSettings.address;
   while (previousChangedBlock.toNumber() !== 0) {
     // eslint-disable-next-line no-await-in-loop
     previousChangedBlock = await getEventsFromBlock(
@@ -226,7 +229,8 @@ export const fetchDataFromEvents = async (
       did,
       document,
       provider,
-      resolverSettings,
+      smartContractInterface,
+      smartContractAddress,
     );
   }
 };

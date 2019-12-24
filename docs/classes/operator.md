@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
 
 # Class: Operator
 
@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-Defined in did-resolver/src/models/operator.ts:67
+Defined in did-resolver/src/models/operator.ts:64
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:93
+Defined in did-resolver/src/models/operator.ts:90
 
 Empty for this implementation
 
@@ -73,7 +73,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:155
+Defined in did-resolver/src/models/operator.ts:154
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -105,7 +105,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/models/resolver.ts:139
+Defined in did-resolver/src/models/resolver.ts:146
 
 **Parameters:**
 
@@ -123,13 +123,15 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/models/operator.ts:127
+Defined in did-resolver/src/models/operator.ts:126
 
 Sets attribute value in DID document identified by the did
 
 **`example`** 
 ```typescript
-import { Operator, DIDAttribute } from '@ew-did-registry/did-resolver';
+import {
+Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
+} from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 
 const ownerKeys = new Keys();

@@ -5,7 +5,6 @@ import { Wallet } from 'ethers';
 import {
   Algorithms, DIDAttribute, Encoding, IUpdateData, PubKeyType, Operator, IAuthentication,
 } from '../src';
-// import { IAuthentication } from '../src/models';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
@@ -27,14 +26,13 @@ describe('[DID-OPERATOR]', function () {
       encoding: Encoding.HEX,
       value: new Keys().publicKey,
     };
-    const result = await operator.update(did, attribute, updateData, validity);
+    await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     // console.log('document:', document);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.slice(2),
     );
-    // console.log('public key:', publicKey);
     // eslint-disable-next-line no-unused-expressions
     expect(publicKey).not.null;
   });
@@ -52,12 +50,10 @@ describe('[DID-OPERATOR]', function () {
       const updated = await operator.update(did, attribute, updateData, validity);
       expect(updated).to.be.true;
       const document = await operator.read(did);
-      // console.log('document:', document);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
         (pk) => pk.id === `${did}#delegate-${updateData.delegate}`,
       );
-      // console.log('auth method:', authMethod);
       expect(authMethod).include({
         type: 'Secp256k1VerificationKey2018',
         controller: did,
@@ -78,7 +74,6 @@ describe('[DID-OPERATOR]', function () {
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
     const document = await operator.read(did);
-    // console.log('document:', document);
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.delegate}`;
     const auth = document.authentication.find(
@@ -88,7 +83,6 @@ describe('[DID-OPERATOR]', function () {
     const publicKey = document.publicKey.find(
       (pk) => pk.id === publicKeyId,
     );
-    // console.log('auth method:', authMethod);
     expect(publicKey).include({
       type: 'Secp256k1VerificationKey2018',
       controller: did,
@@ -108,7 +102,6 @@ describe('[DID-OPERATOR]', function () {
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
     const document = await operator.read(did);
-    // console.log('document:', document);
     expect(document.id).equal(did);
     expect(document.service.find(
       (sv) => sv.type === updateData.algo && sv.serviceEndpoint === endpoint,
@@ -125,7 +118,7 @@ describe('[DID-OPERATOR]', function () {
       value: new Keys().publicKey,
     };
     try {
-      const result = await operator.update(invalidDid, attribute, updateData, validity);
+      await operator.update(invalidDid, attribute, updateData, validity);
       fail('Error was not thrown');
     } catch (e) {
       expect(e.message).to.equal('Invalid DID');
