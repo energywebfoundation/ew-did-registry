@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IDID](idid.md)
 
 # Interface: IDID
 

@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
 
 # Class: JWT
 
