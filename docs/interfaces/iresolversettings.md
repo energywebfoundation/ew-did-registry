@@ -1,6 +1,9 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IResolverSettings](iresolversettings.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolverSettings](iresolversettings.md)
 
 # Interface: IResolverSettings
+
+Resolver requires provider, as well as application binary interface and
+address of the smart contract representing DID Registry
 
 ## Hierarchy
 
@@ -20,7 +23,7 @@
 
 • **abi**? : *Array‹string | ParamType›*
 
-Defined in did-resolver/src/models/resolver.ts:54
+*Defined in [did-resolver/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L29)*
 
 ___
 
@@ -28,7 +31,7 @@ ___
 
 • **address**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:55
+*Defined in [did-resolver/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L30)*
 
 ___
 
@@ -36,4 +39,4 @@ ___
 
 • **provider**? : *[IProvider](iprovider.md)*
 
-Defined in did-resolver/src/models/resolver.ts:53
+*Defined in [did-resolver/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L28)*

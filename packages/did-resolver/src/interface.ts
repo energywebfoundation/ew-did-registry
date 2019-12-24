@@ -2,6 +2,13 @@ import { BigNumber } from 'ethers/utils';
 import { IDIDDocument, DIDAttribute, IUpdateData } from './models';
 
 export interface IResolver {
+    /**
+     * Constructor takes keys and resolver settings to create a new Resolver
+     * constructor(settings?: IResolverSettings);
+     *
+     * Private members:
+     *   settings;
+     */
   /**
    * Constructor takes keys and resolver settings to create a new Resolver
    * constructor(settings?: IResolverSettings);
@@ -10,14 +17,14 @@ export interface IResolver {
    *   settings;
    */
 
-  /**
-   * Read method resolves the DID Document for the provided DID.
-   * Should not be confused with “read” method in DID Document Lite,
-   * which returns the required attribute from the DID Document.
-   * @param {string} did
-   * @returns {IDIDDocument}
-   */
-  read(did: string): Promise<IDIDDocument>;
+    /**
+     * Read method resolves the DID Document for the provided DID.
+     * Should not be confused with “read” method in DID Document Lite,
+     * which returns the required attribute from the DID Document.
+     * @param {string} did
+     * @returns {IDIDDocument}
+     */
+    read(did: string): Promise<IDIDDocument>;
 }
 
 export interface IOperator extends IResolver {

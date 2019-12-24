@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ISmartContractEvent](ismartcontractevent.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ISmartContractEvent](ismartcontractevent.md)
 
 # Interface: ISmartContractEvent
 
@@ -22,7 +22,7 @@
 
 • **name**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:78
+*Defined in [did-resolver/src/models/index.ts:81](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L81)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **signature**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:79
+*Defined in [did-resolver/src/models/index.ts:82](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L82)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **topic**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:80
+*Defined in [did-resolver/src/models/index.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L83)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:90
+*Defined in [did-resolver/src/models/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L93)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **values**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:81
+*Defined in [did-resolver/src/models/index.ts:84](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L84)*
 
 #### Type declaration:
 

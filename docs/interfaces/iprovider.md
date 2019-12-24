@@ -1,6 +1,8 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
 
 # Interface: IProvider
+
+Specifies current Provider
 
 ## Hierarchy
 
@@ -21,7 +23,7 @@
 
 • **network**? : *Networkish*
 
-Defined in did-resolver/src/models/resolver.ts:49
+*Defined in [did-resolver/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L20)*
 
 ___
 
@@ -29,7 +31,7 @@ ___
 
 • **path**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:48
+*Defined in [did-resolver/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L19)*
 
 ___
 
@@ -37,7 +39,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/resolver.ts:46
+*Defined in [did-resolver/src/models/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L17)*
 
 ___
 
@@ -45,4 +47,4 @@ ___
 
 • **uriOrInfo**? : *string | ConnectionInfo*
 
-Defined in did-resolver/src/models/resolver.ts:47
+*Defined in [did-resolver/src/models/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L18)*

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IServiceEndpoint](iserviceendpoint.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IServiceEndpoint](iserviceendpoint.md)
 
 # Interface: IServiceEndpoint
 
@@ -22,7 +22,7 @@
 
 • **description**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:36
+*Defined in [did-resolver/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L49)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:33
+*Defined in [did-resolver/src/models/index.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L46)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **serviceEndpoint**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:35
+*Defined in [did-resolver/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L48)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:34
+*Defined in [did-resolver/src/models/index.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L47)*
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:37
+*Defined in [did-resolver/src/models/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L50)*

@@ -1,12 +1,10 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
 
 # Class: Resolver
 
 ## Hierarchy
 
 * **Resolver**
-
-  ↳ [Operator](operator.md)
 
 ## Implements
 
@@ -28,7 +26,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/models/resolver.ts:127
+*Defined in [did-resolver/src/models/resolver.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/resolver.ts#L10)*
 
 Constructor
 
@@ -50,7 +48,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/models/resolver.ts:139
+*Defined in [did-resolver/src/models/resolver.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/resolver.ts#L22)*
 
 **Parameters:**
 

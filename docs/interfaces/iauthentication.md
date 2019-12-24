@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
 
 # Interface: IAuthentication
 
@@ -20,7 +20,7 @@
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:13
+*Defined in [did-resolver/src/models/index.ts:69](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L69)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:12
+*Defined in [did-resolver/src/models/index.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L68)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:14
+*Defined in [did-resolver/src/models/index.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L70)*
