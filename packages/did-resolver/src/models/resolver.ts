@@ -1,3 +1,5 @@
+import { BigNumber } from 'ethers/utils';
+
 import { IResolver } from '../interface';
 import { IDIDDocument, IDIDLogData, IResolverSettings } from './index';
 import { defaultResolverSettings, matchingPatternDid } from '../constants';
@@ -8,6 +10,11 @@ class Resolver implements IResolver {
      * Stores resolver settings, such as abi, contract address, and IProvider
      */
     protected readonly _settings: IResolverSettings;
+
+    /*
+     * Caches the blockchain data for further reads
+     */
+    private _fetchedDocument: IDIDLogData;
 
     /**
      * Constructor
@@ -27,21 +34,26 @@ class Resolver implements IResolver {
             reject(new Error('Invalid did provided'));
             return;
           }
-          const document: IDIDLogData = {
-            owner: undefined,
-            authentication: {},
-            publicKey: {},
-            serviceEndpoints: {},
-            attributes: new Map(),
-          };
+
+          if (this._fetchedDocument === undefined) {
+            this._fetchedDocument = {
+              owner: undefined,
+              lastChangedBlock: new BigNumber(0),
+              authentication: {},
+              publicKey: {},
+              serviceEndpoints: {},
+              attributes: new Map(),
+            };
+          }
           try {
-            await fetchDataFromEvents(did, document, this._settings);
-            const didDocument = wrapDidDocument(did, document);
-            console.log(didDocument);
+            await fetchDataFromEvents(did, this._fetchedDocument, this._settings);
+            console.log('Fetched Data:');
+            console.log(this._fetchedDocument);
+            const didDocument = wrapDidDocument(did, this._fetchedDocument);
             resolve(didDocument);
           } catch (error) {
             if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-              const didDocument = wrapDidDocument(did, document);
+              const didDocument = wrapDidDocument(did, this._fetchedDocument);
               resolve(didDocument);
             }
             reject(error);

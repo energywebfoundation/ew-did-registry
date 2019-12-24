@@ -48,6 +48,7 @@ export interface IServiceEndpoint {
     serviceEndpoint: string;
     description?: string;
     validity?: BigNumber;
+    block?: number;
 }
 
 export interface IPublicKey {
@@ -62,12 +63,14 @@ export interface IPublicKey {
     publicKeyJwk?: string;
     publicKeyMultibase?: string;
     validity?: BigNumber;
+    block?: number;
 }
 
 export interface IAuthentication {
     type: string;
     publicKey: string;
     validity?: BigNumber;
+    block?: number;
 }
 
 export interface ILinkedDataProof {
@@ -95,6 +98,7 @@ export interface ISmartContractEvent {
 
 export interface IDIDLogData {
     owner: string;
+    lastChangedBlock: BigNumber;
     publicKey: { [key: string]: IPublicKey };
     authentication: { [key: string]: IAuthentication };
     delegates?: string[];
@@ -102,12 +106,13 @@ export interface IDIDLogData {
     created?: string;
     updated?: string;
     proof?: ILinkedDataProof;
-    attributes?: Map<string, { [key: string]: string | object}>;
+    attributes?: Map<string, { [key: string]: string | number | object}>;
 }
 
 export interface IHandlers {
     [key: string]: (event: ISmartContractEvent,
                     etherAddress: string,
                     document: IDIDLogData,
-                    validTo: BigNumber) => IDIDLogData;
+                    validTo: BigNumber,
+                    block: number,) => IDIDLogData;
 }

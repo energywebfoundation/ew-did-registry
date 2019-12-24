@@ -18,11 +18,12 @@ const handleDelegateChange = (
   did: string,
   document: IDIDLogData,
   validTo: BigNumber,
+  block: number,
 ): IDIDLogData => {
-  const [, , blockchainAddress] = did.split(':');
   const publicKeyID = `${did}#delegate-${event.values.delegate}`;
 
-  if (document.publicKey[publicKeyID] === undefined) {
+  if (document.publicKey[publicKeyID] === undefined
+      || document.publicKey[publicKeyID].block < block) {
     const { delegateType } = event.values;
     const stringDelegateType = ethers.utils.parseBytes32String(delegateType);
     switch (stringDelegateType) {
@@ -31,6 +32,7 @@ const handleDelegateChange = (
           type: 'sigAuth',
           publicKey: publicKeyID,
           validity: validTo,
+          block,
         };
         // eslint-disable-next-line no-fallthrough
       case 'veriKey':
@@ -40,6 +42,7 @@ const handleDelegateChange = (
           controller: did,
           ethereumAddress: event.values.delegate,
           validity: validTo,
+          block,
         };
         break;
       default:
@@ -55,6 +58,7 @@ const handleAttributeChange = (
   did: string,
   document: IDIDLogData,
   validTo: BigNumber,
+  block: number,
 ): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
   const attributeType = event.values.name;
@@ -74,8 +78,10 @@ const handleAttributeChange = (
           type: `${algo}${type}`,
           controller: blockchainAddress,
           validity: validTo,
+          block,
         };
-        if (document.publicKey[pk.id] === undefined) {
+        if (document.publicKey[pk.id] === undefined
+            || document.publicKey[pk.id].block < block) {
           switch (encoding) {
             case null:
             case undefined:
@@ -110,7 +116,8 @@ const handleAttributeChange = (
         }
         return document;
       case 'svc':
-        if (document.serviceEndpoints[algo] === undefined) {
+        if (document.serviceEndpoints[algo] === undefined
+            || document.serviceEndpoints[algo].block < block) {
           document.serviceEndpoints[algo] = {
             id: `${did}#${algo}`,
             type: algo,
@@ -119,6 +126,7 @@ const handleAttributeChange = (
               'hex',
             ).toString(),
             validity: validTo,
+            block,
           };
           return document;
         }
@@ -126,10 +134,12 @@ const handleAttributeChange = (
       default:
         break;
     }
-  } else if (document.attributes.get(stringAttributeType) === undefined) {
+  } else if (document.attributes.get(stringAttributeType) === undefined
+      || (document.attributes.get(stringAttributeType)).block < block) {
     const attributeData = {
       attribute: Buffer.from(event.values.value.slice(2), 'hex').toString(),
       validity: validTo,
+      block,
     };
     document.attributes.set(stringAttributeType, attributeData);
     return document;
@@ -147,12 +157,13 @@ const updateDocument = (
   eventName: string,
   did: string,
   document: IDIDLogData,
+  block: number,
 ): IDIDLogData => {
   const { validTo } = event.values;
 
   if (validTo) {
     const handler = handlers[eventName];
-    return handler(event, did, document, validTo);
+    return handler(event, did, document, validTo, block);
   }
 
   return document;
@@ -177,7 +188,7 @@ const getEventsFromBlock = (
   }).then((Log) => {
     const event = smartContractInterface.parseLog(Log[0]);
     const eventName = event.name;
-    updateDocument(event, eventName, did, document);
+    updateDocument(event, eventName, did, document, block.toNumber());
 
     resolve(event.values.previousChange);
   }).catch((error) => {
@@ -208,8 +219,10 @@ export const fetchDataFromEvents = async (
   const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
   let previousChangedBlock;
+  let lastChangedBlock;
   try {
     previousChangedBlock = await contract.changed(blockchainAddress);
+    lastChangedBlock = previousChangedBlock;
   } catch (error) {
     throw new Error('Blockchain address did not interact with smart contract');
   }
@@ -222,7 +235,10 @@ export const fetchDataFromEvents = async (
 
   const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
   const smartContractAddress = resolverSettings.address;
-  while (previousChangedBlock.toNumber() !== 0) {
+  while (
+    previousChangedBlock.toNumber() !== 0
+    && previousChangedBlock.toNumber() !== document.lastChangedBlock.toNumber()
+  ) {
     // eslint-disable-next-line no-await-in-loop
     previousChangedBlock = await getEventsFromBlock(
       previousChangedBlock,
@@ -233,6 +249,7 @@ export const fetchDataFromEvents = async (
       smartContractAddress,
     );
   }
+  document.lastChangedBlock = lastChangedBlock;
 };
 
 export const wrapDidDocument = (
@@ -269,9 +286,12 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.publicKey) {
     const pubKey = document.publicKey[key];
+    console.log(pubKey);
     if (pubKey.validity.gt(now)) {
-      delete pubKey.validity;
-      didDocument.publicKey.push(pubKey);
+      const pubKeyCopy = { ...pubKey };
+      delete pubKeyCopy.validity;
+      delete pubKeyCopy.block;
+      didDocument.publicKey.push(pubKeyCopy);
     }
   }
 
@@ -279,8 +299,10 @@ export const wrapDidDocument = (
   for (const key in document.authentication) {
     const authenticator = document.authentication[key];
     if (authenticator.validity.gt(now)) {
-      delete authenticator.validity;
-      didDocument.authentication.push(authenticator);
+      const authenticatorCopy = { ...authenticator };
+      delete authenticatorCopy.validity;
+      delete authenticatorCopy.block;
+      didDocument.authentication.push(authenticatorCopy);
     }
   }
 
@@ -288,7 +310,9 @@ export const wrapDidDocument = (
   for (const key in document.serviceEndpoints) {
     const serviceEndpoint = document.serviceEndpoints[key];
     if (serviceEndpoint.validity.gt(now)) {
-      delete serviceEndpoint.validity;
+      const serviceEndpointCopy = { ...serviceEndpoint };
+      delete serviceEndpointCopy.validity;
+      delete serviceEndpointCopy.block;
       didDocument.service.push(serviceEndpoint);
     }
   }
