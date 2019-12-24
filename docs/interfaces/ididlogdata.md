@@ -27,7 +27,7 @@
 
 • **attributes**? : *Map‹string, object›*
 
-*Defined in [did-resolver/src/models/index.ts:109](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L109)*
+*Defined in [did-resolver/src/models/index.ts:109](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L109)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **authentication**: *object*
 
-*Defined in [did-resolver/src/models/index.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L103)*
+*Defined in [did-resolver/src/models/index.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L103)*
 
 #### Type declaration:
 
@@ -47,7 +47,7 @@ ___
 
 • **created**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:106](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L106)*
+*Defined in [did-resolver/src/models/index.ts:106](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L106)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **delegates**? : *string[]*
 
-*Defined in [did-resolver/src/models/index.ts:104](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L104)*
+*Defined in [did-resolver/src/models/index.ts:104](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L104)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **lastChangedBlock**: *BigNumber*
 
-*Defined in [did-resolver/src/models/index.ts:101](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L101)*
+*Defined in [did-resolver/src/models/index.ts:101](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L101)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **owner**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L100)*
+*Defined in [did-resolver/src/models/index.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L100)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-resolver/src/models/index.ts:108](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L108)*
+*Defined in [did-resolver/src/models/index.ts:108](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L108)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **publicKey**: *object*
 
-*Defined in [did-resolver/src/models/index.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L102)*
+*Defined in [did-resolver/src/models/index.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L102)*
 
 #### Type declaration:
 
@@ -99,7 +99,7 @@ ___
 
 • **serviceEndpoints**? : *object*
 
-*Defined in [did-resolver/src/models/index.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L105)*
+*Defined in [did-resolver/src/models/index.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L105)*
 
 #### Type declaration:
 
@@ -111,4 +111,4 @@ ___
 
 • **updated**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:107](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did-resolver/src/models/index.ts#L107)*
+*Defined in [did-resolver/src/models/index.ts:107](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/index.ts#L107)*

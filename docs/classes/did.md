@@ -23,7 +23,7 @@
 
 ▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
 
-*Defined in [did/src/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did/src/index.ts#L31)*
+*Defined in [did/src/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did/src/index.ts#L31)*
 
 Gets a DID for a particular network
 
@@ -56,7 +56,7 @@ ___
 
 *Implementation of [IDID](../interfaces/idid.md)*
 
-*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b6f8096/packages/did/src/index.ts#L51)*
+*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did/src/index.ts#L51)*
 
 Sets a DID for a particular network (inferred from DID provided)
 

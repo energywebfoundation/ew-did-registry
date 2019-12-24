@@ -47,8 +47,6 @@ class Resolver implements IResolver {
           }
           try {
             await fetchDataFromEvents(did, this._fetchedDocument, this._settings);
-            console.log('Fetched Data:');
-            console.log(this._fetchedDocument);
             const didDocument = wrapDidDocument(did, this._fetchedDocument);
             resolve(didDocument);
           } catch (error) {

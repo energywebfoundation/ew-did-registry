@@ -286,7 +286,6 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.publicKey) {
     const pubKey = document.publicKey[key];
-    console.log(pubKey);
     if (pubKey.validity.gt(now)) {
       const pubKeyCopy = { ...pubKey };
       delete pubKeyCopy.validity;
