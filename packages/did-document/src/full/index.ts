@@ -1,3 +1,2 @@
-import { IDIDDocumentFull } from './interface';
-
-export { IDIDDocumentFull };
+export * from './interface';
+export { default as DIDDocumentFull } from './documentFull';

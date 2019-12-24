@@ -11,6 +11,10 @@ This interface extends lite DID Document interface
 
   ↳ **IDIDDocumentFull**
 
+## Implemented by
+
+* [DIDDocumentFull](../classes/diddocumentfull.md)
+
 ## Index
 
 ### Properties
@@ -105,7 +109,7 @@ ___
 
 ###  update
 
-▸ **update**(`attribute`: string, `data`: [IUpdateParameters](iupdateparameters.md)): *boolean*
+▸ **update**(`attribute`: string, `data`: IUpdateData): *boolean*
 
 *Defined in [did-document/src/full/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/full/interface.ts#L24)*
 
@@ -116,6 +120,6 @@ Provided with necessary parameters, method updates relevant attributes of the DI
 Name | Type |
 ------ | ------ |
 `attribute` | string |
-`data` | [IUpdateParameters](iupdateparameters.md) |
+`data` | IUpdateData |
 
 **Returns:** *boolean*

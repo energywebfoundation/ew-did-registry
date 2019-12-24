@@ -1,5 +1,5 @@
+import { IUpdateData } from '@ew-did-registry/did-resolver';
 import { IDIDDocumentLite } from '../lite';
-import { IUpdateParameters } from '../models';
 
 /**
  * Interface describes the full version of DID Document with CRUD functionality
@@ -21,7 +21,7 @@ export interface IDIDDocumentFull extends IDIDDocumentLite{
      * @param {IUpdateParameters} data
      * @returns {boolean}
      */
-    update(attribute: string, data: IUpdateParameters): boolean;
+    update(attribute: string, data: IUpdateData): boolean;
 
     /**
      * On success the status of the DID Document is changed from “active” to “deactivated”.
