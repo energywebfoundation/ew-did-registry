@@ -14,6 +14,7 @@
 * [authentication](ididlogdata.md#authentication)
 * [created](ididlogdata.md#optional-created)
 * [delegates](ididlogdata.md#optional-delegates)
+* [lastChangedBlock](ididlogdata.md#lastchangedblock)
 * [owner](ididlogdata.md#owner)
 * [proof](ididlogdata.md#optional-proof)
 * [publicKey](ididlogdata.md#publickey)
@@ -26,7 +27,7 @@
 
 • **attributes**? : *Map‹string, object›*
 
-*Defined in [did-resolver/src/models/index.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L105)*
+Defined in did-resolver/src/models/resolver.ts:110
 
 ___
 
@@ -34,7 +35,7 @@ ___
 
 • **authentication**: *object*
 
-*Defined in [did-resolver/src/models/index.ts:99](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L99)*
+Defined in did-resolver/src/models/resolver.ts:104
 
 #### Type declaration:
 
@@ -46,7 +47,7 @@ ___
 
 • **created**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L102)*
+Defined in did-resolver/src/models/resolver.ts:107
 
 ___
 
@@ -54,7 +55,15 @@ ___
 
 • **delegates**? : *string[]*
 
-*Defined in [did-resolver/src/models/index.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L100)*
+Defined in did-resolver/src/models/resolver.ts:105
+
+___
+
+###  lastChangedBlock
+
+• **lastChangedBlock**: *BigNumber*
+
+Defined in did-resolver/src/models/resolver.ts:102
 
 ___
 
@@ -62,7 +71,7 @@ ___
 
 • **owner**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L97)*
+Defined in did-resolver/src/models/resolver.ts:101
 
 ___
 
@@ -70,7 +79,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-resolver/src/models/index.ts:104](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L104)*
+Defined in did-resolver/src/models/resolver.ts:109
 
 ___
 
@@ -78,7 +87,7 @@ ___
 
 • **publicKey**: *object*
 
-*Defined in [did-resolver/src/models/index.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L98)*
+Defined in did-resolver/src/models/resolver.ts:103
 
 #### Type declaration:
 
@@ -90,7 +99,7 @@ ___
 
 • **serviceEndpoints**? : *object*
 
-*Defined in [did-resolver/src/models/index.ts:101](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L101)*
+Defined in did-resolver/src/models/resolver.ts:106
 
 #### Type declaration:
 
@@ -102,4 +111,4 @@ ___
 
 • **updated**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L103)*
+Defined in did-resolver/src/models/resolver.ts:108

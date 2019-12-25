@@ -10,6 +10,7 @@
 
 ### Properties
 
+* [block](iserviceendpoint.md#optional-block)
 * [description](iserviceendpoint.md#optional-description)
 * [id](iserviceendpoint.md#id)
 * [serviceEndpoint](iserviceendpoint.md#serviceendpoint)
@@ -18,11 +19,19 @@
 
 ## Properties
 
+### `Optional` block
+
+• **block**? : *number*
+
+Defined in did-resolver/src/models/resolver.ts:51
+
+___
+
 ### `Optional` description
 
 • **description**? : *string*
 
-*Defined in [did-resolver/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L49)*
+Defined in did-resolver/src/models/resolver.ts:49
 
 ___
 
@@ -30,7 +39,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L46)*
+Defined in did-resolver/src/models/resolver.ts:46
 
 ___
 
@@ -38,7 +47,7 @@ ___
 
 • **serviceEndpoint**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L48)*
+Defined in did-resolver/src/models/resolver.ts:48
 
 ___
 
@@ -46,7 +55,7 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/index.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L47)*
+Defined in did-resolver/src/models/resolver.ts:47
 
 ___
 
@@ -54,4 +63,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-*Defined in [did-resolver/src/models/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/84044eb/packages/did-resolver/src/models/index.ts#L50)*
+Defined in did-resolver/src/models/resolver.ts:50
