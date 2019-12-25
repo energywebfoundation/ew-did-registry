@@ -6,6 +6,8 @@
 
 * **Resolver**
 
+  ↳ [Operator](operator.md)
+
 ## Implements
 
 * [IResolver](../interfaces/iresolver.md)
@@ -26,7 +28,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/resolver.ts#L17)*
+Defined in did-resolver/src/implementations/resolver.ts:17
 
 Constructor
 
@@ -48,7 +50,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/72b0e9b/packages/did-resolver/src/models/resolver.ts#L29)*
+Defined in did-resolver/src/implementations/resolver.ts:29
 
 **Parameters:**
 

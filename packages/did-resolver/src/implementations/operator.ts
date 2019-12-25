@@ -4,15 +4,15 @@ import { IKeys } from '@ew-did-registry/keys';
 import { BigNumber } from 'ethers/utils';
 import { IOperator } from '../interface';
 import {
+  Algorithms,
+  DIDAttribute,
+  Encoding,
   IAuthentication,
   IPublicKey,
   IServiceEndpoint,
-  ProviderTypes,
-  Algorithms,
-  PubKeyType,
-  Encoding,
-  DIDAttribute,
   IUpdateData,
+  ProviderTypes,
+  PubKeyType,
 } from '../models';
 import Resolver from './resolver';
 import {
@@ -148,26 +148,6 @@ export class Operator extends Resolver implements IOperator {
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     // eslint-disable-next-line no-restricted-syntax
     const method = this._didRegistry.revokeDelegate;
-    for (const auth of auths) {
-      const match = auth.publicKey.match(delegatePubKeyIdPattern);
-      // eslint-disable-next-line no-continue
-      if (!match) continue;
-      const delegateAddress = match[1];
-      const didAttribute = DIDAttribute.Authenticate;
-      const updateData: IUpdateData = {
-        algo: Algorithms.ED25519,
-        type: PubKeyType.SignatureAuthentication2018,
-        encoding: Encoding.HEX,
-        delegate: delegateAddress,
-      };
-      const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, null, { nonce },
-      );
-      if (!revoked) {
-        return false;
-      }
-      nonce += 1;
-    }
     for (const pk of publicKeys) {
       const match = pk.id.match(delegatePubKeyIdPattern);
       // eslint-disable-next-line no-continue
@@ -176,7 +156,10 @@ export class Operator extends Resolver implements IOperator {
       const delegateAddress = pk.ethereumAddress;
       const updateData: IUpdateData = {
         algo: Algorithms.ED25519,
-        type: PubKeyType.VerificationKey2018,
+        type: auths.find(
+          (auth) => auth.publicKey === match[0],
+        ) ? PubKeyType.SignatureAuthentication2018
+          : PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
         delegate: delegateAddress,
       };
@@ -323,7 +306,9 @@ export class Operator extends Resolver implements IOperator {
     const { provider } = this._settings;
     switch (provider.type) {
       case ProviderTypes.HTTP:
-        return new ethers.providers.JsonRpcProvider(provider.uriOrInfo);
+        return new ethers.providers.JsonRpcProvider(provider.uriOrInfo, provider.network);
+      case ProviderTypes.IPC:
+        return new ethers.providers.IpcProvider(provider.path, provider.network);
       default:
         return ethers.getDefaultProvider();
     }
