@@ -131,7 +131,7 @@ Sets attribute value in DID document identified by the did
 ```typescript
 import {
 Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
-} from '@ew-did-registry/did-resolver';
+ } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 
 const ownerKeys = new Keys();

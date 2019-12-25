@@ -72,10 +72,10 @@ export class Operator extends Resolver implements IOperator {
    *
    * @example
    *```typescript
-   *import {
+   * import {
    * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
-   * } from '@ew-did-registry/did-resolver';
-   *import { Keys } from '@ew-did-registry/keys';
+   *  } from '@ew-did-registry/did-resolver';
+   * import { Keys } from '@ew-did-registry/keys';
    *
    * const ownerKeys = new Keys();
    * const operator = new Operator(ownerKeys);
