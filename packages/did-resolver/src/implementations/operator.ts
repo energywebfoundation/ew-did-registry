@@ -247,7 +247,7 @@ export class Operator extends Resolver implements IOperator {
       throw new Error('Validity must be non negative value');
     }
     const identity = Operator._parseDid(did);
-    const attributeName = Operator._composeAttributeName(didAttribute, updateData);
+    const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
@@ -276,7 +276,7 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
-  private static _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
+  private _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
     const {
       algo, type, encoding,
     } = updateData;
