@@ -2,6 +2,7 @@ import { IResolver } from '../interface';
 import { IDIDDocument, IResolverSettings } from './index';
 declare class Resolver implements IResolver {
     protected readonly _settings: IResolverSettings;
+    private _fetchedDocument;
     /**
      * Constructor
      *

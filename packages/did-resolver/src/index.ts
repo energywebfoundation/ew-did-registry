@@ -1,10 +1,3 @@
-import { IResolver, IOperator } from './interface';
-import { IDIDDocument } from './models';
-import Resolver from './models/resolver';
-
-export {
-  IResolver,
-  IOperator,
-  IDIDDocument,
-  Resolver,
-};
+export * from './models';
+export * from './interface';
+export * from './implementations';

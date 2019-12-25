@@ -39,6 +39,7 @@
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-chai-friendly": "^0.5.0",
     "eslint-plugin-import": "^2.18.2",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
