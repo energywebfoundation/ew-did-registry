@@ -39,7 +39,7 @@
 
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
-Defined in did-document/src/full/documentFull.ts:6
+Defined in did-document/src/full/documentFull.ts:7
 
 **Parameters:**
 
@@ -78,31 +78,31 @@ Defined in did-document/src/lite/documentLite.ts:7
 
 ###  create
 
-▸ **create**(`context`: string): *boolean*
+▸ **create**(`context?`: string): *Promise‹boolean›*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:13
+Defined in did-document/src/full/documentFull.ts:14
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`context` | string |
+`context?` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  deactivate
 
-▸ **deactivate**(): *boolean*
+▸ **deactivate**(): *Promise‹boolean›*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:17
+Defined in did-document/src/full/documentFull.ts:18
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
@@ -129,17 +129,16 @@ ___
 
 ###  update
 
-▸ **update**(`attribute`: string, `data`: IUpdateData): *boolean*
+▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-*Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
-
-Defined in did-document/src/full/documentFull.ts:21
+Defined in did-document/src/full/documentFull.ts:22
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`attribute` | string |
+`attribute` | DIDAttribute |
 `data` | IUpdateData |
+`validity` | number &#124; BigNumber |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
