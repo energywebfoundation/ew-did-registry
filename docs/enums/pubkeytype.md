@@ -15,7 +15,7 @@
 
 • **SignatureAuthentication2018**: = "sigAuth"
 
-Defined in did-resolver/src/models/operator.ts:6
+*Defined in [did-resolver/src/models/operator.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/did-resolver/src/models/operator.ts#L6)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **VerificationKey2018**: = "veriKey"
 
-Defined in did-resolver/src/models/operator.ts:6
+*Defined in [did-resolver/src/models/operator.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/did-resolver/src/models/operator.ts#L6)*

@@ -6,12 +6,12 @@ import { defaultResolverSettings, matchingPatternDid } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 class Resolver implements IResolver {
-  /*
+  /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
   protected readonly _settings: IResolverSettings;
 
-  /*
+  /**
    * Caches the blockchain data for further reads
    */
   private _fetchedDocument: IDIDLogData;
@@ -26,6 +26,19 @@ class Resolver implements IResolver {
     this._settings = settings;
   }
 
+  /**
+   * Resolve DID Document for a given did
+   *
+   * @example
+   * ```typescript
+   * import { Resolver } from '@ew-did-registry/did-resolver';
+   *
+   * const resolver = new Resolver();
+   * const didDocument = await resolver.read(did);
+   * ```
+   *
+   * @param {string} did - entity identifier, which is associated with DID Document
+   */
   async read(did: string): Promise<IDIDDocument> {
     return new Promise(
       // eslint-disable-next-line no-async-promise-executor

@@ -28,7 +28,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:17
+*Defined in [did-resolver/src/implementations/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/did-resolver/src/implementations/resolver.ts#L17)*
 
 Constructor
 
@@ -50,12 +50,22 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:29
+*Defined in [did-resolver/src/implementations/resolver.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/did-resolver/src/implementations/resolver.ts#L42)*
+
+Resolve DID Document for a given did
+
+**`example`** 
+```typescript
+import { Resolver } from '@ew-did-registry/did-resolver';
+
+const resolver = new Resolver();
+const didDocument = await resolver.read(did);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`did` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`did` | string | entity identifier, which is associated with DID Document  |
 
 **Returns:** *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
