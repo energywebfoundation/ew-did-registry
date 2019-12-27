@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-
+import { Attributes } from '../src/models';
 
 import { Resolver } from '@ew-did-registry/did-resolver';
 
@@ -23,20 +23,20 @@ describe('[DID DOCUMENT LITE PACKAGE]', function() {
   });
 
   it('read should fetch did-document', async () => {
-    await didDocumentLite.read('id');
+    await didDocumentLite.read(Attributes.id);
     expect(didDocumentLite.didDocument).include.keys('@context', 'id', 'publicKey', 'authentication', 'service');
   });
 
   it('returned id should be equal to did', async () => {
-    const id = await didDocumentLite.read('id');
+    const id = await didDocumentLite.read(Attributes.id);
     expect(id).to.deep.equal(did);
   });
 
   it('returned publicKey should represent the owner', async () => {
-    const publicKey = await didDocumentLite.read('publicKey', 'Secp256k1VerificationKey2018');
+    const publicKey = await didDocumentLite.read(Attributes.publicKey, 'Secp256k1VerificationKey2018');
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    expect(publicKey.id).to.deep.equal(`${did}#owner`);
+    expect(publicKey.id).to.equal(`${did}#owner`);
   });
 
   it('invalid attribute should return undefined', async () => {
@@ -47,7 +47,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function() {
   });
 
   it('valid attribute with wrong type should return undefined', async () => {
-    const wrongKey = await didDocumentLite.read('publicKey', 'ImpossibleKey');
+    const wrongKey = await didDocumentLite.read(Attributes.publicKey, 'ImpossibleKey');
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(wrongKey).to.be.undefined;

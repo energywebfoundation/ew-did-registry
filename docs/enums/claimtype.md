@@ -18,7 +18,7 @@ This enumerated type specifies available Claim Types
 
 • **Private**:
 
-*Defined in [claims/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/claims/src/models/index.ts#L9)*
+*Defined in [claims/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/claims/src/models/index.ts#L9)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 • **Proof**:
 
-*Defined in [claims/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/claims/src/models/index.ts#L10)*
+*Defined in [claims/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/claims/src/models/index.ts#L10)*
 
 ___
 
@@ -34,4 +34,4 @@ ___
 
 • **Public**:
 
-*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/b7dd630/packages/claims/src/models/index.ts#L8)*
+*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/claims/src/models/index.ts#L8)*

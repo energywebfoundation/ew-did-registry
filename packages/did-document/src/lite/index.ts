@@ -48,11 +48,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
      * @param {string} type
      */
     async read(attribute: string, type: string) {
-      try {
-        this.didDocument = await this.resolver.read(this.did);
-      } catch (error) {
-        throw (error);
-      }
+      this.didDocument = await this.resolver.read(this.did);
 
       if (type === undefined) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore

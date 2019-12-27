@@ -1,5 +1,13 @@
-import { IDIDDocument } from './models';
+import { BigNumber } from 'ethers/utils';
+import { IDIDDocument, DIDAttribute, IUpdateData } from './models';
 export interface IResolver {
+    /**
+     * Constructor takes keys and resolver settings to create a new Resolver
+     * constructor(settings?: IResolverSettings);
+     *
+     * Private members:
+     *   settings;
+     */
     /**
      * Constructor takes keys and resolver settings to create a new Resolver
      * constructor(settings?: IResolverSettings);
@@ -27,11 +35,12 @@ export interface IOperator extends IResolver {
     /**
      * Updates relevant attribute of the DID Document
      * @param {string} did
-     * @param {string} attribute
-     * @param {string|object} value
+     * @param { DIDAttribute } attribute
+     * @param { IUpdateData } value
+     * @param { number } validity
      * @returns {boolean}
      */
-    update(did: string, attribute: string, value: string | object): Promise<boolean>;
+    update(did: string, attribute: DIDAttribute, value: IUpdateData, validity: number | BigNumber): Promise<boolean>;
     /**
      * Attempts to deactivate the DID Document for a given DID.
      * Successful, if the transaction is accepted by the smart contract.
