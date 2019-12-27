@@ -18,6 +18,7 @@
 ### Classes
 
 * [DID](classes/did.md)
+* [DIDDocumentFactory](classes/diddocumentfactory.md)
 * [DIDDocumentFull](classes/diddocumentfull.md)
 * [DIDDocumentLite](classes/diddocumentlite.md)
 * [JWT](classes/jwt.md)
