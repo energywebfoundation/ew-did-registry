@@ -6,6 +6,8 @@
 
 * **DIDDocumentLite**
 
+  ↳ [DIDDocumentFull](diddocumentfull.md)
+
 ## Implements
 
 * [IDIDDocumentLite](../interfaces/ididdocumentlite.md)
@@ -29,9 +31,9 @@
 
 ###  constructor
 
-\+ **new DIDDocumentLite**(`did`: string, `resolver`: Resolver): *[DIDDocumentLite](diddocumentlite.md)*
+\+ **new DIDDocumentLite**(`did`: string, `resolver`: IResolver): *[DIDDocumentLite](diddocumentlite.md)*
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/index.ts#L18)*
+Defined in did-document/src/lite/index.ts:18
 
 Constructor takes DID of interest and Resolver as inputs
 
@@ -40,7 +42,7 @@ Constructor takes DID of interest and Resolver as inputs
 Name | Type | Description |
 ------ | ------ | ------ |
 `did` | string | - |
-`resolver` | Resolver |   |
+`resolver` | IResolver |   |
 
 **Returns:** *[DIDDocumentLite](diddocumentlite.md)*
 
@@ -52,7 +54,7 @@ Name | Type | Description |
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[did](../interfaces/ididdocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/index.ts#L13)*
+Defined in did-document/src/lite/index.ts:13
 
 DID of concern
 
@@ -64,7 +66,7 @@ ___
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[didDocument](../interfaces/ididdocumentlite.md#diddocument)*
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/index.ts#L18)*
+Defined in did-document/src/lite/index.ts:18
 
 Fetched DID Document
 
@@ -76,7 +78,7 @@ Fetched DID Document
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md)*
 
-*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/index.ts#L50)*
+Defined in did-document/src/lite/index.ts:50
 
 Method returns the attribute of interest. An optional type parameter can be provided for
 attributes, which are objects

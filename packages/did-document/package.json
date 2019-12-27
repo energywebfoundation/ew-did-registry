@@ -24,6 +24,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did-resolver": "^1.0.0"
+    "@ew-did-registry/did-resolver": "file:../did-resolver",
+    "ethers": "^4.0.40"
   }
 }
