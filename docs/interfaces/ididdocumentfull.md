@@ -11,6 +11,10 @@ This interface extends lite DID Document interface
 
   ↳ **IDIDDocumentFull**
 
+## Implemented by
+
+* [DIDDocumentFull](../classes/diddocumentfull.md)
+
 ## Index
 
 ### Properties
@@ -33,7 +37,7 @@ This interface extends lite DID Document interface
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[did](ididdocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/interface.ts#L19)*
+Defined in did-document/src/lite/interface.ts:19
 
 DID of Document subject is stored in DID Documents
 
@@ -45,7 +49,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[didDocument](ididdocumentlite.md#diddocument)*
 
-*Defined in [did-document/src/lite/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/interface.ts#L24)*
+Defined in did-document/src/lite/interface.ts:24
 
 Resolved DID Document
 
@@ -53,9 +57,9 @@ Resolved DID Document
 
 ###  create
 
-▸ **create**(`context`: string): *boolean*
+▸ **create**(`context`: string): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/full/interface.ts#L16)*
+Defined in did-document/src/full/interface.ts:17
 
 New DID Document is registered on the Blockchain with the provided context,
 if no Document existed for the specified DID
@@ -66,19 +70,19 @@ Name | Type |
 ------ | ------ |
 `context` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  deactivate
 
-▸ **deactivate**(): *boolean*
+▸ **deactivate**(): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/full/interface.ts#L30)*
+Defined in did-document/src/full/interface.ts:31
 
 On success the status of the DID Document is changed from “active” to “deactivated”.
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
@@ -88,7 +92,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[read](ididdocumentlite.md#read)*
 
-*Defined in [did-document/src/lite/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/lite/interface.ts#L32)*
+Defined in did-document/src/lite/interface.ts:32
 
 Fetches the specified data/attributes from DID Document
 
@@ -105,9 +109,9 @@ ___
 
 ###  update
 
-▸ **update**(`attribute`: string, `data`: [IUpdateParameters](iupdateparameters.md)): *boolean*
+▸ **update**(`attribute`: string, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-document/src/full/interface.ts#L24)*
+Defined in did-document/src/full/interface.ts:25
 
 Provided with necessary parameters, method updates relevant attributes of the DID Document
 
@@ -116,6 +120,7 @@ Provided with necessary parameters, method updates relevant attributes of the DI
 Name | Type |
 ------ | ------ |
 `attribute` | string |
-`data` | [IUpdateParameters](iupdateparameters.md) |
+`data` | IUpdateData |
+`validity` | number &#124; BigNumber |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*

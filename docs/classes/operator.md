@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-resolver/src/implementations/operator.ts#L40)*
+Defined in did-resolver/src/implementations/operator.ts:40
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-resolver/src/implementations/operator.ts#L66)*
+Defined in did-resolver/src/implementations/operator.ts:66
 
 Empty for this implementation
 
@@ -73,7 +73,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-resolver/src/implementations/operator.ts#L130)*
+Defined in did-resolver/src/implementations/operator.ts:130
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -105,7 +105,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-resolver/src/implementations/resolver.ts#L42)*
+Defined in did-resolver/src/implementations/resolver.ts:42
 
 Resolve DID Document for a given did
 
@@ -133,7 +133,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/a4486d9/packages/did-resolver/src/implementations/operator.ts#L102)*
+Defined in did-resolver/src/implementations/operator.ts:102
 
 Sets attribute value in DID document identified by the did
 

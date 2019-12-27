@@ -1,11 +1,11 @@
-import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, IResolver, Resolver } from '@ew-did-registry/did-resolver';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
     /**
      * Resolver that fetches DID Document
      */
-    private readonly resolver: Resolver;
+    private readonly resolver: IResolver;
 
     /**
      * DID of concern
@@ -22,7 +22,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
      * @param {string} did
      * @param {Resolver} resolver
      */
-    constructor(did: string, resolver: Resolver) {
+    constructor(did: string, resolver: IResolver) {
       this.resolver = resolver;
       this.did = did;
     }
