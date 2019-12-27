@@ -35,5 +35,4 @@ describe('[RESOLVER PACKAGE]', function() {
     expect(did).to.deep.equal(didDocument.id);
     expect(didDocument).include.keys('@context', 'id', 'publicKey', 'authentication', 'service');
   });
-
 });
