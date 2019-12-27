@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import {
-  Algorithms, DIDAttribute, Encoding, Operator, PubKeyType,
+  Algorithms, DIDAttribute, Encoding, IPublicKey, Operator, PubKeyType,
 } from '@ew-did-registry/did-resolver';
 import DIDDocumentFull from '../src/full/documentFull';
 import { Keys } from '../../keys/dist';
 
-describe.skip('add function', () => {
+describe('[DID DOCUMENT FULL PACKAGE]', function () {
+  this.timeout(0);
   const ownerAddress = '0x0126B7A16967114f3E261c36E9D99629D73caAeA';
   const did = `did:ewc:${ownerAddress}`;
   const keys = new Keys({
@@ -14,14 +15,14 @@ describe.skip('add function', () => {
   });
   const operator = new Operator(keys);
 
-  it('create should return true', async () => {
-    const document = await new DIDDocumentFull(did, operator);
-    const created = document.create();
+  it('create document should return true', async () => {
+    const document = new DIDDocumentFull(did, operator);
+    const created = await document.create();
     expect(created).to.be.true;
   });
 
-  it('update public key should return true', async () => {
-    const document = await new DIDDocumentFull(did, operator);
+  it('update document public key should return true', async () => {
+    const document = new DIDDocumentFull(did, operator);
     await document.create();
     const validity = 5 * 60 * 1000;
     const updated = await document.update(
@@ -37,10 +38,35 @@ describe.skip('add function', () => {
     expect(updated).to.be.true;
   });
 
-  it('deactivate should return true', async () => {
-    const document = await new DIDDocumentFull(did, operator);
+  it('deactivate document should return true', async () => {
+    const document = new DIDDocumentFull(did, operator);
     await document.create();
     const deactivated = await document.deactivate();
     expect(deactivated).to.be.true;
+  });
+
+  xit('test scenario: update public key, read document, deactivate document', async () => {
+    const document = new DIDDocumentFull(did, operator);
+    await document.create();
+    const validity = 5 * 60 * 1000;
+    await document.update(
+      DIDAttribute.PublicKey,
+      {
+        type: PubKeyType.VerificationKey2018,
+        algo: Algorithms.ED25519,
+        encoding: Encoding.HEX,
+        value: new Keys().publicKey,
+      },
+      validity,
+    );
+    let publicKey = await document.read(
+      'publicKey', 'Secp256k1VerificationKey2018',
+    ) as IPublicKey;
+    expect(publicKey.id).equal(`${did}#owner`);
+    await document.deactivate();
+    publicKey = await document.read(
+      'publicKey', 'Secp256k1VerificationKey2018',
+    ) as IPublicKey;
+    expect(publicKey.id).to.be.undefined;
   });
 });
