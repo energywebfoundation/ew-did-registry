@@ -57,6 +57,19 @@ var DIDDocumentFull = /** @class */ (function (_super) {
         _this._operator = operator;
         return _this;
     }
+    /**
+     * Creates new empty DID document
+     *
+     * @example
+     * ```typescript
+     *  import { DIDDocumentFull } from '@ew-did-registry/did-document';
+     *
+     *  const document = new DIDDocumentFull(did, operator);
+     *  await document.create();
+     * ```
+     * @param { string } context
+     * @return { boolean }
+     */
     DIDDocumentFull.prototype.create = function (context) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -64,6 +77,20 @@ var DIDDocumentFull = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Deactivates DID document
+     *
+     * @example
+     * ```typescript
+     * import { DIDDocumentFull } from '@ew-did-registry/did-document';
+     *
+     * const document = new DIDDocumentFull(did, operator);
+     * await document.create();
+     * await document.update(didAttribute, updateData, validity);
+     * await document.deactivate();
+     * ```
+     * @return { boolean }
+     */
     DIDDocumentFull.prototype.deactivate = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -71,6 +98,34 @@ var DIDDocumentFull = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Updates attribute on the DID document
+     *
+     * @example
+     * ```typescript
+     * import { DIDDocumentFull } from '@ew-did-registry/did-document';
+     * import { DIDAttribute, Algorithms, PubKeyTypes } from '@ew-did-registry/did-document';
+     *
+     * const document = new DIDDocumentFull(did, operator);
+     * await document.create();
+     * const didAttribute = DIDAttribute.PublicKey;
+     * const validity = 5 * 60 * 1000;
+     * await document.update(
+     *  DIDAttribute.PublicKey,
+     *  {
+     *    type: PubKeyType.VerificationKey2018,
+     *    algo: Algorithms.ED25519,
+     *    encoding: Encoding.HEX,
+     *    value: new Keys().publicKey,
+     *  },
+     *  validity,
+     *  );
+     * ```
+     * @param attribute
+     * @param data
+     * @param validity
+     * @return { boolean }
+     */
     DIDDocumentFull.prototype.update = function (attribute, data, validity) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {

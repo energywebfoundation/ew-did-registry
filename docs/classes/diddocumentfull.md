@@ -82,7 +82,17 @@ Defined in did-document/src/lite/documentLite.ts:7
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:14
+Defined in did-document/src/full/documentFull.ts:27
+
+Creates new empty DID document
+
+**`example`** 
+```typescript
+ import { DIDDocumentFull } from '@ew-did-registry/did-document';
+
+ const document = new DIDDocumentFull(did, operator);
+ await document.create();
+```
 
 **Parameters:**
 
@@ -100,7 +110,19 @@ ___
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:18
+Defined in did-document/src/full/documentFull.ts:45
+
+Deactivates DID document
+
+**`example`** 
+```typescript
+import { DIDDocumentFull } from '@ew-did-registry/did-document';
+
+const document = new DIDDocumentFull(did, operator);
+await document.create();
+await document.update(didAttribute, updateData, validity);
+await document.deactivate();
+```
 
 **Returns:** *Promise‹boolean›*
 
@@ -131,7 +153,30 @@ ___
 
 ▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:22
+Defined in did-document/src/full/documentFull.ts:77
+
+Updates attribute on the DID document
+
+**`example`** 
+```typescript
+import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import { DIDAttribute, Algorithms, PubKeyTypes } from '@ew-did-registry/did-document';
+
+const document = new DIDDocumentFull(did, operator);
+await document.create();
+const didAttribute = DIDAttribute.PublicKey;
+const validity = 5 * 60 * 1000;
+await document.update(
+ DIDAttribute.PublicKey,
+ {
+   type: PubKeyType.VerificationKey2018,
+   algo: Algorithms.ED25519,
+   encoding: Encoding.HEX,
+   value: new Keys().publicKey,
+ },
+ validity,
+ );
+```
 
 **Parameters:**
 

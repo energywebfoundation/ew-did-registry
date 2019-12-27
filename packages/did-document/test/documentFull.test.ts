@@ -39,7 +39,7 @@ describe.skip('add function', () => {
 
   it('deactivate should return true', async () => {
     const document = await new DIDDocumentFull(did, operator);
-    document.create();
+    await document.create();
     const deactivated = await document.deactivate();
     expect(deactivated).to.be.true;
   });
