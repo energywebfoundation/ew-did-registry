@@ -39,7 +39,7 @@
 
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
-Defined in did-document/src/full/documentFull.ts:7
+Defined in did-document/src/full/documentFull.ts:9
 
 **Parameters:**
 
@@ -60,7 +60,9 @@ Name | Type |
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[did](diddocumentlite.md#did)*
 
-Defined in did-document/src/lite/documentLite.ts:5
+Defined in did-document/src/lite/index.ts:13
+
+DID of concern
 
 ___
 
@@ -72,7 +74,9 @@ ___
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[didDocument](diddocumentlite.md#diddocument)*
 
-Defined in did-document/src/lite/documentLite.ts:7
+Defined in did-document/src/lite/index.ts:18
+
+Fetched DID Document
 
 ## Methods
 
@@ -82,7 +86,7 @@ Defined in did-document/src/lite/documentLite.ts:7
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:27
+Defined in did-document/src/full/documentFull.ts:29
 
 Creates new empty DID document
 
@@ -110,7 +114,7 @@ ___
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:45
+Defined in did-document/src/full/documentFull.ts:47
 
 Deactivates DID document
 
@@ -130,22 +134,38 @@ ___
 
 ###  read
 
-▸ **read**(`attribute`: string, `type?`: string): *string | object*
+▸ **read**(`attribute`: string, `type`: string): *Promise‹any›*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[read](diddocumentlite.md#read)*
 
-Defined in did-document/src/lite/documentLite.ts:16
+Defined in did-document/src/lite/index.ts:50
+
+Method returns the attribute of interest. An optional type parameter can be provided for
+attributes, which are objects
+
+**`example`** 
+```typescript
+import { Resolver } from '@ew-did-registry/did-resolver';
+import { DIDDocumentFactory } from '@ew-did-registry/did-document';
+
+const sampleDid = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
+const resolver = new Resolver();
+const didLiteDocument = DIDDocumentFactory.createLite(sampleDid, resolver);
+const id = didDocumentLite.read('id');
+
+console.log(`DID of the fetched document is ${id}`);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`attribute` | string |
-`type?` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`attribute` | string | - |
+`type` | string |   |
 
-**Returns:** *string | object*
+**Returns:** *Promise‹any›*
 
 ___
 
@@ -153,7 +173,7 @@ ___
 
 ▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:77
+Defined in did-document/src/full/documentFull.ts:79
 
 Updates attribute on the DID document
 

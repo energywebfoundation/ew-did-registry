@@ -1,4 +1,6 @@
-import { DIDAttribute, IOperator, IUpdateData } from '@ew-did-registry/did-resolver';
+import {
+  DIDAttribute, IOperator, IUpdateData,
+} from '@ew-did-registry/did-resolver';
 import { BigNumber } from 'ethers/utils';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import {
-  Algorithms, DIDAttribute, Encoding, IPublicKey, Operator, PubKeyType,
+  Algorithms, DIDAttribute, Encoding, Operator, PubKeyType,
 } from '@ew-did-registry/did-resolver';
 import DIDDocumentFull from '../src/full/documentFull';
 import { Keys } from '../../keys/dist';
@@ -43,30 +43,5 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     await document.create();
     const deactivated = await document.deactivate();
     expect(deactivated).to.be.true;
-  });
-
-  xit('test scenario: update public key, read document, deactivate document', async () => {
-    const document = new DIDDocumentFull(did, operator);
-    await document.create();
-    const validity = 5 * 60 * 1000;
-    await document.update(
-      DIDAttribute.PublicKey,
-      {
-        type: PubKeyType.VerificationKey2018,
-        algo: Algorithms.ED25519,
-        encoding: Encoding.HEX,
-        value: new Keys().publicKey,
-      },
-      validity,
-    );
-    let publicKey = await document.read(
-      'publicKey', 'Secp256k1VerificationKey2018',
-    ) as IPublicKey;
-    expect(publicKey.id).equal(`${did}#owner`);
-    await document.deactivate();
-    publicKey = await document.read(
-      'publicKey', 'Secp256k1VerificationKey2018',
-    ) as IPublicKey;
-    expect(publicKey.id).to.be.undefined;
   });
 });
