@@ -27,7 +27,7 @@
 
 \+ **new DIDDocumentFactory**(`did`: string): *[DIDDocumentFactory](diddocumentfactory.md)*
 
-Defined in did-document/src/factory/did-document-factory.ts:7
+Defined in did-document/src/factory/did-document-factory.ts:10
 
 **Parameters:**
 
@@ -45,14 +45,24 @@ Name | Type |
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-Defined in did-document/src/factory/did-document-factory.ts:13
+Defined in did-document/src/factory/did-document-factory.ts:31
+
+Creates an instance of DIDDocumentFull
+
+**`example`** 
+```typescript
+import { DIDDocumentFactory, DIDDocumentFull } from '@ew-did-registry/did-document';
+
+const factory = new DIDDocumentFactory(did);
+const DIDDocumentFull = factory.createFull(operator);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`operator` | IOperator |
-`did?` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`operator` | IOperator | - |
+`did?` | string |   |
 
 **Returns:** *[IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
@@ -64,13 +74,23 @@ ___
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-Defined in did-document/src/factory/did-document-factory.ts:17
+Defined in did-document/src/factory/did-document-factory.ts:50
+
+Creates an instance of DIDDocumentFull
+
+**`example`** 
+```typescript
+import { DIDDocumentFactory, DIDDocumentLite } from '@ew-did-registry/did-document';
+
+const factory = new DIDDocumentFactory(did);
+const DIDDocumentFull = factory.createLite(resolver);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`resolver` | IResolver |
-`did?` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`resolver` | IResolver | - |
+`did?` | string |   |
 
 **Returns:** *[IDIDDocumentLite](../interfaces/ididdocumentlite.md)*
