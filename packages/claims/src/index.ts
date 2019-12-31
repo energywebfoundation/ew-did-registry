@@ -1,5 +1,5 @@
 import { IKeys } from '@ew-did-registry/keys';
-import { IDidDocument } from '@ew-did-registry/did-resolver';
+import { IDIDDocument } from '@ew-did-registry/did-resolver';
 import { JWT } from '@ew-did-registry/jwt';
 import { IClaims } from './interface';
 import { IPrivateClaim, PrivateClaim } from './private';
@@ -11,7 +11,7 @@ class Claims implements IClaims {
   /**
    * Did document describing the subject for which this factory creates the claims
    */
-  private _didDocument: IDidDocument;
+  private _didDocument: IDIDDocument;
 
   /**
    * Subject keypair
@@ -141,7 +141,7 @@ class Claims implements IClaims {
       Promise<IVerificationClaim | IPrivateClaim | IProofClaim> {
     const jwt = new JWT(this._keyPair);
     // @ts-ignore
-    const { claimData, hashedFields, didIssuer } = await jwt.verify(token, this._keyPair.publicKey);
+    const { claimData, hashedFields, didIssuer } = await jwt.decode(token);
     switch (type) {
       case ClaimType.Public:
         return this.createPublicClaim(claimData);

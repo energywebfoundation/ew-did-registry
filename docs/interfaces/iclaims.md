@@ -27,7 +27,7 @@ IClaims interface is a factory to create Public, Private, and Proof Claims
 
 ▸ **createPrivateClaim**(`data`: [IClaimData](iclaimdata.md), `didIssuer`: string): *Promise‹[IPrivateClaim](iprivateclaim.md)›*
 
-*Defined in [claims/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/interface.ts#L30)*
+Defined in claims/src/interface.ts:30
 
 Create Private Claim by providing claim data and Issuer's DID
 
@@ -46,7 +46,7 @@ ___
 
 ▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: number[]): *Promise‹[IProofClaim](iproofclaim.md)›*
 
-*Defined in [claims/src/interface.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/interface.ts#L38)*
+Defined in claims/src/interface.ts:38
 
 Create Proof Claim with claim data and hashed claim fields
 
@@ -65,7 +65,7 @@ ___
 
 ▸ **createPublicClaim**(`data`: [IClaimData](iclaimdata.md)): *Promise‹[IVerificationClaim](iverificationclaim.md)›*
 
-*Defined in [claims/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/interface.ts#L22)*
+Defined in claims/src/interface.ts:22
 
 Create Public Claim with claim data
 
@@ -83,7 +83,7 @@ ___
 
 ▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *Promise‹[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)›*
 
-*Defined in [claims/src/interface.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/interface.ts#L46)*
+Defined in claims/src/interface.ts:46
 
 Provided with JWT this method will generate a Claim
 

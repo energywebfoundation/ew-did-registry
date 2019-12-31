@@ -75,7 +75,7 @@
 
 • **ec**: *ec‹›* =  new EC('secp256k1')
 
-*Defined in [keys/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/index.ts#L10)*
+Defined in keys/src/index.ts:10
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 • **keyEncoder**: *KeyEncoder‹›* =  new KeyEncoder('secp256k1')
 
-*Defined in [jwt/src/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/jwt/src/index.ts#L7)*
+Defined in jwt/src/index.ts:7
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **keyPairAlice**: *IKeys*
 
-*Defined in [jwt/test/jwt.test.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/jwt/test/jwt.test.ts#L8)*
+Defined in jwt/test/jwt.test.ts:8
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 • **payload**: *object*
 
-*Defined in [jwt/test/jwt.test.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/jwt/test/jwt.test.ts#L6)*
+Defined in jwt/test/jwt.test.ts:6
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 • **token**: *string*
 
-*Defined in [jwt/test/jwt.test.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/jwt/test/jwt.test.ts#L7)*
+Defined in jwt/test/jwt.test.ts:7
 
 ## Functions
 
@@ -115,7 +115,7 @@ ___
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/did/src/index.ts#L3)*
+Defined in did/src/index.ts:3
 
 **Parameters:**
 
@@ -128,7 +128,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-document/src/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/did-document/src/index.ts#L3)*
+Defined in did-registry/src/index.ts:1
 
 **Parameters:**
 
@@ -141,7 +141,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-registry/src/index.ts:1](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/did-registry/src/index.ts#L1)*
+Defined in did-document/src/index.ts:3
 
 **Parameters:**
 
@@ -154,7 +154,7 @@ Name | Type |
 
 ▸ **add**(`left`: number, `right`: number): *number*
 
-*Defined in [did-resolver/src/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/did-resolver/src/index.ts#L4)*
+Defined in did-resolver/src/index.ts:4
 
 **Parameters:**
 
@@ -171,7 +171,7 @@ ___
 
 ▸ **sha256**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/functions/index.ts#L16)*
+Defined in keys/src/functions/index.ts:16
 
 **Parameters:**
 
@@ -187,11 +187,11 @@ Name | Type |
 
 ### ▪ **ECDSA_PATTERNS**: *object*
 
-*Defined in [keys/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/models/index.ts#L6)*
+Defined in keys/src/models/index.ts:6
 
 ▪ **secp256k1**: *object*
 
-*Defined in [keys/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/models/index.ts#L7)*
+Defined in keys/src/models/index.ts:7
 
 * **PRIVATE_KEY**: *RegExp‹›* =  /^[a-f0-9]{64}$/
 
@@ -205,13 +205,13 @@ ___
 
 ### ▪ **hex**: *object*
 
-*Defined in [keys/src/functions/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/functions/index.ts#L3)*
+Defined in keys/src/functions/index.ts:3
 
 ###  encode
 
 ▸ **encode**(`data`: string): *string*
 
-*Defined in [keys/src/functions/index.ts:4](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/keys/src/functions/index.ts#L4)*
+Defined in keys/src/functions/index.ts:4
 
 **Parameters:**
 

@@ -29,7 +29,7 @@
 
 \+ **new Claims**(`keyPair`: IKeys): *[Claims](claims.md)*
 
-*Defined in [claims/src/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/index.ts#L13)*
+Defined in claims/src/index.ts:19
 
 **Parameters:**
 
@@ -47,14 +47,30 @@ Name | Type |
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-*Defined in [claims/src/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/index.ts#L30)*
+Defined in claims/src/index.ts:80
+
+Creates claim which will be sent in encoded form to the didIssuer
+
+**`example`** 
+```typescript
+import { Claims } from '@ew-did-registry/claims';
+import { Networks } from '@ew-did-registry/did';
+
+const claims = new Claims(keys);
+const claimData = {
+    did: 'did:Networks.Ethereum:my_id',
+    data: 'secret data'
+};
+const didIssuer = 'did:Networks.Ethereum:issuer_id';
+const claim = await claims.createPrivateClaim(claimData, didIssuer);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) |
-`didIssuer` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`claimData` | [IClaimData](../interfaces/iclaimdata.md) | - |
+`didIssuer` | string |   |
 
 **Returns:** *Promise‹[IPrivateClaim](../interfaces/iprivateclaim.md)›*
 
@@ -66,14 +82,30 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-*Defined in [claims/src/index.ts:41](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/index.ts#L41)*
+Defined in claims/src/index.ts:112
+
+Creates claim with verifiable data in hashedFields
+
+**`example`** 
+```typescript
+import { Claims } from '@ew-did-registry/claims';
+import { Networks } from '@ew-did-registry/did';
+
+const claims = new Claims(keys);
+const claimData = {
+    did: 'did:Networks.Ethereum:my_id',
+    data: 'secret data'
+};
+const hashedFields = [123, 456];
+const claim = await claims.createProofClaim(claimData, hashedFields);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) |
-`hashedFields` | number[] |
+Name | Type | Description |
+------ | ------ | ------ |
+`claimData` | [IClaimData](../interfaces/iclaimdata.md) | - |
+`hashedFields` | number[] |   |
 
 **Returns:** *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
 
@@ -85,13 +117,28 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-*Defined in [claims/src/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/index.ts#L20)*
+Defined in claims/src/index.ts:49
+
+Creates verifiable claim with data about subject provided in claimData
+
+**`example`** 
+```typescript
+import { Claims } from '@ew-did-registry/claims';
+import { Networks } from '@ew-did-registry/did';
+
+const claims = new Claims(keys);
+const claimData = {
+    did: 'did:Networks.Ethereum:my_id',
+    data: 'data'
+};
+const claim = await claims.createPublicClaim(claimData);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`claimData` | [IClaimData](../interfaces/iclaimdata.md) |   |
 
 **Returns:** *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md)›*
 
@@ -103,13 +150,26 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-*Defined in [claims/src/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/index.ts#L52)*
+Defined in claims/src/index.ts:140
+
+Creates claim of the specified type from the serialized claim
+
+**`example`** 
+```typescript
+import { Claims, ClaimType } from '@ew-did-registry/claims';
+
+const keys = new Keys();
+const claims = new Claims(keys);
+const claim = claims.generateClaimFromToken(
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`token` | string |
-`type` | [ClaimType](../enums/claimtype.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`token` | string | - |
+`type` | [ClaimType](../enums/claimtype.md) |   |
 
 **Returns:** *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md) | [IPrivateClaim](../interfaces/iprivateclaim.md) | [IProofClaim](../interfaces/iproofclaim.md)›*
+
+Promise<IVerificationClaim | IPrivateClaim | IProofClaim>

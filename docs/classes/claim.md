@@ -37,7 +37,7 @@
 
 \+ **new Claim**(`data`: [IClaimBuildData](../interfaces/iclaimbuilddata.md)): *[Claim](claim.md)*
 
-*Defined in [claims/src/public/claim.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L13)*
+Defined in claims/src/public/claim.ts:13
 
 **Parameters:**
 
@@ -55,7 +55,7 @@ Name | Type |
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[claimData](../interfaces/iclaim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L7)*
+Defined in claims/src/public/claim.ts:7
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[jwt](../interfaces/iclaim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L9)*
+Defined in claims/src/public/claim.ts:9
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[keyPair](../interfaces/iclaim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L11)*
+Defined in claims/src/public/claim.ts:11
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[token](../interfaces/iclaim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L13)*
+Defined in claims/src/public/claim.ts:13
 
 ## Methods
 
@@ -95,6 +95,6 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md)*
 
-*Defined in [claims/src/public/claim.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L22)*
+Defined in claims/src/public/claim.ts:22
 
 **Returns:** *string*

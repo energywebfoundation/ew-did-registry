@@ -42,7 +42,7 @@
 
 *Overrides [Claim](claim.md).[constructor](claim.md#constructor)*
 
-*Defined in [claims/src/private/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/private/index.ts#L7)*
+Defined in claims/src/private/index.ts:7
 
 **Parameters:**
 
@@ -62,7 +62,7 @@ Name | Type |
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L7)*
+Defined in claims/src/public/claim.ts:7
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L9)*
+Defined in claims/src/public/claim.ts:9
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L11)*
+Defined in claims/src/public/claim.ts:11
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L13)*
+Defined in claims/src/public/claim.ts:13
 
 ## Methods
 
@@ -110,7 +110,7 @@ ___
 
 *Inherited from [VerificationClaim](verificationclaim.md).[approve](verificationclaim.md#approve)*
 
-*Defined in [claims/src/public/verificationClaim.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/verificationClaim.ts#L7)*
+Defined in claims/src/public/verificationClaim.ts:7
 
 **Returns:** *string*
 
@@ -124,7 +124,7 @@ ___
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-*Defined in [claims/src/public/claim.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/claim.ts#L22)*
+Defined in claims/src/public/claim.ts:22
 
 **Returns:** *string*
 
@@ -138,7 +138,7 @@ ___
 
 *Inherited from [VerificationClaim](verificationclaim.md).[verify](verificationclaim.md#verify)*
 
-*Defined in [claims/src/public/verificationClaim.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/public/verificationClaim.ts#L11)*
+Defined in claims/src/public/verificationClaim.ts:11
 
 **Returns:** *boolean*
 
@@ -150,7 +150,7 @@ ___
 
 *Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
 
-*Defined in [claims/src/private/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/c7209ba/packages/claims/src/private/index.ts#L19)*
+Defined in claims/src/private/index.ts:19
 
 **Parameters:**
 
