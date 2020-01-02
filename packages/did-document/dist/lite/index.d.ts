@@ -1,4 +1,4 @@
-import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver';
 import { IDIDDocumentLite } from './interface';
 declare class DIDDocumentLite implements IDIDDocumentLite {
     /**
@@ -18,7 +18,7 @@ declare class DIDDocumentLite implements IDIDDocumentLite {
      * @param {string} did
      * @param {Resolver} resolver
      */
-    constructor(did: string, resolver: Resolver);
+    constructor(did: string, resolver: IResolver);
     /**
      * Method returns the attribute of interest. An optional type parameter can be provided for
      * attributes, which are objects

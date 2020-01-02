@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
+[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
 
 # Class: JWT
 
@@ -28,7 +28,7 @@
 
 \+ **new JWT**(`keys`: IKeys): *[JWT](jwt.md)*
 
-Defined in jwt/src/index.ts:10
+*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/jwt/src/index.ts#L10)*
 
 Key pair has to be passed on construction to JWT
 
@@ -48,7 +48,7 @@ Name | Type | Description |
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-Defined in jwt/src/index.ts:128
+*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/jwt/src/index.ts#L131)*
 
 Return decoded JWT payload without verifying signature
 
@@ -85,11 +85,9 @@ ___
 
 ###  sign
 
-▸ **sign**(`payload`: object, `options?`: object): *Promise‹string›*
+▸ **sign**(`payload`: string | object, `options?`: object): *Promise‹string›*
 
-*Implementation of [IJWT](../interfaces/ijwt.md)*
-
-Defined in jwt/src/index.ts:45
+*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/jwt/src/index.ts#L45)*
 
 Sign payload and return JWT
 
@@ -115,7 +113,7 @@ try {
 
 Name | Type |
 ------ | ------ |
-`payload` | object |
+`payload` | string &#124; object |
 `options?` | object |
 
 **Returns:** *Promise‹string›*
@@ -128,7 +126,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-Defined in jwt/src/index.ts:90
+*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/jwt/src/index.ts#L93)*
 
 If the signature is correct, method returns decoded JWT payload
 
