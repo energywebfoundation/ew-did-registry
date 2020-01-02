@@ -8,6 +8,10 @@ This interface is a factory of Lite and Full DID Documents
 
 * **IDIDDocumentFactory**
 
+## Implemented by
+
+* [DIDDocumentFactory](../classes/diddocumentfactory.md)
+
 ## Index
 
 ### Methods
@@ -19,7 +23,7 @@ This interface is a factory of Lite and Full DID Documents
 
 ###  createFull
 
-▸ **createFull**(`did`: string, `operator`: IOperator): *[IDIDDocumentFull](ididdocumentfull.md)*
+▸ **createFull**(`operator`: IOperator, `did?`: string): *[IDIDDocumentFull](ididdocumentfull.md)*
 
 Defined in did-document/src/interface.ts:32
 
@@ -29,8 +33,8 @@ Provided with the DID and Resolver, full version of DID Document is returned
 
 Name | Type |
 ------ | ------ |
-`did` | string |
 `operator` | IOperator |
+`did?` | string |
 
 **Returns:** *[IDIDDocumentFull](ididdocumentfull.md)*
 
@@ -38,7 +42,7 @@ ___
 
 ###  createLite
 
-▸ **createLite**(`did`: string, `resolver`: IResolver): *[IDIDDocumentLite](ididdocumentlite.md)*
+▸ **createLite**(`resolver`: IResolver, `did?`: string): *[IDIDDocumentLite](ididdocumentlite.md)*
 
 Defined in did-document/src/interface.ts:24
 
@@ -48,7 +52,7 @@ Provided with the DID and Resolver, lite version of DID Document is returned
 
 Name | Type |
 ------ | ------ |
-`did` | string |
 `resolver` | IResolver |
+`did?` | string |
 
 **Returns:** *[IDIDDocumentLite](ididdocumentlite.md)*

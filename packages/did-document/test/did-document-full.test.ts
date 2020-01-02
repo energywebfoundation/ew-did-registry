@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import {
   Algorithms, DIDAttribute, Encoding, Operator, PubKeyType,
 } from '@ew-did-registry/did-resolver';
+import { Keys } from '@ew-did-registry/keys';
 import DIDDocumentFull from '../src/full/documentFull';
-import { Keys } from '../../keys/dist';
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
