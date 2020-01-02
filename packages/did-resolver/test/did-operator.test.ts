@@ -10,11 +10,11 @@ const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys({
-    privateKey: '9a843e79a455a368c3031ffc3974e04e04f0553f2464b89074f901dea713c357',
-    publicKey: '0361652cea564db2c9ef4d5859705376cbe5628e47490022a3b4535764d3f08efe',
+    privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
+    publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
   const operator = new Operator(keys);
-  const identity = '0x0126B7A16967114f3E261c36E9D99629D73caAeA';
+  const identity = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
   const validity = 10 * 60 * 1000;
   const did = `did:ewc:${identity}`;
 
