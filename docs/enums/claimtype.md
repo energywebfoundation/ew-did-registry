@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [ClaimType](claimtype.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ClaimType](claimtype.md)
 
 # Enumeration: ClaimType
 
@@ -18,7 +18,7 @@ This enumerated type specifies available Claim Types
 
 • **Private**:
 
-*Defined in [claims/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/claims/src/models/index.ts#L10)*
+*Defined in [claims/src/models/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L10)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 • **Proof**:
 
-*Defined in [claims/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/claims/src/models/index.ts#L11)*
+*Defined in [claims/src/models/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L11)*
 
 ___
 
@@ -34,4 +34,4 @@ ___
 
 • **Public**:
 
-*Defined in [claims/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/claims/src/models/index.ts#L9)*
+*Defined in [claims/src/models/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L9)*

@@ -1,4 +1,4 @@
-[@ew-did-registry/did](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IAuthentication](iauthentication.md)
 
 # Interface: IAuthentication
 
@@ -21,7 +21,7 @@
 
 • **block**? : *number*
 
-*Defined in [did-resolver/src/models/resolver.ts:74](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/did-resolver/src/models/resolver.ts#L74)*
+*Defined in [did-resolver/src/models/resolver.ts:74](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/resolver.ts#L74)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:72](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/did-resolver/src/models/resolver.ts#L72)*
+*Defined in [did-resolver/src/models/resolver.ts:72](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/resolver.ts#L72)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:71](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/did-resolver/src/models/resolver.ts#L71)*
+*Defined in [did-resolver/src/models/resolver.ts:71](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/resolver.ts#L71)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-*Defined in [did-resolver/src/models/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/4dc2947/packages/did-resolver/src/models/resolver.ts#L73)*
+*Defined in [did-resolver/src/models/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/resolver.ts#L73)*
