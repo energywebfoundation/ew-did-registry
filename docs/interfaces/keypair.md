@@ -19,7 +19,7 @@
 
 • **privateKey**? : *string*
 
-*Defined in [keys/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/keys/src/models/index.ts#L2)*
+*Defined in [keys/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/keys/src/models/index.ts#L2)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **publicKey**? : *string*
 
-*Defined in [keys/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/keys/src/models/index.ts#L3)*
+*Defined in [keys/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/keys/src/models/index.ts#L3)*

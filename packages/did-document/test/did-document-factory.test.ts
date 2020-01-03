@@ -9,8 +9,7 @@ import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';
 
-describe('[DID DOCUMENT FACTORY]', function () {
-  this.timeout(0);
+describe('[DID DOCUMENT FACTORY]', () => {
   const keys = new Keys();
   const { address } = new ethers.Wallet(keys.privateKey);
   const did = `did:ewc:${address}`;

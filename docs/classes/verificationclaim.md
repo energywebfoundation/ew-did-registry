@@ -30,6 +30,7 @@
 ### Methods
 
 * [approve](verificationclaim.md#approve)
+* [createJWT](verificationclaim.md#createjwt)
 * [getDid](verificationclaim.md#getdid)
 * [verify](verificationclaim.md#verify)
 
@@ -41,7 +42,7 @@
 
 *Inherited from [Claim](claim.md).[constructor](claim.md#constructor)*
 
-*Defined in [claims/src/public/claim.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L38)*
+*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L36)*
 
 Constructor
 
@@ -65,7 +66,7 @@ Name | Type |
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L33)*
+*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L31)*
 
 claimData stores the claim fields
 
@@ -77,7 +78,7 @@ ___
 
 *Inherited from [Claim](claim.md).[didDocument](claim.md#diddocument)*
 
-*Defined in [claims/src/public/claim.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L18)*
+*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L16)*
 
 didDocument is used to store fetched DID Document
 
@@ -91,7 +92,7 @@ ___
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L23)*
+*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L21)*
 
 jwt stores the JWT to manage web tokens
 
@@ -105,7 +106,7 @@ ___
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L38)*
+*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L36)*
 
 keyPair represents the implementation of key management interface
 
@@ -119,7 +120,7 @@ ___
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L28)*
+*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L26)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -131,9 +132,21 @@ claimToken stores the actual serialised JWT in a string format
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-*Defined in [claims/src/public/verificationClaim.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/verificationClaim.ts#L15)*
+*Defined in [claims/src/public/verificationClaim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/verificationClaim.ts#L16)*
 
 **Returns:** *Promise‹string›*
+
+___
+
+###  createJWT
+
+▸ **createJWT**(): *Promise‹void›*
+
+*Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
+
+*Defined in [claims/src/public/claim.ts:80](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L80)*
+
+**Returns:** *Promise‹void›*
 
 ___
 
@@ -145,7 +158,7 @@ ___
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-*Defined in [claims/src/public/claim.ts:62](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/claim.ts#L62)*
+*Defined in [claims/src/public/claim.ts:69](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L69)*
 
 **Returns:** *Promise‹boolean›*
 
@@ -153,10 +166,10 @@ ___
 
 ###  verify
 
-▸ **verify**(): *boolean*
+▸ **verify**(): *Promise‹boolean›*
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-*Defined in [claims/src/public/verificationClaim.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/public/verificationClaim.ts#L5)*
+*Defined in [claims/src/public/verificationClaim.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/verificationClaim.ts#L5)*
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*

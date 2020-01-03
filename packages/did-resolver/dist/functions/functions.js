@@ -242,9 +242,9 @@ exports.wrapDidDocument = function (did, document, context) {
     var publicKey = [
         {
             id: did + "#owner",
-            type: 'Secp256k1VerificationKey2018',
+            type: 'Secp256k1VerificationKey',
             controller: did,
-            ethereumAddress: did,
+            ethereumAddress: document.owner,
         },
     ];
     var authentication = [
