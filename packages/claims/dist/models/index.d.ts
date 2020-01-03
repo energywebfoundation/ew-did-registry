@@ -67,7 +67,7 @@ export interface IVerificationClaim extends IClaim {
      * verify check if the given Claim was signed correctly
      * @returns {boolean}
      */
-    verify(): boolean;
+    verify(): Promise<boolean>;
     /**
      * Method signs the claim and return the serialised JWT
      * @returns {string}

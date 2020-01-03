@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/implementations/operator.ts#L40)*
+*Defined in [did-resolver/src/implementations/operator.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/implementations/operator.ts#L40)*
 
 **Parameters:**
 
@@ -52,18 +52,20 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/implementations/operator.ts#L66)*
+*Defined in [did-resolver/src/implementations/operator.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/implementations/operator.ts#L68)*
 
 Empty for this implementation
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`did` | string | - |
-`context` | string |   |
+Name | Type |
+------ | ------ |
+`did` | string |
+`context` | string |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>
 
 ___
 
@@ -73,7 +75,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/implementations/operator.ts#L130)*
+*Defined in [did-resolver/src/implementations/operator.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/implementations/operator.ts#L132)*
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -89,11 +91,13 @@ const updated = await operator.deactivate(did);
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`did` | string |   |
+Name | Type |
+------ | ------ |
+`did` | string |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>
 
 ___
 
@@ -105,7 +109,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/implementations/resolver.ts#L42)*
+*Defined in [did-resolver/src/implementations/resolver.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/implementations/resolver.ts#L43)*
 
 Resolve DID Document for a given did
 
@@ -121,7 +125,7 @@ const didDocument = await resolver.read(did);
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`did` | string | entity identifier, which is associated with DID Document  |
+`did` | string | entity identifier, which is associated with DID Document |
 
 **Returns:** *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
 
@@ -133,7 +137,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/implementations/operator.ts#L102)*
+*Defined in [did-resolver/src/implementations/operator.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/implementations/operator.ts#L103)*
 
 Sets attribute value in DID document identified by the did
 
@@ -164,7 +168,7 @@ Name | Type | Default | Description |
 `did` | string | - | did associated with DID document |
 `didAttribute` | [DIDAttribute](../enums/didattribute.md) | - | specifies updated section in DID document. Must be 31 bytes or shorter |
 `updateData` | [IUpdateData](../interfaces/iupdatedata.md) | - | - |
-`validity` | number &#124; BigNumber |  ethers.constants.MaxUint256 | time in milliseconds during which                              attribute will be valid  |
+`validity` | number &#124; BigNumber |  ethers.constants.MaxUint256 | time in milliseconds during which                              attribute will be valid |
 
 **Returns:** *Promise‹boolean›*
 

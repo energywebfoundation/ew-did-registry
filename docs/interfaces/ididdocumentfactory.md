@@ -25,7 +25,7 @@ This interface is a factory of Lite and Full DID Documents
 
 ▸ **createFull**(`operator`: IOperator, `did?`: string): *[IDIDDocumentFull](ididdocumentfull.md)*
 
-*Defined in [did-document/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-document/src/interface.ts#L32)*
+*Defined in [did-document/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-document/src/interface.ts#L32)*
 
 Provided with the DID and Resolver, full version of DID Document is returned
 
@@ -44,7 +44,7 @@ ___
 
 ▸ **createLite**(`resolver`: IResolver, `did?`: string): *[IDIDDocumentLite](ididdocumentlite.md)*
 
-*Defined in [did-document/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-document/src/interface.ts#L24)*
+*Defined in [did-document/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-document/src/interface.ts#L24)*
 
 Provided with the DID and Resolver, lite version of DID Document is returned
 

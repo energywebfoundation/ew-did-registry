@@ -23,7 +23,7 @@ Specifies current Provider
 
 • **network**? : *Networkish*
 
-*Defined in [did-resolver/src/models/resolver.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/resolver.ts#L20)*
+*Defined in [did-resolver/src/models/resolver.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/resolver.ts#L20)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **path**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/resolver.ts#L19)*
+*Defined in [did-resolver/src/models/resolver.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/resolver.ts#L19)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/resolver.ts#L17)*
+*Defined in [did-resolver/src/models/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/resolver.ts#L17)*
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 • **uriOrInfo**? : *string | ConnectionInfo*
 
-*Defined in [did-resolver/src/models/resolver.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/resolver.ts#L18)*
+*Defined in [did-resolver/src/models/resolver.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/resolver.ts#L18)*

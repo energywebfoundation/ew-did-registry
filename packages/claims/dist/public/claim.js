@@ -47,20 +47,27 @@ var Claim = /** @class */ (function () {
      * @param {IResolverSettings} settings
      */
     function Claim(data) {
-        var _this = this;
         var resolver = new did_resolver_1.Resolver(data.resolverSettings);
-        var documentFactory = new did_document_1.DIDDocumentFactory(data.claimData.did);
-        this.didDocumentLite = documentFactory.createLite(resolver);
         this.keyPair = data.keyPair;
         this.jwt = new jwt_1.JWT(data.keyPair);
-        this.claimData = data.claimData;
         if (data.token === undefined) {
-            this._createJWT(this.jwt, data.claimData).then(function (token) {
-                _this.token = token;
-            });
+            var documentFactory = new did_document_1.DIDDocumentFactory(data.claimData.did);
+            this.didDocumentLite = documentFactory.createLite(resolver);
+            this.claimData = data.claimData;
         }
         else {
             this.token = data.token;
+            var decodedPayload = this.jwt.decode(this.token);
+            if (Object.prototype.hasOwnProperty.call(decodedPayload, 'did')) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                var decodedDid = decodedPayload.did;
+                var documentFactory = new did_document_1.DIDDocumentFactory(decodedDid);
+                this.didDocumentLite = documentFactory.createLite(resolver);
+                this.claimData = {
+                    did: decodedDid,
+                };
+            }
         }
     }
     Claim.prototype.getDid = function () {
@@ -84,15 +91,16 @@ var Claim = /** @class */ (function () {
             });
         });
     };
-    Claim.prototype._createJWT = function (jwt, claimData) {
+    Claim.prototype.createJWT = function () {
         return __awaiter(this, void 0, void 0, function () {
             var token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, jwt.sign(claimData)];
+                    case 0: return [4 /*yield*/, this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true })];
                     case 1:
                         token = _a.sent();
-                        return [2 /*return*/, token];
+                        this.token = token;
+                        return [2 /*return*/];
                 }
             });
         });

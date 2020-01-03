@@ -36,6 +36,6 @@ declare class Claim implements IClaim {
      */
     constructor(data: IClaimBuildData);
     getDid(): Promise<boolean>;
-    private _createJWT;
+    createJWT(): Promise<void>;
 }
 export default Claim;

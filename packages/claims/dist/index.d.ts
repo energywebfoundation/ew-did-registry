@@ -1,3 +1,3 @@
 import { IClaims } from './interface';
-import { Claim } from './public';
-export { IClaims, Claim, };
+import { Claim, VerificationClaim } from './public';
+export { IClaims, Claim, VerificationClaim, };
