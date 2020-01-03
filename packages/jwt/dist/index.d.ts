@@ -32,7 +32,9 @@ declare class JWT implements IJWT {
      * @param {object} options
      * @returns {Promise<string>}
      */
-    sign(payload: object, options?: object): Promise<string>;
+    sign(payload: string | {
+        [key: string]: string | object;
+    }, options?: object): Promise<string>;
     /**
      * If the signature is correct, method returns decoded JWT payload
      *

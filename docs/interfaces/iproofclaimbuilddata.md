@@ -19,6 +19,7 @@ interface and is required to construct Proof Claims
 * [hashedFields](iproofclaimbuilddata.md#optional-hashedfields)
 * [jwt](iproofclaimbuilddata.md#jwt)
 * [keyPair](iproofclaimbuilddata.md#keypair)
+* [resolverSettings](iproofclaimbuilddata.md#optional-resolversettings)
 * [token](iproofclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -29,7 +30,7 @@ interface and is required to construct Proof Claims
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[claimData](iclaimbuilddata.md#optional-claimdata)*
 
-Defined in claims/src/models/index.ts:30
+*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L31)*
 
 ___
 
@@ -37,7 +38,7 @@ ___
 
 • **hashedFields**? : *number[]*
 
-Defined in claims/src/models/index.ts:98
+*Defined in [claims/src/models/index.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L100)*
 
 ___
 
@@ -47,7 +48,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[jwt](iclaimbuilddata.md#jwt)*
 
-Defined in claims/src/models/index.ts:27
+*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L28)*
 
 ___
 
@@ -57,7 +58,17 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[keyPair](iclaimbuilddata.md#keypair)*
 
-Defined in claims/src/models/index.ts:28
+*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L29)*
+
+___
+
+### `Optional` resolverSettings
+
+• **resolverSettings**? : *IResolverSettings*
+
+*Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolverSettings](iclaimbuilddata.md#optional-resolversettings)*
+
+*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L32)*
 
 ___
 
@@ -67,4 +78,4 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[token](iclaimbuilddata.md#optional-token)*
 
-Defined in claims/src/models/index.ts:29
+*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/claims/src/models/index.ts#L30)*

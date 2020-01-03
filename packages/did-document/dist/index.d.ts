@@ -1,2 +1,3 @@
 import { IDIDDocumentFactory } from './interface';
-export { IDIDDocumentFactory, };
+import { IDIDDocumentLite } from './lite';
+export { IDIDDocumentFactory, IDIDDocumentLite, };
