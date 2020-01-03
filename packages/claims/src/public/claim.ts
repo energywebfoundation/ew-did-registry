@@ -2,9 +2,7 @@ import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
-import {
-  IClaim, IClaimData, IClaimBuildData, IVerificationClaim,
-} from '../models';
+import { IClaim, IClaimData, IClaimBuildData } from '../models';
 
 class Claim implements IClaim {
     /**
@@ -15,7 +13,7 @@ class Claim implements IClaim {
     /**
      * didDocument is used to store fetched DID Document
      */
-    protected didDocument: IDIDDocument;
+    public didDocument: IDIDDocument;
 
     /**
      * jwt stores the JWT to manage web tokens
@@ -45,13 +43,27 @@ class Claim implements IClaim {
      */
     constructor(data: IClaimBuildData) {
       const resolver = new Resolver(data.resolverSettings);
-      this.didDocumentLite = DIDDocumentFactory.createLite(resolver);
       this.keyPair = data.keyPair;
       this.jwt = new JWT(data.keyPair);
-      this.claimData = data.claimData;
-      this._createJWT(this.jwt, data.claimData).then((token) => {
-        this.token = token;
-      });
+
+      if (data.token === undefined) {
+        const documentFactory = new DIDDocumentFactory(data.claimData.did);
+        this.didDocumentLite = documentFactory.createLite(resolver);
+        this.claimData = data.claimData;
+      } else {
+        this.token = data.token;
+        const decodedPayload = this.jwt.decode(this.token);
+        if (Object.prototype.hasOwnProperty.call(decodedPayload, 'did')) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          const decodedDid = decodedPayload.did;
+          const documentFactory = new DIDDocumentFactory(decodedDid);
+          this.didDocumentLite = documentFactory.createLite(resolver);
+          this.claimData = {
+            did: decodedDid,
+          };
+        }
+      }
     }
 
     async getDid(): Promise<boolean> {
@@ -60,13 +72,14 @@ class Claim implements IClaim {
         this.didDocument = this.didDocumentLite.didDocument;
         return true;
       } catch (error) {
+        console.log(error);
         return false;
       }
     }
 
-    private async _createJWT(jwt: IJWT, claimData: IClaimData) {
-      const token = await jwt.sign(claimData);
-      return token;
+    async createJWT() {
+      const token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
+      this.token = token;
     }
 }
 

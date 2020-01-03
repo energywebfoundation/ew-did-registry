@@ -16,7 +16,7 @@
 
 • **Authenticate**: = "auth"
 
-*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/operator.ts#L2)*
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/operator.ts#L2)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **PublicKey**: = "pub"
 
-*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/operator.ts#L2)*
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/operator.ts#L2)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **ServicePoint**: = "svc"
 
-*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/d86fc0d/packages/did-resolver/src/models/operator.ts#L2)*
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/models/operator.ts#L2)*
