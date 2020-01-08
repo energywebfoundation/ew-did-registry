@@ -13,6 +13,10 @@ and is used by Private and Public Claims
 
   ↳ [IPrivateClaim](iprivateclaim.md)
 
+## Implemented by
+
+* [VerificationClaim](../classes/verificationclaim.md)
+
 ## Index
 
 ### Properties
@@ -36,7 +40,7 @@ and is used by Private and Public Claims
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-Defined in claims/src/models/index.ts:54
+*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L56)*
 
 claimData stores the claim fields
 
@@ -48,7 +52,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
 
-Defined in claims/src/models/index.ts:46
+*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L48)*
 
 jwt stores the JWT to manage web tokens
 
@@ -60,7 +64,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
 
-Defined in claims/src/models/index.ts:58
+*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L60)*
 
 keyPair represents the implementation of key management interface
 
@@ -72,7 +76,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
 
-Defined in claims/src/models/index.ts:50
+*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L52)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -80,36 +84,36 @@ claimToken stores the actual serialised JWT in a string format
 
 ###  approve
 
-▸ **approve**(): *string*
+▸ **approve**(): *Promise‹string›*
 
-Defined in claims/src/models/index.ts:82
+*Defined in [claims/src/models/index.ts:84](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L84)*
 
 Method signs the claim and return the serialised JWT
 
-**Returns:** *string*
+**Returns:** *Promise‹string›*
 
 ___
 
 ###  getDid
 
-▸ **getDid**(): *string*
+▸ **getDid**(): *Promise‹boolean›*
 
 *Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
 
-Defined in claims/src/models/index.ts:64
+*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L66)*
 
 Method returns the DID document associated with a claim subject DID
 
-**Returns:** *string*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  verify
 
-▸ **verify**(): *boolean*
+▸ **verify**(): *Promise‹boolean›*
 
-Defined in claims/src/models/index.ts:76
+*Defined in [claims/src/models/index.ts:78](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L78)*
 
 verify check if the given Claim was signed correctly
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*

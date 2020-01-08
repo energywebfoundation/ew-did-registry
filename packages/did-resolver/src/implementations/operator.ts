@@ -59,8 +59,10 @@ export class Operator extends Resolver implements IOperator {
 
   /**
    * Empty for this implementation
+   *
    * @param did
    * @param context
+   * @returns Promise<boolean>
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(did: string, context: string): Promise<boolean> {
@@ -96,8 +98,7 @@ export class Operator extends Resolver implements IOperator {
    * @param { IUpdateData } updateData
    * @param { number } validity - time in milliseconds during which
    *                              attribute will be valid
-   *
-   * @return Promise<boolean>
+   * @returns Promise<boolean>
    */
   async update(
     did: string,
@@ -126,6 +127,7 @@ export class Operator extends Resolver implements IOperator {
    * ```
    *
    * @param { string } did
+   * @returns Promise<boolean>
    */
   async deactivate(did: string): Promise<boolean> {
     const document = await this.read(did);

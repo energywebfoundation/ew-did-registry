@@ -38,6 +38,7 @@ class Resolver implements IResolver {
    * ```
    *
    * @param {string} did - entity identifier, which is associated with DID Document
+   * @returns {Promise<IDIDDocument>}
    */
   async read(did: string): Promise<IDIDDocument> {
     return new Promise(
@@ -49,8 +50,9 @@ class Resolver implements IResolver {
         }
 
         if (this._fetchedDocument === undefined) {
+          const [, , blockchainAddress] = did.split(':');
           this._fetchedDocument = {
-            owner: undefined,
+            owner: blockchainAddress,
             lastChangedBlock: new BigNumber(0),
             authentication: {},
             publicKey: {},

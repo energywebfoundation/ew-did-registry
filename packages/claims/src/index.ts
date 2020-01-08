@@ -1,8 +1,8 @@
 import { IClaims } from './interface';
-
-const add = (left: number, right: number): number => left + right;
+import { Claim, VerificationClaim } from './public';
 
 export {
-  add,
   IClaims,
+  Claim,
+  VerificationClaim,
 };
