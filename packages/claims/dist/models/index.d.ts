@@ -1,5 +1,6 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from '@ew-did-registry/jwt';
+import { IResolverSettings } from '@ew-did-registry/did-resolver';
 /**
  * This enumerated type specifies available Claim Types
  */
@@ -25,6 +26,7 @@ export interface IClaimBuildData {
     keyPair: IKeys;
     token?: string;
     claimData?: IClaimData;
+    resolverSettings?: IResolverSettings;
 }
 /**
  * Claim interface is used by all Claim types
@@ -54,7 +56,7 @@ export interface IClaim {
      * Method returns the DID document associated with a claim subject DID
      * @returns {string}
      */
-    getDid(): string;
+    getDid(): Promise<boolean>;
 }
 /**
  * Verification Claim interface specifies methods to verify and approve claims
@@ -65,12 +67,12 @@ export interface IVerificationClaim extends IClaim {
      * verify check if the given Claim was signed correctly
      * @returns {boolean}
      */
-    verify(): boolean;
+    verify(): Promise<boolean>;
     /**
      * Method signs the claim and return the serialised JWT
      * @returns {string}
      */
-    approve(): string;
+    approve(): Promise<string>;
 }
 /**
  * Private Claim Build Data extends the general Claim Build Data

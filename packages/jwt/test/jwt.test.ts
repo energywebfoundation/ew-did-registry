@@ -14,7 +14,7 @@ before(async () => {
   payload = { claim: 'test' };
 
   try {
-    token = await jwtAlice.sign(payload, { algorithm: 'ES256', noTimestamp: true });
+    token = await jwtAlice.sign({ claim: 'test' }, { algorithm: 'ES256', noTimestamp: true });
   } catch (e) {
     console.log(e);
   }

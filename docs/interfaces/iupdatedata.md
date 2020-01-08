@@ -26,7 +26,7 @@ delegate field
 
 • **algo**: *[Algorithms](../enums/algorithms.md)*
 
-Defined in did-resolver/src/models/operator.ts:24
+*Defined in [did-resolver/src/models/operator.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L24)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **delegate**? : *string*
 
-Defined in did-resolver/src/models/operator.ts:27
+*Defined in [did-resolver/src/models/operator.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L27)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **encoding**: *[Encoding](../enums/encoding.md)*
 
-Defined in did-resolver/src/models/operator.ts:23
+*Defined in [did-resolver/src/models/operator.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L23)*
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **type**: *[PubKeyType](../enums/pubkeytype.md)*
 
-Defined in did-resolver/src/models/operator.ts:25
+*Defined in [did-resolver/src/models/operator.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L25)*
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/operator.ts:26
+*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L26)*

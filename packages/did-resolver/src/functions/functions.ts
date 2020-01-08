@@ -260,9 +260,9 @@ export const wrapDidDocument = (
   const publicKey: IPublicKey[] = [
     {
       id: `${did}#owner`,
-      type: 'Secp256k1VerificationKey2018',
+      type: 'Secp256k1VerificationKey',
       controller: did,
-      ethereumAddress: did,
+      ethereumAddress: document.owner,
     },
   ];
 

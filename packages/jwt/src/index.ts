@@ -42,7 +42,10 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns {Promise<string>}
    */
-  async sign(payload: object, options?: object): Promise<string> {
+  async sign(
+    payload: string | { [key: string]: string | object},
+    options?: object,
+  ): Promise<string> {
     return new Promise(
       (resolve, reject) => {
         const pemPrivateKey = keyEncoder.encodePrivate(this._keys.privateKey, 'raw', 'pem');
