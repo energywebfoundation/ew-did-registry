@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
 
 # Enumeration: Algorithms
 
@@ -16,7 +16,7 @@
 
 • **ECDSA**: = "ecdsa"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L14)*
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/models/operator.ts#L14)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **ED25519**: = "Ed25519"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L14)*
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/models/operator.ts#L14)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **RSA**: = "rsa"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/models/operator.ts#L14)*
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/models/operator.ts#L14)*

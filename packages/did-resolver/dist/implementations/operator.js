@@ -78,8 +78,10 @@ var Operator = /** @class */ (function (_super) {
     }
     /**
      * Empty for this implementation
+     *
      * @param did
      * @param context
+     * @returns Promise<boolean>
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Operator.prototype.create = function (did, context) {
@@ -118,8 +120,7 @@ var Operator = /** @class */ (function (_super) {
      * @param { IUpdateData } updateData
      * @param { number } validity - time in milliseconds during which
      *                              attribute will be valid
-     *
-     * @return Promise<boolean>
+     * @returns Promise<boolean>
      */
     Operator.prototype.update = function (did, didAttribute, updateData, validity) {
         if (validity === void 0) { validity = ethers_1.ethers.constants.MaxUint256; }
@@ -148,6 +149,7 @@ var Operator = /** @class */ (function (_super) {
      * ```
      *
      * @param { string } did
+     * @returns Promise<boolean>
      */
     Operator.prototype.deactivate = function (did) {
         return __awaiter(this, void 0, void 0, function () {

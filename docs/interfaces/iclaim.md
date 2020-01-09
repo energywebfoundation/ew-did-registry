@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
 
 # Interface: IClaim
 
@@ -15,6 +15,7 @@ Claim interface is used by all Claim types
 ## Implemented by
 
 * [Claim](../classes/claim.md)
+* [PrivateClaim](../classes/privateclaim.md)
 * [VerificationClaim](../classes/verificationclaim.md)
 
 ## Index
@@ -28,6 +29,7 @@ Claim interface is used by all Claim types
 
 ### Methods
 
+* [createJWT](iclaim.md#createjwt)
 * [getDid](iclaim.md#getdid)
 
 ## Properties
@@ -36,7 +38,7 @@ Claim interface is used by all Claim types
 
 • **claimData**: *[IClaimData](iclaimdata.md)*
 
-*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L56)*
+*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L56)*
 
 claimData stores the claim fields
 
@@ -46,7 +48,7 @@ ___
 
 • **jwt**: *IJWT*
 
-*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L48)*
+*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L48)*
 
 jwt stores the JWT to manage web tokens
 
@@ -56,7 +58,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L60)*
+*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L60)*
 
 keyPair represents the implementation of key management interface
 
@@ -66,17 +68,31 @@ ___
 
 • **token**: *string*
 
-*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L52)*
+*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L52)*
 
 claimToken stores the actual serialised JWT in a string format
 
 ## Methods
 
+###  createJWT
+
+▸ **createJWT**(): *void*
+
+*Defined in [claims/src/models/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L73)*
+
+Method creates token with the payload provided in the claim data
+The signed token is stored as a member of Claim class
+This is a void method
+
+**Returns:** *void*
+
+___
+
 ###  getDid
 
 ▸ **getDid**(): *Promise‹boolean›*
 
-*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L66)*
+*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L66)*
 
 Method returns the DID document associated with a claim subject DID
 

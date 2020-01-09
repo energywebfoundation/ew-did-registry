@@ -17,5 +17,5 @@ export interface IPrivateClaim extends IVerificationClaim {
      * @param {number[]} hashedFields
      * @returns {boolean}
      */
-    verifyPayload(hashedFields: number[]): boolean;
+    verifyPayload(hashedFields: { [key: string]: string }): boolean;
 }

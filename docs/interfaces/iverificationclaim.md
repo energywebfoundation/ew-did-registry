@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IVerificationClaim](iverificationclaim.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IVerificationClaim](iverificationclaim.md)
 
 # Interface: IVerificationClaim
 
@@ -15,6 +15,7 @@ and is used by Private and Public Claims
 
 ## Implemented by
 
+* [PrivateClaim](../classes/privateclaim.md)
 * [VerificationClaim](../classes/verificationclaim.md)
 
 ## Index
@@ -29,6 +30,7 @@ and is used by Private and Public Claims
 ### Methods
 
 * [approve](iverificationclaim.md#approve)
+* [createJWT](iverificationclaim.md#createjwt)
 * [getDid](iverificationclaim.md#getdid)
 * [verify](iverificationclaim.md#verify)
 
@@ -40,7 +42,7 @@ and is used by Private and Public Claims
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L56)*
+*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L56)*
 
 claimData stores the claim fields
 
@@ -52,7 +54,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L48)*
+*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L48)*
 
 jwt stores the JWT to manage web tokens
 
@@ -64,7 +66,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
 
-*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L60)*
+*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L60)*
 
 keyPair represents the implementation of key management interface
 
@@ -76,7 +78,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
 
-*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L52)*
+*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L52)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -86,11 +88,27 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **approve**(): *Promise‹string›*
 
-*Defined in [claims/src/models/index.ts:84](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L84)*
+*Defined in [claims/src/models/index.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L91)*
 
 Method signs the claim and return the serialised JWT
 
 **Returns:** *Promise‹string›*
+
+___
+
+###  createJWT
+
+▸ **createJWT**(): *void*
+
+*Inherited from [IClaim](iclaim.md).[createJWT](iclaim.md#createjwt)*
+
+*Defined in [claims/src/models/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L73)*
+
+Method creates token with the payload provided in the claim data
+The signed token is stored as a member of Claim class
+This is a void method
+
+**Returns:** *void*
 
 ___
 
@@ -100,7 +118,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
 
-*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L66)*
+*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L66)*
 
 Method returns the DID document associated with a claim subject DID
 
@@ -112,7 +130,7 @@ ___
 
 ▸ **verify**(): *Promise‹boolean›*
 
-*Defined in [claims/src/models/index.ts:78](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/claims/src/models/index.ts#L78)*
+*Defined in [claims/src/models/index.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/models/index.ts#L85)*
 
 verify check if the given Claim was signed correctly
 

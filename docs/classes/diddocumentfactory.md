@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentFactory](diddocumentfactory.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentFactory](diddocumentfactory.md)
 
 # Class: DIDDocumentFactory
 
@@ -27,7 +27,7 @@
 
 \+ **new DIDDocumentFactory**(`did`: string): *[DIDDocumentFactory](diddocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-document/src/factory/did-document-factory.ts#L10)*
+*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-document/src/factory/did-document-factory.ts#L10)*
 
 **Parameters:**
 
@@ -45,7 +45,7 @@ Name | Type |
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-document/src/factory/did-document-factory.ts#L31)*
+*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-document/src/factory/did-document-factory.ts#L31)*
 
 Creates an instance of DIDDocumentFull
 
@@ -74,7 +74,7 @@ ___
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-document/src/factory/did-document-factory.ts#L50)*
+*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-document/src/factory/did-document-factory.ts#L50)*
 
 Creates an instance of DIDDocumentFull
 

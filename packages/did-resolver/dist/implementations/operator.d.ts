@@ -22,8 +22,10 @@ export declare class Operator extends Resolver implements IOperator {
     constructor(keys: IKeys);
     /**
      * Empty for this implementation
+     *
      * @param did
      * @param context
+     * @returns Promise<boolean>
      */
     create(did: string, context: string): Promise<boolean>;
     /**
@@ -55,8 +57,7 @@ export declare class Operator extends Resolver implements IOperator {
      * @param { IUpdateData } updateData
      * @param { number } validity - time in milliseconds during which
      *                              attribute will be valid
-     *
-     * @return Promise<boolean>
+     * @returns Promise<boolean>
      */
     update(did: string, didAttribute: DIDAttribute, updateData: IUpdateData, validity?: number | BigNumber): Promise<boolean>;
     /**
@@ -73,6 +74,7 @@ export declare class Operator extends Resolver implements IOperator {
      * ```
      *
      * @param { string } did
+     * @returns Promise<boolean>
      */
     deactivate(did: string): Promise<boolean>;
     private _revokeAuthentications;

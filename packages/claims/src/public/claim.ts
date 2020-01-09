@@ -100,8 +100,7 @@ class Claim implements IClaim {
         this.didDocument = this.didDocumentLite.didDocument;
         return true;
       } catch (error) {
-        console.log(error);
-        return false;
+        throw new Error(error);
       }
     }
 
@@ -132,7 +131,7 @@ class Claim implements IClaim {
      * console.log(publicClaim.token);
      * ```
      */
-    async createJWT() {
+    async createJWT(): Promise<void> {
       const token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
       this.token = token;
     }

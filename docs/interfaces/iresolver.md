@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
 
 # Interface: IResolver
 
@@ -25,7 +25,7 @@
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-*Defined in [did-resolver/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/3aeedf2/packages/did-resolver/src/interface.ts#L27)*
+*Defined in [did-resolver/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/interface.ts#L27)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,

@@ -1,62 +1,64 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [VerificationClaim](verificationclaim.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [PrivateClaim](privateclaim.md)
 
-# Class: VerificationClaim
+# Class: PrivateClaim
 
 ## Hierarchy
 
-* [Claim](claim.md)
+  ↳ [VerificationClaim](verificationclaim.md)
 
-  ↳ **VerificationClaim**
-
-  ↳ [PrivateClaim](privateclaim.md)
+  ↳ **PrivateClaim**
 
 ## Implements
 
 * [IClaim](../interfaces/iclaim.md)
 * [IVerificationClaim](../interfaces/iverificationclaim.md)
+* [IPrivateClaim](../interfaces/iprivateclaim.md)
 
 ## Index
 
 ### Constructors
 
-* [constructor](verificationclaim.md#constructor)
+* [constructor](privateclaim.md#constructor)
 
 ### Properties
 
-* [claimData](verificationclaim.md#claimdata)
-* [didDocument](verificationclaim.md#diddocument)
-* [jwt](verificationclaim.md#jwt)
-* [keyPair](verificationclaim.md#keypair)
-* [token](verificationclaim.md#token)
+* [claimData](privateclaim.md#claimdata)
+* [didDocument](privateclaim.md#diddocument)
+* [issuerDid](privateclaim.md#issuerdid)
+* [jwt](privateclaim.md#jwt)
+* [keyPair](privateclaim.md#keypair)
+* [token](privateclaim.md#token)
 
 ### Methods
 
-* [approve](verificationclaim.md#approve)
-* [createJWT](verificationclaim.md#createjwt)
-* [getDid](verificationclaim.md#getdid)
-* [verify](verificationclaim.md#verify)
+* [approve](privateclaim.md#approve)
+* [createJWT](privateclaim.md#createjwt)
+* [createPrivateClaimData](privateclaim.md#createprivateclaimdata)
+* [decryptAndHashFields](privateclaim.md#decryptandhashfields)
+* [getDid](privateclaim.md#getdid)
+* [verify](privateclaim.md#verify)
+* [verifyPayload](privateclaim.md#verifypayload)
 
 ## Constructors
 
 ###  constructor
 
-\+ **new VerificationClaim**(`data`: [IClaimBuildData](../interfaces/iclaimbuilddata.md)): *[VerificationClaim](verificationclaim.md)*
+\+ **new PrivateClaim**(`data`: [IPrivateClaimBuildData](../interfaces/iprivateclaimbuilddata.md)): *[PrivateClaim](privateclaim.md)*
 
-*Inherited from [Claim](claim.md).[constructor](claim.md#constructor)*
+*Overrides [Claim](claim.md).[constructor](claim.md#constructor)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/public/claim.ts#L36)*
+*Defined in [claims/src/private/index.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/private/index.ts#L16)*
 
-Constructor
-
-IClaimBuildData has to be passed to construct any type of Claim
+Constructor takes as input Private Claim data.
+eslint warning disabled to ensure type-checking.
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`data` | [IClaimBuildData](../interfaces/iclaimbuilddata.md) |   |
+`data` | [IPrivateClaimBuildData](../interfaces/iprivateclaimbuilddata.md) |   |
 
-**Returns:** *[VerificationClaim](verificationclaim.md)*
+**Returns:** *[PrivateClaim](privateclaim.md)*
 
 ## Properties
 
@@ -64,7 +66,7 @@ Name | Type | Description |
 
 • **claimData**: *[IClaimData](../interfaces/iclaimdata.md)*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md).[claimData](../interfaces/iverificationclaim.md#claimdata)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md).[claimData](../interfaces/iprivateclaim.md#claimdata)*
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
@@ -86,11 +88,19 @@ didDocument is used to store fetched DID Document
 
 ___
 
+###  issuerDid
+
+• **issuerDid**: *string*
+
+*Defined in [claims/src/private/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/private/index.ts#L14)*
+
+___
+
 ###  jwt
 
 • **jwt**: *IJWT*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md).[jwt](../interfaces/iverificationclaim.md#jwt)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md).[jwt](../interfaces/iprivateclaim.md#jwt)*
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
@@ -104,7 +114,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md).[keyPair](../interfaces/iverificationclaim.md#keypair)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md).[keyPair](../interfaces/iprivateclaim.md#keypair)*
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
@@ -118,7 +128,7 @@ ___
 
 • **token**: *string*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md).[token](../interfaces/iverificationclaim.md#token)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md).[token](../interfaces/iprivateclaim.md#token)*
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
@@ -132,7 +142,9 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **approve**(): *Promise‹string›*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
+
+*Inherited from [VerificationClaim](verificationclaim.md).[approve](verificationclaim.md#approve)*
 
 *Defined in [claims/src/public/verificationClaim.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/public/verificationClaim.ts#L70)*
 
@@ -169,7 +181,7 @@ ___
 
 ▸ **createJWT**(): *Promise‹void›*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
 
 *Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
 
@@ -205,11 +217,37 @@ console.log(publicClaim.token);
 
 ___
 
+###  createPrivateClaimData
+
+▸ **createPrivateClaimData**(): *Promise‹object›*
+
+*Defined in [claims/src/private/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/private/index.ts#L32)*
+
+**Returns:** *Promise‹object›*
+
+___
+
+###  decryptAndHashFields
+
+▸ **decryptAndHashFields**(`privateKey`: string): *void*
+
+*Defined in [claims/src/private/index.ts:69](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/private/index.ts#L69)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`privateKey` | string |
+
+**Returns:** *void*
+
+___
+
 ###  getDid
 
 ▸ **getDid**(): *Promise‹boolean›*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
@@ -248,7 +286,9 @@ ___
 
 ▸ **verify**(): *Promise‹boolean›*
 
-*Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
+
+*Inherited from [VerificationClaim](verificationclaim.md).[verify](verificationclaim.md#verify)*
 
 *Defined in [claims/src/public/verificationClaim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/public/verificationClaim.ts#L31)*
 
@@ -276,3 +316,19 @@ console.log(verified) // Should be true, if successful
 ```
 
 **Returns:** *Promise‹boolean›*
+
+___
+
+###  verifyPayload
+
+▸ **verifyPayload**(`saltedFields`: object): *boolean*
+
+*Defined in [claims/src/private/index.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/claims/src/private/index.ts#L91)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`saltedFields` | object |
+
+**Returns:** *boolean*

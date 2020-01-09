@@ -57,6 +57,12 @@ export interface IClaim {
      * @returns {string}
      */
     getDid(): Promise<boolean>;
+    /**
+     * Method creates token with the payload provided in the claim data
+     * The signed token is stored as a member of Claim class
+     * This is a void method
+     */
+    createJWT(): void;
 }
 /**
  * Verification Claim interface specifies methods to verify and approve claims
