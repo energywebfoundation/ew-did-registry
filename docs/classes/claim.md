@@ -8,6 +8,8 @@
 
   ↳ [VerificationClaim](verificationclaim.md)
 
+  ↳ [ProofClaim](proofclaim.md)
+
 ## Implements
 
 * [IClaim](../interfaces/iclaim.md)
@@ -37,7 +39,7 @@
 
 \+ **new Claim**(`data`: [IClaimBuildData](../interfaces/iclaimbuilddata.md)): *[Claim](claim.md)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L36)*
+Defined in claims/src/public/claim.ts:36
 
 Constructor
 
@@ -59,7 +61,7 @@ Name | Type |
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[claimData](../interfaces/iclaim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L31)*
+Defined in claims/src/public/claim.ts:31
 
 claimData stores the claim fields
 
@@ -69,7 +71,7 @@ ___
 
 • **didDocument**: *IDIDDocument*
 
-*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L16)*
+Defined in claims/src/public/claim.ts:16
 
 didDocument is used to store fetched DID Document
 
@@ -81,7 +83,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[jwt](../interfaces/iclaim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L21)*
+Defined in claims/src/public/claim.ts:21
 
 jwt stores the JWT to manage web tokens
 
@@ -93,7 +95,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[keyPair](../interfaces/iclaim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L36)*
+Defined in claims/src/public/claim.ts:36
 
 keyPair represents the implementation of key management interface
 
@@ -105,7 +107,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[token](../interfaces/iclaim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L26)*
+Defined in claims/src/public/claim.ts:26
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -115,7 +117,7 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **createJWT**(): *Promise‹void›*
 
-*Defined in [claims/src/public/claim.ts:80](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L80)*
+Defined in claims/src/public/claim.ts:80
 
 **Returns:** *Promise‹void›*
 
@@ -127,6 +129,6 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md)*
 
-*Defined in [claims/src/public/claim.ts:69](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/public/claim.ts#L69)*
+Defined in claims/src/public/claim.ts:69
 
 **Returns:** *Promise‹boolean›*

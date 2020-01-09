@@ -15,6 +15,7 @@ Claim interface is used by all Claim types
 ## Implemented by
 
 * [Claim](../classes/claim.md)
+* [ProofClaim](../classes/proofclaim.md)
 * [VerificationClaim](../classes/verificationclaim.md)
 
 ## Index
@@ -36,7 +37,7 @@ Claim interface is used by all Claim types
 
 • **claimData**: *[IClaimData](iclaimdata.md)*
 
-*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L56)*
+Defined in claims/src/models/index.ts:56
 
 claimData stores the claim fields
 
@@ -46,7 +47,7 @@ ___
 
 • **jwt**: *IJWT*
 
-*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L48)*
+Defined in claims/src/models/index.ts:48
 
 jwt stores the JWT to manage web tokens
 
@@ -56,7 +57,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L60)*
+Defined in claims/src/models/index.ts:60
 
 keyPair represents the implementation of key management interface
 
@@ -66,7 +67,7 @@ ___
 
 • **token**: *string*
 
-*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L52)*
+Defined in claims/src/models/index.ts:52
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -76,7 +77,7 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **getDid**(): *Promise‹boolean›*
 
-*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L66)*
+Defined in claims/src/models/index.ts:66
 
 Method returns the DID document associated with a claim subject DID
 

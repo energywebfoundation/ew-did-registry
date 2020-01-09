@@ -30,7 +30,7 @@ interface and is required to construct Proof Claims
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[claimData](iclaimbuilddata.md#optional-claimdata)*
 
-*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L31)*
+Defined in claims/src/models/index.ts:31
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **hashedFields**? : *number[]*
 
-*Defined in [claims/src/models/index.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L100)*
+Defined in claims/src/models/index.ts:100
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[jwt](iclaimbuilddata.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L28)*
+Defined in claims/src/models/index.ts:28
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[keyPair](iclaimbuilddata.md#keypair)*
 
-*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L29)*
+Defined in claims/src/models/index.ts:29
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolverSettings](iclaimbuilddata.md#optional-resolversettings)*
 
-*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L32)*
+Defined in claims/src/models/index.ts:32
 
 ___
 
@@ -78,4 +78,4 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[token](iclaimbuilddata.md#optional-token)*
 
-*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/claims/src/models/index.ts#L30)*
+Defined in claims/src/models/index.ts:30

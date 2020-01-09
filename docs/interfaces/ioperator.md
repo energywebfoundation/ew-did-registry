@@ -27,7 +27,7 @@
 
 ▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:37](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/interface.ts#L37)*
+Defined in did-resolver/src/interface.ts:37
 
 Registers a DID-Document for a given DID, and defines the provided context
 
@@ -46,7 +46,7 @@ ___
 
 ▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/interface.ts#L61)*
+Defined in did-resolver/src/interface.ts:61
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -68,7 +68,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-*Defined in [did-resolver/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/interface.ts#L27)*
+Defined in did-resolver/src/interface.ts:27
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -88,7 +88,7 @@ ___
 
 ▸ **update**(`did`: string, `attribute`: [DIDAttribute](../enums/didattribute.md), `value`: [IUpdateData](iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/36ca36d/packages/did-resolver/src/interface.ts#L47)*
+Defined in did-resolver/src/interface.ts:47
 
 Updates relevant attribute of the DID Document
 
