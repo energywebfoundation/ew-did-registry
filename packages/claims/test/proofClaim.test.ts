@@ -6,45 +6,45 @@ import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
 import { ProofClaim } from '../src/proof';
 
-const { bn } = sjcl;
+const { bn, codec } = sjcl;
 describe('[PROOF CLAIM]', () => {
-  const paranoia = 6;
-
   const curve = sjcl.ecc.curves.k256;
+  const paranoia = 6;
   const order = curve.r;
-
-  const secret = bn.random(order, paranoia);
-  const PK = curve.G.mult(secret);
-  const name = 'field';
-
-  const keys = new Keys();
-  const jwt = new JWT(keys);
-
-  const payload = {
-    verifyData: {
-      [name]: PK.toBits(),
-    }
+  /**
+  * represents hashed values of some secret data
+  */
+  const hashedField = bn.random(order, paranoia).toString();
+  const PK = curve.G.mult(new bn(hashedField));
+  const fieldName = 'secret';
+  /**
+   * private data owner's keys
+   */
+  const verifyData = {
+    [fieldName]: codec.hex.fromBits(PK.toBits()),
   };
 
-  it('proof claim creted by the owner of the private data should pass verification', async () => {
-    const verifyToken = await jwt.sign(payload);
-    let hashedField = /*sjcl.hash.sha256.hash(*/secret.toBits()/*)*/;
+  it('proof claim created by the owner of the private data should pass verification', async () => {
+    const ownerKeys = new Keys();
+    const jwt = new JWT(ownerKeys);
+    const verifyToken = await jwt.sign(verifyData, { algorithm: 'ES256', noTimestamp: true });
     let proofClaim = new ProofClaim({
-      hashedFields: [hashedField],
-      keyPair: keys,
+      hashedFields: { [fieldName]: hashedField },
+      keyPair: ownerKeys,
       jwt,
       claimData: {
-        did: `did:ewc:${keys.publicKey}`,
+        did: `did:ewc:${ownerKeys.publicKey}`,
       },
     });
     await proofClaim.tokenCreated;
+    const verifierKeys = new Keys();
     const proofToken = proofClaim.token;
     proofClaim = new ProofClaim({
       token: proofToken,
-      keyPair: keys,
-      jwt,
+      keyPair: verifierKeys,
+      jwt: new JWT(verifierKeys),
       claimData: {
-        did: `did:ewc:${keys.publicKey}`,
+        did: `did:ewc:${verifierKeys.publicKey}`,
       },
     });
     expect(proofClaim.verify(verifyToken)).true;

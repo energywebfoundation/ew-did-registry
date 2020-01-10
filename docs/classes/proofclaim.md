@@ -21,10 +21,10 @@
 
 ### Properties
 
-* [_hashedFields](proofclaim.md#_hashedfields)
 * [claimData](proofclaim.md#claimdata)
 * [curve](proofclaim.md#curve)
 * [didDocument](proofclaim.md#diddocument)
+* [g](proofclaim.md#g)
 * [jwt](proofclaim.md#jwt)
 * [keyPair](proofclaim.md#keypair)
 * [paranoia](proofclaim.md#paranoia)
@@ -46,27 +46,22 @@
 
 *Overrides [Claim](claim.md).[constructor](claim.md#constructor)*
 
-Defined in claims/src/proof/proofClaim.ts:21
+Defined in claims/src/proof/proofClaim.ts:32
+
+Creates claim about possession of some private data.
+When created by the owner of the private data, this data must be contained
+in `hashedFields`assosiative array. When created by verifier data must contain `token`
+created during owner's creation of proof claim
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`data` | [IProofClaimBuildData](../interfaces/iproofclaimbuilddata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`data` | [IProofClaimBuildData](../interfaces/iproofclaimbuilddata.md) |   |
 
 **Returns:** *[ProofClaim](proofclaim.md)*
 
 ## Properties
-
-###  _hashedFields
-
-• **_hashedFields**: *number[]*
-
-Defined in claims/src/proof/proofClaim.ts:13
-
-hashed private values
-
-___
 
 ###  claimData
 
@@ -88,6 +83,8 @@ ___
 
 Defined in claims/src/proof/proofClaim.ts:15
 
+secp256k1 curve
+
 ___
 
 ###  didDocument
@@ -99,6 +96,16 @@ ___
 Defined in claims/src/public/claim.ts:16
 
 didDocument is used to store fetched DID Document
+
+___
+
+###  g
+
+• **g**: *any* =  this.curve.G
+
+Defined in claims/src/proof/proofClaim.ts:25
+
+base of the secp256k1 curve
 
 ___
 
@@ -134,7 +141,7 @@ ___
 
 • **paranoia**: *number* = 6
 
-Defined in claims/src/proof/proofClaim.ts:19
+Defined in claims/src/proof/proofClaim.ts:27
 
 ___
 
@@ -142,7 +149,9 @@ ___
 
 • **q**: *any* =  this.curve.r
 
-Defined in claims/src/proof/proofClaim.ts:17
+Defined in claims/src/proof/proofClaim.ts:20
+
+prime order of the secp256k1 base
 
 ___
 
@@ -164,7 +173,9 @@ ___
 
 • **tokenCreated**: *Promise‹void›*
 
-Defined in claims/src/proof/proofClaim.ts:21
+Defined in claims/src/proof/proofClaim.ts:32
+
+token creation completion flag
 
 ## Methods
 
@@ -200,10 +211,23 @@ ___
 
 *Implementation of [IProofClaim](../interfaces/iproofclaim.md)*
 
-Defined in claims/src/proof/proofClaim.ts:60
+Defined in claims/src/proof/proofClaim.ts:88
 
-Сhecks that the public keys in the private token payload matches the values based on
-which the this.token payload was calculated
+Сhecks that the public keys in the `privateToken`'s payload matches values
+based on which `this.token` payload was calculated
+
+**`example`** 
+```typescript
+import { ProofClaim } from '@ew-did-registry/claims';
+
+------------------------------ owner -----------------------------------
+const proofClaim = new ProofClaim({jwt, keys, claimData,  hashedFields });
+const proofToken = proofClaim.token;
+----------------------------- verifier ---------------------------------
+const proofClaim = new ProofClaim({jwt, keys, claimData, proofToken });
+const privateToken = store.getClaim(claimUrl);
+const verified = proofClaim.verify(privateToken);
+```
 
 **Parameters:**
 

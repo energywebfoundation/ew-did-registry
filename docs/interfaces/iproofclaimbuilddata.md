@@ -36,9 +36,13 @@ ___
 
 ### `Optional` hashedFields
 
-• **hashedFields**? : *number[]*
+• **hashedFields**? : *object*
 
 Defined in claims/src/models/index.ts:100
+
+#### Type declaration:
+
+* \[ **keys**: *string*\]: string
 
 ___
 

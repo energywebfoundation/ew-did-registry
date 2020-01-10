@@ -97,5 +97,5 @@ export interface IPrivateClaimBuildData extends IClaimBuildData {
  * interface and is required to construct Proof Claims
  */
 export interface IProofClaimBuildData extends IClaimBuildData {
-    hashedFields?: number[];
+    hashedFields?: { [keys: string]: string };
 }

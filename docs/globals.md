@@ -72,6 +72,7 @@
 * [abi1056](globals.md#const-abi1056)
 * [address1056](globals.md#const-address1056)
 * [bn](globals.md#bn)
+* [codec](globals.md#codec)
 * [delegatePubKeyIdPattern](globals.md#const-delegatepubkeyidpattern)
 * [ec](globals.md#const-ec)
 * [ethAddrPattern](globals.md#const-ethaddrpattern)
@@ -389,7 +390,17 @@ ___
 
 • **bn**: *any*
 
-Defined in claims/src/proof/proofClaim.ts:8
+Defined in claims/src/proof/proofClaim.ts:9
+
+Defined in claims/test/proofClaim.test.ts:9
+
+___
+
+###  codec
+
+• **codec**: *any*
+
+Defined in claims/src/proof/proofClaim.ts:9
 
 Defined in claims/test/proofClaim.test.ts:9
 
@@ -431,7 +442,7 @@ ___
 
 • **hash**: *any*
 
-Defined in claims/src/proof/proofClaim.ts:8
+Defined in claims/src/proof/proofClaim.ts:9
 
 ___
 
