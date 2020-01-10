@@ -6,8 +6,8 @@ import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
 import { ProofClaim } from '../src/proof';
 
-const { bn, codec } = sjcl;
 describe('[PROOF CLAIM]', () => {
+  const { bn, codec } = sjcl;
   const curve = sjcl.ecc.curves.k256;
   const paranoia = 6;
   const order = curve.r;
@@ -26,12 +26,12 @@ describe('[PROOF CLAIM]', () => {
 
   it('proof claim created by the owner of the private data should pass verification', async () => {
     const ownerKeys = new Keys();
-    const jwt = new JWT(ownerKeys);
-    const verifyToken = await jwt.sign(verifyData, { algorithm: 'ES256', noTimestamp: true });
+    const ownerJwt = new JWT(ownerKeys);
+    const verifyToken = await ownerJwt.sign(verifyData, { algorithm: 'ES256', noTimestamp: true });
     let proofClaim = new ProofClaim({
       hashedFields: { [fieldName]: hashedField },
       keyPair: ownerKeys,
-      jwt,
+      jwt: ownerJwt,
       claimData: {
         did: `did:ewc:${ownerKeys.publicKey}`,
       },

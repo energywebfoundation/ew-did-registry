@@ -392,8 +392,6 @@ ___
 
 Defined in claims/src/proof/proofClaim.ts:9
 
-Defined in claims/test/proofClaim.test.ts:9
-
 ___
 
 ###  codec
@@ -401,8 +399,6 @@ ___
 • **codec**: *any*
 
 Defined in claims/src/proof/proofClaim.ts:9
-
-Defined in claims/test/proofClaim.test.ts:9
 
 ___
 
