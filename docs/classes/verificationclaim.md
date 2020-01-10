@@ -46,13 +46,13 @@ Defined in claims/src/public/claim.ts:36
 
 Constructor
 
-Settings have to be passed to construct resolver
+IClaimBuildData has to be passed to construct any type of Claim
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`data` | [IClaimBuildData](../interfaces/iclaimbuilddata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`data` | [IClaimBuildData](../interfaces/iclaimbuilddata.md) |   |
 
 **Returns:** *[VerificationClaim](verificationclaim.md)*
 
@@ -132,7 +132,32 @@ claimToken stores the actual serialised JWT in a string format
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-Defined in claims/src/public/verificationClaim.ts:16
+Defined in claims/src/public/verificationClaim.ts:70
+
+Approve method signs the payload of the provided token with verifiers private key
+Returns signed token on success
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+import { verificationClaim } from '@ew-did-registry/claims';
+
+const keysVerifier = new Keys();
+const jwtVerifier = new JWT(keysVerifier);
+const tokenToVerify = publicClaim.token;
+const dataVerifier = {
+  jwt: jwtVerifier,
+  keyPair: keysVerifier,
+  token: tokenToVerify,
+};
+
+verificationClaim = new VerificationClaim(dataVerifier);
+const approvedToken = await verificationClaim.approve();
+console.log(approvedToken)
+// If verification was successful, verifier can sign the payload of the token
+// with his private key and return the approved JWT
+```
 
 **Returns:** *Promise‹string›*
 
@@ -144,7 +169,33 @@ ___
 
 *Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
 
-Defined in claims/src/public/claim.ts:80
+Defined in claims/src/public/claim.ts:135
+
+Method creates token with the payload provided in the claim data
+The signed token is stored as a member of Claim class
+This is a void method
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+import { Claim } from '@ew-did-registry/claims';
+
+const keys = new Keys();
+const jwt = new JWT(keys);
+const claimData = {
+  did: `did:ewc:0x${keys.publicKey}`,
+  test: 'test',
+};
+const data = {
+  jwt,
+  keyPair: keys,
+  claimData,
+};
+const publicClaim = new Claim(data);
+await publicClaim.createJWT();
+console.log(publicClaim.token);
+```
 
 **Returns:** *Promise‹void›*
 
@@ -158,7 +209,32 @@ ___
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-Defined in claims/src/public/claim.ts:69
+Defined in claims/src/public/claim.ts:97
+
+Method fetches the DID Document associated with did provided in claim data
+DID Document is then stored as a member of Claim class. Returns true on success
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+import { Claim } from '@ew-did-registry/claims';
+
+const keys = new Keys();
+const jwt = new JWT(keys);
+const claimData = {
+  did: `did:ewc:0x${keys.publicKey}`,
+  test: 'test',
+};
+const data = {
+  jwt,
+  keyPair: keys,
+  claimData,
+};
+const publicClaim = new Claim(data);
+await publicClaim.getDid();
+console.log(publicClaim.didDocument);
+```
 
 **Returns:** *Promise‹boolean›*
 
@@ -170,6 +246,29 @@ ___
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-Defined in claims/src/public/verificationClaim.ts:5
+Defined in claims/src/public/verificationClaim.ts:31
+
+Verify method checks if the token was signed by the correct private key
+Returns true on success
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+import { verificationClaim } from '@ew-did-registry/claims';
+
+const keysVerifier = new Keys();
+const jwtVerifier = new JWT(keysVerifier);
+const tokenToVerify = publicClaim.token;
+const dataVerifier = {
+  jwt: jwtVerifier,
+  keyPair: keysVerifier,
+  token: tokenToVerify,
+};
+
+verificationClaim = new VerificationClaim(dataVerifier);
+const verified = await verificationClaim.verify();
+console.log(verified) // Should be true, if successful
+```
 
 **Returns:** *Promise‹boolean›*

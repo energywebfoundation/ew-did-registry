@@ -59,14 +59,24 @@ var VerificationClaim = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     VerificationClaim.prototype.verify = function () {
-        var publicKey = this.didDocument.publicKey.find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; });
-        try {
-            this.jwt.verify(this.token, publicKey.ethereumAddress);
-        }
-        catch (error) {
-            throw (new Error(error));
-        }
-        return true;
+        return __awaiter(this, void 0, void 0, function () {
+            var publicKey;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getDid()];
+                    case 1:
+                        _a.sent();
+                        publicKey = this.didDocument.publicKey.find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; });
+                        try {
+                            this.jwt.verify(this.token, publicKey.ethereumAddress.slice(2));
+                        }
+                        catch (error) {
+                            throw (new Error(error));
+                        }
+                        return [2 /*return*/, true];
+                }
+            });
+        });
     };
     VerificationClaim.prototype.approve = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -78,7 +88,7 @@ var VerificationClaim = /** @class */ (function (_super) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.jwt.sign(decodedPayload)];
+                        return [4 /*yield*/, this.jwt.sign(decodedPayload, { algorithm: 'ES256', noTimestamp: true })];
                     case 2:
                         signedToken = _a.sent();
                         return [3 /*break*/, 4];

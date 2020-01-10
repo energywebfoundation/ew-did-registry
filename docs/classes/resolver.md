@@ -50,7 +50,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:42
+Defined in did-resolver/src/implementations/resolver.ts:43
 
 Resolve DID Document for a given did
 
@@ -66,6 +66,6 @@ const didDocument = await resolver.read(did);
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`did` | string | entity identifier, which is associated with DID Document  |
+`did` | string | entity identifier, which is associated with DID Document |
 
 **Returns:** *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
