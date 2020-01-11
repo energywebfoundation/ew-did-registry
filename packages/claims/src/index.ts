@@ -6,3 +6,5 @@ export {
   Claim,
   VerificationClaim,
 };
+export * from './models';
+export * from './proof';
