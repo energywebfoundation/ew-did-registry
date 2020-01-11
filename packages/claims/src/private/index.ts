@@ -29,6 +29,33 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       this.resolverSettings = data.resolverSettings;
     }
 
+    /**
+     * Creation of Private Claim is a separate method to avoid asynchronous calls in the constructor
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     *  did: `did:ewc:0x${keys.publicKey}`,
+     *  issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     *
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * privateClaim.createPrivateClaimData();
+     * console.log(privateClaim);
+     * ```
+     * @returns {Promise<{ [key: string]: string }}
+     */
     async createPrivateClaimData(): Promise<{ [key: string]: string }> {
       let issuerDocumentLite: IDIDDocumentLite;
       try {
@@ -48,24 +75,57 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       const saltedFields: { [key: string]: string } = { };
       Object.entries(this.claimData).forEach(
         ([key, value]) => {
-          const salt = crypto.randomBytes(32).toString('base64');
-          const saltedValue = value + salt;
-          let encrpytedSaltedValue;
-          try {
-            encrpytedSaltedValue = ecies.encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
-          } catch (error) {
-            throw new Error(error);
+          if (key !== 'did') {
+            const salt = crypto.randomBytes(32).toString('base64');
+            const saltedValue = value + salt;
+            let encrpytedSaltedValue;
+            try {
+              encrpytedSaltedValue = ecies.encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
+            } catch (error) {
+              throw new Error(error);
+            }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            privateClaimData[key] = encrpytedSaltedValue;
+            saltedFields[key] = saltedValue;
           }
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          privateClaimData[key] = encrpytedSaltedValue;
-          saltedFields[key] = saltedValue;
         },
       );
       this.claimData = privateClaimData;
       return saltedFields;
     }
 
+    /**
+     * This method is called when the issuer receives the token from the user with encrypted data
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const issuerKeys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     * did: `did:ewc:0x${keys.publicKey}`,
+     * issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * await privateClaim.createPrivateClaimData();
+     * privateClaim.decryptAndHashFields(issuerKeys.privateKey);
+     * const hashedFields = privateClaim.claimData;
+     * console.log(hashedFields);
+     * ```
+     *
+     * @param {string} privateKey
+     * @returns void
+     */
     decryptAndHashFields(privateKey: string): void {
       if (privateKey.length === 32) {
         privateKey = `0x${privateKey}`;
@@ -76,6 +136,7 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       Object.entries(this.claimData).forEach(
         ([key, value]) => {
           if (key !== 'did') {
+            console.log(value);
             const decryptedField = ecies.decrypt(privateKey, value).toString();
             const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
             const fieldKeys = new Keys({ privateKey: fieldHash, publicKey: undefined });
@@ -88,6 +149,51 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       this.claimData = privateClaimData;
     }
 
+    /**
+     * This method is called by the user after the issuer returns signed JWT with hashed
+     * encrypted fields. Methods verifies if the payload was created correctly
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const issuerKeys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     * did: `did:ewc:0x${keys.publicKey}`,
+     * issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * const saltedFields = await privateClaim.createPrivateClaimData();
+     * privateClaim.decryptAndHashFields(issuerKeys.privateKey);
+     * const issuerSignedToken = await issuerJWT.sign(privateClaim.claimData,
+     * { algorithm: 'ES256', noTimestamp: true });
+     * const issuerClaimData = {
+     *  did: `did:ewc:0x${issuerKeys.publicKey}`,
+     * };
+     * const issuerData = {
+     *  jwt,
+     *  keyPair: keys,
+     *  token: issuerSignedToken,
+     *  claimData: issuerClaimData,
+     * }
+     * const issuerReturnedPrivateClaim = new PrivateClaim(issuerData);
+     * issuerReturnedPrivateClaim.verify();
+     * const verified = issuerReturnedPrivateClaim.verifyPayload(saltedFields);
+     * console.log(verified);
+     * ```
+     *
+     * @param {{ [key: string]: string }} saltedFields
+     * @returns boolean
+     */
     verifyPayload(saltedFields: { [key: string]: string }): boolean {
       Object.entries(saltedFields).forEach(
         // eslint-disable-next-line consistent-return

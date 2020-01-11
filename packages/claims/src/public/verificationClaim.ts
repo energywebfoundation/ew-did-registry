@@ -32,7 +32,7 @@ class VerificationClaim extends Claim implements IVerificationClaim {
     await this.getDid();
     const publicKey = this.didDocument.publicKey.find((pk) => pk.type === 'Secp256k1VerificationKey');
     try {
-      this.jwt.verify(this.token, publicKey.ethereumAddress.slice(2));
+      await this.jwt.verify(this.token, publicKey.ethereumAddress.slice(2));
     } catch (error) {
       throw (new Error(error));
     }
