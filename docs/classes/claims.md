@@ -29,7 +29,7 @@
 
 \+ **new Claims**(`keyPair`: IKeys): *[Claims](claims.md)*
 
-Defined in claims/src/index.ts:19
+Defined in claims/src/claims/claims.ts:19
 
 **Parameters:**
 
@@ -47,7 +47,7 @@ Name | Type |
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-Defined in claims/src/index.ts:80
+Defined in claims/src/claims/claims.ts:80
 
 Creates claim which will be sent in encoded form to the didIssuer
 
@@ -78,11 +78,9 @@ ___
 
 ###  createProofClaim
 
-▸ **createProofClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `hashedFields`: number[]): *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
+▸ **createProofClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `hashedFields`: object): *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
 
-*Implementation of [IClaims](../interfaces/iclaims.md)*
-
-Defined in claims/src/index.ts:112
+Defined in claims/src/claims/claims.ts:113
 
 Creates claim with verifiable data in hashedFields
 
@@ -105,7 +103,7 @@ const claim = await claims.createProofClaim(claimData, hashedFields);
 Name | Type | Description |
 ------ | ------ | ------ |
 `claimData` | [IClaimData](../interfaces/iclaimdata.md) | - |
-`hashedFields` | number[] |   |
+`hashedFields` | object |   |
 
 **Returns:** *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
 
@@ -117,7 +115,7 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-Defined in claims/src/index.ts:49
+Defined in claims/src/claims/claims.ts:49
 
 Creates verifiable claim with data about subject provided in claimData
 
@@ -150,7 +148,7 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md)*
 
-Defined in claims/src/index.ts:140
+Defined in claims/src/claims/claims.ts:141
 
 Creates claim of the specified type from the serialized claim
 

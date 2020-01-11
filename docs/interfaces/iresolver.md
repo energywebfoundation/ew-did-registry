@@ -8,6 +8,11 @@
 
   ↳ [IOperator](ioperator.md)
 
+## Implemented by
+
+* [Operator](../classes/operator.md)
+* [Resolver](../classes/resolver.md)
+
 ## Index
 
 ### Methods
@@ -20,7 +25,7 @@
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-Defined in did-resolver/src/interface.ts:20
+Defined in did-resolver/src/interface.ts:27
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,

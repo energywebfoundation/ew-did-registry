@@ -19,6 +19,7 @@ interface and is required to construct Private Claims
 * [issuerDid](iprivateclaimbuilddata.md#optional-issuerdid)
 * [jwt](iprivateclaimbuilddata.md#jwt)
 * [keyPair](iprivateclaimbuilddata.md#keypair)
+* [resolverSettings](iprivateclaimbuilddata.md#optional-resolversettings)
 * [token](iprivateclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -29,7 +30,7 @@ interface and is required to construct Private Claims
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[claimData](iclaimbuilddata.md#optional-claimdata)*
 
-Defined in claims/src/models/index.ts:30
+Defined in claims/src/models/index.ts:31
 
 ___
 
@@ -37,7 +38,7 @@ ___
 
 • **issuerDid**? : *string*
 
-Defined in claims/src/models/index.ts:90
+Defined in claims/src/models/index.ts:92
 
 ___
 
@@ -47,7 +48,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[jwt](iclaimbuilddata.md#jwt)*
 
-Defined in claims/src/models/index.ts:27
+Defined in claims/src/models/index.ts:28
 
 ___
 
@@ -57,7 +58,17 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[keyPair](iclaimbuilddata.md#keypair)*
 
-Defined in claims/src/models/index.ts:28
+Defined in claims/src/models/index.ts:29
+
+___
+
+### `Optional` resolverSettings
+
+• **resolverSettings**? : *IResolverSettings*
+
+*Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolverSettings](iclaimbuilddata.md#optional-resolversettings)*
+
+Defined in claims/src/models/index.ts:32
 
 ___
 
@@ -67,4 +78,4 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[token](iclaimbuilddata.md#optional-token)*
 
-Defined in claims/src/models/index.ts:29
+Defined in claims/src/models/index.ts:30

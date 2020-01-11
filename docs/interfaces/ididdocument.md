@@ -10,47 +10,47 @@
 
 ### Properties
 
+* [@context](ididdocument.md#@context)
 * [authentication](ididdocument.md#authentication)
-* [context](ididdocument.md#context)
-* [created](ididdocument.md#created)
-* [delegates](ididdocument.md#delegates)
+* [created](ididdocument.md#optional-created)
+* [delegates](ididdocument.md#optional-delegates)
 * [id](ididdocument.md#id)
 * [proof](ididdocument.md#optional-proof)
 * [publicKey](ididdocument.md#publickey)
-* [service](ididdocument.md#service)
-* [updated](ididdocument.md#updated)
+* [service](ididdocument.md#optional-service)
+* [updated](ididdocument.md#optional-updated)
 
 ## Properties
+
+###  @context
+
+• **@context**: *string*
+
+Defined in did-resolver/src/models/resolver.ts:34
+
+___
 
 ###  authentication
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-Defined in did-resolver/src/models/index.ts:30
+Defined in did-resolver/src/models/resolver.ts:37
 
 ___
 
-###  context
+### `Optional` created
 
-• **context**: *string*
+• **created**? : *string*
 
-Defined in did-resolver/src/models/index.ts:27
-
-___
-
-###  created
-
-• **created**: *string*
-
-Defined in did-resolver/src/models/index.ts:33
+Defined in did-resolver/src/models/resolver.ts:40
 
 ___
 
-###  delegates
+### `Optional` delegates
 
-• **delegates**: *string[]*
+• **delegates**? : *string[]*
 
-Defined in did-resolver/src/models/index.ts:31
+Defined in did-resolver/src/models/resolver.ts:38
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/index.ts:28
+Defined in did-resolver/src/models/resolver.ts:35
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-Defined in did-resolver/src/models/index.ts:35
+Defined in did-resolver/src/models/resolver.ts:42
 
 ___
 
@@ -74,20 +74,20 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-Defined in did-resolver/src/models/index.ts:29
+Defined in did-resolver/src/models/resolver.ts:36
 
 ___
 
-###  service
+### `Optional` service
 
-• **service**: *[IServiceEndpoint](iserviceendpoint.md)[]*
+• **service**? : *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-Defined in did-resolver/src/models/index.ts:32
+Defined in did-resolver/src/models/resolver.ts:39
 
 ___
 
-###  updated
+### `Optional` updated
 
-• **updated**: *string*
+• **updated**? : *string*
 
-Defined in did-resolver/src/models/index.ts:34
+Defined in did-resolver/src/models/resolver.ts:41

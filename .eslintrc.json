@@ -19,16 +19,21 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "import"
+    "import",
+    "chai-friendly"
   ],
   "rules": {
     "import/no-unresolved": "error",
     "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0,
-    "import/extensions": 0,
-    "no-underscore-dangle": "off",
-    "space-infix-ops": ["error", { "int32Hint": false }]
+    "import/extensions": "off",
+    "space-infix-ops": ["error", { "int32Hint": false }],
+    "no-underscore-dangle": 0,
+    "no-param-reassign": 0,
+    "space-before-function-paren": 0,
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
   },
   "settings": {
     "import/resolver": {

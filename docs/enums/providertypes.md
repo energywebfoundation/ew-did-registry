@@ -8,7 +8,6 @@
 
 * [HTTP](providertypes.md#http)
 * [IPC](providertypes.md#ipc)
-* [WebSocket](providertypes.md#websocket)
 
 ## Enumeration members
 
@@ -16,7 +15,7 @@
 
 • **HTTP**:
 
-Defined in did-resolver/src/models/index.ts:2
+Defined in did-resolver/src/models/resolver.ts:9
 
 ___
 
@@ -24,12 +23,4 @@ ___
 
 • **IPC**:
 
-Defined in did-resolver/src/models/index.ts:3
-
-___
-
-###  WebSocket
-
-• **WebSocket**:
-
-Defined in did-resolver/src/models/index.ts:4
+Defined in did-resolver/src/models/resolver.ts:10

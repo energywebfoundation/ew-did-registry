@@ -6,6 +6,10 @@
 
 * **IDID**
 
+## Implemented by
+
+* [DID](../classes/did.md)
+
 ## Index
 
 ### Methods
@@ -17,9 +21,9 @@
 
 ###  get
 
-▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
+▸ **get**(`network`: string): *string | undefined*
 
-Defined in did/src/interface.ts:30
+Defined in did/src/interface.ts:29
 
 Gets a DID for a particular network
 
@@ -27,7 +31,7 @@ Gets a DID for a particular network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 
 **Returns:** *string | undefined*
 
@@ -35,7 +39,7 @@ ___
 
 ###  set
 
-▸ **set**(`did`: string): *void*
+▸ **set**(`did`: string): *[IDID](idid.md)*
 
 Defined in did/src/interface.ts:14
 
@@ -47,9 +51,9 @@ Name | Type |
 ------ | ------ |
 `did` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*
 
-▸ **set**(`network`: [Networks](../enums/networks.md), `id`: string): *void*
+▸ **set**(`network`: string, `id`: string): *[IDID](idid.md)*
 
 Defined in did/src/interface.ts:22
 
@@ -59,7 +63,7 @@ Sets a DID for the provided network
 
 Name | Type |
 ------ | ------ |
-`network` | [Networks](../enums/networks.md) |
+`network` | string |
 `id` | string |
 
-**Returns:** *void*
+**Returns:** *[IDID](idid.md)*

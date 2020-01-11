@@ -10,6 +10,11 @@ Interface describes the lite version of DID Document with only read functionalit
 
   ↳ [IDIDDocumentFull](ididdocumentfull.md)
 
+## Implemented by
+
+* [DIDDocumentFull](../classes/diddocumentfull.md)
+* [DIDDocumentLite](../classes/diddocumentlite.md)
+
 ## Index
 
 ### Properties
@@ -45,7 +50,7 @@ Resolved DID Document
 
 ###  read
 
-▸ **read**(`attribute`: string, `type?`: string): *string*
+▸ **read**(`attribute`: string, `type?`: string): *string | object*
 
 Defined in did-document/src/lite/interface.ts:32
 
@@ -58,4 +63,4 @@ Name | Type |
 `attribute` | string |
 `type?` | string |
 
-**Returns:** *string*
+**Returns:** *string | object*

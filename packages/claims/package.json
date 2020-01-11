@@ -24,8 +24,11 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did-resolver": "file:../did-resolver",
+    "@ew-did-registry/keys": "^1.0.0",
     "@ew-did-registry/jwt": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0"
+    "@ew-did-registry/did-resolver": "^1.0.0",
+    "@ew-did-registry/did-document": "^1.0.0",
+    "@types/sjcl": "^1.0.28",
+    "sjcl-complete": "^1.0.0"
   }
 }

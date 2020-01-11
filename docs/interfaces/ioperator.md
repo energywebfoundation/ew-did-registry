@@ -8,6 +8,10 @@
 
   ↳ **IOperator**
 
+## Implemented by
+
+* [Operator](../classes/operator.md)
+
 ## Index
 
 ### Methods
@@ -23,7 +27,7 @@
 
 ▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:30
+Defined in did-resolver/src/interface.ts:37
 
 Registers a DID-Document for a given DID, and defines the provided context
 
@@ -42,7 +46,7 @@ ___
 
 ▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:48
+Defined in did-resolver/src/interface.ts:61
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -64,7 +68,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-Defined in did-resolver/src/interface.ts:20
+Defined in did-resolver/src/interface.ts:27
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -82,9 +86,9 @@ ___
 
 ###  update
 
-▸ **update**(`did`: string, `attribute`: string, `value`: string | object): *Promise‹boolean›*
+▸ **update**(`did`: string, `attribute`: [DIDAttribute](../enums/didattribute.md), `value`: [IUpdateData](iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:39
+Defined in did-resolver/src/interface.ts:47
 
 Updates relevant attribute of the DID Document
 
@@ -93,7 +97,8 @@ Updates relevant attribute of the DID Document
 Name | Type |
 ------ | ------ |
 `did` | string |
-`attribute` | string |
-`value` | string &#124; object |
+`attribute` | [DIDAttribute](../enums/didattribute.md) |
+`value` | [IUpdateData](iupdatedata.md) |
+`validity` | number &#124; BigNumber |
 
 **Returns:** *Promise‹boolean›*

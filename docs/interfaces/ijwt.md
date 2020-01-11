@@ -45,7 +45,7 @@ ___
 
 ###  sign
 
-▸ **sign**(`payload`: object, `options?`: object): *Promise‹string›*
+▸ **sign**(`payload`: string | object, `options?`: object): *Promise‹string›*
 
 Defined in jwt/src/interface.ts:11
 
@@ -55,7 +55,7 @@ Method accepts claim payload and options, and returns a string Promise
 
 Name | Type |
 ------ | ------ |
-`payload` | object |
+`payload` | string &#124; object |
 `options?` | object |
 
 **Returns:** *Promise‹string›*

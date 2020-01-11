@@ -1,8 +1,12 @@
 import { IDIDDocumentFactory } from './interface';
+import { IDIDDocumentLite } from './lite';
+import { DIDDocumentFactory } from './factory';
 
-const add = (left: number, right: number): number => left + right;
-
+export * from './factory';
+export * from './full';
+export * from './lite';
 export {
-  add,
   IDIDDocumentFactory,
+  IDIDDocumentLite,
+  DIDDocumentFactory,
 };

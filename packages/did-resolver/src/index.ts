@@ -1,11 +1,3 @@
-import { IResolver, IOperator } from './interface';
-import { IDIDDocument } from './models';
-
-const add = (left: number, right: number): number => left + right;
-
-export {
-  add,
-  IResolver,
-  IOperator,
-  IDIDDocument,
-};
+export * from './models';
+export * from './interface';
+export * from './implementations';

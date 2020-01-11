@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Claims, IClaims } from '../src';
+import { IClaims } from '../src/interface';
+import { Claims } from '../src/claims';
 import { VerificationClaim } from '../src/public';
 import { PrivateClaim } from '../src/private';
 import { ProofClaim } from '../src/proof';
@@ -41,7 +42,7 @@ describe.skip('[ABSTRACT FACTORY CLAIMS]', () => {
       did: `did:${Networks.Ethereum}:my_id`,
       data: 'data',
     };
-    const hashedFields = [123, 456];
+    const hashedFields = { test: '' };
     const claim = claims.createProofClaim(claimData, hashedFields);
     expect(claim).to.be.an.instanceOf(ProofClaim);
   });

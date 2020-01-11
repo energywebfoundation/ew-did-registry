@@ -1,3 +1,4 @@
 import { IDIDDocumentFactory } from './interface';
-declare const add: (left: number, right: number) => number;
-export { add, IDIDDocumentFactory, };
+import { IDIDDocumentLite } from './lite';
+import { DIDDocumentFactory } from './factory';
+export { IDIDDocumentFactory, IDIDDocumentLite, DIDDocumentFactory, };

@@ -18,12 +18,12 @@ export interface IDIDDocumentFactory {
      * @param {IResolver} resolver
      * @returns {IDIDDocumentLite}
      */
-    createLite(did: string, resolver: IResolver): IDIDDocumentLite;
+    createLite(resolver: IResolver, did?: string): IDIDDocumentLite;
     /**
      * Provided with the DID and Resolver, full version of DID Document is returned
      * @param {string} did
      * @param {IOperator} operator
      * @returns {IDIDDocumentFull}
      */
-    createFull(did: string, operator: IOperator): IDIDDocumentFull;
+    createFull(operator: IOperator, did?: string): IDIDDocumentFull;
 }

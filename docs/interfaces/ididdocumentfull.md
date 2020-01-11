@@ -11,6 +11,10 @@ This interface extends lite DID Document interface
 
   ↳ **IDIDDocumentFull**
 
+## Implemented by
+
+* [DIDDocumentFull](../classes/diddocumentfull.md)
+
 ## Index
 
 ### Properties
@@ -53,9 +57,9 @@ Resolved DID Document
 
 ###  create
 
-▸ **create**(`context`: string): *boolean*
+▸ **create**(`context`: string): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:16
+Defined in did-document/src/full/interface.ts:17
 
 New DID Document is registered on the Blockchain with the provided context,
 if no Document existed for the specified DID
@@ -66,25 +70,25 @@ Name | Type |
 ------ | ------ |
 `context` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  deactivate
 
-▸ **deactivate**(): *boolean*
+▸ **deactivate**(): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:30
+Defined in did-document/src/full/interface.ts:31
 
 On success the status of the DID Document is changed from “active” to “deactivated”.
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  read
 
-▸ **read**(`attribute`: string, `type?`: string): *string*
+▸ **read**(`attribute`: string, `type?`: string): *string | object*
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[read](ididdocumentlite.md#read)*
 
@@ -99,15 +103,15 @@ Name | Type |
 `attribute` | string |
 `type?` | string |
 
-**Returns:** *string*
+**Returns:** *string | object*
 
 ___
 
 ###  update
 
-▸ **update**(`attribute`: string, `data`: [IUpdateParameters](iupdateparameters.md)): *boolean*
+▸ **update**(`attribute`: string, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:24
+Defined in did-document/src/full/interface.ts:25
 
 Provided with necessary parameters, method updates relevant attributes of the DID Document
 
@@ -116,6 +120,7 @@ Provided with necessary parameters, method updates relevant attributes of the DI
 Name | Type |
 ------ | ------ |
 `attribute` | string |
-`data` | [IUpdateParameters](iupdateparameters.md) |
+`data` | IUpdateData |
+`validity` | number &#124; BigNumber |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*

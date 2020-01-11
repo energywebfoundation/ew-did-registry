@@ -12,17 +12,26 @@ Specifies current Provider
 
 ### Properties
 
-* [options](iprovider.md#optional-options)
+* [network](iprovider.md#optional-network)
+* [path](iprovider.md#optional-path)
 * [type](iprovider.md#type)
-* [uri](iprovider.md#uri)
+* [uriOrInfo](iprovider.md#optional-uriorinfo)
 
 ## Properties
 
-### `Optional` options
+### `Optional` network
 
-• **options**? : *object*
+• **network**? : *Networkish*
 
-Defined in did-resolver/src/models/index.ts:13
+Defined in did-resolver/src/models/resolver.ts:20
+
+___
+
+### `Optional` path
+
+• **path**? : *string*
+
+Defined in did-resolver/src/models/resolver.ts:19
 
 ___
 
@@ -30,12 +39,12 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/index.ts:12
+Defined in did-resolver/src/models/resolver.ts:17
 
 ___
 
-###  uri
+### `Optional` uriOrInfo
 
-• **uri**: *string*
+• **uriOrInfo**? : *string | ConnectionInfo*
 
-Defined in did-resolver/src/models/index.ts:11
+Defined in did-resolver/src/models/resolver.ts:18

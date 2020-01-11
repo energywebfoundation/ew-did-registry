@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var add = function (left, right) { return left + right; };
-exports.add = add;
+var factory_1 = require("./factory");
+exports.DIDDocumentFactory = factory_1.DIDDocumentFactory;
 //# sourceMappingURL=index.js.map

@@ -20,6 +20,7 @@ each of the Claim types
 * [claimData](iclaimbuilddata.md#optional-claimdata)
 * [jwt](iclaimbuilddata.md#jwt)
 * [keyPair](iclaimbuilddata.md#keypair)
+* [resolverSettings](iclaimbuilddata.md#optional-resolversettings)
 * [token](iclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -28,7 +29,7 @@ each of the Claim types
 
 • **claimData**? : *[IClaimData](iclaimdata.md)*
 
-Defined in claims/src/models/index.ts:30
+Defined in claims/src/models/index.ts:31
 
 ___
 
@@ -36,7 +37,7 @@ ___
 
 • **jwt**: *IJWT*
 
-Defined in claims/src/models/index.ts:27
+Defined in claims/src/models/index.ts:28
 
 ___
 
@@ -44,7 +45,15 @@ ___
 
 • **keyPair**: *IKeys*
 
-Defined in claims/src/models/index.ts:28
+Defined in claims/src/models/index.ts:29
+
+___
+
+### `Optional` resolverSettings
+
+• **resolverSettings**? : *IResolverSettings*
+
+Defined in claims/src/models/index.ts:32
 
 ___
 
@@ -52,4 +61,4 @@ ___
 
 • **token**? : *string*
 
-Defined in claims/src/models/index.ts:29
+Defined in claims/src/models/index.ts:30

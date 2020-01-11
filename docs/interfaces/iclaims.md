@@ -44,9 +44,9 @@ ___
 
 ###  createProofClaim
 
-▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: number[]): *Promise‹[IProofClaim](iproofclaim.md)›*
+▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: object): *Promise‹[IProofClaim](iproofclaim.md)›*
 
-Defined in claims/src/interface.ts:38
+Defined in claims/src/interface.ts:39
 
 Create Proof Claim with claim data and hashed claim fields
 
@@ -55,7 +55,7 @@ Create Proof Claim with claim data and hashed claim fields
 Name | Type |
 ------ | ------ |
 `data` | [IClaimData](iclaimdata.md) |
-`hashedFields` | number[] |
+`hashedFields` | object |
 
 **Returns:** *Promise‹[IProofClaim](iproofclaim.md)›*
 
@@ -83,7 +83,7 @@ ___
 
 ▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *Promise‹[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)›*
 
-Defined in claims/src/interface.ts:46
+Defined in claims/src/interface.ts:47
 
 Provided with JWT this method will generate a Claim
 

@@ -6,10 +6,15 @@
 
 * **IPublicKey**
 
+## Indexable
+
+* \[ **key**: *string*\]: string | number | BigNumber
+
 ## Index
 
 ### Properties
 
+* [block](ipublickey.md#optional-block)
 * [controller](ipublickey.md#controller)
 * [ethereumAddress](ipublickey.md#optional-ethereumaddress)
 * [id](ipublickey.md#id)
@@ -20,14 +25,23 @@
 * [publicKeyMultibase](ipublickey.md#optional-publickeymultibase)
 * [publicKeyPem](ipublickey.md#optional-publickeypem)
 * [type](ipublickey.md#type)
+* [validity](ipublickey.md#optional-validity)
 
 ## Properties
+
+### `Optional` block
+
+• **block**? : *number*
+
+Defined in did-resolver/src/models/resolver.ts:66
+
+___
 
 ###  controller
 
 • **controller**: *string*
 
-Defined in did-resolver/src/models/index.ts:48
+Defined in did-resolver/src/models/resolver.ts:57
 
 ___
 
@@ -35,7 +49,7 @@ ___
 
 • **ethereumAddress**? : *string*
 
-Defined in did-resolver/src/models/index.ts:49
+Defined in did-resolver/src/models/resolver.ts:58
 
 ___
 
@@ -43,7 +57,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/index.ts:46
+Defined in did-resolver/src/models/resolver.ts:55
 
 ___
 
@@ -51,7 +65,7 @@ ___
 
 • **publicKeyBase58**? : *string*
 
-Defined in did-resolver/src/models/index.ts:51
+Defined in did-resolver/src/models/resolver.ts:60
 
 ___
 
@@ -59,7 +73,7 @@ ___
 
 • **publicKeyBase64**? : *string*
 
-Defined in did-resolver/src/models/index.ts:50
+Defined in did-resolver/src/models/resolver.ts:59
 
 ___
 
@@ -67,7 +81,7 @@ ___
 
 • **publicKeyHex**? : *string*
 
-Defined in did-resolver/src/models/index.ts:52
+Defined in did-resolver/src/models/resolver.ts:61
 
 ___
 
@@ -75,7 +89,7 @@ ___
 
 • **publicKeyJwk**? : *string*
 
-Defined in did-resolver/src/models/index.ts:54
+Defined in did-resolver/src/models/resolver.ts:63
 
 ___
 
@@ -83,7 +97,7 @@ ___
 
 • **publicKeyMultibase**? : *string*
 
-Defined in did-resolver/src/models/index.ts:55
+Defined in did-resolver/src/models/resolver.ts:64
 
 ___
 
@@ -91,7 +105,7 @@ ___
 
 • **publicKeyPem**? : *string*
 
-Defined in did-resolver/src/models/index.ts:53
+Defined in did-resolver/src/models/resolver.ts:62
 
 ___
 
@@ -99,4 +113,12 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/index.ts:47
+Defined in did-resolver/src/models/resolver.ts:56
+
+___
+
+### `Optional` validity
+
+• **validity**? : *BigNumber*
+
+Defined in did-resolver/src/models/resolver.ts:65

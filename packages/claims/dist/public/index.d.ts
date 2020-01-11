@@ -1,3 +1,2 @@
-import Claim from './claim';
-import VerificationClaim from './verificationClaim';
-export { Claim, VerificationClaim, };
+export { default as Claim } from './claim';
+export { default as VerificationClaim } from './verificationClaim';
