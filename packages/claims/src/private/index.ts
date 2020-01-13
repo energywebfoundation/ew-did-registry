@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IResolverSettings, Resolver } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
-import { IPrivateClaim } from './interface';
+import { IPrivateClaim, IClaimFields } from './interface';
 import { VerificationClaim } from '../public';
 import { IPrivateClaimBuildData } from '../models';
 
@@ -51,12 +51,12 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
      *  claimData,
      * };
      * const privateClaim = new PrivateClaim(data);
-     * privateClaim.createPrivateClaimData();
+     * await privateClaim.createPrivateClaimData();
      * console.log(privateClaim);
      * ```
      * @returns {Promise<{ [key: string]: string }}
      */
-    async createPrivateClaimData(): Promise<{ [key: string]: string }> {
+    async createPrivateClaimData(): Promise<IClaimFields> {
       let issuerDocumentLite: IDIDDocumentLite;
       try {
         const resolver = new Resolver(this.resolverSettings);
@@ -72,7 +72,7 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       const privateClaimData = {
         did: this.claimData.did,
       };
-      const saltedFields: { [key: string]: string } = { };
+      const saltedFields: IClaimFields = { };
       Object.entries(this.claimData).forEach(
         ([key, value]) => {
           if (key !== 'did') {
@@ -126,20 +126,22 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
      * @param {string} privateKey
      * @returns void
      */
-    decryptAndHashFields(privateKey: string): void {
-      if (privateKey.length === 32) {
-        privateKey = `0x${privateKey}`;
+    decryptAndHashFields(): void {
+      let privateKeyIssuer = this.keyPair.privateKey;
+      if (privateKeyIssuer.length === 32) {
+        privateKeyIssuer = `0x${privateKeyIssuer}`;
       }
       const privateClaimData = {
-        did: this.issuerDid,
+        did: this.claimData.did,
       };
       Object.entries(this.claimData).forEach(
         ([key, value]) => {
-          if (key !== 'did') {
-            console.log(value);
-            const decryptedField = ecies.decrypt(privateKey, value).toString();
-            const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
-            const fieldKeys = new Keys({ privateKey: fieldHash, publicKey: undefined });
+          if (key !== 'did' && key !== 'signerDid') {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            const decryptedField = ecies.decrypt(privateKeyIssuer, Buffer.from(value.data));
+            const fieldHash = crypto.createHash('sha256').update(decryptedField.toString()).digest('hex');
+            const fieldKeys = new Keys({ privateKey: fieldHash });
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             privateClaimData[key] = fieldKeys.publicKey;

@@ -30,6 +30,7 @@ export interface IClaimBuildData {
     token?: string;
     claimData?: IClaimData;
     resolverSettings?: IResolverSettings;
+    signerDid?: string;
 }
 
 /**
@@ -61,9 +62,12 @@ export interface IClaim {
 
     /**
      * Method returns the DID document associated with a claim subject DID
+     * Optional parameter did allows to read document associated with a different DID
+     *
+     * @param {string} did
      * @returns {string}
      */
-    getDid(): Promise<boolean>;
+    getDid(did?: string): Promise<boolean>;
 
     /**
      * Method creates token with the payload provided in the claim data
