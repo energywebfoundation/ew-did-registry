@@ -28,6 +28,7 @@ declare class Resolver implements IResolver {
      * ```
      *
      * @param {string} did - entity identifier, which is associated with DID Document
+     * @returns {Promise<IDIDDocument>}
      */
     read(did: string): Promise<IDIDDocument>;
 }
