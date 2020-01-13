@@ -11,7 +11,7 @@ DID is a required property for every Claim
 
 ## Indexable
 
-* \[ **key**: *string*\]: string
+* \[ **key**: *string*\]: string | object
 
 Claim Data interface specifies the format of claim data fields
 DID is a required property for every Claim

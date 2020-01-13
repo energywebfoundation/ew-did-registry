@@ -62,6 +62,7 @@ var Resolver = /** @class */ (function () {
      * ```
      *
      * @param {string} did - entity identifier, which is associated with DID Document
+     * @returns {Promise<IDIDDocument>}
      */
     Resolver.prototype.read = function (did) {
         return __awaiter(this, void 0, void 0, function () {

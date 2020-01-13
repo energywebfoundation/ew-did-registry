@@ -83,7 +83,7 @@ var ProofClaim = /** @class */ (function (_super) {
         _this.g = _this.curve.G;
         _this.paranoia = 6;
         if (data.hashedFields) { // claim created by subject - owner of the hashed fields
-            _this.tokenCreated = _this._createToken(data.hashedFields);
+            _this._hashedFields = data.hashedFields;
         }
         else { // claim created by verifier
             _this.token = data.token;
@@ -91,35 +91,24 @@ var ProofClaim = /** @class */ (function (_super) {
         return _this;
     }
     /* eslint-disable new-cap */
-    ProofClaim.prototype._createToken = function (hashedFields) {
+    ProofClaim.prototype.createProofClaimData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var proofData, _a;
             var _this = this;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        proofData = {};
-                        Object.entries(hashedFields).forEach(function (_a) {
-                            var key = _a[0], field = _a[1];
-                            var k = bn.random(_this.q, _this.paranoia);
-                            var h = _this.curve.G.mult(k);
-                            var a = new bn(field);
-                            var PK = _this.curve.G.mult(a);
-                            var c = bn.fromBits(hash.sha256.hash(_this.curve.G.x.toBits()
-                                .concat(h.toBits())
-                                .concat(PK.toBits())));
-                            var ca = c.mul(a).mod(_this.q);
-                            var s = ca.add(k).mod(_this.q);
-                            proofData[key] = { h: h.toBits(), s: s.toBits() };
-                        });
-                        /* eslint-disable new-cap */
-                        _a = this;
-                        return [4 /*yield*/, this.jwt.sign(JSON.stringify(proofData))];
-                    case 1:
-                        /* eslint-disable new-cap */
-                        _a.token = _b.sent();
-                        return [2 /*return*/];
-                }
+            return __generator(this, function (_a) {
+                Object.entries(this._hashedFields).forEach(function (_a) {
+                    var key = _a[0], field = _a[1];
+                    var k = bn.random(_this.q, _this.paranoia);
+                    var h = _this.curve.G.mult(k);
+                    var a = new bn(field);
+                    var PK = _this.curve.G.mult(a);
+                    var c = bn.fromBits(hash.sha256.hash(_this.curve.G.x.toBits()
+                        .concat(h.toBits())
+                        .concat(PK.toBits())));
+                    var ca = c.mul(a).mod(_this.q);
+                    var s = ca.add(k).mod(_this.q);
+                    _this.claimData[key] = { h: h.toBits(), s: s.toBits() };
+                });
+                return [2 /*return*/];
             });
         });
     };

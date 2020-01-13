@@ -17,7 +17,7 @@ export enum ClaimType {
  */
 export interface IClaimData {
     did: string;
-    [key: string]: string;
+    [key: string]: string | object;
 }
 
 /**

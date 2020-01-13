@@ -12,8 +12,8 @@ export interface IProofClaim extends IClaim {
      */
     /**
      * To verify the claim, private token (JWT) representing the claim should be provided
-     * @param {string} privateToken
-     * @returns {boolean}
+     * @param { string } privateToken
+     * @returns { boolean }
      */
     verify(privateToken: string): boolean;
 }

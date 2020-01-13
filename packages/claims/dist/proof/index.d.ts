@@ -1,2 +1,2 @@
-import { IProofClaim } from './interface';
-export { IProofClaim };
+export * from './interface';
+export * from './proofClaim';

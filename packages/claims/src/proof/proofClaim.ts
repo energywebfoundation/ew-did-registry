@@ -27,9 +27,9 @@ export class ProofClaim extends Claim implements IProofClaim {
   paranoia = 6;
 
   /**
-   * token creation completion flag
+   * sha256-hashed private claim data
    */
-  tokenCreated: Promise<void>;
+  _hashedFields: { [keys: string]: string };
 
   /**
    * Creates claim about possession of some private data.
@@ -41,16 +41,15 @@ export class ProofClaim extends Claim implements IProofClaim {
   constructor(data: IProofClaimBuildData) {
     super(data);
     if (data.hashedFields) { // claim created by subject - owner of the hashed fields
-      this.tokenCreated = this._createToken(data.hashedFields);
+      this._hashedFields = data.hashedFields;
     } else { // claim created by verifier
       this.token = data.token;
     }
   }
 
   /* eslint-disable new-cap */
-  private async _createToken(hashedFields: { [key: string]: string }): Promise<void> {
-    const proofData: { [key: string]: { h: object; s: object } } = {};
-    Object.entries(hashedFields).forEach(([key, field]) => {
+  async createProofClaimData(): Promise<void> {
+    Object.entries(this._hashedFields).forEach(([key, field]) => {
       const k = bn.random(this.q, this.paranoia);
       const h: sjcl.SjclEllipticalPoint = this.curve.G.mult(k);
       const a = new bn(field);
@@ -62,10 +61,8 @@ export class ProofClaim extends Claim implements IProofClaim {
       ));
       const ca = c.mul(a).mod(this.q);
       const s = ca.add(k).mod(this.q);
-      proofData[key] = { h: h.toBits(), s: s.toBits() };
+      this.claimData[key] = { h: h.toBits(), s: s.toBits() };
     });
-    /* eslint-disable new-cap */
-    this.token = await this.jwt.sign(JSON.stringify(proofData));
   }
 
   /**
