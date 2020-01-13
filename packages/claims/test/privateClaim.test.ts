@@ -3,7 +3,7 @@ import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 
 import { PrivateClaim } from '../src';
-import { IPrivateClaim } from '../src/private';
+import { IPrivateClaim, IClaimFields } from '../src/private';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ecies = require('eciesjs');
 
@@ -15,7 +15,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
   let claimData;
   let data;
   let privateClaim: IPrivateClaim;
-  let saltedFields: { [key: string]: string };
+  let saltedFields: IClaimFields;
 
   beforeEach(async () => {
     keys = new Keys();
@@ -69,7 +69,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
     }
     const privateClaimIssuer = new PrivateClaim(issuerData);
     privateClaimIssuer.decryptAndHashFields();
-    const issuerSignedToken = await issuerJWT.sign(privateClaim.claimData, { algorithm: 'ES256', noTimestamp: true });
+    const issuerSignedToken = await issuerJWT.sign(privateClaimIssuer.claimData, { algorithm: 'ES256', noTimestamp: true });
     const issuerClaimData = {
       did: `did:ewc:0x${issuerKeys.publicKey}`,
     };

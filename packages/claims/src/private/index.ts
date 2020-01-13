@@ -118,12 +118,19 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
      * };
      * const privateClaim = new PrivateClaim(data);
      * await privateClaim.createPrivateClaimData();
-     * privateClaim.decryptAndHashFields(issuerKeys.privateKey);
-     * const hashedFields = privateClaim.claimData;
+     *
+     * const issuerJWT = new JWT(issuerKeys);
+     * const issuerData = {
+     *  jwt: issuerJWT,
+     *  keyPair: issuerKeys,
+     *  token: privateClaim.token,
+     * }
+     * const privateClaimIssuer = new PrivateClaim(issuerData);
+     * privateClaimIssuer.decryptAndHashFields();
+     * const hashedFields = privateClaimIssuer.claimData;
      * console.log(hashedFields);
      * ```
      *
-     * @param {string} privateKey
      * @returns void
      */
     decryptAndHashFields(): void {
@@ -193,23 +200,23 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
      * console.log(verified);
      * ```
      *
-     * @param {{ [key: string]: string }} saltedFields
+     * @param {IClaimFields} saltedFields
      * @returns boolean
      */
-    verifyPayload(saltedFields: { [key: string]: string }): boolean {
+    verifyPayload(saltedFields: IClaimFields): boolean {
+      let returnValue = true;
       Object.entries(saltedFields).forEach(
-        // eslint-disable-next-line consistent-return
         ([key, value]) => {
           if (key !== 'did') {
             const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
             const fieldKeys = new Keys({ privateKey: fieldHash, publicKey: undefined });
             if (this.claimData[key] !== fieldKeys.publicKey) {
-              return false;
+              returnValue = false;
             }
           }
         },
       );
-      return true;
+      return returnValue;
     }
 }
-export { IPrivateClaim, PrivateClaim };
+export { IPrivateClaim, PrivateClaim, IClaimFields };
