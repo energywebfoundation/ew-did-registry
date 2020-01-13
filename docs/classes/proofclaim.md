@@ -21,6 +21,7 @@
 
 ### Properties
 
+* [_hashedFields](proofclaim.md#_hashedfields)
 * [claimData](proofclaim.md#claimdata)
 * [curve](proofclaim.md#curve)
 * [didDocument](proofclaim.md#diddocument)
@@ -30,11 +31,11 @@
 * [paranoia](proofclaim.md#paranoia)
 * [q](proofclaim.md#q)
 * [token](proofclaim.md#token)
-* [tokenCreated](proofclaim.md#tokencreated)
 
 ### Methods
 
 * [createJWT](proofclaim.md#createjwt)
+* [createProofClaimData](proofclaim.md#createproofclaimdata)
 * [getDid](proofclaim.md#getdid)
 * [verify](proofclaim.md#verify)
 
@@ -62,6 +63,20 @@ Name | Type | Description |
 **Returns:** *[ProofClaim](proofclaim.md)*
 
 ## Properties
+
+###  _hashedFields
+
+• **_hashedFields**: *object*
+
+Defined in claims/src/proof/proofClaim.ts:32
+
+sha256-hashed private claim data
+
+#### Type declaration:
+
+* \[ **keys**: *string*\]: string
+
+___
 
 ###  claimData
 
@@ -167,16 +182,6 @@ Defined in claims/src/public/claim.ts:26
 
 claimToken stores the actual serialised JWT in a string format
 
-___
-
-###  tokenCreated
-
-• **tokenCreated**: *Promise‹void›*
-
-Defined in claims/src/proof/proofClaim.ts:32
-
-token creation completion flag
-
 ## Methods
 
 ###  createJWT
@@ -212,6 +217,16 @@ const publicClaim = new Claim(data);
 await publicClaim.createJWT();
 console.log(publicClaim.token);
 ```
+
+**Returns:** *Promise‹void›*
+
+___
+
+###  createProofClaimData
+
+▸ **createProofClaimData**(): *Promise‹void›*
+
+Defined in claims/src/proof/proofClaim.ts:51
 
 **Returns:** *Promise‹void›*
 
@@ -262,7 +277,7 @@ ___
 
 *Implementation of [IProofClaim](../interfaces/iproofclaim.md)*
 
-Defined in claims/src/proof/proofClaim.ts:88
+Defined in claims/src/proof/proofClaim.ts:85
 
 Сhecks that the public keys in the `privateToken`'s payload matches values
 based on which `this.token` payload was calculated
