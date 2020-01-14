@@ -17,9 +17,11 @@ export declare class ProofClaim extends Claim implements IProofClaim {
     g: any;
     paranoia: number;
     /**
-     * token creation completion flag
+     * sha256-hashed private claim data
      */
-    tokenCreated: Promise<void>;
+    _hashedFields: {
+        [keys: string]: string;
+    };
     /**
      * Creates claim about possession of some private data.
      * When created by the owner of the private data, this data must be contained
@@ -28,7 +30,7 @@ export declare class ProofClaim extends Claim implements IProofClaim {
      * @param { IProofClaimBuildData } data
      */
     constructor(data: IProofClaimBuildData);
-    private _createToken;
+    createProofClaimData(): Promise<void>;
     /**
      * Сhecks that the public keys in the `privateToken`'s payload matches values
      * based on which `this.token` payload was calculated

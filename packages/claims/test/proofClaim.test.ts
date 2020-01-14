@@ -33,10 +33,12 @@ describe('[PROOF CLAIM]', () => {
       keyPair: ownerKeys,
       jwt: ownerJwt,
       claimData: {
-        did: `did:ewc:${ownerKeys.publicKey}`,
+        did: `did:ewc:0x${ownerKeys.publicKey}`,
       },
     });
-    await proofClaim.tokenCreated;
+    await proofClaim.createProofClaimData();
+    await proofClaim.createJWT();
+    console.log('proofClaim.test: proof claim data:', proofClaim.claimData);
     const verifierKeys = new Keys();
     const proofToken = proofClaim.token;
     proofClaim = new ProofClaim({
@@ -44,7 +46,7 @@ describe('[PROOF CLAIM]', () => {
       keyPair: verifierKeys,
       jwt: new JWT(verifierKeys),
       claimData: {
-        did: `did:ewc:${verifierKeys.publicKey}`,
+        did: `did:ewc:0x${verifierKeys.publicKey}`,
       },
     });
     expect(proofClaim.verify(verifyToken)).true;

@@ -15,7 +15,7 @@ export declare enum ClaimType {
  */
 export interface IClaimData {
     did: string;
-    [key: string]: string;
+    [key: string]: string | object;
 }
 /**
  * Claim Build Data outlines the necessary properties used to create
@@ -86,5 +86,7 @@ export interface IPrivateClaimBuildData extends IClaimBuildData {
  * interface and is required to construct Proof Claims
  */
 export interface IProofClaimBuildData extends IClaimBuildData {
-    hashedFields?: number[];
+    hashedFields?: {
+        [keys: string]: string;
+    };
 }
