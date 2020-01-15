@@ -29,7 +29,9 @@ export interface IClaims {
      * @param {number[]} hashedFields
      * @returns {IProofClaim}
      */
-    createProofClaim(data: IClaimData, hashedFields: number[]): Promise<IProofClaim>;
+    createProofClaim(data: IClaimData, hashedFields: {
+        [keys: string]: string;
+    }): Promise<IProofClaim>;
     /**
      * Provided with JWT this method will generate a Claim
      * @param {string} token

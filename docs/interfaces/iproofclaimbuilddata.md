@@ -20,6 +20,7 @@ interface and is required to construct Proof Claims
 * [jwt](iproofclaimbuilddata.md#jwt)
 * [keyPair](iproofclaimbuilddata.md#keypair)
 * [resolverSettings](iproofclaimbuilddata.md#optional-resolversettings)
+* [signerDid](iproofclaimbuilddata.md#optional-signerdid)
 * [token](iproofclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -38,7 +39,7 @@ ___
 
 • **hashedFields**? : *object*
 
-Defined in claims/src/models/index.ts:100
+Defined in claims/src/models/index.ts:111
 
 #### Type declaration:
 
@@ -73,6 +74,16 @@ ___
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolverSettings](iclaimbuilddata.md#optional-resolversettings)*
 
 Defined in claims/src/models/index.ts:32
+
+___
+
+### `Optional` signerDid
+
+• **signerDid**? : *string*
+
+*Inherited from [IClaimBuildData](iclaimbuilddata.md).[signerDid](iclaimbuilddata.md#optional-signerdid)*
+
+Defined in claims/src/models/index.ts:33
 
 ___
 

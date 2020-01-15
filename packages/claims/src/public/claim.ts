@@ -1,10 +1,15 @@
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
-import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, IResolverSettings, Resolver } from '@ew-did-registry/did-resolver';
 import { IClaim, IClaimData, IClaimBuildData } from '../models';
 
 class Claim implements IClaim {
+    /**
+     * Used for creation of new Resolvers
+     */
+    private readonly resolver: Resolver;
+
     /**
      * Light document is used for fetching the DID Document
      */
@@ -42,26 +47,27 @@ class Claim implements IClaim {
      * @param {IClaimBuildData} data
      */
     constructor(data: IClaimBuildData) {
-      const resolver = new Resolver(data.resolverSettings);
+      this.resolver = new Resolver(data.resolverSettings);
       this.keyPair = data.keyPair;
       this.jwt = new JWT(data.keyPair);
 
       if (data.token === undefined) {
         const documentFactory = new DIDDocumentFactory(data.claimData.did);
-        this.didDocumentLite = documentFactory.createLite(resolver);
+        this.didDocumentLite = documentFactory.createLite(this.resolver);
         this.claimData = data.claimData;
       } else {
         this.token = data.token;
         const decodedPayload = this.jwt.decode(this.token);
-        if (Object.prototype.hasOwnProperty.call(decodedPayload, 'did')) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        if (decodedPayload.did) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
           // @ts-ignore
           const decodedDid = decodedPayload.did;
           const documentFactory = new DIDDocumentFactory(decodedDid);
-          this.didDocumentLite = documentFactory.createLite(resolver);
-          this.claimData = {
-            did: decodedDid,
-          };
+          this.didDocumentLite = documentFactory.createLite(this.resolver);
+          this.claimData = decodedPayload as IClaimData;
+          this.claimData.signerDid = data.signerDid;
         }
       }
     }
@@ -94,14 +100,20 @@ class Claim implements IClaim {
      *
      * @returns {Promise<boolean>}
      */
-    async getDid(): Promise<boolean> {
+    async getDid(did?: string): Promise<boolean> {
       try {
-        await this.didDocumentLite.read(this.claimData.did);
-        this.didDocument = this.didDocumentLite.didDocument;
+        if (did) {
+          const documentFactory = new DIDDocumentFactory(did);
+          const tempDidDocumentLite = documentFactory.createLite(this.resolver);
+          await tempDidDocumentLite.read(did);
+          this.didDocument = tempDidDocumentLite.didDocument;
+        } else {
+          await this.didDocumentLite.read(this.claimData.did);
+          this.didDocument = this.didDocumentLite.didDocument;
+        }
         return true;
       } catch (error) {
-        console.log(error);
-        return false;
+        throw new Error(error);
       }
     }
 
@@ -132,9 +144,8 @@ class Claim implements IClaim {
      * console.log(publicClaim.token);
      * ```
      */
-    async createJWT() {
-      const token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
-      this.token = token;
+    async createJWT(): Promise<void> {
+      this.token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
     }
 }
 

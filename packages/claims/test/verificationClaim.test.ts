@@ -8,13 +8,15 @@ import { IClaimData } from '../src/models';
 describe('[VERIFICATION CLAIM CLASS]', () => {
 
   let claimData: IClaimData;
+  let keys: Keys;
+  let jwt: JWT;
   let keysVerifier: Keys;
   let jwtVerifier: JWT;
   let verificationClaim: VerificationClaim;
 
   before(async () => {
-    const keys = new Keys();
-    const jwt = new JWT(keys);
+    keys = new Keys();
+    jwt = new JWT(keys);
     claimData = {
       did: `did:ewc:0x${keys.publicKey}`,
       test: 'test',
@@ -51,5 +53,20 @@ describe('[VERIFICATION CLAIM CLASS]', () => {
     const approvedPayload = await jwtVerifier.verify(approvedToken, keysVerifier.publicKey);
     expect(approvedToken).to.be.a('string');
     expect(approvedPayload).to.be.eql(claimData);
+  });
+
+
+  it('jwt approved by verifier should be signed correctly', async () => {
+    const approvedToken = await verificationClaim.approve();
+    const receivedClaimData = {
+      jwt,
+      keyPair: keys,
+      token: approvedToken,
+      signerDid: `did:ewc:0x${keysVerifier.publicKey}`,
+    };
+    const receivedClaim = new VerificationClaim(receivedClaimData);
+    const verified = await receivedClaim.verify();
+    expect(approvedToken).to.be.a('string');
+    expect(verified).to.be.true;
   });
 });

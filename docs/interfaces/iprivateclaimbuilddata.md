@@ -20,6 +20,7 @@ interface and is required to construct Private Claims
 * [jwt](iprivateclaimbuilddata.md#jwt)
 * [keyPair](iprivateclaimbuilddata.md#keypair)
 * [resolverSettings](iprivateclaimbuilddata.md#optional-resolversettings)
+* [signerDid](iprivateclaimbuilddata.md#optional-signerdid)
 * [token](iprivateclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -38,7 +39,7 @@ ___
 
 • **issuerDid**? : *string*
 
-Defined in claims/src/models/index.ts:92
+Defined in claims/src/models/index.ts:103
 
 ___
 
@@ -69,6 +70,16 @@ ___
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolverSettings](iclaimbuilddata.md#optional-resolversettings)*
 
 Defined in claims/src/models/index.ts:32
+
+___
+
+### `Optional` signerDid
+
+• **signerDid**? : *string*
+
+*Inherited from [IClaimBuildData](iclaimbuilddata.md).[signerDid](iclaimbuilddata.md#optional-signerdid)*
+
+Defined in claims/src/models/index.ts:33
 
 ___
 

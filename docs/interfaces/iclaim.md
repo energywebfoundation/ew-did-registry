@@ -30,6 +30,7 @@ Claim interface is used by all Claim types
 
 ### Methods
 
+* [createJWT](iclaim.md#createjwt)
 * [getDid](iclaim.md#getdid)
 
 ## Properties
@@ -38,7 +39,7 @@ Claim interface is used by all Claim types
 
 • **claimData**: *[IClaimData](iclaimdata.md)*
 
-Defined in claims/src/models/index.ts:56
+Defined in claims/src/models/index.ts:57
 
 claimData stores the claim fields
 
@@ -48,7 +49,7 @@ ___
 
 • **jwt**: *IJWT*
 
-Defined in claims/src/models/index.ts:48
+Defined in claims/src/models/index.ts:49
 
 jwt stores the JWT to manage web tokens
 
@@ -58,7 +59,7 @@ ___
 
 • **keyPair**: *IKeys*
 
-Defined in claims/src/models/index.ts:60
+Defined in claims/src/models/index.ts:61
 
 keyPair represents the implementation of key management interface
 
@@ -68,18 +69,39 @@ ___
 
 • **token**: *string*
 
-Defined in claims/src/models/index.ts:52
+Defined in claims/src/models/index.ts:53
 
 claimToken stores the actual serialised JWT in a string format
 
 ## Methods
 
+###  createJWT
+
+▸ **createJWT**(): *void*
+
+Defined in claims/src/models/index.ts:77
+
+Method creates token with the payload provided in the claim data
+The signed token is stored as a member of Claim class
+This is a void method
+
+**Returns:** *void*
+
+___
+
 ###  getDid
 
-▸ **getDid**(): *Promise‹boolean›*
+▸ **getDid**(`did?`: string): *Promise‹boolean›*
 
-Defined in claims/src/models/index.ts:66
+Defined in claims/src/models/index.ts:70
 
 Method returns the DID document associated with a claim subject DID
+Optional parameter did allows to read document associated with a different DID
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did?` | string |
 
 **Returns:** *Promise‹boolean›*

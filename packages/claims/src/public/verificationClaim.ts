@@ -29,10 +29,10 @@ class VerificationClaim extends Claim implements IVerificationClaim {
    * @returns {Promise<boolean>}
    */
   async verify(): Promise<boolean> {
-    await this.getDid();
+    await this.getDid(this.claimData.signerDid as string);
     const publicKey = this.didDocument.publicKey.find((pk) => pk.type === 'Secp256k1VerificationKey');
     try {
-      this.jwt.verify(this.token, publicKey.ethereumAddress.slice(2));
+      await this.jwt.verify(this.token, publicKey.ethereumAddress.slice(2));
     } catch (error) {
       throw (new Error(error));
     }

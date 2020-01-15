@@ -39,7 +39,7 @@
 
 \+ **new Claim**(`data`: [IClaimBuildData](../interfaces/iclaimbuilddata.md)): *[Claim](claim.md)*
 
-Defined in claims/src/public/claim.ts:36
+Defined in claims/src/public/claim.ts:41
 
 Constructor
 
@@ -61,7 +61,7 @@ Name | Type | Description |
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[claimData](../interfaces/iclaim.md#claimdata)*
 
-Defined in claims/src/public/claim.ts:31
+Defined in claims/src/public/claim.ts:36
 
 claimData stores the claim fields
 
@@ -71,7 +71,7 @@ ___
 
 • **didDocument**: *IDIDDocument*
 
-Defined in claims/src/public/claim.ts:16
+Defined in claims/src/public/claim.ts:21
 
 didDocument is used to store fetched DID Document
 
@@ -83,7 +83,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[jwt](../interfaces/iclaim.md#jwt)*
 
-Defined in claims/src/public/claim.ts:21
+Defined in claims/src/public/claim.ts:26
 
 jwt stores the JWT to manage web tokens
 
@@ -95,7 +95,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[keyPair](../interfaces/iclaim.md#keypair)*
 
-Defined in claims/src/public/claim.ts:36
+Defined in claims/src/public/claim.ts:41
 
 keyPair represents the implementation of key management interface
 
@@ -107,7 +107,7 @@ ___
 
 *Implementation of [IClaim](../interfaces/iclaim.md).[token](../interfaces/iclaim.md#token)*
 
-Defined in claims/src/public/claim.ts:26
+Defined in claims/src/public/claim.ts:31
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -117,7 +117,9 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **createJWT**(): *Promise‹void›*
 
-Defined in claims/src/public/claim.ts:135
+*Implementation of [IClaim](../interfaces/iclaim.md)*
+
+Defined in claims/src/public/claim.ts:147
 
 Method creates token with the payload provided in the claim data
 The signed token is stored as a member of Claim class
@@ -151,11 +153,11 @@ ___
 
 ###  getDid
 
-▸ **getDid**(): *Promise‹boolean›*
+▸ **getDid**(`did?`: string): *Promise‹boolean›*
 
 *Implementation of [IClaim](../interfaces/iclaim.md)*
 
-Defined in claims/src/public/claim.ts:97
+Defined in claims/src/public/claim.ts:103
 
 Method fetches the DID Document associated with did provided in claim data
 DID Document is then stored as a member of Claim class. Returns true on success
@@ -181,5 +183,11 @@ const publicClaim = new Claim(data);
 await publicClaim.getDid();
 console.log(publicClaim.didDocument);
 ```
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did?` | string |
 
 **Returns:** *Promise‹boolean›*

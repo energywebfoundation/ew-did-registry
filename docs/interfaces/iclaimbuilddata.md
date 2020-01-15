@@ -21,6 +21,7 @@ each of the Claim types
 * [jwt](iclaimbuilddata.md#jwt)
 * [keyPair](iclaimbuilddata.md#keypair)
 * [resolverSettings](iclaimbuilddata.md#optional-resolversettings)
+* [signerDid](iclaimbuilddata.md#optional-signerdid)
 * [token](iclaimbuilddata.md#optional-token)
 
 ## Properties
@@ -54,6 +55,14 @@ ___
 • **resolverSettings**? : *IResolverSettings*
 
 Defined in claims/src/models/index.ts:32
+
+___
+
+### `Optional` signerDid
+
+• **signerDid**? : *string*
+
+Defined in claims/src/models/index.ts:33
 
 ___
 

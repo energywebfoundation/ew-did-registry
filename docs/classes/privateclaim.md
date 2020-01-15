@@ -24,6 +24,7 @@
 
 * [claimData](privateclaim.md#claimdata)
 * [didDocument](privateclaim.md#diddocument)
+* [issuerDid](privateclaim.md#issuerdid)
 * [jwt](privateclaim.md#jwt)
 * [keyPair](privateclaim.md#keypair)
 * [token](privateclaim.md#token)
@@ -32,6 +33,8 @@
 
 * [approve](privateclaim.md#approve)
 * [createJWT](privateclaim.md#createjwt)
+* [createPrivateClaimData](privateclaim.md#createprivateclaimdata)
+* [decryptAndHashFields](privateclaim.md#decryptandhashfields)
 * [getDid](privateclaim.md#getdid)
 * [verify](privateclaim.md#verify)
 * [verifyPayload](privateclaim.md#verifypayload)
@@ -44,13 +47,16 @@
 
 *Overrides [Claim](claim.md).[constructor](claim.md#constructor)*
 
-Defined in claims/src/private/index.ts:7
+Defined in claims/src/private/index.ts:13
+
+Constructor takes as input Private Claim data.
+eslint warning disabled to ensure type-checking.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`data` | [IPrivateClaimBuildData](../interfaces/iprivateclaimbuilddata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`data` | [IPrivateClaimBuildData](../interfaces/iprivateclaimbuilddata.md) |   |
 
 **Returns:** *[PrivateClaim](privateclaim.md)*
 
@@ -64,7 +70,7 @@ Name | Type |
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
-Defined in claims/src/public/claim.ts:31
+Defined in claims/src/public/claim.ts:36
 
 claimData stores the claim fields
 
@@ -76,9 +82,17 @@ ___
 
 *Inherited from [Claim](claim.md).[didDocument](claim.md#diddocument)*
 
-Defined in claims/src/public/claim.ts:16
+Defined in claims/src/public/claim.ts:21
 
 didDocument is used to store fetched DID Document
+
+___
+
+###  issuerDid
+
+• **issuerDid**: *string*
+
+Defined in claims/src/private/index.ts:11
 
 ___
 
@@ -90,7 +104,7 @@ ___
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
-Defined in claims/src/public/claim.ts:21
+Defined in claims/src/public/claim.ts:26
 
 jwt stores the JWT to manage web tokens
 
@@ -104,7 +118,7 @@ ___
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
-Defined in claims/src/public/claim.ts:36
+Defined in claims/src/public/claim.ts:41
 
 keyPair represents the implementation of key management interface
 
@@ -118,7 +132,7 @@ ___
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
-Defined in claims/src/public/claim.ts:26
+Defined in claims/src/public/claim.ts:31
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -167,9 +181,11 @@ ___
 
 ▸ **createJWT**(): *Promise‹void›*
 
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
+
 *Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
 
-Defined in claims/src/public/claim.ts:135
+Defined in claims/src/public/claim.ts:147
 
 Method creates token with the payload provided in the claim data
 The signed token is stored as a member of Claim class
@@ -201,15 +217,101 @@ console.log(publicClaim.token);
 
 ___
 
+###  createPrivateClaimData
+
+▸ **createPrivateClaimData**(): *Promise‹[IClaimFields](../interfaces/iclaimfields.md)›*
+
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
+
+Defined in claims/src/private/index.ts:56
+
+Creation of Private Claim is a separate method to avoid asynchronous calls in the constructor
+
+**`example`** 
+```typescript
+import { PrivateClaim } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+const keys = new Keys();
+const jwt = new JWT(keys);
+const claimData = {
+ did: `did:ewc:0x${keys.publicKey}`,
+ issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+ test: 'test',
+};
+
+const data = {
+ jwt,
+ keyPair: keys,
+ claimData,
+};
+const privateClaim = new PrivateClaim(data);
+await privateClaim.createPrivateClaimData();
+console.log(privateClaim);
+```
+
+**Returns:** *Promise‹[IClaimFields](../interfaces/iclaimfields.md)›*
+
+___
+
+###  decryptAndHashFields
+
+▸ **decryptAndHashFields**(): *void*
+
+*Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
+
+Defined in claims/src/private/index.ts:134
+
+This method is called when the issuer receives the token from the user with encrypted data
+
+**`example`** 
+```typescript
+import { PrivateClaim } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+const keys = new Keys();
+const issuerKeys = new Keys();
+const jwt = new JWT(keys);
+const claimData = {
+did: `did:ewc:0x${keys.publicKey}`,
+issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+ test: 'test',
+};
+const data = {
+ jwt,
+ keyPair: keys,
+ claimData,
+};
+const privateClaim = new PrivateClaim(data);
+await privateClaim.createPrivateClaimData();
+
+const issuerJWT = new JWT(issuerKeys);
+const issuerData = {
+ jwt: issuerJWT,
+ keyPair: issuerKeys,
+ token: privateClaim.token,
+}
+const privateClaimIssuer = new PrivateClaim(issuerData);
+privateClaimIssuer.decryptAndHashFields();
+const hashedFields = privateClaimIssuer.claimData;
+console.log(hashedFields);
+```
+
+**Returns:** *void*
+
+void
+
+___
+
 ###  getDid
 
-▸ **getDid**(): *Promise‹boolean›*
+▸ **getDid**(`did?`: string): *Promise‹boolean›*
 
 *Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-Defined in claims/src/public/claim.ts:97
+Defined in claims/src/public/claim.ts:103
 
 Method fetches the DID Document associated with did provided in claim data
 DID Document is then stored as a member of Claim class. Returns true on success
@@ -235,6 +337,12 @@ const publicClaim = new Claim(data);
 await publicClaim.getDid();
 console.log(publicClaim.didDocument);
 ```
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did?` | string |
 
 **Returns:** *Promise‹boolean›*
 
@@ -279,16 +387,59 @@ ___
 
 ###  verifyPayload
 
-▸ **verifyPayload**(`hashedFields`: number[]): *boolean*
+▸ **verifyPayload**(`saltedFields`: [IClaimFields](../interfaces/iclaimfields.md)): *boolean*
 
 *Implementation of [IPrivateClaim](../interfaces/iprivateclaim.md)*
 
-Defined in claims/src/private/index.ts:19
+Defined in claims/src/private/index.ts:201
+
+This method is called by the user after the issuer returns signed JWT with hashed
+encrypted fields. Methods verifies if the payload was created correctly
+
+**`example`** 
+```typescript
+import { PrivateClaim } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+const keys = new Keys();
+const issuerKeys = new Keys();
+const jwt = new JWT(keys);
+const claimData = {
+did: `did:ewc:0x${keys.publicKey}`,
+issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+ test: 'test',
+};
+const data = {
+ jwt,
+ keyPair: keys,
+ claimData,
+};
+const privateClaim = new PrivateClaim(data);
+const saltedFields = await privateClaim.createPrivateClaimData();
+privateClaim.decryptAndHashFields(issuerKeys.privateKey);
+const issuerSignedToken = await issuerJWT.sign(privateClaim.claimData,
+{ algorithm: 'ES256', noTimestamp: true });
+const issuerClaimData = {
+ did: `did:ewc:0x${issuerKeys.publicKey}`,
+};
+const issuerData = {
+ jwt,
+ keyPair: keys,
+ token: issuerSignedToken,
+ claimData: issuerClaimData,
+}
+const issuerReturnedPrivateClaim = new PrivateClaim(issuerData);
+issuerReturnedPrivateClaim.verify();
+const verified = issuerReturnedPrivateClaim.verifyPayload(saltedFields);
+console.log(verified);
+```
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`hashedFields` | number[] |
+`saltedFields` | [IClaimFields](../interfaces/iclaimfields.md) |
 
 **Returns:** *boolean*
+
+boolean

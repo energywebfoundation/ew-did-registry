@@ -47,26 +47,27 @@ var Claim = /** @class */ (function () {
      * @param {IClaimBuildData} data
      */
     function Claim(data) {
-        var resolver = new did_resolver_1.Resolver(data.resolverSettings);
+        this.resolver = new did_resolver_1.Resolver(data.resolverSettings);
         this.keyPair = data.keyPair;
         this.jwt = new jwt_1.JWT(data.keyPair);
         if (data.token === undefined) {
             var documentFactory = new did_document_1.DIDDocumentFactory(data.claimData.did);
-            this.didDocumentLite = documentFactory.createLite(resolver);
+            this.didDocumentLite = documentFactory.createLite(this.resolver);
             this.claimData = data.claimData;
         }
         else {
             this.token = data.token;
             var decodedPayload = this.jwt.decode(this.token);
-            if (Object.prototype.hasOwnProperty.call(decodedPayload, 'did')) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            if (decodedPayload.did) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 var decodedDid = decodedPayload.did;
                 var documentFactory = new did_document_1.DIDDocumentFactory(decodedDid);
-                this.didDocumentLite = documentFactory.createLite(resolver);
-                this.claimData = {
-                    did: decodedDid,
-                };
+                this.didDocumentLite = documentFactory.createLite(this.resolver);
+                this.claimData = decodedPayload;
+                this.claimData.signerDid = data.signerDid;
             }
         }
     }
@@ -98,23 +99,31 @@ var Claim = /** @class */ (function () {
      *
      * @returns {Promise<boolean>}
      */
-    Claim.prototype.getDid = function () {
+    Claim.prototype.getDid = function (did) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1;
+            var documentFactory, tempDidDocumentLite, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.didDocumentLite.read(this.claimData.did)];
+                        _a.trys.push([0, 5, , 6]);
+                        if (!did) return [3 /*break*/, 2];
+                        documentFactory = new did_document_1.DIDDocumentFactory(did);
+                        tempDidDocumentLite = documentFactory.createLite(this.resolver);
+                        return [4 /*yield*/, tempDidDocumentLite.read(did)];
                     case 1:
                         _a.sent();
+                        this.didDocument = tempDidDocumentLite.didDocument;
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, this.didDocumentLite.read(this.claimData.did)];
+                    case 3:
+                        _a.sent();
                         this.didDocument = this.didDocumentLite.didDocument;
-                        return [2 /*return*/, true];
-                    case 2:
+                        _a.label = 4;
+                    case 4: return [2 /*return*/, true];
+                    case 5:
                         error_1 = _a.sent();
-                        console.log(error_1);
-                        return [2 /*return*/, false];
-                    case 3: return [2 /*return*/];
+                        throw new Error(error_1);
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -148,13 +157,14 @@ var Claim = /** @class */ (function () {
      */
     Claim.prototype.createJWT = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true })];
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true })];
                     case 1:
-                        token = _a.sent();
-                        this.token = token;
+                        _a.token = _b.sent();
                         return [2 /*return*/];
                 }
             });

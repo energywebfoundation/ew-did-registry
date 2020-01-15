@@ -30,6 +30,7 @@ and is used by Private and Public Claims
 ### Methods
 
 * [approve](iverificationclaim.md#approve)
+* [createJWT](iverificationclaim.md#createjwt)
 * [getDid](iverificationclaim.md#getdid)
 * [verify](iverificationclaim.md#verify)
 
@@ -41,7 +42,7 @@ and is used by Private and Public Claims
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-Defined in claims/src/models/index.ts:56
+Defined in claims/src/models/index.ts:57
 
 claimData stores the claim fields
 
@@ -53,7 +54,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
 
-Defined in claims/src/models/index.ts:48
+Defined in claims/src/models/index.ts:49
 
 jwt stores the JWT to manage web tokens
 
@@ -65,7 +66,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
 
-Defined in claims/src/models/index.ts:60
+Defined in claims/src/models/index.ts:61
 
 keyPair represents the implementation of key management interface
 
@@ -77,7 +78,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
 
-Defined in claims/src/models/index.ts:52
+Defined in claims/src/models/index.ts:53
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -87,7 +88,7 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **approve**(): *Promise‹string›*
 
-Defined in claims/src/models/index.ts:84
+Defined in claims/src/models/index.ts:95
 
 Method signs the claim and return the serialised JWT
 
@@ -95,15 +96,38 @@ Method signs the claim and return the serialised JWT
 
 ___
 
+###  createJWT
+
+▸ **createJWT**(): *void*
+
+*Inherited from [IClaim](iclaim.md).[createJWT](iclaim.md#createjwt)*
+
+Defined in claims/src/models/index.ts:77
+
+Method creates token with the payload provided in the claim data
+The signed token is stored as a member of Claim class
+This is a void method
+
+**Returns:** *void*
+
+___
+
 ###  getDid
 
-▸ **getDid**(): *Promise‹boolean›*
+▸ **getDid**(`did?`: string): *Promise‹boolean›*
 
 *Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
 
-Defined in claims/src/models/index.ts:66
+Defined in claims/src/models/index.ts:70
 
 Method returns the DID document associated with a claim subject DID
+Optional parameter did allows to read document associated with a different DID
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did?` | string |
 
 **Returns:** *Promise‹boolean›*
 
@@ -113,7 +137,7 @@ ___
 
 ▸ **verify**(): *Promise‹boolean›*
 
-Defined in claims/src/models/index.ts:78
+Defined in claims/src/models/index.ts:89
 
 verify check if the given Claim was signed correctly
 

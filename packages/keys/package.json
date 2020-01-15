@@ -24,8 +24,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "ecies-parity": "^0.1.1",
     "@types/elliptic": "^6.4.10",
+    "ecies-parity": "^0.1.1",
     "elliptic": "^6.5.2"
   }
 }

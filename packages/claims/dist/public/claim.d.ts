@@ -5,6 +5,10 @@ import { IDIDDocument } from '@ew-did-registry/did-resolver';
 import { IClaim, IClaimData, IClaimBuildData } from '../models';
 declare class Claim implements IClaim {
     /**
+     * Used for creation of new Resolvers
+     */
+    private readonly resolver;
+    /**
      * Light document is used for fetching the DID Document
      */
     protected readonly didDocumentLite: IDIDDocumentLite;
@@ -63,7 +67,7 @@ declare class Claim implements IClaim {
      *
      * @returns {Promise<boolean>}
      */
-    getDid(): Promise<boolean>;
+    getDid(did?: string): Promise<boolean>;
     /**
      * Method creates token with the payload provided in the claim data
      * The signed token is stored as a member of Claim class

@@ -37,6 +37,7 @@
 * [IClaim](interfaces/iclaim.md)
 * [IClaimBuildData](interfaces/iclaimbuilddata.md)
 * [IClaimData](interfaces/iclaimdata.md)
+* [IClaimFields](interfaces/iclaimfields.md)
 * [IClaims](interfaces/iclaims.md)
 * [IDID](interfaces/idid.md)
 * [IDIDDocument](interfaces/ididdocument.md)
