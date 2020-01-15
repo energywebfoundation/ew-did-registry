@@ -13,6 +13,8 @@ In this document we will concentrate on the first solution: delegating the signa
 
 Authorizing the third party to sign on behalf of the `Organization` until the delegation is revoked is a major security risk for the `Organization` which requires a lot of trust. This is why we propose to setup the third party in a secure [SGX enclave](https://en.wikipedia.org/wiki/Software_Guard_Extensions). 
 
+As SGX is certified by Intel, Intel serves as the guarantor and hence the source of trust. But Intel does not have the power to reveal any information, it does only certify that the software deployed to the enclave is correct.
+
 ### Process
 
 The following diagrams depict the sequence of events which allow to create a fully anonymous private claim.
@@ -66,3 +68,33 @@ The result is that the end-user can present the claim to the organization withou
 
 ## Use Case
 
+The first use case is enrolling EV drivers in a subsidy scheme without knowing who the drivers are but making sure that each driver can only enroll once.
+
+When the driver sends information to claim subsidy they include:
+
+* Proof of charge operation. I.e. CDR with signature from CPO
+* Anonymous proof of enrollment in program 
+* EWC address to transfer the reward to 
+
+````mermaid
+sequenceDiagram
+    participant usr as End User
+    participant org as Organization
+
+    usr->>org:Send miles driven together with enrollment proof
+    note over usr,org:no user data needs to be disclosed
+    org->>org:verify enrollment claim
+    org->>org:store miles driven claim and associated enrollment
+    org->>org:transfer stable coins 
+    org-->>usr:transaction hash
+````
+
+The organization can verify that
+
+* Only enrolled users can submit requests
+* A request can not be submitted twice in the same time period
+    * The session ID from te CDR can be checked
+    * The enrollment proof serves as unique identifier for the anonymous user
+* It can not discover the user's identity with the EWC address where the tokens are sent to
+
+This process allows for a fully anonymous and secure with no need for a trusted party. 
