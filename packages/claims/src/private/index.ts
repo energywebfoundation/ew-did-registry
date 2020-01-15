@@ -1,14 +1,11 @@
 import crypto from 'crypto';
+import { encrypt, decrypt } from 'eciesjs';
 import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IResolverSettings, Resolver } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { IPrivateClaim, IClaimFields } from './interface';
 import { VerificationClaim } from '../public';
 import { IPrivateClaimBuildData } from '../models';
-
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ecies = require('eciesjs');
 
 class PrivateClaim extends VerificationClaim implements IPrivateClaim {
     public issuerDid: string;
@@ -69,30 +66,31 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
 
       const issuerPublicKey = issuerDocumentLite.didDocument.publicKey.find((pk) => pk.type === 'Secp256k1VerificationKey');
       const issuerEthereumPublic = issuerPublicKey.ethereumAddress;
-      const privateClaimData = {
-        did: this.claimData.did,
-      };
-      const saltedFields: IClaimFields = { };
-      Object.entries(this.claimData).forEach(
-        ([key, value]) => {
-          if (key !== 'did') {
-            const salt = crypto.randomBytes(32).toString('base64');
-            const saltedValue = value + salt;
-            let encrpytedSaltedValue;
-            try {
-              encrpytedSaltedValue = ecies.encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
-            } catch (error) {
-              throw new Error(error);
-            }
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            privateClaimData[key] = encrpytedSaltedValue;
-            saltedFields[key] = saltedValue;
+
+      const results = Object.entries(this.claimData).reduce((accumulator, currentValue) => {
+        const [key, value] = currentValue;
+        if (key !== 'did') {
+          const salt = crypto.randomBytes(32).toString('base64');
+          const saltedValue = value + salt;
+          let encrpytedSaltedValue;
+          try {
+            encrpytedSaltedValue = encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
+          } catch (error) {
+            throw new Error(error);
           }
-        },
-      );
-      this.claimData = privateClaimData;
-      return saltedFields;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          accumulator.privateClaimData[key] = encrpytedSaltedValue;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          accumulator.saltedFields[key] = saltedValue;
+        }
+        return accumulator;
+      },
+      { privateClaimData: { did: this.claimData.did }, saltedFields: {} });
+
+      this.claimData = results.privateClaimData;
+      return results.saltedFields;
     }
 
     /**
@@ -138,24 +136,21 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
       if (privateKeyIssuer.length === 32) {
         privateKeyIssuer = `0x${privateKeyIssuer}`;
       }
-      const privateClaimData = {
-        did: this.claimData.did,
-      };
-      Object.entries(this.claimData).forEach(
-        ([key, value]) => {
-          if (key !== 'did' && key !== 'signerDid') {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            const decryptedField = ecies.decrypt(privateKeyIssuer, Buffer.from(value.data));
-            const fieldHash = crypto.createHash('sha256').update(decryptedField.toString()).digest('hex');
-            const fieldKeys = new Keys({ privateKey: fieldHash });
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            privateClaimData[key] = fieldKeys.publicKey;
-          }
-        },
-      );
-      this.claimData = privateClaimData;
+
+      this.claimData = Object.entries(this.claimData).reduce((accumulator, currentValue) => {
+        const [key, value] = currentValue;
+        if (key !== 'did' && key !== 'signerDid') {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          const decryptedField = decrypt(privateKeyIssuer, Buffer.from(value.data));
+          const fieldHash = crypto.createHash('sha256').update(decryptedField.toString()).digest('hex');
+          const fieldKeys = new Keys({ privateKey: fieldHash });
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          accumulator[key] = fieldKeys.publicKey;
+        }
+        return accumulator;
+      }, { did: this.claimData.did });
     }
 
     /**
@@ -204,19 +199,19 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
      * @returns boolean
      */
     verifyPayload(saltedFields: IClaimFields): boolean {
-      let returnValue = true;
-      Object.entries(saltedFields).forEach(
-        ([key, value]) => {
-          if (key !== 'did') {
-            const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
-            const fieldKeys = new Keys({ privateKey: fieldHash, publicKey: undefined });
-            if (this.claimData[key] !== fieldKeys.publicKey) {
-              returnValue = false;
-            }
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key of Object.keys(saltedFields)) {
+        const value = saltedFields[key];
+        if (key !== 'did') {
+          const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
+          const fieldKeys = new Keys({ privateKey: fieldHash });
+          if (this.claimData[key] !== fieldKeys.publicKey) {
+            return false;
           }
-        },
-      );
-      return returnValue;
+        }
+      }
+
+      return true;
     }
 }
 export { IPrivateClaim, PrivateClaim, IClaimFields };

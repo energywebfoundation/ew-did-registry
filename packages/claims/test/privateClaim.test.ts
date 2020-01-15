@@ -1,3 +1,4 @@
+import { decrypt } from 'eciesjs';
 import { expect } from 'chai';
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
@@ -5,10 +6,8 @@ import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { PrivateClaim } from '../src';
 import { IPrivateClaim, IClaimFields } from '../src/private';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const ecies = require('eciesjs');
 
 describe('[PRIVATE CLAIM CLASS]', () => {
-
   let keys: IKeys;
   let issuerKeys: IKeys;
   let jwt: IJWT;
@@ -36,7 +35,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
   });
 
   it('private claim data should be encrypted correctly', async () => {
-    const decryptedTestField = ecies.decrypt(`0x${issuerKeys.privateKey}`, privateClaim.claimData.test);
+    const decryptedTestField = decrypt(`0x${issuerKeys.privateKey}`, privateClaim.claimData.test as any);
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(decryptedTestField.toString()).to.be.eql(saltedFields.test);

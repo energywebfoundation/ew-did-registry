@@ -28,7 +28,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/resolver.ts#L17)*
+*Defined in [did-resolver/src/implementations/resolver.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/resolver.ts#L17)*
 
 Constructor
 
@@ -50,7 +50,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/resolver.ts#L43)*
+*Defined in [did-resolver/src/implementations/resolver.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/resolver.ts#L43)*
 
 Resolve DID Document for a given did
 

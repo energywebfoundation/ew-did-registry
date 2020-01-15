@@ -58,7 +58,9 @@ class Claim implements IClaim {
       } else {
         this.token = data.token;
         const decodedPayload = this.jwt.decode(this.token);
-        if (Object.prototype.hasOwnProperty.call(decodedPayload, 'did')) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        if (decodedPayload.did) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
           // @ts-ignore
           const decodedDid = decodedPayload.did;
@@ -143,8 +145,7 @@ class Claim implements IClaim {
      * ```
      */
     async createJWT(): Promise<void> {
-      const token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
-      this.token = token;
+      this.token = await this.jwt.sign(this.claimData, { algorithm: 'ES256', noTimestamp: true });
     }
 }
 

@@ -34,7 +34,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/operator.ts#L40)*
+*Defined in [did-resolver/src/implementations/operator.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/operator.ts#L40)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/operator.ts#L68)*
+*Defined in [did-resolver/src/implementations/operator.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/operator.ts#L68)*
 
 Empty for this implementation
 
@@ -75,7 +75,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/operator.ts#L132)*
+*Defined in [did-resolver/src/implementations/operator.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/operator.ts#L132)*
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -109,7 +109,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/resolver.ts#L43)*
+*Defined in [did-resolver/src/implementations/resolver.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/resolver.ts#L43)*
 
 Resolve DID Document for a given did
 
@@ -137,7 +137,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/d2ee593/packages/did-resolver/src/implementations/operator.ts#L103)*
+*Defined in [did-resolver/src/implementations/operator.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/implementations/operator.ts#L103)*
 
 Sets attribute value in DID document identified by the did
 
