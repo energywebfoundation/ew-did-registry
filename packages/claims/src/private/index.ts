@@ -10,20 +10,16 @@ import { IPrivateClaimBuildData } from '../models';
 class PrivateClaim extends VerificationClaim implements IPrivateClaim {
     public issuerDid: string;
 
-    private resolverSettings: IResolverSettings;
-
     /**
      * Constructor takes as input Private Claim data.
      * eslint warning disabled to ensure type-checking.
      * @param data
      */
-    // eslint-disable-next-line no-useless-constructor
     constructor(data: IPrivateClaimBuildData) {
       super(data);
       if (data.token === undefined) {
         this.issuerDid = data.claimData.issuerDid;
       }
-      this.resolverSettings = data.resolverSettings;
     }
 
     /**
@@ -56,9 +52,8 @@ class PrivateClaim extends VerificationClaim implements IPrivateClaim {
     async createPrivateClaimData(): Promise<IClaimFields> {
       let issuerDocumentLite: IDIDDocumentLite;
       try {
-        const resolver = new Resolver(this.resolverSettings);
         const documentFactory = new DIDDocumentFactory(this.issuerDid);
-        issuerDocumentLite = documentFactory.createLite(resolver);
+        issuerDocumentLite = documentFactory.createLite(this.resolver);
         await issuerDocumentLite.read('did');
       } catch (error) {
         throw new Error(error);

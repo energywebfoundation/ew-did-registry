@@ -53,12 +53,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var crypto_1 = __importDefault(require("crypto"));
+var eciesjs_1 = require("eciesjs");
 var did_document_1 = require("@ew-did-registry/did-document");
 var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var keys_1 = require("@ew-did-registry/keys");
 var public_1 = require("../public");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-var ecies = require('eciesjs');
 var PrivateClaim = /** @class */ (function (_super) {
     __extends(PrivateClaim, _super);
     /**
@@ -75,9 +74,36 @@ var PrivateClaim = /** @class */ (function (_super) {
         _this.resolverSettings = data.resolverSettings;
         return _this;
     }
+    /**
+     * Creation of Private Claim is a separate method to avoid asynchronous calls in the constructor
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     *  did: `did:ewc:0x${keys.publicKey}`,
+     *  issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     *
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * await privateClaim.createPrivateClaimData();
+     * console.log(privateClaim);
+     * ```
+     * @returns {Promise<{ [key: string]: string }}
+     */
     PrivateClaim.prototype.createPrivateClaimData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var issuerDocumentLite, resolver, documentFactory, error_1, issuerPublicKey, issuerEthereumPublic, privateClaimData, saltedFields;
+            var issuerDocumentLite, resolver, documentFactory, error_1, issuerPublicKey, issuerEthereumPublic, results;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -95,66 +121,149 @@ var PrivateClaim = /** @class */ (function (_super) {
                     case 3:
                         issuerPublicKey = issuerDocumentLite.didDocument.publicKey.find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; });
                         issuerEthereumPublic = issuerPublicKey.ethereumAddress;
-                        privateClaimData = {
-                            did: this.claimData.did,
-                        };
-                        saltedFields = {};
-                        Object.entries(this.claimData).forEach(function (_a) {
-                            var key = _a[0], value = _a[1];
-                            var salt = crypto_1.default.randomBytes(32).toString('base64');
-                            var saltedValue = value + salt;
-                            var encrpytedSaltedValue;
-                            try {
-                                encrpytedSaltedValue = ecies.encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
+                        results = Object.entries(this.claimData).reduce(function (accumulator, currentValue) {
+                            var key = currentValue[0], value = currentValue[1];
+                            if (key !== 'did') {
+                                var salt = crypto_1.default.randomBytes(32).toString('base64');
+                                var saltedValue = value + salt;
+                                var encrpytedSaltedValue = void 0;
+                                try {
+                                    encrpytedSaltedValue = eciesjs_1.encrypt(issuerEthereumPublic, Buffer.from(saltedValue));
+                                }
+                                catch (error) {
+                                    throw new Error(error);
+                                }
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                                // @ts-ignore
+                                accumulator.privateClaimData[key] = encrpytedSaltedValue;
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                                // @ts-ignore
+                                accumulator.saltedFields[key] = saltedValue;
                             }
-                            catch (error) {
-                                throw new Error(error);
-                            }
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                            // @ts-ignore
-                            privateClaimData[key] = encrpytedSaltedValue;
-                            saltedFields[key] = saltedValue;
-                        });
-                        this.claimData = privateClaimData;
-                        return [2 /*return*/, saltedFields];
+                            return accumulator;
+                        }, { privateClaimData: { did: this.claimData.did }, saltedFields: {} });
+                        this.claimData = results.privateClaimData;
+                        return [2 /*return*/, results.saltedFields];
                 }
             });
         });
     };
-    PrivateClaim.prototype.decryptAndHashFields = function (privateKey) {
-        if (privateKey.length === 32) {
-            privateKey = "0x" + privateKey;
+    /**
+     * This method is called when the issuer receives the token from the user with encrypted data
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const issuerKeys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     * did: `did:ewc:0x${keys.publicKey}`,
+     * issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * await privateClaim.createPrivateClaimData();
+     *
+     * const issuerJWT = new JWT(issuerKeys);
+     * const issuerData = {
+     *  jwt: issuerJWT,
+     *  keyPair: issuerKeys,
+     *  token: privateClaim.token,
+     * }
+     * const privateClaimIssuer = new PrivateClaim(issuerData);
+     * privateClaimIssuer.decryptAndHashFields();
+     * const hashedFields = privateClaimIssuer.claimData;
+     * console.log(hashedFields);
+     * ```
+     *
+     * @returns void
+     */
+    PrivateClaim.prototype.decryptAndHashFields = function () {
+        var privateKeyIssuer = this.keyPair.privateKey;
+        if (privateKeyIssuer.length === 32) {
+            privateKeyIssuer = "0x" + privateKeyIssuer;
         }
-        var privateClaimData = {
-            did: this.issuerDid,
-        };
-        Object.entries(this.claimData).forEach(function (_a) {
-            var key = _a[0], value = _a[1];
-            if (key !== 'did') {
-                var decryptedField = ecies.decrypt(privateKey, value).toString();
-                var fieldHash = crypto_1.default.createHash('sha256').update(decryptedField).digest('hex');
-                var fieldKeys = new keys_1.Keys({ privateKey: fieldHash, publicKey: undefined });
+        this.claimData = Object.entries(this.claimData).reduce(function (accumulator, currentValue) {
+            var key = currentValue[0], value = currentValue[1];
+            if (key !== 'did' && key !== 'signerDid') {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
-                privateClaimData[key] = fieldKeys.publicKey;
+                var decryptedField = eciesjs_1.decrypt(privateKeyIssuer, Buffer.from(value.data));
+                var fieldHash = crypto_1.default.createHash('sha256').update(decryptedField.toString()).digest('hex');
+                var fieldKeys = new keys_1.Keys({ privateKey: fieldHash });
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                // @ts-ignore
+                accumulator[key] = fieldKeys.publicKey;
             }
-        });
-        this.claimData = privateClaimData;
+            return accumulator;
+        }, { did: this.claimData.did });
     };
+    /**
+     * This method is called by the user after the issuer returns signed JWT with hashed
+     * encrypted fields. Methods verifies if the payload was created correctly
+     *
+     * @example
+     * ```typescript
+     * import { PrivateClaim } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * const keys = new Keys();
+     * const issuerKeys = new Keys();
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     * did: `did:ewc:0x${keys.publicKey}`,
+     * issuerDid: `did:ewc:0x${issuerKeys.publicKey}`,
+     *  test: 'test',
+     * };
+     * const data = {
+     *  jwt,
+     *  keyPair: keys,
+     *  claimData,
+     * };
+     * const privateClaim = new PrivateClaim(data);
+     * const saltedFields = await privateClaim.createPrivateClaimData();
+     * privateClaim.decryptAndHashFields(issuerKeys.privateKey);
+     * const issuerSignedToken = await issuerJWT.sign(privateClaim.claimData,
+     * { algorithm: 'ES256', noTimestamp: true });
+     * const issuerClaimData = {
+     *  did: `did:ewc:0x${issuerKeys.publicKey}`,
+     * };
+     * const issuerData = {
+     *  jwt,
+     *  keyPair: keys,
+     *  token: issuerSignedToken,
+     *  claimData: issuerClaimData,
+     * }
+     * const issuerReturnedPrivateClaim = new PrivateClaim(issuerData);
+     * issuerReturnedPrivateClaim.verify();
+     * const verified = issuerReturnedPrivateClaim.verifyPayload(saltedFields);
+     * console.log(verified);
+     * ```
+     *
+     * @param {IClaimFields} saltedFields
+     * @returns boolean
+     */
     PrivateClaim.prototype.verifyPayload = function (saltedFields) {
-        var _this = this;
-        Object.entries(saltedFields).forEach(
-        // eslint-disable-next-line consistent-return
-        function (_a) {
-            var key = _a[0], value = _a[1];
+        // eslint-disable-next-line no-restricted-syntax
+        for (var _i = 0, _a = Object.keys(saltedFields); _i < _a.length; _i++) {
+            var key = _a[_i];
+            var value = saltedFields[key];
             if (key !== 'did') {
                 var fieldHash = crypto_1.default.createHash('sha256').update(value).digest('hex');
-                var fieldKeys = new keys_1.Keys({ privateKey: fieldHash, publicKey: undefined });
-                if (_this.claimData[key] !== fieldKeys.publicKey) {
+                var fieldKeys = new keys_1.Keys({ privateKey: fieldHash });
+                if (this.claimData[key] !== fieldKeys.publicKey) {
                     return false;
                 }
             }
-        });
+        }
         return true;
     };
     return PrivateClaim;

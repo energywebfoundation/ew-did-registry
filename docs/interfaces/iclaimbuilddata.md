@@ -20,7 +20,7 @@ each of the Claim types
 * [claimData](iclaimbuilddata.md#optional-claimdata)
 * [jwt](iclaimbuilddata.md#jwt)
 * [keyPair](iclaimbuilddata.md#keypair)
-* [resolverSettings](iclaimbuilddata.md#optional-resolversettings)
+* [resolver](iclaimbuilddata.md#resolver)
 * [signerDid](iclaimbuilddata.md#optional-signerdid)
 * [token](iclaimbuilddata.md#optional-token)
 
@@ -30,7 +30,7 @@ each of the Claim types
 
 • **claimData**? : *[IClaimData](iclaimdata.md)*
 
-*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L31)*
+*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L32)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **jwt**: *IJWT*
 
-*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L28)*
+*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L28)*
 
 ___
 
@@ -46,15 +46,15 @@ ___
 
 • **keyPair**: *IKeys*
 
-*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L29)*
+*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L29)*
 
 ___
 
-### `Optional` resolverSettings
+###  resolver
 
-• **resolverSettings**? : *IResolverSettings*
+• **resolver**: *Resolver*
 
-*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L32)*
+*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L30)*
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 • **signerDid**? : *string*
 
-*Defined in [claims/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L33)*
+*Defined in [claims/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L33)*
 
 ___
 
@@ -70,4 +70,4 @@ ___
 
 • **token**? : *string*
 
-*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L30)*
+*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L31)*

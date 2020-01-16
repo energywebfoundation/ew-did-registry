@@ -17,7 +17,7 @@
 
 • **BASE58**: = "base58"
 
-*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/models/operator.ts#L10)*
+*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/did-resolver/src/models/operator.ts#L10)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **BASE64**: = "base64"
 
-*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/models/operator.ts#L10)*
+*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/did-resolver/src/models/operator.ts#L10)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **HEX**: = "hex"
 
-*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/models/operator.ts#L10)*
+*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/did-resolver/src/models/operator.ts#L10)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **PEM**: = "pem"
 
-*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/did-resolver/src/models/operator.ts#L10)*
+*Defined in [did-resolver/src/models/operator.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/did-resolver/src/models/operator.ts#L10)*

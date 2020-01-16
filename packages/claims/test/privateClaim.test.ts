@@ -2,12 +2,14 @@ import { decrypt } from 'eciesjs';
 import { expect } from 'chai';
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { Resolver } from '@ew-did-registry/did-resolver';
 
 import { PrivateClaim } from '../src';
 import { IPrivateClaim, IClaimFields } from '../src/private';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 describe('[PRIVATE CLAIM CLASS]', () => {
+  let resolver: Resolver;
   let keys: IKeys;
   let issuerKeys: IKeys;
   let jwt: IJWT;
@@ -17,6 +19,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
   let saltedFields: IClaimFields;
 
   beforeEach(async () => {
+    resolver = new Resolver();
     keys = new Keys();
     issuerKeys = new Keys();
     jwt = new JWT(keys);
@@ -27,8 +30,9 @@ describe('[PRIVATE CLAIM CLASS]', () => {
     };
     data = {
       jwt,
-      keyPair: keys,
+      resolver,
       claimData,
+      keyPair: keys,
     };
     privateClaim = new PrivateClaim(data);
     saltedFields = await privateClaim.createPrivateClaimData();
@@ -45,6 +49,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
     await privateClaim.createJWT();
     const issuerJWT = new JWT(issuerKeys);
     const issuerData = {
+      resolver,
       jwt: issuerJWT,
       keyPair: issuerKeys,
       token: privateClaim.token,
@@ -62,6 +67,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
     await privateClaim.createJWT();
     const issuerJWT = new JWT(issuerKeys);
     const issuerData = {
+      resolver,
       jwt: issuerJWT,
       keyPair: issuerKeys,
       token: privateClaim.token,
@@ -73,6 +79,7 @@ describe('[PRIVATE CLAIM CLASS]', () => {
       did: `did:ewc:0x${issuerKeys.publicKey}`,
     };
     const userData = {
+      resolver,
       jwt,
       keyPair: keys,
       token: issuerSignedToken,

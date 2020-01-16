@@ -42,7 +42,7 @@ and is used by Private and Public Claims
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-*Defined in [claims/src/models/index.ts:57](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L57)*
+*Defined in [claims/src/models/index.ts:57](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L57)*
 
 claimData stores the claim fields
 
@@ -54,7 +54,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L49)*
+*Defined in [claims/src/models/index.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L49)*
 
 jwt stores the JWT to manage web tokens
 
@@ -66,7 +66,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
 
-*Defined in [claims/src/models/index.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L61)*
+*Defined in [claims/src/models/index.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L61)*
 
 keyPair represents the implementation of key management interface
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
 
-*Defined in [claims/src/models/index.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L53)*
+*Defined in [claims/src/models/index.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L53)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -88,7 +88,7 @@ claimToken stores the actual serialised JWT in a string format
 
 ▸ **approve**(): *Promise‹string›*
 
-*Defined in [claims/src/models/index.ts:95](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L95)*
+*Defined in [claims/src/models/index.ts:95](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L95)*
 
 Method signs the claim and return the serialised JWT
 
@@ -102,7 +102,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[createJWT](iclaim.md#createjwt)*
 
-*Defined in [claims/src/models/index.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L77)*
+*Defined in [claims/src/models/index.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L77)*
 
 Method creates token with the payload provided in the claim data
 The signed token is stored as a member of Claim class
@@ -118,7 +118,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
 
-*Defined in [claims/src/models/index.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L70)*
+*Defined in [claims/src/models/index.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L70)*
 
 Method returns the DID document associated with a claim subject DID
 Optional parameter did allows to read document associated with a different DID
@@ -137,7 +137,7 @@ ___
 
 ▸ **verify**(): *Promise‹boolean›*
 
-*Defined in [claims/src/models/index.ts:89](https://github.com/energywebfoundation/ew-did-registry/blob/77ae9c7/packages/claims/src/models/index.ts#L89)*
+*Defined in [claims/src/models/index.ts:89](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L89)*
 
 verify check if the given Claim was signed correctly
 

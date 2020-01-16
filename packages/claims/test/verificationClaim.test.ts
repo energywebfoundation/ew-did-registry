@@ -1,12 +1,14 @@
 import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
+import { Resolver } from '@ew-did-registry/did-resolver';
 
 import { Claim, VerificationClaim } from '../src';
 import { IClaimData } from '../src/models';
 
 describe('[VERIFICATION CLAIM CLASS]', () => {
 
+  let resolver: Resolver;
   let claimData: IClaimData;
   let keys: Keys;
   let jwt: JWT;
@@ -15,6 +17,7 @@ describe('[VERIFICATION CLAIM CLASS]', () => {
   let verificationClaim: VerificationClaim;
 
   before(async () => {
+    resolver = new Resolver();
     keys = new Keys();
     jwt = new JWT(keys);
     claimData = {
@@ -22,6 +25,7 @@ describe('[VERIFICATION CLAIM CLASS]', () => {
       test: 'test',
     };
     const data = {
+      resolver,
       jwt,
       keyPair: keys,
       claimData,
@@ -33,6 +37,7 @@ describe('[VERIFICATION CLAIM CLASS]', () => {
     jwtVerifier = new JWT(keysVerifier);
     const tokenToVerify = publicClaim.token;
     const dataVerifier = {
+      resolver,
       jwt: jwtVerifier,
       keyPair: keysVerifier,
       token: tokenToVerify,
@@ -59,6 +64,7 @@ describe('[VERIFICATION CLAIM CLASS]', () => {
   it('jwt approved by verifier should be signed correctly', async () => {
     const approvedToken = await verificationClaim.approve();
     const receivedClaimData = {
+      resolver,
       jwt,
       keyPair: keys,
       token: approvedToken,

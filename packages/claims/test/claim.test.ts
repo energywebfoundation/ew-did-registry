@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
+import { Resolver } from '@ew-did-registry/did-resolver';
 
 import { Claim } from '../src';
 import { IClaimData } from '../src/models';
@@ -11,14 +12,16 @@ describe('[CLAIM CLASS]', () => {
   before(() => {
     const keys = new Keys();
     const jwt = new JWT(keys);
+    const resolver = new Resolver();
     claimData = {
       did: `did:ewc:0x${keys.publicKey}`,
       test: 'test',
     };
     const data = {
       jwt,
-      keyPair: keys,
+      resolver,
       claimData,
+      keyPair: keys,
     };
     publicClaim = new Claim(data);
   })

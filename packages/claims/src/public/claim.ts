@@ -1,14 +1,14 @@
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
-import { IDIDDocument, IResolverSettings, Resolver } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
 import { IClaim, IClaimData, IClaimBuildData } from '../models';
 
 class Claim implements IClaim {
     /**
      * Used for creation of new Resolvers
      */
-    private readonly resolver: Resolver;
+    protected readonly resolver: Resolver;
 
     /**
      * Light document is used for fetching the DID Document
@@ -47,7 +47,7 @@ class Claim implements IClaim {
      * @param {IClaimBuildData} data
      */
     constructor(data: IClaimBuildData) {
-      this.resolver = new Resolver(data.resolverSettings);
+      this.resolver = data.resolver;
       this.keyPair = data.keyPair;
       this.jwt = new JWT(data.keyPair);
 
@@ -103,8 +103,9 @@ class Claim implements IClaim {
     async getDid(did?: string): Promise<boolean> {
       try {
         if (did) {
+          const tempResolver = new Resolver();
           const documentFactory = new DIDDocumentFactory(did);
-          const tempDidDocumentLite = documentFactory.createLite(this.resolver);
+          const tempDidDocumentLite = documentFactory.createLite(tempResolver);
           await tempDidDocumentLite.read(did);
           this.didDocument = tempDidDocumentLite.didDocument;
         } else {
