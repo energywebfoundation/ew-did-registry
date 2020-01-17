@@ -53,7 +53,7 @@ declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<IPrivateClaim> } claim wich contains token with private data encrypted by issuer key
      */
-    createPrivateClaim(claimData: IClaimData, issuerPK: string): Promise<{
+    createPrivateClaim(claimData: IClaimData, issuer: string): Promise<{
         token: string;
         saltedFields: {
             [key: string]: string;

@@ -49,7 +49,7 @@ class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData,
     };
-    return this.jwt.sign(claim);
+    return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }
 
   /**
@@ -78,7 +78,7 @@ class ClaimsUser extends Claims implements IClaimsUser {
    */
   async createPrivateClaim(
     claimData: IClaimData,
-    issuerPK: string,
+    issuer: string,
   ): Promise<{ token: string; saltedFields: { [key: string]: string } }> {
     const saltedFields = {};
     const claim: IClaim = {
@@ -86,6 +86,11 @@ class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: {},
     };
+    const issuerDocument = await this.getDocument(issuer);
+    const issuerPK = issuerDocument
+      .publicKey
+      .find((pk: { type: string }) => pk.type === 'Secp256k1VerificationKey')
+      .ethereumAddress;
     Object.entries(claimData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;

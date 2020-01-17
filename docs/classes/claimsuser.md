@@ -162,7 +162,7 @@ claimToken stores the actual serialised JWT in a string format
 
 ###  createPrivateClaim
 
-▸ **createPrivateClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `issuerPK`: string): *Promise‹object›*
+▸ **createPrivateClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `issuer`: string): *Promise‹object›*
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
@@ -192,7 +192,7 @@ const claim = await claims.createPrivateClaim(claimData, issuerDid);
 Name | Type | Description |
 ------ | ------ | ------ |
 `claimData` | [IClaimData](../interfaces/iclaimdata.md) | object with claim subject `did` and subject private data |
-`issuerPK` | string | - |
+`issuer` | string | - |
 
 **Returns:** *Promise‹object›*
 
@@ -204,7 +204,7 @@ ___
 
 ▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: object): *Promise‹string›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:128
+Defined in claims/src/claimsUser/claimsUser.ts:133
 
 Used by the claim subject based on the hashed salted values calculated
 when creating private claim. Verifier should use `generateClaimFromToken`
@@ -317,7 +317,7 @@ ___
 
 ▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object): *Promise‹boolean›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:185
+Defined in claims/src/claimsUser/claimsUser.ts:190
 
 **Parameters:**
 
@@ -336,7 +336,7 @@ ___
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-Defined in claims/src/claimsUser/claimsUser.ts:179
+Defined in claims/src/claimsUser/claimsUser.ts:184
 
 Verify method checks if the token was signed by the correct private key
 Returns true on success

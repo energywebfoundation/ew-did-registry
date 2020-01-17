@@ -24,7 +24,7 @@
 
 ###  createPrivateClaim
 
-▸ **createPrivateClaim**(`claimData`: [IClaimData](iclaimdata.md), `issuerPK`: string): *Promise‹object›*
+▸ **createPrivateClaim**(`claimData`: [IClaimData](iclaimdata.md), `issuer`: string): *Promise‹object›*
 
 Defined in claims/src/interface.ts:18
 
@@ -33,7 +33,7 @@ Defined in claims/src/interface.ts:18
 Name | Type |
 ------ | ------ |
 `claimData` | [IClaimData](iclaimdata.md) |
-`issuerPK` | string |
+`issuer` | string |
 
 **Returns:** *Promise‹object›*
 

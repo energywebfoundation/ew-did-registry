@@ -15,7 +15,7 @@ export interface IClaimsFactory {
 
 export interface IClaimsUser {
   createPublicClaim(claimData: IClaimData): Promise<string>;
-  createPrivateClaim(claimData: IClaimData, issuerPK: string):
+  createPrivateClaim(claimData: IClaimData, issuer: string):
     Promise<{ token: string; saltedFields: { [key: string]: string } }>;
   createProofClaim(claimUrl: string, saltedFields: { [key: string]: string }): Promise<string>;
   verifyPublicClaim(token: string): Promise<boolean>;

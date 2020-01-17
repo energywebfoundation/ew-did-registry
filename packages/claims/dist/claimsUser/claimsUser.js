@@ -101,7 +101,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                     signer: this.did,
                     claimData: claimData,
                 };
-                return [2 /*return*/, this.jwt.sign(claim)];
+                return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
             });
         });
     };
@@ -129,9 +129,9 @@ var ClaimsUser = /** @class */ (function (_super) {
      *
      * @returns { Promise<IPrivateClaim> } claim wich contains token with private data encrypted by issuer key
      */
-    ClaimsUser.prototype.createPrivateClaim = function (claimData, issuerPK) {
+    ClaimsUser.prototype.createPrivateClaim = function (claimData, issuer) {
         return __awaiter(this, void 0, void 0, function () {
-            var saltedFields, claim, token;
+            var saltedFields, claim, issuerDocument, issuerPK, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -141,6 +141,13 @@ var ClaimsUser = /** @class */ (function (_super) {
                             signer: this.did,
                             claimData: {},
                         };
+                        return [4 /*yield*/, this.getDocument(issuer)];
+                    case 1:
+                        issuerDocument = _a.sent();
+                        issuerPK = issuerDocument
+                            .publicKey
+                            .find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; })
+                            .ethereumAddress;
                         Object.entries(claimData).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
                             var salt = crypto_1.default.randomBytes(32).toString('base64');
@@ -154,7 +161,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                             saltedFields[key] = saltedValue;
                         });
                         return [4 /*yield*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
-                    case 1:
+                    case 2:
                         token = _a.sent();
                         return [2 /*return*/, { token: token, saltedFields: saltedFields }];
                 }
