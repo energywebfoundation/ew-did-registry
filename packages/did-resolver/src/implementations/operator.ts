@@ -13,9 +13,11 @@ import {
   IUpdateData,
   ProviderTypes,
   PubKeyType,
+  IResolverSettings, DelegateTypes,
 } from '../models';
 import Resolver from './resolver';
 import {
+  defaultResolverSettings,
   delegatePubKeyIdPattern,
   matchingPatternDid,
   pubKeyIdPattern,
@@ -44,8 +46,8 @@ export class Operator extends Resolver implements IOperator {
    * @param { IKeys } keys - identifies an account which acts as a
    * controller in a subsequent operations with DID document
    */
-  constructor(keys: IKeys) {
-    super();
+  constructor(keys: IKeys, settings: IResolverSettings = defaultResolverSettings) {
+    super(settings);
     this._keys = keys;
     const {
       address, abi,
@@ -111,6 +113,81 @@ export class Operator extends Resolver implements IOperator {
       ? registry.setAttribute
       : registry.addDelegate;
     return this._sendTransaction(method, did, didAttribute, updateData, validity);
+  }
+
+  async revokeDelegate(
+    identityDID: string,
+    delegateType: DelegateTypes,
+    delegateDID: string,
+  ): Promise<boolean> {
+    const bytesType = ethers.utils.formatBytes32String(delegateType);
+    const [, , identityAddress] = identityDID.split(':');
+    const [, , delegateAddress] = delegateDID.split(':');
+
+    try {
+      const tx = await this._didRegistry.revokeDelegate(
+        identityAddress,
+        bytesType,
+        delegateAddress,
+      );
+      const receipt = await tx.wait();
+      const event = receipt.events.find(
+        (e: any) => (e.event === 'DIDDelegateChanged'),
+      );
+      if (!event) return false;
+    } catch (error) {
+      throw new Error(error);
+    }
+    return true;
+  }
+
+  async revokeAttribute(
+    identityDID: string,
+    attributeType: DIDAttribute,
+    delegateDID: string,
+  ): Promise<boolean> {
+    const bytesType = ethers.utils.formatBytes32String(attributeType);
+    const [, , identityAddress] = identityDID.split(':');
+    const [, , delegateAddress] = delegateDID.split(':');
+
+    try {
+      const tx = await this._didRegistry.revokeAttribute(
+        identityAddress,
+        bytesType,
+        delegateAddress,
+      );
+      const receipt = await tx.wait();
+      const event = receipt.events.find(
+        (e: any) => (e.event === 'DIDAttributeChanged'),
+      );
+      if (!event) return false;
+    } catch (error) {
+      throw new Error(error);
+    }
+    return true;
+  }
+
+  async changeOwner(
+    identityDID: string,
+    newOwnerDid: string,
+  ): Promise<boolean> {
+    const [, , identityAddress] = identityDID.split(':');
+    const [, , delegateAddress] = newOwnerDid.split(':');
+
+    try {
+      const tx = await this._didRegistry.changeOwner(
+        identityAddress,
+        delegateAddress,
+      );
+      const receipt = await tx.wait();
+      const event = receipt.events.find(
+        (e: any) => (e.event === 'DIDOwnerChanged'),
+      );
+      if (!event) return false;
+    } catch (error) {
+      throw new Error(error);
+    }
+    return true;
   }
 
   /**

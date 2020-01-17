@@ -105,3 +105,7 @@ export interface IDIDLogData {
 export interface IHandlers {
     [key: string]: (event: ISmartContractEvent, etherAddress: string, document: IDIDLogData, validTo: BigNumber, block: number) => IDIDLogData;
 }
+export declare enum DelegateTypes {
+    authentication = "sigAuth",
+    verification = "veriKey"
+}

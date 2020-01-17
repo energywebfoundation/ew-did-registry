@@ -1,7 +1,7 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { BigNumber } from 'ethers/utils';
 import { IOperator } from '../interface';
-import { DIDAttribute, IUpdateData } from '../models';
+import { DIDAttribute, IUpdateData, IResolverSettings, DelegateTypes } from '../models';
 import Resolver from './resolver';
 export declare class Operator extends Resolver implements IOperator {
     /**
@@ -19,7 +19,7 @@ export declare class Operator extends Resolver implements IOperator {
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
-    constructor(keys: IKeys);
+    constructor(keys: IKeys, settings?: IResolverSettings);
     /**
      * Empty for this implementation
      *
@@ -60,6 +60,9 @@ export declare class Operator extends Resolver implements IOperator {
      * @returns Promise<boolean>
      */
     update(did: string, didAttribute: DIDAttribute, updateData: IUpdateData, validity?: number | BigNumber): Promise<boolean>;
+    revokeDelegate(identityDID: string, delegateType: DelegateTypes, delegateDID: string): Promise<boolean>;
+    revokeAttribute(identityDID: string, attributeType: DIDAttribute, delegateDID: string): Promise<boolean>;
+    changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean>;
     /**
      * Revokes authentication methods, public keys and delegates from DID document
      *

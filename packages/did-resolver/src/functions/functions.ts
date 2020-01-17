@@ -1,4 +1,6 @@
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
+import { BaseProvider } from 'ethers/providers';
+
 import { BigNumber, Interface } from 'ethers/utils';
 
 import {
@@ -8,7 +10,6 @@ import {
   IResolverSettings,
   IPublicKey,
   IHandlers,
-  ProviderTypes,
 } from '../models';
 
 import { matchingPatternDidEvents } from '../constants';
@@ -171,7 +172,7 @@ const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.JsonRpcProvider,
+  provider: ethers.providers.BaseProvider,
   smartContractInterface: Interface,
   smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
@@ -198,23 +199,10 @@ export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
   resolverSettings: IResolverSettings,
+  contract: Contract,
+  provider: BaseProvider,
 ): Promise<void> => {
   const [, , blockchainAddress] = did.split(':');
-
-  let provider;
-  if (resolverSettings.provider.type === ProviderTypes.HTTP) {
-    provider = new ethers.providers.JsonRpcProvider(
-      resolverSettings.provider.uriOrInfo,
-      resolverSettings.provider.network,
-    );
-  } else if (resolverSettings.provider.type === ProviderTypes.IPC) {
-    provider = new ethers.providers.IpcProvider(
-      resolverSettings.provider.path,
-      resolverSettings.provider.network,
-    );
-  }
-
-  const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
   let previousChangedBlock;
   let lastChangedBlock;

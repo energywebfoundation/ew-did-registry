@@ -1,10 +1,18 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 import {
-  Algorithms, DIDAttribute, Encoding, IUpdateData, PubKeyType, Operator, IAuthentication,
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IUpdateData,
+  PubKeyType,
+  Operator,
+  IAuthentication,
+  DelegateTypes,
 } from '../src';
+import { defaultResolverSettings } from '../src/constants';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
@@ -28,7 +36,6 @@ describe('[DID-OPERATOR]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
-    // console.log('document:', document);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.slice(2),
@@ -180,5 +187,37 @@ describe('[DID-OPERATOR]', function () {
     expect(document.service).to.be.empty;
     expect(document.publicKey.length).equal(1);
     expect(document.authentication.length).equal(1);
+  });
+
+  it('delegate revocation creates an event', async () => {
+    const keysDelegate = new Keys();
+    const newDid = `did:ewc:0x${keysDelegate.publicKey.slice(26)}`;
+    const revoked = await operator.revokeDelegate(did, DelegateTypes.verification, newDid);
+    expect(revoked).to.be.true;
+  });
+
+  it('attribute revocation creates an event', async () => {
+    const keysDelegate = new Keys();
+    const newDid = `did:ewc:0x${keysDelegate.publicKey.slice(26)}`;
+    const revoked = await operator.revokeAttribute(did, DIDAttribute.Authenticate, newDid);
+    expect(revoked).to.be.true;
+  });
+
+  it('owner change should lead to expected result', async () => {
+    const secondKeys = new Keys({
+      privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
+      publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
+    });
+    const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
+    const operatorNewOwner = new Operator(secondKeys);
+    let currentOwner;
+
+    await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
+    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    expect(currentOwner).to.be.eql(identityNewOwner);
+
+    await operatorNewOwner.changeOwner(`did:ewc:${identity}`, `did:ewc:${identity}`);
+    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    expect(currentOwner).to.be.eql(identity);
   });
 });

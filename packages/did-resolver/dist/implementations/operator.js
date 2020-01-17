@@ -65,8 +65,9 @@ var Operator = /** @class */ (function (_super) {
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
-    function Operator(keys) {
-        var _this = _super.call(this) || this;
+    function Operator(keys, settings) {
+        if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
+        var _this = _super.call(this, settings) || this;
         _this._keys = keys;
         var _a = _this._settings, address = _a.address, abi = _a.abi;
         var privateKey = _this._keys.privateKey;
@@ -132,6 +133,95 @@ var Operator = /** @class */ (function (_super) {
                     ? registry.setAttribute
                     : registry.addDelegate;
                 return [2 /*return*/, this._sendTransaction(method, did, didAttribute, updateData, validity)];
+            });
+        });
+    };
+    Operator.prototype.revokeDelegate = function (identityDID, delegateType, delegateDID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_1, error_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(delegateType);
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = delegateDID.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.revokeDelegate(identityAddress, bytesType, delegateAddress)];
+                    case 2:
+                        tx = _c.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _c.sent();
+                        event_1 = receipt.events.find(function (e) { return (e.event === 'DIDDelegateChanged'); });
+                        if (!event_1)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _c.sent();
+                        throw new Error(error_1);
+                    case 5: return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    Operator.prototype.revokeAttribute = function (identityDID, attributeType, delegateDID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_2, error_2;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(attributeType);
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = delegateDID.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.revokeAttribute(identityAddress, bytesType, delegateAddress)];
+                    case 2:
+                        tx = _c.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _c.sent();
+                        event_2 = receipt.events.find(function (e) { return (e.event === 'DIDAttributeChanged'); });
+                        if (!event_2)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_2 = _c.sent();
+                        throw new Error(error_2);
+                    case 5: return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    Operator.prototype.changeOwner = function (identityDID, newOwnerDid) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, identityAddress, _b, delegateAddress, tx, receipt, event_3, error_3;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = newOwnerDid.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.changeOwner(identityAddress, delegateAddress)];
+                    case 2:
+                        tx = _c.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _c.sent();
+                        event_3 = receipt.events.find(function (e) { return (e.event === 'DIDOwnerChanged'); });
+                        if (!event_3)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_3 = _c.sent();
+                        throw new Error(error_3);
+                    case 5: return [2 /*return*/, true];
+                }
             });
         });
     };
@@ -342,7 +432,7 @@ var Operator = /** @class */ (function (_super) {
     };
     Operator.prototype._sendTransaction = function (method, did, didAttribute, updateData, validity, overrides) {
         return __awaiter(this, void 0, void 0, function () {
-            var identity, attributeName, bytesOfAttribute, bytesOfValue, argums, tx, receipt, event_1, e_1;
+            var identity, attributeName, bytesOfAttribute, bytesOfValue, argums, tx, receipt, event_4, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -370,10 +460,10 @@ var Operator = /** @class */ (function (_super) {
                         return [4 /*yield*/, tx.wait()];
                     case 3:
                         receipt = _a.sent();
-                        event_1 = receipt.events.find(function (e) { return (didAttribute === models_1.DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
+                        event_4 = receipt.events.find(function (e) { return (didAttribute === models_1.DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
                             || (didAttribute === models_1.DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
                             || (didAttribute === models_1.DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'); });
-                        if (!event_1)
+                        if (!event_4)
                             return [2 /*return*/, false];
                         return [3 /*break*/, 5];
                     case 4:

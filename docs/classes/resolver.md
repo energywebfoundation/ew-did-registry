@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
 
 # Class: Resolver
 
@@ -20,7 +20,9 @@
 
 ### Methods
 
+* [identityOwner](resolver.md#identityowner)
 * [read](resolver.md#read)
+* [validDelegate](resolver.md#validdelegate)
 
 ## Constructors
 
@@ -28,7 +30,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:17
+*Defined in [did-resolver/src/implementations/resolver.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L34)*
 
 Constructor
 
@@ -44,13 +46,31 @@ Name | Type | Default | Description |
 
 ## Methods
 
+###  identityOwner
+
+▸ **identityOwner**(`did`: string): *Promise‹string›*
+
+*Implementation of [IResolver](../interfaces/iresolver.md)*
+
+*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L114)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did` | string |
+
+**Returns:** *Promise‹string›*
+
+___
+
 ###  read
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:43
+*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L73)*
 
 Resolve DID Document for a given did
 
@@ -69,3 +89,23 @@ Name | Type | Description |
 `did` | string | entity identifier, which is associated with DID Document |
 
 **Returns:** *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
+
+___
+
+###  validDelegate
+
+▸ **validDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
+
+*Implementation of [IResolver](../interfaces/iresolver.md)*
+
+*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L125)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`identityDID` | string |
+`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
+`delegateDID` | string |
+
+**Returns:** *Promise‹boolean›*

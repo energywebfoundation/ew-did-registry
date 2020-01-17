@@ -49,7 +49,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
 var utils_1 = require("ethers/utils");
-var models_1 = require("../models");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, did, document, validTo, block) {
     var publicKeyID = did + "#delegate-" + event.values.delegate;
@@ -184,19 +183,12 @@ var getEventsFromBlock = function (block, did, document, provider, smartContract
         reject(error);
     });
 }); };
-exports.fetchDataFromEvents = function (did, document, resolverSettings) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, blockchainAddress, provider, contract, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
+exports.fetchDataFromEvents = function (did, document, resolverSettings, contract, provider) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, blockchainAddress, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _a = did.split(':'), blockchainAddress = _a[2];
-                if (resolverSettings.provider.type === models_1.ProviderTypes.HTTP) {
-                    provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uriOrInfo, resolverSettings.provider.network);
-                }
-                else if (resolverSettings.provider.type === models_1.ProviderTypes.IPC) {
-                    provider = new ethers_1.ethers.providers.IpcProvider(resolverSettings.provider.path, resolverSettings.provider.network);
-                }
-                contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
                 _c.label = 1;
             case 1:
                 _c.trys.push([1, 3, , 4]);

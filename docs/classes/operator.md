@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
 
 # Class: Operator
 
@@ -21,30 +21,53 @@
 
 ### Methods
 
+* [changeOwner](operator.md#changeowner)
 * [create](operator.md#create)
 * [deactivate](operator.md#deactivate)
+* [identityOwner](operator.md#identityowner)
 * [read](operator.md#read)
+* [revokeAttribute](operator.md#revokeattribute)
+* [revokeDelegate](operator.md#revokedelegate)
 * [update](operator.md#update)
+* [validDelegate](operator.md#validdelegate)
 
 ## Constructors
 
 ###  constructor
 
-\+ **new Operator**(`keys`: IKeys): *[Operator](operator.md)*
+\+ **new Operator**(`keys`: IKeys, `settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Operator](operator.md)*
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-Defined in did-resolver/src/implementations/operator.ts:40
+*Defined in [did-resolver/src/implementations/operator.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L42)*
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`keys` | IKeys | identifies an account which acts as a controller in a subsequent operations with DID document  |
+Name | Type | Default | Description |
+------ | ------ | ------ | ------ |
+`keys` | IKeys | - | identifies an account which acts as a controller in a subsequent operations with DID document  |
+`settings` | [IResolverSettings](../interfaces/iresolversettings.md) |  defaultResolverSettings | - |
 
 **Returns:** *[Operator](operator.md)*
 
 ## Methods
+
+###  changeOwner
+
+▸ **changeOwner**(`identityDID`: string, `newOwnerDid`: string): *Promise‹boolean›*
+
+*Defined in [did-resolver/src/implementations/operator.ts:170](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L170)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`identityDID` | string |
+`newOwnerDid` | string |
+
+**Returns:** *Promise‹boolean›*
+
+___
 
 ###  create
 
@@ -52,7 +75,7 @@ Name | Type | Description |
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/implementations/operator.ts:68
+*Defined in [did-resolver/src/implementations/operator.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L70)*
 
 Empty for this implementation
 
@@ -75,7 +98,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/implementations/operator.ts:132
+*Defined in [did-resolver/src/implementations/operator.ts:209](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L209)*
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -101,6 +124,26 @@ Promise<boolean>
 
 ___
 
+###  identityOwner
+
+▸ **identityOwner**(`did`: string): *Promise‹string›*
+
+*Implementation of [IOperator](../interfaces/ioperator.md)*
+
+*Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
+
+*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L114)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did` | string |
+
+**Returns:** *Promise‹string›*
+
+___
+
 ###  read
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
@@ -109,7 +152,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/implementations/resolver.ts:43
+*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L73)*
 
 Resolve DID Document for a given did
 
@@ -131,13 +174,49 @@ Name | Type | Description |
 
 ___
 
+###  revokeAttribute
+
+▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `delegateDID`: string): *Promise‹boolean›*
+
+*Defined in [did-resolver/src/implementations/operator.ts:144](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L144)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`identityDID` | string |
+`attributeType` | [DIDAttribute](../enums/didattribute.md) |
+`delegateDID` | string |
+
+**Returns:** *Promise‹boolean›*
+
+___
+
+###  revokeDelegate
+
+▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
+
+*Defined in [did-resolver/src/implementations/operator.ts:118](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L118)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`identityDID` | string |
+`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
+`delegateDID` | string |
+
+**Returns:** *Promise‹boolean›*
+
+___
+
 ###  update
 
 ▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-Defined in did-resolver/src/implementations/operator.ts:103
+*Defined in [did-resolver/src/implementations/operator.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L105)*
 
 Sets attribute value in DID document identified by the did
 
@@ -173,3 +252,25 @@ Name | Type | Default | Description |
 **Returns:** *Promise‹boolean›*
 
 Promise<boolean>
+
+___
+
+###  validDelegate
+
+▸ **validDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
+
+*Implementation of [IOperator](../interfaces/ioperator.md)*
+
+*Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
+
+*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L125)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`identityDID` | string |
+`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
+`delegateDID` | string |
+
+**Returns:** *Promise‹boolean›*

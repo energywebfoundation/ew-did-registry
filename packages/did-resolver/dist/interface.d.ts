@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers/utils';
-import { IDIDDocument, DIDAttribute, IUpdateData } from './models';
+import { IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes } from './models';
 export interface IResolver {
     /**
      * Constructor takes keys and resolver settings to create a new Resolver
@@ -23,6 +23,8 @@ export interface IResolver {
      * @returns {IDIDDocument}
      */
     read(did: string): Promise<IDIDDocument>;
+    identityOwner(did: string): Promise<string>;
+    validDelegate(identityDID: string, delegateType: DelegateTypes, delegateDID: string): Promise<boolean>;
 }
 export interface IOperator extends IResolver {
     /**
