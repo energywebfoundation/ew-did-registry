@@ -6,6 +6,12 @@
 
 * **Claims**
 
+  ↳ [ClaimsIssuer](claimsissuer.md)
+
+  ↳ [ClaimsVerifier](claimsverifier.md)
+
+  ↳ [ClaimsUser](claimsuser.md)
+
 ## Implements
 
 * [IClaims](../interfaces/iclaims.md)
@@ -16,158 +22,146 @@
 
 * [constructor](claims.md#constructor)
 
+### Properties
+
+* [did](claims.md#did)
+* [didDocument](claims.md#diddocument)
+* [jwt](claims.md#jwt)
+* [keys](claims.md#keys)
+* [token](claims.md#token)
+
 ### Methods
 
-* [createPrivateClaim](claims.md#createprivateclaim)
-* [createProofClaim](claims.md#createproofclaim)
-* [createPublicClaim](claims.md#createpublicclaim)
-* [generateClaimFromToken](claims.md#generateclaimfromtoken)
+* [getDocument](claims.md#getdocument)
+* [verifySignature](claims.md#verifysignature)
 
 ## Constructors
 
 ###  constructor
 
-\+ **new Claims**(`keyPair`: IKeys): *[Claims](claims.md)*
+\+ **new Claims**(`keys`: IKeys, `resolver`: IResolver): *[Claims](claims.md)*
 
-Defined in claims/src/claims/claims.ts:19
+Defined in claims/src/claims/claims.ts:39
+
+Constructor
+
+IClaimBuildData has to be passed to construct any type of Claim
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`keyPair` | IKeys |
+`keys` | IKeys |
+`resolver` | IResolver |
 
 **Returns:** *[Claims](claims.md)*
 
+## Properties
+
+###  did
+
+• **did**: *string*
+
+*Implementation of [IClaims](../interfaces/iclaims.md).[did](../interfaces/iclaims.md#did)*
+
+Defined in claims/src/claims/claims.ts:39
+
+___
+
+###  didDocument
+
+• **didDocument**: *IDIDDocument*
+
+Defined in claims/src/claims/claims.ts:22
+
+didDocument is used to store fetched DID Document
+
+___
+
+###  jwt
+
+• **jwt**: *IJWT*
+
+Defined in claims/src/claims/claims.ts:27
+
+jwt stores the JWT to manage web tokens
+
+___
+
+###  keys
+
+• **keys**: *IKeys*
+
+*Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
+
+Defined in claims/src/claims/claims.ts:37
+
+keyPair represents the implementation of key management interface
+
+___
+
+###  token
+
+• **token**: *string*
+
+Defined in claims/src/claims/claims.ts:32
+
+claimToken stores the actual serialised JWT in a string format
+
 ## Methods
 
-###  createPrivateClaim
+###  getDocument
 
-▸ **createPrivateClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `didIssuer`: string): *Promise‹[IPrivateClaim](../interfaces/iprivateclaim.md)›*
+▸ **getDocument**(`did`: string): *Promise‹IDIDDocument›*
 
-*Implementation of [IClaims](../interfaces/iclaims.md)*
+Defined in claims/src/claims/claims.ts:82
 
-Defined in claims/src/claims/claims.ts:80
-
-Creates claim which will be sent in encoded form to the didIssuer
-
-**`example`** 
-```typescript
-import { Claims } from '@ew-did-registry/claims';
-import { Networks } from '@ew-did-registry/did';
-
-const claims = new Claims(keys);
-const claimData = {
-    did: 'did:Networks.Ethereum:my_id',
-    data: 'secret data'
-};
-const didIssuer = 'did:Networks.Ethereum:issuer_id';
-const claim = await claims.createPrivateClaim(claimData, didIssuer);
-```
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) | - |
-`didIssuer` | string |   |
-
-**Returns:** *Promise‹[IPrivateClaim](../interfaces/iprivateclaim.md)›*
-
-___
-
-###  createProofClaim
-
-▸ **createProofClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md), `hashedFields`: object): *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
-
-Defined in claims/src/claims/claims.ts:113
-
-Creates claim with verifiable data in hashedFields
+Method fetches the DID Document associated with did provided in claim data
+DID Document is then stored as a member of Claim class. Returns true on success
 
 **`example`** 
 ```typescript
-import { Claims } from '@ew-did-registry/claims';
-import { Networks } from '@ew-did-registry/did';
-
-const claims = new Claims(keys);
-const claimData = {
-    did: 'did:Networks.Ethereum:my_id',
-    data: 'secret data'
-};
-const hashedFields = [123, 456];
-const claim = await claims.createProofClaim(claimData, hashedFields);
-```
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) | - |
-`hashedFields` | object |   |
-
-**Returns:** *Promise‹[IProofClaim](../interfaces/iproofclaim.md)›*
-
-___
-
-###  createPublicClaim
-
-▸ **createPublicClaim**(`claimData`: [IClaimData](../interfaces/iclaimdata.md)): *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md)›*
-
-*Implementation of [IClaims](../interfaces/iclaims.md)*
-
-Defined in claims/src/claims/claims.ts:49
-
-Creates verifiable claim with data about subject provided in claimData
-
-**`example`** 
-```typescript
-import { Claims } from '@ew-did-registry/claims';
-import { Networks } from '@ew-did-registry/did';
-
-const claims = new Claims(keys);
-const claimData = {
-    did: 'did:Networks.Ethereum:my_id',
-    data: 'data'
-};
-const claim = await claims.createPublicClaim(claimData);
-```
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`claimData` | [IClaimData](../interfaces/iclaimdata.md) |   |
-
-**Returns:** *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md)›*
-
-___
-
-###  generateClaimFromToken
-
-▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md) | [IPrivateClaim](../interfaces/iprivateclaim.md) | [IProofClaim](../interfaces/iproofclaim.md)›*
-
-*Implementation of [IClaims](../interfaces/iclaims.md)*
-
-Defined in claims/src/claims/claims.ts:141
-
-Creates claim of the specified type from the serialized claim
-
-**`example`** 
-```typescript
-import { Claims, ClaimType } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '@ew-did-registry/jwt';
+import { Claim } from '@ew-did-registry/claims';
 
 const keys = new Keys();
-const claims = new Claims(keys);
-const claim = claims.generateClaimFromToken(
+const jwt = new JWT(keys);
+const claimData = {
+  did: `did:ewc:0x${keys.publicKey}`,
+  test: 'test',
+};
+const data = {
+  jwt,
+  keyPair: keys,
+  claimData,
+};
+const publicClaim = new Claim(data);
+await publicClaim.getDid();
+console.log(publicClaim.didDocument);
 ```
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`token` | string | - |
-`type` | [ClaimType](../enums/claimtype.md) |   |
+Name | Type |
+------ | ------ |
+`did` | string |
 
-**Returns:** *Promise‹[IVerificationClaim](../interfaces/iverificationclaim.md) | [IPrivateClaim](../interfaces/iprivateclaim.md) | [IProofClaim](../interfaces/iproofclaim.md)›*
+**Returns:** *Promise‹IDIDDocument›*
 
-Promise<IVerificationClaim | IPrivateClaim | IProofClaim>
+___
+
+###  verifySignature
+
+▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
+
+Defined in claims/src/claims/claims.ts:89
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`token` | string |
+`signer` | string |
+
+**Returns:** *Promise‹boolean›*

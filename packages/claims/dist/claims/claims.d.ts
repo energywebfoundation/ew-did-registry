@@ -1,105 +1,69 @@
+import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver';
+import { IDIDDocumentLite } from '@ew-did-registry/did-document';
+import { IJWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
-import { IPrivateClaim } from '../private';
-import { ClaimType, IClaimData, IVerificationClaim } from '../models';
-import { IProofClaim } from '../proof';
-import { IClaims } from '../interface';
+import { IClaims } from '../models';
 export declare class Claims implements IClaims {
     /**
-     * Did document describing the subject for which this factory creates the claims
+     * Used for creation of new Resolvers
      */
-    private _didDocument;
+    private readonly resolver;
     /**
-     * Subject keypair
+     * Light document is used for fetching the DID Document
      */
-    private readonly _keyPair;
+    protected readonly didDocumentLite: IDIDDocumentLite;
     /**
+     * didDocument is used to store fetched DID Document
+     */
+    didDocument: IDIDDocument;
+    /**
+     * jwt stores the JWT to manage web tokens
+     */
+    jwt: IJWT;
+    /**
+     * claimToken stores the actual serialised JWT in a string format
+     */
+    token: string;
+    /**
+     * keyPair represents the implementation of key management interface
+     */
+    keys: IKeys;
+    did: string;
+    /**
+     * Constructor
      *
-     * @param {IKeys} keyPair
-     * @param {IDidDocumetn} didDocument
+     * IClaimBuildData has to be passed to construct any type of Claim
+     * @param {IClaimBuildData} data
      */
-    constructor(keyPair: IKeys);
+    constructor(keys: IKeys, resolver: IResolver);
     /**
-     * Creates verifiable claim with data about subject provided in claimData
+     * Method fetches the DID Document associated with did provided in claim data
+     * DID Document is then stored as a member of Claim class. Returns true on success
      *
      * @example
      * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'data'
-     * };
-     * const claim = await claims.createPublicClaim(claimData);
-     * ```
-     * @param {IClaimData } claimData
-     *
-     * @return {Promise<IVerificationClaim>}
-     */
-    createPublicClaim(claimData: IClaimData): Promise<IVerificationClaim>;
-    /**
-     * Creates claim which will be sent in encoded form to the didIssuer
-     *
-     * @example
-     * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'secret data'
-     * };
-     * const didIssuer = 'did:Networks.Ethereum:issuer_id';
-     * const claim = await claims.createPrivateClaim(claimData, didIssuer);
-     * ```
-     * @param {IClaimData } claimData
-     * @param {string} didIssuer
-     *
-     * @return {Promise<IPrivateClaim>}
-     */
-    createPrivateClaim(claimData: IClaimData, didIssuer: string): Promise<IPrivateClaim>;
-    /**
-     * Creates claim with verifiable data in hashedFields
-     *
-     * @example
-     * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'secret data'
-     * };
-     * const hashedFields = [123, 456];
-     * const claim = await claims.createProofClaim(claimData, hashedFields);
-     * ```
-     * @param {IClaimData } claimData
-     * @param {number[]} hashedFields
-     *
-     * @return {Promise<IPrivateClaim>}
-     */
-    createProofClaim(claimData: IClaimData, hashedFields: {
-        [keys: string]: string;
-    }): Promise<IProofClaim>;
-    /**
-     * Creates claim of the specified type from the serialized claim
-     *
-     * @example
-     * ```typescript
-     * import { Claims, ClaimType } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * import { Claim } from '@ew-did-registry/claims';
      *
      * const keys = new Keys();
-     * const claims = new Claims(keys);
-     * const claim = claims.generateClaimFromToken(
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     *   did: `did:ewc:0x${keys.publicKey}`,
+     *   test: 'test',
+     * };
+     * const data = {
+     *   jwt,
+     *   keyPair: keys,
+     *   claimData,
+     * };
+     * const publicClaim = new Claim(data);
+     * await publicClaim.getDid();
+     * console.log(publicClaim.didDocument);
      * ```
      *
-     * @param { string } token
-     * @param { ClaimType } type
-     *
-     * @return Promise<IVerificationClaim | IPrivateClaim | IProofClaim>
+     * @returns {Promise<IDIDDocument>}
      */
-    generateClaimFromToken(token: string, type: ClaimType): Promise<IVerificationClaim | IPrivateClaim | IProofClaim>;
+    getDocument(did: string): Promise<IDIDDocument>;
+    verifySignature(token: string, signer: string): Promise<boolean>;
 }

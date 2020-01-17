@@ -12,4 +12,8 @@ and [JWT](https://tools.ietf.org/html/rfc7519) specifications.
 
 ## How to use
 
+* Since the process of claim creation differs depending on the role of the 
+creator, you should use claim factory [Claims](docs/classes/claims.md), not the constructors;
+* 
+
 ## Examples

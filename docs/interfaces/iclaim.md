@@ -2,106 +2,48 @@
 
 # Interface: IClaim
 
-Claim interface is used by all Claim types
-
 ## Hierarchy
 
 * **IClaim**
 
-  ↳ [IVerificationClaim](iverificationclaim.md)
-
   ↳ [IProofClaim](iproofclaim.md)
 
-## Implemented by
+## Indexable
 
-* [Claim](../classes/claim.md)
-* [PrivateClaim](../classes/privateclaim.md)
-* [ProofClaim](../classes/proofclaim.md)
-* [VerificationClaim](../classes/verificationclaim.md)
+* \[ **key**: *string*\]: string | object
 
 ## Index
 
 ### Properties
 
 * [claimData](iclaim.md#claimdata)
-* [jwt](iclaim.md#jwt)
-* [keyPair](iclaim.md#keypair)
-* [token](iclaim.md#token)
-
-### Methods
-
-* [createJWT](iclaim.md#createjwt)
-* [getDid](iclaim.md#getdid)
+* [did](iclaim.md#did)
+* [signer](iclaim.md#signer)
 
 ## Properties
 
 ###  claimData
 
-• **claimData**: *[IClaimData](iclaimdata.md)*
+• **claimData**: *object*
 
-Defined in claims/src/models/index.ts:57
+Defined in claims/src/models/index.ts:6
 
-claimData stores the claim fields
+#### Type declaration:
 
-___
-
-###  jwt
-
-• **jwt**: *IJWT*
-
-Defined in claims/src/models/index.ts:49
-
-jwt stores the JWT to manage web tokens
+* \[ **key**: *string*\]: string | object
 
 ___
 
-###  keyPair
+###  did
 
-• **keyPair**: *IKeys*
+• **did**: *string*
 
-Defined in claims/src/models/index.ts:61
-
-keyPair represents the implementation of key management interface
+Defined in claims/src/models/index.ts:4
 
 ___
 
-###  token
+###  signer
 
-• **token**: *string*
+• **signer**: *string*
 
-Defined in claims/src/models/index.ts:53
-
-claimToken stores the actual serialised JWT in a string format
-
-## Methods
-
-###  createJWT
-
-▸ **createJWT**(): *void*
-
-Defined in claims/src/models/index.ts:77
-
-Method creates token with the payload provided in the claim data
-The signed token is stored as a member of Claim class
-This is a void method
-
-**Returns:** *void*
-
-___
-
-###  getDid
-
-▸ **getDid**(`did?`: string): *Promise‹boolean›*
-
-Defined in claims/src/models/index.ts:70
-
-Method returns the DID document associated with a claim subject DID
-Optional parameter did allows to read document associated with a different DID
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`did?` | string |
-
-**Returns:** *Promise‹boolean›*
+Defined in claims/src/models/index.ts:5

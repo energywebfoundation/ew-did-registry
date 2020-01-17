@@ -2,135 +2,63 @@
 
 # Interface: IProofClaim
 
-This interface extends a more general Claim interface
-and specifies Proof interface, which is used to create
-proof of knowledge of claim data and provides a method
-to verify if the provided proof is valid
-
 ## Hierarchy
 
 * [IClaim](iclaim.md)
 
   ↳ **IProofClaim**
 
-## Implemented by
+## Indexable
 
-* [ProofClaim](../classes/proofclaim.md)
+* \[ **key**: *string*\]: string | object
 
 ## Index
 
 ### Properties
 
 * [claimData](iproofclaim.md#claimdata)
-* [jwt](iproofclaim.md#jwt)
-* [keyPair](iproofclaim.md#keypair)
-* [token](iproofclaim.md#token)
-
-### Methods
-
-* [createJWT](iproofclaim.md#createjwt)
-* [getDid](iproofclaim.md#getdid)
-* [verify](iproofclaim.md#verify)
+* [claimUrl](iproofclaim.md#claimurl)
+* [did](iproofclaim.md#did)
+* [signer](iproofclaim.md#signer)
 
 ## Properties
 
 ###  claimData
 
-• **claimData**: *[IClaimData](iclaimdata.md)*
+• **claimData**: *object*
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-Defined in claims/src/models/index.ts:57
+Defined in claims/src/models/index.ts:6
 
-claimData stores the claim fields
+#### Type declaration:
 
-___
-
-###  jwt
-
-• **jwt**: *IJWT*
-
-*Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
-
-Defined in claims/src/models/index.ts:49
-
-jwt stores the JWT to manage web tokens
+* \[ **key**: *string*\]: string | object
 
 ___
 
-###  keyPair
+###  claimUrl
 
-• **keyPair**: *IKeys*
+• **claimUrl**: *string*
 
-*Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
-
-Defined in claims/src/models/index.ts:61
-
-keyPair represents the implementation of key management interface
+Defined in claims/src/models/index.ts:11
 
 ___
 
-###  token
+###  did
 
-• **token**: *string*
+• **did**: *string*
 
-*Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
+*Inherited from [IClaim](iclaim.md).[did](iclaim.md#did)*
 
-Defined in claims/src/models/index.ts:53
-
-claimToken stores the actual serialised JWT in a string format
-
-## Methods
-
-###  createJWT
-
-▸ **createJWT**(): *void*
-
-*Inherited from [IClaim](iclaim.md).[createJWT](iclaim.md#createjwt)*
-
-Defined in claims/src/models/index.ts:77
-
-Method creates token with the payload provided in the claim data
-The signed token is stored as a member of Claim class
-This is a void method
-
-**Returns:** *void*
+Defined in claims/src/models/index.ts:4
 
 ___
 
-###  getDid
+###  signer
 
-▸ **getDid**(`did?`: string): *Promise‹boolean›*
+• **signer**: *string*
 
-*Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
+*Inherited from [IClaim](iclaim.md).[signer](iclaim.md#signer)*
 
-Defined in claims/src/models/index.ts:70
-
-Method returns the DID document associated with a claim subject DID
-Optional parameter did allows to read document associated with a different DID
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`did?` | string |
-
-**Returns:** *Promise‹boolean›*
-
-___
-
-###  verify
-
-▸ **verify**(`privateToken`: string): *boolean*
-
-Defined in claims/src/proof/interface.ts:21
-
-To verify the claim, private token (JWT) representing the claim should be provided
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`privateToken` | string |
-
-**Returns:** *boolean*
+Defined in claims/src/models/index.ts:5

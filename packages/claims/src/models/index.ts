@@ -1,112 +1,21 @@
 import { IKeys } from '@ew-did-registry/keys';
-import { IJWT } from '@ew-did-registry/jwt';
-import { IResolverSettings } from '@ew-did-registry/did-resolver';
 
-/**
- * This enumerated type specifies available Claim Types
- */
-export enum ClaimType {
-    Public,
-    Private,
-    Proof
-}
-
-/**
- * Claim Data interface specifies the format of claim data fields
- * DID is a required property for every Claim
- */
-export interface IClaimData {
+export interface IClaim {
     did: string;
+    signer: string;
+    claimData: { [key: string]: string | object };
     [key: string]: string | object;
 }
 
-/**
- * Claim Build Data outlines the necessary properties used to create
- * each of the Claim types
- */
-export interface IClaimBuildData {
-    jwt: IJWT;
-    keyPair: IKeys;
-    token?: string;
-    claimData?: IClaimData;
-    resolverSettings?: IResolverSettings;
-    signerDid?: string;
+export interface IProofClaim extends IClaim {
+    claimUrl: string;
 }
 
-/**
- * Claim interface is used by all Claim types
- */
-export interface IClaim {
-
-    /**
-     * To construct the Public Claim IClaimBuildData has to be provided
-     * constructor(data: IClaimBuildData);
-     */
-
-    /**
-     * jwt stores the JWT to manage web tokens
-     */
-    jwt: IJWT;
-    /**
-     * claimToken stores the actual serialised JWT in a string format
-     */
-    token: string;
-    /**
-     * claimData stores the claim fields
-     */
-    claimData: IClaimData;
-    /**
-     * keyPair represents the implementation of key management interface
-     */
-    keyPair: IKeys;
-
-    /**
-     * Method returns the DID document associated with a claim subject DID
-     * Optional parameter did allows to read document associated with a different DID
-     *
-     * @param {string} did
-     * @returns {string}
-     */
-    getDid(did?: string): Promise<boolean>;
-
-    /**
-     * Method creates token with the payload provided in the claim data
-     * The signed token is stored as a member of Claim class
-     * This is a void method
-     */
-    createJWT(): void;
+export interface IClaimData {
+    [key: string]: object | string;
 }
 
-/**
- * Verification Claim interface specifies methods to verify and approve claims
- * and is used by Private and Public Claims
- */
-export interface IVerificationClaim extends IClaim {
-    /**
-     * verify check if the given Claim was signed correctly
-     * @returns {boolean}
-     */
-    verify(): Promise<boolean>;
-
-    /**
-     * Method signs the claim and return the serialised JWT
-     * @returns {string}
-     */
-    approve(): Promise<string>;
-}
-
-/**
- * Private Claim Build Data extends the general Claim Build Data
- * interface and is required to construct Private Claims
- */
-export interface IPrivateClaimBuildData extends IClaimBuildData {
-    issuerDid?: string;
-}
-
-/**
- * Proof Claim Build Data extends the general Claim Build Data
- * interface and is required to construct Proof Claims
- */
-export interface IProofClaimBuildData extends IClaimBuildData {
-    hashedFields?: { [keys: string]: string };
+export interface IClaims {
+    did: string;
+    keys: IKeys;
 }

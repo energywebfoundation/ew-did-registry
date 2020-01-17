@@ -36,179 +36,89 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var did_document_1 = require("@ew-did-registry/did-document");
 var jwt_1 = require("@ew-did-registry/jwt");
-var private_1 = require("../private");
-var models_1 = require("../models");
-var proof_1 = require("../proof");
-var public_1 = require("../public");
+var did_1 = require("@ew-did-registry/did");
 var Claims = /** @class */ (function () {
     /**
+     * Constructor
      *
-     * @param {IKeys} keyPair
-     * @param {IDidDocumetn} didDocument
+     * IClaimBuildData has to be passed to construct any type of Claim
+     * @param {IClaimBuildData} data
      */
-    function Claims(keyPair) {
-        this._keyPair = keyPair;
+    function Claims(keys, resolver) {
+        this.resolver = resolver;
+        this.keys = keys;
+        this.jwt = new jwt_1.JWT(keys);
+        this.did = "did:" + did_1.Networks.Ethereum + ":0x" + keys.publicKey;
     }
     /**
-     * Creates verifiable claim with data about subject provided in claimData
+     * Method fetches the DID Document associated with did provided in claim data
+     * DID Document is then stored as a member of Claim class. Returns true on success
      *
      * @example
      * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'data'
-     * };
-     * const claim = await claims.createPublicClaim(claimData);
-     * ```
-     * @param {IClaimData } claimData
-     *
-     * @return {Promise<IVerificationClaim>}
-     */
-    Claims.prototype.createPublicClaim = function (claimData) {
-        return __awaiter(this, void 0, void 0, function () {
-            var jwt, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        jwt = new jwt_1.JWT(this._keyPair);
-                        return [4 /*yield*/, jwt.sign(claimData)];
-                    case 1:
-                        token = _a.sent();
-                        return [2 /*return*/, new public_1.VerificationClaim({
-                                jwt: jwt,
-                                keyPair: this._keyPair,
-                                token: token,
-                            })];
-                }
-            });
-        });
-    };
-    /**
-     * Creates claim which will be sent in encoded form to the didIssuer
-     *
-     * @example
-     * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'secret data'
-     * };
-     * const didIssuer = 'did:Networks.Ethereum:issuer_id';
-     * const claim = await claims.createPrivateClaim(claimData, didIssuer);
-     * ```
-     * @param {IClaimData } claimData
-     * @param {string} didIssuer
-     *
-     * @return {Promise<IPrivateClaim>}
-     */
-    Claims.prototype.createPrivateClaim = function (claimData, didIssuer) {
-        return __awaiter(this, void 0, void 0, function () {
-            var jwt, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        jwt = new jwt_1.JWT(this._keyPair);
-                        return [4 /*yield*/, jwt.sign(claimData)];
-                    case 1:
-                        token = _a.sent();
-                        return [2 /*return*/, new private_1.PrivateClaim({
-                                jwt: jwt,
-                                keyPair: this._keyPair,
-                                token: token,
-                                issuerDid: didIssuer,
-                            })];
-                }
-            });
-        });
-    };
-    /**
-     * Creates claim with verifiable data in hashedFields
-     *
-     * @example
-     * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
-     *
-     * const claims = new Claims(keys);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:my_id',
-     *     data: 'secret data'
-     * };
-     * const hashedFields = [123, 456];
-     * const claim = await claims.createProofClaim(claimData, hashedFields);
-     * ```
-     * @param {IClaimData } claimData
-     * @param {number[]} hashedFields
-     *
-     * @return {Promise<IPrivateClaim>}
-     */
-    // eslint-disable-next-line max-len
-    Claims.prototype.createProofClaim = function (claimData, hashedFields) {
-        return __awaiter(this, void 0, void 0, function () {
-            var jwt, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        jwt = new jwt_1.JWT(this._keyPair);
-                        return [4 /*yield*/, jwt.sign(claimData)];
-                    case 1:
-                        token = _a.sent();
-                        return [2 /*return*/, new proof_1.ProofClaim({
-                                jwt: jwt,
-                                keyPair: this._keyPair,
-                                token: token,
-                                hashedFields: hashedFields,
-                            })];
-                }
-            });
-        });
-    };
-    /**
-     * Creates claim of the specified type from the serialized claim
-     *
-     * @example
-     * ```typescript
-     * import { Claims, ClaimType } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { JWT } from '@ew-did-registry/jwt';
+     * import { Claim } from '@ew-did-registry/claims';
      *
      * const keys = new Keys();
-     * const claims = new Claims(keys);
-     * const claim = claims.generateClaimFromToken(
+     * const jwt = new JWT(keys);
+     * const claimData = {
+     *   did: `did:ewc:0x${keys.publicKey}`,
+     *   test: 'test',
+     * };
+     * const data = {
+     *   jwt,
+     *   keyPair: keys,
+     *   claimData,
+     * };
+     * const publicClaim = new Claim(data);
+     * await publicClaim.getDid();
+     * console.log(publicClaim.didDocument);
      * ```
      *
-     * @param { string } token
-     * @param { ClaimType } type
-     *
-     * @return Promise<IVerificationClaim | IPrivateClaim | IProofClaim>
+     * @returns {Promise<IDIDDocument>}
      */
-    Claims.prototype.generateClaimFromToken = function (token, type) {
+    Claims.prototype.getDocument = function (did) {
         return __awaiter(this, void 0, void 0, function () {
-            var jwt, _a, claimData, hashedFields, didIssuer;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var documentFactory, didDocumentLite;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        jwt = new jwt_1.JWT(this._keyPair);
-                        return [4 /*yield*/, jwt.decode(token)];
+                        documentFactory = new did_document_1.DIDDocumentFactory(did);
+                        didDocumentLite = documentFactory.createLite(this.resolver);
+                        return [4 /*yield*/, didDocumentLite.read(did)];
                     case 1:
-                        _a = _b.sent(), claimData = _a.claimData, hashedFields = _a.hashedFields, didIssuer = _a.didIssuer;
-                        switch (type) {
-                            case models_1.ClaimType.Public:
-                                return [2 /*return*/, this.createPublicClaim(claimData)];
-                            case models_1.ClaimType.Private:
-                                return [2 /*return*/, this.createPrivateClaim(claimData, hashedFields)];
-                            case models_1.ClaimType.Proof:
-                                return [2 /*return*/, this.createProofClaim(claimData, didIssuer)];
-                            default:
-                                return [2 /*return*/, this.createPublicClaim(claimData)];
-                        }
-                        return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, didDocumentLite.didDocument];
+                }
+            });
+        });
+    };
+    Claims.prototype.verifySignature = function (token, signer) {
+        return __awaiter(this, void 0, void 0, function () {
+            var issuerDocument, issuerPublicKey, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getDocument(signer)];
+                    case 1:
+                        issuerDocument = _a.sent();
+                        issuerPublicKey = issuerDocument
+                            .publicKey
+                            .find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; })
+                            .ethereumAddress;
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, this.jwt.verify(token, issuerPublicKey.slice(2))];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, false];
+                    case 5: return [2 /*return*/, true];
                 }
             });
         });
