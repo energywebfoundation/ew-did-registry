@@ -2,7 +2,7 @@
 
 # Class: ClaimsFactory
 
-An implementation of claim factory
+An implementation of claims factory
 
 **`class`** 
 
@@ -49,7 +49,9 @@ Name | Type |
 
 ▸ **createClaimsIssuer**(): *[IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-Defined in claims/src/claimsFactory/claimsFactory.ts:28
+Defined in claims/src/claimsFactory/claimsFactory.ts:38
+
+Contstructs instance of ClaimsIssuer
 
 **Returns:** *[IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
@@ -59,7 +61,9 @@ ___
 
 ▸ **createClaimsUser**(): *[IClaimsUser](../interfaces/iclaimsuser.md)*
 
-Defined in claims/src/claimsFactory/claimsFactory.ts:24
+Defined in claims/src/claimsFactory/claimsFactory.ts:29
+
+Constructs instance of ClaimsUser
 
 **Returns:** *[IClaimsUser](../interfaces/iclaimsuser.md)*
 
@@ -69,6 +73,8 @@ ___
 
 ▸ **createClaimsVerifier**(): *[IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsFactory/claimsFactory.ts:32
+Defined in claims/src/claimsFactory/claimsFactory.ts:47
+
+Constructs instance of ClaimsUser
 
 **Returns:** *[IClaimsVerifier](../interfaces/iclaimsverifier.md)*

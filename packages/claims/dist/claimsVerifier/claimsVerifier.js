@@ -62,6 +62,21 @@ var ClaimsVerifier = /** @class */ (function (_super) {
     function ClaimsVerifier() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    /**
+     * Checks issuer signature on token
+     *
+     * @example
+     * ```typescript
+     * import { ClaimsVerifier } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const keys = new Keys();
+     * const claims = new ClaimsVerifier(verifier);
+     * const verified = claims.verifyPublicProof(issuedToken);
+     * ```
+     * @param { string } token containing proof data
+     * @returns { boolean } whether the proof was succesfull
+     */
     ClaimsVerifier.prototype.verifyPublicProof = function (token) {
         return __awaiter(this, void 0, void 0, function () {
             var claim;
@@ -80,45 +95,61 @@ var ClaimsVerifier = /** @class */ (function (_super) {
         });
     };
     /**
-     * Сhecks that the public keys in the `privateToken`'s payload matches values
-     * based on which `this.token` payload was calculated
-     * @example
-     * ```typescript
-     * import { ProofClaim } from '@ew-did-registry/claims';
-     *
-     * ------------------------------ owner -----------------------------------
-     * const proofClaim = new ProofClaim({jwt, keys, claimData,  hashedFields });
-     * const proofToken = proofClaim.token;
-     * ----------------------------- verifier ---------------------------------
-     * const proofClaim = new ProofClaim({jwt, keys, claimData, proofToken });
-     * const privateToken = store.getClaim(claimUrl);
-     * const verified = proofClaim.verify(privateToken);
-     * ```
-     * @param { string } privateToken
-     */
+    * Checks issuer signature on issued token and user signature on proof token
+    * and verifies that proof and private data mathches to each other
+    *
+    * @example
+    * ```typescript
+    * import { ClaimsVerifier } from '@ew-did-registry/claims';
+    * import { Keys } from '@ew-did-registry/keys';
+    *
+    * const keys = new Keys();
+    * const claims = new ClaimsVerifier(verifier);
+    * const verified = claims.verifyPrivateProof(proofToken, privateToken);
+    * ```
+    * @param { string } proofToken contains proof data
+    * @param { string } privateToken contains private data
+    * @returns { boolean } whether the proof was succesfull
+    */
     ClaimsVerifier.prototype.verifyPrivateProof = function (proofToken, privateToken) {
-        var curve = sjcl_complete_1.default.ecc.curves.k256;
-        var g = curve.G;
-        var proofClaim = this.jwt.decode(proofToken);
-        var privateClaim = this.jwt.decode(privateToken);
-        // eslint-disable-next-line no-restricted-syntax
-        for (var _i = 0, _a = Object.entries(privateClaim.claimData); _i < _a.length; _i++) {
-            var _b = _a[_i], key = _b[0], value = _b[1];
-            var PK = curve.fromBits(value);
-            var _c = proofClaim.claimData[key], h = _c.h, s = _c.s;
-            h = curve.fromBits(h);
-            s = bn.fromBits(s);
-            var c = hash.sha256.hash(g.x.toBits()
-                .concat(h.toBits())
-                .concat(PK.toBits()));
-            c = bn.fromBits(c);
-            var left = g.mult(s);
-            var right = PK.mult(c).toJac().add(h).toAffine();
-            if (!sjcl_complete_1.default.bitArray.equal(left.toBits(), right.toBits())) {
-                return false;
-            }
-        }
-        return true;
+        return __awaiter(this, void 0, void 0, function () {
+            var curve, g, proofClaim, privateClaim, _i, _a, _b, key, value, PK, _c, h, s, c, left, right;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        curve = sjcl_complete_1.default.ecc.curves.k256;
+                        g = curve.G;
+                        proofClaim = this.jwt.decode(proofToken);
+                        return [4 /*yield*/, this.verifySignature(proofToken, proofClaim.signer)];
+                    case 1:
+                        if (!(_d.sent()))
+                            return [2 /*return*/, false];
+                        privateClaim = this.jwt.decode(privateToken);
+                        return [4 /*yield*/, this.verifySignature(privateToken, privateClaim.signer)];
+                    case 2:
+                        if (!(_d.sent()))
+                            return [2 /*return*/, false];
+                        // eslint-disable-next-line no-restricted-syntax
+                        for (_i = 0, _a = Object.entries(privateClaim.claimData); _i < _a.length; _i++) {
+                            _b = _a[_i], key = _b[0], value = _b[1];
+                            PK = curve.fromBits(value);
+                            _c = proofClaim.claimData[key], h = _c.h, s = _c.s;
+                            h = curve.fromBits(h);
+                            s = bn.fromBits(s);
+                            c = hash.sha256.hash(g.x.toBits()
+                                .concat(h.toBits())
+                                .concat(PK.toBits()));
+                            c = bn.fromBits(c);
+                            left = g.mult(s);
+                            right = PK.mult(c).toJac().add(h).toAffine();
+                            if (!sjcl_complete_1.default.bitArray.equal(left.toBits(), right.toBits())) {
+                                return [2 /*return*/, false];
+                            }
+                        }
+                        return [2 /*return*/, true];
+                }
+            });
+        });
     };
     return ClaimsVerifier;
 }(claims_1.Claims));

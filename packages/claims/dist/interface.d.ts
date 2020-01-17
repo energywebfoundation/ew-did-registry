@@ -31,5 +31,5 @@ export interface IClaimsIssuer {
 }
 export interface IClaimsVerifier {
     verifyPublicProof(token: string): Promise<boolean>;
-    verifyPrivateProof(proofToken: string, privateToken: string): boolean;
+    verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
 }

@@ -1,10 +1,14 @@
 import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver';
-import { IDIDDocumentLite, DIDDocumentFactory } from '@ew-did-registry/did-document';
+import { DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
 import { IClaims } from '../models';
 
+/**
+ * @class
+ * Base class for extending by other claims classes
+ */
 export class Claims implements IClaims {
     /**
      * Used for creation of new Resolvers
@@ -12,37 +16,22 @@ export class Claims implements IClaims {
     private readonly resolver: IResolver;
 
     /**
-     * Light document is used for fetching the DID Document
-     */
-    protected readonly didDocumentLite: IDIDDocumentLite;
-
-    /**
-     * didDocument is used to store fetched DID Document
-     */
-    public didDocument: IDIDDocument;
-
-    /**
      * jwt stores the JWT to manage web tokens
      */
     public jwt: IJWT;
 
     /**
-     * claimToken stores the actual serialised JWT in a string format
-     */
-    public token: string;
-
-    /**
-     * keyPair represents the implementation of key management interface
+     * Key pair represents the implementation of key management interface
      */
     public keys: IKeys;
 
     public did: string;
 
     /**
-     * Constructor
+     * @constructor
      *
-     * IClaimBuildData has to be passed to construct any type of Claim
-     * @param {IClaimBuildData} data
+     * @param { IKeys } keys user key pair
+     * @param { IResolver } resolver
      */
     constructor(keys: IKeys, resolver: IResolver) {
       this.resolver = resolver;
@@ -52,29 +41,17 @@ export class Claims implements IClaims {
     }
 
     /**
-     * Method fetches the DID Document associated with did provided in claim data
-     * DID Document is then stored as a member of Claim class. Returns true on success
+     * Fetches DID document of the corresponding DID
      *
      * @example
      * ```typescript
      * import { Keys } from '@ew-did-registry/keys';
-     * import { JWT } from '@ew-did-registry/jwt';
-     * import { Claim } from '@ew-did-registry/claims';
+     * import { Claims } from '@ew-did-registry/claims';
      *
-     * const keys = new Keys();
-     * const jwt = new JWT(keys);
-     * const claimData = {
-     *   did: `did:ewc:0x${keys.publicKey}`,
-     *   test: 'test',
-     * };
-     * const data = {
-     *   jwt,
-     *   keyPair: keys,
-     *   claimData,
-     * };
-     * const publicClaim = new Claim(data);
-     * await publicClaim.getDid();
-     * console.log(publicClaim.didDocument);
+     * const user = new Keys();
+     * const claims = new Claims(user);
+     * const did = `did:${Networks.Ethereum}:user_id`;
+     * const document = await claims.getDocument(did);
      * ```
      *
      * @returns {Promise<IDIDDocument>}
@@ -86,6 +63,21 @@ export class Claims implements IClaims {
       return didDocumentLite.didDocument;
     }
 
+    /**
+     * Verifies signers signature on received token
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { Claims } from '@ew-did-registry/claims';
+     *
+     * const user = new Keys();
+     * const claims = new Claims(user);
+     * const verified = claims.verifySignature(token, userDid);
+     * ```
+     *
+     * @param { string } token token signature on which you want to check
+     * @param { string } signer did of the signer
+     */
     async verifySignature(token: string, signer: string): Promise<boolean> {
       const issuerDocument = await this.getDocument(signer);
       const issuerPublicKey = issuerDocument

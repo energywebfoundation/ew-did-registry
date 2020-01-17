@@ -24,7 +24,10 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', () => {
   it('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
     const claimData: IClaimData = { secret: '123' };
-    const { token: privateToken, saltedFields } = await claimsUser.createPrivateClaim(claimData, issuerDid);
+    const {
+      token: privateToken,
+      saltedFields,
+    } = await claimsUser.createPrivateClaim(claimData, issuerDid);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side
@@ -33,7 +36,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', () => {
     const claimUrl = 'http://test.service.com';
     const proofToken = await claimsUser.createProofClaim(claimUrl, saltedFields);
     // Verifier side
-    const prooved = claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
+    const prooved = await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
     expect(prooved).to.be.true;
   });
 

@@ -9,24 +9,23 @@ declare class ClaimsUser extends Claims implements IClaimsUser {
     paranoia: number;
     /**
      *
-     * Creates verifiable claim with data about subject provided in claimData
+     * Creates token with data about subject provided in claimData
      *
      * @example
      * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
+     * import { ClaimsUser } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
      *
-     * const subject = new Keys();
-     * const claims = new Claims(subject);
+     * const user = new Keys();
+     * const claims = new ClaimsUser(user);
      * const claimData = {
-     *     did: 'did:Networks.Ethereum:claim_subject_address',
-     *     data: 'data'
+     *     name: 'John'
      * };
-     * const claim = await claims.createPublicClaim(claimData);
+     * const token = await claims.createPublicClaim(claimData);
      * ```
      * @param { IClaimData } claimData
      *
-     * @returns { Promise<IVerificationClaim> }
+     * @returns { Promise<string> }
      */
     createPublicClaim(claimData: IClaimData): Promise<string>;
     /**
@@ -36,22 +35,20 @@ declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @example
      * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
+     * import { ClaimsUser } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
      *
-     * const subject = new Keys();
-     * const claims = new Claims(subject);
+     * const user = new Keys();
+     * const claims = new ClaimsUser(user);
      * const claimData = {
-     *     did: 'did:Networks.Ethereum:claim_subject_address',
      *     secret: '123'
      * };
-     * const issuerDid = 'did:Networks.Ethereum:issuer_address';
-     * const claim = await claims.createPrivateClaim(claimData, issuerDid);
+     * const claim = await claims.createPrivateClaim(claimData, issuer);
      * ```
-     * @param { IClaimData } claimData object with claim subject `did` and subject private data
-     * @param { string } issuerDid
+     * @param { IClaimData } claimData object with claim subject private data
+     * @param { string } issuer
      *
-     * @returns { Promise<IPrivateClaim> } claim wich contains token with private data encrypted by issuer key
+     * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */
     createPrivateClaim(claimData: IClaimData, issuer: string): Promise<{
         token: string;
@@ -60,59 +57,61 @@ declare class ClaimsUser extends Claims implements IClaimsUser {
         };
     }>;
     /**
-     * Used by the claim subject based on the hashed salted values calculated
-     * when creating private claim. Verifier should use `generateClaimFromToken`
+     * Used by the claim subject based on the salted values calculated
+     * when creating private claim
      *
      * @example
      * ```typescript
-     * import { Claims } from '@ew-did-registry/claims';
-     * import { Networks } from '@ew-did-registry/did';
+     * import { ClaimsUser } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
      *
-     * const subject = new Keys();
-     * const claims = new Claims(subject);
-     * const claimData = {
-     *     did: 'did:Networks.Ethereum:claim_subject_address',
+     * const user = new Keys();
+     * const claims = new ClaimsUser(user);
+     * const claimUrl = 'http://example.com';
+     * const saltedFields = {
+     *    secret: '123abc'
      * };
-     * const hashedFields = {
-     *    secret: '0x500cec0cbd1888723f3438b2bdcb8b6b399cefefd25809231bed2c5bcb2aef88'
-     * };
-     * const claim = await claims.createProofClaim(claimData, hashedFields);
+     * const claim = await claims.createProofClaim(claimUrl, saltedFields);
      * ```
-     * @param { IClaimData } claimData - claim subject public data
-     * @param { { [keys: string]: string } } hashedFields - salted and sha256-hashed private subject data
+     * @param { string } claimUrl - url of previously saved token
+     * @param { { [keys: string]: string } } saltedFields - salted private user data
      *
-     * @returns { Promise<IPrivateClaim> }
+     * @returns { Promise<string> }
      */
     createProofClaim(claimUrl: string, saltedFields: {
         [key: string]: string;
     }): Promise<string>;
     /**
-     * Verify method checks if the token was signed by the correct private key
-     * Returns true on success
+     * Verifies token received from issuer
      *
      * @example
      * ```typescript
+     * import { ClaimsUser } from '@ew-did-registry/claims';
      * import { Keys } from '@ew-did-registry/keys';
-     * import { JWT } from '@ew-did-registry/jwt';
-     * import { verificationClaim } from '@ew-did-registry/claims';
      *
-     * const keysVerifier = new Keys();
-     * const jwtVerifier = new JWT(keysVerifier);
-     * const tokenToVerify = publicClaim.token;
-     * const dataVerifier = {
-     *   jwt: jwtVerifier,
-     *   keyPair: keysVerifier,
-     *   token: tokenToVerify,
-     * };
-     *
-     * verificationClaim = new VerificationClaim(dataVerifier);
-     * const verified = await verificationClaim.verify();
-     * console.log(verified) // Should be true, if successful
+     * const user = new Keys();
+     * const claims = new UserClaims(user);
+     * const verified = await claims.verifyPublicToken(issuedToken);
      * ```
-     *
+     * @param { string } token - issued token
      * @returns {Promise<boolean>}
      */
     verifyPublicClaim(token: string): Promise<boolean>;
+    /**
+     * Verifies token with private data received from issuer
+     *
+     * @example
+     * ```typescript
+     * import { ClaimsUser } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
+     *
+     * const user = new Keys();
+     * const claims = new UserClaims(user);
+     * const verified = await claims.verifyPrivateToken(issuedToken);
+     * ```
+     * @param { string } token - issued token
+     * @returns {Promise<boolean>}
+     */
     verifyPrivateClaim(token: string, saltedFields: {
         [key: string]: string;
     }): Promise<boolean>;

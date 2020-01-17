@@ -401,11 +401,11 @@ ___
 
 • **bn**: *any*
 
+Defined in claims/src/claimsUser/claimsUser.ts:14
+
 Defined in claims/src/claimsIssuer/claimsIssuer.ts:11
 
 Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
-
-Defined in claims/src/claimsUser/claimsUser.ts:14
 
 ___
 
@@ -461,9 +461,9 @@ ___
 
 • **hash**: *any*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
-
 Defined in claims/src/claimsUser/claimsUser.ts:14
+
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
 
 ___
 

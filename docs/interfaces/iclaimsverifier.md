@@ -21,9 +21,9 @@
 
 ###  verifyPrivateProof
 
-▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *boolean*
+▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:32
+Defined in claims/src/interface.ts:35
 
 **Parameters:**
 
@@ -32,7 +32,7 @@ Name | Type |
 `proofToken` | string |
 `privateToken` | string |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 ▸ **verifyPublicProof**(`token`: string): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:31
+Defined in claims/src/interface.ts:34
 
 **Parameters:**
 

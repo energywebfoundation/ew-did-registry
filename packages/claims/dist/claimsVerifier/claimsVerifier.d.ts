@@ -1,23 +1,38 @@
 import { Claims } from '../claims';
 import { IClaimsVerifier } from '../interface';
 export declare class ClaimsVerifier extends Claims implements IClaimsVerifier {
-    verifyPublicProof(token: string): Promise<boolean>;
     /**
-     * Сhecks that the public keys in the `privateToken`'s payload matches values
-     * based on which `this.token` payload was calculated
+     * Checks issuer signature on token
+     *
      * @example
      * ```typescript
-     * import { ProofClaim } from '@ew-did-registry/claims';
+     * import { ClaimsVerifier } from '@ew-did-registry/claims';
+     * import { Keys } from '@ew-did-registry/keys';
      *
-     * ------------------------------ owner -----------------------------------
-     * const proofClaim = new ProofClaim({jwt, keys, claimData,  hashedFields });
-     * const proofToken = proofClaim.token;
-     * ----------------------------- verifier ---------------------------------
-     * const proofClaim = new ProofClaim({jwt, keys, claimData, proofToken });
-     * const privateToken = store.getClaim(claimUrl);
-     * const verified = proofClaim.verify(privateToken);
+     * const keys = new Keys();
+     * const claims = new ClaimsVerifier(verifier);
+     * const verified = claims.verifyPublicProof(issuedToken);
      * ```
-     * @param { string } privateToken
+     * @param { string } token containing proof data
+     * @returns { boolean } whether the proof was succesfull
      */
-    verifyPrivateProof(proofToken: string, privateToken: string): boolean;
+    verifyPublicProof(token: string): Promise<boolean>;
+    /**
+    * Checks issuer signature on issued token and user signature on proof token
+    * and verifies that proof and private data mathches to each other
+    *
+    * @example
+    * ```typescript
+    * import { ClaimsVerifier } from '@ew-did-registry/claims';
+    * import { Keys } from '@ew-did-registry/keys';
+    *
+    * const keys = new Keys();
+    * const claims = new ClaimsVerifier(verifier);
+    * const verified = claims.verifyPrivateProof(proofToken, privateToken);
+    * ```
+    * @param { string } proofToken contains proof data
+    * @param { string } privateToken contains private data
+    * @returns { boolean } whether the proof was succesfull
+    */
+    verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
 }

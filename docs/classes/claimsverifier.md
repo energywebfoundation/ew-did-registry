@@ -22,10 +22,8 @@
 ### Properties
 
 * [did](claimsverifier.md#did)
-* [didDocument](claimsverifier.md#diddocument)
 * [jwt](claimsverifier.md#jwt)
 * [keys](claimsverifier.md#keys)
-* [token](claimsverifier.md#token)
 
 ### Methods
 
@@ -42,18 +40,16 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-Defined in claims/src/claims/claims.ts:39
+Defined in claims/src/claims/claims.ts:28
 
-Constructor
-
-IClaimBuildData has to be passed to construct any type of Claim
+**`constructor`** 
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`resolver` | IResolver |
+Name | Type | Description |
+------ | ------ | ------ |
+`keys` | IKeys | user key pair |
+`resolver` | IResolver |   |
 
 **Returns:** *[ClaimsVerifier](claimsverifier.md)*
 
@@ -67,19 +63,7 @@ Name | Type |
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-Defined in claims/src/claims/claims.ts:39
-
-___
-
-###  didDocument
-
-• **didDocument**: *IDIDDocument*
-
-*Inherited from [Claims](claims.md).[didDocument](claims.md#diddocument)*
-
-Defined in claims/src/claims/claims.ts:22
-
-didDocument is used to store fetched DID Document
+Defined in claims/src/claims/claims.ts:28
 
 ___
 
@@ -89,7 +73,7 @@ ___
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-Defined in claims/src/claims/claims.ts:27
+Defined in claims/src/claims/claims.ts:21
 
 jwt stores the JWT to manage web tokens
 
@@ -103,21 +87,9 @@ ___
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-Defined in claims/src/claims/claims.ts:37
+Defined in claims/src/claims/claims.ts:26
 
-keyPair represents the implementation of key management interface
-
-___
-
-###  token
-
-• **token**: *string*
-
-*Inherited from [Claims](claims.md).[token](claims.md#token)*
-
-Defined in claims/src/claims/claims.ts:32
-
-claimToken stores the actual serialised JWT in a string format
+Key pair represents the implementation of key management interface
 
 ## Methods
 
@@ -127,31 +99,19 @@ claimToken stores the actual serialised JWT in a string format
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-Defined in claims/src/claims/claims.ts:82
+Defined in claims/src/claims/claims.ts:59
 
-Method fetches the DID Document associated with did provided in claim data
-DID Document is then stored as a member of Claim class. Returns true on success
+Fetches DID document of the corresponding DID
 
 **`example`** 
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '@ew-did-registry/jwt';
-import { Claim } from '@ew-did-registry/claims';
+import { Claims } from '@ew-did-registry/claims';
 
-const keys = new Keys();
-const jwt = new JWT(keys);
-const claimData = {
-  did: `did:ewc:0x${keys.publicKey}`,
-  test: 'test',
-};
-const data = {
-  jwt,
-  keyPair: keys,
-  claimData,
-};
-const publicClaim = new Claim(data);
-await publicClaim.getDid();
-console.log(publicClaim.didDocument);
+const user = new Keys();
+const claims = new Claims(user);
+const did = `did:${Networks.Ethereum}:user_id`;
+const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
@@ -166,36 +126,35 @@ ___
 
 ###  verifyPrivateProof
 
-▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *boolean*
+▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:35
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:50
 
-Сhecks that the public keys in the `privateToken`'s payload matches values
-based on which `this.token` payload was calculated
+Checks issuer signature on issued token and user signature on proof token
+and verifies that proof and private data mathches to each other
 
 **`example`** 
 ```typescript
-import { ProofClaim } from '@ew-did-registry/claims';
+import { ClaimsVerifier } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
 
------------------------------- owner -----------------------------------
-const proofClaim = new ProofClaim({jwt, keys, claimData,  hashedFields });
-const proofToken = proofClaim.token;
------------------------------ verifier ---------------------------------
-const proofClaim = new ProofClaim({jwt, keys, claimData, proofToken });
-const privateToken = store.getClaim(claimUrl);
-const verified = proofClaim.verify(privateToken);
+const keys = new Keys();
+const claims = new ClaimsVerifier(verifier);
+const verified = claims.verifyPrivateProof(proofToken, privateToken);
 ```
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`proofToken` | string | - |
-`privateToken` | string |   |
+`proofToken` | string | contains proof data |
+`privateToken` | string | contains private data |
 
-**Returns:** *boolean*
+**Returns:** *Promise‹boolean›*
+
+whether the proof was succesfull
 
 ___
 
@@ -205,15 +164,29 @@ ___
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:11
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:26
+
+Checks issuer signature on token
+
+**`example`** 
+```typescript
+import { ClaimsVerifier } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+
+const keys = new Keys();
+const claims = new ClaimsVerifier(verifier);
+const verified = claims.verifyPublicProof(issuedToken);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`token` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`token` | string | containing proof data |
 
 **Returns:** *Promise‹boolean›*
+
+whether the proof was succesfull
 
 ___
 
@@ -223,13 +196,25 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-Defined in claims/src/claims/claims.ts:89
+Defined in claims/src/claims/claims.ts:81
+
+Verifies signers signature on received token
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { Claims } from '@ew-did-registry/claims';
+
+const user = new Keys();
+const claims = new Claims(user);
+const verified = claims.verifySignature(token, userDid);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`token` | string |
-`signer` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`token` | string | token signature on which you want to check |
+`signer` | string | did of the signer  |
 
 **Returns:** *Promise‹boolean›*

@@ -2,34 +2,39 @@ import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
 export declare class ClaimsIssuer extends Claims implements IClaimsIssuer {
     /**
-     * Approve method signs the payload of the provided token with verifiers private key
-     * Returns signed token on success
+     * Verifies user signature on token and issue new token signed by issuer.
+     * Throws if user signature not valid
      *
      * @example
      * ```typescript
      * import { Keys } from '@ew-did-registry/keys';
-     * import { JWT } from '@ew-did-registry/jwt';
-     * import { verificationClaim } from '@ew-did-registry/claims';
+     * import { ClaimsIssuer } from '@ew-did-registry/claims';
      *
-     * const keysVerifier = new Keys();
-     * const jwtVerifier = new JWT(keysVerifier);
-     * const tokenToVerify = publicClaim.token;
-     * const dataVerifier = {
-     *   jwt: jwtVerifier,
-     *   keyPair: keysVerifier,
-     *   token: tokenToVerify,
-     * };
-     *
-     * verificationClaim = new VerificationClaim(dataVerifier);
-     * const approvedToken = await verificationClaim.approve();
-     * console.log(approvedToken)
-     * // If verification was successful, verifier can sign the payload of the token
-     * // with his private key and return the approved JWT
+     * const issuer = new Keys();
+     * claims = new ClaimsIssuer(issuer);
+     * const issuedToken = await claims.issuePublicClaim(token);
      * ```
-     *
-     * @returns {Promise<string>}
+     * @params { string } token to verify
+     * @returns { Promise<string> } issued token
      */
     issuePublicClaim(token: string): Promise<string>;
+    /**
+     * Verifies user signature on token, decrypt private data and issue new token
+     * with sha256-hashed decrypted data signed by issuer. Throws if user
+     * signature not valid
+     *
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { ClaimsIssuer } from '@ew-did-registry/claims';
+     *
+     * const issuer = new Keys();
+     * claims = new ClaimsIssuer(issuer);
+     * const issuedToken = await claims.issuePrivateClaim(token);
+     * ```
+     * @params { string } token to verify
+     * @returns { Promise<string> } issued token
+     */
     issuePrivateClaim(token: string): Promise<string>;
 }
 export default ClaimsIssuer;

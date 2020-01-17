@@ -19,7 +19,10 @@ export interface IClaimsUser {
     Promise<{ token: string; saltedFields: { [key: string]: string } }>;
   createProofClaim(claimUrl: string, saltedFields: { [key: string]: string }): Promise<string>;
   verifyPublicClaim(token: string): Promise<boolean>;
-  verifyPrivateClaim(privateToken: string, saltedFields: { [key: string]: string }): Promise<boolean>;
+  verifyPrivateClaim(
+    privateToken: string,
+    saltedFields: { [key: string]: string }
+  ): Promise<boolean>;
 }
 
 export interface IClaimsIssuer {
@@ -29,5 +32,5 @@ export interface IClaimsIssuer {
 
 export interface IClaimsVerifier {
   verifyPublicProof(token: string): Promise<boolean>;
-  verifyPrivateProof(proofToken: string, privateToken: string): boolean;
+  verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
 }

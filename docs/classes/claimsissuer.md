@@ -22,10 +22,8 @@
 ### Properties
 
 * [did](claimsissuer.md#did)
-* [didDocument](claimsissuer.md#diddocument)
 * [jwt](claimsissuer.md#jwt)
 * [keys](claimsissuer.md#keys)
-* [token](claimsissuer.md#token)
 
 ### Methods
 
@@ -42,18 +40,16 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-Defined in claims/src/claims/claims.ts:39
+Defined in claims/src/claims/claims.ts:28
 
-Constructor
-
-IClaimBuildData has to be passed to construct any type of Claim
+**`constructor`** 
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`resolver` | IResolver |
+Name | Type | Description |
+------ | ------ | ------ |
+`keys` | IKeys | user key pair |
+`resolver` | IResolver |   |
 
 **Returns:** *[ClaimsIssuer](claimsissuer.md)*
 
@@ -67,19 +63,7 @@ Name | Type |
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-Defined in claims/src/claims/claims.ts:39
-
-___
-
-###  didDocument
-
-• **didDocument**: *IDIDDocument*
-
-*Inherited from [Claims](claims.md).[didDocument](claims.md#diddocument)*
-
-Defined in claims/src/claims/claims.ts:22
-
-didDocument is used to store fetched DID Document
+Defined in claims/src/claims/claims.ts:28
 
 ___
 
@@ -89,7 +73,7 @@ ___
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-Defined in claims/src/claims/claims.ts:27
+Defined in claims/src/claims/claims.ts:21
 
 jwt stores the JWT to manage web tokens
 
@@ -103,21 +87,9 @@ ___
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-Defined in claims/src/claims/claims.ts:37
+Defined in claims/src/claims/claims.ts:26
 
-keyPair represents the implementation of key management interface
-
-___
-
-###  token
-
-• **token**: *string*
-
-*Inherited from [Claims](claims.md).[token](claims.md#token)*
-
-Defined in claims/src/claims/claims.ts:32
-
-claimToken stores the actual serialised JWT in a string format
+Key pair represents the implementation of key management interface
 
 ## Methods
 
@@ -127,31 +99,19 @@ claimToken stores the actual serialised JWT in a string format
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-Defined in claims/src/claims/claims.ts:82
+Defined in claims/src/claims/claims.ts:59
 
-Method fetches the DID Document associated with did provided in claim data
-DID Document is then stored as a member of Claim class. Returns true on success
+Fetches DID document of the corresponding DID
 
 **`example`** 
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '@ew-did-registry/jwt';
-import { Claim } from '@ew-did-registry/claims';
+import { Claims } from '@ew-did-registry/claims';
 
-const keys = new Keys();
-const jwt = new JWT(keys);
-const claimData = {
-  did: `did:ewc:0x${keys.publicKey}`,
-  test: 'test',
-};
-const data = {
-  jwt,
-  keyPair: keys,
-  claimData,
-};
-const publicClaim = new Claim(data);
-await publicClaim.getDid();
-console.log(publicClaim.didDocument);
+const user = new Keys();
+const claims = new Claims(user);
+const did = `did:${Networks.Ethereum}:user_id`;
+const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
@@ -170,7 +130,23 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-Defined in claims/src/claimsIssuer/claimsIssuer.ts:49
+Defined in claims/src/claimsIssuer/claimsIssuer.ts:56
+
+Verifies user signature on token, decrypt private data and issue new token
+with sha256-hashed decrypted data signed by issuer. Throws if user
+signature not valid
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { ClaimsIssuer } from '@ew-did-registry/claims';
+
+const issuer = new Keys();
+claims = new ClaimsIssuer(issuer);
+const issuedToken = await claims.issuePrivateClaim(token);
+```
+
+**`params`** { string } token to verify
 
 **Parameters:**
 
@@ -179,6 +155,8 @@ Name | Type |
 `token` | string |
 
 **Returns:** *Promise‹string›*
+
+issued token
 
 ___
 
@@ -188,32 +166,22 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-Defined in claims/src/claimsIssuer/claimsIssuer.ts:41
+Defined in claims/src/claimsIssuer/claimsIssuer.ts:29
 
-Approve method signs the payload of the provided token with verifiers private key
-Returns signed token on success
+Verifies user signature on token and issue new token signed by issuer.
+Throws if user signature not valid
 
 **`example`** 
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '@ew-did-registry/jwt';
-import { verificationClaim } from '@ew-did-registry/claims';
+import { ClaimsIssuer } from '@ew-did-registry/claims';
 
-const keysVerifier = new Keys();
-const jwtVerifier = new JWT(keysVerifier);
-const tokenToVerify = publicClaim.token;
-const dataVerifier = {
-  jwt: jwtVerifier,
-  keyPair: keysVerifier,
-  token: tokenToVerify,
-};
-
-verificationClaim = new VerificationClaim(dataVerifier);
-const approvedToken = await verificationClaim.approve();
-console.log(approvedToken)
-// If verification was successful, verifier can sign the payload of the token
-// with his private key and return the approved JWT
+const issuer = new Keys();
+claims = new ClaimsIssuer(issuer);
+const issuedToken = await claims.issuePublicClaim(token);
 ```
+
+**`params`** { string } token to verify
 
 **Parameters:**
 
@@ -223,6 +191,8 @@ Name | Type |
 
 **Returns:** *Promise‹string›*
 
+issued token
+
 ___
 
 ###  verifySignature
@@ -231,13 +201,25 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-Defined in claims/src/claims/claims.ts:89
+Defined in claims/src/claims/claims.ts:81
+
+Verifies signers signature on received token
+
+**`example`** 
+```typescript
+import { Keys } from '@ew-did-registry/keys';
+import { Claims } from '@ew-did-registry/claims';
+
+const user = new Keys();
+const claims = new Claims(user);
+const verified = claims.verifySignature(token, userDid);
+```
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`token` | string |
-`signer` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`token` | string | token signature on which you want to check |
+`signer` | string | did of the signer  |
 
 **Returns:** *Promise‹boolean›*
