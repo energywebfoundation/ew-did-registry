@@ -55,7 +55,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var crypto_1 = __importDefault(require("crypto"));
 var eciesjs_1 = require("eciesjs");
 var did_document_1 = require("@ew-did-registry/did-document");
-var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var keys_1 = require("@ew-did-registry/keys");
 var public_1 = require("../public");
 var PrivateClaim = /** @class */ (function (_super) {
@@ -65,13 +64,11 @@ var PrivateClaim = /** @class */ (function (_super) {
      * eslint warning disabled to ensure type-checking.
      * @param data
      */
-    // eslint-disable-next-line no-useless-constructor
     function PrivateClaim(data) {
         var _this = _super.call(this, data) || this;
         if (data.token === undefined) {
             _this.issuerDid = data.claimData.issuerDid;
         }
-        _this.resolverSettings = data.resolverSettings;
         return _this;
     }
     /**
@@ -103,14 +100,13 @@ var PrivateClaim = /** @class */ (function (_super) {
      */
     PrivateClaim.prototype.createPrivateClaimData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var issuerDocumentLite, resolver, documentFactory, error_1, issuerPublicKey, issuerEthereumPublic, results;
+            var issuerDocumentLite, documentFactory, error_1, issuerPublicKey, issuerEthereumPublic, results;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        resolver = new did_resolver_1.Resolver(this.resolverSettings);
                         documentFactory = new did_document_1.DIDDocumentFactory(this.issuerDid);
-                        issuerDocumentLite = documentFactory.createLite(resolver);
+                        issuerDocumentLite = documentFactory.createLite(this.resolver);
                         return [4 /*yield*/, issuerDocumentLite.read('did')];
                     case 1:
                         _a.sent();

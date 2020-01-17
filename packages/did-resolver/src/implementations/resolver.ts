@@ -49,7 +49,7 @@ class Resolver implements IResolver {
           return;
         }
 
-        if (this._fetchedDocument === undefined) {
+        if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
           const [, , blockchainAddress] = did.split(':');
           this._fetchedDocument = {
             owner: blockchainAddress,

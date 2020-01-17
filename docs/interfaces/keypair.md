@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [KeyPair](keypair.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [KeyPair](keypair.md)
 
 # Interface: KeyPair
 
@@ -19,7 +19,7 @@
 
 • **privateKey**? : *string*
 
-*Defined in [keys/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/keys/src/models/index.ts#L2)*
+*Defined in [keys/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/keys/src/models/index.ts#L2)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **publicKey**? : *string*
 
-*Defined in [keys/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/keys/src/models/index.ts#L3)*
+*Defined in [keys/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/keys/src/models/index.ts#L3)*

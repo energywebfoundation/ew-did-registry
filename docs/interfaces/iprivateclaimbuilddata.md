@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IPrivateClaimBuildData](iprivateclaimbuilddata.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IPrivateClaimBuildData](iprivateclaimbuilddata.md)
 
 # Interface: IPrivateClaimBuildData
 
@@ -31,7 +31,7 @@ interface and is required to construct Private Claims
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[claimData](iclaimbuilddata.md#optional-claimdata)*
 
-*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L32)*
+*Defined in [claims/src/models/index.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L32)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **issuerDid**? : *string*
 
-*Defined in [claims/src/models/index.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L103)*
+*Defined in [claims/src/models/index.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L103)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[jwt](iclaimbuilddata.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L28)*
+*Defined in [claims/src/models/index.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L28)*
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[keyPair](iclaimbuilddata.md#keypair)*
 
-*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L29)*
+*Defined in [claims/src/models/index.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L29)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[resolver](iclaimbuilddata.md#resolver)*
 
-*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L30)*
+*Defined in [claims/src/models/index.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L30)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[signerDid](iclaimbuilddata.md#optional-signerdid)*
 
-*Defined in [claims/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L33)*
+*Defined in [claims/src/models/index.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L33)*
 
 ___
 
@@ -89,4 +89,4 @@ ___
 
 *Inherited from [IClaimBuildData](iclaimbuilddata.md).[token](iclaimbuilddata.md#optional-token)*
 
-*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L31)*
+*Defined in [claims/src/models/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L31)*

@@ -1,6 +1,6 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from '@ew-did-registry/jwt';
-import { IResolverSettings } from '@ew-did-registry/did-resolver';
+import { Resolver } from '@ew-did-registry/did-resolver';
 /**
  * This enumerated type specifies available Claim Types
  */
@@ -24,9 +24,9 @@ export interface IClaimData {
 export interface IClaimBuildData {
     jwt: IJWT;
     keyPair: IKeys;
+    resolver: Resolver;
     token?: string;
     claimData?: IClaimData;
-    resolverSettings?: IResolverSettings;
     signerDid?: string;
 }
 /**

@@ -103,9 +103,8 @@ class Claim implements IClaim {
     async getDid(did?: string): Promise<boolean> {
       try {
         if (did) {
-          const tempResolver = new Resolver();
           const documentFactory = new DIDDocumentFactory(did);
-          const tempDidDocumentLite = documentFactory.createLite(tempResolver);
+          const tempDidDocumentLite = documentFactory.createLite(this.resolver);
           await tempDidDocumentLite.read(did);
           this.didDocument = tempDidDocumentLite.didDocument;
         } else {

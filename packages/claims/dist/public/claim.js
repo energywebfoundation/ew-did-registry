@@ -38,7 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt_1 = require("@ew-did-registry/jwt");
 var did_document_1 = require("@ew-did-registry/did-document");
-var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var Claim = /** @class */ (function () {
     /**
      * Constructor
@@ -47,7 +46,7 @@ var Claim = /** @class */ (function () {
      * @param {IClaimBuildData} data
      */
     function Claim(data) {
-        this.resolver = new did_resolver_1.Resolver(data.resolverSettings);
+        this.resolver = data.resolver;
         this.keyPair = data.keyPair;
         this.jwt = new jwt_1.JWT(data.keyPair);
         if (data.token === undefined) {

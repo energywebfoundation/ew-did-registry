@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimData](iclaimdata.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimData](iclaimdata.md)
 
 # Interface: IClaimData
 
@@ -28,4 +28,4 @@ DID is a required property for every Claim
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/d1c8ba6/packages/claims/src/models/index.ts#L19)*
+*Defined in [claims/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/57502c6/packages/claims/src/models/index.ts#L19)*

@@ -3,7 +3,6 @@ import { VerificationClaim } from '../public';
 import { IPrivateClaimBuildData } from '../models';
 declare class PrivateClaim extends VerificationClaim implements IPrivateClaim {
     issuerDid: string;
-    private resolverSettings;
     /**
      * Constructor takes as input Private Claim data.
      * eslint warning disabled to ensure type-checking.

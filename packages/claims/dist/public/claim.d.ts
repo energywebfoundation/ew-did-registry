@@ -1,13 +1,13 @@
 import { IJWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { IDIDDocument } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, Resolver } from '@ew-did-registry/did-resolver';
 import { IClaim, IClaimData, IClaimBuildData } from '../models';
 declare class Claim implements IClaim {
     /**
      * Used for creation of new Resolvers
      */
-    private readonly resolver;
+    protected readonly resolver: Resolver;
     /**
      * Light document is used for fetching the DID Document
      */
