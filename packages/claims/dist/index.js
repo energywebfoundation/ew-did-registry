@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./claims"));
+__export(require("./claimsUser"));
 __export(require("./claimsIssuer"));
 __export(require("./claimsVerifier"));
 __export(require("./claimsFactory"));

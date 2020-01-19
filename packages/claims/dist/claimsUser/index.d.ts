@@ -1,1 +1,1 @@
-export { default as UserClaims } from './claimsUser';
+export * from './claimsUser';

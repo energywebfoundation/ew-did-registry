@@ -279,5 +279,5 @@ var ClaimsUser = /** @class */ (function (_super) {
     };
     return ClaimsUser;
 }(claims_1.Claims));
-exports.default = ClaimsUser;
+exports.ClaimsUser = ClaimsUser;
 //# sourceMappingURL=claimsUser.js.map

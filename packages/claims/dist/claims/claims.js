@@ -39,12 +39,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var did_document_1 = require("@ew-did-registry/did-document");
 var jwt_1 = require("@ew-did-registry/jwt");
 var did_1 = require("@ew-did-registry/did");
+/**
+ * @class
+ * Base class for extending by other claims classes
+ */
 var Claims = /** @class */ (function () {
     /**
-     * Constructor
+     * @constructor
      *
-     * IClaimBuildData has to be passed to construct any type of Claim
-     * @param {IClaimBuildData} data
+     * @param { IKeys } keys user key pair
+     * @param { IResolver } resolver
      */
     function Claims(keys, resolver) {
         this.resolver = resolver;
@@ -53,29 +57,17 @@ var Claims = /** @class */ (function () {
         this.did = "did:" + did_1.Networks.Ethereum + ":0x" + keys.publicKey;
     }
     /**
-     * Method fetches the DID Document associated with did provided in claim data
-     * DID Document is then stored as a member of Claim class. Returns true on success
+     * Fetches DID document of the corresponding DID
      *
      * @example
      * ```typescript
      * import { Keys } from '@ew-did-registry/keys';
-     * import { JWT } from '@ew-did-registry/jwt';
-     * import { Claim } from '@ew-did-registry/claims';
+     * import { Claims } from '@ew-did-registry/claims';
      *
-     * const keys = new Keys();
-     * const jwt = new JWT(keys);
-     * const claimData = {
-     *   did: `did:ewc:0x${keys.publicKey}`,
-     *   test: 'test',
-     * };
-     * const data = {
-     *   jwt,
-     *   keyPair: keys,
-     *   claimData,
-     * };
-     * const publicClaim = new Claim(data);
-     * await publicClaim.getDid();
-     * console.log(publicClaim.didDocument);
+     * const user = new Keys();
+     * const claims = new Claims(user);
+     * const did = `did:${Networks.Ethereum}:user_id`;
+     * const document = await claims.getDocument(did);
      * ```
      *
      * @returns {Promise<IDIDDocument>}
@@ -96,6 +88,21 @@ var Claims = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Verifies signers signature on received token
+     * @example
+     * ```typescript
+     * import { Keys } from '@ew-did-registry/keys';
+     * import { Claims } from '@ew-did-registry/claims';
+     *
+     * const user = new Keys();
+     * const claims = new Claims(user);
+     * const verified = claims.verifySignature(token, userDid);
+     * ```
+     *
+     * @param { string } token token signature on which you want to check
+     * @param { string } signer did of the signer
+     */
     Claims.prototype.verifySignature = function (token, signer) {
         return __awaiter(this, void 0, void 0, function () {
             var issuerDocument, issuerPublicKey, error_1;

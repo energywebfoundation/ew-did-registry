@@ -2,7 +2,7 @@ import sjcl from 'sjcl-complete';
 import { IClaimData } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
-declare class ClaimsUser extends Claims implements IClaimsUser {
+export declare class ClaimsUser extends Claims implements IClaimsUser {
     curve: sjcl.SjclEllipticalCurve;
     q: any;
     g: any;
@@ -116,4 +116,3 @@ declare class ClaimsUser extends Claims implements IClaimsUser {
         [key: string]: string;
     }): Promise<boolean>;
 }
-export default ClaimsUser;

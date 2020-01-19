@@ -11,7 +11,7 @@ import { IClaim } from '../models';
 const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
   /**
-   * Verifies user signature on token and issue new token signed by issuer.
+   * Verifies user signature on token and issue new token signed by issuer./
    * Throws if user signature not valid
    *
    * @example

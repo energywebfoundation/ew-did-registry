@@ -168,7 +168,7 @@ ___
 
 Defined in claims/src/claimsIssuer/claimsIssuer.ts:29
 
-Verifies user signature on token and issue new token signed by issuer.
+Verifies user signature on token and issue new token signed by issuer./
 Throws if user signature not valid
 
 **`example`** 
