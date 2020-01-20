@@ -8,7 +8,6 @@
 
 * [Algorithms](enums/algorithms.md)
 * [Attributes](enums/attributes.md)
-* [ClaimType](enums/claimtype.md)
 * [DIDAttribute](enums/didattribute.md)
 * [Encoding](enums/encoding.md)
 * [Networks](enums/networks.md)
@@ -17,7 +16,11 @@
 
 ### Classes
 
-* [Claim](classes/claim.md)
+* [Claims](classes/claims.md)
+* [ClaimsFactory](classes/claimsfactory.md)
+* [ClaimsIssuer](classes/claimsissuer.md)
+* [ClaimsUser](classes/claimsuser.md)
+* [ClaimsVerifier](classes/claimsverifier.md)
 * [DID](classes/did.md)
 * [DIDDocumentFactory](classes/diddocumentfactory.md)
 * [DIDDocumentFull](classes/diddocumentfull.md)
@@ -25,17 +28,19 @@
 * [JWT](classes/jwt.md)
 * [Keys](classes/keys.md)
 * [Operator](classes/operator.md)
-* [ProofClaim](classes/proofclaim.md)
+* [Registry](classes/registry.md)
 * [Resolver](classes/resolver.md)
-* [VerificationClaim](classes/verificationclaim.md)
 
 ### Interfaces
 
 * [IAuthentication](interfaces/iauthentication.md)
 * [IClaim](interfaces/iclaim.md)
-* [IClaimBuildData](interfaces/iclaimbuilddata.md)
 * [IClaimData](interfaces/iclaimdata.md)
 * [IClaims](interfaces/iclaims.md)
+* [IClaimsFactory](interfaces/iclaimsfactory.md)
+* [IClaimsIssuer](interfaces/iclaimsissuer.md)
+* [IClaimsUser](interfaces/iclaimsuser.md)
+* [IClaimsVerifier](interfaces/iclaimsverifier.md)
 * [IDID](interfaces/idid.md)
 * [IDIDDocument](interfaces/ididdocument.md)
 * [IDIDDocumentFactory](interfaces/ididdocumentfactory.md)
@@ -49,10 +54,7 @@
 * [IKeys](interfaces/ikeys.md)
 * [ILinkedDataProof](interfaces/ilinkeddataproof.md)
 * [IOperator](interfaces/ioperator.md)
-* [IPrivateClaim](interfaces/iprivateclaim.md)
-* [IPrivateClaimBuildData](interfaces/iprivateclaimbuilddata.md)
 * [IProofClaim](interfaces/iproofclaim.md)
-* [IProofClaimBuildData](interfaces/iproofclaimbuilddata.md)
 * [IProvider](interfaces/iprovider.md)
 * [IPublicKey](interfaces/ipublickey.md)
 * [IResolver](interfaces/iresolver.md)
@@ -61,7 +63,6 @@
 * [ISmartContractEvent](interfaces/ismartcontractevent.md)
 * [IUpdateData](interfaces/iupdatedata.md)
 * [IUpdateParameters](interfaces/iupdateparameters.md)
-* [IVerificationClaim](interfaces/iverificationclaim.md)
 * [KeyPair](interfaces/keypair.md)
 
 ### Variables
@@ -71,11 +72,13 @@
 * [ServicePoint](globals.md#servicepoint)
 * [abi1056](globals.md#const-abi1056)
 * [address1056](globals.md#const-address1056)
+* [bitArray](globals.md#bitarray)
 * [bn](globals.md#bn)
-* [codec](globals.md#codec)
 * [delegatePubKeyIdPattern](globals.md#const-delegatepubkeyidpattern)
+* [document](globals.md#const-document)
 * [ec](globals.md#const-ec)
 * [ethAddrPattern](globals.md#const-ethaddrpattern)
+* [expect](globals.md#expect)
 * [fail](globals.md#fail)
 * [hash](globals.md#hash)
 * [keyEncoder](globals.md#const-keyencoder)
@@ -386,19 +389,23 @@ Defined in did-resolver/src/constants/constants.ts:3
 
 ___
 
+###  bitArray
+
+• **bitArray**: *any*
+
+Defined in claims/src/claimsUser/claimsUser.ts:14
+
+___
+
 ###  bn
 
 • **bn**: *any*
 
-Defined in claims/src/proof/proofClaim.ts:9
+Defined in claims/src/claimsUser/claimsUser.ts:14
 
-___
+Defined in claims/src/claimsIssuer/claimsIssuer.ts:11
 
-###  codec
-
-• **codec**: *any*
-
-Defined in claims/src/proof/proofClaim.ts:9
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
 
 ___
 
@@ -407,6 +414,14 @@ ___
 • **delegatePubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#delegate-(${ethAddrPattern})$`
 
 Defined in did-resolver/src/constants/constants.ts:258
+
+___
+
+### `Const` document
+
+• **document**: *any* =  this.didDocument.read(token.did)
+
+Defined in claims/registry.ts:20
 
 ___
 
@@ -426,6 +441,14 @@ Defined in did-resolver/src/constants/constants.ts:257
 
 ___
 
+###  expect
+
+• **expect**: *ExpectStatic*
+
+Defined in claims/test/claimsFactory.test.ts:11
+
+___
+
 ###  fail
 
 • **fail**: *fail*
@@ -438,7 +461,9 @@ ___
 
 • **hash**: *any*
 
-Defined in claims/src/proof/proofClaim.ts:9
+Defined in claims/src/claimsUser/claimsUser.ts:14
+
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
 
 ___
 

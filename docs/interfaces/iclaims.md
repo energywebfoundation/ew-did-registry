@@ -2,92 +2,36 @@
 
 # Interface: IClaims
 
-IClaims interface is a factory to create Public, Private, and Proof Claims
-
 ## Hierarchy
 
 * **IClaims**
 
+## Implemented by
+
+* [Claims](../classes/claims.md)
+* [ClaimsIssuer](../classes/claimsissuer.md)
+* [ClaimsUser](../classes/claimsuser.md)
+* [ClaimsVerifier](../classes/claimsverifier.md)
+
 ## Index
 
-### Methods
+### Properties
 
-* [createPrivateClaim](iclaims.md#createprivateclaim)
-* [createProofClaim](iclaims.md#createproofclaim)
-* [createPublicClaim](iclaims.md#createpublicclaim)
-* [generateClaimFromToken](iclaims.md#generateclaimfromtoken)
+* [did](iclaims.md#did)
+* [keys](iclaims.md#keys)
 
-## Methods
+## Properties
 
-###  createPrivateClaim
+###  did
 
-▸ **createPrivateClaim**(`data`: [IClaimData](iclaimdata.md), `didIssuer`: string): *[IPrivateClaim](iprivateclaim.md)*
+• **did**: *string*
 
-Defined in claims/src/interface.ts:30
-
-Create Private Claim by providing claim data and Issuer's DID
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-`didIssuer` | string |
-
-**Returns:** *[IPrivateClaim](iprivateclaim.md)*
+Defined in claims/src/models/index.ts:19
 
 ___
 
-###  createProofClaim
+###  keys
 
-▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: number[]): *[IProofClaim](iproofclaim.md)*
+• **keys**: *IKeys*
 
-Defined in claims/src/interface.ts:38
-
-Create Proof Claim with claim data and hashed claim fields
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-`hashedFields` | number[] |
-
-**Returns:** *[IProofClaim](iproofclaim.md)*
-
-___
-
-###  createPublicClaim
-
-▸ **createPublicClaim**(`data`: [IClaimData](iclaimdata.md)): *[IVerificationClaim](iverificationclaim.md)*
-
-Defined in claims/src/interface.ts:22
-
-Create Public Claim with claim data
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-
-**Returns:** *[IVerificationClaim](iverificationclaim.md)*
-
-___
-
-###  generateClaimFromToken
-
-▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)*
-
-Defined in claims/src/interface.ts:46
-
-Provided with JWT this method will generate a Claim
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`token` | string |
-`type` | [ClaimType](../enums/claimtype.md) |
-
-**Returns:** *[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)*
+Defined in claims/src/models/index.ts:20
