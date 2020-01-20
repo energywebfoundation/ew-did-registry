@@ -1,4 +1,6 @@
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
+import { BaseProvider } from 'ethers/providers';
+
 import { BigNumber, Interface } from 'ethers/utils';
 
 import {
@@ -8,7 +10,6 @@ import {
   IResolverSettings,
   IPublicKey,
   IHandlers,
-  ProviderTypes,
 } from '../models';
 
 import { matchingPatternDidEvents } from '../constants';
@@ -20,11 +21,10 @@ const handleDelegateChange = (
   validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
-  const publicKeyID = `${did}#delegate-${event.values.delegate}`;
+  const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
+  const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
   if (document.publicKey[publicKeyID] === undefined
     || document.publicKey[publicKeyID].block < block) {
-    const { delegateType } = event.values;
-    const stringDelegateType = ethers.utils.parseBytes32String(delegateType);
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
@@ -72,7 +72,7 @@ const handleAttributeChange = (
         // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `${did}#key-${type}`,
+          id: `${did}#key-${algo}${type}-${event.values.value}`,
           type: `${algo}${type}`,
           controller: blockchainAddress,
           validity: validTo,
@@ -114,10 +114,12 @@ const handleAttributeChange = (
         }
         return document;
       case 'svc':
-        if (document.serviceEndpoints[algo] === undefined
-          || document.serviceEndpoints[algo].block < block) {
-          document.serviceEndpoints[algo] = {
-            id: `${did}#${algo}`,
+        // eslint-disable-next-line no-case-declarations
+        const serviceId = `${did}#service-${algo}-${event.values.value}`;
+        if (document.serviceEndpoints[serviceId] === undefined
+          || document.serviceEndpoints[serviceId].block < block) {
+          document.serviceEndpoints[serviceId] = {
+            id: serviceId,
             type: algo,
             serviceEndpoint: Buffer.from(
               event.values.value.slice(2),
@@ -171,7 +173,7 @@ const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.JsonRpcProvider,
+  provider: ethers.providers.BaseProvider,
   smartContractInterface: Interface,
   smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
@@ -198,23 +200,10 @@ export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
   resolverSettings: IResolverSettings,
+  contract: Contract,
+  provider: BaseProvider,
 ): Promise<void> => {
   const [, , blockchainAddress] = did.split(':');
-
-  let provider;
-  if (resolverSettings.provider.type === ProviderTypes.HTTP) {
-    provider = new ethers.providers.JsonRpcProvider(
-      resolverSettings.provider.uriOrInfo,
-      resolverSettings.provider.network,
-    );
-  } else if (resolverSettings.provider.type === ProviderTypes.IPC) {
-    provider = new ethers.providers.IpcProvider(
-      resolverSettings.provider.path,
-      resolverSettings.provider.network,
-    );
-  }
-
-  const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
   let previousChangedBlock;
   let lastChangedBlock;

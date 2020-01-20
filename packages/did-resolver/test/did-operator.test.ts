@@ -1,9 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 import {
-  Algorithms, DIDAttribute, Encoding, IUpdateData, PubKeyType, Operator, IAuthentication,
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IUpdateData,
+  PubKeyType,
+  Operator,
+  IAuthentication,
 } from '../src';
 
 const { fail } = assert;
@@ -28,13 +34,12 @@ describe('[DID-OPERATOR]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
-    // console.log('document:', document);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.slice(2),
     );
     // eslint-disable-next-line no-unused-expressions
-    expect(publicKey).not.null;
+    expect(publicKey).is.not.null;
   });
 
   it('adding a delegate with a delegation type of VerificationKey should add a public key',
@@ -52,7 +57,7 @@ describe('[DID-OPERATOR]', function () {
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
-        (pk) => pk.id === `${did}#delegate-${updateData.delegate}`,
+        (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
       );
       expect(authMethod).include({
         type: 'Secp256k1VerificationKey2018',
@@ -75,7 +80,7 @@ describe('[DID-OPERATOR]', function () {
     expect(updated).to.be.true;
     const document = await operator.read(did);
     expect(document.id).equal(did);
-    const publicKeyId = `${did}#delegate-${updateData.delegate}`;
+    const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
     const auth = document.authentication.find(
       (a: IAuthentication) => a.publicKey === publicKeyId,
     );
@@ -180,5 +185,81 @@ describe('[DID-OPERATOR]', function () {
     expect(document.service).to.be.empty;
     expect(document.publicKey.length).equal(1);
     expect(document.authentication.length).equal(1);
+  });
+
+  it('delegate update and revocation makes no changes to the document', async () => {
+    const attribute = DIDAttribute.Authenticate;
+    const keysDelegate = new Keys();
+    const delegate = new Wallet(keysDelegate.privateKey);
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    const updated = await operator.update(did, attribute, updateData, validity);
+    expect(updated).to.be.true;
+    let document = await operator.read(did);
+    expect(document.id).equal(did);
+    let authMethod = document.publicKey.find(
+      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+    );
+    expect(authMethod).include({
+      type: 'Secp256k1VerificationKey2018',
+      controller: did,
+      ethereumAddress: updateData.delegate,
+    });
+
+    const delegateDid = `did:ewc:${delegate.address}`;
+    const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
+    expect(revoked).to.be.true;
+    document = await operator.read(did);
+    authMethod = document.publicKey.find(
+      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+    );
+    expect(authMethod).to.be.undefined;
+  });
+
+  it('attribute update and revocation makes no changes to the document', async () => {
+    const keysAttribute = new Keys();
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: keysAttribute.publicKey,
+    };
+    await operator.update(did, attribute, updateData, validity);
+    let document = await operator.read(did);
+    expect(document.id).equal(did);
+    let publicKey = document.publicKey.find(
+      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+    );
+    expect(publicKey).to.be.not.null;
+    const revoked = await operator.revokeAttribute(did, attribute, updateData);
+    expect(revoked).to.be.true;
+    document = await operator.read(did);
+    publicKey = document.publicKey.find(
+      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+    );
+    expect(publicKey).to.be.undefined;
+  });
+
+  it('owner change should lead to expected result', async () => {
+    const secondKeys = new Keys({
+      privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
+      publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
+    });
+    const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
+    const operatorNewOwner = new Operator(secondKeys);
+    let currentOwner;
+
+    await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
+    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    expect(currentOwner).to.be.eql(identityNewOwner);
+
+    await operatorNewOwner.changeOwner(`did:ewc:${identity}`, `did:ewc:${identity}`);
+    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    expect(currentOwner).to.be.eql(identity);
   });
 });

@@ -11,7 +11,7 @@ export enum Encoding {
 }
 
 export enum Algorithms {
-  ED25519 = 'Ed25519', RSA = 'rsa', ECDSA = 'ecdsa'
+  ED25519 = 'Ed25519', RSA = 'rsa', ECDSA = 'ecdsa', Secp256k1 = 'secp256k1'
 }
 
 /**
