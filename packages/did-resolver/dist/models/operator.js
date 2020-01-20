@@ -23,5 +23,6 @@ var Algorithms;
     Algorithms["ED25519"] = "Ed25519";
     Algorithms["RSA"] = "rsa";
     Algorithms["ECDSA"] = "ecdsa";
+    Algorithms["Secp256k1"] = "secp256k1";
 })(Algorithms = exports.Algorithms || (exports.Algorithms = {}));
 //# sourceMappingURL=operator.js.map

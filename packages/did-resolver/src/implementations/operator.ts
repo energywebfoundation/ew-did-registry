@@ -13,7 +13,7 @@ import {
   IUpdateData,
   ProviderTypes,
   PubKeyType,
-  IResolverSettings, DelegateTypes,
+  IResolverSettings,
 } from '../models';
 import Resolver from './resolver';
 import {
@@ -228,9 +228,7 @@ export class Operator extends Resolver implements IOperator {
     // eslint-disable-next-line no-restricted-syntax
     const method = this._didRegistry.revokeDelegate;
     for (const pk of publicKeys) {
-      console.log('delegate pk.id:',pk.id);
       const match = pk.id.match(delegatePubKeyIdPattern);
-      console.log('delegate pk match:',match);
       // eslint-disable-next-line no-continue
       if (!match) continue;
       const didAttribute = Authenticate;
@@ -260,10 +258,8 @@ export class Operator extends Resolver implements IOperator {
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const pk of publicKeys) {
       const match = pk.id.match(pubKeyIdPattern);
-      // console.log('pk.id: ', pk.id);
       // eslint-disable-next-line no-continue
       if (!match) continue;
-      // console.log('pk to remove:', pk);
       const didAttribute = DIDAttribute.PublicKey;
       const encodings = Object.values(Encoding);
       const encoding = encodings.find((e) => {

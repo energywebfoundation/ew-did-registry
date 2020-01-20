@@ -27,7 +27,7 @@
 
 \+ **new DIDDocumentFactory**(`did`: string): *[DIDDocumentFactory](diddocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-document/src/factory/did-document-factory.ts#L10)*
+*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-document/src/factory/did-document-factory.ts#L10)*
 
 **Parameters:**
 
@@ -45,7 +45,7 @@ Name | Type |
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-document/src/factory/did-document-factory.ts#L31)*
+*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-document/src/factory/did-document-factory.ts#L31)*
 
 Creates an instance of DIDDocumentFull
 
@@ -74,7 +74,7 @@ ___
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-document/src/factory/did-document-factory.ts#L50)*
+*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-document/src/factory/did-document-factory.ts#L50)*
 
 Creates an instance of DIDDocumentFull
 

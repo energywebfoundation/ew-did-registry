@@ -166,30 +166,31 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
-    Operator.prototype.revokeAttribute = function (identityDID, attributeType, delegateDID) {
+    Operator.prototype.revokeAttribute = function (identityDID, attributeType, updateData) {
         return __awaiter(this, void 0, void 0, function () {
-            var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_2, error_2;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a, identityAddress, attribute, bytesType, bytesValue, tx, receipt, event_2, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        bytesType = ethers_1.ethers.utils.formatBytes32String(attributeType);
                         _a = identityDID.split(':'), identityAddress = _a[2];
-                        _b = delegateDID.split(':'), delegateAddress = _b[2];
-                        _c.label = 1;
+                        attribute = this._composeAttributeName(attributeType, updateData);
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(attribute);
+                        bytesValue = this._hexify(updateData.value);
+                        _b.label = 1;
                     case 1:
-                        _c.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, this._didRegistry.revokeAttribute(identityAddress, bytesType, delegateAddress)];
+                        _b.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.revokeAttribute(identityAddress, bytesType, bytesValue)];
                     case 2:
-                        tx = _c.sent();
+                        tx = _b.sent();
                         return [4 /*yield*/, tx.wait()];
                     case 3:
-                        receipt = _c.sent();
+                        receipt = _b.sent();
                         event_2 = receipt.events.find(function (e) { return (e.event === 'DIDAttributeChanged'); });
                         if (!event_2)
                             return [2 /*return*/, false];
                         return [3 /*break*/, 5];
                     case 4:
-                        error_2 = _c.sent();
+                        error_2 = _b.sent();
                         throw new Error(error_2);
                     case 5: return [2 /*return*/, true];
                 }

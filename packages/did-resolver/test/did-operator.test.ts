@@ -148,7 +148,7 @@ describe('[DID-OPERATOR]', function () {
     }
   });
 
-  it.only('deactivating of document should resolve with true', async () => {
+  it('deactivating of document should resolve with true', async () => {
     // add public key
     let attribute = DIDAttribute.PublicKey;
     let updateData: IUpdateData = {

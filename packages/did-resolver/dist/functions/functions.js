@@ -51,11 +51,10 @@ var ethers_1 = require("ethers");
 var utils_1 = require("ethers/utils");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, did, document, validTo, block) {
-    var publicKeyID = did + "#delegate-" + event.values.delegate;
+    var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(event.values.delegateType);
+    var publicKeyID = did + "#delegate-" + stringDelegateType + "-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined
         || document.publicKey[publicKeyID].block < block) {
-        var delegateType = event.values.delegateType;
-        var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(delegateType);
         switch (stringDelegateType) {
             case 'sigAuth':
                 document.authentication[publicKeyID] = {
@@ -96,7 +95,7 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                 // eslint-disable-next-line no-case-declarations
                 var pk = {
                     // method should be defined from did provided
-                    id: did + "#key-" + type,
+                    id: did + "#key-" + algo + type + "-" + event.values.value,
                     type: "" + algo + type,
                     controller: blockchainAddress,
                     validity: validTo,
@@ -126,10 +125,12 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                 }
                 return document;
             case 'svc':
-                if (document.serviceEndpoints[algo] === undefined
-                    || document.serviceEndpoints[algo].block < block) {
-                    document.serviceEndpoints[algo] = {
-                        id: did + "#" + algo,
+                // eslint-disable-next-line no-case-declarations
+                var serviceId = did + "#service-" + algo + "-" + event.values.value;
+                if (document.serviceEndpoints[serviceId] === undefined
+                    || document.serviceEndpoints[serviceId].block < block) {
+                    document.serviceEndpoints[serviceId] = {
+                        id: serviceId,
                         type: algo,
                         serviceEndpoint: Buffer.from(event.values.value.slice(2), 'hex').toString(),
                         validity: validTo,

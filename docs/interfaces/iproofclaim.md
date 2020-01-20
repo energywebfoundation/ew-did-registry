@@ -39,7 +39,7 @@ to verify if the provided proof is valid
 
 *Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
 
-*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/models/index.ts#L56)*
+*Defined in [claims/src/models/index.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/models/index.ts#L56)*
 
 claimData stores the claim fields
 
@@ -51,7 +51,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/models/index.ts#L48)*
+*Defined in [claims/src/models/index.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/models/index.ts#L48)*
 
 jwt stores the JWT to manage web tokens
 
@@ -63,7 +63,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
 
-*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/models/index.ts#L60)*
+*Defined in [claims/src/models/index.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/models/index.ts#L60)*
 
 keyPair represents the implementation of key management interface
 
@@ -75,7 +75,7 @@ ___
 
 *Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
 
-*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/models/index.ts#L52)*
+*Defined in [claims/src/models/index.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/models/index.ts#L52)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -87,7 +87,7 @@ claimToken stores the actual serialised JWT in a string format
 
 *Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
 
-*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/models/index.ts#L66)*
+*Defined in [claims/src/models/index.ts:66](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/models/index.ts#L66)*
 
 Method returns the DID document associated with a claim subject DID
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **verify**(`privateToken`: string): *boolean*
 
-*Defined in [claims/src/proof/interface.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/interface.ts#L21)*
+*Defined in [claims/src/proof/interface.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/claims/src/proof/interface.ts#L21)*
 
 To verify the claim, private token (JWT) representing the claim should be provided
 
