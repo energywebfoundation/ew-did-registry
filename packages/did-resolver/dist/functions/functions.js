@@ -49,14 +49,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
 var utils_1 = require("ethers/utils");
-var models_1 = require("../models");
 var constants_1 = require("../constants");
 var handleDelegateChange = function (event, did, document, validTo, block) {
-    var publicKeyID = did + "#delegate-" + event.values.delegate;
+    var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(event.values.delegateType);
+    var publicKeyID = did + "#delegate-" + stringDelegateType + "-" + event.values.delegate;
     if (document.publicKey[publicKeyID] === undefined
         || document.publicKey[publicKeyID].block < block) {
-        var delegateType = event.values.delegateType;
-        var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(delegateType);
         switch (stringDelegateType) {
             case 'sigAuth':
                 document.authentication[publicKeyID] = {
@@ -97,7 +95,7 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                 // eslint-disable-next-line no-case-declarations
                 var pk = {
                     // method should be defined from did provided
-                    id: did + "#key-" + type,
+                    id: did + "#key-" + algo + type + "-" + event.values.value,
                     type: "" + algo + type,
                     controller: blockchainAddress,
                     validity: validTo,
@@ -127,10 +125,12 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                 }
                 return document;
             case 'svc':
-                if (document.serviceEndpoints[algo] === undefined
-                    || document.serviceEndpoints[algo].block < block) {
-                    document.serviceEndpoints[algo] = {
-                        id: did + "#" + algo,
+                // eslint-disable-next-line no-case-declarations
+                var serviceId = did + "#service-" + algo + "-" + event.values.value;
+                if (document.serviceEndpoints[serviceId] === undefined
+                    || document.serviceEndpoints[serviceId].block < block) {
+                    document.serviceEndpoints[serviceId] = {
+                        id: serviceId,
                         type: algo,
                         serviceEndpoint: Buffer.from(event.values.value.slice(2), 'hex').toString(),
                         validity: validTo,
@@ -184,19 +184,12 @@ var getEventsFromBlock = function (block, did, document, provider, smartContract
         reject(error);
     });
 }); };
-exports.fetchDataFromEvents = function (did, document, resolverSettings) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, blockchainAddress, provider, contract, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
+exports.fetchDataFromEvents = function (did, document, resolverSettings, contract, provider) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, blockchainAddress, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _a = did.split(':'), blockchainAddress = _a[2];
-                if (resolverSettings.provider.type === models_1.ProviderTypes.HTTP) {
-                    provider = new ethers_1.ethers.providers.JsonRpcProvider(resolverSettings.provider.uriOrInfo, resolverSettings.provider.network);
-                }
-                else if (resolverSettings.provider.type === models_1.ProviderTypes.IPC) {
-                    provider = new ethers_1.ethers.providers.IpcProvider(resolverSettings.provider.path, resolverSettings.provider.network);
-                }
-                contract = new ethers_1.ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
                 _c.label = 1;
             case 1:
                 _c.trys.push([1, 3, , 4]);

@@ -117,3 +117,8 @@ export interface IHandlers {
                   validTo: BigNumber,
                   block: number,) => IDIDLogData;
 }
+
+export enum DelegateTypes {
+  authentication = 'sigAuth',
+  verification = 'veriKey',
+}

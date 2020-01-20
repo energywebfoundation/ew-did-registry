@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("ethers/utils");
+var ethers_1 = require("ethers");
+var models_1 = require("../models");
 var constants_1 = require("../constants");
 var functions_1 = require("../functions");
 var Resolver = /** @class */ (function () {
@@ -49,6 +51,13 @@ var Resolver = /** @class */ (function () {
     function Resolver(settings) {
         if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
         this._settings = settings;
+        if (settings.provider.type === models_1.ProviderTypes.HTTP) {
+            this._providerResolver = new ethers_1.ethers.providers.JsonRpcProvider(settings.provider.uriOrInfo, settings.provider.network);
+        }
+        else if (settings.provider.type === models_1.ProviderTypes.IPC) {
+            this._providerResolver = new ethers_1.ethers.providers.IpcProvider(settings.provider.path, settings.provider.network);
+        }
+        this._contract = new ethers_1.ethers.Contract(settings.address, settings.abi, this._providerResolver);
     }
     /**
      * Resolve DID Document for a given did
@@ -93,7 +102,7 @@ var Resolver = /** @class */ (function () {
                                     _b.label = 1;
                                 case 1:
                                     _b.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings)];
+                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings, this._contract, this._providerResolver)];
                                 case 2:
                                     _b.sent();
                                     didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
@@ -111,6 +120,52 @@ var Resolver = /** @class */ (function () {
                             }
                         });
                     }); })];
+            });
+        });
+    };
+    Resolver.prototype.identityOwner = function (did) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, id, owner, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = did.split(':'), id = _a[2];
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this._contract.identityOwner(id)];
+                    case 2:
+                        owner = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_2 = _b.sent();
+                        throw new Error(error_2);
+                    case 4: return [2 /*return*/, owner];
+                }
+            });
+        });
+    };
+    Resolver.prototype.validDelegate = function (identityDID, delegateType, delegateDID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bytesType, _a, identityAddress, _b, delegateAddress, valid, error_3;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(delegateType);
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = delegateDID.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this._contract.validDelegate(identityAddress, bytesType, delegateAddress)];
+                    case 2:
+                        valid = _c.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_3 = _c.sent();
+                        throw new Error(error_3);
+                    case 4: return [2 /*return*/, valid];
+                }
             });
         });
     };

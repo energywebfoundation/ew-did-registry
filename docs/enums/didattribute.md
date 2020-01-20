@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDAttribute](didattribute.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDAttribute](didattribute.md)
 
 # Enumeration: DIDAttribute
 
@@ -16,7 +16,7 @@
 
 • **Authenticate**: = "auth"
 
-Defined in did-resolver/src/models/operator.ts:2
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L2)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **PublicKey**: = "pub"
 
-Defined in did-resolver/src/models/operator.ts:2
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L2)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **ServicePoint**: = "svc"
 
-Defined in did-resolver/src/models/operator.ts:2
+*Defined in [did-resolver/src/models/operator.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L2)*
