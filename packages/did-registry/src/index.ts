@@ -26,8 +26,9 @@ class DIDRegistry implements IDIDRegistry {
 
   changeResolver(resolver: IResolver, network: Networks | string) {
     const relevantKeys = this.keys.get(network);
-    this.didDocument = new DIDDocumentFactory(this.dids.get(network));
+    this.didDocument = new DIDDocumentFactory(this.did.get(network));
     this.claims = new ClaimsFactory(relevantKeys, resolver);
+    this.resolver = resolver;
   }
 }
 
