@@ -42,7 +42,7 @@
 
 *Inherited from [Claim](claim.md).[constructor](claim.md#constructor)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L36)*
+*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L36)*
 
 Constructor
 
@@ -66,7 +66,7 @@ Name | Type | Description |
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L31)*
+*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L31)*
 
 claimData stores the claim fields
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [Claim](claim.md).[didDocument](claim.md#diddocument)*
 
-*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L16)*
+*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L16)*
 
 didDocument is used to store fetched DID Document
 
@@ -92,7 +92,7 @@ ___
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L21)*
+*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L21)*
 
 jwt stores the JWT to manage web tokens
 
@@ -106,7 +106,7 @@ ___
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L36)*
+*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L36)*
 
 keyPair represents the implementation of key management interface
 
@@ -120,7 +120,7 @@ ___
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L26)*
+*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L26)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -132,7 +132,7 @@ claimToken stores the actual serialised JWT in a string format
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-*Defined in [claims/src/public/verificationClaim.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/verificationClaim.ts#L70)*
+*Defined in [claims/src/public/verificationClaim.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/verificationClaim.ts#L70)*
 
 Approve method signs the payload of the provided token with verifiers private key
 Returns signed token on success
@@ -169,7 +169,7 @@ ___
 
 *Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
 
-*Defined in [claims/src/public/claim.ts:135](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L135)*
+*Defined in [claims/src/public/claim.ts:135](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L135)*
 
 Method creates token with the payload provided in the claim data
 The signed token is stored as a member of Claim class
@@ -209,7 +209,7 @@ ___
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-*Defined in [claims/src/public/claim.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L97)*
+*Defined in [claims/src/public/claim.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L97)*
 
 Method fetches the DID Document associated with did provided in claim data
 DID Document is then stored as a member of Claim class. Returns true on success
@@ -246,7 +246,7 @@ ___
 
 *Implementation of [IVerificationClaim](../interfaces/iverificationclaim.md)*
 
-*Defined in [claims/src/public/verificationClaim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/verificationClaim.ts#L31)*
+*Defined in [claims/src/public/verificationClaim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/verificationClaim.ts#L31)*
 
 Verify method checks if the token was signed by the correct private key
 Returns true on success

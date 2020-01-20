@@ -47,7 +47,7 @@
 
 *Overrides [Claim](claim.md).[constructor](claim.md#constructor)*
 
-*Defined in [claims/src/proof/proofClaim.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L32)*
+*Defined in [claims/src/proof/proofClaim.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L32)*
 
 Creates claim about possession of some private data.
 When created by the owner of the private data, this data must be contained
@@ -68,7 +68,7 @@ Name | Type | Description |
 
 • **_hashedFields**: *object*
 
-*Defined in [claims/src/proof/proofClaim.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L32)*
+*Defined in [claims/src/proof/proofClaim.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L32)*
 
 sha256-hashed private claim data
 
@@ -86,7 +86,7 @@ ___
 
 *Inherited from [Claim](claim.md).[claimData](claim.md#claimdata)*
 
-*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L31)*
+*Defined in [claims/src/public/claim.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L31)*
 
 claimData stores the claim fields
 
@@ -96,7 +96,7 @@ ___
 
 • **curve**: *sjcl.SjclEllipticalCurve* =  sjcl.ecc.curves.k256
 
-*Defined in [claims/src/proof/proofClaim.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L15)*
+*Defined in [claims/src/proof/proofClaim.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L15)*
 
 secp256k1 curve
 
@@ -108,7 +108,7 @@ ___
 
 *Inherited from [Claim](claim.md).[didDocument](claim.md#diddocument)*
 
-*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L16)*
+*Defined in [claims/src/public/claim.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L16)*
 
 didDocument is used to store fetched DID Document
 
@@ -118,7 +118,7 @@ ___
 
 • **g**: *any* =  this.curve.G
 
-*Defined in [claims/src/proof/proofClaim.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L25)*
+*Defined in [claims/src/proof/proofClaim.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L25)*
 
 base of the secp256k1 curve
 
@@ -132,7 +132,7 @@ ___
 
 *Inherited from [Claim](claim.md).[jwt](claim.md#jwt)*
 
-*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L21)*
+*Defined in [claims/src/public/claim.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L21)*
 
 jwt stores the JWT to manage web tokens
 
@@ -146,7 +146,7 @@ ___
 
 *Inherited from [Claim](claim.md).[keyPair](claim.md#keypair)*
 
-*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L36)*
+*Defined in [claims/src/public/claim.ts:36](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L36)*
 
 keyPair represents the implementation of key management interface
 
@@ -156,7 +156,7 @@ ___
 
 • **paranoia**: *number* = 6
 
-*Defined in [claims/src/proof/proofClaim.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L27)*
+*Defined in [claims/src/proof/proofClaim.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L27)*
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 • **q**: *any* =  this.curve.r
 
-*Defined in [claims/src/proof/proofClaim.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L20)*
+*Defined in [claims/src/proof/proofClaim.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L20)*
 
 prime order of the secp256k1 base
 
@@ -178,7 +178,7 @@ ___
 
 *Inherited from [Claim](claim.md).[token](claim.md#token)*
 
-*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L26)*
+*Defined in [claims/src/public/claim.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L26)*
 
 claimToken stores the actual serialised JWT in a string format
 
@@ -190,7 +190,7 @@ claimToken stores the actual serialised JWT in a string format
 
 *Inherited from [Claim](claim.md).[createJWT](claim.md#createjwt)*
 
-*Defined in [claims/src/public/claim.ts:135](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L135)*
+*Defined in [claims/src/public/claim.ts:135](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L135)*
 
 Method creates token with the payload provided in the claim data
 The signed token is stored as a member of Claim class
@@ -226,7 +226,7 @@ ___
 
 ▸ **createProofClaimData**(): *Promise‹void›*
 
-*Defined in [claims/src/proof/proofClaim.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L51)*
+*Defined in [claims/src/proof/proofClaim.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L51)*
 
 **Returns:** *Promise‹void›*
 
@@ -240,7 +240,7 @@ ___
 
 *Inherited from [Claim](claim.md).[getDid](claim.md#getdid)*
 
-*Defined in [claims/src/public/claim.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/public/claim.ts#L97)*
+*Defined in [claims/src/public/claim.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/public/claim.ts#L97)*
 
 Method fetches the DID Document associated with did provided in claim data
 DID Document is then stored as a member of Claim class. Returns true on success
@@ -277,7 +277,7 @@ ___
 
 *Implementation of [IProofClaim](../interfaces/iproofclaim.md)*
 
-*Defined in [claims/src/proof/proofClaim.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/claims/src/proof/proofClaim.ts#L85)*
+*Defined in [claims/src/proof/proofClaim.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/claims/src/proof/proofClaim.ts#L85)*
 
 Сhecks that the public keys in the `privateToken`'s payload matches values
 based on which `this.token` payload was calculated

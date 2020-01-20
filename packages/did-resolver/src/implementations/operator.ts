@@ -117,7 +117,7 @@ export class Operator extends Resolver implements IOperator {
 
   async revokeDelegate(
     identityDID: string,
-    delegateType: DelegateTypes,
+    delegateType: PubKeyType,
     delegateDID: string,
   ): Promise<boolean> {
     const bytesType = ethers.utils.formatBytes32String(delegateType);
@@ -144,17 +144,17 @@ export class Operator extends Resolver implements IOperator {
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
-    delegateDID: string,
+    updateData: IUpdateData,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(attributeType);
     const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = delegateDID.split(':');
-
+    const attribute = this._composeAttributeName(attributeType, updateData);
+    const bytesType = ethers.utils.formatBytes32String(attribute);
+    const bytesValue = this._hexify(updateData.value);
     try {
       const tx = await this._didRegistry.revokeAttribute(
         identityAddress,
         bytesType,
-        delegateAddress,
+        bytesValue,
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -228,7 +228,9 @@ export class Operator extends Resolver implements IOperator {
     // eslint-disable-next-line no-restricted-syntax
     const method = this._didRegistry.revokeDelegate;
     for (const pk of publicKeys) {
+      console.log('delegate pk.id:',pk.id);
       const match = pk.id.match(delegatePubKeyIdPattern);
+      console.log('delegate pk match:',match);
       // eslint-disable-next-line no-continue
       if (!match) continue;
       const didAttribute = Authenticate;
@@ -258,8 +260,10 @@ export class Operator extends Resolver implements IOperator {
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const pk of publicKeys) {
       const match = pk.id.match(pubKeyIdPattern);
+      // console.log('pk.id: ', pk.id);
       // eslint-disable-next-line no-continue
       if (!match) continue;
+      // console.log('pk to remove:', pk);
       const didAttribute = DIDAttribute.PublicKey;
       const encodings = Object.values(Encoding);
       const encoding = encodings.find((e) => {

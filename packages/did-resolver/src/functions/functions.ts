@@ -21,11 +21,10 @@ const handleDelegateChange = (
   validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
-  const publicKeyID = `${did}#delegate-${event.values.delegate}`;
+  const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
+  const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
   if (document.publicKey[publicKeyID] === undefined
     || document.publicKey[publicKeyID].block < block) {
-    const { delegateType } = event.values;
-    const stringDelegateType = ethers.utils.parseBytes32String(delegateType);
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
@@ -73,7 +72,7 @@ const handleAttributeChange = (
         // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `${did}#key-${type}`,
+          id: `${did}#key-${algo}${type}-${event.values.value}`,
           type: `${algo}${type}`,
           controller: blockchainAddress,
           validity: validTo,
@@ -115,10 +114,12 @@ const handleAttributeChange = (
         }
         return document;
       case 'svc':
-        if (document.serviceEndpoints[algo] === undefined
-          || document.serviceEndpoints[algo].block < block) {
-          document.serviceEndpoints[algo] = {
-            id: `${did}#${algo}`,
+        // eslint-disable-next-line no-case-declarations
+        const serviceId = `${did}#service-${algo}-${event.values.value}`;
+        if (document.serviceEndpoints[serviceId] === undefined
+          || document.serviceEndpoints[serviceId].block < block) {
+          document.serviceEndpoints[serviceId] = {
+            id: serviceId,
             type: algo,
             serviceEndpoint: Buffer.from(
               event.values.value.slice(2),

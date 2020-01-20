@@ -30,7 +30,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L34)*
+*Defined in [did-resolver/src/implementations/resolver.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L34)*
 
 Constructor
 
@@ -52,7 +52,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L114)*
+*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L114)*
 
 **Parameters:**
 
@@ -70,7 +70,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L73)*
+*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L73)*
 
 Resolve DID Document for a given did
 
@@ -98,7 +98,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L125)*
+*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L125)*
 
 **Parameters:**
 

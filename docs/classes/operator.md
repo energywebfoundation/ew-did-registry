@@ -39,7 +39,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L42)*
+*Defined in [did-resolver/src/implementations/operator.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L42)*
 
 **Parameters:**
 
@@ -56,7 +56,7 @@ Name | Type | Default | Description |
 
 ▸ **changeOwner**(`identityDID`: string, `newOwnerDid`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:170](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L170)*
+*Defined in [did-resolver/src/implementations/operator.ts:170](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L170)*
 
 **Parameters:**
 
@@ -75,7 +75,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L70)*
+*Defined in [did-resolver/src/implementations/operator.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L70)*
 
 Empty for this implementation
 
@@ -98,7 +98,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:209](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L209)*
+*Defined in [did-resolver/src/implementations/operator.ts:209](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L209)*
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -132,7 +132,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L114)*
+*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L114)*
 
 **Parameters:**
 
@@ -152,7 +152,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L73)*
+*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L73)*
 
 Resolve DID Document for a given did
 
@@ -176,9 +176,9 @@ ___
 
 ###  revokeAttribute
 
-▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `delegateDID`: string): *Promise‹boolean›*
+▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md)): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:144](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L144)*
+*Defined in [did-resolver/src/implementations/operator.ts:144](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L144)*
 
 **Parameters:**
 
@@ -186,7 +186,7 @@ Name | Type |
 ------ | ------ |
 `identityDID` | string |
 `attributeType` | [DIDAttribute](../enums/didattribute.md) |
-`delegateDID` | string |
+`updateData` | [IUpdateData](../interfaces/iupdatedata.md) |
 
 **Returns:** *Promise‹boolean›*
 
@@ -194,16 +194,16 @@ ___
 
 ###  revokeDelegate
 
-▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
+▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [PubKeyType](../enums/pubkeytype.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:118](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L118)*
+*Defined in [did-resolver/src/implementations/operator.ts:118](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L118)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `identityDID` | string |
-`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
+`delegateType` | [PubKeyType](../enums/pubkeytype.md) |
 `delegateDID` | string |
 
 **Returns:** *Promise‹boolean›*
@@ -216,7 +216,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/operator.ts#L105)*
+*Defined in [did-resolver/src/implementations/operator.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/operator.ts#L105)*
 
 Sets attribute value in DID document identified by the did
 
@@ -263,7 +263,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/2d9fa75/packages/did-resolver/src/implementations/resolver.ts#L125)*
+*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/ff7b2ca/packages/did-resolver/src/implementations/resolver.ts#L125)*
 
 **Parameters:**
 
