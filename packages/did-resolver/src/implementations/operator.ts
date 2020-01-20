@@ -115,6 +115,15 @@ export class Operator extends Resolver implements IOperator {
     return this._sendTransaction(method, did, didAttribute, updateData, validity);
   }
 
+  /**
+   * Revokes the delegate from DID Document
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of identity of interest
+   * @param { PubKeyType } delegateType - type of delegate of interest
+   * @param { string } delegateDID - did of delegate of interest
+   * @returns Promise<boolean>
+   */
   async revokeDelegate(
     identityDID: string,
     delegateType: PubKeyType,
@@ -141,6 +150,15 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
+  /**
+   * Revokes the attribute from DID Document
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of identity of interest
+   * @param { DIDAttribute } attributeType - type of attribute to revoke
+   * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+   * @returns Promise<boolean>
+   */
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
@@ -167,6 +185,14 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
+  /**
+   * Changes the owner of particular decentralised identity
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of current identity owner
+   * @param { string } newOwnerDid - did of new owner that will be set on success
+   * @returns Promise<boolean>
+   */
   async changeOwner(
     identityDID: string,
     newOwnerDid: string,
