@@ -34,7 +34,6 @@ describe('[DID DOCUMENT LITE PACKAGE]', function() {
 
   it('returned publicKey should represent the owner', async () => {
     const publicKey = await didDocumentLite.read(Attributes.publicKey, 'Secp256k1VerificationKey');
-    console.log(publicKey);
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     expect(publicKey.id).to.equal(`${did}#owner`);
