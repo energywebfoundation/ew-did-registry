@@ -88,7 +88,7 @@ var Resolver = /** @class */ (function () {
                                         reject(new Error('Invalid did provided'));
                                         return [2 /*return*/];
                                     }
-                                    if (this._fetchedDocument === undefined) {
+                                    if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
                                         _a = did.split(':'), blockchainAddress = _a[2];
                                         this._fetchedDocument = {
                                             owner: blockchainAddress,
