@@ -1,48 +1,36 @@
-import { IPrivateClaim } from './private';
-import { IProofClaim } from './proof';
+import { IKeys } from '@ew-did-registry/keys';
+import { IResolver } from '@ew-did-registry/did-resolver';
 import {
-  ClaimType, IClaimData, IClaim, IVerificationClaim,
+  IClaimData,
 } from './models';
 
 /**
  * IClaims interface is a factory to create Public, Private, and Proof Claims
  */
-export interface IClaims {
-    /**
-     * private members:
-     * didDocument: IDidDocument
-     * keyPair: IKeyPair;
-     */
+export interface IClaimsFactory {
+  createClaimsUser(keys: IKeys, resolver: IResolver): IClaimsUser;
+  createClaimsIssuer(keys: IKeys, resolver: IResolver): IClaimsIssuer;
+  createClaimsVerifier(keys: IKeys, resolver: IResolver): IClaimsVerifier;
+}
 
-    /**
-     * Create Public Claim with claim data
-     * @param {IClaimData} data
-     * @returns {IClaim}
-     */
-    createPublicClaim(data: IClaimData): IVerificationClaim;
+export interface IClaimsUser {
+  createPublicClaim(claimData: IClaimData): Promise<string>;
+  createPrivateClaim(claimData: IClaimData, issuer: string):
+    Promise<{ token: string; saltedFields: { [key: string]: string } }>;
+  createProofClaim(claimUrl: string, saltedFields: { [key: string]: string }): Promise<string>;
+  verifyPublicClaim(token: string): Promise<boolean>;
+  verifyPrivateClaim(
+    privateToken: string,
+    saltedFields: { [key: string]: string }
+  ): Promise<boolean>;
+}
 
-    /**
-     * Create Private Claim by providing claim data and Issuer's DID
-     * @param {IClaimData} data
-     * @param {string} didIssuer
-     * @returns {IPrivateClaim}
-     */
-    createPrivateClaim(data: IClaimData, didIssuer: string): IPrivateClaim;
+export interface IClaimsIssuer {
+  issuePublicClaim(token: string): Promise<string>;
+  issuePrivateClaim(token: string): Promise<string>;
+}
 
-    /**
-     * Create Proof Claim with claim data and hashed claim fields
-     * @param {IClaimData} data
-     * @param {number[]} hashedFields
-     * @returns {IProofClaim}
-     */
-    createProofClaim(data: IClaimData, hashedFields: number[]): IProofClaim;
-
-    /**
-     * Provided with JWT this method will generate a Claim
-     * @param {string} token
-     * @param {ClaimType} type
-     * @returns {IVerificationClaim | PrivateClaim | IProofClaim}
-     */
-    generateClaimFromToken(token: string, type: ClaimType):
-        IVerificationClaim | IPrivateClaim | IProofClaim;
+export interface IClaimsVerifier {
+  verifyPublicProof(token: string): Promise<boolean>;
+  verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
 }

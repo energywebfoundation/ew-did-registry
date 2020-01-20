@@ -1,10 +1,7 @@
-import { IClaims } from './interface';
-import { Claim, VerificationClaim } from './public';
-
-export {
-  IClaims,
-  Claim,
-  VerificationClaim,
-};
 export * from './models';
-export * from './proof';
+export * from './interface';
+export * from './claims';
+export * from './claimsUser';
+export * from './claimsIssuer';
+export * from './claimsVerifier';
+export * from './claimsFactory';
