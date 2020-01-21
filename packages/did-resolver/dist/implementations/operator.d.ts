@@ -60,8 +60,34 @@ export declare class Operator extends Resolver implements IOperator {
      * @returns Promise<boolean>
      */
     update(did: string, didAttribute: DIDAttribute, updateData: IUpdateData, validity?: number | BigNumber): Promise<boolean>;
+    /**
+     * Revokes the delegate from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { PubKeyType } delegateType - type of delegate of interest
+     * @param { string } delegateDID - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     revokeDelegate(identityDID: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+    /**
+     * Revokes the attribute from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DIDAttribute } attributeType - type of attribute to revoke
+     * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+     * @returns Promise<boolean>
+     */
     revokeAttribute(identityDID: string, attributeType: DIDAttribute, updateData: IUpdateData): Promise<boolean>;
+    /**
+     * Changes the owner of particular decentralised identity
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of current identity owner
+     * @param { string } newOwnerDid - did of new owner that will be set on success
+     * @returns Promise<boolean>
+     */
     changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean>;
     /**
      * Revokes authentication methods, public keys and delegates from DID document

@@ -136,6 +136,15 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes the delegate from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { PubKeyType } delegateType - type of delegate of interest
+     * @param { string } delegateDID - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     Operator.prototype.revokeDelegate = function (identityDID, delegateType, delegateDID) {
         return __awaiter(this, void 0, void 0, function () {
             var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_1, error_1;
@@ -166,6 +175,15 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes the attribute from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DIDAttribute } attributeType - type of attribute to revoke
+     * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+     * @returns Promise<boolean>
+     */
     Operator.prototype.revokeAttribute = function (identityDID, attributeType, updateData) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, identityAddress, attribute, bytesType, bytesValue, tx, receipt, event_2, error_2;
@@ -197,6 +215,14 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Changes the owner of particular decentralised identity
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of current identity owner
+     * @param { string } newOwnerDid - did of new owner that will be set on success
+     * @returns Promise<boolean>
+     */
     Operator.prototype.changeOwner = function (identityDID, newOwnerDid) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, identityAddress, _b, delegateAddress, tx, receipt, event_3, error_3;

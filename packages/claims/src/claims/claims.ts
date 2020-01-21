@@ -59,6 +59,8 @@ export class Claims implements IClaims {
     async getDocument(did: string): Promise<IDIDDocument> {
       const documentFactory = new DIDDocumentFactory(did);
       const didDocumentLite = documentFactory.createLite(this.resolver);
+      console.log(didDocumentLite);
+      console.log(did);
       await didDocumentLite.read(did);
       return didDocumentLite.didDocument;
     }

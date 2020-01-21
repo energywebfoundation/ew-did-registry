@@ -72,6 +72,7 @@ var DIDDocumentLite = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        console.log("Will use resolver to fetch document for: " + this.did);
                         _a = this;
                         return [4 /*yield*/, this.resolver.read(this.did)];
                     case 1:

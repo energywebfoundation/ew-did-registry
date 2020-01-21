@@ -48,6 +48,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
      * @param {string} type
      */
     async read(attribute: string, type: string) {
+      console.log(`Will use resolver to fetch document for: ${this.did}`);
       this.didDocument = await this.resolver.read(this.did);
 
       if (type === undefined) {

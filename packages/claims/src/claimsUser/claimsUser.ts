@@ -83,6 +83,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: {},
     };
+    console.log(`Getting the document for issuer: ${issuer}`);
     const issuerDocument = await this.getDocument(issuer);
     const issuerPK = issuerDocument
       .publicKey

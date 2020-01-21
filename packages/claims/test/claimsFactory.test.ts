@@ -22,6 +22,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', () => {
   const claimsVerifier = new ClaimsFactory(verifier, resolver).createClaimsVerifier();
 
   it('workflow of private claim generation, issuance and presentation should pass', async () => {
+    console.log(issuerDid);
     // User(Subject) side
     const claimData: IClaimData = { secret: '123' };
     const {

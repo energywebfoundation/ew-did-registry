@@ -18,6 +18,7 @@ class DIDRegistry implements IDIDRegistry {
 
   constructor(keys: IKeys, did: string, resolver: IResolver) {
     const [, network, id] = did.split(':');
+    this.keys = new Map<Networks|string, IKeys>();
     this.keys.set(network, keys);
     this.didDocument = new DIDDocumentFactory(did);
     this.claims = new ClaimsFactory(keys, resolver);
