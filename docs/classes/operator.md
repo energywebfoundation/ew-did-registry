@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
 
 # Class: Operator
 
@@ -39,7 +39,7 @@
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:42](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L42)*
+Defined in did-resolver/src/implementations/operator.ts:41
 
 **Parameters:**
 
@@ -56,35 +56,33 @@ Name | Type | Default | Description |
 
 ▸ **changeOwner**(`identityDID`: string, `newOwnerDid`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:170](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L170)*
+Defined in did-resolver/src/implementations/operator.ts:211
+
+Changes the owner of particular decentralised identity
+Returns true on success
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`identityDID` | string |
-`newOwnerDid` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`identityDID` | string | did of current identity owner |
+`newOwnerDid` | string | did of new owner that will be set on success |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>
 
 ___
 
 ###  create
 
-▸ **create**(`did`: string, `context`: string): *Promise‹boolean›*
+▸ **create**(): *Promise‹boolean›*
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:70](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L70)*
+Defined in did-resolver/src/implementations/operator.ts:69
 
 Empty for this implementation
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`did` | string |
-`context` | string |
 
 **Returns:** *Promise‹boolean›*
 
@@ -98,7 +96,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:209](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L209)*
+Defined in did-resolver/src/implementations/operator.ts:250
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -132,15 +130,19 @@ ___
 
 *Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L114)*
+Defined in did-resolver/src/implementations/resolver.ts:120
+
+Returns the Ethereum address of current identity owner
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`did` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`did` | string | did of identity of interest |
 
 **Returns:** *Promise‹string›*
+
+Promise<string>
 
 ___
 
@@ -152,7 +154,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L73)*
+Defined in did-resolver/src/implementations/resolver.ts:73
 
 Resolve DID Document for a given did
 
@@ -178,17 +180,22 @@ ___
 
 ▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md)): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:144](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L144)*
+Defined in did-resolver/src/implementations/operator.ts:177
+
+Revokes the attribute from DID Document
+Returns true on success
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`identityDID` | string |
-`attributeType` | [DIDAttribute](../enums/didattribute.md) |
-`updateData` | [IUpdateData](../interfaces/iupdatedata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`identityDID` | string | did of identity of interest |
+`attributeType` | [DIDAttribute](../enums/didattribute.md) | type of attribute to revoke |
+`updateData` | [IUpdateData](../interfaces/iupdatedata.md) | data required to identify the correct attribute to revoke |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>
 
 ___
 
@@ -196,27 +203,30 @@ ___
 
 ▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [PubKeyType](../enums/pubkeytype.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:118](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L118)*
+Defined in did-resolver/src/implementations/operator.ts:142
+
+Revokes the delegate from DID Document
+Returns true on success
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`identityDID` | string |
-`delegateType` | [PubKeyType](../enums/pubkeytype.md) |
-`delegateDID` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`identityDID` | string | did of identity of interest |
+`delegateType` | [PubKeyType](../enums/pubkeytype.md) | type of delegate of interest |
+`delegateDID` | string | did of delegate of interest |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>
 
 ___
 
 ###  update
 
-▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
+▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number): *Promise‹boolean›*
 
-*Implementation of [IOperator](../interfaces/ioperator.md)*
-
-*Defined in [did-resolver/src/implementations/operator.ts:105](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/operator.ts#L105)*
+Defined in did-resolver/src/implementations/operator.ts:117
 
 Sets attribute value in DID document identified by the did
 
@@ -247,7 +257,7 @@ Name | Type | Default | Description |
 `did` | string | - | did associated with DID document |
 `didAttribute` | [DIDAttribute](../enums/didattribute.md) | - | specifies updated section in DID document. Must be 31 bytes or shorter |
 `updateData` | [IUpdateData](../interfaces/iupdatedata.md) | - | - |
-`validity` | number &#124; BigNumber |  ethers.constants.MaxUint256 | time in milliseconds during which                              attribute will be valid |
+`validity` | number |  Number.MAX_SAFE_INTEGER | time in milliseconds during which                              attribute will be valid |
 
 **Returns:** *Promise‹boolean›*
 
@@ -263,14 +273,19 @@ ___
 
 *Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L125)*
+Defined in did-resolver/src/implementations/resolver.ts:140
+
+Performs the check if the delegate is valid for particular did
+Return boolean
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`identityDID` | string |
-`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
-`delegateDID` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`identityDID` | string | did of identity of interest |
+`delegateType` | [DelegateTypes](../enums/delegatetypes.md) | type of delegate of interest |
+`delegateDID` | string | - |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>

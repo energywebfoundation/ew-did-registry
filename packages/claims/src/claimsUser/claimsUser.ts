@@ -86,8 +86,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     const issuerDocument = await this.getDocument(issuer);
     const issuerPK = issuerDocument
       .publicKey
-      .find((pk: { type: string }) => pk.type === 'Secp256k1VerificationKey')
-      .ethereumAddress;
+      .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
+      .publicKeyHex;
     Object.entries(claimData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;

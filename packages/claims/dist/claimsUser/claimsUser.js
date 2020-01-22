@@ -143,8 +143,8 @@ var ClaimsUser = /** @class */ (function (_super) {
                         issuerDocument = _a.sent();
                         issuerPK = issuerDocument
                             .publicKey
-                            .find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; })
-                            .ethereumAddress;
+                            .find(function (pk) { return pk.type === 'Secp256k1veriKey'; })
+                            .publicKeyHex;
                         Object.entries(claimData).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
                             var salt = crypto_1.default.randomBytes(32).toString('base64');

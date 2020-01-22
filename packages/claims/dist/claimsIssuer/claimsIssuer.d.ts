@@ -2,7 +2,7 @@ import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
 export declare class ClaimsIssuer extends Claims implements IClaimsIssuer {
     /**
-     * Verifies user signature on token and issue new token signed by issuer.
+     * Verifies user signature on token and issue new token signed by issuer./
      * Throws if user signature not valid
      *
      * @example

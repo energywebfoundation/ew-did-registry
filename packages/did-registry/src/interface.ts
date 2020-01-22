@@ -15,7 +15,7 @@ export interface IDIDRegistry {
     /**
      * IDIDDocument exposes methods to operate with DID Documents
      */
-    didDocument: IDIDDocumentFactory;
+    documentFactory: IDIDDocumentFactory;
     /**
      * IClaims exposes functionality needed to manage Private and Public claims
      */

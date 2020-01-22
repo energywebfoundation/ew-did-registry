@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
 
 # Class: Resolver
 
@@ -30,7 +30,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L34)*
+Defined in did-resolver/src/implementations/resolver.ts:34
 
 Constructor
 
@@ -52,15 +52,19 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:114](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L114)*
+Defined in did-resolver/src/implementations/resolver.ts:120
+
+Returns the Ethereum address of current identity owner
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`did` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`did` | string | did of identity of interest |
 
 **Returns:** *Promise‹string›*
+
+Promise<string>
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L73)*
+Defined in did-resolver/src/implementations/resolver.ts:73
 
 Resolve DID Document for a given did
 
@@ -98,14 +102,19 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/implementations/resolver.ts#L125)*
+Defined in did-resolver/src/implementations/resolver.ts:140
+
+Performs the check if the delegate is valid for particular did
+Return boolean
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`identityDID` | string |
-`delegateType` | [DelegateTypes](../enums/delegatetypes.md) |
-`delegateDID` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`identityDID` | string | did of identity of interest |
+`delegateType` | [DelegateTypes](../enums/delegatetypes.md) | type of delegate of interest |
+`delegateDID` | string | - |
 
 **Returns:** *Promise‹boolean›*
+
+Promise<boolean>

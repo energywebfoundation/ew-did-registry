@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
 
 # Class: JWT
 
@@ -28,7 +28,7 @@
 
 \+ **new JWT**(`keys`: IKeys): *[JWT](jwt.md)*
 
-*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/jwt/src/index.ts#L10)*
+Defined in jwt/src/index.ts:10
 
 Key pair has to be passed on construction to JWT
 
@@ -48,7 +48,7 @@ Name | Type | Description |
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/jwt/src/index.ts#L131)*
+Defined in jwt/src/index.ts:131
 
 Return decoded JWT payload without verifying signature
 
@@ -87,7 +87,7 @@ ___
 
 ▸ **sign**(`payload`: string | object, `options?`: object): *Promise‹string›*
 
-*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/jwt/src/index.ts#L45)*
+Defined in jwt/src/index.ts:45
 
 Sign payload and return JWT
 
@@ -126,7 +126,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/jwt/src/index.ts#L93)*
+Defined in jwt/src/index.ts:93
 
 If the signature is correct, method returns decoded JWT payload
 

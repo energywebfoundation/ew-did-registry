@@ -47,7 +47,7 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-Defined in claims/src/claims/claims.ts:28
+Defined in claims/src/claims/claims.ts:29
 
 **`constructor`** 
 
@@ -74,11 +74,11 @@ ___
 
 • **did**: *string*
 
-*Implementation of [IClaims](../interfaces/iclaims.md).[did](../interfaces/iclaims.md#did)*
+*Implementation of [IClaimsUser](../interfaces/iclaimsuser.md).[did](../interfaces/iclaimsuser.md#did)*
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-Defined in claims/src/claims/claims.ts:28
+Defined in claims/src/claims/claims.ts:29
 
 ___
 
@@ -94,9 +94,11 @@ ___
 
 • **jwt**: *IJWT*
 
+*Implementation of [IClaimsUser](../interfaces/iclaimsuser.md).[jwt](../interfaces/iclaimsuser.md#jwt)*
+
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-Defined in claims/src/claims/claims.ts:21
+Defined in claims/src/claims/claims.ts:22
 
 jwt stores the JWT to manage web tokens
 
@@ -106,11 +108,11 @@ ___
 
 • **keys**: *IKeys*
 
-*Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
+*Implementation of [IClaimsUser](../interfaces/iclaimsuser.md).[keys](../interfaces/iclaimsuser.md#keys)*
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-Defined in claims/src/claims/claims.ts:26
+Defined in claims/src/claims/claims.ts:27
 
 Key pair represents the implementation of key management interface
 
@@ -243,7 +245,7 @@ ___
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-Defined in claims/src/claims/claims.ts:59
+Defined in claims/src/claims/claims.ts:61
 
 Fetches DID document of the corresponding DID
 
@@ -333,7 +335,7 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-Defined in claims/src/claims/claims.ts:81
+Defined in claims/src/claims/claims.ts:83
 
 Verifies signers signature on received token
 

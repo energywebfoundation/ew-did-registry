@@ -4,7 +4,9 @@
 
 ## Hierarchy
 
-* **IClaimsVerifier**
+* [IClaims](iclaims.md)
+
+  ↳ **IClaimsVerifier**
 
 ## Implemented by
 
@@ -12,10 +14,46 @@
 
 ## Index
 
+### Properties
+
+* [did](iclaimsverifier.md#did)
+* [jwt](iclaimsverifier.md#jwt)
+* [keys](iclaimsverifier.md#keys)
+
 ### Methods
 
 * [verifyPrivateProof](iclaimsverifier.md#verifyprivateproof)
 * [verifyPublicProof](iclaimsverifier.md#verifypublicproof)
+
+## Properties
+
+###  did
+
+• **did**: *string*
+
+*Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
+
+Defined in claims/src/models/index.ts:20
+
+___
+
+###  jwt
+
+• **jwt**: *IJWT*
+
+*Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
+
+Defined in claims/src/models/index.ts:22
+
+___
+
+###  keys
+
+• **keys**: *IKeys*
+
+*Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
+
+Defined in claims/src/models/index.ts:21
 
 ## Methods
 
@@ -23,7 +61,7 @@
 
 ▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:35
+Defined in claims/src/interface.ts:33
 
 **Parameters:**
 
@@ -40,7 +78,7 @@ ___
 
 ▸ **verifyPublicProof**(`token`: string): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:34
+Defined in claims/src/interface.ts:32
 
 **Parameters:**
 

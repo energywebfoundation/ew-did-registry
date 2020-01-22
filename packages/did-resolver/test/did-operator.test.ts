@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { ethers, Wallet } from 'ethers';
+import { Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -16,13 +16,30 @@ const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys({
-    privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
-    publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
+    privateKey: '389e5ec8fb902e58e301d4d431c581f5c4be5ced3959ee1feb3cb71f0c8faf5b',
+    publicKey: '02f4989fbf70c41a6252e3e76d938d5144ebe475447760729f6a034a16a1cc7d62',
   });
   const operator = new Operator(keys);
-  const identity = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
+  const identity = '0x9b0AA89890d4A1397369697FF91fCEA08b955530';
   const validity = 10 * 60 * 1000;
   const did = `did:ewc:${identity}`;
+
+  it('updating an attribute without providing validity should update the document with maximum validity', async () => {
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.Secp256k1,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: new Keys().publicKey,
+    };
+    await operator.update(did, attribute, updateData);
+    const document = await operator.read(did);
+    expect(document.id).equal(did);
+    const publicKey = document.publicKey.find(
+      (pk) => pk.publicKeyHex === updateData.value,
+    );
+    expect(publicKey).is.not.undefined;
+  });
 
   it('setting public key attribute should update public keys of DID document', async () => {
     const attribute = DIDAttribute.PublicKey;
@@ -36,10 +53,9 @@ describe('[DID-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value,
     );
-    // eslint-disable-next-line no-unused-expressions
-    expect(publicKey).is.not.null;
+    expect(publicKey).is.not.undefined;
   });
 
   it('adding a delegate with a delegation type of VerificationKey should add a public key',
@@ -84,7 +100,7 @@ describe('[DID-OPERATOR]', function () {
     const auth = document.authentication.find(
       (a: IAuthentication) => a.publicKey === publicKeyId,
     );
-    expect(auth).not.null;
+    expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
       (pk) => pk.id === publicKeyId,
     );
@@ -110,7 +126,7 @@ describe('[DID-OPERATOR]', function () {
     expect(document.id).equal(did);
     expect(document.service.find(
       (sv) => sv.type === updateData.algo && sv.serviceEndpoint === endpoint,
-    )).not.null;
+    )).not.undefined;
   });
 
   it('setting attribute on invalid did should throw an error', async () => {

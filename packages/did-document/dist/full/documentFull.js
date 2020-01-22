@@ -70,10 +70,10 @@ var DIDDocumentFull = /** @class */ (function (_super) {
      * @param { string } context
      * @return { boolean }
      */
-    DIDDocumentFull.prototype.create = function (context) {
+    DIDDocumentFull.prototype.create = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this._operator.create(this.did, context)];
+                return [2 /*return*/, this._operator.create()];
             });
         });
     };

@@ -123,6 +123,12 @@ var Resolver = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Returns the Ethereum address of current identity owner
+     *
+     * @param { string } did - did of identity of interest
+     * @returns Promise<string>
+     */
     Resolver.prototype.identityOwner = function (did) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, id, owner, error_2;
@@ -145,6 +151,15 @@ var Resolver = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Performs the check if the delegate is valid for particular did
+     * Return boolean
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DelegateTypes } delegateType - type of delegate of interest
+     * @param { delegateDID } did - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     Resolver.prototype.validDelegate = function (identityDID, delegateType, delegateDID) {
         return __awaiter(this, void 0, void 0, function () {
             var bytesType, _a, identityAddress, _b, delegateAddress, valid, error_3;

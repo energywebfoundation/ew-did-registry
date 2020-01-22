@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IUpdateData](iupdatedata.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IUpdateData](iupdatedata.md)
 
 # Interface: IUpdateData
 
@@ -26,7 +26,7 @@ delegate field
 
 • **algo**: *[Algorithms](../enums/algorithms.md)*
 
-*Defined in [did-resolver/src/models/operator.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L24)*
+Defined in did-resolver/src/models/operator.ts:24
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **delegate**? : *string*
 
-*Defined in [did-resolver/src/models/operator.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L27)*
+Defined in did-resolver/src/models/operator.ts:27
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **encoding**: *[Encoding](../enums/encoding.md)*
 
-*Defined in [did-resolver/src/models/operator.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L23)*
+Defined in did-resolver/src/models/operator.ts:23
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **type**: *[PubKeyType](../enums/pubkeytype.md)*
 
-*Defined in [did-resolver/src/models/operator.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L25)*
+Defined in did-resolver/src/models/operator.ts:25
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 • **value**? : *string*
 
-*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L26)*
+Defined in did-resolver/src/models/operator.ts:26

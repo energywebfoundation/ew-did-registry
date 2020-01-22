@@ -1,6 +1,7 @@
-import { IDID } from '@ew-did-registry/did';
+import { IDID, Networks } from '@ew-did-registry/did';
 import { IDIDDocumentFactory } from '@ew-did-registry/did-document';
-import { IClaims } from '@ew-did-registry/claims';
+import { IClaimsFactory } from '@ew-did-registry/claims';
+import { IResolver } from '@ew-did-registry/did-resolver';
 import { IKeys } from '@ew-did-registry/keys';
 /**
  * This is responsible for registration and lifecycle management of DID
@@ -13,14 +14,18 @@ export interface IDIDRegistry {
     /**
      * IDIDDocument exposes methods to operate with DID Documents
      */
-    didDocument: IDIDDocumentFactory;
+    documentFactory: IDIDDocumentFactory;
     /**
      * IClaims exposes functionality needed to manage Private and Public claims
      */
-    claims: IClaims;
+    claims: IClaimsFactory;
     /**
      * IKeys is responsible for key management, signing, as well as verification of signature
      */
-    keys: IKeys;
-    addProvider(provider: string): void;
+    keys: Map<Networks | string, IKeys>;
+    /**
+     * Resolver allows to create DID Documents for different ids
+     */
+    resolver: IResolver;
+    changeResolver(resolver: IResolver, network: Networks | string): void;
 }

@@ -66,7 +66,7 @@ var ClaimsIssuer = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
-     * Verifies user signature on token and issue new token signed by issuer.
+     * Verifies user signature on token and issue new token signed by issuer./
      * Throws if user signature not valid
      *
      * @example

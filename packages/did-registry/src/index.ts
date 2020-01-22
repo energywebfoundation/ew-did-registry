@@ -8,9 +8,9 @@ import { IDIDRegistry } from './interface';
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Networks | string, IKeys>;
+  keys: Map<Networks | string, IKeys> = new Map();
 
-  didDocument: IDIDDocumentFactory;
+  documentFactory: IDIDDocumentFactory;
 
   claims: IClaimsFactory;
 
@@ -19,14 +19,14 @@ class DIDRegistry implements IDIDRegistry {
   constructor(keys: IKeys, did: string, resolver: IResolver) {
     const [, network, id] = did.split(':');
     this.keys.set(network, keys);
-    this.didDocument = new DIDDocumentFactory(did);
+    this.documentFactory = new DIDDocumentFactory(did);
     this.claims = new ClaimsFactory(keys, resolver);
     this.resolver = resolver;
   }
 
   changeResolver(resolver: IResolver, network: Networks | string) {
     const relevantKeys = this.keys.get(network);
-    this.didDocument = new DIDDocumentFactory(this.did.get(network));
+    this.documentFactory = new DIDDocumentFactory(this.did.get(network));
     this.claims = new ClaimsFactory(relevantKeys, resolver);
     this.resolver = resolver;
   }
