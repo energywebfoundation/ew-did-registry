@@ -32,7 +32,7 @@ This is responsible for registration and lifecycle management of DID
 
 • **claims**: *IClaimsFactory*
 
-Defined in did-registry/src/interface.ts:22
+*Defined in [did-registry/src/interface.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L22)*
 
 IClaims exposes functionality needed to manage Private and Public claims
 
@@ -42,7 +42,7 @@ ___
 
 • **did**: *IDID*
 
-Defined in did-registry/src/interface.ts:14
+*Defined in [did-registry/src/interface.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L14)*
 
 IDID specifies the interface for decentralised identities
 
@@ -52,7 +52,7 @@ ___
 
 • **documentFactory**: *IDIDDocumentFactory*
 
-Defined in did-registry/src/interface.ts:18
+*Defined in [did-registry/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L18)*
 
 IDIDDocument exposes methods to operate with DID Documents
 
@@ -62,7 +62,7 @@ ___
 
 • **keys**: *Map‹Networks | string, IKeys›*
 
-Defined in did-registry/src/interface.ts:26
+*Defined in [did-registry/src/interface.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L26)*
 
 IKeys is responsible for key management, signing, as well as verification of signature
 
@@ -72,7 +72,7 @@ ___
 
 • **resolver**: *IResolver*
 
-Defined in did-registry/src/interface.ts:30
+*Defined in [did-registry/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L30)*
 
 Resolver allows to create DID Documents for different ids
 
@@ -82,7 +82,7 @@ Resolver allows to create DID Documents for different ids
 
 ▸ **changeResolver**(`resolver`: IResolver, `network`: Networks | string): *void*
 
-Defined in did-registry/src/interface.ts:32
+*Defined in [did-registry/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-registry/src/interface.ts#L32)*
 
 **Parameters:**
 

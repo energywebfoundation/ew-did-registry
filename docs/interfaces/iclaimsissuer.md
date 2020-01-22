@@ -33,7 +33,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-Defined in claims/src/models/index.ts:20
+*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L20)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-Defined in claims/src/models/index.ts:22
+*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L22)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-Defined in claims/src/models/index.ts:21
+*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L21)*
 
 ## Methods
 
@@ -61,7 +61,7 @@ Defined in claims/src/models/index.ts:21
 
 ▸ **issuePrivateClaim**(`token`: string): *Promise‹string›*
 
-Defined in claims/src/interface.ts:28
+*Defined in [claims/src/interface.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/interface.ts#L28)*
 
 **Parameters:**
 
@@ -77,7 +77,7 @@ ___
 
 ▸ **issuePublicClaim**(`token`: string): *Promise‹string›*
 
-Defined in claims/src/interface.ts:27
+*Defined in [claims/src/interface.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/interface.ts#L27)*
 
 **Parameters:**
 

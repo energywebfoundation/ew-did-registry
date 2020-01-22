@@ -247,12 +247,6 @@ export const wrapDidDocument = (
   const now = new BigNumber(Math.floor(new Date().getTime() / 1000));
 
   const publicKey: IPublicKey[] = [
-    {
-      id: `${did}#owner`,
-      type: 'Secp256k1VerificationKey',
-      controller: did,
-      ethereumAddress: document.owner,
-    },
   ];
 
   const authentication = [

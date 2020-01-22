@@ -17,7 +17,7 @@
 
 • **ECDSA**: = "ECDSA"
 
-Defined in did-resolver/src/models/operator.ts:14
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/operator.ts#L14)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **ED25519**: = "Ed25519"
 
-Defined in did-resolver/src/models/operator.ts:14
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/operator.ts#L14)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **RSA**: = "Rsa"
 
-Defined in did-resolver/src/models/operator.ts:14
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/operator.ts#L14)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **Secp256k1**: = "Secp256k1"
 
-Defined in did-resolver/src/models/operator.ts:14
+*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/operator.ts#L14)*

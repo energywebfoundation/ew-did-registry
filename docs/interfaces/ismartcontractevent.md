@@ -22,7 +22,7 @@
 
 • **name**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:85
+*Defined in [did-resolver/src/models/resolver.ts:85](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L85)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **signature**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:86
+*Defined in [did-resolver/src/models/resolver.ts:86](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L86)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **topic**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:87
+*Defined in [did-resolver/src/models/resolver.ts:87](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L87)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:97
+*Defined in [did-resolver/src/models/resolver.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L97)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **values**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:88
+*Defined in [did-resolver/src/models/resolver.ts:88](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L88)*
 
 #### Type declaration:
 

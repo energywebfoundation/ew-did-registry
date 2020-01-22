@@ -199,7 +199,7 @@ describe('[DID-OPERATOR]', function () {
     expect(result).to.be.true;
     document = await operator.read(did);
     expect(document.service).to.be.empty;
-    expect(document.publicKey.length).equal(1);
+    expect(document.publicKey).to.be.empty;
     expect(document.authentication.length).equal(1);
   });
 
