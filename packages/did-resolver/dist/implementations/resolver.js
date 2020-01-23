@@ -80,16 +80,17 @@ var Resolver = /** @class */ (function () {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, blockchainAddress, didDocument, error_1, didDocument;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var _a, address, _b, blockchainAddress, didDocument, error_1, didDocument;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
-                                    if (!constants_1.matchingPatternDid.test(did)) {
+                                    _a = did.split(':'), address = _a[2];
+                                    if (!constants_1.matchingPatternDid.test(did) || (address.length !== 42)) {
                                         reject(new Error('Invalid did provided'));
                                         return [2 /*return*/];
                                     }
                                     if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
-                                        _a = did.split(':'), blockchainAddress = _a[2];
+                                        _b = did.split(':'), blockchainAddress = _b[2];
                                         this._fetchedDocument = {
                                             owner: blockchainAddress,
                                             lastChangedBlock: new utils_1.BigNumber(0),
@@ -99,17 +100,17 @@ var Resolver = /** @class */ (function () {
                                             attributes: new Map(),
                                         };
                                     }
-                                    _b.label = 1;
+                                    _c.label = 1;
                                 case 1:
-                                    _b.trys.push([1, 3, , 4]);
+                                    _c.trys.push([1, 3, , 4]);
                                     return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings, this._contract, this._providerResolver)];
                                 case 2:
-                                    _b.sent();
+                                    _c.sent();
                                     didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
                                     resolve(didDocument);
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    error_1 = _b.sent();
+                                    error_1 = _c.sent();
                                     if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
                                         didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
                                         resolve(didDocument);
@@ -123,6 +124,12 @@ var Resolver = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Returns the Ethereum address of current identity owner
+     *
+     * @param { string } did - did of identity of interest
+     * @returns Promise<string>
+     */
     Resolver.prototype.identityOwner = function (did) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, id, owner, error_2;
@@ -145,6 +152,15 @@ var Resolver = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Performs the check if the delegate is valid for particular did
+     * Return boolean
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DelegateTypes } delegateType - type of delegate of interest
+     * @param { delegateDID } did - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     Resolver.prototype.validDelegate = function (identityDID, delegateType, delegateDID) {
         return __awaiter(this, void 0, void 0, function () {
             var bytesType, _a, identityAddress, _b, delegateAddress, valid, error_3;

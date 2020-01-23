@@ -85,10 +85,32 @@ var Operator = /** @class */ (function (_super) {
      * @returns Promise<boolean>
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Operator.prototype.create = function (did, context) {
+    Operator.prototype.create = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var did, document, pubKey, attribute, updateData, validity;
             return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.resolve(true)];
+                switch (_a.label) {
+                    case 0:
+                        did = "did:ewc:" + this._wallet.address;
+                        return [4 /*yield*/, this.read(did)];
+                    case 1:
+                        document = _a.sent();
+                        pubKey = document.publicKey.find(function (pk) { return pk.type === 'Secp256k1veriKey'; });
+                        if (pubKey)
+                            return [2 /*return*/, true];
+                        attribute = models_1.DIDAttribute.PublicKey;
+                        updateData = {
+                            algo: models_1.Algorithms.Secp256k1,
+                            type: models_1.PubKeyType.VerificationKey2018,
+                            encoding: models_1.Encoding.HEX,
+                            value: this._keys.publicKey,
+                        };
+                        validity = 10 * 60 * 1000;
+                        return [4 /*yield*/, this.update(did, attribute, updateData, validity)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                }
             });
         });
     };
@@ -124,7 +146,7 @@ var Operator = /** @class */ (function (_super) {
      * @returns Promise<boolean>
      */
     Operator.prototype.update = function (did, didAttribute, updateData, validity) {
-        if (validity === void 0) { validity = ethers_1.ethers.constants.MaxUint256; }
+        if (validity === void 0) { validity = Number.MAX_SAFE_INTEGER; }
         return __awaiter(this, void 0, void 0, function () {
             var registry, method;
             return __generator(this, function (_a) {
@@ -132,10 +154,22 @@ var Operator = /** @class */ (function (_super) {
                 method = didAttribute === PublicKey || didAttribute === ServicePoint
                     ? registry.setAttribute
                     : registry.addDelegate;
+                if (validity < 0) {
+                    throw new Error('Validity must be non negative value');
+                }
                 return [2 /*return*/, this._sendTransaction(method, did, didAttribute, updateData, validity)];
             });
         });
     };
+    /**
+     * Revokes the delegate from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { PubKeyType } delegateType - type of delegate of interest
+     * @param { string } delegateDID - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     Operator.prototype.revokeDelegate = function (identityDID, delegateType, delegateDID) {
         return __awaiter(this, void 0, void 0, function () {
             var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_1, error_1;
@@ -166,6 +200,15 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes the attribute from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DIDAttribute } attributeType - type of attribute to revoke
+     * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+     * @returns Promise<boolean>
+     */
     Operator.prototype.revokeAttribute = function (identityDID, attributeType, updateData) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, identityAddress, attribute, bytesType, bytesValue, tx, receipt, event_2, error_2;
@@ -197,6 +240,14 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Changes the owner of particular decentralised identity
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of current identity owner
+     * @param { string } newOwnerDid - did of new owner that will be set on success
+     * @returns Promise<boolean>
+     */
     Operator.prototype.changeOwner = function (identityDID, newOwnerDid) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, identityAddress, _b, delegateAddress, tx, receipt, event_3, error_3;
@@ -354,8 +405,8 @@ var Operator = /** @class */ (function (_super) {
                                         }
                                         value = pk["publicKey" + encoding[0].toUpperCase() + encoding.slice(1)];
                                         updateData = {
-                                            algo: models_1.Algorithms.ED25519,
-                                            type: match[1],
+                                            algo: match[1],
+                                            type: match[2],
                                             encoding: encoding,
                                             value: value,
                                         };
@@ -437,9 +488,6 @@ var Operator = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (validity && validity < 0) {
-                            throw new Error('Validity must be non negative value');
-                        }
                         identity = Operator._parseDid(did);
                         attributeName = this._composeAttributeName(didAttribute, updateData);
                         bytesOfAttribute = ethers_1.ethers.utils.formatBytes32String(attributeName);
@@ -469,7 +517,6 @@ var Operator = /** @class */ (function (_super) {
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
-                        console.error(e_1);
                         return [2 /*return*/, false];
                     case 5: return [2 /*return*/, true];
                 }

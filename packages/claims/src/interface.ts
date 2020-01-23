@@ -1,19 +1,17 @@
-import { IKeys } from '@ew-did-registry/keys';
-import { IResolver } from '@ew-did-registry/did-resolver';
 import {
-  IClaimData,
+  IClaimData, IClaims,
 } from './models';
 
 /**
  * IClaims interface is a factory to create Public, Private, and Proof Claims
  */
 export interface IClaimsFactory {
-  createClaimsUser(keys: IKeys, resolver: IResolver): IClaimsUser;
-  createClaimsIssuer(keys: IKeys, resolver: IResolver): IClaimsIssuer;
-  createClaimsVerifier(keys: IKeys, resolver: IResolver): IClaimsVerifier;
+  createClaimsUser(): IClaimsUser;
+  createClaimsIssuer(): IClaimsIssuer;
+  createClaimsVerifier(): IClaimsVerifier;
 }
 
-export interface IClaimsUser {
+export interface IClaimsUser extends IClaims {
   createPublicClaim(claimData: IClaimData): Promise<string>;
   createPrivateClaim(claimData: IClaimData, issuer: string):
     Promise<{ token: string; saltedFields: { [key: string]: string } }>;
@@ -25,12 +23,12 @@ export interface IClaimsUser {
   ): Promise<boolean>;
 }
 
-export interface IClaimsIssuer {
+export interface IClaimsIssuer extends IClaims {
   issuePublicClaim(token: string): Promise<string>;
   issuePrivateClaim(token: string): Promise<string>;
 }
 
-export interface IClaimsVerifier {
+export interface IClaimsVerifier extends IClaims {
   verifyPublicProof(token: string): Promise<boolean>;
   verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
 }

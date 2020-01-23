@@ -74,7 +74,8 @@ class Resolver implements IResolver {
     return new Promise(
       // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
-        if (!matchingPatternDid.test(did)) {
+        const [, , address] = did.split(':');
+        if (!matchingPatternDid.test(did) || (address.length !== 42)) {
           reject(new Error('Invalid did provided'));
           return;
         }

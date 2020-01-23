@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
 
 # Enumeration: Algorithms
 
@@ -15,9 +15,9 @@
 
 ###  ECDSA
 
-• **ECDSA**: = "ecdsa"
+• **ECDSA**: = "ECDSA"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L14)*
+Defined in did-resolver/src/models/operator.ts:14
 
 ___
 
@@ -25,20 +25,20 @@ ___
 
 • **ED25519**: = "Ed25519"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L14)*
+Defined in did-resolver/src/models/operator.ts:14
 
 ___
 
 ###  RSA
 
-• **RSA**: = "rsa"
+• **RSA**: = "Rsa"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L14)*
+Defined in did-resolver/src/models/operator.ts:14
 
 ___
 
 ###  Secp256k1
 
-• **Secp256k1**: = "secp256k1"
+• **Secp256k1**: = "Secp256k1"
 
-*Defined in [did-resolver/src/models/operator.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/did-resolver/src/models/operator.ts#L14)*
+Defined in did-resolver/src/models/operator.ts:14

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var ethers_1 = require("ethers");
 var did_document_1 = require("@ew-did-registry/did-document");
 var jwt_1 = require("@ew-did-registry/jwt");
 var did_1 = require("@ew-did-registry/did");
@@ -54,7 +55,8 @@ var Claims = /** @class */ (function () {
         this.resolver = resolver;
         this.keys = keys;
         this.jwt = new jwt_1.JWT(keys);
-        this.did = "did:" + did_1.Networks.Ethereum + ":0x" + keys.publicKey;
+        var address = new ethers_1.Wallet(keys.privateKey).address;
+        this.did = "did:" + did_1.Networks.Ethereum + ":" + address;
     }
     /**
      * Fetches DID document of the corresponding DID
@@ -105,20 +107,20 @@ var Claims = /** @class */ (function () {
      */
     Claims.prototype.verifySignature = function (token, signer) {
         return __awaiter(this, void 0, void 0, function () {
-            var issuerDocument, issuerPublicKey, error_1;
+            var signerDocument, issuerPublicKey, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getDocument(signer)];
                     case 1:
-                        issuerDocument = _a.sent();
-                        issuerPublicKey = issuerDocument
+                        signerDocument = _a.sent();
+                        issuerPublicKey = signerDocument
                             .publicKey
-                            .find(function (pk) { return pk.type === 'Secp256k1VerificationKey'; })
-                            .ethereumAddress;
+                            .find(function (pk) { return pk.type === 'Secp256k1veriKey'; })
+                            .publicKeyHex;
                         _a.label = 2;
                     case 2:
                         _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.jwt.verify(token, issuerPublicKey.slice(2))];
+                        return [4 /*yield*/, this.jwt.verify(token, issuerPublicKey)];
                     case 3:
                         _a.sent();
                         return [3 /*break*/, 5];

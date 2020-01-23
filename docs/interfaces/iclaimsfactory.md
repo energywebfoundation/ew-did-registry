@@ -24,16 +24,9 @@ IClaims interface is a factory to create Public, Private, and Proof Claims
 
 ###  createClaimsIssuer
 
-▸ **createClaimsIssuer**(`keys`: IKeys, `resolver`: IResolver): *[IClaimsIssuer](iclaimsissuer.md)*
+▸ **createClaimsIssuer**(): *[IClaimsIssuer](iclaimsissuer.md)*
 
-Defined in claims/src/interface.ts:12
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`resolver` | IResolver |
+Defined in claims/src/interface.ts:10
 
 **Returns:** *[IClaimsIssuer](iclaimsissuer.md)*
 
@@ -41,16 +34,9 @@ ___
 
 ###  createClaimsUser
 
-▸ **createClaimsUser**(`keys`: IKeys, `resolver`: IResolver): *[IClaimsUser](iclaimsuser.md)*
+▸ **createClaimsUser**(): *[IClaimsUser](iclaimsuser.md)*
 
-Defined in claims/src/interface.ts:11
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`resolver` | IResolver |
+Defined in claims/src/interface.ts:9
 
 **Returns:** *[IClaimsUser](iclaimsuser.md)*
 
@@ -58,15 +44,8 @@ ___
 
 ###  createClaimsVerifier
 
-▸ **createClaimsVerifier**(`keys`: IKeys, `resolver`: IResolver): *[IClaimsVerifier](iclaimsverifier.md)*
+▸ **createClaimsVerifier**(): *[IClaimsVerifier](iclaimsverifier.md)*
 
-Defined in claims/src/interface.ts:13
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`keys` | IKeys |
-`resolver` | IResolver |
+Defined in claims/src/interface.ts:11
 
 **Returns:** *[IClaimsVerifier](iclaimsverifier.md)*

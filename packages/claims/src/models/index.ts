@@ -1,4 +1,5 @@
 import { IKeys } from '@ew-did-registry/keys';
+import { IJWT } from '@ew-did-registry/jwt';
 
 export interface IClaim {
     did: string;
@@ -18,4 +19,5 @@ export interface IClaimData {
 export interface IClaims {
     did: string;
     keys: IKeys;
+    jwt: IJWT;
 }
