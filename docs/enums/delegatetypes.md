@@ -15,7 +15,7 @@
 
 • **authentication**: = "sigAuth"
 
-*Defined in [did-resolver/src/models/resolver.ts:122](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L122)*
+Defined in did-resolver/src/models/resolver.ts:122
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **verification**: = "veriKey"
 
-*Defined in [did-resolver/src/models/resolver.ts:123](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/models/resolver.ts#L123)*
+Defined in did-resolver/src/models/resolver.ts:123

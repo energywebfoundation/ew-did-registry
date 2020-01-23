@@ -30,7 +30,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/implementations/resolver.ts#L34)*
+Defined in did-resolver/src/implementations/resolver.ts:34
 
 Constructor
 
@@ -52,7 +52,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:121](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/implementations/resolver.ts#L121)*
+Defined in did-resolver/src/implementations/resolver.ts:121
 
 Returns the Ethereum address of current identity owner
 
@@ -74,7 +74,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/implementations/resolver.ts#L73)*
+Defined in did-resolver/src/implementations/resolver.ts:73
 
 Resolve DID Document for a given did
 
@@ -102,7 +102,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:141](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/did-resolver/src/implementations/resolver.ts#L141)*
+Defined in did-resolver/src/implementations/resolver.ts:141
 
 Performs the check if the delegate is valid for particular did
 Return boolean

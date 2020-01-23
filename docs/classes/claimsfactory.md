@@ -32,7 +32,7 @@ An implementation of claims factory
 
 \+ **new ClaimsFactory**(`keys`: IKeys, `resolver`: IResolver): *[ClaimsFactory](claimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/claimsFactory/claimsFactory.ts#L17)*
+Defined in claims/src/claimsFactory/claimsFactory.ts:17
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ Name | Type |
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/claimsFactory/claimsFactory.ts#L38)*
+Defined in claims/src/claimsFactory/claimsFactory.ts:38
 
 Contstructs instance of ClaimsIssuer
 
@@ -65,7 +65,7 @@ ___
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/claimsFactory/claimsFactory.ts#L29)*
+Defined in claims/src/claimsFactory/claimsFactory.ts:29
 
 Constructs instance of ClaimsUser
 
@@ -79,7 +79,7 @@ ___
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/claimsFactory/claimsFactory.ts#L47)*
+Defined in claims/src/claimsFactory/claimsFactory.ts:47
 
 Constructs instance of ClaimsUser
 

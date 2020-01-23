@@ -1,14 +1,14 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IResolver } from '@ew-did-registry/did-resolver';
 import { IDID, Networks } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentFactory } from '@ew-did-registry/did-document';
+import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
 import { IDIDRegistry } from './interface';
 
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Networks | string, IKeys> ;
+  keys: Map<Networks | string, IKeys>;
 
   documentFactory: IDIDDocumentFactory;
 
@@ -18,7 +18,7 @@ class DIDRegistry implements IDIDRegistry {
 
   constructor(keys: IKeys, did: string, resolver: IResolver) {
     const [, network, id] = did.split(':');
-    this.keys = new Map<Networks|string, IKeys>();
+    this.keys = new Map<Networks | string, IKeys>();
     this.keys.set(network, keys);
     this.documentFactory = new DIDDocumentFactory(did);
     this.claims = new ClaimsFactory(keys, resolver);
@@ -30,6 +30,13 @@ class DIDRegistry implements IDIDRegistry {
     this.documentFactory = new DIDDocumentFactory(this.did.get(network));
     this.claims = new ClaimsFactory(relevantKeys, resolver);
     this.resolver = resolver;
+  }
+
+  async read(did: string): Promise<IDIDDocumentLite> {
+    const temporaryFactory = new DIDDocumentFactory(did);
+    const didDocumentLite = temporaryFactory.createLite(this.resolver, did);
+    await didDocumentLite.read(did);
+    return didDocumentLite;
   }
 }
 

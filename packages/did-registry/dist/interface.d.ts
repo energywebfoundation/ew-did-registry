@@ -1,5 +1,5 @@
 import { IDID, Networks } from '@ew-did-registry/did';
-import { IDIDDocumentFactory } from '@ew-did-registry/did-document';
+import { IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { IClaimsFactory } from '@ew-did-registry/claims';
 import { IResolver } from '@ew-did-registry/did-resolver';
 import { IKeys } from '@ew-did-registry/keys';
@@ -28,4 +28,5 @@ export interface IDIDRegistry {
      */
     resolver: IResolver;
     changeResolver(resolver: IResolver, network: Networks | string): void;
+    read(did: string): Promise<IDIDDocumentLite>;
 }

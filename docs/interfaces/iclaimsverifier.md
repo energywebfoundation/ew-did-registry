@@ -33,7 +33,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L20)*
+Defined in claims/src/models/index.ts:20
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L22)*
+Defined in claims/src/models/index.ts:22
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/models/index.ts#L21)*
+Defined in claims/src/models/index.ts:21
 
 ## Methods
 
@@ -61,7 +61,7 @@ ___
 
 ▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
 
-*Defined in [claims/src/interface.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/interface.ts#L33)*
+Defined in claims/src/interface.ts:33
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **verifyPublicProof**(`token`: string): *Promise‹boolean›*
 
-*Defined in [claims/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/44f0f6f/packages/claims/src/interface.ts#L32)*
+Defined in claims/src/interface.ts:32
 
 **Parameters:**
 
