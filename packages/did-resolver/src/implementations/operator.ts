@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import { Contract, ethers, Wallet } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
-import { BigNumber } from 'ethers/utils';
 import { IOperator } from '../interface';
 import {
   Algorithms,
@@ -67,8 +66,21 @@ export class Operator extends Resolver implements IOperator {
    * @returns Promise<boolean>
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(did: string, context: string): Promise<boolean> {
-    return Promise.resolve(true);
+  async create(): Promise<boolean> {
+    const did = `did:ewc:${this._wallet.address}`;
+    const document = await this.read(did);
+    const pubKey = document.publicKey.find((pk) => pk.type === 'Secp256k1veriKey');
+    if (pubKey) return true;
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.Secp256k1,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: this._keys.publicKey,
+    };
+    const validity = 10 * 60 * 1000;
+    await this.update(did, attribute, updateData, validity);
+    return true;
   }
 
   /**
@@ -106,12 +118,15 @@ export class Operator extends Resolver implements IOperator {
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
-    validity: number | BigNumber = ethers.constants.MaxUint256,
+    validity: number = Number.MAX_SAFE_INTEGER,
   ): Promise<boolean> {
     const registry = this._didRegistry;
     const method = didAttribute === PublicKey || didAttribute === ServicePoint
       ? registry.setAttribute
       : registry.addDelegate;
+    if (validity < 0) {
+      throw new Error('Validity must be non negative value');
+    }
     return this._sendTransaction(method, did, didAttribute, updateData, validity);
   }
 
@@ -297,8 +312,8 @@ export class Operator extends Resolver implements IOperator {
       }
       const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
       const updateData: IUpdateData = {
-        algo: Algorithms.ED25519,
-        type: match[1] as PubKeyType,
+        algo: match[1] as Algorithms,
+        type: match[2] as PubKeyType,
         encoding,
         value,
       };
@@ -343,14 +358,11 @@ export class Operator extends Resolver implements IOperator {
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
-    validity?: number | BigNumber,
+    validity?: number,
     overrides?: {
       nonce?: number;
     },
   ): Promise<boolean> {
-    if (validity && validity < 0) {
-      throw new Error('Validity must be non negative value');
-    }
     const identity = Operator._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
@@ -375,7 +387,6 @@ export class Operator extends Resolver implements IOperator {
       );
       if (!event) return false;
     } catch (e) {
-      console.error(e);
       return false;
     }
     return true;

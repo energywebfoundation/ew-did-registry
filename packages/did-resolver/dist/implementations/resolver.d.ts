@@ -40,7 +40,22 @@ declare class Resolver implements IResolver {
      * @returns {Promise<IDIDDocument>}
      */
     read(did: string): Promise<IDIDDocument>;
+    /**
+     * Returns the Ethereum address of current identity owner
+     *
+     * @param { string } did - did of identity of interest
+     * @returns Promise<string>
+     */
     identityOwner(did: string): Promise<string>;
+    /**
+     * Performs the check if the delegate is valid for particular did
+     * Return boolean
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DelegateTypes } delegateType - type of delegate of interest
+     * @param { delegateDID } did - did of delegate of interest
+     * @returns Promise<boolean>
+     */
     validDelegate(identityDID: string, delegateType: DelegateTypes, delegateDID: string): Promise<boolean>;
 }
 export default Resolver;

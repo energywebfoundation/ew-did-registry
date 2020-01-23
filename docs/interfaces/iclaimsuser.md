@@ -4,13 +4,21 @@
 
 ## Hierarchy
 
-* **IClaimsUser**
+* [IClaims](iclaims.md)
+
+  ↳ **IClaimsUser**
 
 ## Implemented by
 
 * [ClaimsUser](../classes/claimsuser.md)
 
 ## Index
+
+### Properties
+
+* [did](iclaimsuser.md#did)
+* [jwt](iclaimsuser.md#jwt)
+* [keys](iclaimsuser.md#keys)
 
 ### Methods
 
@@ -20,13 +28,43 @@
 * [verifyPrivateClaim](iclaimsuser.md#verifyprivateclaim)
 * [verifyPublicClaim](iclaimsuser.md#verifypublicclaim)
 
+## Properties
+
+###  did
+
+• **did**: *string*
+
+*Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
+
+Defined in claims/src/models/index.ts:20
+
+___
+
+###  jwt
+
+• **jwt**: *IJWT*
+
+*Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
+
+Defined in claims/src/models/index.ts:22
+
+___
+
+###  keys
+
+• **keys**: *IKeys*
+
+*Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
+
+Defined in claims/src/models/index.ts:21
+
 ## Methods
 
 ###  createPrivateClaim
 
 ▸ **createPrivateClaim**(`claimData`: [IClaimData](iclaimdata.md), `issuer`: string): *Promise‹object›*
 
-Defined in claims/src/interface.ts:18
+Defined in claims/src/interface.ts:16
 
 **Parameters:**
 
@@ -43,7 +81,7 @@ ___
 
 ▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: object): *Promise‹string›*
 
-Defined in claims/src/interface.ts:20
+Defined in claims/src/interface.ts:18
 
 **Parameters:**
 
@@ -60,7 +98,7 @@ ___
 
 ▸ **createPublicClaim**(`claimData`: [IClaimData](iclaimdata.md)): *Promise‹string›*
 
-Defined in claims/src/interface.ts:17
+Defined in claims/src/interface.ts:15
 
 **Parameters:**
 
@@ -76,7 +114,7 @@ ___
 
 ▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:22
+Defined in claims/src/interface.ts:20
 
 **Parameters:**
 
@@ -93,7 +131,7 @@ ___
 
 ▸ **verifyPublicClaim**(`token`: string): *Promise‹boolean›*
 
-Defined in claims/src/interface.ts:21
+Defined in claims/src/interface.ts:19
 
 **Parameters:**
 

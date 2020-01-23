@@ -33,7 +33,7 @@ export interface IOperator extends IResolver {
      * @param {string} context
      * @returns {boolean}
      */
-    create(did: string, context: string): Promise<boolean>;
+    create(): Promise<boolean>;
     /**
      * Updates relevant attribute of the DID Document
      * @param {string} did

@@ -49,6 +49,8 @@ Name | Type |
 
 ▸ **createClaimsIssuer**(): *[IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
+*Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
+
 Defined in claims/src/claimsFactory/claimsFactory.ts:38
 
 Contstructs instance of ClaimsIssuer
@@ -61,6 +63,8 @@ ___
 
 ▸ **createClaimsUser**(): *[IClaimsUser](../interfaces/iclaimsuser.md)*
 
+*Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
+
 Defined in claims/src/claimsFactory/claimsFactory.ts:29
 
 Constructs instance of ClaimsUser
@@ -72,6 +76,8 @@ ___
 ###  createClaimsVerifier
 
 ▸ **createClaimsVerifier**(): *[IClaimsVerifier](../interfaces/iclaimsverifier.md)*
+
+*Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
 Defined in claims/src/claimsFactory/claimsFactory.ts:47
 

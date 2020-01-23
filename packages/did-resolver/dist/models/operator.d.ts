@@ -15,9 +15,9 @@ export declare enum Encoding {
 }
 export declare enum Algorithms {
     ED25519 = "Ed25519",
-    RSA = "rsa",
-    ECDSA = "ecdsa",
-    Secp256k1 = "secp256k1"
+    RSA = "Rsa",
+    ECDSA = "ECDSA",
+    Secp256k1 = "Secp256k1"
 }
 /**
  * Data used to update DID Document. To update the public key you need to set its value in value

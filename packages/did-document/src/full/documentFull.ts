@@ -26,8 +26,8 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * @param { string } context
    * @return { boolean }
    */
-  async create(context?: string): Promise<boolean> {
-    return this._operator.create(this.did, context);
+  async create(): Promise<boolean> {
+    return this._operator.create();
   }
 
   /**

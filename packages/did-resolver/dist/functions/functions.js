@@ -232,14 +232,7 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings, contrac
 exports.wrapDidDocument = function (did, document, context) {
     if (context === void 0) { context = 'https://www.w3.org/ns/did/v1'; }
     var now = new utils_1.BigNumber(Math.floor(new Date().getTime() / 1000));
-    var publicKey = [
-        {
-            id: did + "#owner",
-            type: 'Secp256k1VerificationKey',
-            controller: did,
-            ethereumAddress: document.owner,
-        },
-    ];
+    var publicKey = [];
     var authentication = [
         {
             type: 'owner',

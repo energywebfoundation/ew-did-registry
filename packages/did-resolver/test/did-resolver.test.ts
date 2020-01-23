@@ -18,8 +18,13 @@ describe('[RESOLVER PACKAGE]', function() {
   });
 
   it('invalid did should throw an error', async () => {
-    const invalidDid = 'did:ewc1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
-    resolver.read(invalidDid).catch((error) => {
+    const invalidDidFirst = 'did:ewc1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
+    resolver.read(invalidDidFirst).catch((error) => {
+      expect(error.toString()).to.equal('Error: Invalid did provided');
+    });
+
+    const invalidDidSecond = 'did:ewc1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3944352749528734062daagdsgasdbv';
+    resolver.read(invalidDidSecond).catch((error) => {
       expect(error.toString()).to.equal('Error: Invalid did provided');
     });
   });

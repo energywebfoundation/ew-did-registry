@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Keys](keys.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Keys](keys.md)
 
 # Class: Keys
 
@@ -35,7 +35,7 @@
 
 \+ **new Keys**(`__namedParameters`: object): *[Keys](keys.md)*
 
-*Defined in [keys/src/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L23)*
+Defined in keys/src/index.ts:23
 
 **Parameters:**
 
@@ -56,7 +56,7 @@ Name | Type | Description |
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[privateKey](../interfaces/ikeys.md#privatekey)*
 
-*Defined in [keys/src/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L18)*
+Defined in keys/src/index.ts:18
 
 Private Key of secp256k1
 
@@ -68,7 +68,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[publicKey](../interfaces/ikeys.md#publickey)*
 
-*Defined in [keys/src/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L23)*
+Defined in keys/src/index.ts:23
 
 Public Key of secp256k1
 
@@ -80,7 +80,7 @@ Public Key of secp256k1
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:68](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L68)*
+Defined in keys/src/index.ts:68
 
 Decrypt the encrypted data that is given in hex format
 
@@ -113,7 +113,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L93)*
+Defined in keys/src/index.ts:93
 
 Encrypt the data that is given in utf-8 string
 
@@ -145,7 +145,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:124](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L124)*
+Defined in keys/src/index.ts:124
 
 Sign the data
 
@@ -176,7 +176,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:158](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L158)*
+Defined in keys/src/index.ts:158
 
 Verify the signature
 
@@ -206,7 +206,7 @@ ___
 
 ▸ **generateKeyPair**(): *[KeyPair](../interfaces/keypair.md)*
 
-*Defined in [keys/src/index.ts:185](https://github.com/energywebfoundation/ew-did-registry/blob/beea45f/packages/keys/src/index.ts#L185)*
+Defined in keys/src/index.ts:185
 
 Generates new key pair for secp256k1 algorithm.
 

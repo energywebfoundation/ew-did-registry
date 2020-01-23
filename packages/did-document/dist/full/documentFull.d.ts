@@ -18,7 +18,7 @@ declare class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFul
      * @param { string } context
      * @return { boolean }
      */
-    create(context?: string): Promise<boolean>;
+    create(): Promise<boolean>;
     /**
      * Deactivates DID document
      *

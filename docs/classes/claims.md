@@ -42,7 +42,7 @@ Base class for extending by other claims classes
 
 \+ **new Claims**(`keys`: IKeys, `resolver`: IResolver): *[Claims](claims.md)*
 
-Defined in claims/src/claims/claims.ts:28
+Defined in claims/src/claims/claims.ts:29
 
 **`constructor`** 
 
@@ -63,7 +63,7 @@ Name | Type | Description |
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[did](../interfaces/iclaims.md#did)*
 
-Defined in claims/src/claims/claims.ts:28
+Defined in claims/src/claims/claims.ts:29
 
 ___
 
@@ -71,7 +71,9 @@ ___
 
 • **jwt**: *IJWT*
 
-Defined in claims/src/claims/claims.ts:21
+*Implementation of [IClaims](../interfaces/iclaims.md).[jwt](../interfaces/iclaims.md#jwt)*
+
+Defined in claims/src/claims/claims.ts:22
 
 jwt stores the JWT to manage web tokens
 
@@ -83,7 +85,7 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
 
-Defined in claims/src/claims/claims.ts:26
+Defined in claims/src/claims/claims.ts:27
 
 Key pair represents the implementation of key management interface
 
@@ -93,7 +95,7 @@ Key pair represents the implementation of key management interface
 
 ▸ **getDocument**(`did`: string): *Promise‹IDIDDocument›*
 
-Defined in claims/src/claims/claims.ts:59
+Defined in claims/src/claims/claims.ts:61
 
 Fetches DID document of the corresponding DID
 
@@ -122,7 +124,7 @@ ___
 
 ▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
 
-Defined in claims/src/claims/claims.ts:81
+Defined in claims/src/claims/claims.ts:83
 
 Verifies signers signature on received token
 
