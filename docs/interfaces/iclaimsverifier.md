@@ -33,7 +33,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-Defined in claims/src/models/index.ts:20
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-Defined in claims/src/models/index.ts:22
+Defined in claims/src/models/index.ts:23
 
 ___
 
@@ -53,13 +53,13 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-Defined in claims/src/models/index.ts:21
+Defined in claims/src/models/index.ts:22
 
 ## Methods
 
 ###  verifyPrivateProof
 
-▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
+▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹void›*
 
 Defined in claims/src/interface.ts:33
 
@@ -70,13 +70,13 @@ Name | Type |
 `proofToken` | string |
 `privateToken` | string |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*
 
 ___
 
 ###  verifyPublicProof
 
-▸ **verifyPublicProof**(`token`: string): *Promise‹boolean›*
+▸ **verifyPublicProof**(`token`: string): *Promise‹void›*
 
 Defined in claims/src/interface.ts:32
 
@@ -86,4 +86,4 @@ Name | Type |
 ------ | ------ |
 `token` | string |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*

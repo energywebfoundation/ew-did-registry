@@ -59,6 +59,8 @@ var eciesjs_1 = require("eciesjs");
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 var sjcl_complete_1 = __importDefault(require("sjcl-complete"));
+var did_document_1 = require("@ew-did-registry/did-document");
+var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var claims_1 = require("../claims");
 var bn = sjcl_complete_1.default.bn, hash = sjcl_complete_1.default.hash, bitArray = sjcl_complete_1.default.bitArray;
 var ClaimsUser = /** @class */ (function (_super) {
@@ -87,18 +89,18 @@ var ClaimsUser = /** @class */ (function (_super) {
      * };
      * const token = await claims.createPublicClaim(claimData);
      * ```
-     * @param { IClaimData } claimData
+     * @param { IClaimData } publicData
      *
      * @returns { Promise<string> }
      */
-    ClaimsUser.prototype.createPublicClaim = function (claimData) {
+    ClaimsUser.prototype.createPublicClaim = function (publicData) {
         return __awaiter(this, void 0, void 0, function () {
             var claim;
             return __generator(this, function (_a) {
                 claim = {
                     did: this.did,
                     signer: this.did,
-                    claimData: claimData,
+                    publicData: publicData,
                 };
                 return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
             });
@@ -121,12 +123,12 @@ var ClaimsUser = /** @class */ (function (_super) {
      * };
      * const claim = await claims.createPrivateClaim(claimData, issuer);
      * ```
-     * @param { IClaimData } claimData object with claim subject private data
+     * @param { IClaimData } publicData object with claim subject private data
      * @param { string } issuer
      *
      * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */
-    ClaimsUser.prototype.createPrivateClaim = function (claimData, issuer) {
+    ClaimsUser.prototype.createPrivateClaim = function (publicData, privateData, issuer) {
         return __awaiter(this, void 0, void 0, function () {
             var saltedFields, claim, issuerDocument, issuerPK, token;
             return __generator(this, function (_a) {
@@ -136,7 +138,8 @@ var ClaimsUser = /** @class */ (function (_super) {
                         claim = {
                             did: this.did,
                             signer: this.did,
-                            claimData: {},
+                            publicData: publicData,
+                            privateData: {},
                         };
                         return [4 /*yield*/, this.getDocument(issuer)];
                     case 1:
@@ -145,12 +148,12 @@ var ClaimsUser = /** @class */ (function (_super) {
                             .publicKey
                             .find(function (pk) { return pk.type === 'Secp256k1veriKey'; })
                             .publicKeyHex;
-                        Object.entries(claimData).forEach(function (_a) {
+                        Object.entries(privateData).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
                             var salt = crypto_1.default.randomBytes(32).toString('base64');
                             var saltedValue = value + salt;
                             var encryptedValue = eciesjs_1.encrypt(issuerPK, Buffer.from(saltedValue));
-                            claim.claimData[key] = encryptedValue;
+                            claim.privateData[key] = encryptedValue;
                             saltedFields[key] = saltedValue;
                         });
                         return [4 /*yield*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
@@ -192,7 +195,8 @@ var ClaimsUser = /** @class */ (function (_super) {
                     did: this.did,
                     signer: this.did,
                     claimUrl: claimUrl,
-                    claimData: {},
+                    publicData: {},
+                    privateData: {},
                 };
                 Object.entries(saltedFields).forEach(function (_a) {
                     var key = _a[0], field = _a[1];
@@ -206,7 +210,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                         .concat(PK.toBits())));
                     var ca = c.mul(a).mod(_this.q);
                     var s = ca.add(k).mod(_this.q);
-                    claim.claimData[key] = { h: h.toBits(), s: s.toBits() };
+                    claim.privateData[key] = { h: h.toBits(), s: s.toBits() };
                 });
                 return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
             });
@@ -229,10 +233,27 @@ var ClaimsUser = /** @class */ (function (_super) {
      */
     ClaimsUser.prototype.verifyPublicClaim = function (token) {
         return __awaiter(this, void 0, void 0, function () {
-            var claim;
+            var claim, document;
             return __generator(this, function (_a) {
-                claim = this.jwt.decode(token);
-                return [2 /*return*/, this.verifySignature(token, claim.signer)];
+                switch (_a.label) {
+                    case 0:
+                        claim = this.jwt.decode(token);
+                        return [4 /*yield*/, this.verifySignature(token, claim.signer)];
+                    case 1:
+                        if (!(_a.sent())) {
+                            throw new Error('Incorrect signature');
+                        }
+                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
+                        return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
+                                algo: did_resolver_1.Algorithms.Secp256k1,
+                                type: did_resolver_1.PubKeyType.VerificationKey2018,
+                                encoding: did_resolver_1.Encoding.HEX,
+                                delegate: claim.signer,
+                            }, 1 * 60 * 1000)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -253,26 +274,35 @@ var ClaimsUser = /** @class */ (function (_super) {
      */
     ClaimsUser.prototype.verifyPrivateClaim = function (token, saltedFields) {
         return __awaiter(this, void 0, void 0, function () {
-            var claim, _i, _a, _b, key, value, fieldHash, PK;
+            var claim, _i, _a, _b, key, value, fieldHash, PK, document;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         claim = this.jwt.decode(token);
                         return [4 /*yield*/, this.verifySignature(token, claim.signer)];
                     case 1:
-                        if (!(_c.sent()))
-                            return [2 /*return*/, false];
+                        if (!(_c.sent())) {
+                            throw new Error('Invalid signature');
+                        }
                         // eslint-disable-next-line no-restricted-syntax
                         for (_i = 0, _a = Object.entries(saltedFields); _i < _a.length; _i++) {
                             _b = _a[_i], key = _b[0], value = _b[1];
                             fieldHash = crypto_1.default.createHash('sha256').update(value).digest('hex');
                             PK = this.g.mult(new bn(fieldHash));
-                            if (!bitArray.equal(claim.claimData[key], PK.toBits())) {
-                                return [2 /*return*/, false];
+                            if (!bitArray.equal(claim.privateData[key], PK.toBits())) {
+                                throw new Error('Issued claim data doesn\'t match user data');
                             }
                         }
-                        // TODO: add signer to delegates
-                        return [2 /*return*/, true];
+                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
+                        return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
+                                algo: did_resolver_1.Algorithms.Secp256k1,
+                                type: did_resolver_1.PubKeyType.VerificationKey2018,
+                                encoding: did_resolver_1.Encoding.HEX,
+                                delegate: claim.signer,
+                            }, 1 * 60 * 1000)];
+                    case 2:
+                        _c.sent();
+                        return [2 /*return*/];
                 }
             });
         });

@@ -23,11 +23,11 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * };
      * const token = await claims.createPublicClaim(claimData);
      * ```
-     * @param { IClaimData } claimData
+     * @param { IClaimData } publicData
      *
      * @returns { Promise<string> }
      */
-    createPublicClaim(claimData: IClaimData): Promise<string>;
+    createPublicClaim(publicData: IClaimData): Promise<string>;
     /**
      * Used by the claim subject to create token with subject encrypted
      * private data which afterwards will be sent to the issuer. Salted private
@@ -45,12 +45,12 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * };
      * const claim = await claims.createPrivateClaim(claimData, issuer);
      * ```
-     * @param { IClaimData } claimData object with claim subject private data
+     * @param { IClaimData } publicData object with claim subject private data
      * @param { string } issuer
      *
      * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */
-    createPrivateClaim(claimData: IClaimData, issuer: string): Promise<{
+    createPrivateClaim(publicData: IClaimData, privateData: IClaimData, issuer: string): Promise<{
         token: string;
         saltedFields: {
             [key: string]: string;
@@ -96,7 +96,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * @param { string } token - issued token
      * @returns {Promise<boolean>}
      */
-    verifyPublicClaim(token: string): Promise<boolean>;
+    verifyPublicClaim(token: string): Promise<void>;
     /**
      * Verifies token with private data received from issuer
      *
@@ -114,5 +114,5 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      */
     verifyPrivateClaim(token: string, saltedFields: {
         [key: string]: string;
-    }): Promise<boolean>;
+    }): Promise<void>;
 }

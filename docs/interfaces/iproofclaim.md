@@ -16,32 +16,19 @@
 
 ### Properties
 
-* [claimData](iproofclaim.md#claimdata)
 * [claimUrl](iproofclaim.md#claimurl)
 * [did](iproofclaim.md#did)
+* [privateData](iproofclaim.md#optional-privatedata)
+* [publicData](iproofclaim.md#publicdata)
 * [signer](iproofclaim.md#signer)
 
 ## Properties
-
-###  claimData
-
-• **claimData**: *object*
-
-*Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
-
-Defined in claims/src/models/index.ts:7
-
-#### Type declaration:
-
-* \[ **key**: *string*\]: string | object
-
-___
 
 ###  claimUrl
 
 • **claimUrl**: *string*
 
-Defined in claims/src/models/index.ts:12
+Defined in claims/src/models/index.ts:13
 
 ___
 
@@ -52,6 +39,26 @@ ___
 *Inherited from [IClaim](iclaim.md).[did](iclaim.md#did)*
 
 Defined in claims/src/models/index.ts:5
+
+___
+
+### `Optional` privateData
+
+• **privateData**? : *[IClaimData](iclaimdata.md)*
+
+*Inherited from [IClaim](iclaim.md).[privateData](iclaim.md#optional-privatedata)*
+
+Defined in claims/src/models/index.ts:8
+
+___
+
+###  publicData
+
+• **publicData**: *[IClaimData](iclaimdata.md)*
+
+*Inherited from [IClaim](iclaim.md).[publicData](iclaim.md#publicdata)*
+
+Defined in claims/src/models/index.ts:7
 
 ___
 

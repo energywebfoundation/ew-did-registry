@@ -36,7 +36,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-Defined in claims/src/models/index.ts:20
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-Defined in claims/src/models/index.ts:22
+Defined in claims/src/models/index.ts:23
 
 ___
 
@@ -56,13 +56,13 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-Defined in claims/src/models/index.ts:21
+Defined in claims/src/models/index.ts:22
 
 ## Methods
 
 ###  createPrivateClaim
 
-▸ **createPrivateClaim**(`claimData`: [IClaimData](iclaimdata.md), `issuer`: string): *Promise‹object›*
+▸ **createPrivateClaim**(`publicData`: [IClaimData](iclaimdata.md), `privateData`: [IClaimData](iclaimdata.md), `issuer`: string): *Promise‹object›*
 
 Defined in claims/src/interface.ts:16
 
@@ -70,7 +70,8 @@ Defined in claims/src/interface.ts:16
 
 Name | Type |
 ------ | ------ |
-`claimData` | [IClaimData](iclaimdata.md) |
+`publicData` | [IClaimData](iclaimdata.md) |
+`privateData` | [IClaimData](iclaimdata.md) |
 `issuer` | string |
 
 **Returns:** *Promise‹object›*
@@ -96,7 +97,7 @@ ___
 
 ###  createPublicClaim
 
-▸ **createPublicClaim**(`claimData`: [IClaimData](iclaimdata.md)): *Promise‹string›*
+▸ **createPublicClaim**(`publicData`: [IClaimData](iclaimdata.md)): *Promise‹string›*
 
 Defined in claims/src/interface.ts:15
 
@@ -104,7 +105,7 @@ Defined in claims/src/interface.ts:15
 
 Name | Type |
 ------ | ------ |
-`claimData` | [IClaimData](iclaimdata.md) |
+`publicData` | [IClaimData](iclaimdata.md) |
 
 **Returns:** *Promise‹string›*
 
@@ -112,7 +113,7 @@ ___
 
 ###  verifyPrivateClaim
 
-▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object): *Promise‹boolean›*
+▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object): *Promise‹void›*
 
 Defined in claims/src/interface.ts:20
 
@@ -123,13 +124,13 @@ Name | Type |
 `privateToken` | string |
 `saltedFields` | object |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*
 
 ___
 
 ###  verifyPublicClaim
 
-▸ **verifyPublicClaim**(`token`: string): *Promise‹boolean›*
+▸ **verifyPublicClaim**(`token`: string): *Promise‹void›*
 
 Defined in claims/src/interface.ts:19
 
@@ -139,4 +140,4 @@ Name | Type |
 ------ | ------ |
 `token` | string |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*

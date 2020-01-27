@@ -33,7 +33,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-Defined in claims/src/models/index.ts:20
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-Defined in claims/src/models/index.ts:22
+Defined in claims/src/models/index.ts:23
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-Defined in claims/src/models/index.ts:21
+Defined in claims/src/models/index.ts:22
 
 ## Methods
 

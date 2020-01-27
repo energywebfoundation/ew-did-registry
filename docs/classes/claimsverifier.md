@@ -128,11 +128,11 @@ ___
 
 ###  verifyPrivateProof
 
-▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹boolean›*
+▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹void›*
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:50
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:55
 
 Checks issuer signature on issued token and user signature on proof token
 and verifies that proof and private data mathches to each other
@@ -154,7 +154,7 @@ Name | Type | Description |
 `proofToken` | string | contains proof data |
 `privateToken` | string | contains private data |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*
 
 whether the proof was succesfull
 
@@ -162,11 +162,11 @@ ___
 
 ###  verifyPublicProof
 
-▸ **verifyPublicProof**(`token`: string): *Promise‹boolean›*
+▸ **verifyPublicProof**(`token`: string): *Promise‹void›*
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:26
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:27
 
 Checks issuer signature on token
 
@@ -186,7 +186,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | containing proof data |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹void›*
 
 whether the proof was succesfull
 

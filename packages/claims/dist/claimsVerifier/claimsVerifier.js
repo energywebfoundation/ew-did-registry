@@ -55,6 +55,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 var sjcl_complete_1 = __importDefault(require("sjcl-complete"));
+var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var claims_1 = require("../claims");
 var bn = sjcl_complete_1.default.bn, hash = sjcl_complete_1.default.hash;
 var ClaimsVerifier = /** @class */ (function (_super) {
@@ -75,21 +76,25 @@ var ClaimsVerifier = /** @class */ (function (_super) {
      * const verified = claims.verifyPublicProof(issuedToken);
      * ```
      * @param { string } token containing proof data
-     * @returns { boolean } whether the proof was succesfull
+     * @returns { void } whether the proof was succesfull
      */
     ClaimsVerifier.prototype.verifyPublicProof = function (token) {
         return __awaiter(this, void 0, void 0, function () {
-            var claim;
+            var claim, resolver;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         claim = this.jwt.decode(token);
                         return [4 /*yield*/, this.verifySignature(token, claim.signer)];
                     case 1:
-                        if (!(_a.sent()))
-                            return [2 /*return*/, false];
-                        // TODO check signer is delegate of did
-                        return [2 /*return*/, true];
+                        if (!(_a.sent())) {
+                            throw new Error('Invalid signatue');
+                        }
+                        resolver = new did_resolver_1.Resolver();
+                        if (!resolver.validDelegate(claim.did, did_resolver_1.DelegateTypes.verification, claim.signer)) {
+                            throw new Error('Issuer isn\'t a use\'r delegate');
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
@@ -113,7 +118,7 @@ var ClaimsVerifier = /** @class */ (function (_super) {
     */
     ClaimsVerifier.prototype.verifyPrivateProof = function (proofToken, privateToken) {
         return __awaiter(this, void 0, void 0, function () {
-            var curve, g, proofClaim, privateClaim, _i, _a, _b, key, value, PK, _c, h, s, c, left, right;
+            var curve, g, proofClaim, resolver, privateClaim, _i, _a, _b, key, value, PK, _c, h, s, c, left, right;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -122,18 +127,24 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                         proofClaim = this.jwt.decode(proofToken);
                         return [4 /*yield*/, this.verifySignature(proofToken, proofClaim.signer)];
                     case 1:
-                        if (!(_d.sent()))
-                            return [2 /*return*/, false];
+                        if (!(_d.sent())) {
+                            throw new Error('Invalid signature');
+                        }
+                        resolver = new did_resolver_1.Resolver();
                         privateClaim = this.jwt.decode(privateToken);
                         return [4 /*yield*/, this.verifySignature(privateToken, privateClaim.signer)];
                     case 2:
-                        if (!(_d.sent()))
-                            return [2 /*return*/, false];
+                        if (!(_d.sent())) {
+                            throw new Error('Invalid signature');
+                        }
+                        if (!resolver.validDelegate(privateClaim.did, did_resolver_1.DelegateTypes.verification, privateClaim.signer)) {
+                            throw new Error('Issuer isn\'t a use\'r delegate');
+                        }
                         // eslint-disable-next-line no-restricted-syntax
-                        for (_i = 0, _a = Object.entries(privateClaim.claimData); _i < _a.length; _i++) {
+                        for (_i = 0, _a = Object.entries(privateClaim.privateData); _i < _a.length; _i++) {
                             _b = _a[_i], key = _b[0], value = _b[1];
                             PK = curve.fromBits(value);
-                            _c = proofClaim.claimData[key], h = _c.h, s = _c.s;
+                            _c = proofClaim.privateData[key], h = _c.h, s = _c.s;
                             h = curve.fromBits(h);
                             s = bn.fromBits(s);
                             c = hash.sha256.hash(g.x.toBits()
@@ -143,10 +154,10 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                             left = g.mult(s);
                             right = PK.mult(c).toJac().add(h).toAffine();
                             if (!sjcl_complete_1.default.bitArray.equal(left.toBits(), right.toBits())) {
-                                return [2 /*return*/, false];
+                                throw new Error('User didn\'t prove the knowledge of the private data');
                             }
                         }
-                        return [2 /*return*/, true];
+                        return [2 /*return*/];
                 }
             });
         });

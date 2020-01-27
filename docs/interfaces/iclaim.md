@@ -16,29 +16,34 @@
 
 ### Properties
 
-* [claimData](iclaim.md#claimdata)
 * [did](iclaim.md#did)
+* [privateData](iclaim.md#optional-privatedata)
+* [publicData](iclaim.md#publicdata)
 * [signer](iclaim.md#signer)
 
 ## Properties
-
-###  claimData
-
-• **claimData**: *object*
-
-Defined in claims/src/models/index.ts:7
-
-#### Type declaration:
-
-* \[ **key**: *string*\]: string | object
-
-___
 
 ###  did
 
 • **did**: *string*
 
 Defined in claims/src/models/index.ts:5
+
+___
+
+### `Optional` privateData
+
+• **privateData**? : *[IClaimData](iclaimdata.md)*
+
+Defined in claims/src/models/index.ts:8
+
+___
+
+###  publicData
+
+• **publicData**: *[IClaimData](iclaimdata.md)*
+
+Defined in claims/src/models/index.ts:7
 
 ___
 
