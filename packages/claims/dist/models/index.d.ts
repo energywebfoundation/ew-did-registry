@@ -3,9 +3,8 @@ import { IJWT } from '@ew-did-registry/jwt';
 export interface IClaim {
     did: string;
     signer: string;
-    claimData: {
-        [key: string]: string | object;
-    };
+    publicData: IClaimData;
+    privateData?: IClaimData;
     [key: string]: string | object;
 }
 export interface IProofClaim extends IClaim {

@@ -33,7 +33,7 @@
 
 • **did**: *string*
 
-Defined in claims/src/models/index.ts:20
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **jwt**: *IJWT*
 
-Defined in claims/src/models/index.ts:22
+Defined in claims/src/models/index.ts:23
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **keys**: *IKeys*
 
-Defined in claims/src/models/index.ts:21
+Defined in claims/src/models/index.ts:22

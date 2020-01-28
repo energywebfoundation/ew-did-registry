@@ -14,9 +14,10 @@ export declare class ClaimsVerifier extends Claims implements IClaimsVerifier {
      * const verified = claims.verifyPublicProof(issuedToken);
      * ```
      * @param { string } token containing proof data
-     * @returns { boolean } whether the proof was succesfull
+     * @returns { Promise<void> } whether the proof was succesfull
+     * @throws if the proof failed
      */
-    verifyPublicProof(token: string): Promise<boolean>;
+    verifyPublicProof(token: string): Promise<void>;
     /**
     * Checks issuer signature on issued token and user signature on proof token
     * and verifies that proof and private data mathches to each other
@@ -32,7 +33,8 @@ export declare class ClaimsVerifier extends Claims implements IClaimsVerifier {
     * ```
     * @param { string } proofToken contains proof data
     * @param { string } privateToken contains private data
-    * @returns { boolean } whether the proof was succesfull
+    * @returns { Promise<void> } whether the proof was succesfull
+    * @throws if the proof failed
     */
-    verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
+    verifyPrivateProof(proofToken: string, privateToken: string): Promise<void>;
 }

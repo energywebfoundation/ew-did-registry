@@ -67,7 +67,6 @@ var DIDDocumentFull = /** @class */ (function (_super) {
      *  const document = new DIDDocumentFull(did, operator);
      *  await document.create();
      * ```
-     * @param { string } context
      * @return { boolean }
      */
     DIDDocumentFull.prototype.create = function () {
@@ -121,9 +120,9 @@ var DIDDocumentFull = /** @class */ (function (_super) {
      *  validity,
      *  );
      * ```
-     * @param attribute
-     * @param data
-     * @param validity
+     * @param { DIDAttribute } attribute
+     * @param { IUpdateData } data
+     * @param { number } validity - time in milliseconds during the attribujte will be valid
      * @return { boolean }
      */
     DIDDocumentFull.prototype.update = function (attribute, data, validity) {

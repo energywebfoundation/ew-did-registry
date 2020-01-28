@@ -53,14 +53,14 @@ function changeVersion() {
   const { version } = lernaJSON;
   const jsonPattern = /"version": "[.0-9\-a-z]*"/;
   const glob = [
-      './package.json',
+    './package.json',
   ];
 
   return src(glob, {
-      base: './'
+    base: './'
   })
-      .pipe(replace(jsonPattern, `"version": "${version}"`))
-      .pipe(dest('./'));
+    .pipe(replace(jsonPattern, `"version": "${version}"`))
+    .pipe(dest('./'));
 }
 
 function bundling(pckg) {
@@ -71,15 +71,16 @@ function bundling(pckg) {
     insertGlobalVars: false,
     detectGlobals: true,
     bundleExternal: true,
-    entries: [ path.join(pckg.src, 'src/index.ts') ],
+    entries: [path.join(pckg.src, 'src/index.ts')],
     cache: {},
-    packageCache: {}
+    packageCache: {},
+    standalone: pckg.expose,
   })
     .plugin(tsify, { project: pckg.src })
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(streamify(babel({
       compact: true,
       presets: [
@@ -113,7 +114,7 @@ function buildDocs() {
       module: 'commonjs',
       target: 'es5',
       includeDeclarations: false,
-      lib: [ 'lib.esnext.full.d.ts' ],
+      lib: ['lib.esnext.full.d.ts'],
 
       // TypeDoc options (see typedoc docs)
       out: './docs',
