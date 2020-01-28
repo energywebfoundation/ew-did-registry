@@ -166,7 +166,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPublicToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<boolean>}
+   * @returns {Promise<void>}
+   * @throws if the proof failed
    */
   async verifyPublicClaim(token: string): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
@@ -199,7 +200,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPrivateToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<boolean>}
+   * @returns {Promise<void>}
+   * @throw if the proof failed
    */
   async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;

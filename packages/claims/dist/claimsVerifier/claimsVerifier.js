@@ -137,7 +137,8 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                         if (!(_d.sent())) {
                             throw new Error('Invalid signature');
                         }
-                        if (!resolver.validDelegate(privateClaim.did, did_resolver_1.DelegateTypes.verification, privateClaim.signer)) {
+                        if (!resolver
+                            .validDelegate(privateClaim.did, did_resolver_1.DelegateTypes.verification, privateClaim.signer)) {
                             throw new Error('Issuer isn\'t a use\'r delegate');
                         }
                         // eslint-disable-next-line no-restricted-syntax

@@ -275,7 +275,7 @@ ___
 
 ▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object): *Promise‹void›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:204
+Defined in claims/src/claimsUser/claimsUser.ts:206
 
 Verifies token with private data received from issuer
 
@@ -288,6 +288,8 @@ const user = new Keys();
 const claims = new UserClaims(user);
 const verified = await claims.verifyPrivateToken(issuedToken);
 ```
+
+**`throw`** if the proof failed
 
 **Parameters:**
 
@@ -306,7 +308,7 @@ ___
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-Defined in claims/src/claimsUser/claimsUser.ts:171
+Defined in claims/src/claimsUser/claimsUser.ts:172
 
 Verifies token received from issuer
 
@@ -319,6 +321,8 @@ const user = new Keys();
 const claims = new UserClaims(user);
 const verified = await claims.verifyPublicToken(issuedToken);
 ```
+
+**`throws`** if the proof failed
 
 **Parameters:**
 

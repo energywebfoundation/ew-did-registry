@@ -22,7 +22,8 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
    * const verified = claims.verifyPublicProof(issuedToken);
    * ```
    * @param { string } token containing proof data
-   * @returns { void } whether the proof was succesfull
+   * @returns { Promise<void> } whether the proof was succesfull
+   * @throws if the proof failed
    */
   async verifyPublicProof(token: string): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
@@ -50,7 +51,8 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   * ```
   * @param { string } proofToken contains proof data
   * @param { string } privateToken contains private data
-  * @returns { boolean } whether the proof was succesfull
+  * @returns { Promise<void> } whether the proof was succesfull
+  * @throws if the proof failed
   */
   async verifyPrivateProof(proofToken: string, privateToken: string): Promise<void> {
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;

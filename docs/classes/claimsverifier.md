@@ -132,7 +132,7 @@ ___
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:55
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:57
 
 Checks issuer signature on issued token and user signature on proof token
 and verifies that proof and private data mathches to each other
@@ -146,6 +146,8 @@ const keys = new Keys();
 const claims = new ClaimsVerifier(verifier);
 const verified = claims.verifyPrivateProof(proofToken, privateToken);
 ```
+
+**`throws`** if the proof failed
 
 **Parameters:**
 
@@ -166,7 +168,7 @@ ___
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:27
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:28
 
 Checks issuer signature on token
 
@@ -179,6 +181,8 @@ const keys = new Keys();
 const claims = new ClaimsVerifier(verifier);
 const verified = claims.verifyPublicProof(issuedToken);
 ```
+
+**`throws`** if the proof failed
 
 **Parameters:**
 
