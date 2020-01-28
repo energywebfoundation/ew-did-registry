@@ -105,7 +105,18 @@ Defined in did-registry/src/index.ts:17
 
 *Implementation of [IDIDRegistry](../interfaces/ididregistry.md)*
 
-Defined in did-registry/src/index.ts:28
+Defined in did-registry/src/index.ts:43
+
+Configures registry for use with another network
+
+**`example`** 
+```typescript
+import DIDRegistry from '@ew-did-registry/did-regsitry';
+import { Networks } from '@ew-did-registry/did';
+
+const reg = new DIDRegistry(keys, ethDid, ethResolver);
+reg.changeResolver(new Resolver(ewcSettings), Networks.EnergyWeb);
+```
 
 **Parameters:**
 
@@ -124,7 +135,16 @@ ___
 
 *Implementation of [IDIDRegistry](../interfaces/ididregistry.md)*
 
-Defined in did-registry/src/index.ts:35
+Defined in did-registry/src/index.ts:63
+
+Returns DID document of the corresponding did
+
+**`example`** 
+```typescript
+import DIDRegistry from '@ew-did-registry/did-registry';
+
+const document = await reg.read(did);
+```
 
 **Parameters:**
 

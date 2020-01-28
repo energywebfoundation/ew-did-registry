@@ -243,6 +243,7 @@ export const abi1056 = [
 
 export const defaultProvider = {
   uriOrInfo: 'http://volta-rpc.energyweb.org/',
+  // uriOrInfo: 'http://localhost:8545', // to reduce testing time
   type: ProviderTypes.HTTP,
 };
 

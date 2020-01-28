@@ -5,6 +5,10 @@ import { encrypt } from 'eciesjs';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
+import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import {
+  Operator, DIDAttribute, Algorithms, PubKeyType, Encoding,
+} from '@ew-did-registry/did-resolver';
 import {
   IClaimData, IClaim, IProofClaim,
 } from '../models';
@@ -38,15 +42,15 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * };
    * const token = await claims.createPublicClaim(claimData);
    * ```
-   * @param { IClaimData } claimData
+   * @param { IClaimData } publicData
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(claimData: IClaimData): Promise<string> {
+  async createPublicClaim(publicData: IClaimData): Promise<string> {
     const claim: IClaim = {
       did: this.did,
       signer: this.did,
-      claimData,
+      publicData,
     };
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }
@@ -68,31 +72,33 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * };
    * const claim = await claims.createPrivateClaim(claimData, issuer);
    * ```
-   * @param { IClaimData } claimData object with claim subject private data
+   * @param { IClaimData } publicData object with claim subject private data
    * @param { string } issuer
    *
    * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
    */
   async createPrivateClaim(
-    claimData: IClaimData,
+    publicData: IClaimData,
+    privateData: IClaimData,
     issuer: string,
   ): Promise<{ token: string; saltedFields: { [key: string]: string } }> {
     const saltedFields: { [key: string]: string } = {};
     const claim: IClaim = {
       did: this.did,
       signer: this.did,
-      claimData: {},
+      publicData,
+      privateData: {},
     };
     const issuerDocument = await this.getDocument(issuer);
     const issuerPK = issuerDocument
       .publicKey
       .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
       .publicKeyHex;
-    Object.entries(claimData).forEach(([key, value]) => {
+    Object.entries(privateData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
       const encryptedValue = encrypt(issuerPK, Buffer.from(saltedValue));
-      claim.claimData[key] = encryptedValue;
+      claim.privateData[key] = encryptedValue;
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
@@ -126,7 +132,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       did: this.did,
       signer: this.did,
       claimUrl,
-      claimData: {},
+      publicData: {},
+      privateData: {},
     };
     Object.entries(saltedFields).forEach(([key, field]) => {
       const k = bn.random(this.q, this.paranoia);
@@ -141,7 +148,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       ));
       const ca = c.mul(a).mod(this.q);
       const s = ca.add(k).mod(this.q);
-      claim.claimData[key] = { h: h.toBits(), s: s.toBits() };
+      claim.privateData[key] = { h: h.toBits(), s: s.toBits() };
     });
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }
@@ -159,12 +166,28 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPublicToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<boolean>}
+   * @returns {Promise<void>}
+   * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string): Promise<boolean> {
+  async verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
-    return this.verifySignature(token, claim.signer);
-    // TODO: add signer to delegates
+    if (!(await this.verifySignature(token, claim.signer))) {
+      throw new Error('Incorrect signature');
+    }
+    if (JSON.stringify(claim.publicData) !== JSON.stringify(verifyData)) {
+      throw new Error('Token payload doesn\'t match user data');
+    }
+    const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
+    await document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.Secp256k1,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: claim.signer,
+      },
+      1 * 60 * 1000,
+    );
   }
 
   /**
@@ -180,20 +203,35 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPrivateToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<boolean>}
+   * @returns {Promise<void>}
+   * @throw if the proof failed
    */
-  async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }): Promise<boolean> {
+  async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }, publicData: IClaimData): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
-    if (!(await this.verifySignature(token, claim.signer))) return false;
+    if (!(await this.verifySignature(token, claim.signer))) {
+      throw new Error('Invalid signature');
+    }
+    if (JSON.stringify(claim.publicData) !== JSON.stringify(publicData)) {
+      throw new Error('Token payload doesn\'t match user data');
+    }
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(saltedFields)) {
       const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
       const PK = this.g.mult(new bn(fieldHash));
-      if (!bitArray.equal(claim.claimData[key], PK.toBits())) {
-        return false;
+      if (!bitArray.equal(claim.privateData[key], PK.toBits())) {
+        throw new Error('Issued claim data doesn\'t match user data');
       }
     }
-    // TODO: add signer to delegates
-    return true;
+    const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
+    await document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.Secp256k1,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: claim.signer,
+      },
+      1 * 60 * 1000,
+    );
   }
 }

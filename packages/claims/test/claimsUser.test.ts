@@ -33,25 +33,25 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   });
 
   it('createPublicClaim should create token with claim data', async () => {
-    const claimData: IClaimData = {
+    const publicData: IClaimData = {
       name: 'John',
     };
-    const token = await userClaims.createPublicClaim(claimData);
+    const token = await userClaims.createPublicClaim(publicData);
     const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true });
     claim.should.deep.equal({
       did: userDdid,
       signer: userDdid,
-      claimData,
+      publicData,
     });
   });
 
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
-    const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
+    const { token, saltedFields } = await userClaims.createPrivateClaim({}, { secret }, issuerDid);
     const claim: IClaim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
     const decryped = decrypt(
       issuer.privateKey,
-      Buffer.from((claim.claimData.secret as { data: Buffer }).data),
+      Buffer.from((claim.privateData.secret as { data: Buffer }).data),
     );
     decryped.toString().should.equal(saltedFields.secret);
   });
@@ -62,7 +62,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const token = await userClaims.createProofClaim(claimUrl, saltedFields);
     const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
-    claim.should.have.nested.property('claimData.secret.h').which.instanceOf(Array);
-    claim.should.have.nested.property('claimData.secret.s').which.instanceOf(Array);
+    claim.should.have.nested.property('privateData.secret.h').which.instanceOf(Array);
+    claim.should.have.nested.property('privateData.secret.s').which.instanceOf(Array);
   });
 });

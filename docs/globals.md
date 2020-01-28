@@ -30,7 +30,6 @@
 * [JWT](classes/jwt.md)
 * [Keys](classes/keys.md)
 * [Operator](classes/operator.md)
-* [Registry](classes/registry.md)
 * [Resolver](classes/resolver.md)
 
 ### Interfaces
@@ -77,7 +76,6 @@
 * [bitArray](globals.md#bitarray)
 * [bn](globals.md#bn)
 * [delegatePubKeyIdPattern](globals.md#const-delegatepubkeyidpattern)
-* [document](globals.md#const-document)
 * [ec](globals.md#const-ec)
 * [ethAddrPattern](globals.md#const-ethaddrpattern)
 * [expect](globals.md#expect)
@@ -394,7 +392,7 @@ ___
 
 • **bitArray**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:14
+Defined in claims/src/claimsUser/claimsUser.ts:18
 
 ___
 
@@ -402,11 +400,11 @@ ___
 
 • **bn**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:14
+Defined in claims/src/claimsUser/claimsUser.ts:18
 
 Defined in claims/src/claimsIssuer/claimsIssuer.ts:11
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:9
 
 ___
 
@@ -414,15 +412,7 @@ ___
 
 • **delegatePubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#delegate-(sigAuth|veriKey)-(${ethAddrPattern})$`
 
-Defined in did-resolver/src/constants/constants.ts:258
-
-___
-
-### `Const` document
-
-• **document**: *any* =  this.didDocument.read(token.did)
-
-Defined in claims/registry.ts:20
+Defined in did-resolver/src/constants/constants.ts:259
 
 ___
 
@@ -438,7 +428,7 @@ ___
 
 • **ethAddrPattern**: *"0x[A-Fa-f0-9]{40}"* = "0x[A-Fa-f0-9]{40}"
 
-Defined in did-resolver/src/constants/constants.ts:257
+Defined in did-resolver/src/constants/constants.ts:258
 
 ___
 
@@ -462,9 +452,9 @@ ___
 
 • **hash**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:14
+Defined in claims/src/claimsUser/claimsUser.ts:18
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:8
+Defined in claims/src/claimsVerifier/claimsVerifier.ts:9
 
 ___
 
@@ -488,7 +478,7 @@ ___
 
 • **matchingPatternDid**: *RegExp‹›* =  /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/
 
-Defined in did-resolver/src/constants/constants.ts:256
+Defined in did-resolver/src/constants/constants.ts:257
 
 ___
 
@@ -496,7 +486,7 @@ ___
 
 • **matchingPatternDidEvents**: *RegExp‹›* =  /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/
 
-Defined in did-resolver/src/constants/constants.ts:255
+Defined in did-resolver/src/constants/constants.ts:256
 
 ___
 
@@ -512,7 +502,7 @@ ___
 
 • **pubKeyIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#key-([A-Za-z0-9]*)(sigAuth|veriKey)`
 
-Defined in did-resolver/src/constants/constants.ts:259
+Defined in did-resolver/src/constants/constants.ts:260
 
 ___
 
@@ -520,7 +510,7 @@ ___
 
 • **serviceIdPattern**: *string* =  `^did:ewc:${ethAddrPattern}#service-([A-Za-z0-9]+)-([A-Za-z0-9]+)$`
 
-Defined in did-resolver/src/constants/constants.ts:260
+Defined in did-resolver/src/constants/constants.ts:261
 
 ___
 
@@ -720,7 +710,7 @@ Defined in did-resolver/src/constants/constants.ts:244
 
 • **type**: *[ProviderTypes](enums/providertypes.md)* =  ProviderTypes.HTTP
 
-Defined in did-resolver/src/constants/constants.ts:246
+Defined in did-resolver/src/constants/constants.ts:247
 
 ###  uriOrInfo
 
@@ -734,25 +724,25 @@ ___
 
 ### ▪ **defaultResolverSettings**: *object*
 
-Defined in did-resolver/src/constants/constants.ts:249
+Defined in did-resolver/src/constants/constants.ts:250
 
 ###  abi
 
 • **abi**: *object | object[]* =  abi1056
 
-Defined in did-resolver/src/constants/constants.ts:251
+Defined in did-resolver/src/constants/constants.ts:252
 
 ###  address
 
 • **address**: *string* =  address1056
 
-Defined in did-resolver/src/constants/constants.ts:252
+Defined in did-resolver/src/constants/constants.ts:253
 
 ###  provider
 
 • **provider**: *object* =  defaultProvider
 
-Defined in did-resolver/src/constants/constants.ts:250
+Defined in did-resolver/src/constants/constants.ts:251
 
 #### Type declaration:
 
