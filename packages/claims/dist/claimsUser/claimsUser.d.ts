@@ -116,5 +116,5 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      */
     verifyPrivateClaim(token: string, saltedFields: {
         [key: string]: string;
-    }): Promise<void>;
+    }, publicData: IClaimData): Promise<void>;
 }

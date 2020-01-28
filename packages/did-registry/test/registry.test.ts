@@ -53,7 +53,7 @@ describe('[REGISTRY PACKAGE]', function () {
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePublicClaim(token);
     // send to Verifier/Owner
-    const verified = await userClaims.verifyPublicClaim(issuedToken, publicData);
+    await userClaims.verifyPublicClaim(issuedToken, publicData);
     const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
@@ -86,7 +86,7 @@ describe('[REGISTRY PACKAGE]', function () {
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePrivateClaim(token);
     // send to Verifier/Owner
-    let verified = await userClaims.verifyPrivateClaim(issuedToken, saltedFields);
+    await userClaims.verifyPrivateClaim(issuedToken, saltedFields, {});
     const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
@@ -108,7 +108,7 @@ describe('[REGISTRY PACKAGE]', function () {
     const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
     expect(document.publicKey.find((pk) => pk.id === expectedPkId)).to.not.undefined;
     const proofToken = await userClaims.createProofClaim('http://claim.url', saltedFields);
-    verified = await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
+    await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
     document = userLigthDoc.didDocument;
   });
 });

@@ -140,11 +140,11 @@ Defined in claims/src/claimsUser/claimsUser.ts:23
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-Defined in claims/src/claimsUser/claimsUser.ts:80
+Defined in claims/src/claimsUser/claimsUser.ts:84
 
 Used by the claim subject to create token with subject encrypted
-private data which afterwards will be sent to the issuer. Salted private
-fields will be saved in the `saltedFields` argument
+private data and public data which afterwards will be sent to the issuer.
+Salted private fields will be saved in the `saltedFields` argument
 
 **`example`** 
 ```typescript
@@ -153,18 +153,21 @@ import { Keys } from '@ew-did-registry/keys';
 
 const user = new Keys();
 const claims = new ClaimsUser(user);
-const claimData = {
-    secret: '123'
+const privateData = {
+    licence: 'abc123'
 };
-const claim = await claims.createPrivateClaim(claimData, issuer);
+const publicData = {
+    name: 'John'
+};
+const claim = await claims.createPrivateClaim(publicData, privateData, issuer);
 ```
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`publicData` | [IClaimData](../interfaces/iclaimdata.md) | object with claim subject private data |
-`privateData` | [IClaimData](../interfaces/iclaimdata.md) | - |
+`publicData` | [IClaimData](../interfaces/iclaimdata.md) | subject public data |
+`privateData` | [IClaimData](../interfaces/iclaimdata.md) | subject private data |
 `issuer` | string |   |
 
 **Returns:** *Promise‹object›*
@@ -177,7 +180,7 @@ ___
 
 ▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: object): *Promise‹string›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:130
+Defined in claims/src/claimsUser/claimsUser.ts:134
 
 Used by the claim subject based on the salted values calculated
 when creating private claim
@@ -273,9 +276,9 @@ ___
 
 ###  verifyPrivateClaim
 
-▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object): *Promise‹void›*
+▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object, `publicData`: [IClaimData](../interfaces/iclaimdata.md)): *Promise‹void›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:209
+Defined in claims/src/claimsUser/claimsUser.ts:213
 
 Verifies token with private data received from issuer
 
@@ -297,6 +300,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | issued token |
 `saltedFields` | object | - |
+`publicData` | [IClaimData](../interfaces/iclaimdata.md) | - |
 
 **Returns:** *Promise‹void›*
 
@@ -308,7 +312,7 @@ ___
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-Defined in claims/src/claimsUser/claimsUser.ts:172
+Defined in claims/src/claimsUser/claimsUser.ts:176
 
 Verifies token received from issuer
 

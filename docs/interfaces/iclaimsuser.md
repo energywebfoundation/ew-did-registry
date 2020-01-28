@@ -113,7 +113,7 @@ ___
 
 ###  verifyPrivateClaim
 
-▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object): *Promise‹void›*
+▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object, `publicData`: [IClaimData](iclaimdata.md)): *Promise‹void›*
 
 Defined in claims/src/interface.ts:20
 
@@ -123,6 +123,7 @@ Name | Type |
 ------ | ------ |
 `privateToken` | string |
 `saltedFields` | object |
+`publicData` | [IClaimData](iclaimdata.md) |
 
 **Returns:** *Promise‹void›*
 

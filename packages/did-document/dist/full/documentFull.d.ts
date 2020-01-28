@@ -1,5 +1,4 @@
 import { DIDAttribute, IOperator, IUpdateData } from '@ew-did-registry/did-resolver';
-import { BigNumber } from 'ethers/utils';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 declare class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
@@ -15,7 +14,6 @@ declare class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFul
      *  const document = new DIDDocumentFull(did, operator);
      *  await document.create();
      * ```
-     * @param { string } context
      * @return { boolean }
      */
     create(): Promise<boolean>;
@@ -57,11 +55,11 @@ declare class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFul
      *  validity,
      *  );
      * ```
-     * @param attribute
-     * @param data
-     * @param validity
+     * @param { DIDAttribute } attribute
+     * @param { IUpdateData } data
+     * @param { number } validity - time in milliseconds during the attribujte will be valid
      * @return { boolean }
      */
-    update(attribute: DIDAttribute, data: IUpdateData, validity: number | BigNumber): Promise<boolean>;
+    update(attribute: DIDAttribute, data: IUpdateData, validity: number): Promise<boolean>;
 }
 export default DIDDocumentFull;

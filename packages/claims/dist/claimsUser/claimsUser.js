@@ -277,7 +277,7 @@ var ClaimsUser = /** @class */ (function (_super) {
      * @returns {Promise<void>}
      * @throw if the proof failed
      */
-    ClaimsUser.prototype.verifyPrivateClaim = function (token, saltedFields) {
+    ClaimsUser.prototype.verifyPrivateClaim = function (token, saltedFields, publicData) {
         return __awaiter(this, void 0, void 0, function () {
             var claim, _i, _a, _b, key, value, fieldHash, PK, document;
             return __generator(this, function (_c) {
@@ -288,6 +288,9 @@ var ClaimsUser = /** @class */ (function (_super) {
                     case 1:
                         if (!(_c.sent())) {
                             throw new Error('Invalid signature');
+                        }
+                        if (JSON.stringify(claim.publicData) !== JSON.stringify(publicData)) {
+                            throw new Error('Token payload doesn\'t match user data');
                         }
                         // eslint-disable-next-line no-restricted-syntax
                         for (_i = 0, _a = Object.entries(saltedFields); _i < _a.length; _i++) {

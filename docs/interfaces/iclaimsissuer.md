@@ -61,7 +61,7 @@ Defined in claims/src/models/index.ts:22
 
 ▸ **issuePrivateClaim**(`token`: string): *Promise‹string›*
 
-Defined in claims/src/interface.ts:28
+Defined in claims/src/interface.ts:29
 
 **Parameters:**
 
@@ -77,7 +77,7 @@ ___
 
 ▸ **issuePublicClaim**(`token`: string): *Promise‹string›*
 
-Defined in claims/src/interface.ts:27
+Defined in claims/src/interface.ts:28
 
 **Parameters:**
 

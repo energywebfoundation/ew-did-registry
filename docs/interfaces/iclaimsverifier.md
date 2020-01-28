@@ -61,7 +61,7 @@ Defined in claims/src/models/index.ts:22
 
 ▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹void›*
 
-Defined in claims/src/interface.ts:33
+Defined in claims/src/interface.ts:34
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **verifyPublicProof**(`token`: string): *Promise‹void›*
 
-Defined in claims/src/interface.ts:32
+Defined in claims/src/interface.ts:33
 
 **Parameters:**
 

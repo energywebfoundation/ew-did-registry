@@ -206,10 +206,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throw if the proof failed
    */
-  async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }): Promise<void> {
+  async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }, publicData: IClaimData): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signature');
+    }
+    if (JSON.stringify(claim.publicData) !== JSON.stringify(publicData)) {
+      throw new Error('Token payload doesn\'t match user data');
     }
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(saltedFields)) {

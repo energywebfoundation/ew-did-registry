@@ -57,12 +57,12 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side
-    const verified = await claimsUser.verifyPrivateClaim(issuedToken, saltedFields);
+    await claimsUser.verifyPrivateClaim(issuedToken, saltedFields, {});
     // expect(verified).to.be.true;
     const claimUrl = 'http://test.service.com';
     const proofToken = await claimsUser.createProofClaim(claimUrl, saltedFields);
     // Verifier side
-    const prooved = await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
+    await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
@@ -72,8 +72,8 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     // Issuer side
     const issuedToken = await claimsIssuer.issuePublicClaim(token);
     // Application/User side
-    const verified = await claimsUser.verifyPublicClaim(issuedToken, publicData);
+    await claimsUser.verifyPublicClaim(issuedToken, publicData);
     // Verifier side
-    const prooved = await claimsVerifier.verifyPublicProof(issuedToken);
+    await claimsVerifier.verifyPublicProof(issuedToken);
   });
 });
