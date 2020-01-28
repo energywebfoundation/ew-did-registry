@@ -63,20 +63,17 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     const proofToken = await claimsUser.createProofClaim(claimUrl, saltedFields);
     // Verifier side
     const prooved = await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
-    // expect(prooved).to.be.true;
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
-    const claimData: IClaimData = { public: '123' };
-    const token = await claimsUser.createPublicClaim(claimData);
+    const publicData: IClaimData = { public: '123' };
+    const token = await claimsUser.createPublicClaim(publicData);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePublicClaim(token);
     // Application/User side
-    const verified = await claimsUser.verifyPublicClaim(issuedToken);
-    // expect(verified).to.be.true;
+    const verified = await claimsUser.verifyPublicClaim(issuedToken, publicData);
     // Verifier side
     const prooved = await claimsVerifier.verifyPublicProof(issuedToken);
-    // expect(prooved).to.be.true;
   });
 });

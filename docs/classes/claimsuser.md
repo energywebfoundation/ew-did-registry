@@ -275,7 +275,7 @@ ___
 
 ▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object): *Promise‹void›*
 
-Defined in claims/src/claimsUser/claimsUser.ts:206
+Defined in claims/src/claimsUser/claimsUser.ts:209
 
 Verifies token with private data received from issuer
 
@@ -304,7 +304,7 @@ ___
 
 ###  verifyPublicClaim
 
-▸ **verifyPublicClaim**(`token`: string): *Promise‹void›*
+▸ **verifyPublicClaim**(`token`: string, `verifyData`: [IClaimData](../interfaces/iclaimdata.md)): *Promise‹void›*
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
@@ -329,6 +329,7 @@ const verified = await claims.verifyPublicToken(issuedToken);
 Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | issued token |
+`verifyData` | [IClaimData](../interfaces/iclaimdata.md) | - |
 
 **Returns:** *Promise‹void›*
 

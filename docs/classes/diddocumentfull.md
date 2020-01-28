@@ -39,7 +39,7 @@
 
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
-Defined in did-document/src/full/documentFull.ts:9
+Defined in did-document/src/full/documentFull.ts:8
 
 **Parameters:**
 
@@ -84,7 +84,7 @@ Fetched DID Document
 
 ▸ **create**(): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:29
+Defined in did-document/src/full/documentFull.ts:27
 
 Creates new empty DID document
 
@@ -106,7 +106,7 @@ ___
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:47
+Defined in did-document/src/full/documentFull.ts:45
 
 Deactivates DID document
 
@@ -163,9 +163,9 @@ ___
 
 ###  update
 
-▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
+▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:79
+Defined in did-document/src/full/documentFull.ts:77
 
 Updates attribute on the DID document
 
@@ -192,10 +192,10 @@ await document.update(
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`attribute` | DIDAttribute |
-`data` | IUpdateData |
-`validity` | number &#124; BigNumber |
+Name | Type | Description |
+------ | ------ | ------ |
+`attribute` | DIDAttribute | - |
+`data` | IUpdateData | - |
+`validity` | number | time in milliseconds during the attribujte will be valid |
 
 **Returns:** *Promise‹boolean›*

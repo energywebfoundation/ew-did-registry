@@ -229,9 +229,10 @@ var ClaimsUser = /** @class */ (function (_super) {
      * const verified = await claims.verifyPublicToken(issuedToken);
      * ```
      * @param { string } token - issued token
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
+     * @throws if the proof failed
      */
-    ClaimsUser.prototype.verifyPublicClaim = function (token) {
+    ClaimsUser.prototype.verifyPublicClaim = function (token, verifyData) {
         return __awaiter(this, void 0, void 0, function () {
             var claim, document;
             return __generator(this, function (_a) {
@@ -242,6 +243,9 @@ var ClaimsUser = /** @class */ (function (_super) {
                     case 1:
                         if (!(_a.sent())) {
                             throw new Error('Incorrect signature');
+                        }
+                        if (JSON.stringify(claim.publicData) !== JSON.stringify(verifyData)) {
+                            throw new Error('Token payload doesn\'t match user data');
                         }
                         document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
                         return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
@@ -270,7 +274,8 @@ var ClaimsUser = /** @class */ (function (_super) {
      * const verified = await claims.verifyPrivateToken(issuedToken);
      * ```
      * @param { string } token - issued token
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
+     * @throw if the proof failed
      */
     ClaimsUser.prototype.verifyPrivateClaim = function (token, saltedFields) {
         return __awaiter(this, void 0, void 0, function () {

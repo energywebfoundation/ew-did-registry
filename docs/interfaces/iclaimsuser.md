@@ -130,7 +130,7 @@ ___
 
 ###  verifyPublicClaim
 
-▸ **verifyPublicClaim**(`token`: string): *Promise‹void›*
+▸ **verifyPublicClaim**(`token`: string, `verifyData`: [IClaimData](iclaimdata.md)): *Promise‹void›*
 
 Defined in claims/src/interface.ts:19
 
@@ -139,5 +139,6 @@ Defined in claims/src/interface.ts:19
 Name | Type |
 ------ | ------ |
 `token` | string |
+`verifyData` | [IClaimData](iclaimdata.md) |
 
 **Returns:** *Promise‹void›*

@@ -18,7 +18,7 @@ export interface IClaimsUser extends IClaims {
     createProofClaim(claimUrl: string, saltedFields: {
         [key: string]: string;
     }): Promise<string>;
-    verifyPublicClaim(token: string): Promise<void>;
+    verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void>;
     verifyPrivateClaim(privateToken: string, saltedFields: {
         [key: string]: string;
     }): Promise<void>;

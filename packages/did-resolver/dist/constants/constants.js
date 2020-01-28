@@ -241,8 +241,8 @@ exports.abi1056 = [
     },
 ];
 exports.defaultProvider = {
-    uriOrInfo: 'http://volta-rpc.energyweb.org/',
-    // uriOrInfo: 'http://localhost:8545', // to reduce testing time
+    // uriOrInfo: 'http://volta-rpc.energyweb.org/',
+    uriOrInfo: 'http://localhost:8545',
     type: models_1.ProviderTypes.HTTP,
 };
 exports.defaultResolverSettings = {

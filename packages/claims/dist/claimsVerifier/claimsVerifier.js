@@ -76,7 +76,8 @@ var ClaimsVerifier = /** @class */ (function (_super) {
      * const verified = claims.verifyPublicProof(issuedToken);
      * ```
      * @param { string } token containing proof data
-     * @returns { void } whether the proof was succesfull
+     * @returns { Promise<void> } whether the proof was succesfull
+     * @throws if the proof failed
      */
     ClaimsVerifier.prototype.verifyPublicProof = function (token) {
         return __awaiter(this, void 0, void 0, function () {
@@ -114,7 +115,8 @@ var ClaimsVerifier = /** @class */ (function (_super) {
     * ```
     * @param { string } proofToken contains proof data
     * @param { string } privateToken contains private data
-    * @returns { boolean } whether the proof was succesfull
+    * @returns { Promise<void> } whether the proof was succesfull
+    * @throws if the proof failed
     */
     ClaimsVerifier.prototype.verifyPrivateProof = function (proofToken, privateToken) {
         return __awaiter(this, void 0, void 0, function () {

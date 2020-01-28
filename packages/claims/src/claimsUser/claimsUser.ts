@@ -169,10 +169,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string): Promise<void> {
+  async verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Incorrect signature');
+    }
+    if (JSON.stringify(claim.publicData) !== JSON.stringify(verifyData)) {
+      throw new Error('Token payload doesn\'t match user data');
     }
     const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
     await document.update(

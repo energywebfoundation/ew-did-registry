@@ -94,9 +94,10 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * const verified = await claims.verifyPublicToken(issuedToken);
      * ```
      * @param { string } token - issued token
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
+     * @throws if the proof failed
      */
-    verifyPublicClaim(token: string): Promise<void>;
+    verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void>;
     /**
      * Verifies token with private data received from issuer
      *
@@ -110,7 +111,8 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * const verified = await claims.verifyPrivateToken(issuedToken);
      * ```
      * @param { string } token - issued token
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
+     * @throw if the proof failed
      */
     verifyPrivateClaim(token: string, saltedFields: {
         [key: string]: string;
