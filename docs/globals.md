@@ -392,7 +392,7 @@ ___
 
 • **bitArray**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:18
+Defined in claims/src/claimsUser/claimsUser.ts:19
 
 ___
 
@@ -400,7 +400,7 @@ ___
 
 • **bn**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:18
+Defined in claims/src/claimsUser/claimsUser.ts:19
 
 Defined in claims/src/claimsIssuer/claimsIssuer.ts:11
 
@@ -452,7 +452,7 @@ ___
 
 • **hash**: *any*
 
-Defined in claims/src/claimsUser/claimsUser.ts:18
+Defined in claims/src/claimsUser/claimsUser.ts:19
 
 Defined in claims/src/claimsVerifier/claimsVerifier.ts:9
 

@@ -5,6 +5,7 @@ import { encrypt } from 'eciesjs';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
+import assert from 'assert';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
   Operator, DIDAttribute, Algorithms, PubKeyType, Encoding,
@@ -174,9 +175,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Incorrect signature');
     }
-    if (JSON.stringify(claim.publicData) !== JSON.stringify(verifyData)) {
-      throw new Error('Token payload doesn\'t match user data');
-    }
+    assert.deepEqual(claim.publicData, verifyData, 'Token payload doesn\'t match user data');
     const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
     await document.update(
       DIDAttribute.Authenticate,
@@ -211,9 +210,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signature');
     }
-    if (JSON.stringify(claim.publicData) !== JSON.stringify(publicData)) {
-      throw new Error('Token payload doesn\'t match user data');
-    }
+    assert.deepEqual(claim.publicData, publicData, 'Token payload doesn\'t match user data');
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(saltedFields)) {
       const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
