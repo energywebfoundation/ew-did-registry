@@ -33,7 +33,7 @@
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/claims/src/models/index.ts#L20)*
+*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L20)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **jwt**: *IJWT*
 
-*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/claims/src/models/index.ts#L22)*
+*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L22)*
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **keys**: *IKeys*
 
-*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/claims/src/models/index.ts#L21)*
+*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L21)*

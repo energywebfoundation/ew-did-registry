@@ -18,7 +18,7 @@ Other types can be added in the future, if required.
 
 • **authentication**: = "sigAuth"
 
-*Defined in [did-resolver/src/models/resolver.ts:152](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L152)*
+*Defined in [did-resolver/src/models/resolver.ts:152](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/resolver.ts#L152)*
 
 ___
 
@@ -26,4 +26,4 @@ ___
 
 • **verification**: = "veriKey"
 
-*Defined in [did-resolver/src/models/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L153)*
+*Defined in [did-resolver/src/models/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/resolver.ts#L153)*
