@@ -58,10 +58,15 @@ var models_1 = require("../models");
 var resolver_1 = __importDefault(require("./resolver"));
 var constants_1 = require("../constants");
 var Authenticate = models_1.DIDAttribute.Authenticate, PublicKey = models_1.DIDAttribute.PublicKey, ServicePoint = models_1.DIDAttribute.ServicePoint;
+/**
+ * To support/extend this Class, one just has to work with this file.
+ * All the supporting functions are stored as private methods (i.e. with the '_' symbol)
+ * One can easily extend the methods available by researching the smart contract functionality,
+ * as well as by understanding how the read is performed.
+ */
 var Operator = /** @class */ (function (_super) {
     __extends(Operator, _super);
     /**
-     *
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
@@ -78,7 +83,9 @@ var Operator = /** @class */ (function (_super) {
         return _this;
     }
     /**
-     * Empty for this implementation
+     * Relevant did should have positive cryptocurrency balance to perform
+     * the transaction. Create method saves the public key in smart contract's
+     * event, which can be qualified as document creation
      *
      * @param did
      * @param context
@@ -315,6 +322,14 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes authentication attributes
+     *
+     * @param did
+     * @param auths
+     * @param publicKeys
+     * @private
+     */
     Operator.prototype._revokeAuthentications = function (did, auths, publicKeys) {
         return __awaiter(this, void 0, void 0, function () {
             var sender, nonce, method, _loop_1, this_1, _i, publicKeys_1, pk, state_1;
@@ -375,6 +390,13 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes Public key attribute
+     *
+     * @param did
+     * @param publicKeys
+     * @private
+     */
     Operator.prototype._revokePublicKeys = function (did, publicKeys) {
         return __awaiter(this, void 0, void 0, function () {
             var sender, nonce, _loop_2, this_2, _i, publicKeys_2, pk, state_2;
@@ -442,6 +464,13 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes service attributes
+     *
+     * @param did
+     * @param services
+     * @private
+     */
     Operator.prototype._revokeServices = function (did, services) {
         return __awaiter(this, void 0, void 0, function () {
             var revoked, sender, nonce, _i, services_1, service, match, algo, value, didAttribute, _a;
@@ -482,6 +511,17 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Private function to send transactions
+     *
+     * @param method
+     * @param did
+     * @param didAttribute
+     * @param updateData
+     * @param validity
+     * @param overrides
+     * @private
+     */
     Operator.prototype._sendTransaction = function (method, did, didAttribute, updateData, validity, overrides) {
         return __awaiter(this, void 0, void 0, function () {
             var identity, attributeName, bytesOfAttribute, bytesOfValue, argums, tx, receipt, event_4, e_1;
@@ -523,6 +563,13 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Util functions to create attribute name, supported by read method
+     *
+     * @param attribute
+     * @param updateData
+     * @private
+     */
     Operator.prototype._composeAttributeName = function (attribute, updateData) {
         var algo = updateData.algo, type = updateData.type, encoding = updateData.encoding;
         switch (attribute) {
@@ -536,6 +583,12 @@ var Operator = /** @class */ (function (_super) {
                 throw new Error('Unknown attribute name');
         }
     };
+    /**
+     * Util returns hex bytes value corresponding to string or object
+     *
+     * @param value
+     * @private
+     */
     Operator.prototype._hexify = function (value) {
         if (typeof value === 'string' && value.startsWith('0x')) {
             return value;
@@ -545,6 +598,11 @@ var Operator = /** @class */ (function (_super) {
             : JSON.stringify(value))
             .toString('hex');
     };
+    /**
+     * Returns relevant provider
+     *
+     * @private
+     */
     Operator.prototype._getProvider = function () {
         var provider = this._settings.provider;
         switch (provider.type) {
@@ -556,6 +614,12 @@ var Operator = /** @class */ (function (_super) {
                 return ethers_1.ethers.getDefaultProvider();
         }
     };
+    /**
+     * Checks if did is valid, and returns the address if it is
+     *
+     * @param did
+     * @private
+     */
     Operator._parseDid = function (did) {
         if (!constants_1.matchingPatternDid.test(did)) {
             throw new Error('Invalid DID');

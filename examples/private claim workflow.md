@@ -67,7 +67,8 @@ Same flow for verifier
   const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver());
 ```
 The time interval during which the corresponding record in the DID document will
-be valid
+be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
+the example below
 ```typescript 
   const validity = 5 * 60 * 1000;
 ```
@@ -113,9 +114,10 @@ An ```IDIDDocumetLite``` interface is used to read a document
 An ```IDIDDocumetFull``` interface is used to update a document
 ```typescript 
   const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
-    expect(userFullDoc).instanceOf(DIDDocumentFull);
-    await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
-  });
+  expect(userFullDoc).instanceOf(DIDDocumentFull);
+  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
+  await userLigthDoc.read(userDid);
+  document = userLigthDoc.didDocument;
   const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
   expect(document.publicKey.find((pk) => pk.id === expectedPkId)).to.not.undefined;
 ```

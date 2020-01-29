@@ -85,19 +85,22 @@ be valid
   const issuedToken = await issuerClaims.issuePublicClaim(token);
 ```
 * **Verification of issued claim and adding issuer to delegates**
+
+'verifyPublicClaim' check if the claim has the correct payload and
+also adds delegate to the smart contract
 ```typescript 
   const verified = await userClaims.verifyPublicClaim(issuedToken); 
   expect(verified).is.true;
-  const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim; 
-  expect(claim.did).equal(userDid); 
-  expect(claim.signer).equal(issuerDid); 
-  expect(claim.claimData).deep.equal(claimData); 
-  const updateData: IUpdateData = {
-    algo: Algorithms.Secp256k1,
-    type: PubKeyType.VerificationKey2018,
-    encoding: Encoding.HEX,
-    delegate: issuerAddress,
   };
+```
+
+* **Verifier checks if the presented token is valid**
+
+'verifyPublicProof' checks the signature on the claim, as well as 
+whether the delegate is valid for the DID
+```typescript 
+  const verified = await claimsUser.verifyPublicProof(issuedToken);
+  expect(verified).to.be.true;
 ```
 
 An ```IDIDDocumetLite``` interface is used to read a document
