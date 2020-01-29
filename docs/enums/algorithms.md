@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [Algorithms](algorithms.md)
 
 # Enumeration: Algorithms
 
@@ -19,7 +19,7 @@ Algorithms specifies, which algorithm has to be used with a particular public ke
 
 • **ECDSA**: = "ECDSA"
 
-*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/operator.ts#L26)*
+*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/operator.ts#L26)*
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **ED25519**: = "Ed25519"
 
-*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/operator.ts#L26)*
+*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/operator.ts#L26)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **RSA**: = "Rsa"
 
-*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/operator.ts#L26)*
+*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/operator.ts#L26)*
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 • **Secp256k1**: = "Secp256k1"
 
-*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/did-resolver/src/models/operator.ts#L26)*
+*Defined in [did-resolver/src/models/operator.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/operator.ts#L26)*

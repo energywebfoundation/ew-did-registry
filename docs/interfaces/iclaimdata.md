@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimData](iclaimdata.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimData](iclaimdata.md)
 
 # Interface: IClaimData
 

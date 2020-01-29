@@ -15,7 +15,6 @@ import DIDRegistry from '@ew-did-registry/did-registry';
 ```
 
 * **Creating identities based on their roles**
-
   
 User is the claims subject
 

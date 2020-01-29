@@ -245,6 +245,7 @@ exports.abi1056 = [
 // Our default endpoint for communication with blockchain
 exports.defaultProvider = {
     uriOrInfo: 'http://volta-rpc.energyweb.org/',
+    // uriOrInfo: 'http://localhost:8545', // to reduce testing time
     type: models_1.ProviderTypes.HTTP,
 };
 /**

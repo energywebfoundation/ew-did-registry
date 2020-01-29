@@ -61,14 +61,14 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
-    Object.entries(claim.claimData).forEach(([key, value]) => {
+    Object.entries(claim.privateData).forEach(([key, value]) => {
       const decryptedField = decrypt(
         this.keys.privateKey,
         Buffer.from((value as { data: Array<number> }).data),
       );
       const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
       const PK = g.mult(new bn(fieldHash));
-      claim.claimData[key] = PK.toBits();
+      claim.privateData[key] = PK.toBits();
     });
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }

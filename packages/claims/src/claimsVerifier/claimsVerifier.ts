@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
+import { Resolver, DelegateTypes } from '@ew-did-registry/did-resolver';
 import { Claims } from '../claims';
 import { IClaimsVerifier } from '../interface';
 import { IClaim } from '../models';
@@ -21,13 +22,18 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
    * const verified = claims.verifyPublicProof(issuedToken);
    * ```
    * @param { string } token containing proof data
-   * @returns { boolean } whether the proof was succesfull
+   * @returns { Promise<void> } whether the proof was succesfull
+   * @throws if the proof failed
    */
-  async verifyPublicProof(token: string): Promise<boolean> {
+  async verifyPublicProof(token: string): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
-    if (!(await this.verifySignature(token, claim.signer))) return false;
-    // TODO check signer is delegate of did
-    return true;
+    if (!(await this.verifySignature(token, claim.signer))) {
+      throw new Error('Invalid signatue');
+    }
+    const resolver = new Resolver();
+    if (!resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
+      throw new Error('Issuer isn\'t a use\'r delegate');
+    }
   }
 
   /**
@@ -45,19 +51,36 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   * ```
   * @param { string } proofToken contains proof data
   * @param { string } privateToken contains private data
-  * @returns { boolean } whether the proof was succesfull
+  * @returns { Promise<void> } whether the proof was succesfull
+  * @throws if the proof failed
   */
-  async verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean> {
+  async verifyPrivateProof(proofToken: string, privateToken: string): Promise<void> {
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
     const proofClaim: IClaim = this.jwt.decode(proofToken) as IClaim;
-    if (!(await this.verifySignature(proofToken, proofClaim.signer))) return false;
+    if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
+      throw new Error('Invalid signature');
+    }
+    const resolver = new Resolver();
+
     const privateClaim: IClaim = this.jwt.decode(privateToken) as IClaim;
-    if (!(await this.verifySignature(privateToken, privateClaim.signer))) return false;
+    if (!(await this.verifySignature(privateToken, privateClaim.signer))) {
+      throw new Error('Invalid signature');
+    }
+    if (
+      !resolver
+        .validDelegate(
+          privateClaim.did,
+          DelegateTypes.verification,
+          privateClaim.signer,
+        )
+    ) {
+      throw new Error('Issuer isn\'t a use\'r delegate');
+    }
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(privateClaim.claimData)) {
+    for (const [key, value] of Object.entries(privateClaim.privateData)) {
       const PK = curve.fromBits(value);
-      let { h, s } = proofClaim.claimData[key] as { h: sjcl.bitArray; s: sjcl.bitArray };
+      let { h, s } = proofClaim.privateData[key] as { h: sjcl.bitArray; s: sjcl.bitArray };
       h = curve.fromBits(h);
       s = bn.fromBits(s);
       let c = hash.sha256.hash(
@@ -69,9 +92,8 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
       const left = g.mult(s);
       const right = PK.mult(c).toJac().add(h).toAffine();
       if (!sjcl.bitArray.equal(left.toBits(), right.toBits())) {
-        return false;
+        throw new Error('User didn\'t prove the knowledge of the private data');
       }
     }
-    return true;
   }
 }

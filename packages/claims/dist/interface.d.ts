@@ -8,8 +8,8 @@ export interface IClaimsFactory {
     createClaimsVerifier(): IClaimsVerifier;
 }
 export interface IClaimsUser extends IClaims {
-    createPublicClaim(claimData: IClaimData): Promise<string>;
-    createPrivateClaim(claimData: IClaimData, issuer: string): Promise<{
+    createPublicClaim(publicData: IClaimData): Promise<string>;
+    createPrivateClaim(publicData: IClaimData, privateData: IClaimData, issuer: string): Promise<{
         token: string;
         saltedFields: {
             [key: string]: string;
@@ -18,16 +18,16 @@ export interface IClaimsUser extends IClaims {
     createProofClaim(claimUrl: string, saltedFields: {
         [key: string]: string;
     }): Promise<string>;
-    verifyPublicClaim(token: string): Promise<boolean>;
+    verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void>;
     verifyPrivateClaim(privateToken: string, saltedFields: {
         [key: string]: string;
-    }): Promise<boolean>;
+    }, publicData: IClaimData): Promise<void>;
 }
 export interface IClaimsIssuer extends IClaims {
     issuePublicClaim(token: string): Promise<string>;
     issuePrivateClaim(token: string): Promise<string>;
 }
 export interface IClaimsVerifier extends IClaims {
-    verifyPublicProof(token: string): Promise<boolean>;
-    verifyPrivateProof(proofToken: string, privateToken: string): Promise<boolean>;
+    verifyPublicProof(token: string): Promise<void>;
+    verifyPrivateProof(proofToken: string, privateToken: string): Promise<void>;
 }

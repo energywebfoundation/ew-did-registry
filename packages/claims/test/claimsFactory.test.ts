@@ -49,34 +49,31 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
 
   it('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
-    const claimData: IClaimData = { secret: '123' };
+    const privateData: IClaimData = { secret: '123' };
     const {
       token: privateToken,
       saltedFields,
-    } = await claimsUser.createPrivateClaim(claimData, issuerDid);
+    } = await claimsUser.createPrivateClaim({}, privateData, issuerDid);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side
-    const verified = await claimsUser.verifyPrivateClaim(issuedToken, saltedFields);
-    expect(verified).to.be.true;
+    await claimsUser.verifyPrivateClaim(issuedToken, saltedFields, {});
+    // expect(verified).to.be.true;
     const claimUrl = 'http://test.service.com';
     const proofToken = await claimsUser.createProofClaim(claimUrl, saltedFields);
     // Verifier side
-    const prooved = await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
-    expect(prooved).to.be.true;
+    await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
-    const claimData: IClaimData = { public: '123' };
-    const token = await claimsUser.createPublicClaim(claimData);
+    const publicData: IClaimData = { public: '123' };
+    const token = await claimsUser.createPublicClaim(publicData);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePublicClaim(token);
     // Application/User side
-    const verified = await claimsUser.verifyPublicClaim(issuedToken);
-    expect(verified).to.be.true;
+    await claimsUser.verifyPublicClaim(issuedToken, publicData);
     // Verifier side
-    const prooved = await claimsVerifier.verifyPublicProof(issuedToken);
-    expect(prooved).to.be.true;
+    await claimsVerifier.verifyPublicProof(issuedToken);
   });
 });

@@ -1,6 +1,6 @@
 // Karma configuration
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -9,18 +9,17 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ["browserify", "mocha", "chai-as-promised", "chai"],
-
+    frameworks: ['browserify', 'mocha', 'chai-as-promised', 'chai'],
 
     // list of files / patterns to load in the browser
     files: [
-      "node_modules/@babel/polyfill/dist/polyfill.js",
-      "node_modules/chai/chai.js",
-      "node_modules/karma-chai/adapter.js",
-      "node_modules/mocha/mocha.js",
-      "node_modules/karma-mocha/lib/adapter.js",
-      "build/*.min.js",
-      "tests/*.spec.js"
+      'node_modules/@babel/polyfill/dist/polyfill.js',
+      // "node_modules/chai/chai.js",
+      // 'node_modules/karma-chai/adapter.js',
+      // "node_modules/mocha/mocha.js",
+      // 'node_modules/karma-mocha/lib/adapter.js',
+      'build/*.min.js',
+      'tests/*.spec.js',
     ],
 
 
@@ -32,15 +31,15 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "node_modules/chai-as-promised/lib/chai-as-promised.js": ["browserify"],
-      "tests/*.spec.js": ["browserify"]
+      'node_modules/chai-as-promised/lib/chai-as-promised.js': ['browserify'],
+      'tests/*.spec.js': ['browserify'],
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress"],
+    reporters: ['progress'],
 
 
     // web server port
@@ -52,6 +51,7 @@ module.exports = function(config) {
 
 
     // level of logging
+    // eslint-disable-next-line max-len
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
@@ -62,7 +62,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ["Chrome", "Firefox"],
+    browsers: ['Chrome', 'Firefox'],
 
 
     // Continuous Integration mode
@@ -77,9 +77,10 @@ module.exports = function(config) {
 
     client: {
       mocha: {
-        reporter: "spec",
-        ui: "bdd"
-      }
+        reporter: 'spec',
+        ui: 'bdd',
+      },
+      captureConsole: true,
     },
 
     browserify: {
@@ -87,23 +88,27 @@ module.exports = function(config) {
       transform: [
         [
           'babelify', {
-            presets: [ "@babel/env" ]
-          }
-        ]
-      ]
+            presets: ['@babel/env'],
+          },
+        ],
+      ],
     },
 
-    babelPreprocessor: {
-      options: {
-        presets: ["@babel/env"],
-        sourceMap: "inline"
-      },
-      filename: function (file) {
-        return file.originalPath.replace(/\.js$/, ".es5.js");
-      },
-      sourceFileName: function (file) {
-        return file.originalPath;
-      }
-    }
-  })
+    // babelPreprocessor: {
+    //   options: {
+    //     presets: ['@babel/env'],
+    //     sourceMap: 'inline',
+    //   },
+    //   filename(file) {
+    //     return file.originalPath.replace(/\.js$/, '.es5.js');
+    //   },
+    //   sourceFileName(file) {
+    //     return file.originalPath;
+    //   },
+    // },
+
+    browserConsoleLogOptions: {
+      terminal: true,
+    },
+  });
 };

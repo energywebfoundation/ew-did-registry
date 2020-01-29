@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaim](iclaim.md)
 
 # Interface: IClaim
 
@@ -16,29 +16,34 @@
 
 ### Properties
 
-* [claimData](iclaim.md#claimdata)
 * [did](iclaim.md#did)
+* [privateData](iclaim.md#optional-privatedata)
+* [publicData](iclaim.md#publicdata)
 * [signer](iclaim.md#signer)
 
 ## Properties
-
-###  claimData
-
-• **claimData**: *object*
-
-*Defined in [claims/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L7)*
-
-#### Type declaration:
-
-* \[ **key**: *string*\]: string | object
-
-___
 
 ###  did
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L5)*
+*Defined in [claims/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L5)*
+
+___
+
+### `Optional` privateData
+
+• **privateData**? : *[IClaimData](iclaimdata.md)*
+
+*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L8)*
+
+___
+
+###  publicData
+
+• **publicData**: *[IClaimData](iclaimdata.md)*
+
+*Defined in [claims/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L7)*
 
 ___
 
@@ -46,4 +51,4 @@ ___
 
 • **signer**: *string*
 
-*Defined in [claims/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/bf1f4a6/packages/claims/src/models/index.ts#L6)*
+*Defined in [claims/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L6)*
