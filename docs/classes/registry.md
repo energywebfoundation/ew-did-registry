@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Registry](registry.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Registry](registry.md)
 
 # Class: Registry
 
@@ -22,7 +22,7 @@
 
 \+ **new Registry**(`keys`: IKeys, `role`: [Roles.User], `resolver`: IResolver): *[Registry](registry.md)*
 
-Defined in claims/registry.ts:10
+*Defined in [claims/registry.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/claims/registry.ts#L10)*
 
 **Parameters:**
 
@@ -40,4 +40,4 @@ Name | Type |
 
 • **claims**: *IClaimUser | IClaimVerifier | IClaimIssuer*
 
-Defined in claims/registry.ts:6
+*Defined in [claims/registry.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/claims/registry.ts#L6)*

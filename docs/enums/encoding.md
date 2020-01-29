@@ -1,6 +1,8 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Encoding](encoding.md)
 
 # Enumeration: Encoding
+
+Encoding specifies the format in which the public key is store
 
 ## Index
 
@@ -17,7 +19,7 @@
 
 • **BASE58**: = "base58"
 
-Defined in did-resolver/src/models/operator.ts:10
+*Defined in [did-resolver/src/models/operator.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/operator.ts#L19)*
 
 ___
 
@@ -25,7 +27,7 @@ ___
 
 • **BASE64**: = "base64"
 
-Defined in did-resolver/src/models/operator.ts:10
+*Defined in [did-resolver/src/models/operator.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/operator.ts#L19)*
 
 ___
 
@@ -33,7 +35,7 @@ ___
 
 • **HEX**: = "hex"
 
-Defined in did-resolver/src/models/operator.ts:10
+*Defined in [did-resolver/src/models/operator.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/operator.ts#L19)*
 
 ___
 
@@ -41,4 +43,4 @@ ___
 
 • **PEM**: = "pem"
 
-Defined in did-resolver/src/models/operator.ts:10
+*Defined in [did-resolver/src/models/operator.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/operator.ts#L19)*

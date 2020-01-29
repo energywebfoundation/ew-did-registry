@@ -1,6 +1,15 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
 
 # Class: Resolver
+
+To support different networks compliant with ERC1056, the user/developer simply has to provide
+different resolver settings. The default resolver settings are provided in the 'constants' folder
+Any settings that follow the IResolverSettings interface are valid.
+
+The read functionality is implemented in Resolver class. If one wants to adjust it or create her
+own implementation (for example according to ERC725), one could use this class as a
+starting point.
+All the functionality supporting document resolution is stored in 'functions' folder.
 
 ## Hierarchy
 
@@ -30,7 +39,7 @@
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:34
+*Defined in [did-resolver/src/implementations/resolver.ts:44](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/implementations/resolver.ts#L44)*
 
 Constructor
 
@@ -52,7 +61,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:121
+*Defined in [did-resolver/src/implementations/resolver.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/implementations/resolver.ts#L131)*
 
 Returns the Ethereum address of current identity owner
 
@@ -74,7 +83,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:73
+*Defined in [did-resolver/src/implementations/resolver.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/implementations/resolver.ts#L83)*
 
 Resolve DID Document for a given did
 
@@ -102,7 +111,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:141
+*Defined in [did-resolver/src/implementations/resolver.ts:151](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/implementations/resolver.ts#L151)*
 
 Performs the check if the delegate is valid for particular did
 Return boolean

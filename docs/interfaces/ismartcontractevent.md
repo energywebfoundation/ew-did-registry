@@ -1,6 +1,8 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ISmartContractEvent](ismartcontractevent.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [ISmartContractEvent](ismartcontractevent.md)
 
 # Interface: ISmartContractEvent
+
+This interface represents the structure of event emitted by ERC1056 compliant smart contract.
 
 ## Hierarchy
 
@@ -22,7 +24,7 @@
 
 • **name**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:85
+*Defined in [did-resolver/src/models/resolver.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L100)*
 
 ___
 
@@ -30,7 +32,7 @@ ___
 
 • **signature**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:86
+*Defined in [did-resolver/src/models/resolver.ts:101](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L101)*
 
 ___
 
@@ -38,7 +40,7 @@ ___
 
 • **topic**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:87
+*Defined in [did-resolver/src/models/resolver.ts:102](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L102)*
 
 ___
 
@@ -46,7 +48,7 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:97
+*Defined in [did-resolver/src/models/resolver.ts:112](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L112)*
 
 ___
 
@@ -54,7 +56,7 @@ ___
 
 • **values**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:88
+*Defined in [did-resolver/src/models/resolver.ts:103](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/models/resolver.ts#L103)*
 
 #### Type declaration:
 

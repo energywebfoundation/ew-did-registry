@@ -14,6 +14,15 @@ import {
 
 import { matchingPatternDidEvents } from '../constants';
 
+/**
+ * This function updates the document if the event type is 'DelegateChange'
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 const handleDelegateChange = (
   event: ISmartContractEvent,
   did: string,
@@ -51,6 +60,15 @@ const handleDelegateChange = (
   return document;
 };
 
+/**
+ * This function updates the document on Attribute change event
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 const handleAttributeChange = (
   event: ISmartContractEvent,
   did: string,
@@ -147,11 +165,24 @@ const handleAttributeChange = (
   return document;
 };
 
+/**
+ * Simply a handler for delegate vs attribute change
+ */
 const handlers: IHandlers = {
   DIDDelegateChanged: handleDelegateChange,
   DIDAttributeChanged: handleAttributeChange,
 };
 
+/**
+ * Update document checks the event validity, and, if valid,
+ * passes the event parsing to the handler
+ *
+ * @param event
+ * @param eventName
+ * @param did
+ * @param document
+ * @param block
+ */
 const updateDocument = (
   event: ISmartContractEvent,
   eventName: string,
@@ -169,6 +200,17 @@ const updateDocument = (
   return document;
 };
 
+/**
+ * Given a certain block from the chain, this function returns the events
+ * associated with the did within the block
+ *
+ * @param block
+ * @param did
+ * @param document
+ * @param provider
+ * @param smartContractInterface
+ * @param smartContractAddress
+ */
 const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
@@ -196,6 +238,15 @@ const getEventsFromBlock = (
   });
 });
 
+/**
+ * A high level function that manages the flow to read data from the blockchain
+ *
+ * @param did
+ * @param document
+ * @param resolverSettings
+ * @param contract
+ * @param provider
+ */
 export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
@@ -239,6 +290,14 @@ export const fetchDataFromEvents = async (
   document.lastChangedBlock = lastChangedBlock;
 };
 
+/**
+ * Provided with the fetched data, the function parses it and returns the
+ * DID Document associated with the relevant user
+ *
+ * @param did
+ * @param document
+ * @param context
+ */
 export const wrapDidDocument = (
   did: string,
   document: IDIDLogData,

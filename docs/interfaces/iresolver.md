@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IResolver](iresolver.md)
 
 # Interface: IResolver
 
@@ -27,7 +27,11 @@
 
 ▸ **identityOwner**(`did`: string): *Promise‹string›*
 
-Defined in did-resolver/src/interface.ts:31
+*Defined in [did-resolver/src/interface.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/interface.ts#L33)*
+
+Returns the current owner for certain DID.
+If DID document has not been created, did will be identical to address.
+After creation DID owner can be changed.
 
 **Parameters:**
 
@@ -43,7 +47,7 @@ ___
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-Defined in did-resolver/src/interface.ts:29
+*Defined in [did-resolver/src/interface.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/interface.ts#L23)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -63,7 +67,10 @@ ___
 
 ▸ **validDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
 
-Defined in did-resolver/src/interface.ts:33
+*Defined in [did-resolver/src/interface.ts:44](https://github.com/energywebfoundation/ew-did-registry/blob/5e08895/packages/did-resolver/src/interface.ts#L44)*
+
+Checks if the delegate is present for a particular DID.
+Returns boolean.
 
 **Parameters:**
 
