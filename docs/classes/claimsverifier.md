@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ClaimsVerifier](claimsverifier.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [ClaimsVerifier](claimsverifier.md)
 
 # Class: ClaimsVerifier
 
@@ -40,7 +40,7 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-Defined in claims/src/claims/claims.ts:29
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
 
 **`constructor`** 
 
@@ -63,7 +63,7 @@ Name | Type | Description |
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-Defined in claims/src/claims/claims.ts:29
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-Defined in claims/src/claims/claims.ts:22
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -89,7 +89,7 @@ ___
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-Defined in claims/src/claims/claims.ts:27
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L27)*
 
 Key pair represents the implementation of key management interface
 
@@ -101,7 +101,7 @@ Key pair represents the implementation of key management interface
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-Defined in claims/src/claims/claims.ts:61
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L61)*
 
 Fetches DID document of the corresponding DID
 
@@ -132,7 +132,7 @@ ___
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:57
+*Defined in [claims/src/claimsVerifier/claimsVerifier.ts:57](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsVerifier/claimsVerifier.ts#L57)*
 
 Checks issuer signature on issued token and user signature on proof token
 and verifies that proof and private data mathches to each other
@@ -168,7 +168,7 @@ ___
 
 *Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md)*
 
-Defined in claims/src/claimsVerifier/claimsVerifier.ts:28
+*Defined in [claims/src/claimsVerifier/claimsVerifier.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsVerifier/claimsVerifier.ts#L28)*
 
 Checks issuer signature on token
 
@@ -202,7 +202,7 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-Defined in claims/src/claims/claims.ts:83
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 

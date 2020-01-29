@@ -25,6 +25,12 @@ import {
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
+/**
+ * To support/extend this Class, one just has to work with this file.
+ * All the supporting functions are stored as private methods (i.e. with the '_' symbol)
+ * One can easily extend the methods available by researching the smart contract functionality,
+ * as well as by understanding how the read is performed.
+ */
 export class Operator extends Resolver implements IOperator {
   /**
    * ERC-1056 compliant ethereum smart-contract
@@ -41,7 +47,6 @@ export class Operator extends Resolver implements IOperator {
   private readonly _provider: ethers.providers.BaseProvider;
 
   /**
-   *
    * @param { IKeys } keys - identifies an account which acts as a
    * controller in a subsequent operations with DID document
    */
@@ -59,7 +64,9 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
-   * Empty for this implementation
+   * Relevant did should have positive cryptocurrency balance to perform
+   * the transaction. Create method saves the public key in smart contract's
+   * event, which can be qualified as document creation
    *
    * @param did
    * @param context
@@ -259,6 +266,14 @@ export class Operator extends Resolver implements IOperator {
     return authRevoked && pubKeysRevoked && endpointsRevoked;
   }
 
+  /**
+   * Revokes authentication attributes
+   *
+   * @param did
+   * @param auths
+   * @param publicKeys
+   * @private
+   */
   private async _revokeAuthentications(
     did: string,
     auths: IAuthentication[],
@@ -294,6 +309,13 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
+  /**
+   * Revokes Public key attribute
+   *
+   * @param did
+   * @param publicKeys
+   * @private
+   */
   private async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
@@ -329,6 +351,13 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
+  /**
+   * Revokes service attributes
+   *
+   * @param did
+   * @param services
+   * @private
+   */
   private async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
     let revoked = true;
     const sender = this._wallet.address;
@@ -353,6 +382,17 @@ export class Operator extends Resolver implements IOperator {
     return revoked;
   }
 
+  /**
+   * Private function to send transactions
+   *
+   * @param method
+   * @param did
+   * @param didAttribute
+   * @param updateData
+   * @param validity
+   * @param overrides
+   * @private
+   */
   private async _sendTransaction(
     method: any,
     did: string,
@@ -392,6 +432,13 @@ export class Operator extends Resolver implements IOperator {
     return true;
   }
 
+  /**
+   * Util functions to create attribute name, supported by read method
+   *
+   * @param attribute
+   * @param updateData
+   * @private
+   */
   private _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
     const {
       algo, type, encoding,
@@ -408,6 +455,12 @@ export class Operator extends Resolver implements IOperator {
     }
   }
 
+  /**
+   * Util returns hex bytes value corresponding to string or object
+   *
+   * @param value
+   * @private
+   */
   private _hexify(value: string | object): string {
     if (typeof value === 'string' && value.startsWith('0x')) {
       return value;
@@ -418,6 +471,11 @@ export class Operator extends Resolver implements IOperator {
       .toString('hex')}`;
   }
 
+  /**
+   * Returns relevant provider
+   *
+   * @private
+   */
   private _getProvider(): ethers.providers.JsonRpcProvider | ethers.providers.BaseProvider {
     const { provider } = this._settings;
     switch (provider.type) {
@@ -430,6 +488,12 @@ export class Operator extends Resolver implements IOperator {
     }
   }
 
+  /**
+   * Checks if did is valid, and returns the address if it is
+   *
+   * @param did
+   * @private
+   */
   private static _parseDid(did: string): string {
     if (!matchingPatternDid.test(did)) {
       throw new Error('Invalid DID');

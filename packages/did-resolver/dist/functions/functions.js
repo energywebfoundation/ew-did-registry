@@ -50,6 +50,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
 var utils_1 = require("ethers/utils");
 var constants_1 = require("../constants");
+/**
+ * This function updates the document if the event type is 'DelegateChange'
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 var handleDelegateChange = function (event, did, document, validTo, block) {
     var stringDelegateType = ethers_1.ethers.utils.parseBytes32String(event.values.delegateType);
     var publicKeyID = did + "#delegate-" + stringDelegateType + "-" + event.values.delegate;
@@ -80,6 +89,15 @@ var handleDelegateChange = function (event, did, document, validTo, block) {
     }
     return document;
 };
+/**
+ * This function updates the document on Attribute change event
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 var handleAttributeChange = function (event, did, document, validTo, block) {
     var _a = did.split(':'), blockchainAddress = _a[2];
     var attributeType = event.values.name;
@@ -155,10 +173,23 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
     }
     return document;
 };
+/**
+ * Simply a handler for delegate vs attribute change
+ */
 var handlers = {
     DIDDelegateChanged: handleDelegateChange,
     DIDAttributeChanged: handleAttributeChange,
 };
+/**
+ * Update document checks the event validity, and, if valid,
+ * passes the event parsing to the handler
+ *
+ * @param event
+ * @param eventName
+ * @param did
+ * @param document
+ * @param block
+ */
 var updateDocument = function (event, eventName, did, document, block) {
     var validTo = event.values.validTo;
     if (validTo) {
@@ -167,6 +198,17 @@ var updateDocument = function (event, eventName, did, document, block) {
     }
     return document;
 };
+/**
+ * Given a certain block from the chain, this function returns the events
+ * associated with the did within the block
+ *
+ * @param block
+ * @param did
+ * @param document
+ * @param provider
+ * @param smartContractInterface
+ * @param smartContractAddress
+ */
 var getEventsFromBlock = function (block, did, document, provider, smartContractInterface, smartContractAddress) { return new Promise(function (resolve, reject) {
     var _a = did.split(':'), blockchainAddress = _a[2];
     var topics = [null, "0x000000000000000000000000" + blockchainAddress.slice(2)];
@@ -184,6 +226,15 @@ var getEventsFromBlock = function (block, did, document, provider, smartContract
         reject(error);
     });
 }); };
+/**
+ * A high level function that manages the flow to read data from the blockchain
+ *
+ * @param did
+ * @param document
+ * @param resolverSettings
+ * @param contract
+ * @param provider
+ */
 exports.fetchDataFromEvents = function (did, document, resolverSettings, contract, provider) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, blockchainAddress, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
     return __generator(this, function (_c) {
@@ -229,6 +280,14 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings, contrac
         }
     });
 }); };
+/**
+ * Provided with the fetched data, the function parses it and returns the
+ * DID Document associated with the relevant user
+ *
+ * @param did
+ * @param document
+ * @param context
+ */
 exports.wrapDidDocument = function (did, document, context) {
     if (context === void 0) { context = 'https://www.w3.org/ns/did/v1'; }
     var now = new utils_1.BigNumber(Math.floor(new Date().getTime() / 1000));

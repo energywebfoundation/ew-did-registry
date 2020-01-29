@@ -1,8 +1,11 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
 
 # Interface: IProvider
 
-Specifies current Provider
+Specifies Provider to be used to communicate with blockchain.
+The uri, path, and network are the parameters found in the ethers library.
+Hence, 'ethers' documentation is a good point to check the available options,
+if one wants to extend the library.
 
 ## Hierarchy
 
@@ -23,7 +26,7 @@ Specifies current Provider
 
 • **network**? : *Networkish*
 
-Defined in did-resolver/src/models/resolver.ts:20
+*Defined in [did-resolver/src/models/resolver.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L26)*
 
 ___
 
@@ -31,7 +34,7 @@ ___
 
 • **path**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:19
+*Defined in [did-resolver/src/models/resolver.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L25)*
 
 ___
 
@@ -39,7 +42,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/resolver.ts:17
+*Defined in [did-resolver/src/models/resolver.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L23)*
 
 ___
 
@@ -47,4 +50,4 @@ ___
 
 • **uriOrInfo**? : *string | ConnectionInfo*
 
-Defined in did-resolver/src/models/resolver.ts:18
+*Defined in [did-resolver/src/models/resolver.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L24)*

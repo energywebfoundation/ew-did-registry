@@ -41,6 +41,16 @@ var ethers_1 = require("ethers");
 var models_1 = require("../models");
 var constants_1 = require("../constants");
 var functions_1 = require("../functions");
+/**
+ * To support different networks compliant with ERC1056, the user/developer simply has to provide
+ * different resolver settings. The default resolver settings are provided in the 'constants' folder
+ * Any settings that follow the IResolverSettings interface are valid.
+ *
+ * The read functionality is implemented in Resolver class. If one wants to adjust it or create her
+ * own implementation (for example according to ERC725), one could use this class as a
+ * starting point.
+ * All the functionality supporting document resolution is stored in 'functions' folder.
+ */
 var Resolver = /** @class */ (function () {
     /**
      * Constructor
