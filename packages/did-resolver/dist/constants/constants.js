@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var models_1 = require("../models");
+// Address of ERC1056 smart contract on Volta
 exports.address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
+// ABI of smart contract that has the address above
 exports.abi1056 = [
     {
         constant: true,
@@ -240,16 +242,23 @@ exports.abi1056 = [
         type: 'function',
     },
 ];
+// Our default endpoint for communication with blockchain
 exports.defaultProvider = {
     uriOrInfo: 'http://volta-rpc.energyweb.org/',
     // uriOrInfo: 'http://localhost:8545', // to reduce testing time
     type: models_1.ProviderTypes.HTTP,
 };
+/**
+ * The three above comprise the minimal settings for resolver.
+ * One can adjust them to use the resolver with a different provider
+ * or with a different smart contract.
+ */
 exports.defaultResolverSettings = {
     provider: exports.defaultProvider,
     abi: exports.abi1056,
     address: exports.address1056,
 };
+// Various patterns to minimise errors
 exports.matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
 exports.matchingPatternDid = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
 exports.ethAddrPattern = '0x[A-Fa-f0-9]{40}';

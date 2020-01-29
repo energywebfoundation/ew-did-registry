@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
 
 # Class: DIDDocumentFull
 
@@ -39,7 +39,7 @@
 
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
-Defined in did-document/src/full/documentFull.ts:8
+*Defined in [did-document/src/full/documentFull.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/full/documentFull.ts#L8)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[did](diddocumentlite.md#did)*
 
-Defined in did-document/src/lite/index.ts:13
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/lite/index.ts#L13)*
 
 DID of concern
 
@@ -74,7 +74,7 @@ ___
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[didDocument](diddocumentlite.md#diddocument)*
 
-Defined in did-document/src/lite/index.ts:18
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/lite/index.ts#L18)*
 
 Fetched DID Document
 
@@ -84,7 +84,7 @@ Fetched DID Document
 
 ▸ **create**(): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:27
+*Defined in [did-document/src/full/documentFull.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/full/documentFull.ts#L27)*
 
 Creates new empty DID document
 
@@ -106,7 +106,7 @@ ___
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-Defined in did-document/src/full/documentFull.ts:45
+*Defined in [did-document/src/full/documentFull.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/full/documentFull.ts#L45)*
 
 Deactivates DID document
 
@@ -132,7 +132,7 @@ ___
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[read](diddocumentlite.md#read)*
 
-Defined in did-document/src/lite/index.ts:50
+*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/lite/index.ts#L50)*
 
 Method returns the attribute of interest. An optional type parameter can be provided for
 attributes, which are objects
@@ -165,7 +165,7 @@ ___
 
 ▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number): *Promise‹boolean›*
 
-Defined in did-document/src/full/documentFull.ts:77
+*Defined in [did-document/src/full/documentFull.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-document/src/full/documentFull.ts#L77)*
 
 Updates attribute on the DID document
 

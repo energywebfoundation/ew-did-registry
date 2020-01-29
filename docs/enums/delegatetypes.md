@@ -1,6 +1,9 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DelegateTypes](delegatetypes.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [DelegateTypes](delegatetypes.md)
 
 # Enumeration: DelegateTypes
+
+Our assumption that delegates can be of two types, according to the standard. However,
+Other types can be added in the future, if required.
 
 ## Index
 
@@ -15,7 +18,7 @@
 
 • **authentication**: = "sigAuth"
 
-Defined in did-resolver/src/models/resolver.ts:122
+*Defined in [did-resolver/src/models/resolver.ts:152](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L152)*
 
 ___
 
@@ -23,4 +26,4 @@ ___
 
 • **verification**: = "veriKey"
 
-Defined in did-resolver/src/models/resolver.ts:123
+*Defined in [did-resolver/src/models/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L153)*
