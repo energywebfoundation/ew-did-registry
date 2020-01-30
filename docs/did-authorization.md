@@ -52,7 +52,7 @@ This requires a separate smart contract for every name space which is probably O
 
 In order to make sure that all the smart contracts referred to by ENS comply with the same interface and security requirements, we could create a factory contract who creates and references name space contracts:
 
-```
+```javascript
 contract NameSpaceFactory {
     // map keccak256 hashes of name space to the name space contract
     mapping(bytes32 => address) nameSpaces;
@@ -107,7 +107,7 @@ class RoleApproval {
 The first roles are the DSO and TSO which represent the first level after the root authority. They require
 approval by the authority and nothing else.
 
-```
+```json
 {
     "namespace": "flexhub.roles.did.ewc.eth",
     "roles": [
@@ -135,7 +135,7 @@ approval by the authority and nothing else.
 
 In order to act as an installer, an electrician must have received approval from the DSO. Each DSO might
 require that the installer has gotten approval from them specifically.
-```
+```json
 {
     "role_name": "installer",
     "approvals": {
@@ -150,7 +150,7 @@ require that the installer has gotten approval from them specifically.
 ### OEM
 The OEM is the manufacturer of the IoT devices which get installed in the flexhub. It needs to be approved so
 as to create a trust relationship between the OEM and the flexhub users.
-```
+```json
 {
     "namespace": "flexhub.roles.did.ewc.eth",
     "role_name": "oem",
@@ -169,7 +169,7 @@ as to create a trust relationship between the OEM and the flexhub users.
 
 Each IoT device has an identity on the network and must be enabled to act as a device. It must be able to
 prove that its OEM is approved and that it has been installed correctly and that it can communicate with the DSO.
-```
+```json
 {
     "namespace": "flexhub.roles.did.ewc.eth",
     "role_name": "iot_device",
@@ -185,3 +185,33 @@ prove that its OEM is approved and that it has been installed correctly and that
 ```
 
 ## Authentication and authorization
+
+```mermaid
+gantt
+       dateFormat  YYYY-MM-DD
+       title Adding GANTT diagram functionality to mermaid
+
+       section A section
+       Completed task            :done,    des1, 2014-01-06,2014-01-08
+       Active task               :active,  des2, 2014-01-09, 3d
+       Future task               :         des3, after des2, 5d
+       Future task2              :         des4, after des3, 5d
+
+       section Critical tasks
+       Completed task in the critical line :crit, active, crit1, 2014-01-06,8h
+       Implement parser and jison          :crit, done, after crit1, 2d
+       Create tests for parser             :crit, active, 3d
+       Future task in critical line        :crit, 5d
+       Create tests for renderer           :2d
+       Add to mermaid                      :1d
+
+       section Documentation
+       Describe gantt syntax               :active, a1, after des1, 3d
+       Add gantt diagram to demo page      :after a1  , 20h
+       Add another diagram to demo page    :doc1, after a1  , 48h
+
+       section Last section
+       Describe gantt syntax               :after doc1, 3d
+       Add gantt diagram to demo page      :20h
+       Add another diagram to demo page    :48h
+```
