@@ -104,6 +104,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
         }
       } else {
         const fieldHash = crypto.createHash('sha256').update(field.value).digest('hex');
+        // eslint-disable-next-line new-cap
         const PK = g.mult(new bn(fieldHash));
         const bitsPK = PK.toBits();
         // eslint-disable-next-line no-plusplus

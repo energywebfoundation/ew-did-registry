@@ -56,13 +56,13 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     decryped.toString().should.equal(saltedFields.secret);
   });
 
-  it('createProofClaim should return well formed proof claim', async () => {
+  it.only('createProofClaim should return well formed proof claim', async () => {
     const claimUrl = 'http://test.com';
     const saltedFields = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, saltedFields);
     const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
-    claim.should.have.nested.property('claimData.secret.field.h').which.instanceOf(Array);
-    claim.should.have.nested.property('claimData.secret.field.s').which.instanceOf(Array);
+    claim.should.have.nested.property('claimData.secret.value.h').which.instanceOf(Array);
+    claim.should.have.nested.property('claimData.secret.value.s').which.instanceOf(Array);
   });
 });
