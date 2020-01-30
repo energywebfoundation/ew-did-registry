@@ -1,5 +1,5 @@
 import {
-  IClaimData, IClaims,
+  IClaimData, IClaims, IProofData, ISaltedFields,
 } from './models';
 
 /**
@@ -13,15 +13,11 @@ export interface IClaimsFactory {
 
 export interface IClaimsUser extends IClaims {
   createPublicClaim(publicData: IClaimData): Promise<string>;
-  createPrivateClaim(publicData: IClaimData, privateData: IClaimData, issuer: string):
+  createPrivateClaim(privateData: IClaimData, issuer: string):
     Promise<{ token: string; saltedFields: { [key: string]: string } }>;
-  createProofClaim(claimUrl: string, saltedFields: { [key: string]: string }): Promise<string>;
+  createProofClaim(claimUrl: string, saltedFields: IProofData): Promise<string>;
   verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void>;
-  verifyPrivateClaim(
-    privateToken: string,
-    saltedFields: { [key: string]: string },
-    publicData: IClaimData
-  ): Promise<void>;
+  verifyPrivateClaim(privateToken: string, saltedFields: ISaltedFields): Promise<void>;
 }
 
 export interface IClaimsIssuer extends IClaims {
