@@ -1,11 +1,6 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
 
 # Interface: IProofClaim
-
-This interface extends a more general Claim interface
-and specifies Proof interface, which is used to create
-proof of knowledge of claim data and provides a method
-to verify if the provided proof is valid
 
 ## Hierarchy
 
@@ -13,100 +8,64 @@ to verify if the provided proof is valid
 
   ↳ **IProofClaim**
 
-## Implemented by
+## Indexable
 
-* [ProofClaim](../classes/proofclaim.md)
+* \[ **key**: *string*\]: string | object
 
 ## Index
 
 ### Properties
 
-* [claimData](iproofclaim.md#claimdata)
-* [jwt](iproofclaim.md#jwt)
-* [keyPair](iproofclaim.md#keypair)
-* [token](iproofclaim.md#token)
-
-### Methods
-
-* [getDid](iproofclaim.md#getdid)
-* [verify](iproofclaim.md#verify)
+* [claimUrl](iproofclaim.md#claimurl)
+* [did](iproofclaim.md#did)
+* [privateData](iproofclaim.md#optional-privatedata)
+* [publicData](iproofclaim.md#publicdata)
+* [signer](iproofclaim.md#signer)
 
 ## Properties
 
-###  claimData
+###  claimUrl
 
-• **claimData**: *[IClaimData](iclaimdata.md)*
+• **claimUrl**: *string*
 
-*Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
-
-Defined in claims/src/models/index.ts:56
-
-claimData stores the claim fields
+*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L13)*
 
 ___
 
-###  jwt
+###  did
 
-• **jwt**: *IJWT*
+• **did**: *string*
 
-*Inherited from [IClaim](iclaim.md).[jwt](iclaim.md#jwt)*
+*Inherited from [IClaim](iclaim.md).[did](iclaim.md#did)*
 
-Defined in claims/src/models/index.ts:48
-
-jwt stores the JWT to manage web tokens
+*Defined in [claims/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L5)*
 
 ___
 
-###  keyPair
+### `Optional` privateData
 
-• **keyPair**: *IKeys*
+• **privateData**? : *[IClaimData](iclaimdata.md)*
 
-*Inherited from [IClaim](iclaim.md).[keyPair](iclaim.md#keypair)*
+*Inherited from [IClaim](iclaim.md).[privateData](iclaim.md#optional-privatedata)*
 
-Defined in claims/src/models/index.ts:60
-
-keyPair represents the implementation of key management interface
+*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L8)*
 
 ___
 
-###  token
+###  publicData
 
-• **token**: *string*
+• **publicData**: *[IClaimData](iclaimdata.md)*
 
-*Inherited from [IClaim](iclaim.md).[token](iclaim.md#token)*
+*Inherited from [IClaim](iclaim.md).[publicData](iclaim.md#publicdata)*
 
-Defined in claims/src/models/index.ts:52
-
-claimToken stores the actual serialised JWT in a string format
-
-## Methods
-
-###  getDid
-
-▸ **getDid**(): *Promise‹boolean›*
-
-*Inherited from [IClaim](iclaim.md).[getDid](iclaim.md#getdid)*
-
-Defined in claims/src/models/index.ts:66
-
-Method returns the DID document associated with a claim subject DID
-
-**Returns:** *Promise‹boolean›*
+*Defined in [claims/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L7)*
 
 ___
 
-###  verify
+###  signer
 
-▸ **verify**(`privateToken`: string): *boolean*
+• **signer**: *string*
 
-Defined in claims/src/proof/interface.ts:21
+*Inherited from [IClaim](iclaim.md).[signer](iclaim.md#signer)*
 
-To verify the claim, private token (JWT) representing the claim should be provided
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`privateToken` | string |
-
-**Returns:** *boolean*
+*Defined in [claims/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L6)*

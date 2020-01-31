@@ -1,4 +1,6 @@
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
+import { BaseProvider } from 'ethers/providers';
+
 import { BigNumber, Interface } from 'ethers/utils';
 
 import {
@@ -8,11 +10,19 @@ import {
   IResolverSettings,
   IPublicKey,
   IHandlers,
-  ProviderTypes,
 } from '../models';
 
 import { matchingPatternDidEvents } from '../constants';
 
+/**
+ * This function updates the document if the event type is 'DelegateChange'
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 const handleDelegateChange = (
   event: ISmartContractEvent,
   did: string,
@@ -20,11 +30,10 @@ const handleDelegateChange = (
   validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
-  const publicKeyID = `${did}#delegate-${event.values.delegate}`;
+  const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
+  const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
   if (document.publicKey[publicKeyID] === undefined
     || document.publicKey[publicKeyID].block < block) {
-    const { delegateType } = event.values;
-    const stringDelegateType = ethers.utils.parseBytes32String(delegateType);
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
@@ -51,6 +60,15 @@ const handleDelegateChange = (
   return document;
 };
 
+/**
+ * This function updates the document on Attribute change event
+ *
+ * @param event
+ * @param did
+ * @param document
+ * @param validTo
+ * @param block
+ */
 const handleAttributeChange = (
   event: ISmartContractEvent,
   did: string,
@@ -72,7 +90,7 @@ const handleAttributeChange = (
         // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `${did}#key-${type}`,
+          id: `${did}#key-${algo}${type}-${event.values.value}`,
           type: `${algo}${type}`,
           controller: blockchainAddress,
           validity: validTo,
@@ -114,10 +132,12 @@ const handleAttributeChange = (
         }
         return document;
       case 'svc':
-        if (document.serviceEndpoints[algo] === undefined
-          || document.serviceEndpoints[algo].block < block) {
-          document.serviceEndpoints[algo] = {
-            id: `${did}#${algo}`,
+        // eslint-disable-next-line no-case-declarations
+        const serviceId = `${did}#service-${algo}-${event.values.value}`;
+        if (document.serviceEndpoints[serviceId] === undefined
+          || document.serviceEndpoints[serviceId].block < block) {
+          document.serviceEndpoints[serviceId] = {
+            id: serviceId,
             type: algo,
             serviceEndpoint: Buffer.from(
               event.values.value.slice(2),
@@ -145,11 +165,24 @@ const handleAttributeChange = (
   return document;
 };
 
+/**
+ * Simply a handler for delegate vs attribute change
+ */
 const handlers: IHandlers = {
   DIDDelegateChanged: handleDelegateChange,
   DIDAttributeChanged: handleAttributeChange,
 };
 
+/**
+ * Update document checks the event validity, and, if valid,
+ * passes the event parsing to the handler
+ *
+ * @param event
+ * @param eventName
+ * @param did
+ * @param document
+ * @param block
+ */
 const updateDocument = (
   event: ISmartContractEvent,
   eventName: string,
@@ -167,11 +200,22 @@ const updateDocument = (
   return document;
 };
 
+/**
+ * Given a certain block from the chain, this function returns the events
+ * associated with the did within the block
+ *
+ * @param block
+ * @param did
+ * @param document
+ * @param provider
+ * @param smartContractInterface
+ * @param smartContractAddress
+ */
 const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.JsonRpcProvider,
+  provider: ethers.providers.BaseProvider,
   smartContractInterface: Interface,
   smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
@@ -194,27 +238,23 @@ const getEventsFromBlock = (
   });
 });
 
+/**
+ * A high level function that manages the flow to read data from the blockchain
+ *
+ * @param did
+ * @param document
+ * @param resolverSettings
+ * @param contract
+ * @param provider
+ */
 export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
   resolverSettings: IResolverSettings,
+  contract: Contract,
+  provider: BaseProvider,
 ): Promise<void> => {
   const [, , blockchainAddress] = did.split(':');
-
-  let provider;
-  if (resolverSettings.provider.type === ProviderTypes.HTTP) {
-    provider = new ethers.providers.JsonRpcProvider(
-      resolverSettings.provider.uriOrInfo,
-      resolverSettings.provider.network,
-    );
-  } else if (resolverSettings.provider.type === ProviderTypes.IPC) {
-    provider = new ethers.providers.IpcProvider(
-      resolverSettings.provider.path,
-      resolverSettings.provider.network,
-    );
-  }
-
-  const contract = new ethers.Contract(resolverSettings.address, resolverSettings.abi, provider);
 
   let previousChangedBlock;
   let lastChangedBlock;
@@ -250,6 +290,14 @@ export const fetchDataFromEvents = async (
   document.lastChangedBlock = lastChangedBlock;
 };
 
+/**
+ * Provided with the fetched data, the function parses it and returns the
+ * DID Document associated with the relevant user
+ *
+ * @param did
+ * @param document
+ * @param context
+ */
 export const wrapDidDocument = (
   did: string,
   document: IDIDLogData,
@@ -258,12 +306,6 @@ export const wrapDidDocument = (
   const now = new BigNumber(Math.floor(new Date().getTime() / 1000));
 
   const publicKey: IPublicKey[] = [
-    {
-      id: `${did}#owner`,
-      type: 'Secp256k1VerificationKey',
-      controller: did,
-      ethereumAddress: document.owner,
-    },
   ];
 
   const authentication = [

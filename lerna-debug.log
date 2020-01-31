@@ -1,32 +1,28 @@
 0 silly argv { _: [ 'run' ],
 0 silly argv   parallel: true,
 0 silly argv   stream: true,
-0 silly argv   lernaVersion: '3.18.4',
+0 silly argv   lernaVersion: '3.20.2',
 0 silly argv   '$0':
 0 silly argv    '/Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/node_modules/.bin/lerna',
-0 silly argv   script: 'test' }
-1 notice cli v3.18.4
+0 silly argv   script: 'lint' }
+1 notice cli v3.20.2
 2 verbose rootPath /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry
-3 info Executing command in 7 packages: "npm run test"
-4 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/claims' ]
+3 info Executing command in 7 packages: "npm run lint"
+4 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/claims' ]
 5 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/claims undefined
-6 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/did-document' ]
+6 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/did-document' ]
 7 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/did-document undefined
-8 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/did-registry' ]
+8 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/did-registry' ]
 9 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/did-registry undefined
-10 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/did-resolver' ]
+10 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/did-resolver' ]
 11 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/did-resolver undefined
-12 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/did' ]
+12 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/did' ]
 13 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/did undefined
-14 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/jwt' ]
+14 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/jwt' ]
 15 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/jwt undefined
-16 silly npmRunScript.stream [ 'test', [], '@ew-did-registry/keys' ]
+16 silly npmRunScript.stream [ 'lint', [], '@ew-did-registry/keys' ]
 17 silly getExecOpts /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/keys undefined
-18 error Error: Command failed: npm run test
-18 error
-18 error
-18 error > @ew-did-registry/claims@1.0.0 test /Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/packages/claims
-18 error > ../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts
+18 error Error: Command failed: npm run lint
 18 error
 18 error
 18 error     at makeError (/Users/Raid/Documents/JavaScript/Energy/git-repo/ew-did-registry/node_modules/execa/index.js:174:9)

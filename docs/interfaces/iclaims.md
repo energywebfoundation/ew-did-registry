@@ -1,93 +1,52 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaims](iclaims.md)
+[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaims](iclaims.md)
 
 # Interface: IClaims
-
-IClaims interface is a factory to create Public, Private, and Proof Claims
 
 ## Hierarchy
 
 * **IClaims**
 
+  ↳ [IClaimsUser](iclaimsuser.md)
+
+  ↳ [IClaimsIssuer](iclaimsissuer.md)
+
+  ↳ [IClaimsVerifier](iclaimsverifier.md)
+
+## Implemented by
+
+* [Claims](../classes/claims.md)
+* [ClaimsIssuer](../classes/claimsissuer.md)
+* [ClaimsUser](../classes/claimsuser.md)
+* [ClaimsVerifier](../classes/claimsverifier.md)
+
 ## Index
 
-### Methods
+### Properties
 
-* [createPrivateClaim](iclaims.md#createprivateclaim)
-* [createProofClaim](iclaims.md#createproofclaim)
-* [createPublicClaim](iclaims.md#createpublicclaim)
-* [generateClaimFromToken](iclaims.md#generateclaimfromtoken)
+* [did](iclaims.md#did)
+* [jwt](iclaims.md#jwt)
+* [keys](iclaims.md#keys)
 
-## Methods
+## Properties
 
-###  createPrivateClaim
+###  did
 
-▸ **createPrivateClaim**(`data`: [IClaimData](iclaimdata.md), `didIssuer`: string): *[IPrivateClaim](iprivateclaim.md)*
+• **did**: *string*
 
-Defined in claims/src/interface.ts:30
-
-Create Private Claim by providing claim data and Issuer's DID
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-`didIssuer` | string |
-
-**Returns:** *[IPrivateClaim](iprivateclaim.md)*
+*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L21)*
 
 ___
 
-###  createProofClaim
+###  jwt
 
-▸ **createProofClaim**(`data`: [IClaimData](iclaimdata.md), `hashedFields`: number[]): *[IProofClaim](iproofclaim.md)*
+• **jwt**: *IJWT*
 
-Defined in claims/src/interface.ts:38
-
-Create Proof Claim with claim data and hashed claim fields
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-`hashedFields` | number[] |
-
-**Returns:** *[IProofClaim](iproofclaim.md)*
+*Defined in [claims/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L23)*
 
 ___
 
-###  createPublicClaim
+###  keys
 
-▸ **createPublicClaim**(`data`: [IClaimData](iclaimdata.md)): *[IVerificationClaim](iverificationclaim.md)*
+• **keys**: *IKeys*
 
-Defined in claims/src/interface.ts:22
-
-Create Public Claim with claim data
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | [IClaimData](iclaimdata.md) |
-
-**Returns:** *[IVerificationClaim](iverificationclaim.md)*
-
-___
-
-###  generateClaimFromToken
-
-▸ **generateClaimFromToken**(`token`: string, `type`: [ClaimType](../enums/claimtype.md)): *[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)*
-
-Defined in claims/src/interface.ts:46
-
-Provided with JWT this method will generate a Claim
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`token` | string |
-`type` | [ClaimType](../enums/claimtype.md) |
-
-**Returns:** *[IVerificationClaim](iverificationclaim.md) | [IPrivateClaim](iprivateclaim.md) | [IProofClaim](iproofclaim.md)*
+*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L22)*

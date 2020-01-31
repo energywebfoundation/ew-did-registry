@@ -58,15 +58,21 @@ var models_1 = require("../models");
 var resolver_1 = __importDefault(require("./resolver"));
 var constants_1 = require("../constants");
 var Authenticate = models_1.DIDAttribute.Authenticate, PublicKey = models_1.DIDAttribute.PublicKey, ServicePoint = models_1.DIDAttribute.ServicePoint;
+/**
+ * To support/extend this Class, one just has to work with this file.
+ * All the supporting functions are stored as private methods (i.e. with the '_' symbol)
+ * One can easily extend the methods available by researching the smart contract functionality,
+ * as well as by understanding how the read is performed.
+ */
 var Operator = /** @class */ (function (_super) {
     __extends(Operator, _super);
     /**
-     *
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
-    function Operator(keys) {
-        var _this = _super.call(this) || this;
+    function Operator(keys, settings) {
+        if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
+        var _this = _super.call(this, settings) || this;
         _this._keys = keys;
         var _a = _this._settings, address = _a.address, abi = _a.abi;
         var privateKey = _this._keys.privateKey;
@@ -77,17 +83,41 @@ var Operator = /** @class */ (function (_super) {
         return _this;
     }
     /**
-     * Empty for this implementation
+     * Relevant did should have positive cryptocurrency balance to perform
+     * the transaction. Create method saves the public key in smart contract's
+     * event, which can be qualified as document creation
      *
      * @param did
      * @param context
      * @returns Promise<boolean>
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Operator.prototype.create = function (did, context) {
+    Operator.prototype.create = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var did, document, pubKey, attribute, updateData, validity;
             return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.resolve(true)];
+                switch (_a.label) {
+                    case 0:
+                        did = "did:ewc:" + this._wallet.address;
+                        return [4 /*yield*/, this.read(did)];
+                    case 1:
+                        document = _a.sent();
+                        pubKey = document.publicKey.find(function (pk) { return pk.type === 'Secp256k1veriKey'; });
+                        if (pubKey)
+                            return [2 /*return*/, true];
+                        attribute = models_1.DIDAttribute.PublicKey;
+                        updateData = {
+                            algo: models_1.Algorithms.Secp256k1,
+                            type: models_1.PubKeyType.VerificationKey2018,
+                            encoding: models_1.Encoding.HEX,
+                            value: this._keys.publicKey,
+                        };
+                        validity = 10 * 60 * 1000;
+                        return [4 /*yield*/, this.update(did, attribute, updateData, validity)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                }
             });
         });
     };
@@ -123,7 +153,7 @@ var Operator = /** @class */ (function (_super) {
      * @returns Promise<boolean>
      */
     Operator.prototype.update = function (did, didAttribute, updateData, validity) {
-        if (validity === void 0) { validity = ethers_1.ethers.constants.MaxUint256; }
+        if (validity === void 0) { validity = Number.MAX_SAFE_INTEGER; }
         return __awaiter(this, void 0, void 0, function () {
             var registry, method;
             return __generator(this, function (_a) {
@@ -131,7 +161,126 @@ var Operator = /** @class */ (function (_super) {
                 method = didAttribute === PublicKey || didAttribute === ServicePoint
                     ? registry.setAttribute
                     : registry.addDelegate;
+                if (validity < 0) {
+                    throw new Error('Validity must be non negative value');
+                }
                 return [2 /*return*/, this._sendTransaction(method, did, didAttribute, updateData, validity)];
+            });
+        });
+    };
+    /**
+     * Revokes the delegate from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { PubKeyType } delegateType - type of delegate of interest
+     * @param { string } delegateDID - did of delegate of interest
+     * @returns Promise<boolean>
+     */
+    Operator.prototype.revokeDelegate = function (identityDID, delegateType, delegateDID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bytesType, _a, identityAddress, _b, delegateAddress, tx, receipt, event_1, error_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(delegateType);
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = delegateDID.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.revokeDelegate(identityAddress, bytesType, delegateAddress)];
+                    case 2:
+                        tx = _c.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _c.sent();
+                        event_1 = receipt.events.find(function (e) { return (e.event === 'DIDDelegateChanged'); });
+                        if (!event_1)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _c.sent();
+                        throw new Error(error_1);
+                    case 5: return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    /**
+     * Revokes the attribute from DID Document
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DIDAttribute } attributeType - type of attribute to revoke
+     * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+     * @returns Promise<boolean>
+     */
+    Operator.prototype.revokeAttribute = function (identityDID, attributeType, updateData) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, identityAddress, attribute, bytesType, bytesValue, tx, receipt, event_2, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        attribute = this._composeAttributeName(attributeType, updateData);
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(attribute);
+                        bytesValue = this._hexify(updateData.value);
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.revokeAttribute(identityAddress, bytesType, bytesValue)];
+                    case 2:
+                        tx = _b.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _b.sent();
+                        event_2 = receipt.events.find(function (e) { return (e.event === 'DIDAttributeChanged'); });
+                        if (!event_2)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_2 = _b.sent();
+                        throw new Error(error_2);
+                    case 5: return [2 /*return*/, true];
+                }
+            });
+        });
+    };
+    /**
+     * Changes the owner of particular decentralised identity
+     * Returns true on success
+     *
+     * @param { string } identityDID - did of current identity owner
+     * @param { string } newOwnerDid - did of new owner that will be set on success
+     * @returns Promise<boolean>
+     */
+    Operator.prototype.changeOwner = function (identityDID, newOwnerDid) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, identityAddress, _b, delegateAddress, tx, receipt, event_3, error_3;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = newOwnerDid.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this._didRegistry.changeOwner(identityAddress, delegateAddress)];
+                    case 2:
+                        tx = _c.sent();
+                        return [4 /*yield*/, tx.wait()];
+                    case 3:
+                        receipt = _c.sent();
+                        event_3 = receipt.events.find(function (e) { return (e.event === 'DIDOwnerChanged'); });
+                        if (!event_3)
+                            return [2 /*return*/, false];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_3 = _c.sent();
+                        throw new Error(error_3);
+                    case 5: return [2 /*return*/, true];
+                }
             });
         });
     };
@@ -173,6 +322,14 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes authentication attributes
+     *
+     * @param did
+     * @param auths
+     * @param publicKeys
+     * @private
+     */
     Operator.prototype._revokeAuthentications = function (did, auths, publicKeys) {
         return __awaiter(this, void 0, void 0, function () {
             var sender, nonce, method, _loop_1, this_1, _i, publicKeys_1, pk, state_1;
@@ -233,6 +390,13 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes Public key attribute
+     *
+     * @param did
+     * @param publicKeys
+     * @private
+     */
     Operator.prototype._revokePublicKeys = function (did, publicKeys) {
         return __awaiter(this, void 0, void 0, function () {
             var sender, nonce, _loop_2, this_2, _i, publicKeys_2, pk, state_2;
@@ -263,8 +427,8 @@ var Operator = /** @class */ (function (_super) {
                                         }
                                         value = pk["publicKey" + encoding[0].toUpperCase() + encoding.slice(1)];
                                         updateData = {
-                                            algo: models_1.Algorithms.ED25519,
-                                            type: match[1],
+                                            algo: match[1],
+                                            type: match[2],
                                             encoding: encoding,
                                             value: value,
                                         };
@@ -300,6 +464,13 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Revokes service attributes
+     *
+     * @param did
+     * @param services
+     * @private
+     */
     Operator.prototype._revokeServices = function (did, services) {
         return __awaiter(this, void 0, void 0, function () {
             var revoked, sender, nonce, _i, services_1, service, match, algo, value, didAttribute, _a;
@@ -340,15 +511,23 @@ var Operator = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Private function to send transactions
+     *
+     * @param method
+     * @param did
+     * @param didAttribute
+     * @param updateData
+     * @param validity
+     * @param overrides
+     * @private
+     */
     Operator.prototype._sendTransaction = function (method, did, didAttribute, updateData, validity, overrides) {
         return __awaiter(this, void 0, void 0, function () {
-            var identity, attributeName, bytesOfAttribute, bytesOfValue, argums, tx, receipt, event_1, e_1;
+            var identity, attributeName, bytesOfAttribute, bytesOfValue, argums, tx, receipt, event_4, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (validity && validity < 0) {
-                            throw new Error('Validity must be non negative value');
-                        }
                         identity = Operator._parseDid(did);
                         attributeName = this._composeAttributeName(didAttribute, updateData);
                         bytesOfAttribute = ethers_1.ethers.utils.formatBytes32String(attributeName);
@@ -370,21 +549,27 @@ var Operator = /** @class */ (function (_super) {
                         return [4 /*yield*/, tx.wait()];
                     case 3:
                         receipt = _a.sent();
-                        event_1 = receipt.events.find(function (e) { return (didAttribute === models_1.DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
+                        event_4 = receipt.events.find(function (e) { return (didAttribute === models_1.DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
                             || (didAttribute === models_1.DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
                             || (didAttribute === models_1.DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'); });
-                        if (!event_1)
+                        if (!event_4)
                             return [2 /*return*/, false];
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
-                        console.error(e_1);
                         return [2 /*return*/, false];
                     case 5: return [2 /*return*/, true];
                 }
             });
         });
     };
+    /**
+     * Util functions to create attribute name, supported by read method
+     *
+     * @param attribute
+     * @param updateData
+     * @private
+     */
     Operator.prototype._composeAttributeName = function (attribute, updateData) {
         var algo = updateData.algo, type = updateData.type, encoding = updateData.encoding;
         switch (attribute) {
@@ -398,6 +583,12 @@ var Operator = /** @class */ (function (_super) {
                 throw new Error('Unknown attribute name');
         }
     };
+    /**
+     * Util returns hex bytes value corresponding to string or object
+     *
+     * @param value
+     * @private
+     */
     Operator.prototype._hexify = function (value) {
         if (typeof value === 'string' && value.startsWith('0x')) {
             return value;
@@ -407,6 +598,11 @@ var Operator = /** @class */ (function (_super) {
             : JSON.stringify(value))
             .toString('hex');
     };
+    /**
+     * Returns relevant provider
+     *
+     * @private
+     */
     Operator.prototype._getProvider = function () {
         var provider = this._settings.provider;
         switch (provider.type) {
@@ -418,6 +614,12 @@ var Operator = /** @class */ (function (_super) {
                 return ethers_1.ethers.getDefaultProvider();
         }
     };
+    /**
+     * Checks if did is valid, and returns the address if it is
+     *
+     * @param did
+     * @private
+     */
     Operator._parseDid = function (did) {
         if (!constants_1.matchingPatternDid.test(did)) {
             throw new Error('Invalid DID');

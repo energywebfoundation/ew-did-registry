@@ -67,13 +67,12 @@ var DIDDocumentFull = /** @class */ (function (_super) {
      *  const document = new DIDDocumentFull(did, operator);
      *  await document.create();
      * ```
-     * @param { string } context
      * @return { boolean }
      */
-    DIDDocumentFull.prototype.create = function (context) {
+    DIDDocumentFull.prototype.create = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this._operator.create(this.did, context)];
+                return [2 /*return*/, this._operator.create()];
             });
         });
     };
@@ -121,9 +120,9 @@ var DIDDocumentFull = /** @class */ (function (_super) {
      *  validity,
      *  );
      * ```
-     * @param attribute
-     * @param data
-     * @param validity
+     * @param { DIDAttribute } attribute
+     * @param { IUpdateData } data
+     * @param { number } validity - time in milliseconds during the attribujte will be valid
      * @return { boolean }
      */
     DIDDocumentFull.prototype.update = function (attribute, data, validity) {

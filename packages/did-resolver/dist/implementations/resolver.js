@@ -37,8 +37,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("ethers/utils");
+var ethers_1 = require("ethers");
+var models_1 = require("../models");
 var constants_1 = require("../constants");
 var functions_1 = require("../functions");
+/**
+ * To support different networks compliant with ERC1056, the user/developer simply has to provide
+ * different resolver settings. The default resolver settings are provided in the 'constants' folder
+ * Any settings that follow the IResolverSettings interface are valid.
+ *
+ * The read functionality is implemented in Resolver class. If one wants to adjust it or create her
+ * own implementation (for example according to ERC725), one could use this class as a
+ * starting point.
+ * All the functionality supporting document resolution is stored in 'functions' folder.
+ */
 var Resolver = /** @class */ (function () {
     /**
      * Constructor
@@ -49,6 +61,13 @@ var Resolver = /** @class */ (function () {
     function Resolver(settings) {
         if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
         this._settings = settings;
+        if (settings.provider.type === models_1.ProviderTypes.HTTP) {
+            this._providerResolver = new ethers_1.ethers.providers.JsonRpcProvider(settings.provider.uriOrInfo, settings.provider.network);
+        }
+        else if (settings.provider.type === models_1.ProviderTypes.IPC) {
+            this._providerResolver = new ethers_1.ethers.providers.IpcProvider(settings.provider.path, settings.provider.network);
+        }
+        this._contract = new ethers_1.ethers.Contract(settings.address, settings.abi, this._providerResolver);
     }
     /**
      * Resolve DID Document for a given did
@@ -71,16 +90,17 @@ var Resolver = /** @class */ (function () {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, blockchainAddress, didDocument, error_1, didDocument;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var _a, address, _b, blockchainAddress, didDocument, error_1, didDocument;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
-                                    if (!constants_1.matchingPatternDid.test(did)) {
+                                    _a = did.split(':'), address = _a[2];
+                                    if (!constants_1.matchingPatternDid.test(did) || (address.length !== 42)) {
                                         reject(new Error('Invalid did provided'));
                                         return [2 /*return*/];
                                     }
-                                    if (this._fetchedDocument === undefined) {
-                                        _a = did.split(':'), blockchainAddress = _a[2];
+                                    if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
+                                        _b = did.split(':'), blockchainAddress = _b[2];
                                         this._fetchedDocument = {
                                             owner: blockchainAddress,
                                             lastChangedBlock: new utils_1.BigNumber(0),
@@ -90,17 +110,17 @@ var Resolver = /** @class */ (function () {
                                             attributes: new Map(),
                                         };
                                     }
-                                    _b.label = 1;
+                                    _c.label = 1;
                                 case 1:
-                                    _b.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings)];
+                                    _c.trys.push([1, 3, , 4]);
+                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings, this._contract, this._providerResolver)];
                                 case 2:
-                                    _b.sent();
+                                    _c.sent();
                                     didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
                                     resolve(didDocument);
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    error_1 = _b.sent();
+                                    error_1 = _c.sent();
                                     if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
                                         didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
                                         resolve(didDocument);
@@ -111,6 +131,67 @@ var Resolver = /** @class */ (function () {
                             }
                         });
                     }); })];
+            });
+        });
+    };
+    /**
+     * Returns the Ethereum address of current identity owner
+     *
+     * @param { string } did - did of identity of interest
+     * @returns Promise<string>
+     */
+    Resolver.prototype.identityOwner = function (did) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, id, owner, error_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = did.split(':'), id = _a[2];
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this._contract.identityOwner(id)];
+                    case 2:
+                        owner = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_2 = _b.sent();
+                        throw new Error(error_2);
+                    case 4: return [2 /*return*/, owner];
+                }
+            });
+        });
+    };
+    /**
+     * Performs the check if the delegate is valid for particular did
+     * Return boolean
+     *
+     * @param { string } identityDID - did of identity of interest
+     * @param { DelegateTypes } delegateType - type of delegate of interest
+     * @param { delegateDID } did - did of delegate of interest
+     * @returns Promise<boolean>
+     */
+    Resolver.prototype.validDelegate = function (identityDID, delegateType, delegateDID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bytesType, _a, identityAddress, _b, delegateAddress, valid, error_3;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        bytesType = ethers_1.ethers.utils.formatBytes32String(delegateType);
+                        _a = identityDID.split(':'), identityAddress = _a[2];
+                        _b = delegateDID.split(':'), delegateAddress = _b[2];
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this._contract.validDelegate(identityAddress, bytesType, delegateAddress)];
+                    case 2:
+                        valid = _c.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_3 = _c.sent();
+                        throw new Error(error_3);
+                    case 4: return [2 /*return*/, valid];
+                }
             });
         });
     };

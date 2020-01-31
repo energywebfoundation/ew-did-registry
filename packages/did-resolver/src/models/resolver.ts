@@ -5,13 +5,19 @@ import {
   Networkish,
 } from 'ethers/utils';
 
+/**
+ * Specifies currently supported provider types. New types can be added in the future.
+ */
 export enum ProviderTypes {
   HTTP,
   IPC,
 }
 
 /**
- * Specifies current Provider
+ * Specifies Provider to be used to communicate with blockchain.
+ * The uri, path, and network are the parameters found in the ethers library.
+ * Hence, 'ethers' documentation is a good point to check the available options,
+ * if one wants to extend the library.
  */
 export interface IProvider {
   type: ProviderTypes;
@@ -30,6 +36,12 @@ export interface IResolverSettings {
   address?: string;
 }
 
+/**
+ * The interface of DID Document is compliant with W3C specification.
+ * https://w3c.github.io/did-core/
+ * The link above will be the best point of reference for the interface below, including
+ * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
+ */
 export interface IDIDDocument {
   '@context': string;
   id: string;
@@ -81,6 +93,9 @@ export interface ILinkedDataProof {
   signatureValue: string;
 }
 
+/**
+ * This interface represents the structure of event emitted by ERC1056 compliant smart contract.
+ */
 export interface ISmartContractEvent {
   name: string;
   signature: string;
@@ -97,6 +112,13 @@ export interface ISmartContractEvent {
   value?: string;
 }
 
+/**
+ * This interface is used to store the parse data from events.
+ * The log data will be used for caching and further analysed to construct the did document,
+ * as new data arrives.
+ * The data in the did document will exclude certain variables, such as
+ * 'lastChangedBlock', 'created', 'updated', 'proof'
+ */
 export interface IDIDLogData {
   owner: string;
   lastChangedBlock: BigNumber;
@@ -110,10 +132,23 @@ export interface IDIDLogData {
   attributes?: Map<string, { [key: string]: string | number | object}>;
 }
 
+/**
+ * This interface simply specifies the handler functions for different event types
+ * in order to parse the data from the events in the blockchain.
+ */
 export interface IHandlers {
   [key: string]: (event: ISmartContractEvent,
                   etherAddress: string,
                   document: IDIDLogData,
                   validTo: BigNumber,
                   block: number,) => IDIDLogData;
+}
+
+/**
+ * Our assumption that delegates can be of two types, according to the standard. However,
+ * Other types can be added in the future, if required.
+ */
+export enum DelegateTypes {
+  authentication = 'sigAuth',
+  verification = 'veriKey',
 }

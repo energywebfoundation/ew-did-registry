@@ -33,6 +33,11 @@ export declare const defaultProvider: {
     uriOrInfo: string;
     type: ProviderTypes;
 };
+/**
+ * The three above comprise the minimal settings for resolver.
+ * One can adjust them to use the resolver with a different provider
+ * or with a different smart contract.
+ */
 export declare const defaultResolverSettings: {
     provider: {
         uriOrInfo: string;
