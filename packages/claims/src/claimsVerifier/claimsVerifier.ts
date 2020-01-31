@@ -107,13 +107,9 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
         // eslint-disable-next-line new-cap
         const PK = g.mult(new bn(fieldHash));
         const bitsPK = PK.toBits();
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < bitsPK.length; i++) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          if (bitsPK[i] !== value[i]) {
-            throw new Error('Disclosed field does not correspond to stored field');
-          }
+
+        if (!sjcl.bitArray.equal(value, bitsPK)) {
+          throw new Error('Disclosed field does not correspond to stored field');
         }
       }
     });

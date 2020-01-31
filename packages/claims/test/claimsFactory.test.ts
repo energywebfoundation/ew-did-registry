@@ -49,7 +49,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   const claimsIssuer = new ClaimsFactory(issuer, issuerOperator).createClaimsIssuer();
   const claimsVerifier = new ClaimsFactory(verifier, resolver).createClaimsVerifier();
 
-  it('workflow of private claim generation, issuance and presentation should pass', async () => {
+  it.only('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
     const privateData: IClaimData = { secret: '123', anotherSecret: 'shhh' };
     const {

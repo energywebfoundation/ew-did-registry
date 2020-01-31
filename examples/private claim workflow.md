@@ -73,8 +73,9 @@ the example below
 ```
 * **Claim creation**
 ```typescript 
-  const const claimData = {
+  const claimData = {
     secret: '123',
+    notSecret: 'string',
   };
   const { token, saltedFields } = await userClaims.createPrivateClaim(claimData, issuerDid);
 ```
@@ -126,7 +127,25 @@ Application saves issued token
 * **User proves his ownership of private data**
 
 ```typescript 
-  const proofToken = await userClaims.createProofClaim('http://claim.url', saltedFields);
+  const claimUrl = 'http://test.service.com';
+  const encryptedSaltedFields: IProofData = {};
+  let counter = 0;
+  Object.entries(saltedFields).forEach(([key, value]) => {
+    if (counter % 2 === 0) {
+      encryptedSaltedFields[key] = {
+        value,
+        encrypted: true,
+      };
+    } else {
+      encryptedSaltedFields[key] = {
+        value,
+        encrypted: false,
+      };
+    }
+    // eslint-disable-next-line no-plusplus
+    counter++;
+  });
+  const proofToken = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
 ```
 Application loads issued token from claimUrl = 'http://claim.url' and 
 cryptographycally matches it with proof token

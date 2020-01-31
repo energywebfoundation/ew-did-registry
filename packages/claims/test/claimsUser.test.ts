@@ -56,7 +56,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     decryped.toString().should.equal(saltedFields.secret);
   });
 
-  it.only('createProofClaim should return well formed proof claim', async () => {
+  it('createProofClaim should return well formed proof claim', async () => {
     const claimUrl = 'http://test.com';
     const saltedFields = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, saltedFields);
