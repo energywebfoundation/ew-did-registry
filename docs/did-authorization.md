@@ -207,7 +207,7 @@ as to create a trust relationship between the OEM and the flexhub users.
         "authority": true,
         "authority-delegate": "signer",
         "roles": [
-            {"name": "dso", "delegate": "signer"}, 
+            {"name": "dso", "delegate": "signer"},
             {"name": "tso", "delegate": "signer"}
         ]
     }
@@ -225,7 +225,7 @@ prove that its OEM is approved and that it has been installed correctly and that
     "approvals": {
         "authority": false,
         "roles": [
-            {"name": "oem", "delegate": "signer"}, 
+            {"name": "oem", "delegate": "signer"},
             {"name": "installer", "delegate": "signer"}
             {"name": "dso", "delegate": "signer"}
         ]
@@ -247,6 +247,6 @@ In the spirit of not reinventing the wheel, we will base the authentication meth
 
 ![](images/web-authentication.png)
 
-On the plus side, it will be easy to create a plugin that mocks the `Authenticator` and provides a DID compliant proof of authorization. 
+On the plus side, it will be easy to create a plugin that mocks the `Authenticator` and provides a DID compliant proof of authorization.
 
 On the negative side, this API is still experimental and not regarded as [production ready on any browser](https://caniuse.com/#feat=mdn-api_webauthentication)
