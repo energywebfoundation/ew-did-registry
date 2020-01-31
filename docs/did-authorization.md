@@ -32,19 +32,19 @@ update all the claims if a DID is invalidated
 As we already have a solution for creating and managing names on the EWC, the most convenient solution is
 to use it for name spacing the roles. In order to be a valid role name space, an ENS name must point to a
 smart contract which implements the correct interface:
-```
+```javascript
 contract NameSpace is Owned {
     address[] authorities;
     // the URL to the JSON of the roles definitions for this name space e.g. ipfs://QmcMN2wqoun88SVF5own7D5LUpnHwDA6ALZnVdFXhnYhAs
     string roles;
     // access level ownerOnly
-    function addAuthority(address authority) public;
+    function addAuthority(address authority) public {}
     // access level ownerOnly
-    function removeAuthority(address authority) public;
+    function removeAuthority(address authority) public {}
     // access level authorityOnly
-    function setRoles(string memory url) public;
+    function setRoles(string memory url) public{}
     // in order to retire a namespace it should be removed access level ownerOnly
-    function destroy() public;
+    function destroy() public{}
 }
 ```
 
@@ -74,11 +74,11 @@ The EWC flexhub has a list of roles which require approval in order to be valid.
 ```mermaid
 classDiagram
 
-NameSpace ..> Role
+Namespace ..> Role
 Role ..> Approval
 Approval ..> RoleApproval
 
-class NameSpace {
+class Namespace {
     String name
     Array<Role> roles
 }
@@ -99,8 +99,57 @@ class RoleApproval {
     String delegate
 }
 ```
+### Namespace
 
+The `Namespace` is the root element. It has only a name attribute which must contain the fully qualified ENS name. E.g. `flexhub.roles.did.ewc.eth`
 
+In addition to the name, the `Namespace` contains the list of roles.
+
+### Role
+
+Each role's FQN is composed of the the role name and namespace. E.g. `dso.flexhub.roles.did.ewc.eth`
+
+In addition to the name, the role contains the list of pprovals required to verify the validity of the role. When a user claims to have a certain role, it must be able to produce all the proofs listed in the `approvals` array.
+
+### Approval
+
+The `Approval` is the actual definition of the validity of the role. It contains the list of entities which must have signed the claim which is presented in order for the application to accept the claim as valid.
+
+#### Authority
+
+The boolean `authority` attribute specifies if the claim must be signed by one of the DIDs listed in the `authorities` array in the `Namesspace` smart contract.
+
+#### Authority-delegate
+
+The `authority-delegate` attribute contains the `delegation type` a delegate must have in order to be allowed to sign the claim as a delegate of one of the authorities. The `issuer` of the claim must thus be able to provide the proof that the `approver` is indeed a delegate of one of the authorities and has the correct delegation type.
+
+#### Roles Approval
+
+The `roles` attribute contains the list of roles which the approvers must have. There must be at least one valid approval by a DID with the correct role for each of the roles in the list for the claim to be considered valid.
+
+### RoleApproval
+
+This class describes the role `name` which must be held by an approver in order for a claim to hold a role to be valid.
+
+The claim can also be approved by a delegate of a DID with the correct role. In this case, the delegation type must correspond to the `delegate` attribute
+
+### Examples
+
+The following examples show how the roles for the flexhub (namespace `flexhub.roles.did.ewc.eth`) are defined.
+
+```mermaid
+graph LR
+
+    auth(Authority) --> dso(DSO)
+    auth --> tso(TSO)
+    dso --> oem(OEM)
+    oem --> iot(IoT device)
+    dso --> inst(Installer)
+    inst --> iot
+    dso --> pro(Prosumer)
+    inst --> pro
+    pro --> iot
+```
 
 ### TSO and DSO
 
@@ -184,34 +233,20 @@ prove that its OEM is approved and that it has been installed correctly and that
 }
 ```
 
-## Authentication and authorization
+## Authentication and Authorization
+
+In the DID version, there is no need for an `Authenticator` at login time as the approval has been given prior to the authentication, when the authorization was claimed.
 
 ```mermaid
-gantt
-       dateFormat  YYYY-MM-DD
-       title Adding GANTT diagram functionality to mermaid
 
-       section A section
-       Completed task            :done,    des1, 2014-01-06,2014-01-08
-       Active task               :active,  des2, 2014-01-09, 3d
-       Future task               :         des3, after des2, 5d
-       Future task2              :         des4, after des3, 5d
-
-       section Critical tasks
-       Completed task in the critical line :crit, active, crit1, 2014-01-06,8h
-       Implement parser and jison          :crit, done, after crit1, 2d
-       Create tests for parser             :crit, active, 3d
-       Future task in critical line        :crit, 5d
-       Create tests for renderer           :2d
-       Add to mermaid                      :1d
-
-       section Documentation
-       Describe gantt syntax               :active, a1, after des1, 3d
-       Add gantt diagram to demo page      :after a1  , 20h
-       Add another diagram to demo page    :doc1, after a1  , 48h
-
-       section Last section
-       Describe gantt syntax               :after doc1, 3d
-       Add gantt diagram to demo page      :20h
-       Add another diagram to demo page    :48h
 ```
+
+### Web Authentication API
+
+In the spirit of not reinventing the wheel, we will base the authentication method on the `Web Authentication` API. The process looks like this
+
+![](images/web-authentication.png)
+
+On the plus side, it will be easy to create a plugin that mocks the `Authenticator` and provides a DID compliant proof of authorization. 
+
+On the negative side, this API is still experimental and not regarded as [production ready on any browser](https://caniuse.com/#feat=mdn-api_webauthentication)
