@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDDocument](ididdocument.md)
 
 # Interface: IDIDDocument
 
@@ -31,7 +31,7 @@ IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
 
 • **@context**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L46)*
+*Defined in [did-resolver/src/models/resolver.ts:46](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L46)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-*Defined in [did-resolver/src/models/resolver.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L49)*
+*Defined in [did-resolver/src/models/resolver.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L49)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **created**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L52)*
+*Defined in [did-resolver/src/models/resolver.ts:52](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L52)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **delegates**? : *string[]*
 
-*Defined in [did-resolver/src/models/resolver.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L50)*
+*Defined in [did-resolver/src/models/resolver.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L50)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L47)*
+*Defined in [did-resolver/src/models/resolver.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L47)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:54](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L54)*
+*Defined in [did-resolver/src/models/resolver.ts:54](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L54)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-*Defined in [did-resolver/src/models/resolver.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L48)*
+*Defined in [did-resolver/src/models/resolver.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L48)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **service**? : *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-*Defined in [did-resolver/src/models/resolver.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L51)*
+*Defined in [did-resolver/src/models/resolver.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L51)*
 
 ___
 
@@ -95,4 +95,4 @@ ___
 
 • **updated**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L53)*
+*Defined in [did-resolver/src/models/resolver.ts:53](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L53)*

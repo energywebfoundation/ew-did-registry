@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [Claims](claims.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Claims](claims.md)
 
 # Class: Claims
 
@@ -42,7 +42,7 @@ Base class for extending by other claims classes
 
 \+ **new Claims**(`keys`: IKeys, `resolver`: IResolver): *[Claims](claims.md)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L29)*
 
 **`constructor`** 
 
@@ -63,7 +63,7 @@ Name | Type | Description |
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[did](../interfaces/iclaims.md#did)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[jwt](../interfaces/iclaims.md#jwt)*
 
-*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L22)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -85,7 +85,7 @@ ___
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
 
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L27)*
 
 Key pair represents the implementation of key management interface
 
@@ -95,7 +95,7 @@ Key pair represents the implementation of key management interface
 
 ▸ **getDocument**(`did`: string): *Promise‹IDIDDocument›*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L61)*
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L61)*
 
 Fetches DID document of the corresponding DID
 
@@ -124,7 +124,7 @@ ___
 
 ▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
 
-*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L83)*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 

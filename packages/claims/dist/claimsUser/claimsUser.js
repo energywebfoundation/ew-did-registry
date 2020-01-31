@@ -59,6 +59,7 @@ var eciesjs_1 = require("eciesjs");
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 var sjcl_complete_1 = __importDefault(require("sjcl-complete"));
+var assert_1 = __importDefault(require("assert"));
 var did_document_1 = require("@ew-did-registry/did-document");
 var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var claims_1 = require("../claims");
@@ -244,9 +245,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                         if (!(_a.sent())) {
                             throw new Error('Incorrect signature');
                         }
-                        if (JSON.stringify(claim.publicData) !== JSON.stringify(verifyData)) {
-                            throw new Error('Token payload doesn\'t match user data');
-                        }
+                        assert_1.default.deepEqual(claim.publicData, verifyData, 'Token payload doesn\'t match user data');
                         document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
                         return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
                                 algo: did_resolver_1.Algorithms.Secp256k1,
@@ -289,9 +288,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                         if (!(_c.sent())) {
                             throw new Error('Invalid signature');
                         }
-                        if (JSON.stringify(claim.publicData) !== JSON.stringify(publicData)) {
-                            throw new Error('Token payload doesn\'t match user data');
-                        }
+                        assert_1.default.deepEqual(claim.publicData, publicData, 'Token payload doesn\'t match user data');
                         // eslint-disable-next-line no-restricted-syntax
                         for (_i = 0, _a = Object.entries(saltedFields); _i < _a.length; _i++) {
                             _b = _a[_i], key = _b[0], value = _b[1];

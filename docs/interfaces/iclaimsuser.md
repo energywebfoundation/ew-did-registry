@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimsUser](iclaimsuser.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimsUser](iclaimsuser.md)
 
 # Interface: IClaimsUser
 
@@ -36,7 +36,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L21)*
+*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L21)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L23)*
+*Defined in [claims/src/models/index.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L23)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/models/index.ts#L22)*
+*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L22)*
 
 ## Methods
 
@@ -64,7 +64,7 @@ ___
 
 ▸ **createPrivateClaim**(`publicData`: [IClaimData](iclaimdata.md), `privateData`: [IClaimData](iclaimdata.md), `issuer`: string): *Promise‹object›*
 
-*Defined in [claims/src/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/interface.ts#L16)*
+*Defined in [claims/src/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/interface.ts#L16)*
 
 **Parameters:**
 
@@ -82,7 +82,7 @@ ___
 
 ▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: object): *Promise‹string›*
 
-*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/interface.ts#L18)*
+*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/interface.ts#L18)*
 
 **Parameters:**
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **createPublicClaim**(`publicData`: [IClaimData](iclaimdata.md)): *Promise‹string›*
 
-*Defined in [claims/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/interface.ts#L15)*
+*Defined in [claims/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/interface.ts#L15)*
 
 **Parameters:**
 
@@ -115,7 +115,7 @@ ___
 
 ▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: object, `publicData`: [IClaimData](iclaimdata.md)): *Promise‹void›*
 
-*Defined in [claims/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/interface.ts#L20)*
+*Defined in [claims/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/interface.ts#L20)*
 
 **Parameters:**
 
@@ -133,7 +133,7 @@ ___
 
 ▸ **verifyPublicClaim**(`token`: string, `verifyData`: [IClaimData](iclaimdata.md)): *Promise‹void›*
 
-*Defined in [claims/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/interface.ts#L19)*
+*Defined in [claims/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/interface.ts#L19)*
 
 **Parameters:**
 

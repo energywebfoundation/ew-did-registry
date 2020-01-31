@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDLogData](ididlogdata.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDLogData](ididlogdata.md)
 
 # Interface: IDIDLogData
 
@@ -33,7 +33,7 @@ The data in the did document will exclude certain variables, such as
 
 • **attributes**? : *Map‹string, object›*
 
-*Defined in [did-resolver/src/models/resolver.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L132)*
+*Defined in [did-resolver/src/models/resolver.ts:132](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L132)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **authentication**: *object*
 
-*Defined in [did-resolver/src/models/resolver.ts:126](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L126)*
+*Defined in [did-resolver/src/models/resolver.ts:126](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L126)*
 
 #### Type declaration:
 
@@ -53,7 +53,7 @@ ___
 
 • **created**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L129)*
+*Defined in [did-resolver/src/models/resolver.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L129)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **delegates**? : *string[]*
 
-*Defined in [did-resolver/src/models/resolver.ts:127](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L127)*
+*Defined in [did-resolver/src/models/resolver.ts:127](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L127)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 • **lastChangedBlock**: *BigNumber*
 
-*Defined in [did-resolver/src/models/resolver.ts:124](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L124)*
+*Defined in [did-resolver/src/models/resolver.ts:124](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L124)*
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 • **owner**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:123](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L123)*
+*Defined in [did-resolver/src/models/resolver.ts:123](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L123)*
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L131)*
+*Defined in [did-resolver/src/models/resolver.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L131)*
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 • **publicKey**: *object*
 
-*Defined in [did-resolver/src/models/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L125)*
+*Defined in [did-resolver/src/models/resolver.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L125)*
 
 #### Type declaration:
 
@@ -105,7 +105,7 @@ ___
 
 • **serviceEndpoints**? : *object*
 
-*Defined in [did-resolver/src/models/resolver.ts:128](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L128)*
+*Defined in [did-resolver/src/models/resolver.ts:128](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L128)*
 
 #### Type declaration:
 
@@ -117,4 +117,4 @@ ___
 
 • **updated**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L130)*
+*Defined in [did-resolver/src/models/resolver.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/did-resolver/src/models/resolver.ts#L130)*

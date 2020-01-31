@@ -4,7 +4,7 @@
   "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/lerna run test",
+    "test": "./node_modules/.bin/lerna run test ",
     "setup": "./node_modules/.bin/lerna bootstrap",
     "build": "./node_modules/.bin/lerna run compile --parallel --stream && ./node_modules/.bin/gulp",
     "test:browsers": "./node_modules/.bin/karma start",
@@ -62,13 +62,15 @@
     "karma-mocha": "^1.3.0",
     "lerna": "^3.18.3",
     "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.3",
     "ts-node": "^8.5.2",
     "tsify": "^4.0.1",
     "typedoc": "^0.15.2",
     "typedoc-plugin-markdown": "^2.2.11",
     "typescript": "^3.7.2",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "xunit-viewer": "^6.0.13"
   },
   "husky": {
     "hooks": {

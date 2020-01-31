@@ -151,6 +151,8 @@ graph LR
     pro --> iot
 ```
 
+This diagram shows why we need to share trust and be able to validate roles approved by others. Indeed, if a TSO wants to talk to an IoT Device, it must trust the approvals from the DSO, OEM, Installer and Prosumer whom they have no relationship with.
+
 ### TSO and DSO
 
 The first roles are the DSO and TSO which represent the first level after the root authority. They require
@@ -235,11 +237,38 @@ prove that its OEM is approved and that it has been installed correctly and that
 
 ## Authentication and Authorization
 
-In the DID version, there is no need for an `Authenticator` at login time as the approval has been given prior to the authentication, when the authorization was claimed.
+In this document we describe a Roles Based Authorization scheme. This means that every user's permissions in an application are determined by the roles which were assigned to the user.
+
+Authentication is the part of the process where the application verifies who tries to connect to it and if their claim to this identity is legitimate.
+
+Authorization is when the application determines which roles the user has or was given. In the case of SSI, role membership is not an information that the application holds, it is something that the identity can prove. Hence the ability to share roles among applications.
+
+### Authentication
+
+Authentication boils down to verifying that the party connecting to an application is in possession of the private key that owns the identity it wants to connect as. The sequence of events of the happy path is
 
 ```mermaid
+sequenceDiagram
 
+participant usr as User
+participant app as Application
+participant ewc as Energy Web Chain
+
+usr ->> app: this is my DID
+app ->> ewc: check that the identity is still valid
+ewc -->> app: confirm validity
+app -->> usr: here are some random bytes
+usr ->> usr: sign the challenge
+usr ->> app: this is my signature
+app ->> app: get DID from signature signature
+app ->> ewc: is this DID an owner?
+ewc -->> app: confirm ownership status
+app -->> usr: confirm login
 ```
+
+### Authorization
+
+
 
 ### Web Authentication API
 

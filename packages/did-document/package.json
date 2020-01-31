@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts --reporter mocha-junit-reporter",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
