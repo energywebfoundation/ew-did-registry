@@ -78,26 +78,18 @@ Namespace ..> Role
 Role ..> Approval
 Approval ..> RoleApproval
 
-class Namespace {
-    String name
-    Array<Role> roles
-}
+Namespace : String name
+Namespace : Array<Role> roles
 
-class Role {
-    String name
-    Approval approvals
-}
+Role : String name
+Role : Approval approvals
 
-class Approval {
-    Boolean authority
-    String authority-delegate
-    Array<RoleApproval> roles
-}
+Approval : Boolean authority
+Approval : String authority-delegate
+Approval : Array<RoleApproval> roles
 
-class RoleApproval {
-    String name
-    String delegate
-}
+RoleApproval : String name
+RoleApproval : String delegate
 ```
 ### Namespace
 
