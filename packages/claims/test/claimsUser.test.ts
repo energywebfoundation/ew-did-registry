@@ -4,7 +4,7 @@ import { Resolver, Operator } from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
 import { decrypt } from 'eciesjs';
 import { ClaimsUser } from '../src/claimsUser';
-import { IClaimData, IClaim } from '../src/models';
+import { IPrivateClaim, IProofClaim } from '../src/models';
 
 chai.should();
 
@@ -33,7 +33,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   });
 
   it('createPublicClaim should create token with claim data', async () => {
-    const publicData: IClaimData = {
+    const publicData = {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
@@ -48,21 +48,21 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
     const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
-    const claim: IClaim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
-    const decryped = decrypt(
+    const claim: IPrivateClaim = await userClaims.jwt.decode(token, { algorithm: 'ES256', noTimestamp: true }) as IPrivateClaim;
+    const decrypted = decrypt(
       issuer.privateKey,
-      Buffer.from((claim.claimData.secret as { data: Buffer }).data),
+      Buffer.from(claim.claimData.secret, 'hex'),
     );
-    decryped.toString().should.equal(saltedFields.secret);
+    decrypted.toString().should.equal(saltedFields.secret);
   });
 
   it('createProofClaim should return well formed proof claim', async () => {
     const claimUrl = 'http://test.com';
-    const saltedFields = { secret: { value: '123abc', encrypted: true } };
-    const token = await userClaims.createProofClaim(claimUrl, saltedFields);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
+    const proofData = { secret: { value: '123abc', encrypted: true } };
+    const token = await userClaims.createProofClaim(claimUrl, proofData);
+    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IProofClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
-    claim.should.have.nested.property('claimData.secret.value.h').which.instanceOf(Array);
-    claim.should.have.nested.property('claimData.secret.value.s').which.instanceOf(Array);
+    claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
+    claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
   });
 });

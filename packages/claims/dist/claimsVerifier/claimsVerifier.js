@@ -121,7 +121,7 @@ var ClaimsVerifier = /** @class */ (function (_super) {
     */
     ClaimsVerifier.prototype.verifyPrivateProof = function (proofToken, privateToken) {
         return __awaiter(this, void 0, void 0, function () {
-            var curve, g, proofClaim, resolver, privateClaim, proofClaimData;
+            var curve, g, proofClaim, resolver, privateClaim, proofData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -144,11 +144,11 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                             .validDelegate(privateClaim.did, did_resolver_1.DelegateTypes.verification, privateClaim.signer)) {
                             throw new Error('Issuer isn\'t a use\'r delegate');
                         }
-                        proofClaimData = proofClaim.claimData;
+                        proofData = proofClaim.proofData;
                         // eslint-disable-next-line no-restricted-syntax
                         Object.entries(privateClaim.claimData).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
-                            var field = proofClaimData[key];
+                            var field = proofData[key];
                             if (field.encrypted) {
                                 var PK = curve.fromBits(value);
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -171,13 +171,8 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                                 // eslint-disable-next-line new-cap
                                 var PK = g.mult(new bn(fieldHash));
                                 var bitsPK = PK.toBits();
-                                // eslint-disable-next-line no-plusplus
-                                for (var i = 0; i < bitsPK.length; i++) {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                                    // @ts-ignore
-                                    if (bitsPK[i] !== value[i]) {
-                                        throw new Error('Disclosed field does not correspond to stored field');
-                                    }
+                                if (!sjcl_complete_1.default.bitArray.equal(value, bitsPK)) {
+                                    throw new Error('Disclosed field does not correspond to stored field');
                                 }
                             }
                         });

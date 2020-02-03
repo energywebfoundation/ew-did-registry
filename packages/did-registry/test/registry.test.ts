@@ -4,17 +4,17 @@ import {
 } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
-import { IClaim, IProofData } from '@ew-did-registry/claims';
+import { IProofData, IPublicClaim, IPrivateClaim } from '@ew-did-registry/claims';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
   const userKeys = new Keys({
-    privateKey: '42f9eb48de908412da91f0e7b6d8f987db91cbf7bf2639c53394b746d91d2382',
-    publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
+    privateKey: '813e864ffa199f3cd38d8dcf2b097a2e2b226e000f3a05267eee23d0da7086f4',
+    publicKey: '029462cf4b9ece1f84b600e3d924641aa359f068f1876cbf08b1b345e4c9831f23',
   });
-  const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
+  const userAddress = '0x7551eD4be4eFd75E602189E9d59af448A564AB3a';
   const userDid = `did:${Networks.Ethereum}:${userAddress}`;
   const userOperator = new Operator(userKeys);
 
@@ -54,7 +54,7 @@ describe('[REGISTRY PACKAGE]', function () {
     const issuedToken = await issuerClaims.issuePublicClaim(token);
     // send to Verifier/Owner
     await userClaims.verifyPublicClaim(issuedToken, publicData);
-    const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
+    const claim: IPublicClaim = userClaims.jwt.decode(issuedToken) as IPublicClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
     expect(claim.claimData).deep.equal(publicData);
@@ -67,15 +67,10 @@ describe('[REGISTRY PACKAGE]', function () {
     };
     const userLigthDoc = user.documentFactory.createLite(new Resolver());
     await userLigthDoc.read(userDid);
-    let document = userLigthDoc.didDocument;
-    // console.log('document before add delegate:', document);
     const userFullDoc = user.documentFactory.createFull(new Operator(userKeys));
     expect(userFullDoc).instanceOf(DIDDocumentFull);
     await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity);
     await userLigthDoc.read(userDid);
-    document = userLigthDoc.didDocument;
-    // console.log('Issuer did:', issuerDid);
-    // console.log('document after add delegate:', document);
   });
 
   it.only('user can prove his ownership of his issued and verified private claim', async () => {
@@ -88,7 +83,7 @@ describe('[REGISTRY PACKAGE]', function () {
     const issuedToken = await issuerClaims.issuePrivateClaim(token);
     // send to Verifier/Owner
     await userClaims.verifyPrivateClaim(issuedToken, saltedFields);
-    const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
+    const claim: IPrivateClaim = userClaims.jwt.decode(issuedToken) as IPrivateClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
     // Issued token valid, issuer can be added to delegates
@@ -129,6 +124,5 @@ describe('[REGISTRY PACKAGE]', function () {
     const proofToken = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
     await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
     document = userLigthDoc.didDocument;
-    // console.log(document);
   });
 });

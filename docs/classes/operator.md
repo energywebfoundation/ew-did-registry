@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Operator](operator.md)
 
 # Class: Operator
 
@@ -44,7 +44,7 @@ as well as by understanding how the read is performed.
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L47)*
+Defined in did-resolver/src/implementations/operator.ts:47
 
 **Parameters:**
 
@@ -61,7 +61,7 @@ Name | Type | Default | Description |
 
 ▸ **changeOwner**(`identityDID`: string, `newOwnerDid`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:218](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L218)*
+Defined in did-resolver/src/implementations/operator.ts:218
 
 Changes the owner of particular decentralised identity
 Returns true on success
@@ -85,7 +85,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L76)*
+Defined in did-resolver/src/implementations/operator.ts:76
 
 Relevant did should have positive cryptocurrency balance to perform
 the transaction. Create method saves the public key in smart contract's
@@ -103,7 +103,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:257](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L257)*
+Defined in did-resolver/src/implementations/operator.ts:257
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -137,7 +137,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/resolver.ts#L131)*
+Defined in did-resolver/src/implementations/resolver.ts:131
 
 Returns the Ethereum address of current identity owner
 
@@ -161,7 +161,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/resolver.ts#L83)*
+Defined in did-resolver/src/implementations/resolver.ts:83
 
 Resolve DID Document for a given did
 
@@ -187,7 +187,7 @@ ___
 
 ▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md)): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:184](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L184)*
+Defined in did-resolver/src/implementations/operator.ts:184
 
 Revokes the attribute from DID Document
 Returns true on success
@@ -210,7 +210,7 @@ ___
 
 ▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [PubKeyType](../enums/pubkeytype.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:149](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L149)*
+Defined in did-resolver/src/implementations/operator.ts:149
 
 Revokes the delegate from DID Document
 Returns true on success
@@ -233,7 +233,7 @@ ___
 
 ▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:124](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/operator.ts#L124)*
+Defined in did-resolver/src/implementations/operator.ts:124
 
 Sets attribute value in DID document identified by the did
 
@@ -280,7 +280,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:151](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/implementations/resolver.ts#L151)*
+Defined in did-resolver/src/implementations/resolver.ts:151
 
 Performs the check if the delegate is valid for particular did
 Return boolean

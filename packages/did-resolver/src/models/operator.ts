@@ -32,8 +32,8 @@ export enum Algorithms {
  * delegate field
  */
 export interface IUpdateData {
-  encoding: Encoding;
-  algo: Algorithms;
+  encoding?: Encoding;
+  algo?: Algorithms;
   type: PubKeyType;
   value?: string;
   delegate?: string;

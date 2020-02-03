@@ -11,7 +11,7 @@ import {
   Operator, DIDAttribute, Algorithms, PubKeyType, Encoding,
 } from '@ew-did-registry/did-resolver';
 import {
-  IClaimData, IClaim, IProofClaim, IProofData, ISaltedFields,
+  IProofClaim, IProofData, ISaltedFields, IPublicClaim, IPrivateClaim,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
@@ -47,8 +47,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(publicData: IClaimData): Promise<string> {
-    const claim: IClaim = {
+  async createPublicClaim(publicData: object): Promise<string> {
+    const claim: IPublicClaim = {
       did: this.did,
       signer: this.did,
       claimData: publicData,
@@ -79,11 +79,11 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
    */
   async createPrivateClaim(
-    privateData: IClaimData,
+    privateData: { [key: string]: string },
     issuer: string,
   ): Promise<{ token: string; saltedFields: ISaltedFields }> {
     const saltedFields: { [key: string]: string } = {};
-    const claim: IClaim = {
+    const claim: IPrivateClaim = {
       did: this.did,
       signer: this.did,
       claimData: privateData,
@@ -97,7 +97,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
       const encryptedValue = encrypt(issuerPK, Buffer.from(saltedValue));
-      claim.claimData[key] = encryptedValue;
+      claim.claimData[key] = encryptedValue.toString('hex');
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
@@ -126,18 +126,18 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createProofClaim(claimUrl: string, saltedFields: IProofData): Promise<string> {
+  async createProofClaim(claimUrl: string, proofData: IProofData): Promise<string> {
     const claim: IProofClaim = {
       did: this.did,
       signer: this.did,
       claimUrl,
-      claimData: {},
+      proofData,
     };
-    Object.entries(saltedFields).forEach(([key, field]) => {
+    Object.entries(proofData).forEach(([key, field]) => {
       if (field.encrypted) {
         const k = bn.random(this.q, this.paranoia);
         const h: sjcl.SjclEllipticalPoint = this.g.mult(k);
-        const hashedField = crypto.createHash('sha256').update(field.value).digest('hex');
+        const hashedField = crypto.createHash('sha256').update(field.value as string).digest('hex');
         const a = new bn(hashedField);
         const PK = this.g.mult(a);
         const c: sjcl.BigNumber = bn.fromBits(hash.sha256.hash(
@@ -147,12 +147,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         ));
         const ca = c.mul(a).mod(this.q);
         const s = ca.add(k).mod(this.q);
-        claim.claimData[key] = {
+        claim.proofData[key] = {
           value: { h: h.toBits(), s: s.toBits() },
           encrypted: true,
         };
       } else {
-        claim.claimData[key] = {
+        claim.proofData[key] = {
           value: field.value,
           encrypted: false,
         };
@@ -177,8 +177,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void> {
-    const claim: IClaim = this.jwt.decode(token) as IClaim;
+  async verifyPublicClaim(token: string, verifyData: object): Promise<void> {
+    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Incorrect signature');
     }
@@ -213,7 +213,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @throw if the proof failed
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<void> {
-    const claim: IClaim = this.jwt.decode(token) as IClaim;
+    const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signature');
     }
