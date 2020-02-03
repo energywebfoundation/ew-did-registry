@@ -4,8 +4,7 @@ import { IJWT } from '@ew-did-registry/jwt';
 export interface IClaim {
     did: string;
     signer: string;
-    publicData: IClaimData;
-    privateData?: IClaimData;
+    claimData: IClaimData;
     [key: string]: string | object;
 }
 
@@ -15,6 +14,17 @@ export interface IProofClaim extends IClaim {
 
 export interface IClaimData {
     [key: string]: object | string;
+}
+
+export interface ISaltedFields {
+    [key: string]: string;
+}
+
+export interface IProofData {
+    [key: string]: {
+        value: string;
+        encrypted: boolean;
+    };
 }
 
 export interface IClaims {

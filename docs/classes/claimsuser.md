@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [ClaimsUser](claimsuser.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [ClaimsUser](claimsuser.md)
 
 # Class: ClaimsUser
 
@@ -47,7 +47,7 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L29)*
 
 **`constructor`** 
 
@@ -66,7 +66,7 @@ Name | Type | Description |
 
 • **curve**: *sjcl.SjclEllipticalCurve* =  sjcl.ecc.curves.k256
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L21)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L22)*
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 • **g**: *any* =  this.curve.G
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L25)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L26)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L22)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -112,7 +112,7 @@ ___
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L27)*
 
 Key pair represents the implementation of key management interface
 
@@ -122,7 +122,7 @@ ___
 
 • **paranoia**: *number* = 6
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L27)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:28](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L28)*
 
 ___
 
@@ -130,17 +130,17 @@ ___
 
 • **q**: *any* =  this.curve.r
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L23)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L24)*
 
 ## Methods
 
 ###  createPrivateClaim
 
-▸ **createPrivateClaim**(`publicData`: [IClaimData](../interfaces/iclaimdata.md), `privateData`: [IClaimData](../interfaces/iclaimdata.md), `issuer`: string): *Promise‹object›*
+▸ **createPrivateClaim**(`privateData`: [IClaimData](../interfaces/iclaimdata.md), `issuer`: string): *Promise‹object›*
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:80](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L80)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:81](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L81)*
 
 Used by the claim subject to create token with subject encrypted
 private data which afterwards will be sent to the issuer. Salted private
@@ -163,7 +163,6 @@ const claim = await claims.createPrivateClaim(claimData, issuer);
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`publicData` | [IClaimData](../interfaces/iclaimdata.md) | object with claim subject private data |
 `privateData` | [IClaimData](../interfaces/iclaimdata.md) | - |
 `issuer` | string |   |
 
@@ -175,9 +174,11 @@ ___
 
 ###  createProofClaim
 
-▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: object): *Promise‹string›*
+▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: [IProofData](../interfaces/iproofdata.md)): *Promise‹string›*
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:130](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L130)*
+*Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
+
+*Defined in [claims/src/claimsUser/claimsUser.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L129)*
 
 Used by the claim subject based on the salted values calculated
 when creating private claim
@@ -201,7 +202,7 @@ const claim = await claims.createProofClaim(claimUrl, saltedFields);
 Name | Type | Description |
 ------ | ------ | ------ |
 `claimUrl` | string | url of previously saved token |
-`saltedFields` | object | - |
+`saltedFields` | [IProofData](../interfaces/iproofdata.md) | - |
 
 **Returns:** *Promise‹string›*
 
@@ -213,7 +214,7 @@ ___
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:49](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L49)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L50)*
 
 Creates token with data about subject provided in claimData
 
@@ -246,7 +247,7 @@ ___
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L61)*
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L61)*
 
 Fetches DID document of the corresponding DID
 
@@ -273,9 +274,11 @@ ___
 
 ###  verifyPrivateClaim
 
-▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: object, `publicData`: [IClaimData](../interfaces/iclaimdata.md)): *Promise‹void›*
+▸ **verifyPrivateClaim**(`token`: string, `saltedFields`: [ISaltedFields](../interfaces/isaltedfields.md)): *Promise‹void›*
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:209](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L209)*
+*Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
+
+*Defined in [claims/src/claimsUser/claimsUser.ts:215](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L215)*
 
 Verifies token with private data received from issuer
 
@@ -296,8 +299,7 @@ const verified = await claims.verifyPrivateToken(issuedToken);
 Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | issued token |
-`saltedFields` | object | - |
-`publicData` | [IClaimData](../interfaces/iclaimdata.md) | - |
+`saltedFields` | [ISaltedFields](../interfaces/isaltedfields.md) | - |
 
 **Returns:** *Promise‹void›*
 
@@ -309,7 +311,7 @@ ___
 
 *Implementation of [IClaimsUser](../interfaces/iclaimsuser.md)*
 
-*Defined in [claims/src/claimsUser/claimsUser.ts:172](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claimsUser/claimsUser.ts#L172)*
+*Defined in [claims/src/claimsUser/claimsUser.ts:180](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claimsUser/claimsUser.ts#L180)*
 
 Verifies token received from issuer
 
@@ -342,7 +344,7 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/claims/src/claims/claims.ts#L83)*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 

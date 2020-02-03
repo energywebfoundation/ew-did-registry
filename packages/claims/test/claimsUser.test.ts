@@ -41,28 +41,28 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     claim.should.deep.equal({
       did: userDdid,
       signer: userDdid,
-      publicData,
+      claimData: publicData,
     });
   });
 
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
-    const { token, saltedFields } = await userClaims.createPrivateClaim({}, { secret }, issuerDid);
+    const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
     const claim: IClaim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
     const decryped = decrypt(
       issuer.privateKey,
-      Buffer.from((claim.privateData.secret as { data: Buffer }).data),
+      Buffer.from((claim.claimData.secret as { data: Buffer }).data),
     );
     decryped.toString().should.equal(saltedFields.secret);
   });
 
   it('createProofClaim should return well formed proof claim', async () => {
     const claimUrl = 'http://test.com';
-    const saltedFields = { secret: '123abc' };
+    const saltedFields = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, saltedFields);
     const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
-    claim.should.have.nested.property('privateData.secret.h').which.instanceOf(Array);
-    claim.should.have.nested.property('privateData.secret.s').which.instanceOf(Array);
+    claim.should.have.nested.property('claimData.secret.value.h').which.instanceOf(Array);
+    claim.should.have.nested.property('claimData.secret.value.s').which.instanceOf(Array);
   });
 });
