@@ -1,6 +1,6 @@
 # Role based access for EW-DID
 
-DIDs can be used for authentication very easily but in order to use them for authorization, we need first to agree on how to make the role claims verifiable. 
+DIDs can be used for authentication very easily but in order to use them for authorization, we need first to agree on how to make the role claims verifiable.
 
 ## Overview of roles as claims
 
@@ -70,26 +70,34 @@ A role can be defined in a JSON document. This makes it easy to store in a docum
 serialized and deserialized for RPC usage.
 
 The EWC flexhub has a list of roles which require approval in order to be valid.
+```plantuml
+@startuml
 
-```mermaid
-classDiagram
+Namespace --|> Role
+Role --|> Approval
+Approval --|> RoleApproval
 
-Namespace ..> Role
-Role ..> Approval
-Approval ..> RoleApproval
+class Namespace {
+    String name
+    Array<Role> roles
+}
 
-Namespace : String name
-Namespace : Array<Role> roles
+class Role {
+    String name
+    Approval approvals
+}
 
-Role : String name
-Role : Approval approvals
+class Approval {
+    Boolean authority
+    String authority-delegate
+    Array<RoleApproval> roles
+}
 
-Approval : Boolean authority
-Approval : String authority-delegate
-Approval : Array<RoleApproval> roles
-
-RoleApproval : String name
-RoleApproval : String delegate
+class RoleApproval {
+    String name
+    String delegate
+}
+@enduml
 ```
 ### Namespace
 
@@ -292,7 +300,7 @@ The certificate can be created with [`pkijs`](https://pkijs.org/)
 
 In conventional Web Authentication, the `Authenticator` sets the roles for the identity and signs the entire JWT which contains the identity and associated roles.
 
-We don't have the luxury of having a central source of trust which we can ask 
+We don't have the luxury of having a central source of trust which we can ask
 
 #### Web Authentication API
 
