@@ -449,7 +449,7 @@ export class Operator extends Resolver implements IOperator {
       case DIDAttribute.Authenticate:
         return updateData.type;
       case DIDAttribute.ServicePoint:
-        return `did/${DIDAttribute.ServicePoint}/${algo}/${type}/${encoding}`;
+        return `did/${DIDAttribute.ServicePoint}/${type}`;
       default:
         throw new Error('Unknown attribute name');
     }

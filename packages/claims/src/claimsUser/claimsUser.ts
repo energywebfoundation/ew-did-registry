@@ -11,7 +11,7 @@ import {
   Operator, DIDAttribute, Algorithms, PubKeyType, Encoding,
 } from '@ew-did-registry/did-resolver';
 import {
-  IClaimData, IClaim, IProofClaim,
+  IClaimData, IClaim, IProofClaim, IProofData, ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
@@ -51,7 +51,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     const claim: IClaim = {
       did: this.did,
       signer: this.did,
-      publicData,
+      claimData: publicData,
     };
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }
@@ -79,16 +79,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
    */
   async createPrivateClaim(
-    publicData: IClaimData,
     privateData: IClaimData,
     issuer: string,
-  ): Promise<{ token: string; saltedFields: { [key: string]: string } }> {
+  ): Promise<{ token: string; saltedFields: ISaltedFields }> {
     const saltedFields: { [key: string]: string } = {};
     const claim: IClaim = {
       did: this.did,
       signer: this.did,
-      publicData,
-      privateData: {},
+      claimData: privateData,
     };
     const issuerDocument = await this.getDocument(issuer);
     const issuerPK = issuerDocument
@@ -99,7 +97,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
       const encryptedValue = encrypt(issuerPK, Buffer.from(saltedValue));
-      claim.privateData[key] = encryptedValue;
+      claim.claimData[key] = encryptedValue;
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
@@ -128,28 +126,37 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createProofClaim(claimUrl: string, saltedFields: { [key: string]: string }): Promise<string> {
+  async createProofClaim(claimUrl: string, saltedFields: IProofData): Promise<string> {
     const claim: IProofClaim = {
       did: this.did,
       signer: this.did,
       claimUrl,
-      publicData: {},
-      privateData: {},
+      claimData: {},
     };
     Object.entries(saltedFields).forEach(([key, field]) => {
-      const k = bn.random(this.q, this.paranoia);
-      const h: sjcl.SjclEllipticalPoint = this.g.mult(k);
-      const hashedField = crypto.createHash('sha256').update(field).digest('hex');
-      const a = new bn(hashedField);
-      const PK = this.g.mult(a);
-      const c: sjcl.BigNumber = bn.fromBits(hash.sha256.hash(
-        this.g.x.toBits()
-          .concat(h.toBits())
-          .concat(PK.toBits()),
-      ));
-      const ca = c.mul(a).mod(this.q);
-      const s = ca.add(k).mod(this.q);
-      claim.privateData[key] = { h: h.toBits(), s: s.toBits() };
+      if (field.encrypted) {
+        const k = bn.random(this.q, this.paranoia);
+        const h: sjcl.SjclEllipticalPoint = this.g.mult(k);
+        const hashedField = crypto.createHash('sha256').update(field.value).digest('hex');
+        const a = new bn(hashedField);
+        const PK = this.g.mult(a);
+        const c: sjcl.BigNumber = bn.fromBits(hash.sha256.hash(
+          this.g.x.toBits()
+            .concat(h.toBits())
+            .concat(PK.toBits()),
+        ));
+        const ca = c.mul(a).mod(this.q);
+        const s = ca.add(k).mod(this.q);
+        claim.claimData[key] = {
+          value: { h: h.toBits(), s: s.toBits() },
+          encrypted: true,
+        };
+      } else {
+        claim.claimData[key] = {
+          value: field.value,
+          encrypted: false,
+        };
+      }
     });
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }
@@ -175,7 +182,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Incorrect signature');
     }
-    assert.deepEqual(claim.publicData, verifyData, 'Token payload doesn\'t match user data');
+    assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
     const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
     await document.update(
       DIDAttribute.Authenticate,
@@ -205,17 +212,16 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throw if the proof failed
    */
-  async verifyPrivateClaim(token: string, saltedFields: { [key: string]: string }, publicData: IClaimData): Promise<void> {
+  async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<void> {
     const claim: IClaim = this.jwt.decode(token) as IClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signature');
     }
-    assert.deepEqual(claim.publicData, publicData, 'Token payload doesn\'t match user data');
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(saltedFields)) {
       const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
       const PK = this.g.mult(new bn(fieldHash));
-      if (!bitArray.equal(claim.privateData[key], PK.toBits())) {
+      if (!bitArray.equal(claim.claimData[key], PK.toBits())) {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }

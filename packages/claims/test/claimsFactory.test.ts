@@ -4,8 +4,10 @@ import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import { IResolver, Resolver, Operator } from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
+import { decrypt } from 'eciesjs';
+import crypto from 'crypto';
 import { ClaimsFactory } from '../src/claimsFactory';
-import { IClaimData } from '../src/models';
+import {IClaimData, IProofData} from '../src/models';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
@@ -26,7 +28,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   });
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B';
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`
+  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
   const issuerOperator = new Operator(issuer);
 
   const verifier = new Keys({
@@ -47,20 +49,37 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   const claimsIssuer = new ClaimsFactory(issuer, issuerOperator).createClaimsIssuer();
   const claimsVerifier = new ClaimsFactory(verifier, resolver).createClaimsVerifier();
 
-  it('workflow of private claim generation, issuance and presentation should pass', async () => {
+  it.only('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
-    const privateData: IClaimData = { secret: '123' };
+    const privateData: IClaimData = { secret: '123', anotherSecret: 'shhh' };
     const {
       token: privateToken,
       saltedFields,
-    } = await claimsUser.createPrivateClaim({}, privateData, issuerDid);
+    } = await claimsUser.createPrivateClaim(privateData, issuerDid);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side
-    await claimsUser.verifyPrivateClaim(issuedToken, saltedFields, {});
+    await claimsUser.verifyPrivateClaim(issuedToken, saltedFields);
     // expect(verified).to.be.true;
     const claimUrl = 'http://test.service.com';
-    const proofToken = await claimsUser.createProofClaim(claimUrl, saltedFields);
+    const encryptedSaltedFields: IProofData = {};
+    let counter = 0;
+    Object.entries(saltedFields).forEach(([key, value]) => {
+      if (counter % 2 === 0) {
+        encryptedSaltedFields[key] = {
+          value,
+          encrypted: true,
+        };
+      } else {
+        encryptedSaltedFields[key] = {
+          value,
+          encrypted: false,
+        };
+      }
+      // eslint-disable-next-line no-plusplus
+      counter++;
+    });
+    const proofToken = await claimsUser.createProofClaim(claimUrl, encryptedSaltedFields);
     // Verifier side
     await claimsVerifier.verifyPrivateProof(proofToken, issuedToken);
   });

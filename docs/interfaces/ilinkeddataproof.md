@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [ILinkedDataProof](ilinkeddataproof.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [ILinkedDataProof](ilinkeddataproof.md)
 
 # Interface: ILinkedDataProof
 
@@ -21,7 +21,7 @@
 
 • **created**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L91)*
+*Defined in [did-resolver/src/models/resolver.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/models/resolver.ts#L91)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **creator**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:92](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L92)*
+*Defined in [did-resolver/src/models/resolver.ts:92](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/models/resolver.ts#L92)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **signatureValue**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L93)*
+*Defined in [did-resolver/src/models/resolver.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/models/resolver.ts#L93)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:90](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did-resolver/src/models/resolver.ts#L90)*
+*Defined in [did-resolver/src/models/resolver.ts:90](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-resolver/src/models/resolver.ts#L90)*

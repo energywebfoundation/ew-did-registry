@@ -1,4 +1,4 @@
-[@ew-did-registry/did - v1.0.0](../README.md) › [Globals](../globals.md) › [Networks](networks.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Networks](networks.md)
 
 # Enumeration: Networks
 
@@ -15,7 +15,7 @@
 
 • **EnergyWeb**: = "ewc"
 
-*Defined in [did/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did/src/models/index.ts#L7)*
+*Defined in [did/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did/src/models/index.ts#L7)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **Ethereum**: = "eth"
 
-*Defined in [did/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/1ed60e5/packages/did/src/models/index.ts#L6)*
+*Defined in [did/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did/src/models/index.ts#L6)*

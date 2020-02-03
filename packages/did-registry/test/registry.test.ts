@@ -4,7 +4,7 @@ import {
 } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
-import { IClaim } from '@ew-did-registry/claims';
+import { IClaim, IProofData } from '@ew-did-registry/claims';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 
@@ -57,7 +57,7 @@ describe('[REGISTRY PACKAGE]', function () {
     const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
-    expect(claim.publicData).deep.equal(publicData);
+    expect(claim.claimData).deep.equal(publicData);
     // Issued token valid, issuer can be added to delegates
     const updateData: IUpdateData = {
       algo: Algorithms.Secp256k1,
@@ -78,15 +78,16 @@ describe('[REGISTRY PACKAGE]', function () {
     // console.log('document after add delegate:', document);
   });
 
-  it('user can prove his ownership of his issued and verified private claim', async () => {
+  it.only('user can prove his ownership of his issued and verified private claim', async () => {
     const privateData = {
       secret: '123',
+      notSecret: 'string',
     };
-    const { token, saltedFields } = await userClaims.createPrivateClaim({}, privateData, issuerDid);
+    const { token, saltedFields } = await userClaims.createPrivateClaim(privateData, issuerDid);
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePrivateClaim(token);
     // send to Verifier/Owner
-    await userClaims.verifyPrivateClaim(issuedToken, saltedFields, {});
+    await userClaims.verifyPrivateClaim(issuedToken, saltedFields);
     const claim: IClaim = userClaims.jwt.decode(issuedToken) as IClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
@@ -107,8 +108,27 @@ describe('[REGISTRY PACKAGE]', function () {
     await userLigthDoc.read(userDid);
     const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
     expect(document.publicKey.find((pk) => pk.id === expectedPkId)).to.not.undefined;
-    const proofToken = await userClaims.createProofClaim('http://claim.url', saltedFields);
+    const claimUrl = 'http://test.service.com';
+    const encryptedSaltedFields: IProofData = {};
+    let counter = 0;
+    Object.entries(saltedFields).forEach(([key, value]) => {
+      if (counter % 2 === 0) {
+        encryptedSaltedFields[key] = {
+          value,
+          encrypted: true,
+        };
+      } else {
+        encryptedSaltedFields[key] = {
+          value,
+          encrypted: false,
+        };
+      }
+      // eslint-disable-next-line no-plusplus
+      counter++;
+    });
+    const proofToken = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
     await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
     document = userLigthDoc.didDocument;
+    // console.log(document);
   });
 });
