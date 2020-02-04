@@ -1,19 +1,26 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from '@ew-did-registry/jwt';
 
-export interface IClaim {
+export interface IPublicClaim {
     did: string;
     signer: string;
-    claimData: IClaimData;
+    claimData: object;
     [key: string]: string | object;
 }
 
-export interface IProofClaim extends IClaim {
-    claimUrl: string;
+export interface IPrivateClaim {
+    did: string;
+    signer: string;
+    claimData: { [key: string]: string }; // so that they can be salted
+    [key: string]: string | object;
 }
 
-export interface IClaimData {
-    [key: string]: object | string;
+export interface IProofClaim {
+    did: string;
+    signer: string;
+    claimUrl: string;
+    proofData: IProofData;
+    [key: string]: string | object;
 }
 
 export interface ISaltedFields {
@@ -22,7 +29,7 @@ export interface ISaltedFields {
 
 export interface IProofData {
     [key: string]: {
-        value: string;
+        value: string | object; // string - for non-encrypted, {h,s} - for encrypted
         encrypted: boolean;
     };
 }

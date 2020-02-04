@@ -1,12 +1,10 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
 
 # Interface: IProofClaim
 
 ## Hierarchy
 
-* [IClaim](iclaim.md)
-
-  ↳ **IProofClaim**
+* **IProofClaim**
 
 ## Indexable
 
@@ -16,28 +14,18 @@
 
 ### Properties
 
-* [claimData](iproofclaim.md#claimdata)
 * [claimUrl](iproofclaim.md#claimurl)
 * [did](iproofclaim.md#did)
+* [proofData](iproofclaim.md#proofdata)
 * [signer](iproofclaim.md#signer)
 
 ## Properties
-
-###  claimData
-
-• **claimData**: *[IClaimData](iclaimdata.md)*
-
-*Inherited from [IClaim](iclaim.md).[claimData](iclaim.md#claimdata)*
-
-*Defined in [claims/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/models/index.ts#L7)*
-
-___
 
 ###  claimUrl
 
 • **claimUrl**: *string*
 
-*Defined in [claims/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/models/index.ts#L12)*
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -45,9 +33,15 @@ ___
 
 • **did**: *string*
 
-*Inherited from [IClaim](iclaim.md).[did](iclaim.md#did)*
+Defined in claims/src/models/index.ts:19
 
-*Defined in [claims/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/models/index.ts#L5)*
+___
+
+###  proofData
+
+• **proofData**: *[IProofData](iproofdata.md)*
+
+Defined in claims/src/models/index.ts:22
 
 ___
 
@@ -55,6 +49,4 @@ ___
 
 • **signer**: *string*
 
-*Inherited from [IClaim](iclaim.md).[signer](iclaim.md#signer)*
-
-*Defined in [claims/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/claims/src/models/index.ts#L6)*
+Defined in claims/src/models/index.ts:20

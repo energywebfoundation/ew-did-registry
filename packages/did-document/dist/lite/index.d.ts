@@ -39,6 +39,6 @@ declare class DIDDocumentLite implements IDIDDocumentLite {
      * @param {string} attribute
      * @param {string} type
      */
-    read(attribute: string, type: string): Promise<any>;
+    read(attribute: string, type: string): Promise<string | object>;
 }
 export { IDIDDocumentLite, DIDDocumentLite };

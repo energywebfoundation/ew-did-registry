@@ -359,27 +359,29 @@ export class Operator extends Resolver implements IOperator {
    * @private
    */
   private async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
-    let revoked = true;
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
       const match = service.id.match(serviceIdPattern);
-      const algo = match[1] as Algorithms;
+      const type = match[1] as PubKeyType;
       const value = service.serviceEndpoint;
       const didAttribute = DIDAttribute.ServicePoint;
-      revoked = revoked && await this._sendTransaction(
+      const revoked = await this._sendTransaction(
         this._didRegistry.revokeAttribute,
         did,
         didAttribute,
         {
-          algo, type: PubKeyType.VerificationKey2018, encoding: Encoding.HEX, value,
+          type, value,
         },
         null,
         { nonce },
       );
-      nonce += nonce;
+      if (!revoked) {
+        return false;
+      }
+      nonce += 1;
     }
-    return revoked;
+    return true;
   }
 
   /**

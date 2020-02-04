@@ -7,12 +7,10 @@ import { IDIDDocumentLite } from '../lite';
  */
 export interface IDIDDocumentFull extends IDIDDocumentLite {
     /**
-     * New DID Document is registered on the Blockchain with the provided context,
-     * if no Document existed for the specified DID
-     * @param {string} context
+     * New DID Document is registered on the Blockchain,
      * @returns {boolean}
      */
-    create(context: string): Promise<boolean>;
+    create(): Promise<boolean>;
     /**
      * Provided with necessary parameters, method updates relevant attributes of the DID Document
      * @param {string} attribute

@@ -153,7 +153,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                             var salt = crypto_1.default.randomBytes(32).toString('base64');
                             var saltedValue = value + salt;
                             var encryptedValue = eciesjs_1.encrypt(issuerPK, Buffer.from(saltedValue));
-                            claim.claimData[key] = encryptedValue;
+                            claim.claimData[key] = encryptedValue.toString('hex');
                             saltedFields[key] = saltedValue;
                         });
                         return [4 /*yield*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
@@ -186,7 +186,7 @@ var ClaimsUser = /** @class */ (function (_super) {
      *
      * @returns { Promise<string> }
      */
-    ClaimsUser.prototype.createProofClaim = function (claimUrl, saltedFields) {
+    ClaimsUser.prototype.createProofClaim = function (claimUrl, proofData) {
         return __awaiter(this, void 0, void 0, function () {
             var claim;
             var _this = this;
@@ -195,9 +195,9 @@ var ClaimsUser = /** @class */ (function (_super) {
                     did: this.did,
                     signer: this.did,
                     claimUrl: claimUrl,
-                    claimData: {},
+                    proofData: proofData,
                 };
-                Object.entries(saltedFields).forEach(function (_a) {
+                Object.entries(proofData).forEach(function (_a) {
                     var key = _a[0], field = _a[1];
                     if (field.encrypted) {
                         var k = bn.random(_this.q, _this.paranoia);
@@ -210,13 +210,13 @@ var ClaimsUser = /** @class */ (function (_super) {
                             .concat(PK.toBits())));
                         var ca = c.mul(a).mod(_this.q);
                         var s = ca.add(k).mod(_this.q);
-                        claim.claimData[key] = {
+                        claim.proofData[key] = {
                             value: { h: h.toBits(), s: s.toBits() },
                             encrypted: true,
                         };
                     }
                     else {
-                        claim.claimData[key] = {
+                        claim.proofData[key] = {
                             value: field.value,
                             encrypted: false,
                         };

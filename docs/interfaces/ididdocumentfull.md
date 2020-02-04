@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDDocumentFull](ididdocumentfull.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocumentFull](ididdocumentfull.md)
 
 # Interface: IDIDDocumentFull
 
@@ -37,7 +37,7 @@ This interface extends lite DID Document interface
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[did](ididdocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/lite/interface.ts#L19)*
+Defined in did-document/src/lite/interface.ts:19
 
 DID of Document subject is stored in DID Documents
 
@@ -49,7 +49,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[didDocument](ididdocumentlite.md#diddocument)*
 
-*Defined in [did-document/src/lite/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/lite/interface.ts#L24)*
+Defined in did-document/src/lite/interface.ts:24
 
 Resolved DID Document
 
@@ -57,18 +57,11 @@ Resolved DID Document
 
 ###  create
 
-▸ **create**(`context`: string): *Promise‹boolean›*
+▸ **create**(): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/full/interface.ts#L17)*
+Defined in did-document/src/full/interface.ts:15
 
-New DID Document is registered on the Blockchain with the provided context,
-if no Document existed for the specified DID
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`context` | string |
+New DID Document is registered on the Blockchain,
 
 **Returns:** *Promise‹boolean›*
 
@@ -78,7 +71,7 @@ ___
 
 ▸ **deactivate**(): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/full/interface.ts#L31)*
+Defined in did-document/src/full/interface.ts:29
 
 On success the status of the DID Document is changed from “active” to “deactivated”.
 
@@ -88,11 +81,11 @@ ___
 
 ###  read
 
-▸ **read**(`attribute`: string, `type?`: string): *string | object*
+▸ **read**(`attribute`: string, `type?`: string): *Promise‹string | object›*
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[read](ididdocumentlite.md#read)*
 
-*Defined in [did-document/src/lite/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/lite/interface.ts#L32)*
+Defined in did-document/src/lite/interface.ts:32
 
 Fetches the specified data/attributes from DID Document
 
@@ -103,7 +96,7 @@ Name | Type |
 `attribute` | string |
 `type?` | string |
 
-**Returns:** *string | object*
+**Returns:** *Promise‹string | object›*
 
 ___
 
@@ -111,7 +104,7 @@ ___
 
 ▸ **update**(`attribute`: string, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/interface.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/5f4bc4b/packages/did-document/src/full/interface.ts#L25)*
+Defined in did-document/src/full/interface.ts:23
 
 Provided with necessary parameters, method updates relevant attributes of the DID Document
 
