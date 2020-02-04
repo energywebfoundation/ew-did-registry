@@ -1,5 +1,5 @@
 import sjcl from 'sjcl-complete';
-import { IClaimData } from '../models';
+import { IProofData, ISaltedFields } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 export declare class ClaimsUser extends Claims implements IClaimsUser {
@@ -27,7 +27,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<string> }
      */
-    createPublicClaim(publicData: IClaimData): Promise<string>;
+    createPublicClaim(publicData: object): Promise<string>;
     /**
      * Used by the claim subject to create token with subject encrypted
      * private data which afterwards will be sent to the issuer. Salted private
@@ -50,11 +50,11 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */
-    createPrivateClaim(publicData: IClaimData, privateData: IClaimData, issuer: string): Promise<{
+    createPrivateClaim(privateData: {
+        [key: string]: string;
+    }, issuer: string): Promise<{
         token: string;
-        saltedFields: {
-            [key: string]: string;
-        };
+        saltedFields: ISaltedFields;
     }>;
     /**
      * Used by the claim subject based on the salted values calculated
@@ -78,9 +78,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<string> }
      */
-    createProofClaim(claimUrl: string, saltedFields: {
-        [key: string]: string;
-    }): Promise<string>;
+    createProofClaim(claimUrl: string, proofData: IProofData): Promise<string>;
     /**
      * Verifies token received from issuer
      *
@@ -97,7 +95,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {Promise<void>}
      * @throws if the proof failed
      */
-    verifyPublicClaim(token: string, verifyData: IClaimData): Promise<void>;
+    verifyPublicClaim(token: string, verifyData: object): Promise<void>;
     /**
      * Verifies token with private data received from issuer
      *
@@ -114,7 +112,5 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {Promise<void>}
      * @throw if the proof failed
      */
-    verifyPrivateClaim(token: string, saltedFields: {
-        [key: string]: string;
-    }, publicData: IClaimData): Promise<void>;
+    verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<void>;
 }

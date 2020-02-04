@@ -56,6 +56,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore
 var sjcl_complete_1 = __importDefault(require("sjcl-complete"));
 var did_resolver_1 = require("@ew-did-registry/did-resolver");
+var crypto_1 = __importDefault(require("crypto"));
 var claims_1 = require("../claims");
 var bn = sjcl_complete_1.default.bn, hash = sjcl_complete_1.default.hash;
 var ClaimsVerifier = /** @class */ (function (_super) {
@@ -120,46 +121,61 @@ var ClaimsVerifier = /** @class */ (function (_super) {
     */
     ClaimsVerifier.prototype.verifyPrivateProof = function (proofToken, privateToken) {
         return __awaiter(this, void 0, void 0, function () {
-            var curve, g, proofClaim, resolver, privateClaim, _i, _a, _b, key, value, PK, _c, h, s, c, left, right;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var curve, g, proofClaim, resolver, privateClaim, proofData;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         curve = sjcl_complete_1.default.ecc.curves.k256;
                         g = curve.G;
                         proofClaim = this.jwt.decode(proofToken);
                         return [4 /*yield*/, this.verifySignature(proofToken, proofClaim.signer)];
                     case 1:
-                        if (!(_d.sent())) {
+                        if (!(_a.sent())) {
                             throw new Error('Invalid signature');
                         }
                         resolver = new did_resolver_1.Resolver();
                         privateClaim = this.jwt.decode(privateToken);
                         return [4 /*yield*/, this.verifySignature(privateToken, privateClaim.signer)];
                     case 2:
-                        if (!(_d.sent())) {
+                        if (!(_a.sent())) {
                             throw new Error('Invalid signature');
                         }
                         if (!resolver
                             .validDelegate(privateClaim.did, did_resolver_1.DelegateTypes.verification, privateClaim.signer)) {
                             throw new Error('Issuer isn\'t a use\'r delegate');
                         }
+                        proofData = proofClaim.proofData;
                         // eslint-disable-next-line no-restricted-syntax
-                        for (_i = 0, _a = Object.entries(privateClaim.privateData); _i < _a.length; _i++) {
-                            _b = _a[_i], key = _b[0], value = _b[1];
-                            PK = curve.fromBits(value);
-                            _c = proofClaim.privateData[key], h = _c.h, s = _c.s;
-                            h = curve.fromBits(h);
-                            s = bn.fromBits(s);
-                            c = hash.sha256.hash(g.x.toBits()
-                                .concat(h.toBits())
-                                .concat(PK.toBits()));
-                            c = bn.fromBits(c);
-                            left = g.mult(s);
-                            right = PK.mult(c).toJac().add(h).toAffine();
-                            if (!sjcl_complete_1.default.bitArray.equal(left.toBits(), right.toBits())) {
-                                throw new Error('User didn\'t prove the knowledge of the private data');
+                        Object.entries(privateClaim.claimData).forEach(function (_a) {
+                            var key = _a[0], value = _a[1];
+                            var field = proofData[key];
+                            if (field.encrypted) {
+                                var PK = curve.fromBits(value);
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                                // @ts-ignore
+                                var _b = field.value, h = _b.h, s = _b.s;
+                                h = curve.fromBits(h);
+                                s = bn.fromBits(s);
+                                var c = hash.sha256.hash(g.x.toBits()
+                                    .concat(h.toBits())
+                                    .concat(PK.toBits()));
+                                c = bn.fromBits(c);
+                                var left = g.mult(s);
+                                var right = PK.mult(c).toJac().add(h).toAffine();
+                                if (!sjcl_complete_1.default.bitArray.equal(left.toBits(), right.toBits())) {
+                                    throw new Error('User didn\'t prove the knowledge of the private data');
+                                }
                             }
-                        }
+                            else {
+                                var fieldHash = crypto_1.default.createHash('sha256').update(field.value).digest('hex');
+                                // eslint-disable-next-line new-cap
+                                var PK = g.mult(new bn(fieldHash));
+                                var bitsPK = PK.toBits();
+                                if (!sjcl_complete_1.default.bitArray.equal(value, bitsPK)) {
+                                    throw new Error('Disclosed field does not correspond to stored field');
+                                }
+                            }
+                        });
                         return [2 /*return*/];
                 }
             });

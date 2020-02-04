@@ -1,12 +1,10 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
 
 # Interface: IProofClaim
 
 ## Hierarchy
 
-* [IClaim](iclaim.md)
-
-  ↳ **IProofClaim**
+* **IProofClaim**
 
 ## Indexable
 
@@ -18,8 +16,7 @@
 
 * [claimUrl](iproofclaim.md#claimurl)
 * [did](iproofclaim.md#did)
-* [privateData](iproofclaim.md#optional-privatedata)
-* [publicData](iproofclaim.md#publicdata)
+* [proofData](iproofclaim.md#proofdata)
 * [signer](iproofclaim.md#signer)
 
 ## Properties
@@ -28,7 +25,7 @@
 
 • **claimUrl**: *string*
 
-*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L13)*
+Defined in claims/src/models/index.ts:21
 
 ___
 
@@ -36,29 +33,15 @@ ___
 
 • **did**: *string*
 
-*Inherited from [IClaim](iclaim.md).[did](iclaim.md#did)*
-
-*Defined in [claims/src/models/index.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L5)*
+Defined in claims/src/models/index.ts:19
 
 ___
 
-### `Optional` privateData
+###  proofData
 
-• **privateData**? : *[IClaimData](iclaimdata.md)*
+• **proofData**: *[IProofData](iproofdata.md)*
 
-*Inherited from [IClaim](iclaim.md).[privateData](iclaim.md#optional-privatedata)*
-
-*Defined in [claims/src/models/index.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L8)*
-
-___
-
-###  publicData
-
-• **publicData**: *[IClaimData](iclaimdata.md)*
-
-*Inherited from [IClaim](iclaim.md).[publicData](iclaim.md#publicdata)*
-
-*Defined in [claims/src/models/index.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L7)*
+Defined in claims/src/models/index.ts:22
 
 ___
 
@@ -66,6 +49,4 @@ ___
 
 • **signer**: *string*
 
-*Inherited from [IClaim](iclaim.md).[signer](iclaim.md#signer)*
-
-*Defined in [claims/src/models/index.ts:6](https://github.com/energywebfoundation/ew-did-registry/blob/162cbcc/packages/claims/src/models/index.ts#L6)*
+Defined in claims/src/models/index.ts:20

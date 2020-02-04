@@ -2,9 +2,14 @@
 // @ts-ignore
 import sjcl from 'sjcl-complete';
 import { Resolver, DelegateTypes } from '@ew-did-registry/did-resolver';
+import crypto from 'crypto';
 import { Claims } from '../claims';
 import { IClaimsVerifier } from '../interface';
-import { IClaim } from '../models';
+import {
+  IProofClaim,
+  IPrivateClaim,
+  IPublicClaim,
+} from '../models';
 
 const { bn, hash } = sjcl;
 
@@ -26,7 +31,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
    * @throws if the proof failed
    */
   async verifyPublicProof(token: string): Promise<void> {
-    const claim: IClaim = this.jwt.decode(token) as IClaim;
+    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signatue');
     }
@@ -57,13 +62,13 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   async verifyPrivateProof(proofToken: string, privateToken: string): Promise<void> {
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
-    const proofClaim: IClaim = this.jwt.decode(proofToken) as IClaim;
+    const proofClaim: IProofClaim = this.jwt.decode(proofToken) as IProofClaim;
     if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
       throw new Error('Invalid signature');
     }
     const resolver = new Resolver();
 
-    const privateClaim: IClaim = this.jwt.decode(privateToken) as IClaim;
+    const privateClaim: IPrivateClaim = this.jwt.decode(privateToken) as IPrivateClaim;
     if (!(await this.verifySignature(privateToken, privateClaim.signer))) {
       throw new Error('Invalid signature');
     }
@@ -77,23 +82,39 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     ) {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
+
+    const { proofData } = proofClaim;
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(privateClaim.privateData)) {
-      const PK = curve.fromBits(value);
-      let { h, s } = proofClaim.privateData[key] as { h: sjcl.bitArray; s: sjcl.bitArray };
-      h = curve.fromBits(h);
-      s = bn.fromBits(s);
-      let c = hash.sha256.hash(
-        g.x.toBits()
-          .concat(h.toBits())
-          .concat(PK.toBits()),
-      );
-      c = bn.fromBits(c);
-      const left = g.mult(s);
-      const right = PK.mult(c).toJac().add(h).toAffine();
-      if (!sjcl.bitArray.equal(left.toBits(), right.toBits())) {
-        throw new Error('User didn\'t prove the knowledge of the private data');
+    Object.entries(privateClaim.claimData).forEach(([key, value]) => {
+      const field = proofData[key];
+      if (field.encrypted) {
+        const PK = curve.fromBits(value);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        let { h, s } = field.value;
+        h = curve.fromBits(h);
+        s = bn.fromBits(s);
+        let c = hash.sha256.hash(
+          g.x.toBits()
+            .concat(h.toBits())
+            .concat(PK.toBits()),
+        );
+        c = bn.fromBits(c);
+        const left = g.mult(s);
+        const right = PK.mult(c).toJac().add(h).toAffine();
+        if (!sjcl.bitArray.equal(left.toBits(), right.toBits())) {
+          throw new Error('User didn\'t prove the knowledge of the private data');
+        }
+      } else {
+        const fieldHash = crypto.createHash('sha256').update(field.value as string).digest('hex');
+        // eslint-disable-next-line new-cap
+        const PK = g.mult(new bn(fieldHash));
+        const bitsPK = PK.toBits();
+
+        if (!sjcl.bitArray.equal(value, bitsPK)) {
+          throw new Error('Disclosed field does not correspond to stored field');
+        }
       }
-    }
+    });
   }
 }

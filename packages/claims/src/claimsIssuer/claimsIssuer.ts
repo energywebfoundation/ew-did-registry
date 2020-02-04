@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import sjcl from 'sjcl-complete';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
-import { IClaim } from '../models';
+import { IPublicClaim, IPrivateClaim } from '../models';
 
 const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
@@ -27,7 +27,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * @returns { Promise<string> } issued token
    */
   async issuePublicClaim(token: string): Promise<string> {
-    const claim: IClaim = this.jwt.decode(token) as IClaim;
+    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('User signature not valid');
     }
@@ -56,19 +56,20 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
   async issuePrivateClaim(token: string): Promise<string> {
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
-    const claim: IClaim = this.jwt.decode(token) as IClaim;
+    const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
-    Object.entries(claim.privateData).forEach(([key, value]) => {
+    Object.entries(claim.claimData).forEach(([key, value]) => {
       const decryptedField = decrypt(
         this.keys.privateKey,
-        Buffer.from((value as { data: Array<number> }).data),
+        Buffer.from(value, 'hex'),
+        // Buffer.from((value as { data: Array<number> }).data),
       );
       const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
       const PK = g.mult(new bn(fieldHash));
-      claim.privateData[key] = PK.toBits();
+      claim.claimData[key] = PK.toBits();
     });
     return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
   }

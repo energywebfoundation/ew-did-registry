@@ -135,12 +135,12 @@ var ClaimsIssuer = /** @class */ (function (_super) {
                             throw new Error('User signature not valid');
                         }
                         claim.signer = this.did;
-                        Object.entries(claim.privateData).forEach(function (_a) {
+                        Object.entries(claim.claimData).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
-                            var decryptedField = eciesjs_1.decrypt(_this.keys.privateKey, Buffer.from(value.data));
+                            var decryptedField = eciesjs_1.decrypt(_this.keys.privateKey, Buffer.from(value, 'hex'));
                             var fieldHash = crypto_1.default.createHash('sha256').update(decryptedField).digest('hex');
                             var PK = g.mult(new bn(fieldHash));
-                            claim.privateData[key] = PK.toBits();
+                            claim.claimData[key] = PK.toBits();
                         });
                         return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
                 }
