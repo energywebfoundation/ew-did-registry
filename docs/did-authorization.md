@@ -73,27 +73,27 @@ The EWC flexhub has a list of roles which require approval in order to be valid.
 ```plantuml
 @startuml
 
-Namespace --|> Role
-Role --|> Approval
-Approval --|> RoleApproval
+Namespace -right--|> Role
+Role -right--|> Approval
+Approval -right--|> RoleApproval
 
-class Namespace {
+class Namespace <<(R,#FF7700)>> {
     String name
     Array<Role> roles
 }
 
-class Role {
+class Role <<(R,#FF7700)>> {
     String name
     Approval approvals
 }
 
-class Approval {
+class Approval <<(R,#FF7700)>> {
     Boolean authority
     String authority-delegate
     Array<RoleApproval> roles
 }
 
-class RoleApproval {
+class RoleApproval <<(R,#FF7700)>> {
     String name
     String delegate
 }
@@ -137,18 +137,19 @@ The claim can also be approved by a delegate of a DID with the correct role. In 
 
 The following examples show how the roles for the flexhub (namespace `flexhub.roles.did.ewc.eth`) are defined.
 
-```mermaid
-graph LR
-
-    auth(Authority) --> dso(DSO)
-    auth --> tso(TSO)
-    dso --> oem(OEM)
-    oem --> iot(IoT device)
-    dso --> inst(Installer)
-    inst --> iot
-    dso --> pro(Prosumer)
-    inst --> pro
-    pro --> iot
+```plantuml
+@startuml
+    (*) --> Authority
+    Authority --> DSO
+    Authority --> TSO
+    DSO --> OEM
+    OEM --> "IoT device"
+    DSO --> Installer
+    Installer --> "IoT device"
+    DSO --> Prosumer
+    Installer --> Prosumer
+    Prosumer --> "IoT device"
+@enduml
 ```
 
 This diagram shows why we need to share trust and be able to validate roles approved by others. Indeed, if a TSO wants to talk to an IoT Device, it must trust the approvals from the DSO, OEM, Installer and Prosumer whom they have no relationship with.
@@ -247,23 +248,26 @@ Authorization is when the application determines which roles the user has or was
 
 Authentication boils down to verifying that the party connecting to an application is in possession of the private key that owns the identity it wants to connect as. The sequence of events of the happy path is
 
-```mermaid
-sequenceDiagram
+```plantuml
+@startuml
+autonumber
 
-participant usr as User
-participant app as Application
-participant ewc as Energy Web Chain
+actor User as usr
+participant Application as app
+participant "Energy Web \nChain" as ewc
 
-usr ->> app: this is my DID
-app ->> ewc: check that the identity is still valid
-ewc -->> app: confirm validity
-app -->> usr: here are some random bytes
-usr ->> usr: sign the challenge
-usr ->> app: this is my signature
-app ->> app: get DID from signature signature
-app ->> ewc: is this DID an owner?
-ewc -->> app: confirm ownership status
-app -->> usr: confirm login
+usr -> app: this is my DID
+app -> ewc: check that the identity is still valid
+ewc --> app: confirm validity
+app --> usr: here are some random bytes
+
+usr -> usr: sign the challenge
+usr -> app: this is my signature
+app -> app: get DID from signature 
+app -> ewc: is this DID an owner?
+ewc --> app: confirm ownership status
+app --> usr: confirm login
+@enduml
 ```
 
 #### Message formats
@@ -286,15 +290,30 @@ The user sends their DID in the form of a JWKS ([JSON Web Key Set](https://tools
     ],
     "n": "yeNlzlub94YgerT030codqEztjfU_S6X4DbDA_iVKkjAWtYfPHDzz_sPCT1Axz6isZdf3lHpq_gYX4Sz-cbe4rjmigxUxr-FgKHQy3HeCdK6hNq9ASQvMK9LBOpXDNn7mei6RZWom4wo3CMvvsY1w8tjtfLb-yQwJPltHxShZq5-ihC9irpLI9xEBTgG12q5lGIFPhTl_7inA1PFK97LuSLnTJzW0bj096v_TMDg7pOWm_zHtF53qbVsI0e3v5nmdKXdFf9BjIARRfVrbxVxiZHjU6zL6jY5QJdh1QCmENoejj_ytspMmGW7yMRxzUqgxcAqOBpVm0b-_mW3HoBdjQ",
     "e": "AQAB",
-    "kid": "NjVBRjY5MDlCMUIwNzU4RTA2QzZFMDQ4QzQ2MDAyQjVDNjk1RTM2Qg",
+    "kid": "did:ewc:0x881E6f2C336777748fcB7F1C2F9a82fCFA5C6AA3",
     "x5t": "NjVBRjY5MDlCMUIwNzU4RTA2QzZFMDQ4QzQ2MDAyQjVDNjk1RTM2Qg"
   }
 ]}
 ```
 
-The private key for the X509 certificate is in PEM format. The encoding is performed with [`key encoder`](https://www.npmjs.com/package/key-encoder) package.
+The private key for the X509 certificate is in PEM format. The encoding is performed with [`key encoder`](https://www.npmjs.com/package/key-encoder) package. The certificate can be created with [`pkijs`](https://pkijs.org/)
 
-The certificate can be created with [`pkijs`](https://pkijs.org/)
+##### Verifying ID validity
+
+The validity of the identity can be verified in the smart contract or other data store which holds it. The data store of the identity and the revocation status of the certificate thus depend on the method. The method can be found in the `kid` attribute of the JWKS document.
+
+##### Signed challenge
+
+The challenge are 16 hex encoded random bytes. The bytes are encapsulated in a claim which is turned into a JWT using the EWDID library:
+
+```javascript 1.8
+const claim = {"challenge": "b737160a73f536393c908fe89961e570"}
+const token = await claimsUser.createPublicClaim(claim)
+```
+
+##### Verifying ownership
+
+Again the ownership verification depends on the store for the identitiy. In ERC1056 it is a bit different from ERC725. This should be derived from the DID method.
 
 ### Authorization
 
