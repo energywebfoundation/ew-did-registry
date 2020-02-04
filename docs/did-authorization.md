@@ -32,6 +32,7 @@ update all the claims if a DID is invalidated
 As we already have a solution for creating and managing names on the EWC, the most convenient solution is
 to use it for name spacing the roles. In order to be a valid role name space, an ENS name must point to a
 smart contract which implements the correct interface:
+
 ```javascript
 contract NameSpace is Owned {
     address[] authorities;
@@ -42,7 +43,7 @@ contract NameSpace is Owned {
     // access level ownerOnly
     function removeAuthority(address authority) public {}
     // access level authorityOnly
-    function setRoles(string memory url) public{}
+    function setRoles(string url, string hash) public{}
     // in order to retire a namespace it should be removed access level ownerOnly
     function destroy() public{}
 }
@@ -167,7 +168,7 @@ approval by the authority and nothing else.
         "role_name": "tso",
         "approvals": {
             "authority": true,
-            "authority-delegate": "signer",
+            "authority-delegate": "auth-admin",
             "roles": []
         }
     },
@@ -175,7 +176,7 @@ approval by the authority and nothing else.
         "role_name": "dso",
         "approvals": {
             "authority": true,
-            "authority-delegate": "signer",
+            "authority-delegate": "auth-admin",
             "roles": []
         }
     }]
@@ -193,25 +194,26 @@ require that the installer has gotten approval from them specifically.
     "approvals": {
         "authority": false,
         "roles": [
-            {"name": "dso", "delegate": "signer"}
+            {"name": "dso", "delegate": "auth-admin"}
         ]
     }
 }
 ```
 
 ### OEM
+
 The OEM is the manufacturer of the IoT devices which get installed in the flexhub. It needs to be approved so
 as to create a trust relationship between the OEM and the flexhub users.
+
 ```json
 {
-    "namespace": "flexhub.roles.did.ewc.eth",
     "role_name": "oem",
     "approvals": {
         "authority": true,
         "authority-delegate": "signer",
         "roles": [
-            {"name": "dso", "delegate": "signer"},
-            {"name": "tso", "delegate": "signer"}
+            {"name": "dso", "delegate": "auth-admin"},
+            {"name": "tso", "delegate": "auth-admin"}
         ]
     }
 }
@@ -221,16 +223,16 @@ as to create a trust relationship between the OEM and the flexhub users.
 
 Each IoT device has an identity on the network and must be enabled to act as a device. It must be able to
 prove that its OEM is approved and that it has been installed correctly and that it can communicate with the DSO.
+
 ```json
 {
-    "namespace": "flexhub.roles.did.ewc.eth",
     "role_name": "iot_device",
     "approvals": {
         "authority": false,
         "roles": [
-            {"name": "oem", "delegate": "signer"},
-            {"name": "installer", "delegate": "signer"}
-            {"name": "dso", "delegate": "signer"}
+            {"name": "oem", "delegate": "auth-admin"},
+            {"name": "installer", "delegate": "auth-admin"},
+            {"name": "dso", "delegate": "auth-admin"}
         ]
     }
 }
@@ -268,6 +270,7 @@ app -> ewc: is this DID an owner?
 ewc --> app: confirm ownership status
 app --> usr: confirm login
 @enduml
+TODO: explicitly describe each step 
 ```
 
 #### Message formats
@@ -276,37 +279,27 @@ The messages which are sent and responses received must comply with the followin
 
 ##### DID presentation
 
-The user sends their DID in the form of a JWKS ([JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-4)) which looks something like this:
+The user sends their DID in string format and specifies on which network and which smart contract can be used to verify it.
 
 ```json
 {
-"keys": [
-  {
-    "alg": "ECDSA",
-    "kty": "EC",
-    "use": "sig",
-    "x5c": [
-      "MIIC+DCCAeCgAwIBAgIJBIGjYW6hFpn2MA0GCSqGSIb3DQEBBQUAMCMxITAfBgNVBAMTGGN1c3RvbWVyLWRlbW9zLmF1dGgwLmNvbTAeFw0xNjExMjIyMjIyMDVaFw0zMDA4MDEyMjIyMDVaMCMxITAfBgNVBAMTGGN1c3RvbWVyLWRlbW9zLmF1dGgwLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMnjZc5bm/eGIHq09N9HKHahM7Y31P0ul+A2wwP4lSpIwFrWHzxw88/7Dwk9QMc+orGXX95R6av4GF+Es/nG3uK45ooMVMa/hYCh0Mtx3gnSuoTavQEkLzCvSwTqVwzZ+5noukWVqJuMKNwjL77GNcPLY7Xy2/skMCT5bR8UoWaufooQvYq6SyPcRAU4BtdquZRiBT4U5f+4pwNTxSvey7ki50yc1tG49Per/0zA4O6Tlpv8x7Red6m1bCNHt7+Z5nSl3RX/QYyAEUX1a28VcYmR41Osy+o2OUCXYdUAphDaHo4/8rbKTJhlu8jEcc1KoMXAKjgaVZtG/v5ltx6AXY0CAwEAAaMvMC0wDAYDVR0TBAUwAwEB/zAdBgNVHQ4EFgQUQxFG602h1cG+pnyvJoy9pGJJoCswDQYJKoZIhvcNAQEFBQADggEBAGvtCbzGNBUJPLICth3mLsX0Z4z8T8iu4tyoiuAshP/Ry/ZBnFnXmhD8vwgMZ2lTgUWwlrvlgN+fAtYKnwFO2G3BOCFw96Nm8So9sjTda9CCZ3dhoH57F/hVMBB0K6xhklAc0b5ZxUpCIN92v/w+xZoz1XQBHe8ZbRHaP1HpRM4M7DJk2G5cgUCyu3UBvYS41sHvzrxQ3z7vIePRA4WF4bEkfX12gvny0RsPkrbVMXX1Rj9t6V7QXrbPYBAO+43JvDGYawxYVvLhz+BJ45x50GFQmHszfY3BR9TPK8xmMmQwtIvLu1PMttNCs7niCYkSiUv2sc2mlq1i3IashGkkgmo="
-    ],
-    "n": "yeNlzlub94YgerT030codqEztjfU_S6X4DbDA_iVKkjAWtYfPHDzz_sPCT1Axz6isZdf3lHpq_gYX4Sz-cbe4rjmigxUxr-FgKHQy3HeCdK6hNq9ASQvMK9LBOpXDNn7mei6RZWom4wo3CMvvsY1w8tjtfLb-yQwJPltHxShZq5-ihC9irpLI9xEBTgG12q5lGIFPhTl_7inA1PFK97LuSLnTJzW0bj096v_TMDg7pOWm_zHtF53qbVsI0e3v5nmdKXdFf9BjIARRfVrbxVxiZHjU6zL6jY5QJdh1QCmENoejj_ytspMmGW7yMRxzUqgxcAqOBpVm0b-_mW3HoBdjQ",
-    "e": "AQAB",
-    "kid": "did:ewc:0x881E6f2C336777748fcB7F1C2F9a82fCFA5C6AA3",
-    "x5t": "NjVBRjY5MDlCMUIwNzU4RTA2QzZFMDQ4QzQ2MDAyQjVDNjk1RTM2Qg"
-  }
-]}
+  "id": "did:ethr:0x881E6f2C336777748fcB7F1C2F9a82fCFA5C6AA3",
+  "network": "volta",
+  "registry": "0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af"
+}
 ```
 
-The private key for the X509 certificate is in PEM format. The encoding is performed with [`key encoder`](https://www.npmjs.com/package/key-encoder) package. The certificate can be created with [`pkijs`](https://pkijs.org/)
+The application must make sure this is an implementation it trusts on a network it has access to.
 
 ##### Verifying ID validity
 
-The validity of the identity can be verified in the smart contract or other data store which holds it. The data store of the identity and the revocation status of the certificate thus depend on the method. The method can be found in the `kid` attribute of the JWKS document.
+The validity of the identity can be verified in the smart contract. The data store of the identity and the revocation status of the certificate thus depend on the method. In the above example, we expect to find an ERC 1056 smart contract at the specified address.
 
 ##### Signed challenge
 
 The challenge are 16 hex encoded random bytes. The bytes are encapsulated in a claim which is turned into a JWT using the EWDID library:
 
-```javascript 1.8
+```javascript
 const claim = {"challenge": "b737160a73f536393c908fe89961e570"}
 const token = await claimsUser.createPublicClaim(claim)
 ```
