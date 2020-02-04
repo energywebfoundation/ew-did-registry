@@ -11,8 +11,8 @@ chai.should();
 describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   this.timeout(0);
   const user = new Keys({
-    privateKey: '42f9eb48de908412da91f0e7b6d8f987db91cbf7bf2639c53394b746d91d2382',
-    publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
+    privateKey: 'abbe68d0ead3b5f5d8df7c94ad2169afeb61c58c129081bae3c9fec17f999671',
+    publicKey: '037fae1748fa7e45cebe70f9a3e51c9a5af378cf7aca4373b14a423fb550afc6ef',
   });
   const userOperator = new Operator(user);
   const issuer = new Keys({

@@ -16,11 +16,11 @@ const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys({
-    privateKey: '389e5ec8fb902e58e301d4d431c581f5c4be5ced3959ee1feb3cb71f0c8faf5b',
-    publicKey: '02f4989fbf70c41a6252e3e76d938d5144ebe475447760729f6a034a16a1cc7d62',
+    privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
+    publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
   const operator = new Operator(keys);
-  const identity = '0x9b0AA89890d4A1397369697FF91fCEA08b955530';
+  const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
   const did = `did:ewc:${identity}`;
 
@@ -113,11 +113,9 @@ describe('[DID-OPERATOR]', function () {
 
   it('service endpoint update should add an entry in service section of the DID document', async () => {
     const attribute = DIDAttribute.ServicePoint;
-    const endpoint = 'https://example.com';
+    const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
       value: endpoint,
     };
     const updated = await operator.update(did, attribute, updateData, validity);
@@ -125,7 +123,7 @@ describe('[DID-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     expect(document.service.find(
-      (sv) => sv.type === updateData.algo && sv.serviceEndpoint === endpoint,
+      (sv) => sv.serviceEndpoint === endpoint,
     )).not.undefined;
   });
 
@@ -188,9 +186,7 @@ describe('[DID-OPERATOR]', function () {
     attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://example.com';
     updateData = {
-      algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
       value: endpoint,
     };
     await operator.update(did, attribute, updateData, validity);

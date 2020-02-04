@@ -6,15 +6,13 @@ import { IDIDDocumentLite } from '../lite';
  * Interface describes the full version of DID Document with CRUD functionality
  * This interface extends lite DID Document interface
  */
-export interface IDIDDocumentFull extends IDIDDocumentLite{
+export interface IDIDDocumentFull extends IDIDDocumentLite {
 
     /**
-     * New DID Document is registered on the Blockchain with the provided context,
-     * if no Document existed for the specified DID
-     * @param {string} context
+     * New DID Document is registered on the Blockchain,
      * @returns {boolean}
      */
-    create(context: string): Promise<boolean>;
+    create(): Promise<boolean>;
 
     /**
      * Provided with necessary parameters, method updates relevant attributes of the DID Document
@@ -22,7 +20,7 @@ export interface IDIDDocumentFull extends IDIDDocumentLite{
      * @param {IUpdateParameters} data
      * @returns {boolean}
      */
-    update(attribute: string, data: IUpdateData, validity: number|BigNumber): Promise<boolean>;
+    update(attribute: string, data: IUpdateData, validity: number | BigNumber): Promise<boolean>;
 
     /**
      * On success the status of the DID Document is changed from “active” to “deactivated”.

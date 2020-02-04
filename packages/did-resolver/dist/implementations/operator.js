@@ -473,40 +473,37 @@ var Operator = /** @class */ (function (_super) {
      */
     Operator.prototype._revokeServices = function (did, services) {
         return __awaiter(this, void 0, void 0, function () {
-            var revoked, sender, nonce, _i, services_1, service, match, algo, value, didAttribute, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var sender, nonce, _i, services_1, service, match, type, value, didAttribute, revoked;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        revoked = true;
                         sender = this._wallet.address;
                         return [4 /*yield*/, this._didRegistry.provider.getTransactionCount(sender)];
                     case 1:
-                        nonce = _b.sent();
+                        nonce = _a.sent();
                         _i = 0, services_1 = services;
-                        _b.label = 2;
+                        _a.label = 2;
                     case 2:
-                        if (!(_i < services_1.length)) return [3 /*break*/, 6];
+                        if (!(_i < services_1.length)) return [3 /*break*/, 5];
                         service = services_1[_i];
                         match = service.id.match(constants_1.serviceIdPattern);
-                        algo = match[1];
+                        type = match[1];
                         value = service.serviceEndpoint;
                         didAttribute = models_1.DIDAttribute.ServicePoint;
-                        _a = revoked;
-                        if (!_a) return [3 /*break*/, 4];
                         return [4 /*yield*/, this._sendTransaction(this._didRegistry.revokeAttribute, did, didAttribute, {
-                                algo: algo, type: models_1.PubKeyType.VerificationKey2018, encoding: models_1.Encoding.HEX, value: value,
+                                type: type, value: value,
                             }, null, { nonce: nonce })];
                     case 3:
-                        _a = (_b.sent());
-                        _b.label = 4;
+                        revoked = _a.sent();
+                        if (!revoked) {
+                            return [2 /*return*/, false];
+                        }
+                        nonce += 1;
+                        _a.label = 4;
                     case 4:
-                        revoked = _a;
-                        nonce += nonce;
-                        _b.label = 5;
-                    case 5:
                         _i++;
                         return [3 /*break*/, 2];
-                    case 6: return [2 /*return*/, revoked];
+                    case 5: return [2 /*return*/, true];
                 }
             });
         });
@@ -578,7 +575,7 @@ var Operator = /** @class */ (function (_super) {
             case models_1.DIDAttribute.Authenticate:
                 return updateData.type;
             case models_1.DIDAttribute.ServicePoint:
-                return "did/" + models_1.DIDAttribute.ServicePoint + "/" + algo + "/" + type + "/" + encoding;
+                return "did/" + models_1.DIDAttribute.ServicePoint + "/" + type;
             default:
                 throw new Error('Unknown attribute name');
         }
