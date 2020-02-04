@@ -140,14 +140,14 @@ The following examples show how the roles for the flexhub (namespace `flexhub.ro
 ```plantuml
 @startuml
     (*) --> Authority
-    Authority --> DSO
+    Authority -right-> DSO
     Authority --> TSO
-    DSO --> OEM
-    OEM --> "IoT device"
-    DSO --> Installer
-    Installer --> "IoT device"
-    DSO --> Prosumer
-    Installer --> Prosumer
+    DSO -right-> OEM
+    OEM -right-> "IoT device"
+    Installer -right-> "IoT device"
+    DSO -right-> Installer
+    DSO -right-> Prosumer
+    Installer -right-> Prosumer
     Prosumer --> "IoT device"
 @enduml
 ```
