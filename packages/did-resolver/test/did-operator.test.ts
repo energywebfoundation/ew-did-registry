@@ -1,7 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { Wallet, ContractFactory, ethers } from 'ethers';
+import Web3 from 'web3';
+import * as ethrJson from '../src/constants/EthereumDIDRegistry.json';
 import {
   Algorithms,
   DIDAttribute,
@@ -9,20 +11,50 @@ import {
   IUpdateData,
   PubKeyType,
   Operator,
-  IAuthentication,
+  IAuthentication, IResolverSettings,
 } from '../src';
+import { defaultResolverSettings } from '../src/constants';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
+  const GANACHE_PORT = 8544;
+  const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
   this.timeout(0);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
-  const operator = new Operator(keys);
+  let operator: Operator;
+  let operatorSetting: IResolverSettings;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
   const did = `did:ewc:${identity}`;
+
+  before(async () => {
+    const accounts = await web3.eth.getAccounts();
+    await web3.eth.sendTransaction({
+      from: accounts[2],
+      to: identity,
+      value: '1000000000000000000',
+    });
+    await web3.eth.sendTransaction({
+      from: accounts[3],
+      to: '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7',
+      value: '10000000000000000',
+    });
+
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
+    const registryFactory = new ContractFactory(ethrJson.abi, ethrJson.bytecode,
+      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
+    const registry = await registryFactory.deploy();
+    operatorSetting = {
+      abi: defaultResolverSettings.abi,
+      provider: defaultResolverSettings.provider,
+      address: registry.address,
+    }
+    operator = new Operator(keys, operatorSetting);
+    console.log(`registry: ${registry.address}`);
+  });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
@@ -263,7 +295,7 @@ describe('[DID-OPERATOR]', function () {
       publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
     });
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    const operatorNewOwner = new Operator(secondKeys);
+    const operatorNewOwner = new Operator(secondKeys, operatorSetting);
     let currentOwner;
 
     await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);

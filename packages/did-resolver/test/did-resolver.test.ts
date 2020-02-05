@@ -2,19 +2,48 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import { Keys } from '@ew-did-registry/keys';
-import { Resolver, IResolver, DelegateTypes } from '../src';
+import Web3 from 'web3';
+import { ContractFactory, ethers, Wallet } from 'ethers';
+import {
+  Resolver,
+  IResolver,
+  DelegateTypes,
+  Operator, IResolverSettings,
+} from '../src';
+import * as ethrJson from '../src/constants/EthereumDIDRegistry.json';
+import { defaultResolverSettings } from '../src/constants';
 
-describe('[RESOLVER PACKAGE]', function() {
+describe('[RESOLVER PACKAGE]', function () {
   this.timeout(60000);
   let resolver: IResolver;
+  const GANACHE_PORT = 8544;
+  const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
+  const keys = new Keys({
+    privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
+    publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
+  });
+  let operator: Operator;
+  let operatorSetting: IResolverSettings;
 
-  before(() => {
+  before(async () => {
     chai.should();
     chai.use(chaiAsPromised);
+
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
+    const registryFactory = new ContractFactory(ethrJson.abi, ethrJson.bytecode,
+      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
+    const registry = await registryFactory.deploy();
+    operatorSetting = {
+      abi: defaultResolverSettings.abi,
+      provider: defaultResolverSettings.provider,
+      address: registry.address,
+    };
+    operator = new Operator(keys, operatorSetting);
+    console.log(`registry: ${registry.address}`);
   });
 
   beforeEach(() => {
-    resolver = new Resolver();
+    resolver = new Resolver(operatorSetting);
   });
 
   it('invalid did should throw an error', async () => {
@@ -29,11 +58,11 @@ describe('[RESOLVER PACKAGE]', function() {
     });
   });
 
-  it('expect any valid did to have a document', async() => {
+  it('expect any valid did to have a document', async () => {
     const did = 'did:ewc:0x0000000000000000000000000000000000000000';
     const didDocument = await resolver.read(did);
     expect(didDocument).include.keys('@context', 'id', 'publicKey', 'authentication', 'service');
-  })
+  });
 
   it('resolver should return did-document', async () => {
     const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
@@ -45,7 +74,7 @@ describe('[RESOLVER PACKAGE]', function() {
   it('resolver check the current owner of did-document', async () => {
     const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const owner = await resolver.identityOwner(did);
-    expect(owner).to.equal('0xE4BF300D449351dC7237804A2766904a22B9CFE4');
+    expect(owner).to.equal('0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947');
 
     const keys = new Keys();
     const newDid = `did:ewc:0x${keys.publicKey.slice(26)}`;
@@ -60,4 +89,4 @@ describe('[RESOLVER PACKAGE]', function() {
     const validDelegate = await resolver.validDelegate(did, DelegateTypes.verification, newDid);
     expect(validDelegate).to.be.false;
   });
-})
+});

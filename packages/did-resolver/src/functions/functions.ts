@@ -220,7 +220,7 @@ const getEventsFromBlock = (
   smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
   const [, , blockchainAddress] = did.split(':');
-  const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2)}`];
+  const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2).toLowerCase()}`];
 
   provider.getLogs({
     address: smartContractAddress,

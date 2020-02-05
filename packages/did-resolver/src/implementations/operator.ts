@@ -429,6 +429,8 @@ export class Operator extends Resolver implements IOperator {
       );
       if (!event) return false;
     } catch (e) {
+      console.error(`tx sent ${e}`);
+      // TODO: handle error
       return false;
     }
     return true;
