@@ -11,11 +11,11 @@ import {
   IOperator, IResolverSettings
 } from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
+import Web3 from 'web3';
+import { ContractFactory, ethers, Wallet } from 'ethers';
 import { ClaimsFactory } from '../src/claimsFactory';
 import { IProofData } from '../src/models';
-import Web3 from "web3";
-import {ContractFactory, ethers, Wallet} from "ethers";
-import {IClaimsIssuer, IClaimsUser, IClaimsVerifier} from "../src";
+import { IClaimsIssuer, IClaimsUser, IClaimsVerifier } from '../src';
 
 chai.use(chaiAsPromised);
 
@@ -66,7 +66,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
 
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
     const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
-        new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
+      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
     const registry = await registryFactory.deploy();
     const resolverSetting: IResolverSettings = {
       abi: defaultResolverSettings.abi,
@@ -128,15 +128,11 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
     const publicData = { public: '123' };
-    console.log('before createPublicClaim')
     const token = await claimsUser.createPublicClaim(publicData);
-    console.log('before issuePublicClaim')
     // Issuer side
     const issuedToken = await claimsIssuer.issuePublicClaim(token);
-    console.log('before verifyPublicClaim')
     // Application/User side
     await claimsUser.verifyPublicClaim(issuedToken, publicData);
-    console.log('before verifyPublicProof')
     // Verifier side
     await claimsVerifier.verifyPublicProof(issuedToken);
   });

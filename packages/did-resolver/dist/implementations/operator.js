@@ -555,7 +555,7 @@ var Operator = /** @class */ (function (_super) {
                         e_1 = _a.sent();
                         console.error("tx sent " + e_1);
                         // TODO: handle error
-                        return [2 /*return*/, false];
+                        throw e_1;
                     case 5: return [2 /*return*/, true];
                 }
             });

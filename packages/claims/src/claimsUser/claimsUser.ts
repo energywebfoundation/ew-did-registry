@@ -185,12 +185,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
     const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
     await document.update(
-      DIDAttribute.Authenticate,
+      DIDAttribute.ServicePoint,
       {
         algo: Algorithms.Secp256k1,
         type: PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
-        delegate: claim.signer,
+        value: token,
       },
       1 * 60 * 1000,
     );
@@ -227,12 +227,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     }
     const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
     await document.update(
-      DIDAttribute.Authenticate,
+      DIDAttribute.ServicePoint,
       {
         algo: Algorithms.Secp256k1,
         type: PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
-        delegate: claim.signer,
+        value: token,
       },
       1 * 60 * 1000,
     );
