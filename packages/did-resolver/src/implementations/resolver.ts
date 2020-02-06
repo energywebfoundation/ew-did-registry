@@ -9,7 +9,7 @@ import {
   ProviderTypes,
   DelegateTypes,
 } from '../models';
-import { defaultResolverSettings, matchingPatternDid } from '../constants';
+import { matchingPatternDid } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 /**
@@ -63,7 +63,7 @@ class Resolver implements IResolver {
       );
     }
 
-    this._contract = new ethers.Contract(settings.address, settings.abi as any, this._providerResolver);
+    this._contract = new ethers.Contract(settings.address, settings.abi, this._providerResolver);
   }
 
   /**

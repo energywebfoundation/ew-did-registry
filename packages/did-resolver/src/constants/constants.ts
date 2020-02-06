@@ -1,5 +1,5 @@
-import {IResolverSettings, ProviderTypes} from '../models';
-import {ethrReg} from './EthereumDIDRegistry';
+import { IResolverSettings, ProviderTypes } from '../models';
+import { ethrReg } from './EthereumDIDRegistry';
 
 // Address of ERC1056 smart contract on Volta
 export const address1056 = '0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0'; // '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
@@ -9,9 +9,9 @@ export const abi1056 = ethrReg.abi;
 
 // Our default endpoint for communication with blockchain
 export const defaultProvider = {
-    // uriOrInfo: 'http://volta-rpc.energyweb.org/',
-    uriOrInfo: 'http://localhost:8544', // to reduce testing time
-    type: ProviderTypes.HTTP,
+  // uriOrInfo: 'http://volta-rpc.energyweb.org/',
+  uriOrInfo: 'http://localhost:8544', // to reduce testing time
+  type: ProviderTypes.HTTP,
 };
 
 /**
@@ -20,9 +20,9 @@ export const defaultProvider = {
  * or with a different smart contract.
  */
 export const defaultResolverSettings: IResolverSettings = {
-    provider: defaultProvider,
-    abi: ethrReg.abi as any,
-    address: address1056,
+  provider: defaultProvider,
+  abi: ethrReg.abi,
+  address: address1056,
 };
 
 // Various patterns to minimise errors

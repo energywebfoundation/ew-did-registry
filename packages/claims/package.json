@@ -5,8 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts --reporter mocha-junit-reporter",
-    "test-local": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8543 --accounts 20 --networkId=9 \"../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts\"",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"

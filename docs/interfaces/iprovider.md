@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IProvider](iprovider.md)
 
 # Interface: IProvider
 
@@ -26,7 +26,7 @@ if one wants to extend the library.
 
 • **network**? : *Networkish*
 
-*Defined in [did-resolver/src/models/resolver.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-resolver/src/models/resolver.ts#L26)*
+*Defined in [did-resolver/src/models/resolver.ts:26](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/models/resolver.ts#L26)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **path**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-resolver/src/models/resolver.ts#L25)*
+*Defined in [did-resolver/src/models/resolver.ts:25](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/models/resolver.ts#L25)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-resolver/src/models/resolver.ts#L23)*
+*Defined in [did-resolver/src/models/resolver.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/models/resolver.ts#L23)*
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 • **uriOrInfo**? : *string | ConnectionInfo*
 
-*Defined in [did-resolver/src/models/resolver.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-resolver/src/models/resolver.ts#L24)*
+*Defined in [did-resolver/src/models/resolver.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/models/resolver.ts#L24)*

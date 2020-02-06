@@ -6,12 +6,12 @@ import { encrypt } from 'eciesjs';
 // @ts-ignore
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
-import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
-  Operator, DIDAttribute, Algorithms, PubKeyType, Encoding,
-} from '@ew-did-registry/did-resolver';
-import {
-  IProofClaim, IProofData, ISaltedFields, IPublicClaim, IPrivateClaim,
+  IPrivateClaim,
+  IProofClaim,
+  IProofData,
+  IPublicClaim,
+  ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
@@ -177,23 +177,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string, verifyData: object): Promise<void> {
+  async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
     const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Incorrect signature');
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
-    const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
-    await document.update(
-      DIDAttribute.ServicePoint,
-      {
-        algo: Algorithms.Secp256k1,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        value: token,
-      },
-      1 * 60 * 1000,
-    );
+    return true;
   }
 
   /**
@@ -212,7 +202,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<void>}
    * @throw if the proof failed
    */
-  async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<void> {
+  async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signature');
@@ -225,16 +215,6 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }
-    const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
-    await document.update(
-      DIDAttribute.ServicePoint,
-      {
-        algo: Algorithms.Secp256k1,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        value: token,
-      },
-      1 * 60 * 1000,
-    );
+    return true;
   }
 }

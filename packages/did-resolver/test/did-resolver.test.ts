@@ -2,22 +2,17 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import { Keys } from '@ew-did-registry/keys';
-import Web3 from 'web3';
-import { ContractFactory, ethers, Wallet } from 'ethers';
 import {
   Resolver,
   IResolver,
   DelegateTypes,
   Operator, IResolverSettings,
 } from '../src';
-import {ethrReg} from '../src/constants/EthereumDIDRegistry';
-import { defaultResolverSettings } from '../src/constants';
+import { getSettings } from '../../../tests/init-ganache';
 
 describe('[RESOLVER PACKAGE]', function () {
   this.timeout(60000);
   let resolver: IResolver;
-  const GANACHE_PORT = 8543;
-  const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
@@ -29,17 +24,8 @@ describe('[RESOLVER PACKAGE]', function () {
     chai.should();
     chai.use(chaiAsPromised);
 
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
-      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
-    const registry = await registryFactory.deploy();
-    operatorSetting = {
-      abi: defaultResolverSettings.abi,
-      provider: defaultResolverSettings.provider,
-      address: registry.address,
-    };
+    operatorSetting = await getSettings([]);
     operator = new Operator(keys, operatorSetting);
-    console.log(`registry: ${registry.address}`);
   });
 
   beforeEach(() => {

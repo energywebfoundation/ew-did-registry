@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaimsVerifier](iclaimsverifier.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimsVerifier](iclaimsverifier.md)
 
 # Interface: IClaimsVerifier
 
@@ -33,7 +33,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-*Defined in [claims/src/models/index.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L38)*
+*Defined in [claims/src/models/index.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L38)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L40)*
+*Defined in [claims/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L40)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-*Defined in [claims/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L39)*
+*Defined in [claims/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L39)*
 
 ## Methods
 
@@ -61,7 +61,7 @@ ___
 
 ▸ **verifyPrivateProof**(`proofToken`: string, `privateToken`: string): *Promise‹void›*
 
-*Defined in [claims/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L30)*
+*Defined in [claims/src/interface.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L30)*
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **verifyPublicProof**(`token`: string): *Promise‹void›*
 
-*Defined in [claims/src/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L29)*
+*Defined in [claims/src/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L29)*
 
 **Parameters:**
 

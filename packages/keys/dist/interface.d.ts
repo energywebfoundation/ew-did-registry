@@ -7,6 +7,7 @@ export interface IKeys {
      * Public key in hex format
      */
     publicKey: string;
+    address: string;
     /**
      * Sign the data with private key
      * @param {string} data

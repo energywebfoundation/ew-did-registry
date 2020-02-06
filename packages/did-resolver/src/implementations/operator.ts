@@ -1,5 +1,7 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers, Wallet } from 'ethers';
+import {
+  Contract, ethers, Event, Wallet,
+} from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { IOperator } from '../interface';
 import {
@@ -16,7 +18,6 @@ import {
 } from '../models';
 import Resolver from './resolver';
 import {
-  defaultResolverSettings,
   delegatePubKeyIdPattern,
   matchingPatternDid,
   pubKeyIdPattern,
@@ -60,7 +61,7 @@ export class Operator extends Resolver implements IOperator {
     this._provider = this._getProvider();
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this._wallet = wallet;
-    this._didRegistry = new ethers.Contract(address, abi as any, wallet);
+    this._didRegistry = new ethers.Contract(address, abi, wallet);
   }
 
   /**
@@ -163,7 +164,7 @@ export class Operator extends Resolver implements IOperator {
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
-        (e: any) => (e.event === 'DIDDelegateChanged'),
+        (e: Event) => (e.event === 'DIDDelegateChanged'),
       );
       if (!event) return false;
     } catch (error) {
@@ -198,7 +199,7 @@ export class Operator extends Resolver implements IOperator {
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
-        (e: any) => (e.event === 'DIDAttributeChanged'),
+        (e: Event) => (e.event === 'DIDAttributeChanged'),
       );
       if (!event) return false;
     } catch (error) {
@@ -229,7 +230,7 @@ export class Operator extends Resolver implements IOperator {
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
-        (e: any) => (e.event === 'DIDOwnerChanged'),
+        (e: Event) => (e.event === 'DIDOwnerChanged'),
       );
       if (!event) return false;
     } catch (error) {
@@ -396,7 +397,7 @@ export class Operator extends Resolver implements IOperator {
    * @private
    */
   private async _sendTransaction(
-    method: any,
+    method: Function,
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
@@ -423,15 +424,13 @@ export class Operator extends Resolver implements IOperator {
       const tx = await method(...argums.filter((a) => a));
       const receipt = await tx.wait();
       const event = receipt.events.find(
-        (e: any) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
+        (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
       if (!event) return false;
     } catch (e) {
-      console.error(`tx sent ${e}`);
-      // TODO: handle error
-      throw e;
+      throw new Error(e.message);
     }
     return true;
   }

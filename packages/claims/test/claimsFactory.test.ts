@@ -6,16 +6,14 @@ import {
   IResolver,
   Resolver,
   Operator,
-  ethrReg,
-  defaultResolverSettings,
-  IOperator, IResolverSettings
+  IOperator,
+  IResolverSettings,
 } from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
-import Web3 from 'web3';
-import { ContractFactory, ethers, Wallet } from 'ethers';
 import { ClaimsFactory } from '../src/claimsFactory';
 import { IProofData } from '../src/models';
 import { IClaimsIssuer, IClaimsUser, IClaimsVerifier } from '../src';
+import { getSettings } from '../../../tests/init-ganache';
 
 chai.use(chaiAsPromised);
 
@@ -47,37 +45,15 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   let claimsIssuer: IClaimsIssuer;
   let claimsVerifier: IClaimsVerifier;
 
-  const GANACHE_PORT = 8544;
-  const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
   let resolver: IResolver;
 
   before(async () => {
-    const accounts = await web3.eth.getAccounts();
-    await web3.eth.sendTransaction({
-      from: accounts[2],
-      to: userAddress,
-      value: '1000000000000000000',
-    });
-    await web3.eth.sendTransaction({
-      from: accounts[2],
-      to: issuerAddress,
-      value: '1000000000000000000',
-    });
+    const resolverSettings: IResolverSettings = await getSettings([userAddress, issuerAddress]);
+    console.log(`registry: ${resolverSettings.address}`);
 
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
-      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
-    const registry = await registryFactory.deploy();
-    const resolverSetting: IResolverSettings = {
-      abi: defaultResolverSettings.abi,
-      provider: defaultResolverSettings.provider,
-      address: registry.address,
-    };
-    resolver = new Resolver(resolverSetting);
-    userOperator = new Operator(user, resolverSetting);
-    issuerOperator = new Operator(issuer, resolverSetting);
-
-    console.log(`registry: ${registry.address}`);
+    resolver = new Resolver(resolverSettings);
+    userOperator = new Operator(user, resolverSettings);
+    issuerOperator = new Operator(issuer, resolverSettings);
 
     await userOperator.deactivate(userDid);
     await userOperator.create();

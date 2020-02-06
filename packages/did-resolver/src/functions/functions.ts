@@ -271,7 +271,7 @@ export const fetchDataFromEvents = async (
     document.owner = blockchainAddress;
   }
 
-  const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi as any);
+  const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
   const smartContractAddress = resolverSettings.address;
   while (
     previousChangedBlock.toNumber() !== 0

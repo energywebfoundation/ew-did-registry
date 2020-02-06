@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IProofClaim](iproofclaim.md)
 
 # Interface: IProofClaim
 
@@ -25,7 +25,7 @@
 
 • **claimUrl**: *string*
 
-*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L21)*
+*Defined in [claims/src/models/index.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L21)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L19)*
+*Defined in [claims/src/models/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L19)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **proofData**: *[IProofData](iproofdata.md)*
 
-*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L22)*
+*Defined in [claims/src/models/index.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L22)*
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **signer**: *string*
 
-*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L20)*
+*Defined in [claims/src/models/index.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L20)*

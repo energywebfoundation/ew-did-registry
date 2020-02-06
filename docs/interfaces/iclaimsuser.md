@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IClaimsUser](iclaimsuser.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IClaimsUser](iclaimsuser.md)
 
 # Interface: IClaimsUser
 
@@ -36,7 +36,7 @@
 
 *Inherited from [IClaims](iclaims.md).[did](iclaims.md#did)*
 
-*Defined in [claims/src/models/index.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L38)*
+*Defined in [claims/src/models/index.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L38)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[jwt](iclaims.md#jwt)*
 
-*Defined in [claims/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L40)*
+*Defined in [claims/src/models/index.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L40)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 *Inherited from [IClaims](iclaims.md).[keys](iclaims.md#keys)*
 
-*Defined in [claims/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/models/index.ts#L39)*
+*Defined in [claims/src/models/index.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/models/index.ts#L39)*
 
 ## Methods
 
@@ -64,7 +64,7 @@ ___
 
 ▸ **createPrivateClaim**(`privateData`: object, `issuer`: string): *Promise‹object›*
 
-*Defined in [claims/src/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L16)*
+*Defined in [claims/src/interface.ts:16](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L16)*
 
 **Parameters:**
 
@@ -81,7 +81,7 @@ ___
 
 ▸ **createProofClaim**(`claimUrl`: string, `saltedFields`: [IProofData](iproofdata.md)): *Promise‹string›*
 
-*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L18)*
+*Defined in [claims/src/interface.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L18)*
 
 **Parameters:**
 
@@ -98,7 +98,7 @@ ___
 
 ▸ **createPublicClaim**(`publicData`: object): *Promise‹string›*
 
-*Defined in [claims/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L15)*
+*Defined in [claims/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L15)*
 
 **Parameters:**
 
@@ -112,9 +112,9 @@ ___
 
 ###  verifyPrivateClaim
 
-▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: [ISaltedFields](isaltedfields.md)): *Promise‹void›*
+▸ **verifyPrivateClaim**(`privateToken`: string, `saltedFields`: [ISaltedFields](isaltedfields.md)): *Promise‹boolean›*
 
-*Defined in [claims/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L20)*
+*Defined in [claims/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L20)*
 
 **Parameters:**
 
@@ -123,15 +123,15 @@ Name | Type |
 `privateToken` | string |
 `saltedFields` | [ISaltedFields](isaltedfields.md) |
 
-**Returns:** *Promise‹void›*
+**Returns:** *Promise‹boolean›*
 
 ___
 
 ###  verifyPublicClaim
 
-▸ **verifyPublicClaim**(`token`: string, `verifyData`: object): *Promise‹void›*
+▸ **verifyPublicClaim**(`token`: string, `verifyData`: object): *Promise‹boolean›*
 
-*Defined in [claims/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L19)*
+*Defined in [claims/src/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/interface.ts#L19)*
 
 **Parameters:**
 
@@ -140,4 +140,4 @@ Name | Type |
 `token` | string |
 `verifyData` | object |
 
-**Returns:** *Promise‹void›*
+**Returns:** *Promise‹boolean›*

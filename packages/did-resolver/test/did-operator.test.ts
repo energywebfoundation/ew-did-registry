@@ -1,9 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, ContractFactory, ethers } from 'ethers';
-import Web3 from 'web3';
-import {ethrReg} from '../src/constants/EthereumDIDRegistry';
+import { Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -13,12 +11,10 @@ import {
   Operator,
   IAuthentication, IResolverSettings,
 } from '../src';
-import { defaultResolverSettings } from '../src/constants';
+import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
-  const GANACHE_PORT = 8543;
-  const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
   this.timeout(0);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
@@ -31,29 +27,10 @@ describe('[DID-OPERATOR]', function () {
   const did = `did:ewc:${identity}`;
 
   before(async () => {
-    const accounts = await web3.eth.getAccounts();
-    await web3.eth.sendTransaction({
-      from: accounts[2],
-      to: identity,
-      value: '1000000000000000000',
-    });
-    await web3.eth.sendTransaction({
-      from: accounts[3],
-      to: '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7',
-      value: '10000000000000000',
-    });
+    operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    console.log(`registry: ${operatorSetting.address}`);
 
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
-      new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
-    const registry = await registryFactory.deploy();
-    operatorSetting = {
-      abi: defaultResolverSettings.abi,
-      provider: defaultResolverSettings.provider,
-      address: registry.address,
-    };
     operator = new Operator(keys, operatorSetting);
-    console.log(`registry: ${registry.address}`);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
