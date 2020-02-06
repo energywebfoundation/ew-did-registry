@@ -24,9 +24,9 @@ if one wants to extend the library.
 
 ### `Optional` network
 
-• **network**? : *Networkish*
+• **network**? : *utils.Networkish*
 
-Defined in did-resolver/src/models/resolver.ts:26
+Defined in did-resolver/src/models/resolver.ts:21
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **path**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:25
+Defined in did-resolver/src/models/resolver.ts:20
 
 ___
 
@@ -42,12 +42,12 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-Defined in did-resolver/src/models/resolver.ts:23
+Defined in did-resolver/src/models/resolver.ts:18
 
 ___
 
 ### `Optional` uriOrInfo
 
-• **uriOrInfo**? : *string | ConnectionInfo*
+• **uriOrInfo**? : *string | utils.ConnectionInfo*
 
-Defined in did-resolver/src/models/resolver.ts:24
+Defined in did-resolver/src/models/resolver.ts:19

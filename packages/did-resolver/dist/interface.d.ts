@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers/utils';
+import { utils } from 'ethers';
 import { IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes } from './models';
 export interface IResolver {
     /**
@@ -55,7 +55,7 @@ export interface IOperator extends IResolver {
      * @param { number } validity
      * @returns {boolean}
      */
-    update(did: string, attribute: DIDAttribute, value: IUpdateData, validity: number | BigNumber): Promise<boolean>;
+    update(did: string, attribute: DIDAttribute, value: IUpdateData, validity: number | utils.BigNumber): Promise<boolean>;
     /**
      * Attempts to deactivate the DID Document for a given DID.
      * Successful, if the transaction is accepted by the smart contract.

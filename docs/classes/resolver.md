@@ -39,7 +39,7 @@ All the functionality supporting document resolution is stored in 'functions' fo
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:44
+Defined in did-resolver/src/implementations/resolver.ts:47
 
 Constructor
 
@@ -61,7 +61,7 @@ Name | Type | Default | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:131
+Defined in did-resolver/src/implementations/resolver.ts:134
 
 Returns the Ethereum address of current identity owner
 
@@ -83,7 +83,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:83
+Defined in did-resolver/src/implementations/resolver.ts:86
 
 Resolve DID Document for a given did
 
@@ -111,7 +111,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-Defined in did-resolver/src/implementations/resolver.ts:151
+Defined in did-resolver/src/implementations/resolver.ts:154
 
 Performs the check if the delegate is valid for particular did
 Return boolean

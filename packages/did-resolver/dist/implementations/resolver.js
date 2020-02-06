@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("ethers/utils");
 var ethers_1 = require("ethers");
 var models_1 = require("../models");
 var constants_1 = require("../constants");
@@ -103,7 +102,7 @@ var Resolver = /** @class */ (function () {
                                         _b = did.split(':'), blockchainAddress = _b[2];
                                         this._fetchedDocument = {
                                             owner: blockchainAddress,
-                                            lastChangedBlock: new utils_1.BigNumber(0),
+                                            lastChangedBlock: new ethers_1.utils.BigNumber(0),
                                             authentication: {},
                                             publicKey: {},
                                             serviceEndpoints: {},

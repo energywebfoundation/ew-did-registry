@@ -21,7 +21,7 @@
 
 • **block**? : *number*
 
-Defined in did-resolver/src/models/resolver.ts:86
+Defined in did-resolver/src/models/resolver.ts:81
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **publicKey**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:84
+Defined in did-resolver/src/models/resolver.ts:79
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **type**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:83
+Defined in did-resolver/src/models/resolver.ts:78
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:85
+Defined in did-resolver/src/models/resolver.ts:80
