@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers/utils';
+import { utils } from 'ethers';
 import {
   IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes,
 } from './models';
@@ -71,7 +71,7 @@ export interface IOperator extends IResolver {
     did: string,
     attribute: DIDAttribute,
     value: IUpdateData,
-    validity: number|BigNumber
+    validity: number|utils.BigNumber
   ): Promise<boolean>;
 
   /**

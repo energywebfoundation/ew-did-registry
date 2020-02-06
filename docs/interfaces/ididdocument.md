@@ -31,7 +31,7 @@ IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
 
 • **@context**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:46
+Defined in did-resolver/src/models/resolver.ts:41
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **authentication**: *Array‹[IAuthentication](iauthentication.md) | string›*
 
-Defined in did-resolver/src/models/resolver.ts:49
+Defined in did-resolver/src/models/resolver.ts:44
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **created**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:52
+Defined in did-resolver/src/models/resolver.ts:47
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **delegates**? : *string[]*
 
-Defined in did-resolver/src/models/resolver.ts:50
+Defined in did-resolver/src/models/resolver.ts:45
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **id**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:47
+Defined in did-resolver/src/models/resolver.ts:42
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-Defined in did-resolver/src/models/resolver.ts:54
+Defined in did-resolver/src/models/resolver.ts:49
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **publicKey**: *[IPublicKey](ipublickey.md)[]*
 
-Defined in did-resolver/src/models/resolver.ts:48
+Defined in did-resolver/src/models/resolver.ts:43
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **service**? : *[IServiceEndpoint](iserviceendpoint.md)[]*
 
-Defined in did-resolver/src/models/resolver.ts:51
+Defined in did-resolver/src/models/resolver.ts:46
 
 ___
 
@@ -95,4 +95,4 @@ ___
 
 • **updated**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:53
+Defined in did-resolver/src/models/resolver.ts:48

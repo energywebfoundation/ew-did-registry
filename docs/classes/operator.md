@@ -137,7 +137,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
 
-Defined in did-resolver/src/implementations/resolver.ts:131
+Defined in did-resolver/src/implementations/resolver.ts:134
 
 Returns the Ethereum address of current identity owner
 
@@ -161,7 +161,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-Defined in did-resolver/src/implementations/resolver.ts:83
+Defined in did-resolver/src/implementations/resolver.ts:86
 
 Resolve DID Document for a given did
 
@@ -280,7 +280,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
 
-Defined in did-resolver/src/implementations/resolver.ts:151
+Defined in did-resolver/src/implementations/resolver.ts:154
 
 Performs the check if the delegate is valid for particular did
 Return boolean

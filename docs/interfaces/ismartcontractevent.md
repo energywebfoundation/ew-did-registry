@@ -24,7 +24,7 @@ This interface represents the structure of event emitted by ERC1056 compliant sm
 
 • **name**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:100
+Defined in did-resolver/src/models/resolver.ts:95
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **signature**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:101
+Defined in did-resolver/src/models/resolver.ts:96
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **topic**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:102
+Defined in did-resolver/src/models/resolver.ts:97
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **value**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:112
+Defined in did-resolver/src/models/resolver.ts:107
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **values**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:103
+Defined in did-resolver/src/models/resolver.ts:98
 
 #### Type declaration:
 
