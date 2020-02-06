@@ -553,9 +553,7 @@ var Operator = /** @class */ (function (_super) {
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
-                        console.error("tx sent " + e_1);
-                        // TODO: handle error
-                        throw e_1;
+                        throw new Error(e_1.message);
                     case 5: return [2 /*return*/, true];
                 }
             });

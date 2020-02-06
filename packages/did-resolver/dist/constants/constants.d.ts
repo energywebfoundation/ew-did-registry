@@ -1,33 +1,33 @@
 import { IResolverSettings, ProviderTypes } from '../models';
 export declare const address1056 = "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0";
 export declare const abi1056: ({
-    "constant": boolean;
-    "inputs": {
-        "name": string;
-        "type": string;
+    constant: boolean;
+    inputs: {
+        name: string;
+        type: string;
     }[];
-    "name": string;
-    "outputs": {
-        "name": string;
-        "type": string;
+    name: string;
+    outputs: {
+        name: string;
+        type: string;
     }[];
-    "payable": boolean;
-    "stateMutability": string;
-    "type": string;
-    "anonymous"?: undefined;
+    payable: boolean;
+    stateMutability: string;
+    type: string;
+    anonymous?: undefined;
 } | {
-    "anonymous": boolean;
-    "inputs": {
-        "indexed": boolean;
-        "name": string;
-        "type": string;
+    anonymous: boolean;
+    inputs: {
+        indexed: boolean;
+        name: string;
+        type: string;
     }[];
-    "name": string;
-    "type": string;
-    "constant"?: undefined;
-    "outputs"?: undefined;
-    "payable"?: undefined;
-    "stateMutability"?: undefined;
+    name: string;
+    type: string;
+    constant?: undefined;
+    outputs?: undefined;
+    payable?: undefined;
+    stateMutability?: undefined;
 })[];
 export declare const defaultProvider: {
     uriOrInfo: string;
