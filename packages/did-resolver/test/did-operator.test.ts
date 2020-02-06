@@ -3,7 +3,7 @@ import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, ContractFactory, ethers } from 'ethers';
 import Web3 from 'web3';
-import * as ethrJson from '../src/constants/EthereumDIDRegistry.json';
+import {ethrReg} from '../src/constants/EthereumDIDRegistry';
 import {
   Algorithms,
   DIDAttribute,
@@ -17,7 +17,7 @@ import { defaultResolverSettings } from '../src/constants';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
-  const GANACHE_PORT = 8544;
+  const GANACHE_PORT = 8543;
   const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
   this.timeout(0);
   const keys = new Keys({
@@ -44,14 +44,14 @@ describe('[DID-OPERATOR]', function () {
     });
 
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const registryFactory = new ContractFactory(ethrJson.abi, ethrJson.bytecode,
+    const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
       new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
     const registry = await registryFactory.deploy();
     operatorSetting = {
       abi: defaultResolverSettings.abi,
       provider: defaultResolverSettings.provider,
       address: registry.address,
-    }
+    };
     operator = new Operator(keys, operatorSetting);
     console.log(`registry: ${registry.address}`);
   });

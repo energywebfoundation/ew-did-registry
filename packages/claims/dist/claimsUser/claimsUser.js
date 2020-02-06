@@ -255,7 +255,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                             throw new Error('Incorrect signature');
                         }
                         assert_1.default.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
-                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
+                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys, this.resolver.settings));
                         return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
                                 algo: did_resolver_1.Algorithms.Secp256k1,
                                 type: did_resolver_1.PubKeyType.VerificationKey2018,
@@ -306,7 +306,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                                 throw new Error('Issued claim data doesn\'t match user data');
                             }
                         }
-                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
+                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys, this.resolver.settings));
                         return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
                                 algo: did_resolver_1.Algorithms.Secp256k1,
                                 type: did_resolver_1.PubKeyType.VerificationKey2018,

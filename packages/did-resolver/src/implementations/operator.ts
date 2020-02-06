@@ -50,17 +50,17 @@ export class Operator extends Resolver implements IOperator {
    * @param { IKeys } keys - identifies an account which acts as a
    * controller in a subsequent operations with DID document
    */
-  constructor(keys: IKeys, settings: IResolverSettings = defaultResolverSettings) {
+  constructor(keys: IKeys, settings: IResolverSettings) {
     super(settings);
     this._keys = keys;
     const {
       address, abi,
-    } = this._settings;
+    } = this.settings;
     const { privateKey } = this._keys;
     this._provider = this._getProvider();
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this._wallet = wallet;
-    this._didRegistry = new ethers.Contract(address, abi, wallet);
+    this._didRegistry = new ethers.Contract(address, abi as any, wallet);
   }
 
   /**
@@ -431,7 +431,7 @@ export class Operator extends Resolver implements IOperator {
     } catch (e) {
       console.error(`tx sent ${e}`);
       // TODO: handle error
-      return false;
+      throw e;
     }
     return true;
   }
@@ -481,7 +481,7 @@ export class Operator extends Resolver implements IOperator {
    * @private
    */
   private _getProvider(): ethers.providers.JsonRpcProvider | ethers.providers.BaseProvider {
-    const { provider } = this._settings;
+    const { provider } = this.settings;
     switch (provider.type) {
       case ProviderTypes.HTTP:
         return new ethers.providers.JsonRpcProvider(provider.uriOrInfo, provider.network);

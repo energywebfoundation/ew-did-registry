@@ -4,4 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./constants"));
+__export(require("./EthereumDIDRegistry"));
 //# sourceMappingURL=index.js.map

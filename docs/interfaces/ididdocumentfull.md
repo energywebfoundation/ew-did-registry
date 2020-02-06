@@ -37,7 +37,7 @@ This interface extends lite DID Document interface
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[did](ididdocumentlite.md#did)*
 
-Defined in did-document/src/lite/interface.ts:19
+*Defined in [did-document/src/lite/interface.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/lite/interface.ts#L19)*
 
 DID of Document subject is stored in DID Documents
 
@@ -49,7 +49,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[didDocument](ididdocumentlite.md#diddocument)*
 
-Defined in did-document/src/lite/interface.ts:24
+*Defined in [did-document/src/lite/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/lite/interface.ts#L24)*
 
 Resolved DID Document
 
@@ -59,7 +59,7 @@ Resolved DID Document
 
 ▸ **create**(): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:15
+*Defined in [did-document/src/full/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/full/interface.ts#L15)*
 
 New DID Document is registered on the Blockchain,
 
@@ -71,7 +71,7 @@ ___
 
 ▸ **deactivate**(): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:29
+*Defined in [did-document/src/full/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/full/interface.ts#L29)*
 
 On success the status of the DID Document is changed from “active” to “deactivated”.
 
@@ -85,7 +85,7 @@ ___
 
 *Inherited from [IDIDDocumentLite](ididdocumentlite.md).[read](ididdocumentlite.md#read)*
 
-Defined in did-document/src/lite/interface.ts:32
+*Defined in [did-document/src/lite/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/lite/interface.ts#L32)*
 
 Fetches the specified data/attributes from DID Document
 
@@ -104,7 +104,7 @@ ___
 
 ▸ **update**(`attribute`: string, `data`: IUpdateData, `validity`: number | BigNumber): *Promise‹boolean›*
 
-Defined in did-document/src/full/interface.ts:23
+*Defined in [did-document/src/full/interface.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/did-document/src/full/interface.ts#L23)*
 
 Provided with necessary parameters, method updates relevant attributes of the DID Document
 

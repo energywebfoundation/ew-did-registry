@@ -26,7 +26,7 @@ IClaims interface is a factory to create Public, Private, and Proof Claims
 
 ▸ **createClaimsIssuer**(): *[IClaimsIssuer](iclaimsissuer.md)*
 
-Defined in claims/src/interface.ts:10
+*Defined in [claims/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L10)*
 
 **Returns:** *[IClaimsIssuer](iclaimsissuer.md)*
 
@@ -36,7 +36,7 @@ ___
 
 ▸ **createClaimsUser**(): *[IClaimsUser](iclaimsuser.md)*
 
-Defined in claims/src/interface.ts:9
+*Defined in [claims/src/interface.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L9)*
 
 **Returns:** *[IClaimsUser](iclaimsuser.md)*
 
@@ -46,6 +46,6 @@ ___
 
 ▸ **createClaimsVerifier**(): *[IClaimsVerifier](iclaimsverifier.md)*
 
-Defined in claims/src/interface.ts:11
+*Defined in [claims/src/interface.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/9796cd6/packages/claims/src/interface.ts#L11)*
 
 **Returns:** *[IClaimsVerifier](iclaimsverifier.md)*

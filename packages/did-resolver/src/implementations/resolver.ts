@@ -26,7 +26,7 @@ class Resolver implements IResolver {
   /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
-  protected readonly _settings: IResolverSettings;
+  readonly settings: IResolverSettings;
 
   /**
    * Stores the provider to connect to blockchain
@@ -49,8 +49,8 @@ class Resolver implements IResolver {
    * Settings have to be passed to construct resolver
    * @param {IResolverSettings} settings
    */
-  constructor(settings: IResolverSettings = defaultResolverSettings) {
-    this._settings = settings;
+  constructor(settings: IResolverSettings) {
+    this.settings = settings;
     if (settings.provider.type === ProviderTypes.HTTP) {
       this._providerResolver = new ethers.providers.JsonRpcProvider(
         settings.provider.uriOrInfo,
@@ -63,7 +63,7 @@ class Resolver implements IResolver {
       );
     }
 
-    this._contract = new ethers.Contract(settings.address, settings.abi, this._providerResolver);
+    this._contract = new ethers.Contract(settings.address, settings.abi as any, this._providerResolver);
   }
 
   /**
@@ -105,7 +105,7 @@ class Resolver implements IResolver {
           await fetchDataFromEvents(
             did,
             this._fetchedDocument,
-            this._settings,
+            this.settings,
             this._contract,
             this._providerResolver,
           );

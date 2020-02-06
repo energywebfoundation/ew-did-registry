@@ -211,7 +211,7 @@ var updateDocument = function (event, eventName, did, document, block) {
  */
 var getEventsFromBlock = function (block, did, document, provider, smartContractInterface, smartContractAddress) { return new Promise(function (resolve, reject) {
     var _a = did.split(':'), blockchainAddress = _a[2];
-    var topics = [null, "0x000000000000000000000000" + blockchainAddress.slice(2)];
+    var topics = [null, "0x000000000000000000000000" + blockchainAddress.slice(2).toLowerCase()];
     provider.getLogs({
         address: smartContractAddress,
         fromBlock: block.toNumber(),

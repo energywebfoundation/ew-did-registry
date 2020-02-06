@@ -183,7 +183,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       throw new Error('Incorrect signature');
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
-    const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
+    const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
     await document.update(
       DIDAttribute.Authenticate,
       {
@@ -225,7 +225,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }
-    const document = new DIDDocumentFull(claim.did, new Operator(this.keys));
+    const document = new DIDDocumentFull(claim.did, new Operator(this.keys, this.resolver.settings));
     await document.update(
       DIDAttribute.Authenticate,
       {

@@ -1,9 +1,10 @@
 import { BigNumber } from 'ethers/utils';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes,
+    IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings,
 } from './models';
 
 export interface IResolver {
+    readonly settings: IResolverSettings;
     /**
      * Constructor takes keys and resolver settings to create a new Resolver
      * constructor(settings?: IResolverSettings);
