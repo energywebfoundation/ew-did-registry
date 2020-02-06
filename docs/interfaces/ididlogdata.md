@@ -33,7 +33,7 @@ The data in the did document will exclude certain variables, such as
 
 • **attributes**? : *Map‹string, object›*
 
-Defined in did-resolver/src/models/resolver.ts:132
+Defined in did-resolver/src/models/resolver.ts:127
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **authentication**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:126
+Defined in did-resolver/src/models/resolver.ts:121
 
 #### Type declaration:
 
@@ -53,7 +53,7 @@ ___
 
 • **created**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:129
+Defined in did-resolver/src/models/resolver.ts:124
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **delegates**? : *string[]*
 
-Defined in did-resolver/src/models/resolver.ts:127
+Defined in did-resolver/src/models/resolver.ts:122
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 • **lastChangedBlock**: *BigNumber*
 
-Defined in did-resolver/src/models/resolver.ts:124
+Defined in did-resolver/src/models/resolver.ts:119
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 • **owner**: *string*
 
-Defined in did-resolver/src/models/resolver.ts:123
+Defined in did-resolver/src/models/resolver.ts:118
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 • **proof**? : *[ILinkedDataProof](ilinkeddataproof.md)*
 
-Defined in did-resolver/src/models/resolver.ts:131
+Defined in did-resolver/src/models/resolver.ts:126
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 • **publicKey**: *object*
 
-Defined in did-resolver/src/models/resolver.ts:125
+Defined in did-resolver/src/models/resolver.ts:120
 
 #### Type declaration:
 
@@ -105,7 +105,7 @@ ___
 
 • **serviceEndpoints**? : *object*
 
-Defined in did-resolver/src/models/resolver.ts:128
+Defined in did-resolver/src/models/resolver.ts:123
 
 #### Type declaration:
 
@@ -117,4 +117,4 @@ ___
 
 • **updated**? : *string*
 
-Defined in did-resolver/src/models/resolver.ts:130
+Defined in did-resolver/src/models/resolver.ts:125

@@ -519,7 +519,7 @@ Defined in jwt/test/jwt.test.ts:7
 
 ▸ **fetchDataFromEvents**(`did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `resolverSettings`: [IResolverSettings](interfaces/iresolversettings.md), `contract`: Contract, `provider`: BaseProvider): *Promise‹void›*
 
-Defined in did-resolver/src/functions/functions.ts:250
+Defined in did-resolver/src/functions/functions.ts:252
 
 A high level function that manages the flow to read data from the blockchain
 
@@ -541,7 +541,7 @@ ___
 
 ▸ **getEventsFromBlock**(`block`: BigNumber, `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `provider`: BaseProvider, `smartContractInterface`: Interface, `smartContractAddress`: string): *Promise‹unknown›*
 
-Defined in did-resolver/src/functions/functions.ts:214
+Defined in did-resolver/src/functions/functions.ts:216
 
 Given a certain block from the chain, this function returns the events
 associated with the did within the block
@@ -565,7 +565,7 @@ ___
 
 ▸ **handleAttributeChange**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `validTo`: BigNumber, `block`: number): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-Defined in did-resolver/src/functions/functions.ts:72
+Defined in did-resolver/src/functions/functions.ts:74
 
 This function updates the document on Attribute change event
 
@@ -587,7 +587,7 @@ ___
 
 ▸ **handleDelegateChange**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `validTo`: BigNumber, `block`: number): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-Defined in did-resolver/src/functions/functions.ts:26
+Defined in did-resolver/src/functions/functions.ts:28
 
 This function updates the document if the event type is 'DelegateChange'
 
@@ -625,7 +625,7 @@ ___
 
 ▸ **updateDocument**(`event`: [ISmartContractEvent](interfaces/ismartcontractevent.md), `eventName`: string, `did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `block`: number): *[IDIDLogData](interfaces/ididlogdata.md)*
 
-Defined in did-resolver/src/functions/functions.ts:186
+Defined in did-resolver/src/functions/functions.ts:188
 
 Update document checks the event validity, and, if valid,
 passes the event parsing to the handler
@@ -648,7 +648,7 @@ ___
 
 ▸ **wrapDidDocument**(`did`: string, `document`: [IDIDLogData](interfaces/ididlogdata.md), `context`: string): *[IDIDDocument](interfaces/ididdocument.md)*
 
-Defined in did-resolver/src/functions/functions.ts:301
+Defined in did-resolver/src/functions/functions.ts:303
 
 Provided with the fetched data, the function parses it and returns the
 DID Document associated with the relevant user
@@ -768,7 +768,7 @@ ___
 
 ### ▪ **handlers**: *object*
 
-Defined in did-resolver/src/functions/functions.ts:171
+Defined in did-resolver/src/functions/functions.ts:173
 
 Simply a handler for delegate vs attribute change
 
@@ -776,13 +776,13 @@ Simply a handler for delegate vs attribute change
 
 • **DIDAttributeChanged**: *handleAttributeChange* =  handleAttributeChange
 
-Defined in did-resolver/src/functions/functions.ts:173
+Defined in did-resolver/src/functions/functions.ts:175
 
 ###  DIDDelegateChanged
 
 • **DIDDelegateChanged**: *handleDelegateChange* =  handleDelegateChange
 
-Defined in did-resolver/src/functions/functions.ts:172
+Defined in did-resolver/src/functions/functions.ts:174
 
 ___
 

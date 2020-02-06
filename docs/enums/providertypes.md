@@ -17,7 +17,7 @@ Specifies currently supported provider types. New types can be added in the futu
 
 • **HTTP**:
 
-Defined in did-resolver/src/models/resolver.ts:12
+Defined in did-resolver/src/models/resolver.ts:7
 
 ___
 
@@ -25,4 +25,4 @@ ___
 
 • **IPC**:
 
-Defined in did-resolver/src/models/resolver.ts:13
+Defined in did-resolver/src/models/resolver.ts:8
