@@ -43,6 +43,7 @@ var elliptic_1 = require("elliptic");
 var bn_js_1 = __importDefault(require("bn.js"));
 // @ts-ignore
 var ecies_parity_1 = __importDefault(require("ecies-parity"));
+var ethers_1 = require("ethers");
 var functions_1 = require("./functions");
 var ec = new elliptic_1.ec('secp256k1');
 var Keys = /** @class */ (function () {
@@ -73,6 +74,13 @@ var Keys = /** @class */ (function () {
             this.publicKey = publicKey_1;
         }
     }
+    Object.defineProperty(Keys.prototype, "address", {
+        get: function () {
+            return new ethers_1.Wallet(this.privateKey).address.toString();
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Decrypt the encrypted data that is given in hex format
      *

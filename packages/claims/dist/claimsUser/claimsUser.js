@@ -60,8 +60,6 @@ var eciesjs_1 = require("eciesjs");
 // @ts-ignore
 var sjcl_complete_1 = __importDefault(require("sjcl-complete"));
 var assert_1 = __importDefault(require("assert"));
-var did_document_1 = require("@ew-did-registry/did-document");
-var did_resolver_1 = require("@ew-did-registry/did-resolver");
 var claims_1 = require("../claims");
 var bn = sjcl_complete_1.default.bn, hash = sjcl_complete_1.default.hash, bitArray = sjcl_complete_1.default.bitArray;
 var ClaimsUser = /** @class */ (function (_super) {
@@ -244,7 +242,7 @@ var ClaimsUser = /** @class */ (function (_super) {
      */
     ClaimsUser.prototype.verifyPublicClaim = function (token, verifyData) {
         return __awaiter(this, void 0, void 0, function () {
-            var claim, document;
+            var claim;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -255,16 +253,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                             throw new Error('Incorrect signature');
                         }
                         assert_1.default.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
-                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
-                        return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
-                                algo: did_resolver_1.Algorithms.Secp256k1,
-                                type: did_resolver_1.PubKeyType.VerificationKey2018,
-                                encoding: did_resolver_1.Encoding.HEX,
-                                delegate: claim.signer,
-                            }, 1 * 60 * 1000)];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, true];
                 }
             });
         });
@@ -287,7 +276,7 @@ var ClaimsUser = /** @class */ (function (_super) {
      */
     ClaimsUser.prototype.verifyPrivateClaim = function (token, saltedFields) {
         return __awaiter(this, void 0, void 0, function () {
-            var claim, _i, _a, _b, key, value, fieldHash, PK, document;
+            var claim, _i, _a, _b, key, value, fieldHash, PK;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -306,16 +295,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                                 throw new Error('Issued claim data doesn\'t match user data');
                             }
                         }
-                        document = new did_document_1.DIDDocumentFull(claim.did, new did_resolver_1.Operator(this.keys));
-                        return [4 /*yield*/, document.update(did_resolver_1.DIDAttribute.Authenticate, {
-                                algo: did_resolver_1.Algorithms.Secp256k1,
-                                type: did_resolver_1.PubKeyType.VerificationKey2018,
-                                encoding: did_resolver_1.Encoding.HEX,
-                                delegate: claim.signer,
-                            }, 1 * 60 * 1000)];
-                    case 2:
-                        _c.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, true];
                 }
             });
         });

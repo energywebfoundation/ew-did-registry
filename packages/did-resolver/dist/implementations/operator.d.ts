@@ -23,7 +23,7 @@ export declare class Operator extends Resolver implements IOperator {
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
-    constructor(keys: IKeys, settings?: IResolverSettings);
+    constructor(keys: IKeys, settings: IResolverSettings);
     /**
      * Relevant did should have positive cryptocurrency balance to perform
      * the transaction. Create method saves the public key in smart contract's

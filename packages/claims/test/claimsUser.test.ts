@@ -1,10 +1,17 @@
 import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Resolver, Operator } from '@ew-did-registry/did-resolver';
+import {
+  Resolver,
+  Operator,
+  IOperator,
+  IResolver,
+} from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
 import { decrypt } from 'eciesjs';
 import { ClaimsUser } from '../src/claimsUser';
 import { IPrivateClaim, IProofClaim } from '../src/models';
+import { getSettings } from '../../../tests/init-ganache';
+import { IClaimsUser } from '../src';
 
 chai.should();
 
@@ -16,18 +23,27 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
   const userDdid = `did:${Networks.Ethereum}:${userAddress}`;
-  const userOperator = new Operator(user);
   const issuer = new Keys({
     privateKey: '945d90baf66123693be97edff663d5c54f5d517d40928a9c0caa37dba3a0b042',
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   });
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B';
   const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
-  const issuerOperator = new Operator(issuer);
-  const resolver = new Resolver();
-  const userClaims = new ClaimsUser(user, resolver);
+
+  let userOperator: IOperator;
+  let issuerOperator: IOperator;
+  let resolver: IResolver;
+  let userClaims: IClaimsUser;
 
   before(async () => {
+    const resolverSettings = await getSettings([issuerAddress, userAddress]);
+    console.log(`registry: ${resolverSettings.address}`);
+
+    userOperator = new Operator(user, resolverSettings);
+    issuerOperator = new Operator(issuer, resolverSettings);
+    resolver = new Resolver(resolverSettings);
+    userClaims = new ClaimsUser(user, resolver);
+
     await userOperator.create();
     await issuerOperator.create();
   });
