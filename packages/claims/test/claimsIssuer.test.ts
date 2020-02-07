@@ -2,8 +2,6 @@ import chai from 'chai';
 import chaiAsPromise from 'chai-as-promised';
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import {
-  defaultResolverSettings,
-  ethrReg,
   IOperator,
   IResolver,
   IResolverSettings,

@@ -2,7 +2,7 @@ import { IResolverSettings, ProviderTypes } from '../models';
 import { ethrReg } from './EthereumDIDRegistry';
 
 // Address of ERC1056 smart contract on Volta
-export const address1056 = '0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0'; // '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
+export const address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
 
 // ABI of smart contract that has the address above
 export const abi1056 = ethrReg.abi;

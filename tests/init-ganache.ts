@@ -1,8 +1,8 @@
 import { ContractFactory, ethers, Wallet } from 'ethers';
 import Web3 from 'web3';
+import { AsyncSendable } from 'ethers/providers';
 import { defaultResolverSettings, ethrReg } from '../packages/did-resolver/src/constants';
 import { IResolverSettings } from '../packages/did-resolver/src/models';
-import { AsyncSendable } from 'ethers/providers';
 
 const GANACHE_PORT = 8544;
 const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
