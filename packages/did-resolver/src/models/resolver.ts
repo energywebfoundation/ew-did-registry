@@ -1,9 +1,4 @@
-import {
-  ParamType,
-  BigNumber,
-  ConnectionInfo,
-  Networkish,
-} from 'ethers/utils';
+import { utils } from 'ethers';
 
 /**
  * Specifies currently supported provider types. New types can be added in the future.
@@ -21,9 +16,9 @@ export enum ProviderTypes {
  */
 export interface IProvider {
   type: ProviderTypes;
-  uriOrInfo?: string | ConnectionInfo;
+  uriOrInfo?: string | utils.ConnectionInfo;
   path?: string;
-  network?: Networkish;
+  network?: utils.Networkish;
 }
 
 /**
@@ -32,7 +27,7 @@ export interface IProvider {
  */
 export interface IResolverSettings {
   provider?: IProvider;
-  abi?: Array<string | ParamType>;
+  abi?: Array<string | utils.ParamType>;
   address?: string;
 }
 
@@ -59,7 +54,7 @@ export interface IServiceEndpoint {
   type: string;
   serviceEndpoint: string;
   description?: string;
-  validity?: BigNumber;
+  validity?: utils.BigNumber;
   block?: number;
 }
 
@@ -74,15 +69,15 @@ export interface IPublicKey {
   publicKeyPem?: string;
   publicKeyJwk?: string;
   publicKeyMultibase?: string;
-  validity?: BigNumber;
+  validity?: utils.BigNumber;
   block?: number;
-  [key: string]: string|number|BigNumber;
+  [key: string]: string | number | utils.BigNumber;
 }
 
 export interface IAuthentication {
   type: string;
   publicKey: string;
-  validity?: BigNumber;
+  validity?: utils.BigNumber;
   block?: number;
 }
 
@@ -104,7 +99,7 @@ export interface ISmartContractEvent {
     identity: string;
     delegateType: string;
     delegate: string;
-    validTo: BigNumber;
+    validTo: utils.BigNumber;
     previousChange: object;
     name?: string;
     value?: string;
@@ -121,7 +116,7 @@ export interface ISmartContractEvent {
  */
 export interface IDIDLogData {
   owner: string;
-  lastChangedBlock: BigNumber;
+  lastChangedBlock: utils.BigNumber;
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];
@@ -129,7 +124,7 @@ export interface IDIDLogData {
   created?: string;
   updated?: string;
   proof?: ILinkedDataProof;
-  attributes?: Map<string, { [key: string]: string | number | object}>;
+  attributes?: Map<string, { [key: string]: string | number | object }>;
 }
 
 /**
@@ -138,10 +133,10 @@ export interface IDIDLogData {
  */
 export interface IHandlers {
   [key: string]: (event: ISmartContractEvent,
-                  etherAddress: string,
-                  document: IDIDLogData,
-                  validTo: BigNumber,
-                  block: number,) => IDIDLogData;
+    etherAddress: string,
+    document: IDIDLogData,
+    validTo: utils.BigNumber,
+    block: number) => IDIDLogData;
 }
 
 /**

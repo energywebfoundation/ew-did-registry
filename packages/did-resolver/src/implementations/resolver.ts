@@ -1,6 +1,9 @@
-import { BigNumber } from 'ethers/utils';
-import { BaseProvider } from 'ethers/providers';
-import { Contract, ethers } from 'ethers';
+import {
+  ethers,
+  utils,
+  providers,
+  Contract,
+} from 'ethers';
 import { IResolver } from '../interface';
 import {
   IDIDDocument,
@@ -31,7 +34,7 @@ class Resolver implements IResolver {
   /**
    * Stores the provider to connect to blockchain
    */
-  private readonly _providerResolver: BaseProvider;
+  private readonly _providerResolver: providers.BaseProvider;
 
   /**
    * Stores the smart contract instance with read functionality available
@@ -94,7 +97,7 @@ class Resolver implements IResolver {
           const [, , blockchainAddress] = did.split(':');
           this._fetchedDocument = {
             owner: blockchainAddress,
-            lastChangedBlock: new BigNumber(0),
+            lastChangedBlock: new utils.BigNumber(0),
             authentication: {},
             publicKey: {},
             serviceEndpoints: {},

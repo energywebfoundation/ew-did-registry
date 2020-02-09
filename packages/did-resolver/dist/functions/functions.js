@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ethers_1 = require("ethers");
-var utils_1 = require("ethers/utils");
 var constants_1 = require("../constants");
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -290,7 +289,7 @@ exports.fetchDataFromEvents = function (did, document, resolverSettings, contrac
  */
 exports.wrapDidDocument = function (did, document, context) {
     if (context === void 0) { context = 'https://www.w3.org/ns/did/v1'; }
-    var now = new utils_1.BigNumber(Math.floor(new Date().getTime() / 1000));
+    var now = new ethers_1.utils.BigNumber(Math.floor(new Date().getTime() / 1000));
     var publicKey = [];
     var authentication = [
         {

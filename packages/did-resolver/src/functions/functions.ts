@@ -1,7 +1,9 @@
-import { Contract, ethers } from 'ethers';
-import { BaseProvider } from 'ethers/providers';
-
-import { BigNumber, Interface } from 'ethers/utils';
+import {
+  Contract,
+  ethers,
+  providers,
+  utils,
+} from 'ethers';
 
 import {
   IDIDDocument,
@@ -27,7 +29,7 @@ const handleDelegateChange = (
   event: ISmartContractEvent,
   did: string,
   document: IDIDLogData,
-  validTo: BigNumber,
+  validTo: utils.BigNumber,
   block: number,
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
@@ -42,7 +44,7 @@ const handleDelegateChange = (
           validity: validTo,
           block,
         };
-        // eslint-disable-next-line no-fallthrough
+      // eslint-disable-next-line no-fallthrough
       case 'veriKey':
         document.publicKey[publicKeyID] = {
           id: publicKeyID,
@@ -73,7 +75,7 @@ const handleAttributeChange = (
   event: ISmartContractEvent,
   did: string,
   document: IDIDLogData,
-  validTo: BigNumber,
+  validTo: utils.BigNumber,
   block: number,
 ): IDIDLogData => {
   const [, , blockchainAddress] = did.split(':');
@@ -216,7 +218,7 @@ const getEventsFromBlock = (
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.BaseProvider,
-  smartContractInterface: Interface,
+  smartContractInterface: utils.Interface,
   smartContractAddress: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
   const [, , blockchainAddress] = did.split(':');
@@ -252,7 +254,7 @@ export const fetchDataFromEvents = async (
   document: IDIDLogData,
   resolverSettings: IResolverSettings,
   contract: Contract,
-  provider: BaseProvider,
+  provider: providers.BaseProvider,
 ): Promise<void> => {
   const [, , blockchainAddress] = did.split(':');
 
@@ -303,7 +305,7 @@ export const wrapDidDocument = (
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
-  const now = new BigNumber(Math.floor(new Date().getTime() / 1000));
+  const now = new utils.BigNumber(Math.floor(new Date().getTime() / 1000));
 
   const publicKey: IPublicKey[] = [
   ];
