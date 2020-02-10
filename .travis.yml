@@ -8,7 +8,10 @@ install:
   - npm install
   - npm run setup
   - npm run build
-script:  npm run test
+  - npm run browserTest:build
+script:  
+  - npm run test-rpc
+  - npm run browserTest:run
 deploy:
   provider: releases
   api_key:
