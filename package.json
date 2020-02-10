@@ -70,7 +70,7 @@
     "run-with-testrpc": "^0.3.1",
     "ts-node": "^8.5.2",
     "tsify": "^4.0.1",
-    "typedoc": "^0.15.2",
+    "typedoc": "^0.16.9",
     "typedoc-plugin-markdown": "^2.2.11",
     "typescript": "^3.7.2",
     "vinyl-buffer": "^1.0.1",
