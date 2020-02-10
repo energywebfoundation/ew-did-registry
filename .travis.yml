@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  global:
+  - '10.18.1'
+env:
+  - secure: "GITHUB PERSONAL ACCESS TOKEN"
+install: 
+  - npm install
+  - npm run setup
+  - npm run build
+script:  npm run test
+deploy:
+  provider: releases
+  api_key:
+    secure: "GITHUB PERSONAL ACCESS TOKEN"
+  ffile_glob: true
+  file: build/*
+  skip_cleanup: true
+  on:
+    branch: development
+    tags: true
