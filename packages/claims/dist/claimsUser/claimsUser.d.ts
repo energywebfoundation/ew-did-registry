@@ -95,7 +95,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {Promise<void>}
      * @throws if the proof failed
      */
-    verifyPublicClaim(token: string, verifyData: object): Promise<void>;
+    verifyPublicClaim(token: string, verifyData: object): Promise<boolean>;
     /**
      * Verifies token with private data received from issuer
      *
@@ -112,5 +112,5 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {Promise<void>}
      * @throw if the proof failed
      */
-    verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<void>;
+    verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean>;
 }

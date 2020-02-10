@@ -3,6 +3,7 @@ import BN from 'bn.js';
 // @ts-ignore
 import ecies from 'ecies-parity';
 
+import { Wallet } from 'ethers';
 import { IKeys } from './interface';
 import { KeyPair } from './models';
 import { hex, sha256 } from './functions';
@@ -44,6 +45,10 @@ class Keys implements IKeys {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
       }
+    }
+
+    get address (): string {
+      return new Wallet(this.privateKey).address.toString();
     }
 
     /**

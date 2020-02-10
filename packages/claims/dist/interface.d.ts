@@ -18,8 +18,8 @@ export interface IClaimsUser extends IClaims {
         };
     }>;
     createProofClaim(claimUrl: string, saltedFields: IProofData): Promise<string>;
-    verifyPublicClaim(token: string, verifyData: object): Promise<void>;
-    verifyPrivateClaim(privateToken: string, saltedFields: ISaltedFields): Promise<void>;
+    verifyPublicClaim(token: string, verifyData: object): Promise<boolean>;
+    verifyPrivateClaim(privateToken: string, saltedFields: ISaltedFields): Promise<boolean>;
 }
 export interface IClaimsIssuer extends IClaims {
     issuePublicClaim(token: string): Promise<string>;

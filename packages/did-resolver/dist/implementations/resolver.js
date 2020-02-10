@@ -58,8 +58,7 @@ var Resolver = /** @class */ (function () {
      * @param {IResolverSettings} settings
      */
     function Resolver(settings) {
-        if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
-        this._settings = settings;
+        this.settings = settings;
         if (settings.provider.type === models_1.ProviderTypes.HTTP) {
             this._providerResolver = new ethers_1.ethers.providers.JsonRpcProvider(settings.provider.uriOrInfo, settings.provider.network);
         }
@@ -112,7 +111,7 @@ var Resolver = /** @class */ (function () {
                                     _c.label = 1;
                                 case 1:
                                     _c.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this._settings, this._contract, this._providerResolver)];
+                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this.settings, this._contract, this._providerResolver)];
                                 case 2:
                                     _c.sent();
                                     didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);

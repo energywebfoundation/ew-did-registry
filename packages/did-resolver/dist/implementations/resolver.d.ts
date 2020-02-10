@@ -15,7 +15,7 @@ declare class Resolver implements IResolver {
     /**
      * Stores resolver settings, such as abi, contract address, and IProvider
      */
-    protected readonly _settings: IResolverSettings;
+    readonly settings: IResolverSettings;
     /**
      * Stores the provider to connect to blockchain
      */
@@ -34,7 +34,7 @@ declare class Resolver implements IResolver {
      * Settings have to be passed to construct resolver
      * @param {IResolverSettings} settings
      */
-    constructor(settings?: IResolverSettings);
+    constructor(settings: IResolverSettings);
     /**
      * Resolve DID Document for a given did
      *

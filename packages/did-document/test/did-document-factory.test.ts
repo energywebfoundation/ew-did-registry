@@ -3,17 +3,26 @@ import { expect } from 'chai';
 import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import {
+  IOperator,
   Operator,
 } from '@ew-did-registry/did-resolver';
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';
+import { getSettings } from '../../../tests/init-ganache';
 
 describe('[DID DOCUMENT FACTORY]', () => {
   const keys = new Keys();
   const { address } = new ethers.Wallet(keys.privateKey);
   const did = `did:ewc:${address}`;
-  const operator = new Operator(keys);
+
+  let operator: IOperator;
+
+  before(async () => {
+    const resolverSettings = await getSettings([]);
+    console.log(`registry: ${resolverSettings.address}`);
+    operator = new Operator(keys, resolverSettings);
+  });
 
   it('createLite should return instance of DIDDocumentLite', () => {
     const factory = new DIDDocumentFactory(did);

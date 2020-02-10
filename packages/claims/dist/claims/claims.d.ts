@@ -10,7 +10,7 @@ export declare class Claims implements IClaims {
     /**
      * Used for creation of new Resolvers
      */
-    private readonly resolver;
+    protected readonly resolver: IResolver;
     /**
      * jwt stores the JWT to manage web tokens
      */

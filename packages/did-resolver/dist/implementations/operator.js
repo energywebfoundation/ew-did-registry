@@ -71,10 +71,9 @@ var Operator = /** @class */ (function (_super) {
      * controller in a subsequent operations with DID document
      */
     function Operator(keys, settings) {
-        if (settings === void 0) { settings = constants_1.defaultResolverSettings; }
         var _this = _super.call(this, settings) || this;
         _this._keys = keys;
-        var _a = _this._settings, address = _a.address, abi = _a.abi;
+        var _a = _this.settings, address = _a.address, abi = _a.abi;
         var privateKey = _this._keys.privateKey;
         _this._provider = _this._getProvider();
         var wallet = new ethers_1.ethers.Wallet(privateKey, _this._provider);
@@ -554,7 +553,7 @@ var Operator = /** @class */ (function (_super) {
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
-                        return [2 /*return*/, false];
+                        throw new Error(e_1.message);
                     case 5: return [2 /*return*/, true];
                 }
             });
@@ -601,7 +600,7 @@ var Operator = /** @class */ (function (_super) {
      * @private
      */
     Operator.prototype._getProvider = function () {
-        var provider = this._settings.provider;
+        var provider = this.settings.provider;
         switch (provider.type) {
             case models_1.ProviderTypes.HTTP:
                 return new ethers_1.ethers.providers.JsonRpcProvider(provider.uriOrInfo, provider.network);

@@ -9,8 +9,9 @@ import {
   IUpdateData,
   PubKeyType,
   Operator,
-  IAuthentication,
+  IAuthentication, IResolverSettings,
 } from '../src';
+import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
@@ -19,10 +20,18 @@ describe('[DID-OPERATOR]', function () {
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
-  const operator = new Operator(keys);
+  let operator: Operator;
+  let operatorSetting: IResolverSettings;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
   const did = `did:ewc:${identity}`;
+
+  before(async () => {
+    operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    console.log(`registry: ${operatorSetting.address}`);
+
+    operator = new Operator(keys, operatorSetting);
+  });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
@@ -263,7 +272,7 @@ describe('[DID-OPERATOR]', function () {
       publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
     });
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    const operatorNewOwner = new Operator(secondKeys);
+    const operatorNewOwner = new Operator(secondKeys, operatorSetting);
     let currentOwner;
 
     await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);

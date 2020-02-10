@@ -4,6 +4,7 @@ import { Attributes } from '../src/models';
 import { Resolver } from '@ew-did-registry/did-resolver';
 
 import { DIDDocumentLite, IDIDDocumentLite } from '../src/lite';
+import { getSettings } from '../../../tests/init-ganache';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function() {
   this.timeout(60000);
@@ -12,8 +13,9 @@ describe('[DID DOCUMENT LITE PACKAGE]', function() {
   const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
   const wrongId = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
 
-  before(() => {
-    const resolver = new Resolver();
+  before(async () => {
+    const resolverSettings = await getSettings([]);
+    const resolver = new Resolver(resolverSettings);
     didDocumentLite = new DIDDocumentLite(did, resolver);
     wrongDidDocumentLite = new DIDDocumentLite(wrongId, resolver);
   });
