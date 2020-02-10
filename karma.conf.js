@@ -18,8 +18,8 @@ module.exports = function (config) {
       // 'node_modules/karma-chai/adapter.js',
       // "node_modules/mocha/mocha.js",
       // 'node_modules/karma-mocha/lib/adapter.js',
-      'build/*.min.js',
-      'tests/*.spec.js',
+      'tests/bundledApp.js',
+      'tests/browser.test.js',
     ],
 
 
@@ -32,7 +32,7 @@ module.exports = function (config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'node_modules/chai-as-promised/lib/chai-as-promised.js': ['browserify'],
-      'tests/*.spec.js': ['browserify'],
+      'tests/browser.test.js': ['browserify'],
     },
 
 

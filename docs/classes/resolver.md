@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Resolver](resolver.md)
 
 # Class: Resolver
 
@@ -43,7 +43,7 @@ All the functionality supporting document resolution is stored in 'functions' fo
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:44](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/implementations/resolver.ts#L44)*
+*Defined in [did-resolver/src/implementations/resolver.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/implementations/resolver.ts#L47)*
 
 Constructor
 
@@ -65,7 +65,7 @@ Name | Type | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md).[settings](../interfaces/iresolver.md#settings)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/implementations/resolver.ts#L29)*
+*Defined in [did-resolver/src/implementations/resolver.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/implementations/resolver.ts#L32)*
 
 Stores resolver settings, such as abi, contract address, and IProvider
 
@@ -77,7 +77,7 @@ Stores resolver settings, such as abi, contract address, and IProvider
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/implementations/resolver.ts#L131)*
+*Defined in [did-resolver/src/implementations/resolver.ts:134](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/implementations/resolver.ts#L134)*
 
 Returns the Ethereum address of current identity owner
 
@@ -99,7 +99,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/implementations/resolver.ts#L83)*
+*Defined in [did-resolver/src/implementations/resolver.ts:86](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/implementations/resolver.ts#L86)*
 
 Resolve DID Document for a given did
 
@@ -127,7 +127,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:151](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-resolver/src/implementations/resolver.ts#L151)*
+*Defined in [did-resolver/src/implementations/resolver.ts:154](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/implementations/resolver.ts#L154)*
 
 Performs the check if the delegate is valid for particular did
 Return boolean

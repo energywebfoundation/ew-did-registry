@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers/utils';
+import { utils } from 'ethers';
 import { IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings } from './models';
 export interface IResolver {
     readonly settings: IResolverSettings;

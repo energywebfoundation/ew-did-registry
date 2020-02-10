@@ -1,3 +1,9 @@
+/* eslint-disable semi */
+/* eslint-disable prefer-template */
+/* eslint-disable quote-props */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable comma-dangle */
+/* eslint-disable @typescript-eslint/camelcase */
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
@@ -74,7 +80,7 @@ function bundling(pckg) {
     entries: [path.join(pckg.src, 'src/index.ts')],
     cache: {},
     packageCache: {},
-    standalone: pckg.expose,
+    standalone: pckg.expose, // in browser will be globals keys, didRegistry, didResolver,...
   })
     .plugin(tsify, { project: pckg.src })
     .bundle()

@@ -1,5 +1,5 @@
 import { IResolverSettings, ProviderTypes } from '../models';
-export declare const address1056 = "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0";
+export declare const address1056 = "0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af";
 export declare const abi1056: ({
     constant: boolean;
     inputs: {
