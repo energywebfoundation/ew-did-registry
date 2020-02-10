@@ -2,10 +2,18 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { IResolver, Resolver, Operator } from '@ew-did-registry/did-resolver';
+import {
+  IResolver,
+  Resolver,
+  Operator,
+  IOperator,
+  IResolverSettings,
+} from '@ew-did-registry/did-resolver';
 import { Networks } from '@ew-did-registry/did';
 import { ClaimsFactory } from '../src/claimsFactory';
 import { IProofData } from '../src/models';
+import { IClaimsIssuer, IClaimsUser, IClaimsVerifier } from '../src';
+import { getSettings } from '../../../tests/init-ganache';
 
 chai.use(chaiAsPromised);
 
@@ -18,7 +26,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   });
   const userAddress = '0x5AAab994B9103F427bEDedc2173f33e347a3DeE2';
   const userDid = `did:${Networks.EnergyWeb}:${userAddress}`;
-  const userOperator = new Operator(user);
+  let userOperator: IOperator;
 
   const issuer = new Keys({
     privateKey: '7809091ad3646a9505b7ae5597f9f344e43df9e4d4fb12ecc48bda87c7bbda2c',
@@ -26,25 +34,37 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   });
   const issuerAddress = '0x116b43b21F082e941c78486809AE0010bb60DFA4';
   const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
-  const issuerOperator = new Operator(issuer);
+  let issuerOperator: IOperator;
 
   const verifier = new Keys({
     privateKey: '37cd773efb8cd99b0f509ec118df8e9c6d6e5e22b214012a76be215f77250b9e',
     publicKey: '02335325b9d16aa046ea7275537d9aced84ed3683a7969db5f836b0e6d62770d1e',
   });
 
+  let claimsUser: IClaimsUser;
+  let claimsIssuer: IClaimsIssuer;
+  let claimsVerifier: IClaimsVerifier;
+
+  let resolver: IResolver;
+
   before(async () => {
+    const resolverSettings: IResolverSettings = await getSettings([userAddress, issuerAddress]);
+    console.log(`registry: ${resolverSettings.address}`);
+
+    resolver = new Resolver(resolverSettings);
+    userOperator = new Operator(user, resolverSettings);
+    issuerOperator = new Operator(issuer, resolverSettings);
+
     await userOperator.deactivate(userDid);
     await userOperator.create();
 
     await issuerOperator.deactivate(issuerDid);
     await issuerOperator.create();
-  });
 
-  const resolver: IResolver = new Resolver();
-  const claimsUser = new ClaimsFactory(user, userOperator).createClaimsUser();
-  const claimsIssuer = new ClaimsFactory(issuer, issuerOperator).createClaimsIssuer();
-  const claimsVerifier = new ClaimsFactory(verifier, resolver).createClaimsVerifier();
+    claimsUser = new ClaimsFactory(user, userOperator).createClaimsUser();
+    claimsIssuer = new ClaimsFactory(issuer, issuerOperator).createClaimsIssuer();
+    claimsVerifier = new ClaimsFactory(verifier, resolver).createClaimsVerifier();
+  });
 
   it('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side

@@ -1,9 +1,10 @@
 import { expect } from 'chai';
 import {
-  Algorithms, DIDAttribute, Encoding, Operator, PubKeyType,
+  Algorithms, DIDAttribute, Encoding, IOperator, Operator, PubKeyType,
 } from '@ew-did-registry/did-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import DIDDocumentFull from '../src/full/documentFull';
+import { getSettings } from '../../../tests/init-ganache';
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
@@ -13,7 +14,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
-  const operator = new Operator(keys);
+
+  let operator: IOperator;
+
+  before(async () => {
+    const resolverSettings = await getSettings([ownerAddress]);
+    console.log(`registry: ${resolverSettings.address}`);
+    operator = new Operator(keys, resolverSettings);
+  });
 
   it('create document should return true', async () => {
     const document = new DIDDocumentFull(did, operator);

@@ -92,7 +92,7 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                         if (!(_a.sent())) {
                             throw new Error('Invalid signatue');
                         }
-                        resolver = new did_resolver_1.Resolver();
+                        resolver = new did_resolver_1.Resolver(this.resolver.settings);
                         if (!resolver.validDelegate(claim.did, did_resolver_1.DelegateTypes.verification, claim.signer)) {
                             throw new Error('Issuer isn\'t a use\'r delegate');
                         }
@@ -133,7 +133,7 @@ var ClaimsVerifier = /** @class */ (function (_super) {
                         if (!(_a.sent())) {
                             throw new Error('Invalid signature');
                         }
-                        resolver = new did_resolver_1.Resolver();
+                        resolver = new did_resolver_1.Resolver(this.resolver.settings);
                         privateClaim = this.jwt.decode(privateToken);
                         return [4 /*yield*/, this.verifySignature(privateToken, privateClaim.signer)];
                     case 2:

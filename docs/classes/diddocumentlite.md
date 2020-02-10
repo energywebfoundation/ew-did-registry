@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentLite](diddocumentlite.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentLite](diddocumentlite.md)
 
 # Class: DIDDocumentLite
 
@@ -33,7 +33,7 @@
 
 \+ **new DIDDocumentLite**(`did`: string, `resolver`: IResolver): *[DIDDocumentLite](diddocumentlite.md)*
 
-Defined in did-document/src/lite/index.ts:18
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L18)*
 
 Constructor takes DID of interest and Resolver as inputs
 
@@ -54,7 +54,7 @@ Name | Type | Description |
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[did](../interfaces/ididdocumentlite.md#did)*
 
-Defined in did-document/src/lite/index.ts:13
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L13)*
 
 DID of concern
 
@@ -66,7 +66,7 @@ ___
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[didDocument](../interfaces/ididdocumentlite.md#diddocument)*
 
-Defined in did-document/src/lite/index.ts:18
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L18)*
 
 Fetched DID Document
 
@@ -78,7 +78,7 @@ Fetched DID Document
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md)*
 
-Defined in did-document/src/lite/index.ts:50
+*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L50)*
 
 Method returns the attribute of interest. An optional type parameter can be provided for
 attributes, which are objects
