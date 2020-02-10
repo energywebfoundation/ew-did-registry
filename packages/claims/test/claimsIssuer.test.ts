@@ -34,7 +34,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   let claimsUser: IClaimsUser;
 
   before(async () => {
-    const resolverSettings: IResolverSettings = await getSettings([issuer.address, user.address]);
+    const resolverSettings: IResolverSettings = await getSettings([issuer.getAddress(), user.getAddress()]);
     console.log(`registry: ${resolverSettings.address}`);
 
     resolver = new Resolver(resolverSettings);

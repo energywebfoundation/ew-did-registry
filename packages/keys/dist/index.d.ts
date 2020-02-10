@@ -15,7 +15,7 @@ declare class Keys implements IKeys {
      * @param {string} publicKey
      */
     constructor({ privateKey, publicKey }?: KeyPair);
-    get address(): string;
+    getAddress(): string;
     /**
      * Decrypt the encrypted data that is given in hex format
      *

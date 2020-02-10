@@ -52,7 +52,8 @@ var Keys = /** @class */ (function () {
      * @param {string} publicKey
      */
     function Keys(_a) {
-        var _b = _a === void 0 ? {} : _a, privateKey = _b.privateKey, publicKey = _b.publicKey;
+        var _b;
+        var _c = _a === void 0 ? {} : _a, privateKey = _c.privateKey, publicKey = _c.publicKey;
         if (privateKey && publicKey) {
             this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
             this.privateKey = privateKey;
@@ -68,19 +69,15 @@ var Keys = /** @class */ (function () {
             this.publicKey = publicKey;
         }
         else {
-            var _c = Keys.generateKeyPair(), privateKey_1 = _c.privateKey, publicKey_1 = _c.publicKey;
-            this._keyPair = ec.keyFromPrivate(privateKey_1, 'hex');
-            this.privateKey = privateKey_1;
-            this.publicKey = publicKey_1;
+            (_b = Keys.generateKeyPair(), privateKey = _b.privateKey, publicKey = _b.publicKey);
+            this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
+            this.privateKey = privateKey;
+            this.publicKey = publicKey;
         }
     }
-    Object.defineProperty(Keys.prototype, "address", {
-        get: function () {
-            return new ethers_1.Wallet(this.privateKey).address.toString();
-        },
-        enumerable: true,
-        configurable: true
-    });
+    Keys.prototype.getAddress = function () {
+        return new ethers_1.Wallet(this.privateKey).address.toString();
+    };
     /**
      * Decrypt the encrypted data that is given in hex format
      *

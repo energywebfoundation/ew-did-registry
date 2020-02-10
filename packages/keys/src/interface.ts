@@ -9,7 +9,10 @@ export interface IKeys {
      */
     publicKey: string;
 
-    address: string;
+    /**
+     * Returns Ethereum address of the corresponding keypair
+     */
+    getAddress(): string;
 
     /**
      * Sign the data with private key

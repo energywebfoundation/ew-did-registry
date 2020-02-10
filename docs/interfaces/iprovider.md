@@ -26,7 +26,7 @@ if one wants to extend the library.
 
 • **network**? : *utils.Networkish*
 
-*Defined in [did-resolver/src/models/resolver.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/resolver.ts#L21)*
+*Defined in [did-resolver/src/models/resolver.ts:21](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/resolver.ts#L21)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **path**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/resolver.ts#L20)*
+*Defined in [did-resolver/src/models/resolver.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/resolver.ts#L20)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **type**: *[ProviderTypes](../enums/providertypes.md)*
 
-*Defined in [did-resolver/src/models/resolver.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/resolver.ts#L18)*
+*Defined in [did-resolver/src/models/resolver.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/resolver.ts#L18)*
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 • **uriOrInfo**? : *string | utils.ConnectionInfo*
 
-*Defined in [did-resolver/src/models/resolver.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/resolver.ts#L19)*
+*Defined in [did-resolver/src/models/resolver.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/resolver.ts#L19)*

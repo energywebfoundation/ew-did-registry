@@ -14,7 +14,6 @@
 
 ### Properties
 
-* [address](ikeys.md#address)
 * [privateKey](ikeys.md#privatekey)
 * [publicKey](ikeys.md#publickey)
 
@@ -22,24 +21,17 @@
 
 * [decrypt](ikeys.md#decrypt)
 * [encrypt](ikeys.md#encrypt)
+* [getAddress](ikeys.md#getaddress)
 * [sign](ikeys.md#sign)
 * [verify](ikeys.md#verify)
 
 ## Properties
 
-###  address
-
-• **address**: *string*
-
-*Defined in [keys/src/interface.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L12)*
-
-___
-
 ###  privateKey
 
 • **privateKey**: *string*
 
-*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L5)*
+*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L5)*
 
 Private key in hex format
 
@@ -49,7 +41,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L10)*
+*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L10)*
 
 Public key in hex format
 
@@ -59,7 +51,7 @@ Public key in hex format
 
 ▸ **decrypt**(`encrypted`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L45)*
+*Defined in [keys/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L48)*
 
 Decryption
 
@@ -78,7 +70,7 @@ ___
 
 ▸ **encrypt**(`data`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:37](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L37)*
+*Defined in [keys/src/interface.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L40)*
 
 Encryption
 
@@ -93,11 +85,23 @@ Name | Type |
 
 ___
 
+###  getAddress
+
+▸ **getAddress**(): *string*
+
+*Defined in [keys/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L15)*
+
+Returns Ethereum address of the corresponding keypair
+
+**Returns:** *string*
+
+___
+
 ###  sign
 
 ▸ **sign**(`data`: string, `privateKey?`: string): *string*
 
-*Defined in [keys/src/interface.ts:20](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L20)*
+*Defined in [keys/src/interface.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L23)*
 
 Sign the data with private key
 
@@ -116,7 +120,7 @@ ___
 
 ▸ **verify**(`data`: string, `signature`: string, `publicKey?`: string): *boolean*
 
-*Defined in [keys/src/interface.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/keys/src/interface.ts#L29)*
+*Defined in [keys/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/interface.ts#L32)*
 
 Verify the signature accordance to data with public key
 

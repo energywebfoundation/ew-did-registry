@@ -17,7 +17,7 @@ The two main types of public keys are, in turn, verification key and signature a
 
 • **SignatureAuthentication2018**: = "sigAuth"
 
-*Defined in [did-resolver/src/models/operator.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/operator.ts#L12)*
+*Defined in [did-resolver/src/models/operator.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/operator.ts#L12)*
 
 ___
 
@@ -25,4 +25,4 @@ ___
 
 • **VerificationKey2018**: = "veriKey"
 
-*Defined in [did-resolver/src/models/operator.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/models/operator.ts#L12)*
+*Defined in [did-resolver/src/models/operator.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/models/operator.ts#L12)*

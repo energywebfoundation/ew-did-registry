@@ -31,7 +31,7 @@
 
 • **settings**: *[IResolverSettings](iresolversettings.md)*
 
-*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/interface.ts#L7)*
+*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L7)*
 
 ## Methods
 
@@ -39,7 +39,7 @@
 
 ▸ **identityOwner**(`did`: string): *Promise‹string›*
 
-*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/interface.ts#L34)*
+*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L34)*
 
 Returns the current owner for certain DID.
 If DID document has not been created, did will be identical to address.
@@ -59,7 +59,7 @@ ___
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/interface.ts#L24)*
+*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L24)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -79,7 +79,7 @@ ___
 
 ▸ **validDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/cf74adb/packages/did-resolver/src/interface.ts#L45)*
+*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L45)*
 
 Checks if the delegate is present for a particular DID.
 Returns boolean.
