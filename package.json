@@ -50,7 +50,7 @@
     "ganache-cli": "^6.9.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-rename": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-streamify": "^1.0.2",
