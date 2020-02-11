@@ -28,7 +28,12 @@
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0,
     "import/extensions": "off",
-    "space-infix-ops": ["error", { "int32Hint": false }],
+    "space-infix-ops": [
+      "error",
+      {
+        "int32Hint": false
+      }
+    ],
     "no-underscore-dangle": 0,
     "no-param-reassign": 0,
     "space-before-function-paren": 0,
@@ -39,8 +44,32 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx", ".d.ts"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".d.ts"
+        ]
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.js"
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.js"
+      ],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
+  ]
 }

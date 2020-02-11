@@ -28,11 +28,7 @@
 
 \+ **new JWT**(`keys`: IKeys): *[JWT](jwt.md)*
 
-*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/jwt/src/index.ts#L10)*
-
-Key pair has to be passed on construction to JWT
-
-**Parameters:**
+*Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L10)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -48,15 +44,11 @@ Name | Type | Description |
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/jwt/src/index.ts#L131)*
+*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L131)*
 
 Return decoded JWT payload without verifying signature
 
-**`example`** 
-```typescript
-import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '@ew-did-registry/jwt';
-
+*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L131)*
 const AliceKeyPair = new Keys();
 const BobKeyPair = new Keys();
 const jwtAlice = new JWT(AliceKeyPair);
@@ -87,7 +79,7 @@ ___
 
 ▸ **sign**(`payload`: string | object, `options?`: object): *Promise‹string›*
 
-*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/jwt/src/index.ts#L45)*
+*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L45)*
 
 Sign payload and return JWT
 
@@ -95,11 +87,7 @@ Sign payload and return JWT
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
-
-const keyPair = new Keys();
-const jwt = new JWT(keyPair);
-const payload = {claim: 'test'};
-let token;
+*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L45)*
 
 try {
   token = await jwt.sign(payload, { algorithm: 'ES256' });
@@ -126,7 +114,7 @@ ___
 
 *Implementation of [IJWT](../interfaces/ijwt.md)*
 
-*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/jwt/src/index.ts#L93)*
+*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L93)*
 
 If the signature is correct, method returns decoded JWT payload
 
@@ -138,11 +126,7 @@ import { JWT } from '@ew-did-registry/jwt';
 const AliceKeyPair = new Keys();
 const BobKeyPair = new Keys();
 const jwtAlice = new JWT(AliceKeyPair);
-const jwtBob = new JWT(BobKeyPair);
-const payload = {claim: 'test'};
-
-const token = await jwtAlice.sign(payload, { algorithm: 'ES256' });
-
+*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L93)*
 let decoded;
 
 try {

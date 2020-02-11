@@ -29,6 +29,7 @@
 
 * [decrypt](keys.md#decrypt)
 * [encrypt](keys.md#encrypt)
+* [getAddress](keys.md#getaddress)
 * [sign](keys.md#sign)
 * [verify](keys.md#verify)
 * [generateKeyPair](keys.md#static-generatekeypair)
@@ -39,11 +40,7 @@
 
 \+ **new Keys**(`__namedParameters`: object): *[Keys](keys.md)*
 
-*Defined in [keys/src/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L24)*
-
-**Parameters:**
-
-▪`Default value`  **__namedParameters**: *object*=  {}
+*Defined in [keys/src/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L24)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -60,19 +57,15 @@ Name | Type | Description |
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[privateKey](../interfaces/ikeys.md#privatekey)*
 
-*Defined in [keys/src/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L19)*
+*Defined in [keys/src/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L19)*
 
 Private Key of secp256k1
 
-___
-
-###  publicKey
-
-• **publicKey**: *string*
+*Defined in [keys/src/index.ts:19](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L19)*
 
 *Implementation of [IKeys](../interfaces/ikeys.md).[publicKey](../interfaces/ikeys.md#publickey)*
 
-*Defined in [keys/src/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L24)*
+*Defined in [keys/src/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L24)*
 
 Public Key of secp256k1
 
@@ -80,11 +73,7 @@ Public Key of secp256k1
 
 ###  address
 
-• **get address**(): *string*
-
-*Defined in [keys/src/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L50)*
-
-**Returns:** *string*
+*Defined in [keys/src/index.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L24)*
 
 ## Methods
 
@@ -94,7 +83,7 @@ Public Key of secp256k1
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L73)*
+*Defined in [keys/src/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L73)*
 
 Decrypt the encrypted data that is given in hex format
 
@@ -106,11 +95,7 @@ const keysAlice = new Keys();
 const keysBob = new Keys();
 const data = 'test';
 const encrypted = await keysAlice.encrypt(data, keysBob.publicKey);
-const decrypted = await keysBob.decrypt(encrypted);
-console.log(decrypted); // 'test'
-```
-
-**Parameters:**
+*Defined in [keys/src/index.ts:73](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L73)*
 
 Name | Type |
 ------ | ------ |
@@ -127,7 +112,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L98)*
+*Defined in [keys/src/index.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L98)*
 
 Encrypt the data that is given in utf-8 string
 
@@ -143,13 +128,21 @@ console.log(encrypted); // hex symbols string
 ```
 
 **Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | string |
-`publicKeyTo?` | string |
+*Defined in [keys/src/index.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L98)*
 
 **Returns:** *Promise‹string›*
+
+___
+
+###  getAddress
+
+▸ **getAddress**(): *string*
+
+*Implementation of [IKeys](../interfaces/ikeys.md)*
+
+*Defined in [keys/src/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L50)*
+
+**Returns:** *string*
 
 ___
 
@@ -159,7 +152,7 @@ ___
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L129)*
+*Defined in [keys/src/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L129)*
 
 Sign the data
 
@@ -179,18 +172,14 @@ Name | Type |
 ------ | ------ |
 `data` | string |
 `privateKey?` | string |
-
-**Returns:** *string*
-
-___
-
+*Defined in [keys/src/index.ts:129](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L129)*
 ###  verify
 
 ▸ **verify**(`data`: string, `signature`: string, `publicKey?`: string): *boolean*
 
 *Implementation of [IKeys](../interfaces/ikeys.md)*
 
-*Defined in [keys/src/index.ts:163](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L163)*
+*Defined in [keys/src/index.ts:163](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L163)*
 
 Verify the signature
 
@@ -214,13 +203,9 @@ Name | Type |
 
 **Returns:** *boolean*
 
-___
+*Defined in [keys/src/index.ts:163](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L163)*
 
-### `Static` generateKeyPair
-
-▸ **generateKeyPair**(): *[KeyPair](../interfaces/keypair.md)*
-
-*Defined in [keys/src/index.ts:190](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/index.ts#L190)*
+*Defined in [keys/src/index.ts:190](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L190)*
 
 Generates new key pair for secp256k1 algorithm.
 
@@ -234,3 +219,4 @@ console.log(keyPair.publicKey) // 66 hex symbols string
 ```
 
 **Returns:** *[KeyPair](../interfaces/keypair.md)*
+*Defined in [keys/src/index.ts:190](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/keys/src/index.ts#L190)*

@@ -23,11 +23,7 @@
 
 ▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
 
-*Defined in [did/src/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did/src/index.ts#L31)*
-
-Gets a DID for a particular network
-
-**`example`** 
+*Defined in [did/src/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did/src/index.ts#L31)*
 ```typescript
 import { DID, Network } from '@ew-did-registry/did';
 
@@ -56,15 +52,11 @@ ___
 
 *Implementation of [IDID](../interfaces/idid.md)*
 
-*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did/src/index.ts#L51)*
+*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did/src/index.ts#L51)*
 
 Sets a DID for a particular network (inferred from DID provided)
 
-**`example`** 
-```typescript
-import { DID } from '@ew-did-registry/did';
-
-const did = new DID();
+*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did/src/index.ts#L51)*
 did.set('did:eth:method_specific_id');
 console.log(did.get('eth')); // 'did:eth:method_specific_id'
 ```

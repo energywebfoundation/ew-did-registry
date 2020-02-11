@@ -27,11 +27,7 @@
 
 \+ **new DIDDocumentFactory**(`did`: string): *[DIDDocumentFactory](diddocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/factory/did-document-factory.ts#L10)*
-
-**Parameters:**
-
-Name | Type |
+*Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L10)*
 ------ | ------ |
 `did` | string |
 
@@ -45,15 +41,11 @@ Name | Type |
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/factory/did-document-factory.ts#L31)*
+*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L31)*
 
 Creates an instance of DIDDocumentFull
 
-**`example`** 
-```typescript
-import { DIDDocumentFactory, DIDDocumentFull } from '@ew-did-registry/did-document';
-
-const factory = new DIDDocumentFactory(did);
+*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L31)*
 const DIDDocumentFull = factory.createFull(operator);
 ```
 
@@ -74,7 +66,7 @@ ___
 
 *Implementation of [IDIDDocumentFactory](../interfaces/ididdocumentfactory.md)*
 
-*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/factory/did-document-factory.ts#L50)*
+*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L50)*
 
 Creates an instance of DIDDocumentFull
 
@@ -82,11 +74,7 @@ Creates an instance of DIDDocumentFull
 ```typescript
 import { DIDDocumentFactory, DIDDocumentLite } from '@ew-did-registry/did-document';
 
-const factory = new DIDDocumentFactory(did);
-const DIDDocumentFull = factory.createLite(resolver);
-```
-
-**Parameters:**
+*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L50)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
