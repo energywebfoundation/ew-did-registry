@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IKeys](ikeys.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IKeys](ikeys.md)
 
 # Interface: IKeys
 
@@ -14,6 +14,7 @@
 
 ### Properties
 
+* [address](ikeys.md#address)
 * [privateKey](ikeys.md#privatekey)
 * [publicKey](ikeys.md#publickey)
 
@@ -26,6 +27,14 @@
 * [verify](ikeys.md#verify)
 
 ## Properties
+
+###  address
+
+• **address**: *string*
+
+*Defined in [keys/src/interface.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/keys/src/interface.ts#L12)*
+
+___
 
 ###  privateKey
 

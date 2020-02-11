@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [JWT](jwt.md)
 
 # Class: JWT
 
@@ -30,10 +30,6 @@
 
 *Defined in [jwt/src/index.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L10)*
 
-Key pair has to be passed on construction to JWT
-
-**Parameters:**
-
 Name | Type | Description |
 ------ | ------ | ------ |
 `keys` | IKeys |   |
@@ -52,11 +48,7 @@ Name | Type | Description |
 
 Return decoded JWT payload without verifying signature
 
-**`example`** 
-```typescript
-import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '@ew-did-registry/jwt';
-
+*Defined in [jwt/src/index.ts:131](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L131)*
 const AliceKeyPair = new Keys();
 const BobKeyPair = new Keys();
 const jwtAlice = new JWT(AliceKeyPair);
@@ -95,11 +87,7 @@ Sign payload and return JWT
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '@ew-did-registry/jwt';
-
-const keyPair = new Keys();
-const jwt = new JWT(keyPair);
-const payload = {claim: 'test'};
-let token;
+*Defined in [jwt/src/index.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L45)*
 
 try {
   token = await jwt.sign(payload, { algorithm: 'ES256' });
@@ -138,11 +126,7 @@ import { JWT } from '@ew-did-registry/jwt';
 const AliceKeyPair = new Keys();
 const BobKeyPair = new Keys();
 const jwtAlice = new JWT(AliceKeyPair);
-const jwtBob = new JWT(BobKeyPair);
-const payload = {claim: 'test'};
-
-const token = await jwtAlice.sign(payload, { algorithm: 'ES256' });
-
+*Defined in [jwt/src/index.ts:93](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/jwt/src/index.ts#L93)*
 let decoded;
 
 try {

@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
 
 # Class: DIDDocumentFull
 
@@ -40,10 +40,6 @@
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
 *Defined in [did-document/src/full/documentFull.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L8)*
-
-**Parameters:**
-
-Name | Type |
 ------ | ------ |
 `did` | string |
 `operator` | IOperator |
@@ -64,11 +60,7 @@ Name | Type |
 
 DID of concern
 
-___
-
-###  didDocument
-
-• **didDocument**: *IDIDDocument*
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L13)*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md).[didDocument](../interfaces/ididdocumentfull.md#diddocument)*
 
@@ -82,11 +74,7 @@ Fetched DID Document
 
 ###  create
 
-▸ **create**(): *Promise‹boolean›*
-
-*Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
-
-*Defined in [did-document/src/full/documentFull.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L27)*
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
 
 Creates new empty DID document
 
@@ -98,11 +86,7 @@ Creates new empty DID document
  await document.create();
 ```
 
-**Returns:** *Promise‹boolean›*
-
-___
-
-###  deactivate
+*Defined in [did-document/src/full/documentFull.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L27)*
 
 ▸ **deactivate**(): *Promise‹boolean›*
 
@@ -124,11 +108,7 @@ await document.deactivate();
 
 **Returns:** *Promise‹boolean›*
 
-___
-
-###  read
-
-▸ **read**(`attribute`: string, `type`: string): *Promise‹string | object›*
+*Defined in [did-document/src/full/documentFull.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L45)*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
@@ -154,11 +134,7 @@ console.log(`DID of the fetched document is ${id}`);
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`attribute` | string | - |
-`type` | string |   |
-
+*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L50)*
 **Returns:** *Promise‹string | object›*
 
 ___
@@ -191,11 +167,7 @@ await document.update(
  validity,
  );
 ```
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
+*Defined in [did-document/src/full/documentFull.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L77)*
 `attribute` | DIDAttribute | - |
 `data` | IUpdateData | - |
 `validity` | number | time in milliseconds during the attribujte will be valid |

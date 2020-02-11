@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IDIDDocumentFull](ididdocumentfull.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IDIDDocumentFull](ididdocumentfull.md)
 
 # Interface: IDIDDocumentFull
 

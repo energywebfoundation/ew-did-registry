@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [Claims](claims.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [Claims](claims.md)
 
 # Class: Claims
 
@@ -44,10 +44,6 @@ Base class for extending by other claims classes
 
 *Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
-**`constructor`** 
-
-**Parameters:**
-
 Name | Type | Description |
 ------ | ------ | ------ |
 `keys` | IKeys | user key pair |
@@ -67,11 +63,7 @@ Name | Type | Description |
 
 ___
 
-###  jwt
-
-• **jwt**: *IJWT*
-
-*Implementation of [IClaims](../interfaces/iclaims.md).[jwt](../interfaces/iclaims.md#jwt)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 *Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
@@ -81,11 +73,7 @@ ___
 
 ###  keys
 
-• **keys**: *IKeys*
-
-*Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
-
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
 Key pair represents the implementation of key management interface
 
@@ -97,11 +85,7 @@ Key pair represents the implementation of key management interface
 
 *Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 
-Fetches DID document of the corresponding DID
-
-**`example`** 
-```typescript
-import { Keys } from '@ew-did-registry/keys';
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 import { Claims } from '@ew-did-registry/claims';
 
 const user = new Keys();
@@ -111,11 +95,7 @@ const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
-
-Name | Type |
------- | ------ |
-`did` | string |
-
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 **Returns:** *Promise‹IDIDDocument›*
 
 ___
@@ -144,5 +124,4 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | token signature on which you want to check |
 `signer` | string | did of the signer  |
-
-**Returns:** *Promise‹boolean›*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*

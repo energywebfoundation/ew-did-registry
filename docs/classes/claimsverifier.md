@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [ClaimsVerifier](claimsverifier.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [ClaimsVerifier](claimsverifier.md)
 
 # Class: ClaimsVerifier
 
@@ -42,10 +42,6 @@
 
 *Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
-**`constructor`** 
-
-**Parameters:**
-
 Name | Type | Description |
 ------ | ------ | ------ |
 `keys` | IKeys | user key pair |
@@ -67,11 +63,7 @@ Name | Type | Description |
 
 ___
 
-###  jwt
-
-• **jwt**: *IJWT*
-
-*Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md).[jwt](../interfaces/iclaimsverifier.md#jwt)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
@@ -83,11 +75,7 @@ ___
 
 ###  keys
 
-• **keys**: *IKeys*
-
-*Implementation of [IClaimsVerifier](../interfaces/iclaimsverifier.md).[keys](../interfaces/iclaimsverifier.md#keys)*
-
-*Inherited from [Claims](claims.md).[keys](claims.md#keys)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
 *Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 
@@ -101,11 +89,7 @@ Key pair represents the implementation of key management interface
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
-
-Fetches DID document of the corresponding DID
-
-**`example`** 
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
 import { Claims } from '@ew-did-registry/claims';
@@ -117,11 +101,7 @@ const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
-
-Name | Type |
------- | ------ |
-`did` | string |
-
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 **Returns:** *Promise‹IDIDDocument›*
 
 ___
@@ -152,11 +132,7 @@ const verified = claims.verifyPrivateProof(proofToken, privateToken);
 **Parameters:**
 
 Name | Type | Description |
------- | ------ | ------ |
-`proofToken` | string | contains proof data |
-`privateToken` | string | contains private data |
-
-**Returns:** *Promise‹void›*
+*Defined in [claims/src/claimsVerifier/claimsVerifier.ts:62](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsVerifier/claimsVerifier.ts#L62)*
 
 whether the proof was succesfull
 
@@ -192,11 +168,7 @@ Name | Type | Description |
 
 **Returns:** *Promise‹void›*
 
-whether the proof was succesfull
-
-___
-
-###  verifySignature
+*Defined in [claims/src/claimsVerifier/claimsVerifier.ts:33](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsVerifier/claimsVerifier.ts#L33)*
 
 ▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
 
@@ -224,3 +196,4 @@ Name | Type | Description |
 `signer` | string | did of the signer  |
 
 **Returns:** *Promise‹boolean›*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*

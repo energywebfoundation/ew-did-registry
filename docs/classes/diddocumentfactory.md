@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentFactory](diddocumentfactory.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentFactory](diddocumentfactory.md)
 
 # Class: DIDDocumentFactory
 
@@ -28,10 +28,6 @@
 \+ **new DIDDocumentFactory**(`did`: string): *[DIDDocumentFactory](diddocumentfactory.md)*
 
 *Defined in [did-document/src/factory/did-document-factory.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L10)*
-
-**Parameters:**
-
-Name | Type |
 ------ | ------ |
 `did` | string |
 
@@ -49,11 +45,7 @@ Name | Type |
 
 Creates an instance of DIDDocumentFull
 
-**`example`** 
-```typescript
-import { DIDDocumentFactory, DIDDocumentFull } from '@ew-did-registry/did-document';
-
-const factory = new DIDDocumentFactory(did);
+*Defined in [did-document/src/factory/did-document-factory.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L31)*
 const DIDDocumentFull = factory.createFull(operator);
 ```
 
@@ -82,11 +74,7 @@ Creates an instance of DIDDocumentFull
 ```typescript
 import { DIDDocumentFactory, DIDDocumentLite } from '@ew-did-registry/did-document';
 
-const factory = new DIDDocumentFactory(did);
-const DIDDocumentFull = factory.createLite(resolver);
-```
-
-**Parameters:**
+*Defined in [did-document/src/factory/did-document-factory.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/factory/did-document-factory.ts#L50)*
 
 Name | Type | Description |
 ------ | ------ | ------ |

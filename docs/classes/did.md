@@ -1,4 +1,4 @@
-[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DID](did.md)
+[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DID](did.md)
 
 # Class: DID
 
@@ -24,10 +24,6 @@
 ▸ **get**(`network`: [Networks](../enums/networks.md)): *string | undefined*
 
 *Defined in [did/src/index.ts:31](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did/src/index.ts#L31)*
-
-Gets a DID for a particular network
-
-**`example`** 
 ```typescript
 import { DID, Network } from '@ew-did-registry/did';
 
@@ -60,11 +56,7 @@ ___
 
 Sets a DID for a particular network (inferred from DID provided)
 
-**`example`** 
-```typescript
-import { DID } from '@ew-did-registry/did';
-
-const did = new DID();
+*Defined in [did/src/index.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did/src/index.ts#L51)*
 did.set('did:eth:method_specific_id');
 console.log(did.get('eth')); // 'did:eth:method_specific_id'
 ```
