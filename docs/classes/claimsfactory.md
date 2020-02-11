@@ -32,11 +32,7 @@ An implementation of claims factory
 
 \+ **new ClaimsFactory**(`keys`: IKeys, `resolver`: IResolver): *[ClaimsFactory](claimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsFactory/claimsFactory.ts#L17)*
-
-**Parameters:**
-
-Name | Type |
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L17)*
 ------ | ------ |
 `keys` | IKeys |
 `resolver` | IResolver |
@@ -51,21 +47,17 @@ Name | Type |
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsFactory/claimsFactory.ts#L38)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L38)*
 
 Contstructs instance of ClaimsIssuer
 
-**Returns:** *[IClaimsIssuer](../interfaces/iclaimsissuer.md)*
-
-___
-
-###  createClaimsUser
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L38)*
 
 ▸ **createClaimsUser**(): *[IClaimsUser](../interfaces/iclaimsuser.md)*
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsFactory/claimsFactory.ts#L29)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L29)*
 
 Constructs instance of ClaimsUser
 
@@ -73,14 +65,11 @@ Constructs instance of ClaimsUser
 
 ___
 
-###  createClaimsVerifier
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L29)*
 
-▸ **createClaimsVerifier**(): *[IClaimsVerifier](../interfaces/iclaimsverifier.md)*
-
-*Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
-
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsFactory/claimsFactory.ts#L47)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L47)*
 
 Constructs instance of ClaimsUser
 
 **Returns:** *[IClaimsVerifier](../interfaces/iclaimsverifier.md)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsFactory/claimsFactory.ts#L47)*

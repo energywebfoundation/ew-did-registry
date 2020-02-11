@@ -40,11 +40,7 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L29)*
-
-**`constructor`** 
-
-**Parameters:**
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -63,19 +59,15 @@ Name | Type | Description |
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
-###  jwt
-
-• **jwt**: *IJWT*
-
-*Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md).[jwt](../interfaces/iclaimsissuer.md#jwt)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L22)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -83,13 +75,9 @@ ___
 
 ###  keys
 
-• **keys**: *IKeys*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
-*Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md).[keys](../interfaces/iclaimsissuer.md#keys)*
-
-*Inherited from [Claims](claims.md).[keys](claims.md#keys)*
-
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 
 Key pair represents the implementation of key management interface
 
@@ -101,11 +89,7 @@ Key pair represents the implementation of key management interface
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L61)*
-
-Fetches DID document of the corresponding DID
-
-**`example`** 
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 ```typescript
 import { Keys } from '@ew-did-registry/keys';
 import { Claims } from '@ew-did-registry/claims';
@@ -117,11 +101,7 @@ const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
-
-Name | Type |
------- | ------ |
-`did` | string |
-
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 **Returns:** *Promise‹IDIDDocument›*
 
 ___
@@ -132,7 +112,7 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsIssuer/claimsIssuer.ts#L56)*
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsIssuer/claimsIssuer.ts#L56)*
 
 Verifies user signature on token, decrypt private data and issue new token
 with sha256-hashed decrypted data signed by issuer. Throws if user
@@ -152,11 +132,7 @@ const issuedToken = await claims.issuePrivateClaim(token);
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`token` | string |
-
-**Returns:** *Promise‹string›*
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsIssuer/claimsIssuer.ts#L56)*
 
 issued token
 
@@ -168,7 +144,7 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claimsIssuer/claimsIssuer.ts#L29)*
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsIssuer/claimsIssuer.ts#L29)*
 
 Verifies user signature on token and issue new token signed by issuer./
 Throws if user signature not valid
@@ -192,18 +168,14 @@ Name | Type |
 `token` | string |
 
 **Returns:** *Promise‹string›*
-
-issued token
-
-___
-
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claimsIssuer/claimsIssuer.ts#L29)*
 ###  verifySignature
 
 ▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L83)*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 
@@ -225,3 +197,4 @@ Name | Type | Description |
 `signer` | string | did of the signer  |
 
 **Returns:** *Promise‹boolean›*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*

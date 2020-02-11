@@ -35,11 +35,7 @@
 
 \+ **new DIDRegistry**(`keys`: IKeys, `did`: string, `resolver`: IResolver): *[DIDRegistry](didregistry.md)*
 
-*Defined in [did-registry/src/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L17)*
-
-**Parameters:**
-
-Name | Type |
+*Defined in [did-registry/src/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L17)*
 ------ | ------ |
 `keys` | IKeys |
 `did` | string |
@@ -55,17 +51,13 @@ Name | Type |
 
 *Implementation of [IDIDRegistry](../interfaces/ididregistry.md).[claims](../interfaces/ididregistry.md#claims)*
 
-*Defined in [did-registry/src/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L15)*
+*Defined in [did-registry/src/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L15)*
 
 ___
 
-###  did
+*Defined in [did-registry/src/index.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L15)*
 
-• **did**: *IDID*
-
-*Implementation of [IDIDRegistry](../interfaces/ididregistry.md).[did](../interfaces/ididregistry.md#did)*
-
-*Defined in [did-registry/src/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L9)*
+*Defined in [did-registry/src/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L9)*
 
 ___
 
@@ -73,11 +65,7 @@ ___
 
 • **documentFactory**: *IDIDDocumentFactory*
 
-*Implementation of [IDIDRegistry](../interfaces/ididregistry.md).[documentFactory](../interfaces/ididregistry.md#documentfactory)*
-
-*Defined in [did-registry/src/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L13)*
-
-___
+*Defined in [did-registry/src/index.ts:9](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L9)*
 
 ###  keys
 
@@ -85,27 +73,19 @@ ___
 
 *Implementation of [IDIDRegistry](../interfaces/ididregistry.md).[keys](../interfaces/ididregistry.md#keys)*
 
-*Defined in [did-registry/src/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L11)*
+*Defined in [did-registry/src/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L11)*
 
-___
-
-###  resolver
-
-• **resolver**: *IResolver*
+*Defined in [did-registry/src/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L13)*
 
 *Implementation of [IDIDRegistry](../interfaces/ididregistry.md).[resolver](../interfaces/ididregistry.md#resolver)*
 
-*Defined in [did-registry/src/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L17)*
+*Defined in [did-registry/src/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L17)*
 
 ## Methods
 
 ###  changeResolver
 
-▸ **changeResolver**(`resolver`: IResolver, `network`: Networks | string): *void*
-
-*Implementation of [IDIDRegistry](../interfaces/ididregistry.md)*
-
-*Defined in [did-registry/src/index.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L43)*
+*Defined in [did-registry/src/index.ts:11](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L11)*
 
 Configures registry for use with another network
 
@@ -115,11 +95,7 @@ import DIDRegistry from '@ew-did-registry/did-regsitry';
 import { Networks } from '@ew-did-registry/did';
 
 const reg = new DIDRegistry(keys, ethDid, ethResolver);
-reg.changeResolver(new Resolver(ewcSettings), Networks.EnergyWeb);
-```
-
-**Parameters:**
-
+*Defined in [did-registry/src/index.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L17)*
 Name | Type |
 ------ | ------ |
 `resolver` | IResolver |
@@ -129,13 +105,9 @@ Name | Type |
 
 ___
 
-###  read
+*Defined in [did-registry/src/index.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L43)*
 
-▸ **read**(`did`: string): *Promise‹IDIDDocumentLite›*
-
-*Implementation of [IDIDRegistry](../interfaces/ididregistry.md)*
-
-*Defined in [did-registry/src/index.ts:63](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-registry/src/index.ts#L63)*
+*Defined in [did-registry/src/index.ts:63](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L63)*
 
 Returns DID document of the corresponding did
 
@@ -153,3 +125,4 @@ Name | Type |
 `did` | string |
 
 **Returns:** *Promise‹IDIDDocumentLite›*
+*Defined in [did-registry/src/index.ts:63](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-registry/src/index.ts#L63)*

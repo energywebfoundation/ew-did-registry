@@ -28,7 +28,7 @@ export interface IProvider {
  */
 export interface IResolverSettings {
   provider?: IProvider;
-  abi?: Array<string | FunctionFragment | EventFragment>;
+  abi?: Array<string | utils.ParamType>;
   address?: string;
 }
 

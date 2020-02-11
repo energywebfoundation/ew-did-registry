@@ -33,11 +33,7 @@
 
 \+ **new DIDDocumentLite**(`did`: string, `resolver`: IResolver): *[DIDDocumentLite](diddocumentlite.md)*
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L18)*
-
-Constructor takes DID of interest and Resolver as inputs
-
-**Parameters:**
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -54,19 +50,15 @@ Name | Type | Description |
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[did](../interfaces/ididdocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L13)*
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L13)*
 
 DID of concern
 
-___
-
-###  didDocument
-
-• **didDocument**: *IDIDDocument*
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L13)*
 
 *Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md).[didDocument](../interfaces/ididdocumentlite.md#diddocument)*
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L18)*
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
 
 Fetched DID Document
 
@@ -74,11 +66,7 @@ Fetched DID Document
 
 ###  read
 
-▸ **read**(`attribute`: string, `type`: string): *Promise‹string | object›*
-
-*Implementation of [IDIDDocumentLite](../interfaces/ididdocumentlite.md)*
-
-*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/did-document/src/lite/index.ts#L50)*
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
 
 Method returns the attribute of interest. An optional type parameter can be provided for
 attributes, which are objects
@@ -90,11 +78,7 @@ import { DIDDocumentFactory } from '@ew-did-registry/did-document';
 
 const sampleDid = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
 const resolver = new Resolver();
-const didLiteDocument = DIDDocumentFactory.createLite(sampleDid, resolver);
-const id = didDocumentLite.read('id');
-
-console.log(`DID of the fetched document is ${id}`);
-```
+*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L50)*
 
 **Parameters:**
 

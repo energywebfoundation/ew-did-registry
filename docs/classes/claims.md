@@ -42,11 +42,7 @@ Base class for extending by other claims classes
 
 \+ **new Claims**(`keys`: IKeys, `resolver`: IResolver): *[Claims](claims.md)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L29)*
-
-**`constructor`** 
-
-**Parameters:**
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -63,17 +59,13 @@ Name | Type | Description |
 
 *Implementation of [IClaims](../interfaces/iclaims.md).[did](../interfaces/iclaims.md#did)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
-###  jwt
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L29)*
 
-• **jwt**: *IJWT*
-
-*Implementation of [IClaims](../interfaces/iclaims.md).[jwt](../interfaces/iclaims.md#jwt)*
-
-*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L22)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -81,11 +73,7 @@ ___
 
 ###  keys
 
-• **keys**: *IKeys*
-
-*Implementation of [IClaims](../interfaces/iclaims.md).[keys](../interfaces/iclaims.md#keys)*
-
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L22)*
 
 Key pair represents the implementation of key management interface
 
@@ -95,13 +83,9 @@ Key pair represents the implementation of key management interface
 
 ▸ **getDocument**(`did`: string): *Promise‹IDIDDocument›*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L61)*
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 
-Fetches DID document of the corresponding DID
-
-**`example`** 
-```typescript
-import { Keys } from '@ew-did-registry/keys';
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L27)*
 import { Claims } from '@ew-did-registry/claims';
 
 const user = new Keys();
@@ -111,11 +95,7 @@ const document = await claims.getDocument(did);
 ```
 
 **Parameters:**
-
-Name | Type |
------- | ------ |
-`did` | string |
-
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L61)*
 **Returns:** *Promise‹IDIDDocument›*
 
 ___
@@ -124,7 +104,7 @@ ___
 
 ▸ **verifySignature**(`token`: string, `signer`: string): *Promise‹boolean›*
 
-*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/d64ff0f/packages/claims/src/claims/claims.ts#L83)*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 
@@ -144,5 +124,4 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `token` | string | token signature on which you want to check |
 `signer` | string | did of the signer  |
-
-**Returns:** *Promise‹boolean›*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/claims/claims.ts#L83)*
