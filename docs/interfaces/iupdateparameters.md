@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IUpdateParameters](iupdateparameters.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IUpdateParameters](iupdateparameters.md)
 
 # Interface: IUpdateParameters
 
@@ -19,7 +19,7 @@
 
 • **type**? : *string*
 
-*Defined in [did-document/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/models/index.ts#L3)*
+*Defined in [did-document/src/models/index.ts:3](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/models/index.ts#L3)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **value**: *string | object*
 
-*Defined in [did-document/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/models/index.ts#L2)*
+*Defined in [did-document/src/models/index.ts:2](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/models/index.ts#L2)*

@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [DIDDocumentFull](diddocumentfull.md)
 
 # Class: DIDDocumentFull
 
@@ -39,7 +39,11 @@
 
 *Overrides [DIDDocumentLite](diddocumentlite.md).[constructor](diddocumentlite.md#constructor)*
 
-*Defined in [did-document/src/full/documentFull.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L8)*
+*Defined in [did-document/src/full/documentFull.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/full/documentFull.ts#L8)*
+
+**Parameters:**
+
+Name | Type |
 ------ | ------ |
 `did` | string |
 `operator` | IOperator |
@@ -56,17 +60,21 @@
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[did](diddocumentlite.md#did)*
 
-*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L13)*
+*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/lite/index.ts#L13)*
 
 DID of concern
 
-*Defined in [did-document/src/lite/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L13)*
+___
+
+###  didDocument
+
+• **didDocument**: *IDIDDocument*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md).[didDocument](../interfaces/ididdocumentfull.md#diddocument)*
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[didDocument](diddocumentlite.md#diddocument)*
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
+*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/lite/index.ts#L18)*
 
 Fetched DID Document
 
@@ -74,7 +82,11 @@ Fetched DID Document
 
 ###  create
 
-*Defined in [did-document/src/lite/index.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L18)*
+▸ **create**(): *Promise‹boolean›*
+
+*Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
+
+*Defined in [did-document/src/full/documentFull.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/full/documentFull.ts#L27)*
 
 Creates new empty DID document
 
@@ -86,13 +98,17 @@ Creates new empty DID document
  await document.create();
 ```
 
-*Defined in [did-document/src/full/documentFull.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L27)*
+**Returns:** *Promise‹boolean›*
+
+___
+
+###  deactivate
 
 ▸ **deactivate**(): *Promise‹boolean›*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
-*Defined in [did-document/src/full/documentFull.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L45)*
+*Defined in [did-document/src/full/documentFull.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/full/documentFull.ts#L45)*
 
 Deactivates DID document
 
@@ -108,13 +124,17 @@ await document.deactivate();
 
 **Returns:** *Promise‹boolean›*
 
-*Defined in [did-document/src/full/documentFull.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L45)*
+___
+
+###  read
+
+▸ **read**(`attribute`: string, `type`: string): *Promise‹string | object›*
 
 *Implementation of [IDIDDocumentFull](../interfaces/ididdocumentfull.md)*
 
 *Inherited from [DIDDocumentLite](diddocumentlite.md).[read](diddocumentlite.md#read)*
 
-*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L50)*
+*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/lite/index.ts#L50)*
 
 Method returns the attribute of interest. An optional type parameter can be provided for
 attributes, which are objects
@@ -134,7 +154,11 @@ console.log(`DID of the fetched document is ${id}`);
 
 **Parameters:**
 
-*Defined in [did-document/src/lite/index.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/lite/index.ts#L50)*
+Name | Type | Description |
+------ | ------ | ------ |
+`attribute` | string | - |
+`type` | string |   |
+
 **Returns:** *Promise‹string | object›*
 
 ___
@@ -143,7 +167,7 @@ ___
 
 ▸ **update**(`attribute`: DIDAttribute, `data`: IUpdateData, `validity`: number): *Promise‹boolean›*
 
-*Defined in [did-document/src/full/documentFull.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L77)*
+*Defined in [did-document/src/full/documentFull.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/did-document/src/full/documentFull.ts#L77)*
 
 Updates attribute on the DID document
 
@@ -167,7 +191,11 @@ await document.update(
  validity,
  );
 ```
-*Defined in [did-document/src/full/documentFull.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-document/src/full/documentFull.ts#L77)*
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
 `attribute` | DIDAttribute | - |
 `data` | IUpdateData | - |
 `validity` | number | time in milliseconds during the attribujte will be valid |

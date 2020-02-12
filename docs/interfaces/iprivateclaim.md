@@ -1,4 +1,4 @@
-[@ew-did-registry/claims - v1.0.0](../README.md) › [Globals](../globals.md) › [IPrivateClaim](iprivateclaim.md)
+[@ew-did-registry/claims](../README.md) › [Globals](../globals.md) › [IPrivateClaim](iprivateclaim.md)
 
 # Interface: IPrivateClaim
 
@@ -24,7 +24,7 @@
 
 • **claimData**: *object*
 
-*Defined in [claims/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/models/index.ts#L14)*
+*Defined in [claims/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/claims/src/models/index.ts#L14)*
 
 #### Type declaration:
 
@@ -36,7 +36,7 @@ ___
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/models/index.ts#L12)*
+*Defined in [claims/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/claims/src/models/index.ts#L12)*
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 • **signer**: *string*
 
-*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/claims/src/models/index.ts#L13)*
+*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/f6d3180/packages/claims/src/models/index.ts#L13)*
