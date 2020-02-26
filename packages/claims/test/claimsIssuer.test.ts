@@ -49,7 +49,6 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   });
 
   it('if issuer receives correct token, he must issue token signed by him', async () => {
-    this.timeout(500);
     const token = await claimsUser.createPublicClaim({});
     await (claimsIssuer.issuePublicClaim(token)).should.be.fulfilled;
   });
