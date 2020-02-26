@@ -1,0 +1,19 @@
+language: node_js
+node_js: 10.18.1
+install:
+  - npm install
+  - npm run setup
+  - npm run build
+  - npm run browserTest:build
+script:
+  - npm run test-rpc
+  - npm run browserTest:run
+deploy:
+  provider: releases
+  api_key: "ei7yeSpjV+aK5j7gK8KzbWtpQ4667WDyBSgH1Fw6w/J0tV1q6rhUr7OgqgknBKSEZx1BvBhh6jIkHYoUwytcPYMoncMYn38NoonLyvMg8Sn52H3HBC1Vgv35MvIOa3TPZNB1B2TqaN3QOM7nT5l5uQneF5VvfmFv5M9K2FWL+i6XyViBsFkXC6/V4BqculOtBWwWmHeUZJ8hIPppsIsHnntit/EWm3aH3cK+32vMWIeIUzoxeduq2W9G0qNeYfmjZuq7ISBI/+Ad912IukCbA6TAcl/JODWPtMHrEJMqBkOB6twD7a8RBbm8Ps/4PuxiLM4VMG3T1NWJcRmbm0KxE4oriOI5AvPKvtD6PBpbQCXg1hrUZeEpvUuGgaQoDsowxQln7jQg909ECu03LFflrl5qoJlvnTVAx/4tf4LtKcwZH5paufMG/eI1SBhlYcvi/GkbQ+Wy51h/yW7GTngEEh5pRVGtrlLjtC/LVtAyo7/HM2WosNUKo6AQNJV9L9FXoYSsdUw7yYUI/54wB3ZUa4ICB21Xe4fqharFKOYw/TWNUjMr2eShrvnZLmE745p/EQo4qRdqKvXsfiLTeNgzn/FPP7CdqVl/LmACMJe2JgdMlq7zWANWqvUqzXgnaikcnoj2Yx0mx1BzhnAGrvN0Zoe6M2Tl6Ykd5eOxfs98MaI="
+  ffile_glob: true
+  file: build/*
+  skip_cleanup: true
+  on:
+    branch: development
+    tags: true

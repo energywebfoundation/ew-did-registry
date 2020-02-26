@@ -1,5 +1,4 @@
 import { utils } from 'ethers';
-import { EventFragment, FunctionFragment } from 'ethers/utils/abi-coder';
 
 /**
  * Specifies currently supported provider types. New types can be added in the future.
