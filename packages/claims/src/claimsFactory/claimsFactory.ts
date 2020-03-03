@@ -1,11 +1,12 @@
 import { IKeys } from '@ew-did-registry/keys';
-import { IResolver } from '@ew-did-registry/did-resolver';
+import { IResolver, IPublicKey } from '@ew-did-registry/did-resolver';
 import {
   IClaimsFactory, IClaimsUser, IClaimsIssuer, IClaimsVerifier,
 } from '../interface';
 import { ClaimsUser } from '../claimsUser';
 import { ClaimsIssuer } from '../claimsIssuer';
 import { ClaimsVerifier } from '../claimsVerifier';
+
 
 /**
  * An implementation of claims factory
