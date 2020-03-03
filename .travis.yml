@@ -3,7 +3,6 @@ node_js: 10.18.1
 install:
   - npm install
   - npm run setup
-  - npm run compile
   - npm run build
   - npm run browserTest:build
 script:
