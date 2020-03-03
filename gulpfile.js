@@ -16,7 +16,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const typedoc = require('gulp-typedoc');
-const order = require('gulp-order');
+
 const del = require('del');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
@@ -34,7 +34,7 @@ const packages = fs.readdirSync(path.join(__dirname, './packages')).map((directo
   expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
   src: path.join(__dirname, `packages/${directory}`),
   config: path.join(__dirname, `packages/${directory}/tsconfig.json`),
-})).reverse();
+}));
 
 const uglifyOptions = {
   compress: {
@@ -103,7 +103,6 @@ function bundling(pckg) {
 
 function bundleAll(done) {
   packages.forEach((pckg) => {
-    console.log(pckg.fileName);
     bundling(pckg);
   });
   done()
