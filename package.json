@@ -27,6 +27,9 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.2",
