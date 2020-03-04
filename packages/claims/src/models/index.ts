@@ -39,5 +39,3 @@ export interface IClaims {
     keys: IKeys;
     jwt: IJWT;
 }
-
-
