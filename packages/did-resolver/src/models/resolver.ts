@@ -56,6 +56,7 @@ export interface IServiceEndpoint {
   description?: string;
   validity?: utils.BigNumber;
   block?: number;
+  [key: string]: string | utils.BigNumber | number;
 }
 
 export interface IPublicKey {
@@ -79,6 +80,7 @@ export interface IAuthentication {
   publicKey: string;
   validity?: utils.BigNumber;
   block?: number;
+  [key: string]: string | utils.BigNumber | number;
 }
 
 export interface ILinkedDataProof {
@@ -116,7 +118,7 @@ export interface ISmartContractEvent {
  */
 export interface IDIDLogData {
   owner: string;
-  lastChangedBlock: utils.BigNumber;
+  topBlock: utils.BigNumber;
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];

@@ -19,7 +19,7 @@ import {
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern,
-  matchingPatternDid,
+  DIDPattern,
   pubKeyIdPattern,
   serviceIdPattern,
 } from '../constants';
@@ -45,7 +45,7 @@ export class Operator extends Resolver implements IOperator {
   /**
    * Ethereum blockchain provider
    */
-  private readonly _provider: ethers.providers.BaseProvider;
+  // private readonly _provider: ethers.providers.BaseProvider;
 
   /**
    * @param { IKeys } keys - identifies an account which acts as a
@@ -58,7 +58,7 @@ export class Operator extends Resolver implements IOperator {
       address, abi,
     } = this.settings;
     const { privateKey } = this._keys;
-    this._provider = this._getProvider();
+    // this._provider = this._getProvider();
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this._wallet = wallet;
     this._didRegistry = new ethers.Contract(address, abi, wallet);
@@ -458,12 +458,6 @@ export class Operator extends Resolver implements IOperator {
     }
   }
 
-  /**
-   * Util returns hex bytes value corresponding to string or object
-   *
-   * @param value
-   * @private
-   */
   private _hexify(value: string | object): string {
     if (typeof value === 'string' && value.startsWith('0x')) {
       return value;
@@ -498,7 +492,7 @@ export class Operator extends Resolver implements IOperator {
    * @private
    */
   private static _parseDid(did: string): string {
-    if (!matchingPatternDid.test(did)) {
+    if (!DIDPattern.test(did)) {
       throw new Error('Invalid DID');
     }
     const [, , id] = did.split(':');

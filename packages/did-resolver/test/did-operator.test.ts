@@ -9,7 +9,7 @@ import {
   IUpdateData,
   PubKeyType,
   Operator,
-  IAuthentication, IResolverSettings,
+  IAuthentication, IResolverSettings, IDIDDocument,
 } from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 
@@ -39,10 +39,10 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: new Keys().publicKey,
+      value: `0x${new Keys().publicKey}`,
     };
     await operator.update(did, attribute, updateData);
-    const document = await operator.read(did);
+    const document: IDIDDocument = await operator.read(did) as IDIDDocument;
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
@@ -56,7 +56,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: new Keys().publicKey,
+      value: `0x${new Keys().publicKey}`,
     };
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
@@ -143,7 +143,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: new Keys().publicKey,
+      value: `0x${new Keys().publicKey}`,
     };
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
@@ -159,7 +159,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: new Keys().publicKey,
+      value: `0x${new Keys().publicKey}`,
     };
     try {
       await operator.update(did, attribute, updateData, -100);
@@ -178,7 +178,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: new Keys().publicKey,
+      value: `0x${new Keys().publicKey}`,
     };
     await operator.update(did, attribute, updateData, validity);
     // add authentication method
@@ -200,6 +200,7 @@ describe('[DID-OPERATOR]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
+    console.log('document before deactivation', document);
     const result = await operator.deactivate(did);
     expect(result).to.be.true;
     document = await operator.read(did);
