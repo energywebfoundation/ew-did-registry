@@ -200,7 +200,6 @@ describe('[DID-OPERATOR]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
-    console.log('document before deactivation', document);
     const result = await operator.deactivate(did);
     expect(result).to.be.true;
     document = await operator.read(did);

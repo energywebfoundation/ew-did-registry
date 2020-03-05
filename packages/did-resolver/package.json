@@ -27,7 +27,7 @@
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0",
     "bn.js": "^5.0.0",
-    "ethers": "file:../../../ethers.js",
+    "ethers": "^4.0.45",
     "ganache-cli": "^6.9.1"
   },
   "devDependencies": {

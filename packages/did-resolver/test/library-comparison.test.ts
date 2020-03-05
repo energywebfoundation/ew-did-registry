@@ -4,6 +4,7 @@ import { Keys } from '@ew-did-registry/keys';
 import Web3 from 'web3';
 import { abi1056, address1056 } from '../src/constants';
 
+/* -------------- Skiped until Volta RPC is Ok ----------------- */
 describe.skip('[DID-RESOLVER-PERFORMANCE-COMPARISON]', function () {
   this.timeout(0);
   const voltaUri = 'https://volta-internal-archive.energyweb.org/';

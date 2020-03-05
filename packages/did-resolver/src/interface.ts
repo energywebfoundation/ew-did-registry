@@ -21,7 +21,7 @@ export interface IResolver {
    * @param {string} did
    * @returns {Promise<IDIDDocument>}
    */
-  read(did: string): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication>;
+  read(did: string): Promise<IDIDDocument>;
 
   /**
    * Returns the current owner for certain DID.
@@ -47,6 +47,11 @@ export interface IResolver {
     delegateType: DelegateTypes,
     delegateDID: string
   ): Promise<boolean>;
+
+  readAttribute(
+    did: string,
+    filter?: { [key: string]: { [key: string]: string } },
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
 }
 
 export interface IOperator extends IResolver {

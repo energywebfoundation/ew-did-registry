@@ -15,7 +15,7 @@ import {
 
 import { getSettings } from '../../../tests/init-ganache';
 
-describe.only('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
+describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
@@ -43,7 +43,6 @@ describe.only('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     const publicKeyAttr = await operator.readAttribute(did, { publicKey: { publicKeyHex: updateData.value, type: `${updateData.algo}${updateData.type}` } });
-    console.log('publicKeyAttr:', publicKeyAttr);
     expect(publicKeyAttr.publicKeyHex === updateData.value);
   });
 
