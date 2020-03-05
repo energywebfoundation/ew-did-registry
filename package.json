@@ -1,6 +1,6 @@
 {
   "name": "ew-did-registry",
-  "version": "0.0.1-0",
+  "version": "0.0.1-1",
   "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
   "main": "index.js",
   "scripts": {
