@@ -16,4 +16,7 @@ deploy:
   skip_cleanup: true
   on:
     branch: development
+    before_script:
+    script:
+      - npm run publish
     tags: true
