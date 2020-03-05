@@ -1,5 +1,5 @@
 import { Contract, ethers } from 'ethers';
-import { IDIDDocument, IDIDLogData, IResolverSettings } from '../models';
+import { IDIDDocument, IDIDLogData, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication } from '../models';
 /**
  * A high level function that manages the flow to read data from the blockchain
  *
@@ -9,7 +9,11 @@ import { IDIDDocument, IDIDLogData, IResolverSettings } from '../models';
  * @param contract
  * @param provider
  */
-export declare const fetchDataFromEvents: (did: string, document: IDIDLogData, resolverSettings: IResolverSettings, contract: Contract, provider: ethers.providers.BaseProvider) => Promise<void>;
+export declare const fetchDataFromEvents: (did: string, document: IDIDLogData, resolverSettings: IResolverSettings, contract: Contract, provider: ethers.providers.BaseProvider, filter?: {
+    [key: string]: {
+        [key: string]: string;
+    };
+}) => Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
 /**
  * Provided with the fetched data, the function parses it and returns the
  * DID Document associated with the relevant user

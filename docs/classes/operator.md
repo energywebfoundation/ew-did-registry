@@ -35,6 +35,7 @@ as well as by understanding how the read is performed.
 * [deactivate](operator.md#deactivate)
 * [identityOwner](operator.md#identityowner)
 * [read](operator.md#read)
+* [readAttribute](operator.md#readattribute)
 * [revokeAttribute](operator.md#revokeattribute)
 * [revokeDelegate](operator.md#revokedelegate)
 * [update](operator.md#update)
@@ -48,7 +49,7 @@ as well as by understanding how the read is performed.
 
 *Overrides [Resolver](resolver.md).[constructor](resolver.md#constructor)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L48)*
+*Defined in [did-resolver/src/implementations/operator.ts:43](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L43)*
 
 **Parameters:**
 
@@ -69,7 +70,7 @@ Name | Type | Description |
 
 *Inherited from [Resolver](resolver.md).[settings](resolver.md#settings)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/resolver.ts#L32)*
+*Defined in [did-resolver/src/implementations/resolver.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L35)*
 
 Stores resolver settings, such as abi, contract address, and IProvider
 
@@ -79,7 +80,7 @@ Stores resolver settings, such as abi, contract address, and IProvider
 
 ▸ **changeOwner**(`identityDID`: string, `newOwnerDid`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:219](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L219)*
+*Defined in [did-resolver/src/implementations/operator.ts:219](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L219)*
 
 Changes the owner of particular decentralised identity
 Returns true on success
@@ -103,7 +104,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L77)*
+*Defined in [did-resolver/src/implementations/operator.ts:77](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L77)*
 
 Relevant did should have positive cryptocurrency balance to perform
 the transaction. Create method saves the public key in smart contract's
@@ -121,7 +122,7 @@ ___
 
 *Implementation of [IOperator](../interfaces/ioperator.md)*
 
-*Defined in [did-resolver/src/implementations/operator.ts:258](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L258)*
+*Defined in [did-resolver/src/implementations/operator.ts:258](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L258)*
 
 Revokes authentication methods, public keys and delegates from DID document
 
@@ -155,7 +156,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[identityOwner](resolver.md#identityowner)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:134](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/resolver.ts#L134)*
+*Defined in [did-resolver/src/implementations/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L153)*
 
 Returns the Ethereum address of current identity owner
 
@@ -179,25 +180,34 @@ ___
 
 *Inherited from [Resolver](resolver.md).[read](resolver.md#read)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:86](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/resolver.ts#L86)*
-
-Resolve DID Document for a given did
-
-**`example`** 
-```typescript
-import { Resolver } from '@ew-did-registry/did-resolver';
-
-const resolver = new Resolver();
-const didDocument = await resolver.read(did);
-```
+*Defined in [did-resolver/src/implementations/resolver.ts:136](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L136)*
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`did` | string | entity identifier, which is associated with DID Document |
+Name | Type |
+------ | ------ |
+`did` | string |
 
 **Returns:** *Promise‹[IDIDDocument](../interfaces/ididdocument.md)›*
+
+___
+
+###  readAttribute
+
+▸ **readAttribute**(`did`: string, `filter?`: object): *Promise‹[IPublicKey](../interfaces/ipublickey.md) | [IServiceEndpoint](../interfaces/iserviceendpoint.md) | [IAuthentication](../interfaces/iauthentication.md)›*
+
+*Inherited from [Resolver](resolver.md).[readAttribute](resolver.md#readattribute)*
+
+*Defined in [did-resolver/src/implementations/resolver.ts:140](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L140)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did` | string |
+`filter?` | object |
+
+**Returns:** *Promise‹[IPublicKey](../interfaces/ipublickey.md) | [IServiceEndpoint](../interfaces/iserviceendpoint.md) | [IAuthentication](../interfaces/iauthentication.md)›*
 
 ___
 
@@ -205,7 +215,7 @@ ___
 
 ▸ **revokeAttribute**(`identityDID`: string, `attributeType`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md)): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:185](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L185)*
+*Defined in [did-resolver/src/implementations/operator.ts:185](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L185)*
 
 Revokes the attribute from DID Document
 Returns true on success
@@ -228,7 +238,7 @@ ___
 
 ▸ **revokeDelegate**(`identityDID`: string, `delegateType`: [PubKeyType](../enums/pubkeytype.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:150](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L150)*
+*Defined in [did-resolver/src/implementations/operator.ts:150](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L150)*
 
 Revokes the delegate from DID Document
 Returns true on success
@@ -251,7 +261,7 @@ ___
 
 ▸ **update**(`did`: string, `didAttribute`: [DIDAttribute](../enums/didattribute.md), `updateData`: [IUpdateData](../interfaces/iupdatedata.md), `validity`: number): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/implementations/operator.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/operator.ts#L125)*
+*Defined in [did-resolver/src/implementations/operator.ts:125](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/operator.ts#L125)*
 
 Sets attribute value in DID document identified by the did
 
@@ -298,7 +308,7 @@ ___
 
 *Inherited from [Resolver](resolver.md).[validDelegate](resolver.md#validdelegate)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:154](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/implementations/resolver.ts#L154)*
+*Defined in [did-resolver/src/implementations/resolver.ts:173](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L173)*
 
 Performs the check if the delegate is valid for particular did
 Return boolean

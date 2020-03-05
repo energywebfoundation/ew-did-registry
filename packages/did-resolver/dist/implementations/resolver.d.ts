@@ -1,6 +1,6 @@
-import { Contract } from 'ethers';
+import { providers, Contract } from 'ethers';
 import { IResolver } from '../interface';
-import { IDIDDocument, IResolverSettings, DelegateTypes } from '../models';
+import { IDIDDocument, IResolverSettings, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication } from '../models';
 /**
  * To support different networks compliant with ERC1056, the user/developer simply has to provide
  * different resolver settings. The default resolver settings are provided in the 'constants' folder
@@ -19,7 +19,7 @@ declare class Resolver implements IResolver {
     /**
      * Stores the provider to connect to blockchain
      */
-    private readonly _providerResolver;
+    protected readonly _provider: providers.BaseProvider;
     /**
      * Stores the smart contract instance with read functionality available
      */
@@ -27,7 +27,7 @@ declare class Resolver implements IResolver {
     /**
      * Caches the blockchain data for further reads
      */
-    private _fetchedDocument;
+    private _document;
     /**
      * Constructor
      *
@@ -49,7 +49,13 @@ declare class Resolver implements IResolver {
      * @param {string} did - entity identifier, which is associated with DID Document
      * @returns {Promise<IDIDDocument>}
      */
+    private _read;
     read(did: string): Promise<IDIDDocument>;
+    readAttribute(did: string, filter?: {
+        [key: string]: {
+            [key: string]: string;
+        };
+    }): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
     /**
      * Returns the Ethereum address of current identity owner
      *

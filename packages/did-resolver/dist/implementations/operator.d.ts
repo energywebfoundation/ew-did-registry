@@ -18,7 +18,6 @@ export declare class Operator extends Resolver implements IOperator {
     /**
      * Ethereum blockchain provider
      */
-    private readonly _provider;
     /**
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
@@ -157,12 +156,6 @@ export declare class Operator extends Resolver implements IOperator {
      * @private
      */
     private _composeAttributeName;
-    /**
-     * Util returns hex bytes value corresponding to string or object
-     *
-     * @param value
-     * @private
-     */
     private _hexify;
     /**
      * Returns relevant provider

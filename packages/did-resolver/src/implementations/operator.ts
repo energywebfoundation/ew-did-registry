@@ -84,7 +84,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: this._keys.publicKey,
+      value: `0x${this._keys.publicKey}`,
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);

@@ -67,6 +67,10 @@ var Authenticate = models_1.DIDAttribute.Authenticate, PublicKey = models_1.DIDA
 var Operator = /** @class */ (function (_super) {
     __extends(Operator, _super);
     /**
+     * Ethereum blockchain provider
+     */
+    // private readonly _provider: ethers.providers.BaseProvider;
+    /**
      * @param { IKeys } keys - identifies an account which acts as a
      * controller in a subsequent operations with DID document
      */
@@ -75,7 +79,7 @@ var Operator = /** @class */ (function (_super) {
         _this._keys = keys;
         var _a = _this.settings, address = _a.address, abi = _a.abi;
         var privateKey = _this._keys.privateKey;
-        _this._provider = _this._getProvider();
+        // this._provider = this._getProvider();
         var wallet = new ethers_1.ethers.Wallet(privateKey, _this._provider);
         _this._wallet = wallet;
         _this._didRegistry = new ethers_1.ethers.Contract(address, abi, wallet);
@@ -109,7 +113,7 @@ var Operator = /** @class */ (function (_super) {
                             algo: models_1.Algorithms.Secp256k1,
                             type: models_1.PubKeyType.VerificationKey2018,
                             encoding: models_1.Encoding.HEX,
-                            value: this._keys.publicKey,
+                            value: "0x" + this._keys.publicKey,
                         };
                         validity = 10 * 60 * 1000;
                         return [4 /*yield*/, this.update(did, attribute, updateData, validity)];
@@ -579,12 +583,6 @@ var Operator = /** @class */ (function (_super) {
                 throw new Error('Unknown attribute name');
         }
     };
-    /**
-     * Util returns hex bytes value corresponding to string or object
-     *
-     * @param value
-     * @private
-     */
     Operator.prototype._hexify = function (value) {
         if (typeof value === 'string' && value.startsWith('0x')) {
             return value;
@@ -617,7 +615,7 @@ var Operator = /** @class */ (function (_super) {
      * @private
      */
     Operator._parseDid = function (did) {
-        if (!constants_1.matchingPatternDid.test(did)) {
+        if (!constants_1.DIDPattern.test(did)) {
             throw new Error('Invalid DID');
         }
         var _a = did.split(':'), id = _a[2];

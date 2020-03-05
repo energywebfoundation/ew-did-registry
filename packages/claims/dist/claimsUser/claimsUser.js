@@ -123,7 +123,7 @@ var ClaimsUser = /** @class */ (function (_super) {
      * const claim = await claims.createPrivateClaim(claimData, issuer);
      * ```
      * @param { IClaimData } publicData object with claim subject private data
-     * @param { string } issuer
+     * @param { string } issuer DID
      *
      * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */

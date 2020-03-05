@@ -8,8 +8,9 @@ exports.address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
 exports.abi1056 = EthereumDIDRegistry_1.ethrReg.abi;
 // Our default endpoint for communication with blockchain
 exports.defaultProvider = {
-    // uriOrInfo: 'http://volta-rpc.energyweb.org/',
+    // uriOrInfo: 'https://volta-rpc.energyweb.org/',
     uriOrInfo: 'http://localhost:8544',
+    // uriOrInfo: 'https://volta-internal-archive.energyweb.org/',
     type: models_1.ProviderTypes.HTTP,
 };
 /**
@@ -23,8 +24,8 @@ exports.defaultResolverSettings = {
     address: exports.address1056,
 };
 // Various patterns to minimise errors
-exports.matchingPatternDidEvents = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-exports.matchingPatternDid = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
+exports.attributeNamePattern = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
+exports.DIDPattern = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
 exports.ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 exports.delegatePubKeyIdPattern = "^did:ewc:" + exports.ethAddrPattern + "#delegate-(sigAuth|veriKey)-(" + exports.ethAddrPattern + ")$";
 exports.pubKeyIdPattern = "^did:ewc:" + exports.ethAddrPattern + "#key-([A-Za-z0-9]*)(sigAuth|veriKey)";

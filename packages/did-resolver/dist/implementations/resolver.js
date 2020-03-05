@@ -60,12 +60,12 @@ var Resolver = /** @class */ (function () {
     function Resolver(settings) {
         this.settings = settings;
         if (settings.provider.type === models_1.ProviderTypes.HTTP) {
-            this._providerResolver = new ethers_1.ethers.providers.JsonRpcProvider(settings.provider.uriOrInfo, settings.provider.network);
+            this._provider = new ethers_1.ethers.providers.JsonRpcProvider(settings.provider.uriOrInfo, settings.provider.network);
         }
         else if (settings.provider.type === models_1.ProviderTypes.IPC) {
-            this._providerResolver = new ethers_1.ethers.providers.IpcProvider(settings.provider.path, settings.provider.network);
+            this._provider = new ethers_1.ethers.providers.IpcProvider(settings.provider.path, settings.provider.network);
         }
-        this._contract = new ethers_1.ethers.Contract(settings.address, settings.abi, this._providerResolver);
+        this._contract = new ethers_1.ethers.Contract(settings.address, settings.abi, this._provider);
     }
     /**
      * Resolve DID Document for a given did
@@ -81,27 +81,27 @@ var Resolver = /** @class */ (function () {
      * @param {string} did - entity identifier, which is associated with DID Document
      * @returns {Promise<IDIDDocument>}
      */
-    Resolver.prototype.read = function (did) {
+    Resolver.prototype._read = function (did, filter) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(
                     // eslint-disable-next-line no-async-promise-executor
                     function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, address, _b, blockchainAddress, didDocument, error_1, didDocument;
+                        var _a, address, _b, identity, data, document_1, error_1, didDocument;
                         return __generator(this, function (_c) {
                             switch (_c.label) {
                                 case 0:
                                     _a = did.split(':'), address = _a[2];
-                                    if (!constants_1.matchingPatternDid.test(did) || (address.length !== 42)) {
+                                    if (!constants_1.DIDPattern.test(did) || (address.length !== 42)) {
                                         reject(new Error('Invalid did provided'));
                                         return [2 /*return*/];
                                     }
-                                    if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
-                                        _b = did.split(':'), blockchainAddress = _b[2];
-                                        this._fetchedDocument = {
-                                            owner: blockchainAddress,
-                                            lastChangedBlock: new ethers_1.utils.BigNumber(0),
+                                    if (this._document === undefined || this._document.owner !== did) {
+                                        _b = did.split(':'), identity = _b[2];
+                                        this._document = {
+                                            owner: identity,
+                                            topBlock: new ethers_1.utils.BigNumber(0),
                                             authentication: {},
                                             publicKey: {},
                                             serviceEndpoints: {},
@@ -111,16 +111,18 @@ var Resolver = /** @class */ (function () {
                                     _c.label = 1;
                                 case 1:
                                     _c.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._fetchedDocument, this.settings, this._contract, this._providerResolver)];
+                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider, filter)];
                                 case 2:
-                                    _c.sent();
-                                    didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
-                                    resolve(didDocument);
+                                    data = _c.sent();
+                                    if (filter)
+                                        resolve(data);
+                                    document_1 = functions_1.wrapDidDocument(did, this._document);
+                                    resolve(document_1);
                                     return [3 /*break*/, 4];
                                 case 3:
                                     error_1 = _c.sent();
                                     if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
-                                        didDocument = functions_1.wrapDidDocument(did, this._fetchedDocument);
+                                        didDocument = functions_1.wrapDidDocument(did, this._document);
                                         resolve(didDocument);
                                     }
                                     reject(error_1);
@@ -129,6 +131,20 @@ var Resolver = /** @class */ (function () {
                             }
                         });
                     }); })];
+            });
+        });
+    };
+    Resolver.prototype.read = function (did) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._read(did)];
+            });
+        });
+    };
+    Resolver.prototype.readAttribute = function (did, filter) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._read(did, filter)];
             });
         });
     };

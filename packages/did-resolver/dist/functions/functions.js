@@ -98,10 +98,10 @@ var handleDelegateChange = function (event, did, document, validTo, block) {
  * @param block
  */
 var handleAttributeChange = function (event, did, document, validTo, block) {
-    var _a = did.split(':'), blockchainAddress = _a[2];
+    var _a = did.split(':'), identity = _a[2];
     var attributeType = event.values.name;
     var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
-    var match = stringAttributeType.match(constants_1.matchingPatternDidEvents);
+    var match = stringAttributeType.match(constants_1.attributeNamePattern);
     if (match) {
         var section = match[1];
         var algo = match[2];
@@ -114,7 +114,7 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                     // method should be defined from did provided
                     id: did + "#key-" + algo + type + "-" + event.values.value,
                     type: "" + algo + type,
-                    controller: blockchainAddress,
+                    controller: identity,
                     validity: validTo,
                     block: block,
                 };
@@ -124,7 +124,7 @@ var handleAttributeChange = function (event, did, document, validTo, block) {
                         case null:
                         case undefined:
                         case 'hex':
-                            pk.publicKeyHex = Buffer.from(event.values.value.slice(2), 'hex').toString();
+                            pk.publicKeyHex = event.values.value;
                             break;
                         case 'base64':
                             pk.publicKeyBase64 = Buffer.from(event.values.value.slice(2), 'hex').toString('base64');
@@ -205,19 +205,19 @@ var updateDocument = function (event, eventName, did, document, block) {
  * @param did
  * @param document
  * @param provider
- * @param smartContractInterface
- * @param smartContractAddress
+ * @param contractInterface
+ * @param address
  */
-var getEventsFromBlock = function (block, did, document, provider, smartContractInterface, smartContractAddress) { return new Promise(function (resolve, reject) {
-    var _a = did.split(':'), blockchainAddress = _a[2];
-    var topics = [null, "0x000000000000000000000000" + blockchainAddress.slice(2).toLowerCase()];
+var getEventsFromBlock = function (block, did, document, provider, contractInterface, address) { return new Promise(function (resolve, reject) {
+    var _a = did.split(':'), identity = _a[2];
+    var topics = [null, "0x000000000000000000000000" + identity.slice(2).toLowerCase()];
     provider.getLogs({
-        address: smartContractAddress,
+        address: address,
         fromBlock: block.toNumber(),
         toBlock: block.toNumber(),
         topics: topics,
-    }).then(function (Log) {
-        var event = smartContractInterface.parseLog(Log[0]);
+    }).then(function (log) {
+        var event = contractInterface.parseLog(log[0]);
         var eventName = event.name;
         updateDocument(event, eventName, did, document, block.toNumber());
         resolve(event.values.previousChange);
@@ -234,48 +234,70 @@ var getEventsFromBlock = function (block, did, document, provider, smartContract
  * @param contract
  * @param provider
  */
-exports.fetchDataFromEvents = function (did, document, resolverSettings, contract, provider) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, blockchainAddress, previousChangedBlock, lastChangedBlock, error_1, _b, smartContractInterface, smartContractAddress;
+exports.fetchDataFromEvents = function (did, document, resolverSettings, contract, provider, filter) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, identity, nextBlock, topBlock, error_1, _b, contractInterface, address, _loop_1, state_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                _a = did.split(':'), blockchainAddress = _a[2];
+                _a = did.split(':'), identity = _a[2];
                 _c.label = 1;
             case 1:
                 _c.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, contract.changed(blockchainAddress)];
+                return [4 /*yield*/, contract.changed(identity)];
             case 2:
-                previousChangedBlock = _c.sent();
-                lastChangedBlock = previousChangedBlock;
+                nextBlock = _c.sent();
+                topBlock = nextBlock;
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _c.sent();
                 throw new Error('Blockchain address did not interact with smart contract');
             case 4:
-                if (!previousChangedBlock) return [3 /*break*/, 6];
+                if (!nextBlock) return [3 /*break*/, 6];
                 _b = document;
-                return [4 /*yield*/, contract.owners(blockchainAddress)];
+                return [4 /*yield*/, contract.owners(identity)];
             case 5:
                 _b.owner = _c.sent();
                 return [3 /*break*/, 7];
             case 6:
-                document.owner = blockchainAddress;
+                document.owner = identity;
                 _c.label = 7;
             case 7:
-                smartContractInterface = new ethers_1.ethers.utils.Interface(resolverSettings.abi);
-                smartContractAddress = resolverSettings.address;
+                contractInterface = new ethers_1.ethers.utils.Interface(resolverSettings.abi);
+                address = resolverSettings.address;
+                _loop_1 = function () {
+                    var attribute_1, attrId;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, getEventsFromBlock(nextBlock, did, document, provider, contractInterface, address)];
+                            case 1:
+                                // eslint-disable-next-line no-await-in-loop
+                                nextBlock = _a.sent();
+                                if (filter) {
+                                    attribute_1 = Object.keys(filter)[0];
+                                    attrId = Object.keys(document[attribute_1]).find(function (id) {
+                                        var attr = document[attribute_1][id];
+                                        return Object.keys(filter[attribute_1]).every(function (prop) { return attr[prop] === filter[attribute_1][prop]; });
+                                    });
+                                    if (attrId)
+                                        return [2 /*return*/, { value: document[attribute_1][attrId] }];
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                };
                 _c.label = 8;
             case 8:
-                if (!(previousChangedBlock.toNumber() !== 0
-                    && previousChangedBlock.toNumber() !== document.lastChangedBlock.toNumber())) return [3 /*break*/, 10];
-                return [4 /*yield*/, getEventsFromBlock(previousChangedBlock, did, document, provider, smartContractInterface, smartContractAddress)];
+                if (!(nextBlock.toNumber() !== 0
+                    && nextBlock.toNumber() > document.topBlock.toNumber())) return [3 /*break*/, 10];
+                return [5 /*yield**/, _loop_1()];
             case 9:
-                // eslint-disable-next-line no-await-in-loop
-                previousChangedBlock = _c.sent();
+                state_1 = _c.sent();
+                if (typeof state_1 === "object")
+                    return [2 /*return*/, state_1.value];
                 return [3 /*break*/, 8];
             case 10:
-                document.lastChangedBlock = lastChangedBlock;
-                return [2 /*return*/];
+                document.topBlock = topBlock;
+                return [2 /*return*/, null];
         }
     });
 }); };

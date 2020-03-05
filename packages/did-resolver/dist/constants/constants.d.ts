@@ -39,8 +39,8 @@ export declare const defaultProvider: {
  * or with a different smart contract.
  */
 export declare const defaultResolverSettings: IResolverSettings;
-export declare const matchingPatternDidEvents: RegExp;
-export declare const matchingPatternDid: RegExp;
+export declare const attributeNamePattern: RegExp;
+export declare const DIDPattern: RegExp;
 export declare const ethAddrPattern = "0x[A-Fa-f0-9]{40}";
 export declare const delegatePubKeyIdPattern: string;
 export declare const pubKeyIdPattern: string;

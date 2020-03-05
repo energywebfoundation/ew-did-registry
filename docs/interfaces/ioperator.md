@@ -24,6 +24,7 @@
 * [deactivate](ioperator.md#deactivate)
 * [identityOwner](ioperator.md#identityowner)
 * [read](ioperator.md#read)
+* [readAttribute](ioperator.md#readattribute)
 * [update](ioperator.md#update)
 * [validDelegate](ioperator.md#validdelegate)
 
@@ -35,7 +36,7 @@
 
 *Inherited from [IResolver](iresolver.md).[settings](iresolver.md#settings)*
 
-*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L7)*
+*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L7)*
 
 ## Methods
 
@@ -43,7 +44,7 @@
 
 ▸ **create**(): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:60](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L60)*
+*Defined in [did-resolver/src/interface.ts:65](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L65)*
 
 Registers a DID-Document for a given DID, and defines the provided context.
 
@@ -55,7 +56,7 @@ ___
 
 ▸ **deactivate**(`did`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:86](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L86)*
+*Defined in [did-resolver/src/interface.ts:91](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L91)*
 
 Attempts to deactivate the DID Document for a given DID.
 Successful, if the transaction is accepted by the smart contract.
@@ -77,7 +78,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[identityOwner](iresolver.md#identityowner)*
 
-*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L34)*
+*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L34)*
 
 Returns the current owner for certain DID.
 If DID document has not been created, did will be identical to address.
@@ -99,7 +100,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[read](iresolver.md#read)*
 
-*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L24)*
+*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L24)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -115,11 +116,30 @@ Name | Type |
 
 ___
 
+###  readAttribute
+
+▸ **readAttribute**(`did`: string, `filter?`: object): *Promise‹[IPublicKey](ipublickey.md) | [IServiceEndpoint](iserviceendpoint.md) | [IAuthentication](iauthentication.md)›*
+
+*Inherited from [IResolver](iresolver.md).[readAttribute](iresolver.md#readattribute)*
+
+*Defined in [did-resolver/src/interface.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L51)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`did` | string |
+`filter?` | object |
+
+**Returns:** *Promise‹[IPublicKey](ipublickey.md) | [IServiceEndpoint](iserviceendpoint.md) | [IAuthentication](iauthentication.md)›*
+
+___
+
 ###  update
 
 ▸ **update**(`did`: string, `attribute`: [DIDAttribute](../enums/didattribute.md), `value`: [IUpdateData](iupdatedata.md), `validity`: number | BigNumber): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:71](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L71)*
+*Defined in [did-resolver/src/interface.ts:76](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L76)*
 
 Updates relevant attribute of the DID Document.
 
@@ -142,7 +162,7 @@ ___
 
 *Inherited from [IResolver](iresolver.md).[validDelegate](iresolver.md#validdelegate)*
 
-*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b17cc12/packages/did-resolver/src/interface.ts#L45)*
+*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/interface.ts#L45)*
 
 Checks if the delegate is present for a particular DID.
 Returns boolean.

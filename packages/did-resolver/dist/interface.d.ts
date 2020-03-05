@@ -1,5 +1,5 @@
 import { utils } from 'ethers';
-import { IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings } from './models';
+import { IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication } from './models';
 export interface IResolver {
     readonly settings: IResolverSettings;
     /**
@@ -37,6 +37,11 @@ export interface IResolver {
      * @returns {Promise<boolean>}
      */
     validDelegate(identityDID: string, delegateType: DelegateTypes, delegateDID: string): Promise<boolean>;
+    readAttribute(did: string, filter?: {
+        [key: string]: {
+            [key: string]: string;
+        };
+    }): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
 }
 export interface IOperator extends IResolver {
     /**
