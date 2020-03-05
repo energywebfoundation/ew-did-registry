@@ -24,6 +24,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@ew-did-registry/claims": "^1.0.0",
     "@types/elliptic": "^6.4.10",
     "ecies-parity": "^0.1.1",
     "elliptic": "^6.5.2"
