@@ -15,3 +15,5 @@ deploy:
   ffile_glob: true
   file: build/*
   skip_cleanup: true
+  on:
+    branch: development
