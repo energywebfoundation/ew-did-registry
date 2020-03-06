@@ -24,10 +24,11 @@ exports.defaultResolverSettings = {
     address: exports.address1056,
 };
 // Various patterns to minimise errors
-exports.attributeNamePattern = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-exports.DIDPattern = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
-exports.ethAddrPattern = '0x[A-Fa-f0-9]{40}';
-exports.delegatePubKeyIdPattern = "^did:ewc:" + exports.ethAddrPattern + "#delegate-(sigAuth|veriKey)-(" + exports.ethAddrPattern + ")$";
-exports.pubKeyIdPattern = "^did:ewc:" + exports.ethAddrPattern + "#key-([A-Za-z0-9]*)(sigAuth|veriKey)";
-exports.serviceIdPattern = "^did:ewc:" + exports.ethAddrPattern + "#service-([A-Za-z0-9]+)-([A-Za-z0-9]+)$";
+var ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+var pubKeyPattern = '0x[A-Fa-f0-i]{66}';
+exports.attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
+exports.DIDPattern = "^did:[a-z0-9]+:" + ethAddrPattern;
+exports.delegatePubKeyIdPattern = "^did:ewc:" + ethAddrPattern + "#delegate-(sigAuth|veriKey)-(" + pubKeyPattern + "|" + ethAddrPattern + ")$";
+exports.pubKeyIdPattern = "^did:ewc:" + ethAddrPattern + "#key-([A-Za-z0-9]+)(sigAuth|veriKey)";
+exports.serviceIdPattern = "^did:ewc:" + ethAddrPattern + "#service-([A-Za-z0-9]+)-([A-Za-z0-9]+)$";
 //# sourceMappingURL=constants.js.map

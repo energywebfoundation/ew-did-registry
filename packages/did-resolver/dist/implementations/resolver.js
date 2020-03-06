@@ -93,7 +93,7 @@ var Resolver = /** @class */ (function () {
                             switch (_c.label) {
                                 case 0:
                                     _a = did.split(':'), address = _a[2];
-                                    if (!constants_1.DIDPattern.test(did) || (address.length !== 42)) {
+                                    if (!did.match(constants_1.DIDPattern) || (address.length !== 42)) {
                                         reject(new Error('Invalid did provided'));
                                         return [2 /*return*/];
                                     }

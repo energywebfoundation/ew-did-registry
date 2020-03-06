@@ -492,7 +492,7 @@ export class Operator extends Resolver implements IOperator {
    * @private
    */
   private static _parseDid(did: string): string {
-    if (!DIDPattern.test(did)) {
+    if (!did.match(DIDPattern)) {
       throw new Error('Invalid DID');
     }
     const [, , id] = did.split(':');

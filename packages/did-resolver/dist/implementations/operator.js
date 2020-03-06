@@ -615,7 +615,7 @@ var Operator = /** @class */ (function (_super) {
      * @private
      */
     Operator._parseDid = function (did) {
-        if (!constants_1.DIDPattern.test(did)) {
+        if (!did.match(constants_1.DIDPattern)) {
             throw new Error('Invalid DID');
         }
         var _a = did.split(':'), id = _a[2];

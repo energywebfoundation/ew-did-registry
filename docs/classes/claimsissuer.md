@@ -40,7 +40,7 @@
 
 *Inherited from [Claims](claims.md).[constructor](claims.md#constructor)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L29)*
 
 **`constructor`** 
 
@@ -63,7 +63,7 @@ Name | Type | Description |
 
 *Inherited from [Claims](claims.md).[did](claims.md#did)*
 
-*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L29)*
+*Defined in [claims/src/claims/claims.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L29)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 *Inherited from [Claims](claims.md).[jwt](claims.md#jwt)*
 
-*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L22)*
+*Defined in [claims/src/claims/claims.ts:22](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L22)*
 
 jwt stores the JWT to manage web tokens
 
@@ -89,7 +89,7 @@ ___
 
 *Inherited from [Claims](claims.md).[keys](claims.md#keys)*
 
-*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L27)*
+*Defined in [claims/src/claims/claims.ts:27](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L27)*
 
 Key pair represents the implementation of key management interface
 
@@ -101,7 +101,7 @@ Key pair represents the implementation of key management interface
 
 *Inherited from [Claims](claims.md).[getDocument](claims.md#getdocument)*
 
-*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L61)*
+*Defined in [claims/src/claims/claims.ts:61](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L61)*
 
 Fetches DID document of the corresponding DID
 
@@ -132,7 +132,7 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claimsIssuer/claimsIssuer.ts#L56)*
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:56](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claimsIssuer/claimsIssuer.ts#L56)*
 
 Verifies user signature on token, decrypt private data and issue new token
 with sha256-hashed decrypted data signed by issuer. Throws if user
@@ -168,7 +168,7 @@ ___
 
 *Implementation of [IClaimsIssuer](../interfaces/iclaimsissuer.md)*
 
-*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claimsIssuer/claimsIssuer.ts#L29)*
+*Defined in [claims/src/claimsIssuer/claimsIssuer.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claimsIssuer/claimsIssuer.ts#L29)*
 
 Verifies user signature on token and issue new token signed by issuer./
 Throws if user signature not valid
@@ -203,7 +203,7 @@ ___
 
 *Inherited from [Claims](claims.md).[verifySignature](claims.md#verifysignature)*
 
-*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/claims/src/claims/claims.ts#L83)*
+*Defined in [claims/src/claims/claims.ts:83](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/claims/src/claims/claims.ts#L83)*
 
 Verifies signers signature on received token
 

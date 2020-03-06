@@ -27,9 +27,11 @@ export const defaultResolverSettings: IResolverSettings = {
 };
 
 // Various patterns to minimise errors
-export const attributeNamePattern = /^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/;
-export const DIDPattern = /did:[a-z0-9]+:0x[A-Za-z0-9]{40}/;
-export const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
-export const delegatePubKeyIdPattern = `^did:ewc:${ethAddrPattern}#delegate-(sigAuth|veriKey)-(${ethAddrPattern})$`;
-export const pubKeyIdPattern = `^did:ewc:${ethAddrPattern}#key-([A-Za-z0-9]*)(sigAuth|veriKey)`;
+
+const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+const pubKeyPattern = '0x[A-Fa-f0-i]{66}';
+export const attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
+export const DIDPattern = `^did:[a-z0-9]+:${ethAddrPattern}`;
+export const delegatePubKeyIdPattern = `^did:ewc:${ethAddrPattern}#delegate-(sigAuth|veriKey)-(${pubKeyPattern}|${ethAddrPattern})$`;
+export const pubKeyIdPattern = `^did:ewc:${ethAddrPattern}#key-([A-Za-z0-9]+)(sigAuth|veriKey)`;
 export const serviceIdPattern = `^did:ewc:${ethAddrPattern}#service-([A-Za-z0-9]+)-([A-Za-z0-9]+)$`;

@@ -94,7 +94,7 @@ class Resolver implements IResolver {
       // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         const [, , address] = did.split(':');
-        if (!DIDPattern.test(did) || (address.length !== 42)) {
+        if (!did.match(DIDPattern) || (address.length !== 42)) {
           reject(new Error('Invalid did provided'));
           return;
         }

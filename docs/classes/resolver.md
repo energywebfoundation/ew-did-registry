@@ -44,7 +44,7 @@ All the functionality supporting document resolution is stored in 'functions' fo
 
 \+ **new Resolver**(`settings`: [IResolverSettings](../interfaces/iresolversettings.md)): *[Resolver](resolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L50)*
+*Defined in [did-resolver/src/implementations/resolver.ts:50](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L50)*
 
 Constructor
 
@@ -66,7 +66,7 @@ Name | Type | Description |
 
 *Implementation of [IResolver](../interfaces/iresolver.md).[settings](../interfaces/iresolver.md#settings)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L35)*
+*Defined in [did-resolver/src/implementations/resolver.ts:35](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L35)*
 
 Stores resolver settings, such as abi, contract address, and IProvider
 
@@ -78,7 +78,7 @@ Stores resolver settings, such as abi, contract address, and IProvider
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L153)*
+*Defined in [did-resolver/src/implementations/resolver.ts:153](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L153)*
 
 Returns the Ethereum address of current identity owner
 
@@ -100,7 +100,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:136](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L136)*
+*Defined in [did-resolver/src/implementations/resolver.ts:136](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L136)*
 
 **Parameters:**
 
@@ -116,7 +116,7 @@ ___
 
 ▸ **readAttribute**(`did`: string, `filter?`: object): *Promise‹[IPublicKey](../interfaces/ipublickey.md) | [IServiceEndpoint](../interfaces/iserviceendpoint.md) | [IAuthentication](../interfaces/iauthentication.md)›*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:140](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L140)*
+*Defined in [did-resolver/src/implementations/resolver.ts:140](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L140)*
 
 **Parameters:**
 
@@ -135,7 +135,7 @@ ___
 
 *Implementation of [IResolver](../interfaces/iresolver.md)*
 
-*Defined in [did-resolver/src/implementations/resolver.ts:173](https://github.com/energywebfoundation/ew-did-registry/blob/c54c7fe/packages/did-resolver/src/implementations/resolver.ts#L173)*
+*Defined in [did-resolver/src/implementations/resolver.ts:173](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/implementations/resolver.ts#L173)*
 
 Performs the check if the delegate is valid for particular did
 Return boolean
