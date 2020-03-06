@@ -16,7 +16,7 @@ import {
   IAuthentication,
 } from '../models';
 
-import { attributeNamePattern } from '../constants';
+import { attributeNamePattern, DIDPattern } from '../constants';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -80,7 +80,10 @@ const handleAttributeChange = (
   validTo: utils.BigNumber,
   block: number,
 ): IDIDLogData => {
-  const [, , identity] = did.split(':');
+  const [, identity] = did.match(DIDPattern);
+  if (!identity) {
+    throw new Error('Invalid DID');
+  }
   const attributeType = event.values.name;
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
   const match = stringAttributeType.match(attributeNamePattern);

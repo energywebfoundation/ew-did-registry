@@ -31,7 +31,7 @@
 
 • **privateKey**: *string*
 
-*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L5)*
+*Defined in [keys/src/interface.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L5)*
 
 Private key in hex format
 
@@ -41,7 +41,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L10)*
+*Defined in [keys/src/interface.ts:10](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L10)*
 
 Public key in hex format
 
@@ -51,7 +51,7 @@ Public key in hex format
 
 ▸ **decrypt**(`encrypted`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L48)*
+*Defined in [keys/src/interface.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L48)*
 
 Decryption
 
@@ -70,7 +70,7 @@ ___
 
 ▸ **encrypt**(`data`: string, `publicKeyTo?`: string): *Promise‹string›*
 
-*Defined in [keys/src/interface.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L40)*
+*Defined in [keys/src/interface.ts:40](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L40)*
 
 Encryption
 
@@ -89,7 +89,7 @@ ___
 
 ▸ **getAddress**(): *string*
 
-*Defined in [keys/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L15)*
+*Defined in [keys/src/interface.ts:15](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L15)*
 
 Returns Ethereum address of the corresponding keypair
 
@@ -101,7 +101,7 @@ ___
 
 ▸ **sign**(`data`: string, `privateKey?`: string): *string*
 
-*Defined in [keys/src/interface.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L23)*
+*Defined in [keys/src/interface.ts:23](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L23)*
 
 Sign the data with private key
 
@@ -120,7 +120,7 @@ ___
 
 ▸ **verify**(`data`: string, `signature`: string, `publicKey?`: string): *boolean*
 
-*Defined in [keys/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/keys/src/interface.ts#L32)*
+*Defined in [keys/src/interface.ts:32](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/keys/src/interface.ts#L32)*
 
 Verify the signature accordance to data with public key
 

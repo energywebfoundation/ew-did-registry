@@ -24,7 +24,7 @@ This interface represents the structure of event emitted by ERC1056 compliant sm
 
 • **name**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L97)*
+*Defined in [did-resolver/src/models/resolver.ts:97](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L97)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **signature**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L98)*
+*Defined in [did-resolver/src/models/resolver.ts:98](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L98)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **topic**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:99](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L99)*
+*Defined in [did-resolver/src/models/resolver.ts:99](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L99)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **value**? : *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:109](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L109)*
+*Defined in [did-resolver/src/models/resolver.ts:109](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L109)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **values**: *object*
 
-*Defined in [did-resolver/src/models/resolver.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L100)*
+*Defined in [did-resolver/src/models/resolver.ts:100](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L100)*
 
 #### Type declaration:
 

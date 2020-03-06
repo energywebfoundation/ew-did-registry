@@ -17,7 +17,7 @@ Specifies currently supported provider types. New types can be added in the futu
 
 • **HTTP**:
 
-*Defined in [did-resolver/src/models/resolver.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L7)*
+*Defined in [did-resolver/src/models/resolver.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L7)*
 
 ___
 
@@ -25,4 +25,4 @@ ___
 
 • **IPC**:
 
-*Defined in [did-resolver/src/models/resolver.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/resolver.ts#L8)*
+*Defined in [did-resolver/src/models/resolver.ts:8](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L8)*

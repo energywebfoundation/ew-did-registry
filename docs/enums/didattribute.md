@@ -18,7 +18,7 @@ Currently, there are three types of DID Attributes, this can be potentially exte
 
 • **Authenticate**: = "auth"
 
-*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/operator.ts#L5)*
+*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/operator.ts#L5)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 • **PublicKey**: = "pub"
 
-*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/operator.ts#L5)*
+*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/operator.ts#L5)*
 
 ___
 
@@ -34,4 +34,4 @@ ___
 
 • **ServicePoint**: = "svc"
 
-*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/b2aa9a8/packages/did-resolver/src/models/operator.ts#L5)*
+*Defined in [did-resolver/src/models/operator.ts:5](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/operator.ts#L5)*

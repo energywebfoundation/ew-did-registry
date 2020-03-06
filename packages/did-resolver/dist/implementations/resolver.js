@@ -83,54 +83,43 @@ var Resolver = /** @class */ (function () {
      */
     Resolver.prototype._read = function (did, filter) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(
-                    // eslint-disable-next-line no-async-promise-executor
-                    function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, address, _b, identity, data, document_1, error_1, didDocument;
-                        return __generator(this, function (_c) {
-                            switch (_c.label) {
-                                case 0:
-                                    _a = did.split(':'), address = _a[2];
-                                    if (!did.match(constants_1.DIDPattern) || (address.length !== 42)) {
-                                        reject(new Error('Invalid did provided'));
-                                        return [2 /*return*/];
-                                    }
-                                    if (this._document === undefined || this._document.owner !== did) {
-                                        _b = did.split(':'), identity = _b[2];
-                                        this._document = {
-                                            owner: identity,
-                                            topBlock: new ethers_1.utils.BigNumber(0),
-                                            authentication: {},
-                                            publicKey: {},
-                                            serviceEndpoints: {},
-                                            attributes: new Map(),
-                                        };
-                                    }
-                                    _c.label = 1;
-                                case 1:
-                                    _c.trys.push([1, 3, , 4]);
-                                    return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider, filter)];
-                                case 2:
-                                    data = _c.sent();
-                                    if (filter)
-                                        resolve(data);
-                                    document_1 = functions_1.wrapDidDocument(did, this._document);
-                                    resolve(document_1);
-                                    return [3 /*break*/, 4];
-                                case 3:
-                                    error_1 = _c.sent();
-                                    if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
-                                        didDocument = functions_1.wrapDidDocument(did, this._document);
-                                        resolve(didDocument);
-                                    }
-                                    reject(error_1);
-                                    return [3 /*break*/, 4];
-                                case 4: return [2 /*return*/];
-                            }
-                        });
-                    }); })];
+            var _a, address, data, document_1, error_1, didDocument;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = did.match(constants_1.DIDPattern), address = _a[1];
+                        if (!address) {
+                            throw new Error('Invalid did provided');
+                        }
+                        if (this._document === undefined || this._document.owner !== did) {
+                            this._document = {
+                                owner: address,
+                                topBlock: new ethers_1.utils.BigNumber(0),
+                                authentication: {},
+                                publicKey: {},
+                                serviceEndpoints: {},
+                                attributes: new Map(),
+                            };
+                        }
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, functions_1.fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider, filter)];
+                    case 2:
+                        data = _b.sent();
+                        if (filter)
+                            return [2 /*return*/, data];
+                        document_1 = functions_1.wrapDidDocument(did, this._document);
+                        return [2 /*return*/, document_1];
+                    case 3:
+                        error_1 = _b.sent();
+                        if (error_1.toString() === 'Error: Blockchain address did not interact with smart contract') {
+                            didDocument = functions_1.wrapDidDocument(did, this._document);
+                            return [2 /*return*/, didDocument];
+                        }
+                        throw error_1;
+                    case 4: return [2 /*return*/];
+                }
             });
         });
     };

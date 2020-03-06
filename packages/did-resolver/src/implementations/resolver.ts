@@ -90,47 +90,40 @@ class Resolver implements IResolver {
     did: string,
     filter?: { [key: string]: { [key: string]: string } },
   ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
-    return new Promise(
-      // eslint-disable-next-line no-async-promise-executor
-      async (resolve, reject) => {
-        const [, , address] = did.split(':');
-        if (!did.match(DIDPattern) || (address.length !== 42)) {
-          reject(new Error('Invalid did provided'));
-          return;
-        }
+    const [, address] = did.match(DIDPattern);
+    if (!address) {
+      throw new Error('Invalid did provided');
+    }
 
-        if (this._document === undefined || this._document.owner !== did) {
-          const [, , identity] = did.split(':');
-          this._document = {
-            owner: identity,
-            topBlock: new utils.BigNumber(0),
-            authentication: {},
-            publicKey: {},
-            serviceEndpoints: {},
-            attributes: new Map(),
-          };
-        }
-        try {
-          const data = await fetchDataFromEvents(
-            did,
-            this._document,
-            this.settings,
-            this._contract,
-            this._provider,
-            filter,
-          );
-          if (filter) resolve(data);
-          const document = wrapDidDocument(did, this._document);
-          resolve(document);
-        } catch (error) {
-          if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-            const didDocument = wrapDidDocument(did, this._document);
-            resolve(didDocument);
-          }
-          reject(error);
-        }
-      },
-    );
+    if (this._document === undefined || this._document.owner !== did) {
+      this._document = {
+        owner: address,
+        topBlock: new utils.BigNumber(0),
+        authentication: {},
+        publicKey: {},
+        serviceEndpoints: {},
+        attributes: new Map(),
+      };
+    }
+    try {
+      const data = await fetchDataFromEvents(
+        did,
+        this._document,
+        this.settings,
+        this._contract,
+        this._provider,
+        filter,
+      );
+      if (filter) return data;
+      const document = wrapDidDocument(did, this._document);
+      return document;
+    } catch (error) {
+      if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+        const didDocument = wrapDidDocument(did, this._document);
+        return didDocument;
+      }
+      throw error;
+    }
   }
 
   async read(did: string): Promise<IDIDDocument> {

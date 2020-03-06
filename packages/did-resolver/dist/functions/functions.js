@@ -98,7 +98,10 @@ var handleDelegateChange = function (event, did, document, validTo, block) {
  * @param block
  */
 var handleAttributeChange = function (event, did, document, validTo, block) {
-    var _a = did.split(':'), identity = _a[2];
+    var _a = did.match(constants_1.DIDPattern), identity = _a[1];
+    if (!identity) {
+        throw new Error('Invalid DID');
+    }
     var attributeType = event.values.name;
     var stringAttributeType = ethers_1.ethers.utils.parseBytes32String(attributeType);
     var match = stringAttributeType.match(constants_1.attributeNamePattern);
