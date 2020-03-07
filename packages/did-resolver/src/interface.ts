@@ -1,52 +1,57 @@
 import { utils } from 'ethers';
 import {
-    IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings,
+  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication,
 } from './models';
 
 export interface IResolver {
-    readonly settings: IResolverSettings;
-    /**
-     * Constructor takes keys and resolver settings to create a new Resolver
-     * constructor(settings?: IResolverSettings);
-     *
-     * Private members:
-     *   settings;
-     */
+  readonly settings: IResolverSettings;
+  /**
+   * Constructor takes keys and resolver settings to create a new Resolver
+   * constructor(settings?: IResolverSettings);
+   *
+   * Private members:
+   *   settings;
+   */
 
-    /**
-     * Read method resolves the DID Document for the provided DID.
-     * Should not be confused with “read” method in DID Document Lite,
-     * which returns the required attribute from the DID Document.
-     *
-     * @param {string} did
-     * @returns {Promise<IDIDDocument>}
-     */
-    read(did: string): Promise<IDIDDocument>;
+  /**
+   * Read method resolves the DID Document for the provided DID.
+   * Should not be confused with “read” method in DID Document Lite,
+   * which returns the required attribute from the DID Document.
+   *
+   * @param {string} did
+   * @returns {Promise<IDIDDocument>}
+   */
+  read(did: string): Promise<IDIDDocument>;
 
-    /**
-     * Returns the current owner for certain DID.
-     * If DID document has not been created, did will be identical to address.
-     * After creation DID owner can be changed.
-     *
-     * @param {string} did
-     * @returns {Promise<string>}
-     */
-    identityOwner(did: string): Promise<string>;
+  /**
+   * Returns the current owner for certain DID.
+   * If DID document has not been created, did will be identical to address.
+   * After creation DID owner can be changed.
+   *
+   * @param {string} did
+   * @returns {Promise<string>}
+   */
+  identityOwner(did: string): Promise<string>;
 
-    /**
-     * Checks if the delegate is present for a particular DID.
-     * Returns boolean.
-     *
-     * @param {string} identityDID
-     * @param {DelegateTypes} delegateType
-     * @param {string} delegateDID
-     * @returns {Promise<boolean>}
-     */
-    validDelegate(
-        identityDID: string,
-        delegateType: DelegateTypes,
-        delegateDID: string
-    ): Promise<boolean>;
+  /**
+   * Checks if the delegate is present for a particular DID.
+   * Returns boolean.
+   *
+   * @param {string} identityDID
+   * @param {DelegateTypes} delegateType
+   * @param {string} delegateDID
+   * @returns {Promise<boolean>}
+   */
+  validDelegate(
+    identityDID: string,
+    delegateType: DelegateTypes,
+    delegateDID: string
+  ): Promise<boolean>;
+
+  readAttribute(
+    did: string,
+    filter?: { [key: string]: { [key: string]: string } },
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
 }
 
 export interface IOperator extends IResolver {
@@ -72,7 +77,7 @@ export interface IOperator extends IResolver {
     did: string,
     attribute: DIDAttribute,
     value: IUpdateData,
-    validity: number|utils.BigNumber
+    validity: number | utils.BigNumber
   ): Promise<boolean>;
 
   /**

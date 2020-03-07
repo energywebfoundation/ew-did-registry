@@ -7,6 +7,7 @@ import { ClaimsUser } from '../claimsUser';
 import { ClaimsIssuer } from '../claimsIssuer';
 import { ClaimsVerifier } from '../claimsVerifier';
 
+
 /**
  * An implementation of claims factory
  * @class
