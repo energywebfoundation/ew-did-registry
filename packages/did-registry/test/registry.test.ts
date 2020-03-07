@@ -22,7 +22,7 @@ import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 
-describe.skip('[REGISTRY PACKAGE]', function () {
+describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
   const userKeys = new Keys({
     privateKey: '813e864ffa199f3cd38d8dcf2b097a2e2b226e000f3a05267eee23d0da7086f4',
@@ -46,6 +46,7 @@ describe.skip('[REGISTRY PACKAGE]', function () {
   const verifierDid = `did:${Networks.EnergyWeb}:${verifierAddress}`;
 
   let userOperator: Operator;
+  let issuerOperator: Operator;
   let user: DIDRegistry;
   let userClaims: IClaimsUser;
   let issuer: DIDRegistry;
@@ -57,6 +58,7 @@ describe.skip('[REGISTRY PACKAGE]', function () {
   before(async () => {
     resolverSettings = await getSettings([userAddress, issuerAddress, verifierAddress]);
     userOperator = new Operator(userKeys, resolverSettings);
+    issuerOperator = new Operator(issuerKeys, resolverSettings);
     user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
     userClaims = user.claims.createClaimsUser();
     issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings));
@@ -64,6 +66,8 @@ describe.skip('[REGISTRY PACKAGE]', function () {
     verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings));
     await userOperator.deactivate(userDid);
     await userOperator.create();
+    await issuerOperator.deactivate(issuerDid);
+    await issuerOperator.create();
   });
 
   it('user public claim should be issued and verified', async () => {
@@ -101,9 +105,7 @@ describe.skip('[REGISTRY PACKAGE]', function () {
       secret: '123',
       notSecret: 'string',
     };
-    console.log('private claim to be created');
     const { token, saltedFields } = await userClaims.createPrivateClaim(privateData, issuerDid);
-    console.log('private claim created');
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePrivateClaim(token);
     // send to Verifier/Owner

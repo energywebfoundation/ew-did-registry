@@ -12,9 +12,11 @@ import {
   IResolverSettings,
   IPublicKey,
   IHandlers,
+  IServiceEndpoint,
+  IAuthentication,
 } from '../models';
 
-import { matchingPatternDidEvents } from '../constants';
+import { attributeNamePattern, DIDPattern } from '../constants';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -78,10 +80,13 @@ const handleAttributeChange = (
   validTo: utils.BigNumber,
   block: number,
 ): IDIDLogData => {
-  const [, , blockchainAddress] = did.split(':');
+  const [, identity] = did.match(DIDPattern);
+  if (!identity) {
+    throw new Error('Invalid DID');
+  }
   const attributeType = event.values.name;
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
-  const match = stringAttributeType.match(matchingPatternDidEvents);
+  const match = stringAttributeType.match(attributeNamePattern);
   if (match) {
     const section = match[1];
     const algo = match[2];
@@ -94,7 +99,7 @@ const handleAttributeChange = (
           // method should be defined from did provided
           id: `${did}#key-${algo}${type}-${event.values.value}`,
           type: `${algo}${type}`,
-          controller: blockchainAddress,
+          controller: identity,
           validity: validTo,
           block,
         };
@@ -104,10 +109,7 @@ const handleAttributeChange = (
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = Buffer.from(
-                event.values.value.slice(2),
-                'hex',
-              ).toString();
+              pk.publicKeyHex = event.values.value;
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(
@@ -210,27 +212,27 @@ const updateDocument = (
  * @param did
  * @param document
  * @param provider
- * @param smartContractInterface
- * @param smartContractAddress
+ * @param contractInterface
+ * @param address
  */
 const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.BaseProvider,
-  smartContractInterface: utils.Interface,
-  smartContractAddress: string,
+  contractInterface: utils.Interface,
+  address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
-  const [, , blockchainAddress] = did.split(':');
-  const topics = [null, `0x000000000000000000000000${blockchainAddress.slice(2).toLowerCase()}`];
+  const [, , identity] = did.split(':');
+  const topics = [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`];
 
   provider.getLogs({
-    address: smartContractAddress,
+    address,
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
     topics,
-  }).then((Log) => {
-    const event = smartContractInterface.parseLog(Log[0]);
+  }).then((log) => {
+    const event = contractInterface.parseLog(log[0]);
     const eventName = event.name;
     updateDocument(event, eventName, did, document, block.toNumber());
 
@@ -255,42 +257,55 @@ export const fetchDataFromEvents = async (
   resolverSettings: IResolverSettings,
   contract: Contract,
   provider: providers.BaseProvider,
-): Promise<void> => {
-  const [, , blockchainAddress] = did.split(':');
+  filter?: { [key: string]: { [key: string]: string } },
+): Promise<null | IPublicKey | IAuthentication | IServiceEndpoint> => {
+  const [, , identity] = did.split(':');
 
-  let previousChangedBlock;
-  let lastChangedBlock;
+  let nextBlock;
+  let topBlock;
   try {
-    previousChangedBlock = await contract.changed(blockchainAddress);
-    lastChangedBlock = previousChangedBlock;
+    nextBlock = await contract.changed(identity);
+    topBlock = nextBlock;
   } catch (error) {
     throw new Error('Blockchain address did not interact with smart contract');
   }
 
-  if (previousChangedBlock) {
-    document.owner = await contract.owners(blockchainAddress);
+  if (nextBlock) {
+    document.owner = await contract.owners(identity);
   } else {
-    document.owner = blockchainAddress;
+    document.owner = identity;
   }
 
-  const smartContractInterface = new ethers.utils.Interface(resolverSettings.abi);
-  const smartContractAddress = resolverSettings.address;
+  const contractInterface = new ethers.utils.Interface(resolverSettings.abi);
+  const { address } = resolverSettings;
   while (
-    previousChangedBlock.toNumber() !== 0
-    && previousChangedBlock.toNumber() !== document.lastChangedBlock.toNumber()
+    nextBlock.toNumber() !== 0
+    && nextBlock.toNumber() > document.topBlock.toNumber()
   ) {
     // eslint-disable-next-line no-await-in-loop
-    previousChangedBlock = await getEventsFromBlock(
-      previousChangedBlock,
+    nextBlock = await getEventsFromBlock(
+      nextBlock,
       did,
       document,
       provider,
-      smartContractInterface,
-      smartContractAddress,
+      contractInterface,
+      address,
     );
+    if (filter) {
+      const attribute = Object.keys(filter)[0] as 'publicKey' | 'serviceEndpoints' | 'authentication';
+      const attrId = Object.keys(document[attribute]).find((id) => {
+        const attr = document[attribute][id];
+        return Object.keys(filter[attribute]).every(
+          (prop) => attr[prop] === filter[attribute][prop],
+        );
+      });
+      if (attrId) return document[attribute][attrId];
+    }
   }
-  document.lastChangedBlock = lastChangedBlock;
+  document.topBlock = topBlock;
+  return null;
 };
+
 
 /**
  * Provided with the fetched data, the function parses it and returns the

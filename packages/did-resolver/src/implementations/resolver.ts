@@ -11,8 +11,11 @@ import {
   IResolverSettings,
   ProviderTypes,
   DelegateTypes,
+  IPublicKey,
+  IServiceEndpoint,
+  IAuthentication,
 } from '../models';
-import { matchingPatternDid } from '../constants';
+import { DIDPattern } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 /**
@@ -34,7 +37,7 @@ class Resolver implements IResolver {
   /**
    * Stores the provider to connect to blockchain
    */
-  private readonly _providerResolver: providers.BaseProvider;
+  protected readonly _provider: providers.BaseProvider;
 
   /**
    * Stores the smart contract instance with read functionality available
@@ -44,7 +47,7 @@ class Resolver implements IResolver {
   /**
    * Caches the blockchain data for further reads
    */
-  private _fetchedDocument: IDIDLogData;
+  private _document: IDIDLogData;
 
   /**
    * Constructor
@@ -55,18 +58,18 @@ class Resolver implements IResolver {
   constructor(settings: IResolverSettings) {
     this.settings = settings;
     if (settings.provider.type === ProviderTypes.HTTP) {
-      this._providerResolver = new ethers.providers.JsonRpcProvider(
+      this._provider = new ethers.providers.JsonRpcProvider(
         settings.provider.uriOrInfo,
         settings.provider.network,
       );
     } else if (settings.provider.type === ProviderTypes.IPC) {
-      this._providerResolver = new ethers.providers.IpcProvider(
+      this._provider = new ethers.providers.IpcProvider(
         settings.provider.path,
         settings.provider.network,
       );
     }
 
-    this._contract = new ethers.Contract(settings.address, settings.abi, this._providerResolver);
+    this._contract = new ethers.Contract(settings.address, settings.abi, this._provider);
   }
 
   /**
@@ -83,46 +86,55 @@ class Resolver implements IResolver {
    * @param {string} did - entity identifier, which is associated with DID Document
    * @returns {Promise<IDIDDocument>}
    */
-  async read(did: string): Promise<IDIDDocument> {
-    return new Promise(
-      // eslint-disable-next-line no-async-promise-executor
-      async (resolve, reject) => {
-        const [, , address] = did.split(':');
-        if (!matchingPatternDid.test(did) || (address.length !== 42)) {
-          reject(new Error('Invalid did provided'));
-          return;
-        }
+  private async _read(
+    did: string,
+    filter?: { [key: string]: { [key: string]: string } },
+  ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
+    const [, address] = did.match(DIDPattern);
+    if (!address) {
+      throw new Error('Invalid did provided');
+    }
 
-        if (this._fetchedDocument === undefined || this._fetchedDocument.owner !== did) {
-          const [, , blockchainAddress] = did.split(':');
-          this._fetchedDocument = {
-            owner: blockchainAddress,
-            lastChangedBlock: new utils.BigNumber(0),
-            authentication: {},
-            publicKey: {},
-            serviceEndpoints: {},
-            attributes: new Map(),
-          };
-        }
-        try {
-          await fetchDataFromEvents(
-            did,
-            this._fetchedDocument,
-            this.settings,
-            this._contract,
-            this._providerResolver,
-          );
-          const didDocument = wrapDidDocument(did, this._fetchedDocument);
-          resolve(didDocument);
-        } catch (error) {
-          if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-            const didDocument = wrapDidDocument(did, this._fetchedDocument);
-            resolve(didDocument);
-          }
-          reject(error);
-        }
-      },
-    );
+    if (this._document === undefined || this._document.owner !== did) {
+      this._document = {
+        owner: address,
+        topBlock: new utils.BigNumber(0),
+        authentication: {},
+        publicKey: {},
+        serviceEndpoints: {},
+        attributes: new Map(),
+      };
+    }
+    try {
+      const data = await fetchDataFromEvents(
+        did,
+        this._document,
+        this.settings,
+        this._contract,
+        this._provider,
+        filter,
+      );
+      if (filter) return data;
+      const document = wrapDidDocument(did, this._document);
+      return document;
+    } catch (error) {
+      if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+        const didDocument = wrapDidDocument(did, this._document);
+        return didDocument;
+      }
+      throw error;
+    }
+  }
+
+  async read(did: string): Promise<IDIDDocument> {
+    return this._read(did) as Promise<IDIDDocument>;
+  }
+
+  async readAttribute(
+    did: string,
+    filter?: { [key: string]: { [key: string]: string } },
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+    return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
   }
 
   /**
