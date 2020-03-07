@@ -10,6 +10,9 @@ import {
 } from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 
+chai.should();
+chai.use(chaiAsPromised);
+
 describe('[RESOLVER PACKAGE]', function () {
   this.timeout(60000);
   let resolver: IResolver;
@@ -21,9 +24,6 @@ describe('[RESOLVER PACKAGE]', function () {
   let operatorSetting: IResolverSettings;
 
   before(async () => {
-    chai.should();
-    chai.use(chaiAsPromised);
-
     operatorSetting = await getSettings([]);
     operator = new Operator(keys, operatorSetting);
   });
@@ -34,14 +34,10 @@ describe('[RESOLVER PACKAGE]', function () {
 
   it('invalid did should throw an error', async () => {
     const invalidDidFirst = 'did:ewc1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
-    resolver.read(invalidDidFirst).catch((error) => {
-      expect(error.toString()).to.equal('Error: Invalid did provided');
-    });
+    resolver.read(invalidDidFirst).should.be.rejected;
 
     const invalidDidSecond = 'did:ewc1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3944352749528734062daagdsgasdbv';
-    resolver.read(invalidDidSecond).catch((error) => {
-      expect(error.toString()).to.equal('Error: Invalid did provided');
-    });
+    resolver.read(invalidDidSecond).should.be.rejected;
   });
 
   it('expect any valid did to have a document', async () => {

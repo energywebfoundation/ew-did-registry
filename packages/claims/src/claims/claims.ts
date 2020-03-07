@@ -87,7 +87,7 @@ export class Claims implements IClaims {
       .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
       .publicKeyHex;
     try {
-      await this.jwt.verify(token, issuerPublicKey);
+      await this.jwt.verify(token, issuerPublicKey.slice(2));
     } catch (error) {
       return false;
     }
