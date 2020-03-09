@@ -1,0 +1,40 @@
+{
+  "name": "@ew-did-registry/did-resolver-interface",
+  "version": "1.0.0",
+  "description": "The package resolve CRUD operations on DID Documents",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "Resolver",
+    "DID Resolver"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@ew-did-registry/did": "^1.0.0",
+    "@ew-did-registry/keys": "^1.0.0",
+    "bn.js": "^5.0.0",
+    "ethers": "^4.0.45",
+    "ganache-cli": "^6.9.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/chai-as-promised": "^7.1.2",
+    "chai": "^4.2.0",
+    "chai-interface": "^2.0.3",
+    "eslint-plugin-chai-friendly": "^0.5.0"
+  }
+}
