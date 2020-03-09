@@ -25,7 +25,7 @@
 
 • **block**? : *number*
 
-*Defined in [did-resolver/src/models/resolver.ts:82](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L82)*
+*Defined in [did-resolver/src/models/resolver.ts:82](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/models/resolver.ts#L82)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **publicKey**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:80](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L80)*
+*Defined in [did-resolver/src/models/resolver.ts:80](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/models/resolver.ts#L80)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **type**: *string*
 
-*Defined in [did-resolver/src/models/resolver.ts:79](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L79)*
+*Defined in [did-resolver/src/models/resolver.ts:79](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/models/resolver.ts#L79)*
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **validity**? : *BigNumber*
 
-*Defined in [did-resolver/src/models/resolver.ts:81](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/models/resolver.ts#L81)*
+*Defined in [did-resolver/src/models/resolver.ts:81](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/models/resolver.ts#L81)*

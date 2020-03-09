@@ -32,7 +32,7 @@
 
 • **settings**: *[IResolverSettings](iresolversettings.md)*
 
-*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/interface.ts#L7)*
+*Defined in [did-resolver/src/interface.ts:7](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/interface.ts#L7)*
 
 ## Methods
 
@@ -40,7 +40,7 @@
 
 ▸ **identityOwner**(`did`: string): *Promise‹string›*
 
-*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/interface.ts#L34)*
+*Defined in [did-resolver/src/interface.ts:34](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/interface.ts#L34)*
 
 Returns the current owner for certain DID.
 If DID document has not been created, did will be identical to address.
@@ -60,7 +60,7 @@ ___
 
 ▸ **read**(`did`: string): *Promise‹[IDIDDocument](ididdocument.md)›*
 
-*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/interface.ts#L24)*
+*Defined in [did-resolver/src/interface.ts:24](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/interface.ts#L24)*
 
 Read method resolves the DID Document for the provided DID.
 Should not be confused with “read” method in DID Document Lite,
@@ -80,7 +80,7 @@ ___
 
 ▸ **readAttribute**(`did`: string, `filter?`: object): *Promise‹[IPublicKey](ipublickey.md) | [IServiceEndpoint](iserviceendpoint.md) | [IAuthentication](iauthentication.md)›*
 
-*Defined in [did-resolver/src/interface.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/interface.ts#L51)*
+*Defined in [did-resolver/src/interface.ts:51](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/interface.ts#L51)*
 
 **Parameters:**
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **validDelegate**(`identityDID`: string, `delegateType`: [DelegateTypes](../enums/delegatetypes.md), `delegateDID`: string): *Promise‹boolean›*
 
-*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/9ddd7ca/packages/did-resolver/src/interface.ts#L45)*
+*Defined in [did-resolver/src/interface.ts:45](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/did-resolver/src/interface.ts#L45)*
 
 Checks if the delegate is present for a particular DID.
 Returns boolean.

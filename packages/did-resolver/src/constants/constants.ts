@@ -29,7 +29,7 @@ export const defaultResolverSettings: IResolverSettings = {
 // Various patterns to minimise errors
 
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
-const pubKeyPattern = '0x[A-Fa-f0-i]{66}';
+const pubKeyPattern = '0x[A-Fa-f0-9]{66}';
 export const attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
 export const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})`;
 export const delegatePubKeyIdPattern = `^did:ewc:${ethAddrPattern}#delegate-(sigAuth|veriKey)-(${pubKeyPattern}|${ethAddrPattern})$`;
