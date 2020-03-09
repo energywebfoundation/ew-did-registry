@@ -24,7 +24,7 @@
 
 • **claimData**: *object*
 
-*Defined in [claims/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/models/index.ts#L14)*
+*Defined in [claims/src/models/index.ts:14](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/models/index.ts#L14)*
 
 #### Type declaration:
 
@@ -36,7 +36,7 @@ ___
 
 • **did**: *string*
 
-*Defined in [claims/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/models/index.ts#L12)*
+*Defined in [claims/src/models/index.ts:12](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/models/index.ts#L12)*
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 • **signer**: *string*
 
-*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/models/index.ts#L13)*
+*Defined in [claims/src/models/index.ts:13](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/models/index.ts#L13)*

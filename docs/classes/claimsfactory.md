@@ -32,7 +32,7 @@ An implementation of claims factory
 
 \+ **new ClaimsFactory**(`keys`: IKeys, `resolver`: IResolver): *[ClaimsFactory](claimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:17](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/claimsFactory/claimsFactory.ts#L17)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:18](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/claimsFactory/claimsFactory.ts#L18)*
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ Name | Type |
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:38](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/claimsFactory/claimsFactory.ts#L38)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:39](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/claimsFactory/claimsFactory.ts#L39)*
 
 Contstructs instance of ClaimsIssuer
 
@@ -65,7 +65,7 @@ ___
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:29](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/claimsFactory/claimsFactory.ts#L29)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:30](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/claimsFactory/claimsFactory.ts#L30)*
 
 Constructs instance of ClaimsUser
 
@@ -79,7 +79,7 @@ ___
 
 *Implementation of [IClaimsFactory](../interfaces/iclaimsfactory.md)*
 
-*Defined in [claims/src/claimsFactory/claimsFactory.ts:47](https://github.com/energywebfoundation/ew-did-registry/blob/b1d68b0/packages/claims/src/claimsFactory/claimsFactory.ts#L47)*
+*Defined in [claims/src/claimsFactory/claimsFactory.ts:48](https://github.com/energywebfoundation/ew-did-registry/blob/f9a1db1/packages/claims/src/claimsFactory/claimsFactory.ts#L48)*
 
 Constructs instance of ClaimsUser
 
