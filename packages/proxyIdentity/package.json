@@ -1,0 +1,25 @@
+{
+  "name": "proxyidentity",
+  "version": "1.0.0",
+  "description": "Implementation of contract representing ERC1056 identity",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
+  },
+  "author": "dmitry.fesenko@482.solutions",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^4.0.45",
+    "web3": "^1.2.6"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "ganache-cli": "^6.9.1",
+    "mocha": "^7.1.0",
+    "prettier": "^1.19.1",
+    "prettier-plugin-solidity": "^1.0.0-alpha.44",
+    "truffle": "^5.1.16",
+    "ts-node": "^8.6.2"
+  }
+}
