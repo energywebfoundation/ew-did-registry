@@ -2,13 +2,12 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
+import { Resolver, Operator } from '@ew-did-registry/did-ethr-resolver'
 import {
   IResolver,
-  Resolver,
-  Operator,
   IOperator,
   IResolverSettings,
-} from '@ew-did-registry/did-resolver';
+} from '@ew-did-registry/did-resolver-interface';
 import { Networks } from '@ew-did-registry/did';
 import { ClaimsFactory } from '../src/claimsFactory';
 import { IProofData } from '../src/models';

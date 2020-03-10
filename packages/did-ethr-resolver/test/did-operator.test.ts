@@ -2,15 +2,15 @@
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
-import { Operator } from '../src';
+import { Operator } from '../src'
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IUpdateData,
   PubKeyType,
-  IAuthentication,
-  IResolverSettings,
+  IAuthentication, 
+  IResolverSettings, 
   IDIDDocument,
 } from '@ew-did-registry/did-resolver-interface';
 import { getSettings } from '../../../tests/init-ganache';

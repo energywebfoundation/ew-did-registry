@@ -1,5 +1,5 @@
 import { IKeys } from '@ew-did-registry/keys';
-import { IResolver } from '@ew-did-registry/did-resolver';
+import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import {
   IClaimsFactory, IClaimsUser, IClaimsIssuer, IClaimsVerifier,
 } from '../interface';

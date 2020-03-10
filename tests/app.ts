@@ -1,6 +1,6 @@
 import { ClaimsFactory } from '../packages/claims';
 import { Keys } from '../packages/keys/dist';
-import { Resolver } from '../packages/did-resolver/dist';
+import { Resolver } from '../packages/did-ethr-resolver/dist';
 import { getSettings } from './init-ganache';
 
 export const createAndStoreClaim = async (): Promise<string> => {
