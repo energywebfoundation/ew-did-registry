@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
@@ -25,7 +26,6 @@
   "dependencies": {
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0",
-    "@ew-did-registry/did-ethr-resolver": "^1.0.0",
     "bn.js": "^5.0.0",
     "ethers": "^4.0.45",
     "ganache-cli": "^6.9.1"

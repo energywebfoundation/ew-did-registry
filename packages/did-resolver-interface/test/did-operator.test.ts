@@ -2,7 +2,7 @@
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
-import { Operator } from '@ew-did-registry/did-ethr-resolver'
+import { Operator } from '../../did-ethr-resolver'
 import {
   Algorithms,
   DIDAttribute,

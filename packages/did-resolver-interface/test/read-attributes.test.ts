@@ -1,7 +1,7 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
 import { expect } from 'chai';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '../../did-ethr-resolver';
 import {
   IResolverSettings,
   DIDAttribute,

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Resolver, Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Resolver, Operator } from '../../did-ethr-resolver';
 import {
   IResolver,
   DelegateTypes,

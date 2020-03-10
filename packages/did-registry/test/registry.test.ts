@@ -1,14 +1,13 @@
 import { expect } from 'chai';
+import { Resolver, Operator } from '@ew-did-registry/did-ethr-resolver';
 import {
-  Resolver,
-  Operator,
   DIDAttribute,
   IUpdateData,
   PubKeyType,
   Algorithms,
   Encoding,
   IResolverSettings,
-} from '@ew-did-registry/did-resolver';
+} from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
 import {

@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Keys } from '@ew-did-registry/keys';
-import { Resolver, Operator } from '@ew-did-registry/did-ethr-resolver'
+import { Keys } from '../../keys';
+import { Resolver, Operator } from '../../did-ethr-resolver'
 import {
   IResolver,
   IOperator,
   IResolverSettings,
-} from '@ew-did-registry/did-resolver-interface';
-import { Networks } from '@ew-did-registry/did';
+} from '../../did-resolver-interface';
+import { Networks } from '../../did';
 import { ClaimsFactory } from '../src/claimsFactory';
 import { IProofData } from '../src/models';
 import { IClaimsIssuer, IClaimsUser, IClaimsVerifier } from '../src';
