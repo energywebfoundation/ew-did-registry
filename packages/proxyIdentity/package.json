@@ -14,11 +14,15 @@
     "web3": "^1.2.6"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.10",
+    "@types/sinon": "^7.5.2",
     "chai": "^4.2.0",
+    "chai-events": "0.0.3",
     "ganache-cli": "^6.9.1",
     "mocha": "^7.1.0",
     "prettier": "^1.19.1",
     "prettier-plugin-solidity": "^1.0.0-alpha.44",
+    "sinon": "^9.0.0",
     "truffle": "^5.1.16",
     "ts-node": "^8.6.2"
   }
