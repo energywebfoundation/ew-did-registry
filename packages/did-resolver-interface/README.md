@@ -5,4 +5,3 @@ This package specifies the resolver, which exposes CRUD operations on DID Docume
 ## Structure
 - dist - contains compiled javascript files
 - src - contains source typescript files
-- test - contains unit test files
