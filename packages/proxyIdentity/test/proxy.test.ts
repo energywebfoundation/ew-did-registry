@@ -23,39 +23,50 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let erc1056: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
+  let creatorAddress: string;
   const proxyFactory = new ContractFactory(abi, bytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  let identity: string;
 
   beforeEach(async () => {
-    proxy = await (await proxyFactory.deploy()).deployed();
+    creatorAddress = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    await creator.sendTransaction({ value: 1000000000, to: proxy.address, gasLimit: 100000 });
-    // console.log('.....Accounts[0]:', account0);
-    // console.log('.....Creator:', await creator.getAddress());
-    // console.log('.....Proxy:', proxy.address);
+    proxy = await (await proxyFactory.deploy(erc1056.address, { value: 1E15 })).deployed();
+    identity = proxy.address;
   });
 
-  it('sendTransaction with changeOwner() calldata should emit DIDOwnerChanged on ERC1056', (done) => {
-    erc1056.on('DIDOwnerChanged', (identity, owner, previousChange) => {
-      erc1056.removeAllListeners('DIDOwnerChanged');
+  it('proxy creator should be identity owner and delegate', (done) => {
+    erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
+      erc1056.removeAllListeners('DIDDelegateChanged');
+      expect(delegate).equal(creatorAddress);
       done();
     });
-    const newOwnerAddress = new Keys().getAddress();
-    erc1056.identityOwner(proxy.address)
-      .then((identityOwner: string) => {
-        expect(identityOwner).equal(proxy.address);
-        const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
-        const data: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [proxy.address, newOwnerAddress]);
-        return proxy.sendTransaction(data, erc1056.address);
-      })
-      .then((tx: any) => tx.wait())
-      .then(() => erc1056.identityOwner(proxy.address))
-      .then((identityOwner: string) => {
-        expect(identityOwner).equal(newOwnerAddress);
+    erc1056.identityOwner(identity)
+      .then((owner: string) => {
+        expect(owner === creatorAddress);
       });
   });
 
-  it('sendTransaction with setAttribute() calldata should emit DIDAttributeChanged on ERC1056', (done) => {
+  it('sendTransaction with changeOwner() calldata should emit DIDOwnerChanged on ERC1056', (done) => {
+    erc1056.on('DIDOwnerChanged', (id, owner, previousChange) => {
+      erc1056.removeAllListeners('DIDOwnerChanged');
+      done();
+    });
+    const newOwner = new Keys().getAddress();
+    erc1056.identityOwner(identity)
+      .then((owner: string) => {
+        const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
+        const data: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [owner, newOwner]);
+        return proxy.sendTransaction(data, erc1056.address);
+      })
+      .then((tx: any) => tx.wait())
+      .then(() => erc1056.identityOwner(identity))
+      .then((owner: string) => {
+        expect(owner).equal(newOwner);
+      });
+  });
+
+  it('sendTransaction with setAttribute() calldata from identity owner should emit DIDAttributeChanged on ERC1056', (done) => {
     erc1056.on('DIDAttributeChanged', (id, n, v, validTo, previouse) => {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
@@ -67,6 +78,15 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     proxy.sendTransaction(data, erc1056.address).then((tx: any) => tx.wait());
   });
 
+  it('sendTransaction with setAttribute() calldata from non-owner should revert', () => {
+    const setAttributeAbi: any = ethrReg.abi.find((f) => f.name === 'setAttribute');
+    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
+    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
+    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const nonOwned = proxy.connect(provider.getSigner(1));
+    return nonOwned.sendTransaction(data, erc1056.address).should.be.rejectedWith('Only owner allowed');
+  });
+
   it('sendSignedTransaction with signed by the owner setAttribute() calldata should emit DIDAttributeChanged on ERC1056', (done) => {
     erc1056.on('DIDAttributeChanged', (id, n, v, validTo, previouse) => {
       erc1056.removeAllListeners('DIDAttributeChanged');
@@ -75,7 +95,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const setAttributeAbi: any = ethrReg.abi.find((f) => f.name === 'setAttribute');
     const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
     const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
     const digest = ethers.utils.keccak256(data);
     creator.signMessage(ethers.utils.arrayify(digest))
       .then((flatSignature) => {
@@ -90,7 +110,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const setAttributeAbi: any = ethrReg.abi.find((f) => f.name === 'setAttribute');
     const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
     const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
     const digest = ethers.utils.keccak256(data);
     const nonOwner = provider.getSigner(1);
     return nonOwner.signMessage(ethers.utils.arrayify(digest))
@@ -100,5 +120,39 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
         return proxy.sendSignedTransaction(data, erc1056.address, v, r, s);
       })
       .should.be.rejectedWith('Signature is not valid');
+  });
+
+  it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
+    const agent = provider.getSigner(1);
+    let agentAddress: string;
+    agent.getAddress()
+      .then((address) => {
+        agentAddress = address;
+        erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
+          if (delegate === agentAddress) {
+            erc1056.removeAllListeners('DIDDelegateChanged');
+            done();
+          }
+        });
+      })
+      .then(() => {
+        return proxy.addRecoveryAgent(agentAddress);
+      })
+      .then((tx: any) => {
+        return tx.wait();
+      })
+      .then(() => {
+        const asAgent = proxy.connect(agent);
+        return asAgent.changeOwner();
+      })
+      .then((tx: any) => {
+        return tx.wait();
+      })
+      .then(() => {
+        return proxy.owner();
+      })
+      .then((owner: string) => {
+        owner.should.equal(agentAddress);
+      });
   });
 });
