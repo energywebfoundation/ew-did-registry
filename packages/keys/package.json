@@ -22,7 +22,7 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@types/elliptic": "^6.4.10",
     "ecies-parity": "^0.1.1",

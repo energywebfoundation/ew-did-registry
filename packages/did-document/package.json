@@ -22,7 +22,7 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did-ethr-resolver": "^1.0.0",
     "@ew-did-registry/did-resolver-interface": "^1.0.0",
