@@ -25,7 +25,7 @@ exports.defaultResolverSettings = {
 };
 // Various patterns to minimise errors
 var ethAddrPattern = '0x[A-Fa-f0-9]{40}';
-var pubKeyPattern = '0x[A-Fa-f0-i]{66}';
+var pubKeyPattern = '0x[A-Fa-f0-9]{66}';
 exports.attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
 exports.DIDPattern = "^did:[a-z0-9]+:(" + ethAddrPattern + ")";
 exports.delegatePubKeyIdPattern = "^did:ewc:" + ethAddrPattern + "#delegate-(sigAuth|veriKey)-(" + pubKeyPattern + "|" + ethAddrPattern + ")$";

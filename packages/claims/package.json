@@ -23,7 +23,7 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/did-document": "^1.0.0",
@@ -33,7 +33,9 @@
     "@types/sjcl": "1.0.28",
     "eciesjs": "^0.3.3",
     "ethers": "^4.0.43",
-    "ganache-cli": "^6.9.1",
     "sjcl-complete": "1.0.0"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.9.1"
   }
 }

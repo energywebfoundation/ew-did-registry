@@ -21,7 +21,7 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/keys": "^1.0.0",
     "jsonwebtoken": "^8.5.1",

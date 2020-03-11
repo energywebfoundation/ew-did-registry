@@ -58,6 +58,7 @@ export class Operator extends Resolver implements IOperator {
       address, abi,
     } = this.settings;
     const { privateKey } = this._keys;
+    // this._provider = this._getProvider();
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this._wallet = wallet;
     this._didRegistry = new ethers.Contract(address, abi, wallet);
