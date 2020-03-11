@@ -12,8 +12,7 @@ contract ProxyIdentity {
         bytes4 sig,
         uint256 len
     );
-    event IdentityOwner(address identity, bool success);
-    event ChangeOwner(address to, address first, address second);
+    event SignedTransactionSend(address sender, address signer, bytes32 hash);
 
     constructor() public {
         owner = msg.sender;
@@ -37,7 +36,7 @@ contract ProxyIdentity {
         _;
     }
 
-    function sendTransaction(bytes calldata _data, address to) external _owner {
+    function sendTransaction(bytes memory _data, address to) public _owner {
         bool success;
         bytes memory data = _data;
         uint256 len = data.length;
@@ -50,6 +49,23 @@ contract ProxyIdentity {
             }
         }
         emit TransactionSend(_data, to, success, sig, len);
+    }
+
+    function sendSignedTransaction(
+        bytes memory data,
+        address to,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) public payable {
+        bytes32 digest = keccak256(data);
+        bytes32 hash = keccak256(
+            abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
+        );
+        address signer = ecrecover(hash, v, r, s);
+        require(owner == signer, "Signature is not valid");
+        sendTransaction(data, to);
+        emit SignedTransactionSend(msg.sender, signer, hash);
     }
 
     function() external payable {}

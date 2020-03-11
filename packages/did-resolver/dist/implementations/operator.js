@@ -79,7 +79,6 @@ var Operator = /** @class */ (function (_super) {
         _this._keys = keys;
         var _a = _this.settings, address = _a.address, abi = _a.abi;
         var privateKey = _this._keys.privateKey;
-        // this._provider = this._getProvider();
         var wallet = new ethers_1.ethers.Wallet(privateKey, _this._provider);
         _this._wallet = wallet;
         _this._didRegistry = new ethers_1.ethers.Contract(address, abi, wallet);
