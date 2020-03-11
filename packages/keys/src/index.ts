@@ -1,7 +1,7 @@
 import { ec as EC } from 'elliptic';
 import BN from 'bn.js';
 // @ts-ignore
-import ecies from 'ecies-parity';
+import {encrypt, decrypt} from 'eciesjs';
 
 import { Wallet } from 'ethers';
 import { IKeys } from './interface';
@@ -73,7 +73,7 @@ class Keys implements IKeys {
   async decrypt(encrypted: string, publicKey?: string): Promise<string> {
     const encryptedBuffer = Buffer.from(encrypted, 'hex');
     const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-    const data = await ecies.decrypt(privateKeyBuffer, encryptedBuffer);
+    const data = await decrypt(privateKeyBuffer, encryptedBuffer);
     return data.toString();
   }
 
@@ -96,15 +96,11 @@ class Keys implements IKeys {
    * @returns {Promise<string>}
    */
   async encrypt(data: string, publicKeyTo?: string): Promise<string> {
-    const publicKeyToBuffer = Buffer.from(publicKeyTo, 'hex');
+    const publicKeyToBuffer = Buffer.from(publicKeyTo || this.publicKey, 'hex');
     const dataBuffer = Buffer.from(data);
-    const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
-    const encrypted = await ecies.encrypt(
+    const encrypted = await encrypt(
       publicKeyToBuffer,
       dataBuffer,
-      {
-        ephemPrivateKey: privateKeyBuffer,
-      },
     );
     return encrypted.toString('hex');
   }
