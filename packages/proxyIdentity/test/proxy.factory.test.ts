@@ -1,12 +1,13 @@
 import { Contract, providers, ContractFactory } from 'ethers';
-import { JsonRpcProvider, JsonRpcSigner } from 'ethers/providers';
+import { JsonRpcProvider } from 'ethers/providers';
 import { expect } from 'chai';
 import { ethrReg } from '../../did-resolver';
+import { abi as proxyAbi } from '../build/contracts/ProxyIdentity.json';
 import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../build/contracts/ProxyFactory.json';
 
 const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 
-describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
+describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
   this.timeout(0);
   let erc1056: Contract;
   let proxyFactory: Contract;
@@ -15,7 +16,6 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let deployerAddress: string;
   const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, deployer);
-  let identity: string;
 
   beforeEach(async () => {
     deployerAddress = await deployer.getAddress();
@@ -23,11 +23,20 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, { value: 1E15 })).deployed();
   });
 
-  it('create() should set sender as owner of created proxy', async () => {
-    const owner: providers.JsonRpcSigner = provider.getSigner(1);
-    const ownerAddress: string = await owner.getAddress();
-    const proxy: Contract = await (await proxyFactory.create({ from: ownerAddress })).wait();
-    const proxyOwner = await proxy.owner();
-    expect(proxyOwner).equal(ownerAddress);
+  it('create() should set sender as owner of created proxy', (done) => {
+    proxyFactory.on('ProxyCreated', (proxyAddress: string) => {
+      // console.log(`>>> proxy created on ${proxyAddress}`);
+      proxyFactory.removeAllListeners('ProxyCreated');
+      const proxy = new Contract(proxyAddress, proxyAbi, deployer);
+      proxy.owner()
+        .then((proxyOwner: string) => {
+          expect(proxyOwner).equal(deployerAddress);
+          done();
+        });
+    });
+    proxyFactory.create({ value: 1E15 })
+      .then((tx: any) => {
+        tx.wait();
+      });
   });
 });
