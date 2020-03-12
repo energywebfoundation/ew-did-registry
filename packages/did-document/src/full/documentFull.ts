@@ -1,6 +1,6 @@
 import {
   DIDAttribute, IOperator, IUpdateData,
-} from '@ew-did-registry/did-resolver';
+} from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 

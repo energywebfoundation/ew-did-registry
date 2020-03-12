@@ -1,4 +1,4 @@
-import { IDIDDocument } from '@ew-did-registry/did-resolver';
+import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 
 /**
  * Interface describes the lite version of DID Document with only read functionality

@@ -1,4 +1,4 @@
-import { IOperator, IResolver } from '@ew-did-registry/did-resolver';
+import { IOperator, IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentFactory } from '../interface';
 import { DIDDocumentFull, IDIDDocumentFull } from '../full';
 import { DIDDocumentLite, IDIDDocumentLite } from '../lite';

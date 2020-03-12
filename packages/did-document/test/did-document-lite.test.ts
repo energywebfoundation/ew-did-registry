@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Attributes } from '../src/models';
 
-import { Resolver } from '@ew-did-registry/did-resolver';
+import { Resolver } from '@ew-did-registry/did-ethr-resolver';
 
 import { DIDDocumentLite, IDIDDocumentLite } from '../src/lite';
 import { getSettings } from '../../../tests/init-ganache';
