@@ -69,6 +69,13 @@ contract ProxyIdentity {
         _changeOwner(msg.sender);
     }
 
+    /**
+    * Used by the proxy factory to make sender the owner
+     */
+    function changeOwner(address newOwner) public _owner {
+        _changeOwner(newOwner);
+    }
+
     function _changeOwner(address newOwner) internal {
         emit ChangeOwner(address(this), owner, newOwner);
         owner = newOwner;
