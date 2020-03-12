@@ -3,7 +3,6 @@ import {
   Contract, ethers, Event, Wallet,
 } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
-import { IOperator } from '../interface';
 import {
   Algorithms,
   DIDAttribute,
@@ -12,10 +11,11 @@ import {
   IPublicKey,
   IServiceEndpoint,
   IUpdateData,
+  IOperator,
   ProviderTypes,
   PubKeyType,
   IResolverSettings,
-} from '../models';
+} from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern,

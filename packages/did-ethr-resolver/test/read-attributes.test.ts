@@ -1,8 +1,8 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Networks } from '@ew-did-registry/did';
 import { expect } from 'chai';
+import { Operator } from '../src';
 import {
-  Operator,
   IResolverSettings,
   DIDAttribute,
   IUpdateData,
@@ -11,7 +11,7 @@ import {
   Encoding,
   IAuthentication,
   IServiceEndpoint,
-} from '../src';
+} from '@ew-did-registry/did-resolver-interface';
 
 import { getSettings } from '../../../tests/init-ganache';
 

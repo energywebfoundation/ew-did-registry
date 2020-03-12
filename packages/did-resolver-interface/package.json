@@ -1,11 +1,10 @@
 {
-  "name": "@ew-did-registry/jwt",
+  "name": "@ew-did-registry/did-resolver-interface",
   "version": "1.0.0",
-  "description": "The package manages JWTs",
+  "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
@@ -14,17 +13,14 @@
     "Energy",
     "EnergyWeb",
     "EW",
-    "JWT",
-    "DID JWT"
+    "Resolver",
+    "DID Resolver"
   ],
   "author": {
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "GPL-3.0-or-later",
+  "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/keys": "^1.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "key-encoder": "^2.0.3"
   }
 }

@@ -1,5 +1,5 @@
 import { Wallet } from 'ethers';
-import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver';
+import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';

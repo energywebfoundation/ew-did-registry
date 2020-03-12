@@ -1,4 +1,4 @@
-import { IResolverSettings, ProviderTypes } from '../models';
+import { IResolverSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 import { ethrReg } from './EthereumDIDRegistry';
 
 // Address of ERC1056 smart contract on Volta

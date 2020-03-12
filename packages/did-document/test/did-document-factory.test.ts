@@ -2,10 +2,8 @@
 import { expect } from 'chai';
 import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  IOperator,
-  Operator,
-} from '@ew-did-registry/did-resolver';
+import { IOperator } from '@ew-did-registry/did-resolver-interface';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';

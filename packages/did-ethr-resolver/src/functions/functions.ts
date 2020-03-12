@@ -14,7 +14,7 @@ import {
   IHandlers,
   IServiceEndpoint,
   IAuthentication,
-} from '../models';
+} from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
 

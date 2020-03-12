@@ -1,13 +1,12 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-
 import { Keys } from '@ew-did-registry/keys';
+import { Resolver, Operator } from '../src';
 import {
-  Resolver,
   IResolver,
   DelegateTypes,
-  Operator, IResolverSettings,
-} from '../src';
+  IResolverSettings,
+} from '@ew-did-registry/did-resolver-interface';
 import { getSettings } from '../../../tests/init-ganache';
 
 chai.should();
