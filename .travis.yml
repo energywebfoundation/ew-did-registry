@@ -3,7 +3,7 @@ node_js: 10.18.1
 install:
   - npm install
   - npm run setup
-  - travis_retry npm run build
+  - npm run build
   - npm run browserTest:build
 script:
   - npm run test-rpc
