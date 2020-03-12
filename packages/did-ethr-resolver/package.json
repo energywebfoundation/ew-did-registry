@@ -27,12 +27,5 @@
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0",
     "@ew-did-registry/did-resolver-interface": "^1.0.0"
-  },
-  "devDependencies": {
-    "@types/chai": "^4.2.7",
-    "@types/chai-as-promised": "^7.1.2",
-    "chai": "^4.2.0",
-    "chai-interface": "^2.0.3",
-    "eslint-plugin-chai-friendly": "^0.5.0"
   }
 }

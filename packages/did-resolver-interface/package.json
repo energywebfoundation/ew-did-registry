@@ -22,7 +22,5 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0"
   }
 }
