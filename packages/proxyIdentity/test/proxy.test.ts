@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Signature } from 'ethers/utils';
-import { ethrReg } from '../../did-resolver';
+import { ethrReg } from '../../did-ethr-resolver';
 import { Keys } from '../../keys';
 import { abi, bytecode } from '../build/contracts/ProxyIdentity.json';
 

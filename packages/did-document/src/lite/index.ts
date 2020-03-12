@@ -1,4 +1,4 @@
-import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver';
+import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {

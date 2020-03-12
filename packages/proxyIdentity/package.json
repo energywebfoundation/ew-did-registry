@@ -1,5 +1,5 @@
 {
-  "name": "proxyidentity",
+  "name": "@ew-did-registry/proxyidentity",
   "version": "1.0.0",
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "author": "dmitry.fesenko@482.solutions",
   "license": "ISC",
   "dependencies": {
+    "@ew-did-registry/did-ethr-resolver": "^1.0.0",
     "ethers": "^4.0.45",
     "web3": "^1.2.6"
   },

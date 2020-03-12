@@ -1,7 +1,7 @@
 import { Contract, providers, ContractFactory } from 'ethers';
 import { JsonRpcProvider } from 'ethers/providers';
 import { expect } from 'chai';
-import { ethrReg } from '../../did-resolver';
+import { ethrReg } from '../../did-ethr-resolver';
 import { abi as proxyAbi } from '../build/contracts/ProxyIdentity.json';
 import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../build/contracts/ProxyFactory.json';
 

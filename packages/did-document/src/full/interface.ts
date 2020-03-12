@@ -1,4 +1,4 @@
-import { IUpdateData } from '@ew-did-registry/did-resolver';
+import { IUpdateData } from '@ew-did-registry/did-resolver-interface';
 import { BigNumber } from 'ethers/utils';
 import { IDIDDocumentLite } from '../lite';
 

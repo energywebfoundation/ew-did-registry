@@ -27,12 +27,11 @@
   "dependencies": {
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/did-document": "^1.0.0",
-    "@ew-did-registry/did-resolver": "^1.0.0",
+    "@ew-did-registry/did-ethr-resolver": "^1.0.0",
+    "@ew-did-registry/did-resolver-interface": "^1.0.0",
     "@ew-did-registry/jwt": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0",
-    "@types/sjcl": "1.0.28",
     "eciesjs": "^0.3.3",
-    "ethers": "^4.0.43",
     "sjcl-complete": "1.0.0"
   },
   "devDependencies": {
