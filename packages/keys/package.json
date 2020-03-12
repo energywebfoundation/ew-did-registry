@@ -26,5 +26,8 @@
   "dependencies": {
     "eciesjs": "^0.3.4",
     "elliptic": "^6.5.2"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.12"
   }
 }
