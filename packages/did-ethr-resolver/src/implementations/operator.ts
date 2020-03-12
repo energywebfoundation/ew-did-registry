@@ -396,7 +396,7 @@ export class Operator extends Resolver implements IOperator {
    * @param overrides
    * @private
    */
-  private async _sendTransaction(
+  protected async _sendTransaction(
     method: Function,
     did: string,
     didAttribute: DIDAttribute,

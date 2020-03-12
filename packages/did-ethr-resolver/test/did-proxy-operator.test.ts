@@ -2,7 +2,7 @@
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
-import { Operator } from '../src'
+import { ProxyOperator } from '../src'
 import {
   Algorithms,
   DIDAttribute,
@@ -12,17 +12,19 @@ import {
   IAuthentication, 
   IResolverSettings, 
   IDIDDocument,
+  IPublicKey,
+  IServiceEndpoint,
 } from '@ew-did-registry/did-resolver-interface';
 import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
-describe('[DID-PROXY-OPERATOR]', function () {
+describe('[DID-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
-  let operator: Operator;
+  let operator: ProxyOperator;
   let operatorSetting: IResolverSettings;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
@@ -32,7 +34,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     console.log(`registry: ${operatorSetting.address}`);
 
-    operator = new Operator(keys, operatorSetting);
+    operator = new ProxyOperator(keys, operatorSetting);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -64,7 +66,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk: IPublicKey) => pk.publicKeyHex === updateData.value,
     );
     expect(publicKey).is.not.undefined;
   });
@@ -84,7 +86,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
-        (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+        (pk: IPublicKey) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
       );
       expect(authMethod).include({
         type: 'Secp256k1VerificationKey2018',
@@ -113,7 +115,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
-      (pk) => pk.id === publicKeyId,
+      (pk: IPublicKey) => pk.id === publicKeyId,
     );
     expect(publicKey).include({
       type: 'Secp256k1VerificationKey2018',
@@ -134,7 +136,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     expect(document.service.find(
-      (sv) => sv.serviceEndpoint === endpoint,
+      (sv: IServiceEndpoint) => sv.serviceEndpoint === endpoint,
     )).not.undefined;
   });
 
@@ -225,7 +227,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
-      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: IPublicKey) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
     );
     expect(authMethod).include({
       type: 'Secp256k1VerificationKey2018',
@@ -238,7 +240,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
-      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: IPublicKey) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
     );
     expect(authMethod).to.be.undefined;
   });
@@ -256,14 +258,14 @@ describe('[DID-PROXY-OPERATOR]', function () {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk: IPublicKey) => pk.publicKeyHex === updateData.value.slice(2),
     );
     expect(publicKey).to.be.not.null;
     const revoked = await operator.revokeAttribute(did, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk: IPublicKey) => pk.publicKeyHex === updateData.value.slice(2),
     );
     expect(publicKey).to.be.undefined;
   });
@@ -274,7 +276,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
     });
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    const operatorNewOwner = new Operator(secondKeys, operatorSetting);
+    const operatorNewOwner = new ProxyOperator(secondKeys, operatorSetting);
     let currentOwner;
 
     await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
