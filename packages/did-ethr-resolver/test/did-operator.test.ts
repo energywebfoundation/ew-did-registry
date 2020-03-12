@@ -16,7 +16,7 @@ import {
 import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
-describe('[DID-PROXY-OPERATOR]', function () {
+describe('[DID-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys({
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
