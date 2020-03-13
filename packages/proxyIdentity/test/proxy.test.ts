@@ -5,9 +5,10 @@ import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Signature } from 'ethers/utils';
-import { abi, bytecode } from '../build/contracts/ProxyIdentity.json';
 import { ethrReg } from '../../did-ethr-resolver';
 import { Keys } from '../../keys';
+import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
+import { abi as payableAbi, bytecode as payableBytecode } from '../build/contracts/Payable.json';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -24,8 +25,9 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
   let creatorAddress: string;
-  const proxyFactory = new ContractFactory(abi, bytecode, creator);
+  const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  const payableFactory = new ContractFactory(payableAbi, payableBytecode, creator);
   let identity: string;
 
   beforeEach(async () => {
@@ -154,5 +156,18 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((owner: string) => {
         owner.should.equal(agentAddress);
       });
+  });
+
+  it('along with transaction a value may be send', async () => {
+    const payable = await (await payableFactory.deploy()).deployed();
+    const balanceBefore: number = await (await provider.getBalance(payable.address)).toNumber();
+    const pay = 1E3;
+    // console.log('.....balance before payMe():', balanceBefore);
+    const payMe: any = payableAbi.find((f) => f.name === 'payMe');
+    const data: string = web3.eth.abi.encodeFunctionCall(payMe, []);
+    await (await proxy.sendTransaction(data, payable.address, { value: pay })).wait();
+    const balanceAfter = await (await provider.getBalance(payable.address)).toNumber();
+    // console.log('.....balance after payMe():', balanceAfter);
+    expect(balanceAfter).equal(balanceBefore + pay);
   });
 });

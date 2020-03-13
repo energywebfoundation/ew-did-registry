@@ -29,13 +29,23 @@ contract ProxyIdentity {
         _;
     }
 
-    function sendTransaction(bytes memory _data, address to) public _owner {
+    function sendTransaction(bytes memory _data, address to)
+        public
+        payable
+        _owner
+    {
+        _sendTransaciton(_data, to, msg.value);
+    }
+
+    function _sendTransaciton(bytes memory _data, address to, uint256 value)
+        internal
+    {
         bool success;
         bytes memory data = _data;
         uint256 len = data.length;
         // solium-disable-next-line security/no-inline-assembly
         assembly {
-            success := call(100000, to, 0, add(data, 0x20), len, 0, 0)
+            success := call(gas, to, value, add(data, 0x20), len, 0, 0)
             if eq(success, 0) {
                 revert(0, 0)
             }
