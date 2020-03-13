@@ -89,7 +89,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     return nonOwned.sendTransaction(data, erc1056.address).should.be.rejectedWith('Only owner allowed');
   });
 
-  it('sendSignedTransaction with signed by the owner setAttribute() calldata should emit DIDAttributeChanged on ERC1056', (done) => {
+  it('sendSignedTransaction with signed by the owner setAttribute() calldata send from non-owner should emit DIDAttributeChanged on ERC1056', (done) => {
     erc1056.on('DIDAttributeChanged', (id, n, v, validTo, previouse) => {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
@@ -103,7 +103,8 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((flatSignature) => {
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        return proxy.sendSignedTransaction(data, erc1056.address, v, r, s);
+        const asNonOwner: Contract = proxy.connect(provider.getSigner(2));
+        return asNonOwner.sendSignedTransaction(data, erc1056.address, v, r, s);
       })
       .then((tx: any) => tx.wait());
   });
@@ -158,16 +159,14 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       });
   });
 
-  it('along with transaction a value may be send', async () => {
+  it('along with transaction a value can be send', async () => {
     const payable = await (await payableFactory.deploy()).deployed();
-    const balanceBefore: number = await (await provider.getBalance(payable.address)).toNumber();
+    const balanceBefore = (await provider.getBalance(payable.address)).toNumber();
     const pay = 1E3;
-    // console.log('.....balance before payMe():', balanceBefore);
     const payMe: any = payableAbi.find((f) => f.name === 'payMe');
     const data: string = web3.eth.abi.encodeFunctionCall(payMe, []);
     await (await proxy.sendTransaction(data, payable.address, { value: pay })).wait();
-    const balanceAfter = await (await provider.getBalance(payable.address)).toNumber();
-    // console.log('.....balance after payMe():', balanceAfter);
+    const balanceAfter = (await provider.getBalance(payable.address)).toNumber();
     expect(balanceAfter).equal(balanceBefore + pay);
   });
 });

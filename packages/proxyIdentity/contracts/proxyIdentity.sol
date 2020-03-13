@@ -34,10 +34,10 @@ contract ProxyIdentity {
         payable
         _owner
     {
-        _sendTransaciton(_data, to, msg.value);
+        _sendTransaction(_data, to, msg.value);
     }
 
-    function _sendTransaciton(bytes memory _data, address to, uint256 value)
+    function _sendTransaction(bytes memory _data, address to, uint256 value)
         internal
     {
         bool success;
@@ -66,7 +66,7 @@ contract ProxyIdentity {
         );
         address signer = ecrecover(hash, v, r, s);
         require(owner == signer, "Signature is not valid");
-        sendTransaction(data, to);
+        _sendTransaction(data, to, msg.value);
         emit SignedTransactionSend(msg.sender, signer, hash);
     }
 
