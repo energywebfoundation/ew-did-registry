@@ -21,10 +21,10 @@ contract ProxyIdentity {
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 10 * 60 * 1000;
 
-    event TransactionSent(bytes data, address to, bool success);
-    event ChangeOwner(address identity, address prev, address next);
-    event AddRecoveryAgent(address agent);
-    event RemoveRecoveryAgent(address agent);
+    event TransactionSent(bytes data, address to, uint256 value);
+    event OwnerChanged(address identity, address prev, address next);
+    event RecoveryAgentAdded(address agent);
+    event RecoveryAgentRemoved(address agent);
 
     constructor(address _erc1056) public {
         erc1056 = _erc1056;
@@ -44,13 +44,13 @@ contract ProxyIdentity {
         _;
     }
 
-    function sendTransaction(bytes memory _data, address to)
+    function sendTransaction(bytes memory _data, address to, uint256 value)
         public
         payable
         _owner
     {
         require(
-            _sendTransaction(_data, to, msg.value),
+            _sendTransaction(_data, to, value),
             "Can't send transaction"
         );
     }
@@ -65,7 +65,7 @@ contract ProxyIdentity {
         assembly {
             success := call(gas, to, value, add(data, 0x20), len, 0, 0)
         }
-        emit TransactionSent(_data, to, success);
+        emit TransactionSent(_data, to, value);
     }
 
     function sendSignedTransaction(
@@ -88,17 +88,21 @@ contract ProxyIdentity {
     }
 
     function addRecoveryAgent(address agent) public _owner {
+        _addRecoveryAgent(agent);
+    }
+
+    function _addRecoveryAgent(address agent) internal {
         recoveryAgents[agent] = true;
-        emit AddRecoveryAgent(agent);
+        emit RecoveryAgentAdded(agent);
     }
 
     function removeRecoveryAgent(address agent) public _recoveryAgent {
         recoveryAgents[agent] = false;
-        emit RemoveRecoveryAgent(agent);
+        emit RecoveryAgentRemoved(agent);
     }
 
-    function changeOwner() external _recoveryAgent {
-        _changeOwner(msg.sender);
+    function changeOwner(address newOwner) external _recoveryAgent {
+        _changeOwner(newOwner);
     }
 
     function _changeOwner(address newOwner) internal {
@@ -108,9 +112,9 @@ contract ProxyIdentity {
             _revokeDelegate(owner);
         }
         owner = newOwner;
-        addRecoveryAgent(owner);
-        _addDelegate(owner);
-        emit ChangeOwner(address(this), oldOwner, newOwner);
+        _addRecoveryAgent(newOwner);
+        _addDelegate(newOwner);
+        emit OwnerChanged(address(this), oldOwner, newOwner);
     }
 
     function _addDelegate(address delegate) internal {

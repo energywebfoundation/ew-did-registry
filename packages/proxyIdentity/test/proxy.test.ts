@@ -4,11 +4,10 @@ import {
 import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Signature } from 'ethers/utils';
+import {BigNumber, Signature} from 'ethers/utils';
 import { ethrReg } from '../../did-ethr-resolver';
 import { Keys } from '../../keys';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
-import { abi as payableAbi, bytecode as payableBytecode } from '../build/contracts/Payable.json';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -27,10 +26,11 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let creatorAddress: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
-  const payableFactory = new ContractFactory(payableAbi, payableBytecode, creator);
   let identity: string;
+  let accounts: string[];
 
   beforeEach(async () => {
+    accounts = await web3.eth.getAccounts()
     creatorAddress = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
     proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
@@ -59,7 +59,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((owner: string) => {
         const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
         const data: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [owner, newOwner]);
-        return proxy.sendTransaction(data, erc1056.address);
+        return proxy.sendTransaction(data, erc1056.address, 0);
       })
       .then((tx: any) => tx.wait())
       .then(() => erc1056.identityOwner(identity))
@@ -77,7 +77,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
     const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
     const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
-    proxy.sendTransaction(data, erc1056.address).then((tx: any) => tx.wait());
+    proxy.sendTransaction(data, erc1056.address, 0).then((tx: any) => tx.wait());
   });
 
   it('sendTransaction with setAttribute() calldata from non-owner should revert', () => {
@@ -86,7 +86,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
     const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
     const nonOwned = proxy.connect(provider.getSigner(1));
-    return nonOwned.sendTransaction(data, erc1056.address).should.be.rejectedWith('Only owner allowed');
+    return nonOwned.sendTransaction(data, erc1056.address, 0).should.be.rejectedWith('Only owner allowed');
   });
 
   it('sendSignedTransaction with signed by the owner setAttribute() calldata send from non-owner should emit DIDAttributeChanged on ERC1056', (done) => {
@@ -127,12 +127,13 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
   it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
     const agent = provider.getSigner(1);
+    const newOwner = accounts[5];
     let agentAddress: string;
     agent.getAddress()
       .then((address) => {
         agentAddress = address;
         erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
-          if (delegate === agentAddress) {
+          if (delegate === newOwner) {
             erc1056.removeAllListeners('DIDDelegateChanged');
             done();
           }
@@ -146,7 +147,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       })
       .then(() => {
         const asAgent = proxy.connect(agent);
-        return asAgent.changeOwner();
+        return asAgent.changeOwner(newOwner);
       })
       .then((tx: any) => {
         return tx.wait();
@@ -155,24 +156,37 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
         return proxy.owner();
       })
       .then((owner: string) => {
-        owner.should.equal(agentAddress);
+        owner.should.equal(newOwner);
       });
   });
 
   it('changeOwner() called by non-recovery agent should revert', async () => {
     const agent = provider.getSigner(2);
     const asAgent = proxy.connect(agent);
-    return asAgent.changeOwner().should.be.rejectedWith('Only recovery agent can change the owner');
+    asAgent.changeOwner(await agent.getAddress()).should.be.rejectedWith('Only recovery agent can change the owner');
   });
 
   it('along with transaction a value can be send', async () => {
-    const payable = await (await payableFactory.deploy()).deployed();
-    const balanceBefore = (await provider.getBalance(payable.address)).toNumber();
-    const pay = 1E3;
-    const payMe: any = payableAbi.find((f) => f.name === 'payMe');
-    const data: string = web3.eth.abi.encodeFunctionCall(payMe, []);
-    await (await proxy.sendTransaction(data, payable.address, { value: pay })).wait();
-    const balanceAfter = (await provider.getBalance(payable.address)).toNumber();
-    expect(balanceAfter).equal(balanceBefore + pay);
+    const payee = accounts[4]
+    const balance0 = new BigNumber(await provider.getBalance(payee));
+    const pay = '10000000000000000000';
+    await (await proxy.sendTransaction('0x0', payee, pay, { value: (new BigNumber(pay)).toHexString() })).wait();
+    const balance1 = (await provider.getBalance(payee)).toString();
+    expect(balance1.toString()).equal(balance0.add(pay).toString())
   });
+
+  it('pre-existing balance can be sent', async () => {
+    const dest = accounts[2]
+    const pay = '10000000000000000000';
+    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest))
+    await web3.eth.sendTransaction({
+      from: accounts[3],
+      to: proxy.address,
+      value: (new BigNumber(pay)).toHexString()
+    })
+    await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
+    const balance1 = await web3.eth.getBalance(dest)
+    expect(balance1.toString()).equal(balance0.add(pay).toString())
+  });
+
 });
