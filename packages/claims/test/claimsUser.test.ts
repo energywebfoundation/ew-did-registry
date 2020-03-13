@@ -1,12 +1,11 @@
 import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
+import { Resolver, Operator } from '../../did-ethr-resolver';
 import {
-  Resolver,
-  Operator,
   IOperator,
   IResolver,
-} from '@ew-did-registry/did-resolver';
-import { Networks } from '@ew-did-registry/did';
+} from '../../did-resolver-interface';
+import { Networks } from '../../did';
 import { decrypt } from 'eciesjs';
 import { ClaimsUser } from '../src/claimsUser';
 import { IPrivateClaim, IProofClaim } from '../src/models';

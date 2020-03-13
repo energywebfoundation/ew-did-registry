@@ -24,8 +24,8 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did-resolver": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0",
-    "ethers": "^4.0.41"
+    "@ew-did-registry/did-ethr-resolver": "^1.0.0",
+    "@ew-did-registry/did-resolver-interface": "^1.0.0",
+    "@ew-did-registry/keys": "^1.0.0"
   }
 }

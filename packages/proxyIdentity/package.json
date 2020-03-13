@@ -1,5 +1,5 @@
 {
-  "name": "proxyidentity",
+  "name": "@ew-did-registry/proxyidentity",
   "version": "1.0.0",
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "index.js",

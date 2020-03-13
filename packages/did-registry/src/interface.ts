@@ -1,7 +1,7 @@
 import { IDID, Networks } from '@ew-did-registry/did';
 import { IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { IClaimsFactory } from '@ew-did-registry/claims';
-import { IResolver } from '@ew-did-registry/did-resolver';
+import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
 
 /**

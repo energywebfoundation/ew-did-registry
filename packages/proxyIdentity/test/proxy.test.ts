@@ -6,7 +6,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Signature } from 'ethers/utils';
 import { abi, bytecode } from '../build/contracts/ProxyIdentity.json';
-import { ethrReg } from '../../did-resolver';
+import { ethrReg } from '../../did-ethr-resolver';
 import { Keys } from '../../keys';
 
 chai.use(chaiAsPromised);

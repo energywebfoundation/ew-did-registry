@@ -1,7 +1,12 @@
 import { expect } from 'chai';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import {
-  Algorithms, DIDAttribute, Encoding, IOperator, Operator, PubKeyType,
-} from '@ew-did-registry/did-resolver';
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IOperator,
+  PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import DIDDocumentFull from '../src/full/documentFull';
 import { getSettings } from '../../../tests/init-ganache';

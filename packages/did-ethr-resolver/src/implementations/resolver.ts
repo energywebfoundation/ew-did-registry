@@ -4,7 +4,6 @@ import {
   providers,
   Contract,
 } from 'ethers';
-import { IResolver } from '../interface';
 import {
   IDIDDocument,
   IDIDLogData,
@@ -12,9 +11,10 @@ import {
   ProviderTypes,
   DelegateTypes,
   IPublicKey,
+  IResolver,
   IServiceEndpoint,
   IAuthentication,
-} from '../models';
+} from '@ew-did-registry/did-resolver-interface';
 import { DIDPattern } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
