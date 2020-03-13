@@ -71,7 +71,7 @@ export class ProxyOperator extends Operator {
       validity || overrides,
       validity && overrides,
     ];
-    const argumentsTypes = ['address', 'address', 'address', 'int256', 'bytes'];
+    const argumentsTypes = ['address', 'bytes32', 'bytes', 'int256'];
     try {
       let signature: string;
       if (didAttribute === PublicKey
@@ -166,28 +166,28 @@ export class ProxyOperator extends Operator {
   //   }
 
   // protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
-  //   const sender = this._wallet.address;
-  // //     let nonce = await this.contract.provider.getTransactionCount(sender);
-  // //     for (const service of services) {
-  // //       const match = service.id.match(serviceIdPattern);
-  // //       const type = match[1] as PubKeyType;
-  // //       const value = service.serviceEndpoint;
-  // //       const didAttribute = DIDAttribute.ServicePoint;
-  // //       const revoked = await this._sendTransaction(
-  // //         this.contract.revokeAttribute,
-  // //         did,
-  // //         didAttribute,
-  // //         {
-  // //           type, value,
-  // //         },
-  // //         null,
-  // //         { nonce },
-  // //       );
-  // //       if (!revoked) {
-  // //         return false;
-  // //       }
-  // //       nonce += 1;
-  // //     }
-  // //     return true;
-  // //   }
+    // const sender = this._wallet.address;
+  //     let nonce = await this.contract.provider.getTransactionCount(sender);
+  //     for (const service of services) {
+  //       const match = service.id.match(serviceIdPattern);
+  //       const type = match[1] as PubKeyType;
+  //       const value = service.serviceEndpoint;
+  //       const didAttribute = DIDAttribute.ServicePoint;
+  //       const revoked = await this._sendTransaction(
+  //         this.contract.revokeAttribute,
+  //         did,
+  //         didAttribute,
+  //         {
+  //           type, value,
+  //         },
+  //         null,
+  //         { nonce },
+  //       );
+  //       if (!revoked) {
+  //         return false;
+  //       }
+  //       nonce += 1;
+  //     }
+  //     return true;
+  //   }
 }
