@@ -1,16 +1,32 @@
 pragma solidity 0.5.8;
 
+interface IERC1056 {
+    function addDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate,
+        uint256 validity
+    ) external;
+
+    function revokeDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate
+    ) external;
+}
+
 contract ProxyIdentity {
     address public owner;
     address erc1056;
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 10 * 60 * 1000;
 
-    event TransactionSend(bytes data, address to, bool success);
+    event TransactionSent(bytes data, address to, bool success);
     event ChangeOwner(address identity, address prev, address next);
     event AddRecoveryAgent(address agent);
+    event RemoveRecoveryAgent(address agent);
 
-    constructor(address _erc1056) public payable {
+    constructor(address _erc1056) public {
         erc1056 = _erc1056;
         _changeOwner(msg.sender);
     }
@@ -49,7 +65,7 @@ contract ProxyIdentity {
         assembly {
             success := call(gas, to, value, add(data, 0x20), len, 0, 0)
         }
-        emit TransactionSend(_data, to, success);
+        emit TransactionSent(_data, to, success);
     }
 
     function sendSignedTransaction(
@@ -71,9 +87,14 @@ contract ProxyIdentity {
         );
     }
 
-    function addRecoveryAgent(address agent) external _owner {
+    function addRecoveryAgent(address agent) public _owner {
         recoveryAgents[agent] = true;
         emit AddRecoveryAgent(agent);
+    }
+
+    function removeRecoveryAgent(address agent) public _recoveryAgent {
+        recoveryAgents[agent] = false;
+        emit RemoveRecoveryAgent(agent);
     }
 
     function changeOwner() external _recoveryAgent {
@@ -81,28 +102,28 @@ contract ProxyIdentity {
     }
 
     function _changeOwner(address newOwner) internal {
-        emit ChangeOwner(address(this), owner, newOwner);
+        address oldOwner = owner;
+        if (owner != address(0x0)) {
+            removeRecoveryAgent(owner);
+            _revokeDelegate(owner);
+        }
         owner = newOwner;
-        _addOwnerToDelegates();
+        addRecoveryAgent(owner);
+        _addDelegate(owner);
+        emit ChangeOwner(address(this), oldOwner, newOwner);
     }
 
-    function _addOwnerToDelegates() internal {
-        bytes32 delegateType;
-        bytes memory bytesOfType = bytes("sigAugh");
-        // solium-disable-next-line security/no-inline-assembly
-        assembly {
-            delegateType := mload(add(bytesOfType, 0x20))
-        }
-        bytes memory payload = abi.encodeWithSignature(
-            "addDelegate(address,bytes32,address,uint256)",
+    function _addDelegate(address delegate) internal {
+        IERC1056(erc1056).addDelegate(
             address(this),
-            delegateType,
-            owner,
+            "sigAuth",
+            delegate,
             defaultValidity
         );
-        // solium-disable-next-line security/no-low-level-calls
-        (bool success, ) = erc1056.call(payload);
-        require(success, "Can't add owner to delegates");
+    }
+
+    function _revokeDelegate(address delegate) internal {
+        IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
     }
 
     function() external payable {}

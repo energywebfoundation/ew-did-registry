@@ -33,7 +33,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   beforeEach(async () => {
     creatorAddress = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    proxy = await (await proxyFactory.deploy(erc1056.address, { value: 1E15 })).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
     identity = proxy.address;
   });
 
@@ -157,6 +157,12 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((owner: string) => {
         owner.should.equal(agentAddress);
       });
+  });
+
+  it('changeOwner() called by non-recovery agent should revert', async () => {
+    const agent = provider.getSigner(2);
+    const asAgent = proxy.connect(agent);
+    return asAgent.changeOwner().should.be.rejectedWith('Only recovery agent can change the owner');
   });
 
   it('along with transaction a value can be send', async () => {
