@@ -57,9 +57,9 @@ export class ProxyOperator extends Operator {
     },
   ): Promise<boolean> {
     const identity = this._parseDid(did);
-    const attributeName = this.contract._composeAttributeName(didAttribute, updateData);
+    const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-    const bytesOfValue = this.contract._hexify(
+    const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value
         : updateData.delegate,

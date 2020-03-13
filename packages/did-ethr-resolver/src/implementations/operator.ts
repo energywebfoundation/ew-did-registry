@@ -442,7 +442,7 @@ export class Operator extends Resolver implements IOperator {
    * @param updateData
    * @private
    */
-  private _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
+  protected _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
     const {
       algo, type, encoding,
     } = updateData;
@@ -458,7 +458,7 @@ export class Operator extends Resolver implements IOperator {
     }
   }
 
-  private _hexify(value: string | object): string {
+  protected _hexify(value: string | object): string {
     if (typeof value === 'string' && value.startsWith('0x')) {
       return value;
     }
