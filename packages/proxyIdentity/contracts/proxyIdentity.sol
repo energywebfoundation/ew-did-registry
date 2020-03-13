@@ -7,7 +7,6 @@ contract ProxyIdentity {
     uint256 defaultValidity = 10 * 60 * 1000;
 
     event TransactionSend(bytes data, address to, bool success);
-    event SignedTransactionSend(address sender, address signer, bytes32 hash);
     event ChangeOwner(address identity, address prev, address next);
     event AddRecoveryAgent(address agent);
 
@@ -34,21 +33,21 @@ contract ProxyIdentity {
         payable
         _owner
     {
-        _sendTransaction(_data, to, msg.value);
+        require(
+            _sendTransaction(_data, to, msg.value),
+            "Can't send transaction"
+        );
     }
 
     function _sendTransaction(bytes memory _data, address to, uint256 value)
         internal
+        returns (bool success)
     {
-        bool success;
         bytes memory data = _data;
         uint256 len = data.length;
         // solium-disable-next-line security/no-inline-assembly
         assembly {
             success := call(gas, to, value, add(data, 0x20), len, 0, 0)
-            if eq(success, 0) {
-                revert(0, 0)
-            }
         }
         emit TransactionSend(_data, to, success);
     }
@@ -66,8 +65,10 @@ contract ProxyIdentity {
         );
         address signer = ecrecover(hash, v, r, s);
         require(owner == signer, "Signature is not valid");
-        _sendTransaction(data, to, msg.value);
-        emit SignedTransactionSend(msg.sender, signer, hash);
+        require(
+            _sendTransaction(data, to, msg.value),
+            "Can't send transaction"
+        );
     }
 
     function addRecoveryAgent(address agent) external _owner {
