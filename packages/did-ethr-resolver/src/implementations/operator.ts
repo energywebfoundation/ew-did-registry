@@ -40,7 +40,7 @@ export class Operator extends Resolver implements IOperator {
 
   private readonly _keys: IKeys;
 
-  private readonly _wallet: Wallet;
+  protected readonly _wallet: Wallet;
 
   /**
    * Ethereum blockchain provider
@@ -275,7 +275,7 @@ export class Operator extends Resolver implements IOperator {
    * @param publicKeys
    * @private
    */
-  private async _revokeAuthentications(
+  protected async _revokeAuthentications(
     did: string,
     auths: IAuthentication[],
     publicKeys: IPublicKey[],
@@ -317,7 +317,7 @@ export class Operator extends Resolver implements IOperator {
    * @param publicKeys
    * @private
    */
-  private async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
+  protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const pk of publicKeys) {
@@ -359,7 +359,7 @@ export class Operator extends Resolver implements IOperator {
    * @param services
    * @private
    */
-  private async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
+  protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
     const sender = this._wallet.address;
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
@@ -406,7 +406,7 @@ export class Operator extends Resolver implements IOperator {
       nonce?: number;
     },
   ): Promise<boolean> {
-    const identity = Operator._parseDid(did);
+    const identity = this._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
@@ -491,7 +491,7 @@ export class Operator extends Resolver implements IOperator {
    * @param did
    * @private
    */
-  private static _parseDid(did: string): string {
+  private _parseDid(did: string): string {
     if (!did.match(DIDPattern)) {
       throw new Error('Invalid DID');
     }
