@@ -69,7 +69,6 @@ export class ProxyOperator extends Operator {
       bytesOfAttribute,
       bytesOfValue,
       validity || overrides,
-      validity && overrides,
     ];
     const argumentsTypes = ['address', 'bytes32', 'bytes', 'int256'];
     try {
@@ -94,100 +93,4 @@ export class ProxyOperator extends Operator {
     }
     return true;
   }
-
-  // protected async _revokeAuthentications(
-  //   did: string,
-  //   auths: IAuthentication[],
-  //   publicKeys: IPublicKey[],
-  // ): Promise<boolean> {
-  //   const sender = this._wallet.address;
-  // let nonce = await this.contract.provider.getTransactionCount(sender);
-  //   // eslint-disable-next-line no-restricted-syntax
-  //   const method = this.contract.revokeDelegate;
-  //   for (const pk of publicKeys) {
-  //     const match = pk.id.match(delegatePubKeyIdPattern);
-  //     // eslint-disable-next-line no-continue
-  //     if (!match) continue;
-  //     const didAttribute = Authenticate;
-  //     const delegateAddress = pk.ethereumAddress;
-  //     const updateData: IUpdateData = {
-  //       algo: Algorithms.ED25519,
-  //       type: auths.find(
-  //         (auth) => auth.publicKey === match[0],
-  //       ) ? PubKeyType.SignatureAuthentication2018
-  //         : PubKeyType.VerificationKey2018,
-  //       encoding: Encoding.HEX,
-  //       delegate: delegateAddress,
-  //     };
-  //     const revoked = await this._sendTransaction(
-  //       method, did, didAttribute, updateData, null, { nonce },
-  //     );
-  //     if (!revoked) {
-  //       return false;
-  //     }
-  //     nonce += 1;
-  //   }
-  //   return true;
-  // }
-
-  //   protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
-  //     const sender = this._wallet.address;
-  //     let nonce = await this.contract.provider.getTransactionCount(sender);
-  //     for (const pk of publicKeys) {
-  //       const match = pk.id.match(pubKeyIdPattern);
-  //       // eslint-disable-next-line no-continue
-  //       if (!match) continue;
-  //       const didAttribute = DIDAttribute.PublicKey;
-  //       const encodings = Object.values(Encoding);
-  //       const encoding = encodings.find((e) => {
-  //         const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
-  //         return pk[`publicKey${suffix}`];
-  //       });
-  //       if (!encoding) {
-  //         throw new Error('Unknown encoding');
-  //       }
-  //       const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
-  //       const updateData: IUpdateData = {
-  //         algo: match[1] as Algorithms,
-  //         type: match[2] as PubKeyType,
-  //         encoding,
-  //         value,
-  //       };
-  //       const method = this.contract.revokeAttribute;
-  //       const revoked = await this._sendTransaction(
-  //         method, did, didAttribute, updateData, null, { nonce },
-  //       );
-  //       if (!revoked) {
-  //         return false;
-  //       }
-  //       nonce += 1;
-  //     }
-  //     return true;
-  //   }
-
-  // protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
-    // const sender = this._wallet.address;
-  //     let nonce = await this.contract.provider.getTransactionCount(sender);
-  //     for (const service of services) {
-  //       const match = service.id.match(serviceIdPattern);
-  //       const type = match[1] as PubKeyType;
-  //       const value = service.serviceEndpoint;
-  //       const didAttribute = DIDAttribute.ServicePoint;
-  //       const revoked = await this._sendTransaction(
-  //         this.contract.revokeAttribute,
-  //         did,
-  //         didAttribute,
-  //         {
-  //           type, value,
-  //         },
-  //         null,
-  //         { nonce },
-  //       );
-  //       if (!revoked) {
-  //         return false;
-  //       }
-  //       nonce += 1;
-  //     }
-  //     return true;
-  //   }
 }
