@@ -491,7 +491,7 @@ export class Operator extends Resolver implements IOperator {
    * @param did
    * @private
    */
-  private _parseDid(did: string): string {
+  protected _parseDid(did: string): string {
     if (!did.match(DIDPattern)) {
       throw new Error('Invalid DID');
     }

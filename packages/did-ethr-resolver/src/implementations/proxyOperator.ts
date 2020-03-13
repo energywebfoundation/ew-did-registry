@@ -56,7 +56,7 @@ export class ProxyOperator extends Operator {
       nonce?: number;
     },
   ): Promise<boolean> {
-    const identity = this.contract._parseDid(did);
+    const identity = this._parseDid(did);
     const attributeName = this.contract._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
     const bytesOfValue = this.contract._hexify(
