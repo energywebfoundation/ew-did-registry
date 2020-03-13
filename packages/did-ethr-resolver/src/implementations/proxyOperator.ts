@@ -64,12 +64,14 @@ export class ProxyOperator extends Operator {
         ? updateData.value
         : updateData.delegate,
     );
-    const argums = [identity,
+    const passedArguments = [
+      identity,
       bytesOfAttribute,
       bytesOfValue,
       validity || overrides,
       validity && overrides,
     ];
+    const argumentsTypes = ['address', 'address', 'address', 'int256', 'bytes'];
     try {
       let signature: string;
       if (didAttribute === PublicKey
@@ -78,7 +80,10 @@ export class ProxyOperator extends Operator {
       }
       signature = 'addDelegate';
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
-      const attribute: string = ethers.utils.defaultAbiCoder.encode(['bytes32'], argums);
+      const attribute: string = ethers.utils.defaultAbiCoder.encode(
+        argumentsTypes,
+        passedArguments,
+      );
       const data: string = ethers.utils.defaultAbiCoder.encode(
         signatureAbi,
         [attribute],
@@ -96,7 +101,7 @@ export class ProxyOperator extends Operator {
   //   publicKeys: IPublicKey[],
   // ): Promise<boolean> {
   //   const sender = this._wallet.address;
-  //   let nonce = await this.contract.provider.getTransactionCount(sender);
+  // let nonce = await this.contract.provider.getTransactionCount(sender);
   //   // eslint-disable-next-line no-restricted-syntax
   //   const method = this.contract.revokeDelegate;
   //   for (const pk of publicKeys) {
