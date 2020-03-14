@@ -1,15 +1,30 @@
 pragma solidity 0.5.8;
 
+interface IERC1056 {
+    function addDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate,
+        uint256 validity
+    ) external;
+
+    function revokeDelegate(
+        address identity,
+        bytes32 delegateType,
+        address delegate
+    ) external;
+}
+
 contract ProxyIdentity {
     address public owner;
     address erc1056;
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 10 * 60 * 1000;
 
-    event TransactionSend(bytes data, address to, bool success);
-    event SignedTransactionSend(address sender, address signer, bytes32 hash);
-    event ChangeOwner(address identity, address prev, address next);
-    event AddRecoveryAgent(address agent);
+    event TransactionSent(bytes data, address to, uint256 value);
+    event OwnerChanged(address identity, address prev, address next);
+    event RecoveryAgentAdded(address agent);
+    event RecoveryAgentRemoved(address agent);
 
     constructor(address _erc1056) public payable {
         erc1056 = _erc1056;
@@ -29,18 +44,28 @@ contract ProxyIdentity {
         _;
     }
 
-    function sendTransaction(bytes memory _data, address to) public _owner {
-        bool success;
+    function sendTransaction(bytes memory _data, address to, uint256 value)
+        public
+        payable
+        _owner
+    {
+        require(
+            _sendTransaction(_data, to, value),
+            "Can't send transaction"
+        );
+    }
+
+    function _sendTransaction(bytes memory _data, address to, uint256 value)
+        internal
+        returns (bool success)
+    {
         bytes memory data = _data;
         uint256 len = data.length;
         // solium-disable-next-line security/no-inline-assembly
         assembly {
-            success := call(100000, to, 0, add(data, 0x20), len, 0, 0)
-            if eq(success, 0) {
-                revert(0, 0)
-            }
+            success := call(gas, to, value, add(data, 0x20), len, 0, 0)
         }
-        emit TransactionSend(_data, to, success);
+        emit TransactionSent(_data, to, value);
     }
 
     function sendSignedTransaction(
@@ -56,17 +81,24 @@ contract ProxyIdentity {
         );
         address signer = ecrecover(hash, v, r, s);
         require(owner == signer, "Signature is not valid");
-        sendTransaction(data, to);
-        emit SignedTransactionSend(msg.sender, signer, hash);
+        require(
+            _sendTransaction(data, to, msg.value),
+            "Can't send transaction"
+        );
     }
 
-    function addRecoveryAgent(address agent) external _owner {
+    function addRecoveryAgent(address agent) public _owner {
+        _addRecoveryAgent(agent);
+    }
+
+    function _addRecoveryAgent(address agent) internal {
         recoveryAgents[agent] = true;
-        emit AddRecoveryAgent(agent);
+        emit RecoveryAgentAdded(agent);
     }
 
-    function changeOwner() external _recoveryAgent {
-        _changeOwner(msg.sender);
+    function removeRecoveryAgent(address agent) public _recoveryAgent {
+        recoveryAgents[agent] = false;
+        emit RecoveryAgentRemoved(agent);
     }
 
     /**
@@ -77,28 +109,28 @@ contract ProxyIdentity {
     }
 
     function _changeOwner(address newOwner) internal {
-        emit ChangeOwner(address(this), owner, newOwner);
+        address oldOwner = owner;
+        if (owner != address(0x0)) {
+            removeRecoveryAgent(owner);
+            _revokeDelegate(owner);
+        }
         owner = newOwner;
-        _addOwnerToDelegates();
+        _addRecoveryAgent(newOwner);
+        _addDelegate(newOwner);
+        emit OwnerChanged(address(this), oldOwner, newOwner);
     }
 
-    function _addOwnerToDelegates() internal {
-        bytes32 delegateType;
-        bytes memory bytesOfType = bytes("sigAugh");
-        // solium-disable-next-line security/no-inline-assembly
-        assembly {
-            delegateType := mload(add(bytesOfType, 0x20))
-        }
-        bytes memory payload = abi.encodeWithSignature(
-            "addDelegate(address,bytes32,address,uint256)",
+    function _addDelegate(address delegate) internal {
+        IERC1056(erc1056).addDelegate(
             address(this),
-            delegateType,
-            owner,
+            "sigAuth",
+            delegate,
             defaultValidity
         );
-        // solium-disable-next-line security/no-low-level-calls
-        (bool success, ) = erc1056.call(payload);
-        require(success, "Can't add owner to delegates");
+    }
+
+    function _revokeDelegate(address delegate) internal {
+        IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
     }
 
     function() external payable {}
