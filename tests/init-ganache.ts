@@ -20,6 +20,7 @@ export const getSettings = async (fillAccounts: Array<string>) => {
   const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
     new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
   const registry = await registryFactory.deploy();
+  // @TODO: deploy proxy factory
   const resolverSetting: IResolverSettings = {
     abi: defaultResolverSettings.abi,
     provider: defaultResolverSettings.provider,

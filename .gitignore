@@ -5,5 +5,6 @@ package-lock.json
 **/*.map
 docs
 build
+!packages/proxyIdentity/build
 dist
 .npmrc
