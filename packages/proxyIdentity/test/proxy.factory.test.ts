@@ -38,7 +38,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
             done();
           })
           .catch((e: Error) => {
-            expect.fail(e);
+            expect.fail(e.message);
           })
     });
     proxyFactory.create({value: 1E15})
