@@ -125,7 +125,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .should.be.rejectedWith('Signature is not valid');
   });
 
-  it.skip('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
+  it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
     const agent = provider.getSigner(1);
     const newOwner = accounts[5];
     let agentAddress: string;
@@ -157,7 +157,8 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       })
       .then((owner: string) => {
         owner.should.equal(newOwner);
-      });
+      })
+        .catch(e => expect.fail(e));
   });
 
   it('changeOwner() called by non-recovery agent should revert', async () => {

@@ -23,20 +23,27 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
     proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, { value: 1E15 })).deployed();
   });
 
-  it('create() should set sender as owner of created proxy', (done) => {
+  it('create() should set sender as owner of created proxy and proxyFactory as creator', (done) => {
     proxyFactory.on('ProxyCreated', (proxyAddress: string) => {
       // console.log(`>>> proxy created on ${proxyAddress}`);
       proxyFactory.removeAllListeners('ProxyCreated');
       const proxy = new Contract(proxyAddress, proxyAbi, deployer);
       proxy.owner()
-        .then((proxyOwner: string) => {
-          expect(proxyOwner).equal(deployerAddress);
-          done();
-        });
+          .then((proxyOwner: string) => {
+            expect(proxyOwner).equal(deployerAddress);
+            return proxy.creator()
+          })
+          .then((creator: string) => {
+            expect(creator).equal(proxyFactory.address);
+            done();
+          })
+          .catch((e: Error) => {
+            expect.fail(e);
+          })
     });
-    proxyFactory.create({ value: 1E15 })
-      .then((tx: any) => {
-        tx.wait();
-      });
+    proxyFactory.create({value: 1E15})
+        .then((tx: any) => {
+          tx.wait();
+        });
   });
 });

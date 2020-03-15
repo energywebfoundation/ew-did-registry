@@ -16,6 +16,7 @@ interface IERC1056 {
 }
 
 contract ProxyIdentity {
+    address public creator;
     address public owner;
     address erc1056;
     mapping(address => bool) recoveryAgents;
@@ -28,6 +29,7 @@ contract ProxyIdentity {
 
     constructor(address _erc1056) public payable {
         erc1056 = _erc1056;
+        creator = msg.sender;
         _changeOwner(msg.sender);
     }
 
@@ -104,7 +106,7 @@ contract ProxyIdentity {
     /**
     * Used by the proxy factory to make sender the owner
      */
-    function changeOwner(address newOwner) public _owner {
+    function changeOwner(address newOwner) public  _recoveryAgent{
         _changeOwner(newOwner);
     }
 
