@@ -1,22 +1,25 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
-import { ProxyOperator } from '../src'
+import { Wallet, ContractFactory, providers } from 'ethers';
+import { ProxyOperator, ethrReg } from '../src'
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IUpdateData,
   PubKeyType,
-  IAuthentication, 
-  IResolverSettings, 
+  IAuthentication,
+  IResolverSettings,
   IDIDDocument,
   IPublicKey,
   IServiceEndpoint,
 } from '@ew-did-registry/did-resolver-interface';
 import { getSettings } from '../../../tests/init-ganache';
+import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../../proxyIdentity/build/contracts/ProxyFactory.json';
+import { JsonRpcProvider } from 'ethers/providers';
 
+const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 const { fail } = assert;
 describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
@@ -33,8 +36,16 @@ describe('[DID-PROXY-OPERATOR]', function () {
   before(async () => {
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     console.log(`registry: ${operatorSetting.address}`);
+    const provider = new JsonRpcProvider('http://localhost:8544');
+    const deployer: providers.JsonRpcSigner = provider.getSigner(0);
+    const erc1056Factory = new ContractFactory(abi1056, bytecode1056, deployer);
+    const erc1056 = await (await erc1056Factory.deploy()).deployed();
+    const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
+    const proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, { value: 100000 })).deployed();
+    console.log(`proxy: ${proxyFactory.address}`);
 
-    operator = new ProxyOperator(keys, operatorSetting);
+
+    operator = new ProxyOperator(keys, operatorSetting, proxyFactory);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -45,6 +56,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: Encoding.HEX,
       value: `0x${new Keys().publicKey}`,
     };
+
     await operator.update(did, attribute, updateData);
     const document: IDIDDocument = await operator.read(did) as IDIDDocument;
     expect(document.id).equal(did);

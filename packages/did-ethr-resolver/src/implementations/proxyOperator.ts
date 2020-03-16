@@ -9,14 +9,13 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
-import { BlockTag } from 'ethers/providers';
 import {
   ethrReg,
   abi1056,
   defaultProvider,
 } from '../constants';
 import { Operator } from './operator';
-import { abi as proxyAbi, bytecode as proxyBytecode } from '../constants/proxyIdentity.json';
+import { abi as proxyAbi } from '../../../proxyIdentity/build/contracts/ProxyIdentity.json';
 
 const { PublicKey, ServicePoint, Authenticate } = DIDAttribute;
 
@@ -27,13 +26,13 @@ export class ProxyOperator extends Operator {
 
   private web3: Web3;
 
-  constructor(keys: IKeys, settings: IResolverSettings) {
+  constructor(keys: IKeys, settings: IResolverSettings, proxyFactory: Contract = null) {
     super(keys, settings);
     const { address, abi } = this.settings;
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this.contract = new Contract(address, abi, wallet);
-    this.proxy = new Contract(address, proxyAbi, wallet);
+    this.proxy = new Contract(proxyFactory.address, proxyAbi, wallet);
     this.web3 = new Web3(defaultProvider.uriOrInfo);
   }
 
@@ -45,10 +44,14 @@ export class ProxyOperator extends Operator {
     const bytesType = ethers.utils.formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
-    const argumentsTypes = ['address', 'bytes32', 'address'];
-    const passedArguments = [identityAddress, bytesType, delegateAddress];
+
+    const passedArguments = {
+      identity: { value: identityAddress, type: 'address' },
+      bytesType: { value: bytesType, type: 'bytes32' },
+      delegate: { value: delegateAddress, type: 'address' },
+    };
     try {
-      this.encodeProxyTransaction('DIDDelegateChanged', argumentsTypes, passedArguments);
+      this.encodeProxyTransaction('changeDelegate', passedArguments);
     } catch (error) {
       throw new Error(error);
     }
@@ -64,11 +67,14 @@ export class ProxyOperator extends Operator {
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = ethers.utils.formatBytes32String(attribute);
     const bytesValue = this._hexify(updateData.value);
-    const argumentsTypes = ['address', 'bytes32', 'bytes'];
-    const passedArguments = [identityAddress, bytesType, bytesValue];
+    const passedArguments = {
+      identity: { value: identityAddress, type: 'address' },
+      bytesType: { value: bytesType, type: 'bytes32' },
+      bytesValue: { value: bytesValue, type: 'bytes' },
+    };
 
     try {
-      this.encodeProxyTransaction('DIDAttributeChanged', argumentsTypes, passedArguments);
+      this.encodeProxyTransaction('changeAttribute', passedArguments);
     } catch (error) {
       throw new Error(error);
     }
@@ -79,13 +85,15 @@ export class ProxyOperator extends Operator {
     identityDID: string,
     newOwnerDid: string,
   ): Promise<boolean> {
-    console.log(identityDID, newOwnerDid);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = newOwnerDid.split(':');
-    const argumentsTypes = ['address', 'address', 'uint256'];
-    const passedArguments = [identityAddress, delegateAddress, 1];
+    const passedArguments = {
+      identity: { value: identityAddress, type: 'address' },
+      delegate: { value: delegateAddress, type: 'address' },
+      val: { value: 0, type: 'int' },
+    };
     try {
-      this.encodeProxyTransaction('DIDOwnerChanged', argumentsTypes, passedArguments);
+      this.encodeProxyTransaction('changeOwner', passedArguments);
     } catch (error) {
       throw new Error(error);
     }
@@ -110,13 +118,14 @@ export class ProxyOperator extends Operator {
         ? updateData.value
         : updateData.delegate,
     );
-    const passedArguments = [
-      identity,
-      bytesOfAttribute,
-      bytesOfValue,
-      validity,
-    ];
-    const argumentsTypes = ['address', 'bytes32', 'bytes', 'uint256'];
+
+    const passedArguments = {
+      identity: { value: identity, type: 'address' },
+      bytesOfAttribute: { value: bytesOfAttribute, type: 'bytes32' },
+      bytesOfValue: { value: bytesOfValue, type: 'bytes' },
+      validity: { value: validity, type: 'uint256' },
+    };
+
     try {
       let signature: string;
       if (didAttribute === PublicKey
@@ -125,23 +134,38 @@ export class ProxyOperator extends Operator {
       } else {
         signature = 'addDelegate';
       }
-      this.encodeProxyTransaction(signature, argumentsTypes, passedArguments);
+      const et = await this.encodeProxyTransaction(signature, passedArguments, overrides);
     } catch (error) {
       throw new Error(error.message);
     }
     return true;
   }
 
-  private encodeProxyTransaction(
+  private async encodeProxyTransaction(
     signature: string,
-    argumentsTypes: Array<string>,
-    passedArguments: Array<string | number>,
+    passedArguments: any,
+    overrides?: {
+      nonce?: number;
+    },
   ) {
     const web3AbiCoder = this.web3.eth.abi;
     const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
-    const parameters = argumentsTypes
-      .map((type, i) => web3AbiCoder.encodeParameter(type, passedArguments[i]));
+
+    const parameters = Object
+      .keys(passedArguments)
+      .map((passedArg) => {
+        const arg = passedArguments[passedArg];
+        if (arg.type !== 'address') {
+          web3AbiCoder.encodeParameter(arg.type, arg.value);
+        }
+        return arg.value;
+      });
+
     const data: string = web3AbiCoder.encodeFunctionCall(signatureAbi, parameters);
-    this.proxy.sendTransaction(data, this.contract.address).then((tx: any) => tx.wait());
+    const trx = await this.proxy
+      .sendTransaction(data, this.contract.address, 1)
+      .then((tx: any) => tx.wait());
+    console.log(trx);
+    return trx;
   }
 }
