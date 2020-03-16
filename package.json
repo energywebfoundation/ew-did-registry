@@ -1,20 +1,21 @@
 {
   "name": "ew-did-registry",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/lerna run test",
     "test-rpc": "./node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"./node_modules/.bin/lerna run test \"",
     "setup": "./node_modules/.bin/lerna bootstrap --no-ci",
-    "build": "./node_modules/.bin/lerna run compile --parallel --stream && ./node_modules/.bin/gulp",
-    "compile": "./node_modules/.bin/lerna run compile --parallel --stream",
+    "build": "./node_modules/.bin/lerna run compile && ./node_modules/.bin/gulp",
+    "compile": "./node_modules/.bin/lerna run compile",
     "ganache": "ganache-cli -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000",
     "browserTest:build": "gulp --gulpfile ./tests/gulpfile.js bundleApp",
     "browserTest:run": "./node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"./node_modules/.bin/karma start\"",
     "lint": "./node_modules/.bin/lerna run lint --parallel --stream",
     "fix": "./node_modules/.bin/lerna run fix --parallel --stream",
-    "publish": "./node_modules/.bin/lerna run publish --canary"
+    "publish": "./node_modules/.bin/lerna run publish --canary",
+    "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/package-lock.json"
   },
   "keywords": [
     "Energy",

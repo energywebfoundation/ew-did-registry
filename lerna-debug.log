@@ -1,13 +1,12 @@
 0 silly argv { _: [ 'add' ],
+0 silly argv   scope: 'ew-did-registry/proxyIdentity',
 0 silly argv   globs: [],
 0 silly argv   lernaVersion: '3.20.2',
-0 silly argv   '$0': 'node_modules\\lerna\\cli.js',
-0 silly argv   pkg: '@ew-did-registry' }
+0 silly argv   '$0': 'lerna',
+0 silly argv   pkg: 'ew-did-registry/did-ethr-resolver' }
 1 notice cli v3.20.2
-2 verbose rootPath C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry
-3 error Error: Invalid tag name "@ew-did-registry": Tags may not have any characters that encodeURIComponent encodes.
-3 error     at invalidTagName (C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry\node_modules\npm-package-arg\npa.js:91:15)
-3 error     at fromRegistry (C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry\node_modules\npm-package-arg\npa.js:296:13)
-3 error     at resolve (C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry\node_modules\npm-package-arg\npa.js:81:12)
-3 error     at npa (C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry\node_modules\npm-package-arg\npa.js:52:10)
-3 error     at AddCommand.initialize (C:\Users\Home\Desktop\Very Useful\ew\ew-did-registry\node_modules\@lerna\add\index.js:39:17)
+2 verbose rootPath /home/dima/Development/ew-did-registry
+3 error Error: exited with error code: 128
+3 error     at ChildProcess.<anonymous> (/home/dima/Development/ew-did-registry/node_modules/@evocateur/pacote/lib/util/finished.js:12:19)
+3 error     at ChildProcess.emit (events.js:198:13)
+3 error     at maybeClose (internal/child_process.js:982:16)
