@@ -5,14 +5,11 @@ import {
   DIDAttribute,
   IUpdateData,
   IResolverSettings,
-  IAuthentication,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
 import {
   ethrReg,
-  abi1056,
-  defaultProvider,
 } from '../constants';
 import { Operator } from './operator';
 import { abi as proxyAbi } from '../../../proxyIdentity/build/contracts/ProxyIdentity.json';
@@ -26,14 +23,14 @@ export class ProxyOperator extends Operator {
 
   private web3: Web3;
 
-  constructor(keys: IKeys, settings: IResolverSettings, proxyFactory: Contract = null) {
+  constructor(keys: IKeys, settings: IResolverSettings, proxyFactory: Contract) {
     super(keys, settings);
     const { address, abi } = this.settings;
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this.contract = new Contract(address, abi, wallet);
     this.proxy = new Contract(proxyFactory.address, proxyAbi, wallet);
-    this.web3 = new Web3(defaultProvider.uriOrInfo);
+    this.web3 = new Web3('http://localhost:8544');
   }
 
   async revokeDelegate(
@@ -45,11 +42,11 @@ export class ProxyOperator extends Operator {
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
 
-    const passedArguments = {
-      identity: { value: identityAddress, type: 'address' },
-      bytesType: { value: bytesType, type: 'bytes32' },
-      delegate: { value: delegateAddress, type: 'address' },
-    };
+    const passedArguments = [
+      { value: identityAddress, type: 'address' },
+      { value: bytesType, type: 'bytes32' },
+      { value: delegateAddress, type: 'address' },
+    ];
     try {
       this.encodeProxyTransaction('changeDelegate', passedArguments);
     } catch (error) {
@@ -67,11 +64,11 @@ export class ProxyOperator extends Operator {
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = ethers.utils.formatBytes32String(attribute);
     const bytesValue = this._hexify(updateData.value);
-    const passedArguments = {
-      identity: { value: identityAddress, type: 'address' },
-      bytesType: { value: bytesType, type: 'bytes32' },
-      bytesValue: { value: bytesValue, type: 'bytes' },
-    };
+    const passedArguments = [
+      { value: identityAddress, type: 'address' },
+      { value: bytesType, type: 'bytes32' },
+      { value: bytesValue, type: 'bytes' },
+    ];
 
     try {
       this.encodeProxyTransaction('changeAttribute', passedArguments);
@@ -81,17 +78,15 @@ export class ProxyOperator extends Operator {
     return true;
   }
 
-  async changeOwner(
-    identityDID: string,
-    newOwnerDid: string,
-  ): Promise<boolean> {
+  async changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = newOwnerDid.split(':');
-    const passedArguments = {
-      identity: { value: identityAddress, type: 'address' },
-      delegate: { value: delegateAddress, type: 'address' },
-      val: { value: 0, type: 'int' },
-    };
+
+    const passedArguments = [
+      { value: identityAddress, type: 'address' },
+      { value: delegateAddress, type: 'address' },
+    ];
+
     try {
       this.encodeProxyTransaction('changeOwner', passedArguments);
     } catch (error) {
@@ -119,12 +114,12 @@ export class ProxyOperator extends Operator {
         : updateData.delegate,
     );
 
-    const passedArguments = {
-      identity: { value: identity, type: 'address' },
-      bytesOfAttribute: { value: bytesOfAttribute, type: 'bytes32' },
-      bytesOfValue: { value: bytesOfValue, type: 'bytes' },
-      validity: { value: validity, type: 'uint256' },
-    };
+    const passedArguments = [
+      { value: identity, type: 'address' },
+      { value: bytesOfAttribute, type: 'bytes32' },
+      { value: bytesOfValue, type: 'bytes' },
+      { value: validity, type: 'uint256' },
+    ];
 
     try {
       let signature: string;
@@ -151,21 +146,19 @@ export class ProxyOperator extends Operator {
     const web3AbiCoder = this.web3.eth.abi;
     const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
 
-    const parameters = Object
-      .keys(passedArguments)
-      .map((passedArg) => {
-        const arg = passedArguments[passedArg];
+    const parameters = passedArguments
+      .map((arg: any) => {
         if (arg.type !== 'address') {
           web3AbiCoder.encodeParameter(arg.type, arg.value);
         }
         return arg.value;
       });
-
     const data: string = web3AbiCoder.encodeFunctionCall(signatureAbi, parameters);
+    // const value = this._hexify();
+    // console.log(value);
     const trx = await this.proxy
-      .sendTransaction(data, this.contract.address, 1)
+      .sendTransaction(data, this.contract.address, 0)
       .then((tx: any) => tx.wait());
-    console.log(trx);
     return trx;
   }
 }

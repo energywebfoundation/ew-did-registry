@@ -21,7 +21,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
   let proxy: Contract;
   let erc1056: Contract;
-  const provider = new JsonRpcProvider('http://localhost:8544');
+  const provider = new JsonRpcProvider('http://localhost:8544')
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
   let creatorAddress: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
@@ -33,7 +33,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     accounts = await web3.eth.getAccounts()
     creatorAddress = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address,{gasPrice: '2'})).deployed();
     identity = proxy.address;
   });
 
