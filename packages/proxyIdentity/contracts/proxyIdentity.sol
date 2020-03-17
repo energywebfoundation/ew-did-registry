@@ -75,7 +75,8 @@ contract ProxyIdentity {
         address to,
         uint8 v,
         bytes32 r,
-        bytes32 s
+        bytes32 s,
+        uint256 value
     ) public payable {
         bytes32 digest = keccak256(data);
         bytes32 hash = keccak256(
@@ -84,7 +85,7 @@ contract ProxyIdentity {
         address signer = ecrecover(hash, v, r, s);
         require(owner == signer, "Signature is not valid");
         require(
-            _sendTransaction(data, to, msg.value),
+            _sendTransaction(data, to, value),
             "Can't send transaction"
         );
     }
