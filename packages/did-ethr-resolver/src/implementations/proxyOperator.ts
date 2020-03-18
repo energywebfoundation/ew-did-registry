@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers } from 'ethers';
+import { Contract, ethers, ContractFactory } from 'ethers';
 import Web3 from 'web3';
 import {
   DIDAttribute,
@@ -8,11 +8,12 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
+import { id } from 'ethers/utils';
 import {
   ethrReg,
 } from '../constants';
 import { Operator } from './operator';
-import { abi as proxyAbi } from '../../../proxyIdentity/build/contracts/ProxyIdentity.json';
+import { abi as proxyAbi, bytecode as proxyBytecode } from '../../../proxyIdentity/build/contracts/ProxyIdentity.json';
 
 const { PublicKey, ServicePoint, Authenticate } = DIDAttribute;
 
@@ -23,13 +24,13 @@ export class ProxyOperator extends Operator {
 
   private web3: Web3;
 
-  constructor(keys: IKeys, settings: IResolverSettings, proxyFactory: Contract) {
+  constructor(keys: IKeys, settings: IResolverSettings, proxyAddress: Contract) {
     super(keys, settings);
     const { address, abi } = this.settings;
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this.contract = new Contract(address, abi, wallet);
-    this.proxy = new Contract(proxyFactory.address, proxyAbi, wallet);
+    this.proxy = proxyAddress;
     this.web3 = new Web3('http://localhost:8544');
   }
 
@@ -41,14 +42,14 @@ export class ProxyOperator extends Operator {
     const bytesType = ethers.utils.formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
+    const params = [this.proxy.address, identityAddress, bytesType, delegateAddress];
 
-    const passedArguments = [
-      { value: identityAddress, type: 'address' },
-      { value: bytesType, type: 'bytes32' },
-      { value: delegateAddress, type: 'address' },
-    ];
     try {
-      this.encodeProxyTransaction('changeDelegate', passedArguments);
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeDelegate');
+      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
+      await this.proxy
+        .sendTransaction(data, this.contract.address, 0)
+        .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
     }
@@ -64,14 +65,14 @@ export class ProxyOperator extends Operator {
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = ethers.utils.formatBytes32String(attribute);
     const bytesValue = this._hexify(updateData.value);
-    const passedArguments = [
-      { value: identityAddress, type: 'address' },
-      { value: bytesType, type: 'bytes32' },
-      { value: bytesValue, type: 'bytes' },
-    ];
+    const params = [identityAddress, bytesType, bytesValue];
 
     try {
-      this.encodeProxyTransaction('changeAttribute', passedArguments);
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeAttribute');
+      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
+      await this.proxy
+        .sendTransaction(data, this.contract.address, 0)
+        .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
     }
@@ -81,14 +82,10 @@ export class ProxyOperator extends Operator {
   async changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = newOwnerDid.split(':');
-
-    const passedArguments = [
-      { value: identityAddress, type: 'address' },
-      { value: delegateAddress, type: 'address' },
-    ];
-
     try {
-      this.encodeProxyTransaction('changeOwner', passedArguments);
+      await this.proxy
+        .changeOwner(delegateAddress)
+        .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
     }
@@ -114,51 +111,23 @@ export class ProxyOperator extends Operator {
         : updateData.delegate,
     );
 
-    const passedArguments = [
-      { value: identity, type: 'address' },
-      { value: bytesOfAttribute, type: 'bytes32' },
-      { value: bytesOfValue, type: 'bytes' },
-      { value: validity, type: 'uint256' },
-    ];
-
+    const params = [this.proxy.address, bytesOfAttribute, bytesOfValue, validity.toString()];
+    let signature: string;
+    if (didAttribute) {
+      signature = 'setAttribute';
+    } else {
+      signature = 'addDelegate';
+    }
     try {
-      let signature: string;
-      if (didAttribute === PublicKey
-        || didAttribute === Authenticate) {
-        signature = 'setAttribute';
-      } else {
-        signature = 'addDelegate';
-      }
-      const et = await this.encodeProxyTransaction(signature, passedArguments, overrides);
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
+      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
+      await this.proxy
+        .sendTransaction(data, this.contract.address, 0)
+        .then((tx: any) => tx.wait());
     } catch (error) {
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
       throw new Error(error.message);
     }
     return true;
-  }
-
-  private async encodeProxyTransaction(
-    signature: string,
-    passedArguments: any,
-    overrides?: {
-      nonce?: number;
-    },
-  ) {
-    const web3AbiCoder = this.web3.eth.abi;
-    const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
-
-    const parameters = passedArguments
-      .map((arg: any) => {
-        if (arg.type !== 'address') {
-          web3AbiCoder.encodeParameter(arg.type, arg.value);
-        }
-        return arg.value;
-      });
-    const data: string = web3AbiCoder.encodeFunctionCall(signatureAbi, parameters);
-    // const value = this._hexify();
-    // console.log(value);
-    const trx = await this.proxy
-      .sendTransaction(data, this.contract.address, 0)
-      .then((tx: any) => tx.wait());
-    return trx;
   }
 }
