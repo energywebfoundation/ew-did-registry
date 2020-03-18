@@ -4,7 +4,7 @@ import {
 import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {BigNumber, Signature} from 'ethers/utils';
+import { BigNumber, Signature } from 'ethers/utils';
 import { ethrReg } from '../../did-ethr-resolver';
 import { Keys } from '../../keys';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
@@ -104,7 +104,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
         const asNonOwner: Contract = proxy.connect(provider.getSigner(2));
-        return asNonOwner.sendSignedTransaction(data, erc1056.address, v, r, s);
+        return asNonOwner.sendSignedTransaction(data, erc1056.address, v, r, s, 0);
       })
       .then((tx: any) => tx.wait());
   });
@@ -120,7 +120,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((flatSignature) => {
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        return proxy.sendSignedTransaction(data, erc1056.address, v, r, s);
+        return proxy.sendSignedTransaction(data, erc1056.address, v, r, s, 0);
       })
       .should.be.rejectedWith('Signature is not valid');
   });
@@ -158,7 +158,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       .then((owner: string) => {
         owner.should.equal(newOwner);
       })
-        .catch(e => expect.fail(e));
+      .catch(e => expect.fail(e));
   });
 
   it('changeOwner() called by non-recovery agent should revert', async () => {
@@ -173,21 +173,37 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const pay = '10000000000000000000';
     await (await proxy.sendTransaction('0x0', payee, pay, { value: (new BigNumber(pay)).toHexString() })).wait();
     const balance1 = (await provider.getBalance(payee)).toString();
-    expect(balance1.toString()).equal(balance0.add(pay).toString())
+    expect(balance1.toString()).equal(balance0.add(pay).toString());
+  });
+
+  it('along with signed transaction value can be send from proxy', async () => {
+    const payee = accounts[4];
+    const pay = new BigNumber('1000000000000000000');
+    const initialBalance = await provider.getBalance(payee);
+    const data = '0x0';
+    const digest = ethers.utils.keccak256(data);
+    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
+    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const { r, s, v } = expSignature;
+    const asNonOwner: Contract = proxy.connect(provider.getSigner(2));
+    const tx = await asNonOwner.sendSignedTransaction(data, payee, v, r, s, pay, { value: pay });
+    await tx.wait();
+    const finalBalance = await provider.getBalance(payee);
+    expect(initialBalance.add(pay).eq(finalBalance)).true;
   });
 
   it('pre-existing balance can be sent', async () => {
-    const dest = accounts[2]
+    const dest = accounts[2];
     const pay = '10000000000000000000';
     const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest))
     await web3.eth.sendTransaction({
       from: accounts[3],
       to: proxy.address,
-      value: (new BigNumber(pay)).toHexString()
-    })
+      value: (new BigNumber(pay)).toHexString(),
+    });
     await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
-    const balance1 = await web3.eth.getBalance(dest)
-    expect(balance1.toString()).equal(balance0.add(pay).toString())
+    const balance1 = await web3.eth.getBalance(dest);
+    expect(balance1.toString()).equal(balance0.add(pay).toString());
   });
 
 });
