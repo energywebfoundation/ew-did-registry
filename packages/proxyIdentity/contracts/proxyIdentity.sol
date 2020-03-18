@@ -20,7 +20,7 @@ contract ProxyIdentity {
     address public owner;
     address erc1056;
     mapping(address => bool) recoveryAgents;
-    uint256 defaultValidity = 10 * 60 * 1000;
+    uint256 defaultValidity = 2**256 - 1;
 
     event TransactionSent(bytes data, address to, uint256 value);
     event OwnerChanged(address identity, address prev, address next);
@@ -51,10 +51,7 @@ contract ProxyIdentity {
         payable
         _owner
     {
-        require(
-            _sendTransaction(_data, to, value),
-            "Can't send transaction"
-        );
+        require(_sendTransaction(_data, to, value), "Can't send transaction");
     }
 
     function _sendTransaction(bytes memory _data, address to, uint256 value)
@@ -75,7 +72,8 @@ contract ProxyIdentity {
         address to,
         uint8 v,
         bytes32 r,
-        bytes32 s
+        bytes32 s,
+        uint256 value
     ) public payable {
         bytes32 digest = keccak256(data);
         bytes32 hash = keccak256(
@@ -83,10 +81,7 @@ contract ProxyIdentity {
         );
         address signer = ecrecover(hash, v, r, s);
         require(owner == signer, "Signature is not valid");
-        require(
-            _sendTransaction(data, to, msg.value),
-            "Can't send transaction"
-        );
+        require(_sendTransaction(data, to, value), "Can't send transaction");
     }
 
     function addRecoveryAgent(address agent) public _owner {
@@ -106,7 +101,7 @@ contract ProxyIdentity {
     /**
     * Used by the proxy factory to make sender the owner
      */
-    function changeOwner(address newOwner) public  _recoveryAgent{
+    function changeOwner(address newOwner) public _recoveryAgent {
         _changeOwner(newOwner);
     }
 
