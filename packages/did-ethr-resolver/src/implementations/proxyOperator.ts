@@ -18,19 +18,19 @@ import { abi as proxyAbi, bytecode as proxyBytecode } from '../../../proxyIdenti
 const { PublicKey, ServicePoint, Authenticate } = DIDAttribute;
 
 export class ProxyOperator extends Operator {
-  private contract: Contract;
+  private contractAddress: string;
 
   private proxy: Contract;
 
   private web3: Web3;
 
-  constructor(keys: IKeys, settings: IResolverSettings, proxyAddress: Contract) {
+  constructor(keys: IKeys, settings: IResolverSettings, proxy: Contract, contractAddress: string) {
     super(keys, settings);
     const { address, abi } = this.settings;
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
-    this.contract = new Contract(address, abi, wallet);
-    this.proxy = proxyAddress;
+    this.contractAddress = contractAddress;
+    this.proxy = proxy;
     this.web3 = new Web3('http://localhost:8544');
   }
 
@@ -48,7 +48,7 @@ export class ProxyOperator extends Operator {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeDelegate');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
-        .sendTransaction(data, this.contract.address, 0)
+        .sendTransaction(data, this.contractAddress, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -71,7 +71,7 @@ export class ProxyOperator extends Operator {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeAttribute');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
-        .sendTransaction(data, this.contract.address, 0)
+        .sendTransaction(data, this.contractAddress, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -119,8 +119,8 @@ export class ProxyOperator extends Operator {
     try {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
-      await this.proxy
-        .sendTransaction(data, this.contract.address, 0)
+      this.proxy
+        .sendTransaction(data, identity, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);

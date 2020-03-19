@@ -20,9 +20,12 @@ import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../../
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../../proxyIdentity/build/contracts/ProxyIdentity.json';
 
 import { JsonRpcProvider } from 'ethers/providers';
+import Web3 from 'web3';
+import { id } from 'ethers/utils';
 
 const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 const { fail } = assert;
+const web3 = new Web3('http://localhost:8544');
 
 describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
@@ -30,30 +33,41 @@ describe('[DID-PROXY-OPERATOR]', function () {
     privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
-  let creatorAddress: string;
   let operator: ProxyOperator;
   let operatorSetting: IResolverSettings;
-  let erc1056Factory: any;
-  let erc1056: Contract;
-  const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
-  const did = `did:ewc:${identity}`;
+  this.timeout(0);
+  let proxy: Contract;
+  let erc1056: Contract;
+  const provider = new JsonRpcProvider('http://localhost:8544');
+  const creator: providers.JsonRpcSigner = provider.getSigner(0);
+  let creatorAddress: string;
+  const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
+  const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  let identity: string;
 
   before(async () => {
+    creatorAddress = await creator.getAddress();
+    erc1056 = await (await erc1056Factory.deploy()).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
+    identity = proxy.address;
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     console.log(`registry: ${operatorSetting.address}`);
     const provider = new JsonRpcProvider('http://localhost:8544');
     const deployer: providers.JsonRpcSigner = provider.getSigner(0);
-    erc1056Factory = new ContractFactory(abi1056, bytecode1056, deployer);
-    erc1056 = await (await erc1056Factory.deploy()).deployed();
-    const proxyFactoryCreator = new ContractFactory(proxyAbi, proxyBytecode, deployer);
-    const proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, { value: 1000000000 })).deployed();
-    console.log(`proxy: ${proxyFactory.address}`);
     creatorAddress = await deployer.getAddress();
-    operator = new ProxyOperator(keys, operatorSetting, proxyFactory);
+    operator = new ProxyOperator(keys, operatorSetting, proxy, erc1056.address);
   });
 
-  it('updating an attribute without providing validity should update the document with maximum validity', async () => {
+  it('updating an attribute without providing validity should update the document with maximum validity', async (done) => {
+
+    erc1056.on('DIDAttributeChanged', (id, n, v, validTo, previouse) => {
+      console.log(id, n, v, validTo, previouse);
+      erc1056.removeAllListeners('DIDAttributeChanged');
+      console.log('EVENT');
+      done();
+    });
+
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
       algo: Algorithms.Secp256k1,
@@ -61,9 +75,13 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: Encoding.HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(did, attribute, updateData);
-    const document: IDIDDocument = await operator.read(did) as IDIDDocument;
-    expect(document.id).equal(did);
+    const doc: IDIDDocument = await operator.read(`did:ewc:${erc1056.address}`) as IDIDDocument;
+    console.log('Before: ', doc);
+    await operator.update(`did:ewc:${erc1056.address}`, attribute, updateData);
+    console.log(proxy.address);
+    const document: IDIDDocument = await operator.read(`did:ewc:${erc1056.address}`) as IDIDDocument;
+    console.log('After: ', document);
+    expect(document.id).equal(`did:ewc:${erc1056.address}`);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
