@@ -103,14 +103,12 @@ export class ProxyOperator extends Operator {
     },
   ): Promise<boolean> {
     const identity = this._parseDid(did);
-    const attributeName = this._composeAttributeName(didAttribute, updateData);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
+    const bytesOfAttribute = ethers.utils.formatBytes32String(didAttribute);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value
         : updateData.delegate,
     );
-
     const params = [this.proxy.address, bytesOfAttribute, bytesOfValue, validity.toString()];
     let signature: string;
     if (didAttribute) {
