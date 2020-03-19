@@ -66,6 +66,10 @@ class DIDRegistry implements IDIDRegistry {
     await didDocumentLite.read(did);
     return didDocumentLite;
   }
+
+  // async createProxy() {
+
+  // }
 }
 
 export default DIDRegistry;
