@@ -123,7 +123,6 @@ export class ProxyOperator extends Operator {
         .sendTransaction(data, identity, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
       throw new Error(error.message);
     }
     return true;
