@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers, ContractFactory } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import Web3 from 'web3';
 import {
   DIDAttribute,
@@ -8,29 +8,30 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
-import { id } from 'ethers/utils';
+import { proxyBuild } from '@ew-did-registry/proxyidentity';
 import {
   ethrReg,
 } from '../constants';
 import { Operator } from './operator';
-import { abi as proxyAbi, bytecode as proxyBytecode } from '../../../proxyIdentity/build/contracts/ProxyIdentity.json';
 
-const { PublicKey, ServicePoint, Authenticate } = DIDAttribute;
+const { PublicKey, ServicePoint } = DIDAttribute;
 
 export class ProxyOperator extends Operator {
-  private contractAddress: string;
-
   private proxy: Contract;
 
   private web3: Web3;
 
-  constructor(keys: IKeys, settings: IResolverSettings, proxy: Contract, contractAddress: string) {
+  /**
+   *
+   * @param keys
+   * @param settings
+   * @param proxyAddress {string} - address of proxy smart contract representing identity
+   */
+  constructor(keys: IKeys, settings: IResolverSettings, proxyAddress: string) {
     super(keys, settings);
-    const { address, abi } = this.settings;
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
-    this.contractAddress = contractAddress;
-    this.proxy = proxy;
+    this.proxy = new Contract(proxyAddress, proxyBuild.abi, wallet);
     this.web3 = new Web3('http://localhost:8544');
   }
 
@@ -48,7 +49,7 @@ export class ProxyOperator extends Operator {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeDelegate');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
-        .sendTransaction(data, this.contractAddress, 0)
+        .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -71,7 +72,7 @@ export class ProxyOperator extends Operator {
       const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeAttribute');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
-        .sendTransaction(data, this.contractAddress, 0)
+        .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -103,24 +104,25 @@ export class ProxyOperator extends Operator {
     },
   ): Promise<boolean> {
     const identity = this._parseDid(did);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(didAttribute);
+    const attributeName = this._composeAttributeName(didAttribute, updateData);
+    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value
         : updateData.delegate,
     );
-    const params = [this.proxy.address, bytesOfAttribute, bytesOfValue, validity.toString()];
-    let signature: string;
-    if (didAttribute) {
-      signature = 'setAttribute';
+    const params = [identity, bytesOfAttribute, bytesOfValue, validity.toString()];
+    let methodName: string;
+    if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
+      methodName = 'setAttribute';
     } else {
-      signature = 'addDelegate';
+      methodName = 'addDelegate';
     }
     try {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === signature);
-      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
-      this.proxy
-        .sendTransaction(data, identity, 0)
+      const methodAbi: any = ethrReg.abi.find((f) => f.name === methodName);
+      const data: string = this.web3.eth.abi.encodeFunctionCall(methodAbi, params);
+      await this.proxy
+        .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error.message);
