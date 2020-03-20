@@ -20,7 +20,6 @@
     "@ew-did-registry/keys": "^1.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "ew-did-registry": "file:../ew-did-registry",
     "express": "^4.17.1"
   }
 }
