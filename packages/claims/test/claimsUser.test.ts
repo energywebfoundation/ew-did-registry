@@ -53,7 +53,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     };
     const token = await userClaims.createPublicClaim(publicData);
     const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true });
-    claim.should.deep.equal({
+    claim.should.deep.include({
       did: userDdid,
       signer: userDdid,
       claimData: publicData,
