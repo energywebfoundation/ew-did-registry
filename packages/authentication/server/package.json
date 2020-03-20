@@ -1,10 +1,11 @@
 {
-  "name": "@ew-did-registry/authentication",
+  "name": "@ew-did-registry/authentication-server",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-rpc": "./node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"node server.js\""
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { login } from '../../state-management';
-import { Networks } from 'ew-did-registry/packages/did';
+import { Networks } from '@ew-did-registry/did';
 import { identityKeys, sendLoginClaim } from '../../utils/did';
 import './style.css';
 
