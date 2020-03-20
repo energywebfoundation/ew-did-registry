@@ -21,6 +21,7 @@ contract ProxyIdentity {
     address erc1056;
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 2**256 - 1;
+    mapping(bytes32 => bool) digests;
 
     event TransactionSent(bytes data, address to, uint256 value);
     event OwnerChanged(address identity, address prev, address next);
@@ -73,9 +74,12 @@ contract ProxyIdentity {
         uint8 v,
         bytes32 r,
         bytes32 s,
-        uint256 value
+        uint256 value,
+        uint256 nonce
     ) public payable {
-        bytes32 digest = keccak256(data);
+        bytes32 digest = keccak256(abi.encode(data, to, value, nonce));
+        require(digests[digest] == false, "This transction has already been send");
+        digests[digest] = true;
         bytes32 hash = keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
         );
