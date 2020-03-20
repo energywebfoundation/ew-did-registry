@@ -47,13 +47,20 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(publicData: object): Promise<string> {
+  async createPublicClaim(publicData: object, jwtOptions: any = {}): Promise<string> {
+    jwtOptions.subject = jwtOptions.subject || this.did;
+    jwtOptions.issuer = this.did;
     const claim: IPublicClaim = {
-      did: this.did,
+      did: jwtOptions.subject,
       signer: this.did,
       claimData: publicData,
     };
-    return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    return this.jwt.sign(
+      claim,
+      {
+        ...jwtOptions, algorithm: 'ES256',
+      },
+    );
   }
 
   /**
@@ -81,7 +88,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createPrivateClaim(
     privateData: { [key: string]: string },
     issuer: string,
+    jwtOptions: any = {},
   ): Promise<{ token: string; saltedFields: ISaltedFields }> {
+    jwtOptions.subject = jwtOptions.subject || this.did;
+    jwtOptions.issuer = this.did;
     const saltedFields: { [key: string]: string } = {};
     const claim: IPrivateClaim = {
       did: this.did,
@@ -100,7 +110,9 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       claim.claimData[key] = encryptedValue.toString('hex');
       saltedFields[key] = saltedValue;
     });
-    const token = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    const token = await this.jwt.sign(claim, {
+      ...jwtOptions, algorithm: 'ES256',
+    });
     return { token, saltedFields };
   }
 
@@ -126,7 +138,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createProofClaim(claimUrl: string, proofData: IProofData): Promise<string> {
+  async createProofClaim(
+    claimUrl: string,
+    proofData: IProofData,
+    jwtOptions: any = {},
+  ): Promise<string> {
+    jwtOptions.subject = jwtOptions.subject || this.did;
+    jwtOptions.issuer = this.did;
     const claim: IProofClaim = {
       did: this.did,
       signer: this.did,
@@ -158,7 +176,9 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         };
       }
     });
-    return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    return this.jwt.sign(claim, {
+      ...jwtOptions, algorithm: 'ES256',
+    });
   }
 
   /**
