@@ -1,7 +1,7 @@
-import { ClaimsUser } from 'ew-did-registry/packages/claims';
-import { Keys } from 'ew-did-registry/packages/keys';
-import { Operator } from 'ew-did-registry/packages/did-ethr-resolver';
-import { Networks } from 'ew-did-registry/packages/did';
+import { ClaimsUser } from '@ew-did-registry/claims';
+import { Keys } from '@ew-did-registry/keys';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Networks } from '@ew-did-registry/did';
 import { getSettings } from '../init-ganache';
 
 export const identityKeys = new Keys();

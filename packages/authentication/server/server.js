@@ -1,15 +1,16 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Resolver, defaultResolverSettings } = require('@ew-did-registry/did-ethr-resolver');
-const { DelegateTypes } = require('ew-did-registry/packages/did-resolver-interface');
-const { Keys } = require('ew-did-registry/packages/keys');
-const { Claims } = require('ew-did-registry/packages/claims');
-const { JWT } = require('ew-did-registry/packages/jwt');
+const { DelegateTypes } = require('@ew-did-registry/did-resolver-interface');
+const { Keys } = require('@ew-did-registry/keys');
+const { Claims } = require('@ew-did-registry/claims');
+const { JWT } = require('@ew-did-registry/jwt');
 
 const app = express();
 app.use(cors());
 app.use(express.text());
-app.use(express.static('client/build'));
+// app.use(express.static(path.join(__dirname, '../client/build/index.html')));
 
 app.post('/login', async function (req, res) {
   const token = req.body;
@@ -35,4 +36,7 @@ app.post('/login', async function (req, res) {
   res.json({ authenticated });
 });
 
-const server = app.listen(3000, '127.0.0.1', () => { console.log('>>> server listening on', server.address().port) });
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../client/build/index.html'));
+// })
+const server = app.listen(3001, '127.0.0.1', () => { console.log('>>> server listening on', server.address().port) });

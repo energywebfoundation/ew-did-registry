@@ -1,6 +1,6 @@
 import { ContractFactory, ethers, Wallet } from 'ethers';
 import Web3 from 'web3';
-import { defaultResolverSettings, ethrReg } from 'ew-did-registry/packages/did-ethr-resolver';
+import { defaultResolverSettings, ethrReg } from '@ew-did-registry/did-ethr-resolver';
 
 const GANACHE_PORT = 8544;
 const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
