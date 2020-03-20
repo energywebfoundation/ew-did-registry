@@ -1,0 +1,26 @@
+{
+  "name": "@ew-did-registry/authentication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-rpc": "./node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"node server.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "run-with-testrpc": "0.3.1"
+  },
+  "dependencies": {
+    "@ew-did-registry/claims": "^1.0.0",
+    "@ew-did-registry/did-ethr-resolver": "^1.0.0",
+    "@ew-did-registry/did-resolver-interface": "^1.0.0",
+    "@ew-did-registry/jwt": "^1.0.0",
+    "@ew-did-registry/keys": "^1.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "ew-did-registry": "file:../ew-did-registry",
+    "express": "^4.17.1"
+  }
+}

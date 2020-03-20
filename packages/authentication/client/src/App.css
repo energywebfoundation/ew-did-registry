@@ -1,0 +1,23 @@
+.layout {
+  height: 100%;
+}
+.logo {
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 28px 0 0;
+    float: left;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 15px;
+}
