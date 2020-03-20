@@ -9,8 +9,8 @@ import {
   Encoding,
   IUpdateData,
   PubKeyType,
-  IAuthentication, 
-  IResolverSettings, 
+  IAuthentication,
+  IResolverSettings,
   IDIDDocument,
 } from '@ew-did-registry/did-resolver-interface';
 import { getSettings } from '../../../tests/init-ganache';
@@ -276,7 +276,6 @@ describe('[DID-OPERATOR]', function () {
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
     const operatorNewOwner = new Operator(secondKeys, operatorSetting);
     let currentOwner;
-
     await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
     currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
     expect(currentOwner).to.be.eql(identityNewOwner);

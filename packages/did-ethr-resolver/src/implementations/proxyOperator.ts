@@ -6,6 +6,8 @@ import {
   IUpdateData,
   IResolverSettings,
   PubKeyType,
+  IAuthentication,
+  IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
 import { proxyBuild } from '@ew-did-registry/proxyidentity';
@@ -35,6 +37,18 @@ export class ProxyOperator extends Operator {
     this.web3 = new Web3('http://localhost:8544');
   }
 
+  async deactivate(did: string): Promise<boolean> {
+    const document = await this.read(did);
+    const authRevoked = await this._revokeAuthentications(
+      did,
+      document.authentication as IAuthentication[],
+      document.publicKey as IPublicKey[],
+    );
+    const pubKeysRevoked = await this._revokePublicKeys(did, document.publicKey);
+    const endpointsRevoked = await this._revokeServices(did, document.service);
+    return authRevoked && pubKeysRevoked && endpointsRevoked;
+  }
+
   async revokeDelegate(
     identityDID: string,
     delegateType: PubKeyType,
@@ -43,10 +57,10 @@ export class ProxyOperator extends Operator {
     const bytesType = ethers.utils.formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
-    const params = [this.proxy.address, identityAddress, bytesType, delegateAddress];
+    const params = [identityAddress, bytesType, delegateAddress];
 
     try {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeDelegate');
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'revokeDelegate');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
         .sendTransaction(data, this.settings.address, 0)
@@ -69,7 +83,7 @@ export class ProxyOperator extends Operator {
     const params = [identityAddress, bytesType, bytesValue];
 
     try {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'changeAttribute');
+      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'revokeAttribute');
       const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
       await this.proxy
         .sendTransaction(data, this.settings.address, 0)
@@ -83,9 +97,12 @@ export class ProxyOperator extends Operator {
   async changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = newOwnerDid.split(':');
+    const params = [identityAddress, delegateAddress];
     try {
-      await this.proxy
-        .changeOwner(delegateAddress)
+      const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
+      const data: string = this.web3.eth.abi.encodeFunctionCall(changeOwnerAbi, params);
+      this.proxy
+        .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -111,7 +128,8 @@ export class ProxyOperator extends Operator {
         ? updateData.value
         : updateData.delegate,
     );
-    const params = [identity, bytesOfAttribute, bytesOfValue, validity.toString()];
+    const validityValue = validity !== null ? validity.toString() : '';
+    const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
     let methodName: string;
     if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
       methodName = 'setAttribute';
