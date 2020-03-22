@@ -101,7 +101,7 @@ export class ProxyOperator extends Operator {
     try {
       const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
       const data: string = this.web3.eth.abi.encodeFunctionCall(changeOwnerAbi, params);
-      this.proxy
+      await this.proxy
         .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
     } catch (error) {

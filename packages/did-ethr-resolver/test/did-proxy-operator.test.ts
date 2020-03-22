@@ -286,23 +286,11 @@ describe('[DID-PROXY-OPERATOR]', function () {
   });
 
   it('owner change should lead to expected result', async () => {
-
-    // const secondKeys = new Keys({
-    //   privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-    //   publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
-    // });
-    // const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    // const operatorNewOwner = new ProxyOperator(secondKeys, operatorSettings, proxy.address);
-    // let currentOwner;
-    // console.log(await operator.identityOwner(`did:ewc:${identity}`));
-    // await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
-    // currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
-    // console.log(currentOwner);
-    // expect(currentOwner).to.be.eql(identityNewOwner);
-
-    // await operatorNewOwner.changeOwner(`did:ewc:${identity}`, `did:ewc:${identity}`);
-    // currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
-    // expect(currentOwner).to.be.eql(identity);
+    const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
+    let currentOwner;
+    await operator.changeOwner(`did:ewc:${proxy.address}`, `did:ewc:${identityNewOwner}`);
+    currentOwner = await erc1056.functions.owners(proxy.address);
+    expect(currentOwner).to.be.eql(identityNewOwner);
   });
 });
 
