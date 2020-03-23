@@ -1,11 +1,11 @@
 import { LOGIN, LOGOUT } from '../types';
 
 const initialState = {
-  isLogedIn: false,
+  isLoggedIn: false,
 }
 
 const login = (payload) => ({
-  isLogedIn: true,
+  isLoggedIn: true,
   DID: payload.DID
 });
 
