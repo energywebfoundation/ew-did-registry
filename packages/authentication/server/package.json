@@ -10,9 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "run-with-testrpc": "0.3.1"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@ew-did-registry/claims": "^1.0.0",
     "@ew-did-registry/did-ethr-resolver": "^1.0.0",
