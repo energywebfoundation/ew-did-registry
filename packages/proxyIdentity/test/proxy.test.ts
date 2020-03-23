@@ -160,7 +160,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     return asNonOwner.sendSignedTransaction(
       data, erc1056.address, v, r, s, 0, nonce,
     )
-      .should.be.rejectedWith('This transction has already been sent');
+      .should.be.rejectedWith('This transaction has already been sent');
   });
 
   it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
