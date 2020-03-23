@@ -22,6 +22,7 @@ contract ProxyIdentity {
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 2**256 - 1;
     mapping(bytes32 => bool) digests;
+    uint256 prevNonce = 0;
 
     event TransactionSent(bytes data, address to, uint256 value);
     event OwnerChanged(address identity, address prev, address next);
@@ -78,8 +79,13 @@ contract ProxyIdentity {
         uint256 nonce
     ) public payable {
         bytes32 digest = keccak256(abi.encode(data, to, value, nonce));
-        require(digests[digest] == false, "This transction has already been send");
+        require(
+            digests[digest] == false,
+            "This transction has already been sent"
+        );
+        require(nonce > prevNonce, "Incorrect nonce");
         digests[digest] = true;
+        prevNonce = nonce;
         bytes32 hash = keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
         );

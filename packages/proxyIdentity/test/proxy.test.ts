@@ -104,14 +104,15 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
         const digest = ethers.utils.keccak256(
           web3.eth.abi.encodeParameters(
             ['bytes', 'address', 'uint256', 'uint256'],
-            [data, erc1056.address, 0, nonce]
-          ));
-        const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest))
+            [data, erc1056.address, 0, nonce + 1],
+          ),
+        );
+        const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
         const asNonOwner: Contract = proxy.connect(nonOwner);
         const tx = await asNonOwner.sendSignedTransaction(
-          data, erc1056.address, v, r, s, 0, nonce,
+          data, erc1056.address, v, r, s, 0, nonce + 1,
         );
         await tx.wait();
       });
@@ -159,7 +160,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     return asNonOwner.sendSignedTransaction(
       data, erc1056.address, v, r, s, 0, nonce,
     )
-      .should.be.rejectedWith('This transction has already been send');
+      .should.be.rejectedWith('This transction has already been sent');
   });
 
   it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
@@ -241,7 +242,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   it('pre-existing balance can be sent', async () => {
     const dest = accounts[2];
     const pay = '10000000000000000000';
-    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest))
+    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest));
     await web3.eth.sendTransaction({
       from: accounts[3],
       to: proxy.address,
