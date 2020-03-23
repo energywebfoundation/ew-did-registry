@@ -1,36 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { Layout } from 'antd';
+import { Layout, Row, Col, Button } from 'antd';
+import { logout } from './state-management/actions/auth';
 import 'antd/dist/antd.css';
 import './App.css';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
-const App = ({ children, auth, location }) => {
+const App = ({ children, auth, location, logout }) => {
   return (
     <Layout className="layout">
       <Header>
-        <div className="logo" >
-          <h1>Authentication Example</h1>
-        </div>
-
+        <Row className="logo">
+          <Col span={4}>
+            Auth example
+          </Col>
+          {
+            auth.isLoggedIn && (
+              <>
+                <Col offset={18} span={2} className="flex-end">
+                  <Button ghost onClick={logout}>Logout</Button>
+                </Col>
+              </>
+            )
+          }
+        </Row>
       </Header>
       {
         (!auth.isLogedIn
           || location.pathname === "/signin"
           || location.pathname === "/signup") ?
-          <Content>{children}</Content>
+          <Content className="content" style={{ height: '400px' }}>{children}</Content>
           :
           <Layout>
-            <Sider width={200} style={{ background: '#fff' }} theme={"dark"}>
-            </Sider>
-            <Content >{children}</Content>
+            <Content>{children}</Content>
           </Layout>
       }
-    </Layout>
+    </Layout >
   );
 }
 
 const mapStateToProps = (({ auth }) => ({ auth }));
-export default withRouter(connect(mapStateToProps)(App));
+export default withRouter(connect(mapStateToProps, ({ logout: logout }))(App));

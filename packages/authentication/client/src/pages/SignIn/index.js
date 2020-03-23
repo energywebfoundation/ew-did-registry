@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { login } from '../../state-management';
 import { Networks } from '@ew-did-registry/did';
 import { identityKeys, sendLoginClaim } from '../../utils/did';
@@ -9,15 +9,15 @@ import './style.css';
 
 const layout = {
   labelCol: {
-    span: 8,
+    span: 4,
   },
   wrapperCol: {
-    span: 16,
+    span: 24,
   },
 };
 const tailLayout = {
   wrapperCol: {
-    offset: 8,
+    offset: 4,
     span: 16,
   },
 };
@@ -42,55 +42,54 @@ class SignIn extends React.Component {
     const DID = `did:${Networks.EnergyWeb}:${identityKeys.getAddress()}`;
     const privateKey = identityKeys.privateKey;
     return (
-      <div style={{ width: '50%' }}>
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{
-            DID,
-            privateKey,
-            remember: true,
-          }}
-          onFinish={this.onFinish}
-          onFinishFailed={this.onFinishFailed}
+      <Form
+        style={{ width: '650px' }}
+        {...layout}
+        name="basic"
+        initialValues={{
+          DID,
+          privateKey,
+          remember: true,
+        }}
+        onFinish={this.onFinish}
+        onFinishFailed={this.onFinishFailed}
+      >
+        <Form.Item
+          label="DID"
+          name="DID"
+          rules={[
+            {
+              required: true,
+              message: 'DID is required!',
+            },
+          ]}
         >
-          <Form.Item
-            label="DID"
-            name="DID"
-            rules={[
-              {
-                required: true,
-                message: 'DID is required!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Private key"
-            name="privateKey"
-            rules={[
-              {
-                required: true,
-                message: 'Private key is required!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+        <Form.Item
+          label="Private key"
+          name="privateKey"
+          rules={[
+            {
+              required: true,
+              message: 'Private key is required!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-          <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+        {/* <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item> */}
 
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Submit
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Submit
         </Button>
-          </Form.Item>
-        </Form>
-      </div >
+        </Form.Item>
+      </Form>
     );
   };
 }

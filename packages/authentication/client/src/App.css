@@ -1,10 +1,9 @@
 .layout {
-  height: 100%;
+    height: 100%;
 }
 .logo {
-    background: rgba(255, 255, 255, 0.2);
-    margin: 0 28px 0 0;
-    float: left;
+  color: whitesmoke;
+  font-size: 24px;
 }
 
 .content {
@@ -15,9 +14,9 @@
 }
 
 .container {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px;
 }
