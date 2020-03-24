@@ -31,8 +31,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signatue');
     }
-    const resolver = this.resolver;
-    if (!resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
+    if (!this.resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
   }
@@ -62,14 +61,13 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
       throw new Error('Invalid signature');
     }
-    const resolver = this.resolver;
 
     const privateClaim: IPrivateClaim = this.jwt.decode(privateToken) as IPrivateClaim;
     if (!(await this.verifySignature(privateToken, privateClaim.signer))) {
       throw new Error('Invalid signature');
     }
     if (
-      !resolver
+      !this.resolver
         .validDelegate(
           privateClaim.did,
           DelegateTypes.verification,
