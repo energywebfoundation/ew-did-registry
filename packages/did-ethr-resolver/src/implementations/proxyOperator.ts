@@ -10,7 +10,7 @@ import {
   IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
-import { proxyBuild } from '@ew-did-registry/proxyidentity';
+import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
 import {
   ethrReg,
 } from '../constants';

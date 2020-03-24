@@ -2,7 +2,7 @@
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  ContractFactory, providers, Contract, Wallet,
+  ContractFactory, Contract, Wallet,
 } from 'ethers';
 import {
   Algorithms,
@@ -20,9 +20,9 @@ import { JsonRpcProvider } from 'ethers/providers';
 import { ProxyOperator, ethrReg } from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../../proxyIdentity/build/contracts/ProxyIdentity.json';
-import Web3 from 'web3';
 
-const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
+
+const { abi: abi1056 } = ethrReg;
 const { fail } = assert;
 
 describe('[DID-PROXY-OPERATOR]', function () {

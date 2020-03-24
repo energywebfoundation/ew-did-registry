@@ -20,6 +20,8 @@ import {
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 import { getSettings } from '../../../tests/init-ganache';
+import { JsonRpcProvider } from 'ethers/providers';
+import { providers } from 'ethers';
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
@@ -151,4 +153,12 @@ describe('[REGISTRY PACKAGE]', function () {
     await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
     document = userLigthDoc.didDocument;
   });
+
+  // it('creates Proxy Identity on createProxy()', async () => {
+  //   const provider = new JsonRpcProvider('http://localhost:8544');
+  //   const deployer: providers.JsonRpcSigner = provider.getSigner(0);
+  //   console.log('Step 1');
+  //   const proxy = await user.createProxy(`did:ewc:${userAddress}`, deployer, 1E15);
+  //   console.log(proxy);
+  // });
 });

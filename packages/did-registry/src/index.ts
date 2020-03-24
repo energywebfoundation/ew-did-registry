@@ -3,6 +3,8 @@ import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Networks } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
+import { ContractFactory, providers } from 'ethers';
+import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../../proxyIdentity/build/contracts/ProxyFactory.json';
 import { IDIDRegistry } from './interface';
 
 class DIDRegistry implements IDIDRegistry {
@@ -67,9 +69,17 @@ class DIDRegistry implements IDIDRegistry {
     return didDocumentLite;
   }
 
-  // async createProxy() {
-
-  // }
+  async createProxy(did: string, deployer: providers.JsonRpcSigner, value: number) {
+    const [, , address] = did.split(':');
+    const proxyFactory = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
+    console.log('Step 2');
+    const proxy = await (await proxyFactory.deploy(address, { value })).deployed();
+    console.log('Step 3');
+    console.log(proxyFactory);
+    await proxy.create({ value })
+      .then((tx: any) => tx.wait());
+    console.log('Step 4');
+  }
 }
 
 export default DIDRegistry;
