@@ -69,16 +69,33 @@ class DIDRegistry implements IDIDRegistry {
     return didDocumentLite;
   }
 
-  async createProxy(did: string, deployer: providers.JsonRpcSigner, value: number) {
-    const [, , address] = did.split(':');
-    const proxyFactory = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
-    console.log('Step 2');
-    const proxy = await (await proxyFactory.deploy(address, { value })).deployed();
-    console.log('Step 3');
-    console.log(proxyFactory);
-    await proxy.create({ value })
-      .then((tx: any) => tx.wait());
-    console.log('Step 4');
+
+  /**
+     * Creates a Proxy Identity
+     *
+     * @example
+     * ```typescript
+     * import DIDRegistry from '@ew-did-registry/did-registry';
+     *
+     * const proxyIdentity = await user.createProxy(erc1056.address, deployer, 0);
+     * ```
+     *
+     * @param { string } contractAddress
+     * @param { JsonRpcSigner } deployer
+     * @param { number } value
+     * @returns { Promsise<void> }
+     */
+
+  async createProxy(contractAddress: string, deployer: providers.JsonRpcSigner, value: number) {
+    try {
+      const proxyFactory = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
+      const proxy = await (await proxyFactory.deploy(contractAddress, { value })).deployed();
+      await proxy.create({ value })
+        .then((tx: any) => tx.wait());
+      return true;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 }
 

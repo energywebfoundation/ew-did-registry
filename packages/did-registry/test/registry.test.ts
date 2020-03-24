@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Resolver, Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Resolver, Operator, abi1056, ethrReg } from '@ew-did-registry/did-ethr-resolver';
 import {
   DIDAttribute,
   IUpdateData,
@@ -21,7 +21,7 @@ import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 import { JsonRpcProvider } from 'ethers/providers';
-import { providers } from 'ethers';
+import { providers, ContractFactory } from 'ethers';
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
@@ -154,11 +154,13 @@ describe('[REGISTRY PACKAGE]', function () {
     document = userLigthDoc.didDocument;
   });
 
-  // it('creates Proxy Identity on createProxy()', async () => {
-  //   const provider = new JsonRpcProvider('http://localhost:8544');
-  //   const deployer: providers.JsonRpcSigner = provider.getSigner(0);
-  //   console.log('Step 1');
-  //   const proxy = await user.createProxy(`did:ewc:${userAddress}`, deployer, 1E15);
-  //   console.log(proxy);
-  // });
+  it('creates Proxy Identity on createProxy()', async () => {
+    const { abi, bytecode: bytecode1056 } = ethrReg;
+    const provider = new JsonRpcProvider('http://localhost:8544');
+    const deployer: providers.JsonRpcSigner = provider.getSigner(0);
+    const erc1056Factory = new ContractFactory(abi, bytecode1056, deployer);
+    const erc1056 = await (await erc1056Factory.deploy()).deployed();
+    const proxyIdentity = await user.createProxy(erc1056.address, deployer, 0);
+    expect(proxyIdentity).to.be.true;
+  });
 });
