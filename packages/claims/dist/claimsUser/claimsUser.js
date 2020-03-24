@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -92,16 +103,19 @@ var ClaimsUser = /** @class */ (function (_super) {
      *
      * @returns { Promise<string> }
      */
-    ClaimsUser.prototype.createPublicClaim = function (publicData) {
+    ClaimsUser.prototype.createPublicClaim = function (publicData, jwtOptions) {
+        if (jwtOptions === void 0) { jwtOptions = {}; }
         return __awaiter(this, void 0, void 0, function () {
             var claim;
             return __generator(this, function (_a) {
+                jwtOptions.subject = jwtOptions.subject || this.did;
+                jwtOptions.issuer = this.did;
                 claim = {
-                    did: this.did,
+                    did: jwtOptions.subject,
                     signer: this.did,
                     claimData: publicData,
                 };
-                return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
+                return [2 /*return*/, this.jwt.sign(claim, __assign(__assign({}, jwtOptions), { algorithm: 'ES256' }))];
             });
         });
     };
@@ -127,12 +141,15 @@ var ClaimsUser = /** @class */ (function (_super) {
      *
      * @returns { Promise<{token: string, saltedFields:{ [key: string]: string }}> } token with private data encrypted by issuer key
      */
-    ClaimsUser.prototype.createPrivateClaim = function (privateData, issuer) {
+    ClaimsUser.prototype.createPrivateClaim = function (privateData, issuer, jwtOptions) {
+        if (jwtOptions === void 0) { jwtOptions = {}; }
         return __awaiter(this, void 0, void 0, function () {
             var saltedFields, claim, issuerDocument, issuerPK, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        jwtOptions.subject = jwtOptions.subject || this.did;
+                        jwtOptions.issuer = this.did;
                         saltedFields = {};
                         claim = {
                             did: this.did,
@@ -154,7 +171,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                             claim.claimData[key] = encryptedValue.toString('hex');
                             saltedFields[key] = saltedValue;
                         });
-                        return [4 /*yield*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
+                        return [4 /*yield*/, this.jwt.sign(claim, __assign(__assign({}, jwtOptions), { algorithm: 'ES256' }))];
                     case 2:
                         token = _a.sent();
                         return [2 /*return*/, { token: token, saltedFields: saltedFields }];
@@ -184,11 +201,14 @@ var ClaimsUser = /** @class */ (function (_super) {
      *
      * @returns { Promise<string> }
      */
-    ClaimsUser.prototype.createProofClaim = function (claimUrl, proofData) {
+    ClaimsUser.prototype.createProofClaim = function (claimUrl, proofData, jwtOptions) {
+        if (jwtOptions === void 0) { jwtOptions = {}; }
         return __awaiter(this, void 0, void 0, function () {
             var claim;
             var _this = this;
             return __generator(this, function (_a) {
+                jwtOptions.subject = jwtOptions.subject || this.did;
+                jwtOptions.issuer = this.did;
                 claim = {
                     did: this.did,
                     signer: this.did,
@@ -220,7 +240,7 @@ var ClaimsUser = /** @class */ (function (_super) {
                         };
                     }
                 });
-                return [2 /*return*/, this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true })];
+                return [2 /*return*/, this.jwt.sign(claim, __assign(__assign({}, jwtOptions), { algorithm: 'ES256' }))];
             });
         });
     };

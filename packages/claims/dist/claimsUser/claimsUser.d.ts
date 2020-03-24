@@ -27,7 +27,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<string> }
      */
-    createPublicClaim(publicData: object): Promise<string>;
+    createPublicClaim(publicData: object, jwtOptions?: any): Promise<string>;
     /**
      * Used by the claim subject to create token with subject encrypted
      * private data which afterwards will be sent to the issuer. Salted private
@@ -52,7 +52,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      */
     createPrivateClaim(privateData: {
         [key: string]: string;
-    }, issuer: string): Promise<{
+    }, issuer: string, jwtOptions?: any): Promise<{
         token: string;
         saltedFields: ISaltedFields;
     }>;
@@ -78,7 +78,7 @@ export declare class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns { Promise<string> }
      */
-    createProofClaim(claimUrl: string, proofData: IProofData): Promise<string>;
+    createProofClaim(claimUrl: string, proofData: IProofData, jwtOptions?: any): Promise<string>;
     /**
      * Verifies token received from issuer
      *
