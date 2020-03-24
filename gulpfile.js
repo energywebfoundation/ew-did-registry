@@ -29,14 +29,12 @@ const configDependabot = require('./.dependabot');
 const BUILD = path.join(__dirname, 'build/');
 const DOCS = path.join(__dirname, 'docs/');
 
-let packages = fs.readdirSync(path.join(__dirname, './packages')).map((directory) => ({
+const packages = fs.readdirSync(path.join(__dirname, './packages')).map((directory) => ({
   fileName: directory,
   expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
   src: path.join(__dirname, `packages/${directory}`),
   config: path.join(__dirname, `packages/${directory}/tsconfig.json`),
 }));
-
-packages = packages.filter((package) => package.fileName !== 'authentication');
 
 const uglifyOptions = {
   compress: {
