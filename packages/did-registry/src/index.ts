@@ -3,8 +3,7 @@ import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Networks } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
-import { ContractFactory, providers } from 'ethers';
-import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../../proxyIdentity/build/contracts/ProxyFactory.json';
+import { ContractFactory, providers, Contract } from 'ethers';
 import { IDIDRegistry } from './interface';
 
 class DIDRegistry implements IDIDRegistry {
@@ -86,13 +85,11 @@ class DIDRegistry implements IDIDRegistry {
      * @returns { Promsise<void> }
      */
 
-  async createProxy(contractAddress: string, deployer: providers.JsonRpcSigner, value: number) {
+  async createProxy(proxyCreator: Contract, value: number) {
     try {
-      const proxyFactory = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
-      const proxy = await (await proxyFactory.deploy(contractAddress, { value })).deployed();
-      await proxy.create({ value })
+      const proxyIdentity = await proxyCreator.create({ value })
         .then((tx: any) => tx.wait());
-      return true;
+      return proxyIdentity.events[proxyIdentity.events.length - 1].address;
     } catch (e) {
       throw new Error(e);
     }

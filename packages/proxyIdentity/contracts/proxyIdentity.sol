@@ -18,7 +18,7 @@ interface IERC1056 {
 contract ProxyIdentity {
     address public creator;
     address public owner;
-    address erc1056;
+    address public erc1056;
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 2**256 - 1;
     mapping(bytes32 => bool) digests;

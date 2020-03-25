@@ -14,11 +14,11 @@ import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIden
 import {
   ethrReg,
 } from '../constants';
-import { Operator } from './operator';
+import { DefaultOperator } from './defaultOperator';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 
-export class ProxyOperator extends Operator {
+export class ProxyOperator extends DefaultOperator {
   private proxy: Contract;
 
   private web3: Web3;
@@ -37,6 +37,22 @@ export class ProxyOperator extends Operator {
     this.web3 = new Web3('http://localhost:8544');
   }
 
+  /**
+   * Revokes authentication methods, public keys and delegates from DID document
+   *
+   * @example
+   * ```typescript
+   *import { Operator } from '@ew-did-registry/did-resolver';
+   *import { Keys } from '@ew-did-registry/keys';
+   *
+   * const ownerKeys = new Keys();
+   * const operator = new Operator(ownerKeys);
+   * const updated = await operator.deactivate(did);
+   * ```
+   *
+   * @param { string } did
+   * @returns Promise<boolean>
+   */
   async deactivate(did: string): Promise<boolean> {
     const document = await this.read(did);
     const authRevoked = await this._revokeAuthentications(
@@ -49,6 +65,16 @@ export class ProxyOperator extends Operator {
     return authRevoked && pubKeysRevoked && endpointsRevoked;
   }
 
+
+  /**
+   * Revokes the delegate from DID Document
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of identity of interest
+   * @param { PubKeyType } delegateType - type of delegate of interest
+   * @param { string } delegateDID - did of delegate of interest
+   * @returns Promise<boolean>
+   */
   async revokeDelegate(
     identityDID: string,
     delegateType: PubKeyType,
@@ -71,6 +97,15 @@ export class ProxyOperator extends Operator {
     return true;
   }
 
+  /**
+   * Revokes the attribute from DID Document
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of identity of interest
+   * @param { DIDAttribute } attributeType - type of attribute to revoke
+   * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+   * @returns Promise<boolean>
+   */
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
@@ -94,6 +129,14 @@ export class ProxyOperator extends Operator {
     return true;
   }
 
+  /**
+   * Changes the owner of particular decentralised identity
+   * Returns true on success
+   *
+   * @param { string } identityDID - did of current identity owner
+   * @param { string } newOwnerDid - did of new owner that will be set on success
+   * @returns Promise<boolean>
+   */
   async changeOwner(identityDID: string, newOwnerDid: string): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = newOwnerDid.split(':');
@@ -110,6 +153,18 @@ export class ProxyOperator extends Operator {
     return true;
   }
 
+
+  /**
+   * Function to send transactions to using proxy
+   *
+   * @param method
+   * @param did
+   * @param didAttribute
+   * @param updateData
+   * @param validity
+   * @param overrides
+   * @protected
+   */
   protected async _sendTransaction(
     method: Function,
     did: string,

@@ -17,6 +17,7 @@ import {
   IClaimsUser,
   IClaimsIssuer,
 } from '@ew-did-registry/claims';
+import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../../proxyIdentity/build/contracts/ProxyFactory.json';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '../src';
 import { getSettings } from '../../../tests/init-ganache';
@@ -160,7 +161,9 @@ describe('[REGISTRY PACKAGE]', function () {
     const deployer: providers.JsonRpcSigner = provider.getSigner(0);
     const erc1056Factory = new ContractFactory(abi, bytecode1056, deployer);
     const erc1056 = await (await erc1056Factory.deploy()).deployed();
-    const proxyIdentity = await user.createProxy(erc1056.address, deployer, 1E15);
-    expect(proxyIdentity).to.be.true;
+    const proxyFactory = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
+    const proxyFactoryCreator = await (await proxyFactory.deploy(erc1056.address, { value: 1E15 })).deployed();
+    const proxyIdentity = await user.createProxy(proxyFactoryCreator, 1E15);
+    expect(proxyIdentity).to.match(/^0x[a-fA-F0-9]{40}$/);
   });
 });
