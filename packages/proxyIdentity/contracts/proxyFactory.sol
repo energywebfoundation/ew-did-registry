@@ -7,12 +7,12 @@ contract ProxyFactory {
     ProxyIdentity[] proxies;
     event ProxyCreated(address proxy);
 
-    constructor(address _erc1056) public payable {
+    constructor(address _erc1056) public {
         erc1056 = _erc1056;
     }
 
-    function create() public payable returns (address) {
-        ProxyIdentity proxy = (new ProxyIdentity).value(msg.value)(erc1056);
+    function create() public returns (address) {
+        ProxyIdentity proxy = new ProxyIdentity(erc1056);
         proxies.push(proxy);
         proxy.changeOwner(msg.sender);
         emit ProxyCreated(address(proxy));

@@ -20,7 +20,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
   beforeEach(async () => {
     deployerAddress = await deployer.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, { value: 1E15 })).deployed();
+    proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address)).deployed();
   });
 
   it('create() should set sender as owner of created proxy and proxyFactory as creator', (done) => {
@@ -29,21 +29,21 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
       proxyFactory.removeAllListeners('ProxyCreated');
       const proxy = new Contract(proxyAddress, proxyAbi, deployer);
       proxy.owner()
-          .then((proxyOwner: string) => {
-            expect(proxyOwner).equal(deployerAddress);
-            return proxy.creator()
-          })
-          .then((creator: string) => {
-            expect(creator).equal(proxyFactory.address);
-            done();
-          })
-          .catch((e: Error) => {
-            expect.fail(e.message);
-          })
+        .then((proxyOwner: string) => {
+          expect(proxyOwner).equal(deployerAddress);
+          return proxy.creator()
+        })
+        .then((creator: string) => {
+          expect(creator).equal(proxyFactory.address);
+          done();
+        })
+        .catch((e: Error) => {
+          expect.fail(e.message);
+        })
     });
-    proxyFactory.create({value: 1E15})
-        .then((tx: any) => {
-          tx.wait();
-        });
+    proxyFactory.create()
+      .then((tx: any) => {
+        tx.wait();
+      });
   });
 });

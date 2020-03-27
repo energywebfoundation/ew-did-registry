@@ -27,7 +27,7 @@ contract ProxyIdentity {
     event RecoveryAgentAdded(address agent);
     event RecoveryAgentRemoved(address agent);
 
-    constructor(address _erc1056) public payable {
+    constructor(address _erc1056) public {
         erc1056 = _erc1056;
         creator = msg.sender;
         _changeOwner(msg.sender);
