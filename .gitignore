@@ -7,4 +7,5 @@ docs
 build
 !packages/proxyIdentity/build
 dist
+*.d.ts
 .npmrc

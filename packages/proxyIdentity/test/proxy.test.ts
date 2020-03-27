@@ -96,15 +96,24 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
     const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
     const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
-    const digest = ethers.utils.keccak256(data);
-    creator.signMessage(ethers.utils.arrayify(digest))
-      .then((flatSignature) => {
+    const nonOwner = provider.getSigner(2);
+    nonOwner.getTransactionCount()
+      .then(async (nonce) => {
+        const digest = ethers.utils.keccak256(
+          web3.eth.abi.encodeParameters(
+            ['bytes', 'address', 'uint256', 'uint256'],
+            [data, erc1056.address, 0, nonce + 1],
+          ),
+        );
+        const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        const asNonOwner: Contract = proxy.connect(provider.getSigner(2));
-        return asNonOwner.sendSignedTransaction(data, erc1056.address, v, r, s, 0);
-      })
-      .then((tx: any) => tx.wait());
+        const asNonOwner: Contract = proxy.connect(nonOwner);
+        const tx = await asNonOwner.sendSignedTransaction(
+          data, erc1056.address, v, r, s, 0, nonce + 1,
+        );
+        await tx.wait();
+      });
   });
 
   it('sendSignedTransaction with signed by the non-owner setAttribute() calldata should revert', () => {
@@ -115,12 +124,41 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const digest = ethers.utils.keccak256(data);
     const nonOwner = provider.getSigner(1);
     return nonOwner.signMessage(ethers.utils.arrayify(digest))
-      .then((flatSignature) => {
+      .then(async (flatSignature) => {
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        return proxy.sendSignedTransaction(data, erc1056.address, v, r, s, 0);
+        return proxy.sendSignedTransaction(
+          data, erc1056.address, v, r, s, 0, await creator.getTransactionCount(),
+        );
       })
       .should.be.rejectedWith('Signature is not valid');
+  });
+
+  it('sendSignedTransaction twice should revert', async () => {
+    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
+    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
+    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
+    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const nonOwner = provider.getSigner(2);
+    const nonce = await nonOwner.getTransactionCount();
+    const digest = ethers.utils.keccak256(
+      web3.eth.abi.encodeParameters(
+        ['bytes', 'address', 'uint256', 'uint256'],
+        [data, erc1056.address, 0, nonce],
+      ),
+    );
+    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
+    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const { r, s, v } = expSignature;
+    const asNonOwner: Contract = proxy.connect(nonOwner);
+    const tx = await asNonOwner.sendSignedTransaction(
+      data, erc1056.address, v, r, s, 0, nonce,
+    );
+    await tx.wait();
+    return asNonOwner.sendSignedTransaction(
+      data, erc1056.address, v, r, s, 0, nonce,
+    )
+      .should.be.rejectedWith('This transaction has already been sent');
   });
 
   it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
@@ -179,12 +217,21 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const pay = new BigNumber('1000000000000000000');
     const initialBalance = await provider.getBalance(payee);
     const data = '0x0';
-    const digest = ethers.utils.keccak256(data);
+    const nonOwner = provider.getSigner(2);
+    const nonce = await nonOwner.getTransactionCount();
+    const digest = ethers.utils.keccak256(
+      web3.eth.abi.encodeParameters(
+        ['bytes', 'address', 'uint256', 'uint256'],
+        [data, payee, pay, nonce],
+      ),
+    );
     const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
     const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
     const { r, s, v } = expSignature;
-    const asNonOwner: Contract = proxy.connect(provider.getSigner(2));
-    const tx = await asNonOwner.sendSignedTransaction(data, payee, v, r, s, pay, { value: pay });
+    const asNonOwner: Contract = proxy.connect(nonOwner);
+    const tx = await asNonOwner.sendSignedTransaction(
+      data, payee, v, r, s, pay, nonce, { value: pay },
+    );
     await tx.wait();
     const finalBalance = await provider.getBalance(payee);
     expect(initialBalance.add(pay).eq(finalBalance)).true;
@@ -193,7 +240,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   it('pre-existing balance can be sent', async () => {
     const dest = accounts[2];
     const pay = '10000000000000000000';
-    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest))
+    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest));
     await web3.eth.sendTransaction({
       from: accounts[3],
       to: proxy.address,

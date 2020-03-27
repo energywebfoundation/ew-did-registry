@@ -18,6 +18,20 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "erc1056",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "owner",
       "outputs": [
         {
@@ -161,6 +175,10 @@
         {
           "name": "value",
           "type": "uint256"
+        },
+        {
+          "name": "nonce",
+          "type": "uint256"
         }
       ],
       "name": "sendSignedTransaction",
@@ -220,7 +238,7 @@
   "source": "pragma solidity 0.5.8;\n\ninterface IERC1056 {\n    function addDelegate(\n        address identity,\n        bytes32 delegateType,\n        address delegate,\n        uint256 validity\n    ) external;\n\n    function revokeDelegate(\n        address identity,\n        bytes32 delegateType,\n        address delegate\n    ) external;\n}\n\ncontract ProxyIdentity {\n    address public creator;\n    address public owner;\n    address erc1056;\n    mapping(address => bool) recoveryAgents;\n    uint256 defaultValidity = 2**256 - 1;\n\n    event TransactionSent(bytes data, address to, uint256 value);\n    event OwnerChanged(address identity, address prev, address next);\n    event RecoveryAgentAdded(address agent);\n    event RecoveryAgentRemoved(address agent);\n\n    constructor(address _erc1056) public {\n        erc1056 = _erc1056;\n        creator = msg.sender;\n        _changeOwner(msg.sender);\n    }\n\n    modifier _owner() {\n        require(msg.sender == owner, \"Only owner allowed\");\n        _;\n    }\n\n    modifier _recoveryAgent() {\n        require(\n            recoveryAgents[msg.sender],\n            \"Only recovery agent can change the owner\"\n        );\n        _;\n    }\n\n    function sendTransaction(bytes memory _data, address to, uint256 value)\n        public\n        payable\n        _owner\n    {\n        require(_sendTransaction(_data, to, value), \"Can't send transaction\");\n    }\n\n    function _sendTransaction(bytes memory _data, address to, uint256 value)\n        internal\n        returns (bool success)\n    {\n        bytes memory data = _data;\n        uint256 len = data.length;\n        // solium-disable-next-line security/no-inline-assembly\n        assembly {\n            success := call(gas, to, value, add(data, 0x20), len, 0, 0)\n        }\n        emit TransactionSent(_data, to, value);\n    }\n\n    function sendSignedTransaction(\n        bytes memory data,\n        address to,\n        uint8 v,\n        bytes32 r,\n        bytes32 s,\n        uint256 value\n    ) public payable {\n        bytes32 digest = keccak256(data);\n        bytes32 hash = keccak256(\n            abi.encodePacked(\"\\x19Ethereum Signed Message:\\n32\", digest)\n        );\n        address signer = ecrecover(hash, v, r, s);\n        require(owner == signer, \"Signature is not valid\");\n        require(_sendTransaction(data, to, value), \"Can't send transaction\");\n    }\n\n    function addRecoveryAgent(address agent) public _owner {\n        _addRecoveryAgent(agent);\n    }\n\n    function _addRecoveryAgent(address agent) internal {\n        recoveryAgents[agent] = true;\n        emit RecoveryAgentAdded(agent);\n    }\n\n    function removeRecoveryAgent(address agent) public _recoveryAgent {\n        recoveryAgents[agent] = false;\n        emit RecoveryAgentRemoved(agent);\n    }\n\n    /**\n    * Used by the proxy factory to make sender the owner\n     */\n    function changeOwner(address newOwner) public _recoveryAgent {\n        _changeOwner(newOwner);\n    }\n\n    function _changeOwner(address newOwner) internal {\n        address oldOwner = owner;\n        if (owner != address(0x0)) {\n            removeRecoveryAgent(owner);\n            _revokeDelegate(owner);\n        }\n        owner = newOwner;\n        _addRecoveryAgent(newOwner);\n        _addDelegate(newOwner);\n        emit OwnerChanged(address(this), oldOwner, newOwner);\n    }\n\n    function _addDelegate(address delegate) internal {\n        IERC1056(erc1056).addDelegate(\n            address(this),\n            \"sigAuth\",\n            delegate,\n            defaultValidity\n        );\n    }\n\n    function _revokeDelegate(address delegate) internal {\n        IERC1056(erc1056).revokeDelegate(address(this), \"sigAuth\", delegate);\n    }\n\n    function() external payable {}\n}\n",
   "sourcePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
   "ast": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
+    "absolutePath": "/home/krll/Desktop/EW/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
     "exportedSymbols": {
       "IERC1056": [
         82
@@ -593,7 +611,7 @@
               }
             },
             "value": null,
-            "visibility": "internal"
+            "visibility": "public"
           },
           {
             "constant": false,
@@ -614,14 +632,14 @@
                 "id": 89,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "436:7:1",
+                "src": "443:7:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "428:24:1",
+              "src": "435:24:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                 "typeString": "mapping(address => bool)"
@@ -630,7 +648,7 @@
                 "id": 90,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
-                "src": "447:4:1",
+                "src": "454:4:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_bool",
                   "typeString": "bool"
@@ -657,7 +675,7 @@
               "id": 93,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "473:7:1",
+              "src": "480:7:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -695,7 +713,7 @@
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "499:1:1",
+                  "src": "506:1:1",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_2_by_1",
@@ -715,7 +733,7 @@
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "502:3:1",
+                  "src": "509:3:1",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_256_by_1",
@@ -723,7 +741,7 @@
                   },
                   "value": "256"
                 },
-                "src": "499:6:1",
+                "src": "506:6:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
                   "typeString": "int_const 1157...(70 digits omitted)...9936"
@@ -741,7 +759,7 @@
                 "kind": "number",
                 "lValueRequested": false,
                 "nodeType": "Literal",
-                "src": "508:1:1",
+                "src": "515:1:1",
                 "subdenomination": null,
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_1_by_1",
@@ -749,12 +767,57 @@
                 },
                 "value": "1"
               },
-              "src": "499:10:1",
+              "src": "506:10:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
                 "typeString": "int_const 1157...(70 digits omitted)...9935"
               }
             },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 121,
+            "name": "digests",
+            "nodeType": "VariableDeclaration",
+            "scope": 461,
+            "src": "522:32:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_bool_$",
+              "typeString": "mapping(bytes32 => bool)"
+            },
+            "typeName": {
+              "id": 120,
+              "keyType": {
+                "id": 118,
+                "name": "bytes32",
+                "nodeType": "ElementaryTypeName",
+                "src": "530:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "522:24:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_bool_$",
+                "typeString": "mapping(bytes32 => bool)"
+              },
+              "valueType": {
+                "id": 119,
+                "name": "bool",
+                "nodeType": "ElementaryTypeName",
+                "src": "541:4:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                }
+              }
+            },
+            "value": null,
             "visibility": "internal"
           },
           {
@@ -785,7 +848,7 @@
                     "id": 100,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "538:5:1",
+                    "src": "583:5:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes_storage_ptr",
                       "typeString": "bytes"
@@ -812,7 +875,7 @@
                     "id": 102,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "550:7:1",
+                    "src": "595:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -840,7 +903,7 @@
                     "id": 104,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "562:7:1",
+                    "src": "607:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -850,9 +913,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "537:39:1"
+              "src": "582:39:1"
             },
-            "src": "516:61:1"
+            "src": "561:61:1"
           },
           {
             "anonymous": false,
@@ -882,7 +945,7 @@
                     "id": 108,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "601:7:1",
+                    "src": "646:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -910,7 +973,7 @@
                     "id": 110,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "619:7:1",
+                    "src": "664:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -938,7 +1001,7 @@
                     "id": 112,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "633:7:1",
+                    "src": "678:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -949,9 +1012,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "600:46:1"
+              "src": "645:46:1"
             },
-            "src": "582:65:1"
+            "src": "627:65:1"
           },
           {
             "anonymous": false,
@@ -981,7 +1044,7 @@
                     "id": 116,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "677:7:1",
+                    "src": "722:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -992,9 +1055,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "676:15:1"
+              "src": "721:15:1"
             },
-            "src": "652:40:1"
+            "src": "697:40:1"
           },
           {
             "anonymous": false,
@@ -1024,7 +1087,7 @@
                     "id": 120,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "724:7:1",
+                    "src": "769:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1035,9 +1098,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "723:15:1"
+              "src": "768:15:1"
             },
-            "src": "697:42:1"
+            "src": "742:42:1"
           },
           {
             "body": {
@@ -1253,7 +1316,7 @@
                     "id": 124,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "757:7:1",
+                    "src": "802:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1264,7 +1327,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "756:18:1"
+              "src": "801:18:1"
             },
             "returnParameters": {
               "id": 127,
@@ -2399,10 +2462,9 @@
                             "src": "2081:34:1",
                             "subdenomination": null,
                             "typeDescriptions": {
-                              "typeIdentifier": "t_stringliteral_178a2411ab6fbc1ba11064408972259c558d0e82fd48b0aba3ad81d14f065e73",
-                              "typeString": "literal_string \"\u0019Ethereum Signed Message:\n32\""
-                            },
-                            "value": "\u0019Ethereum Signed Message:\n32"
+                              "typeIdentifier": "t_bytes_memory_ptr",
+                              "typeString": "bytes memory"
+                            }
                           },
                           {
                             "argumentTypes": null,
@@ -2413,20 +2475,54 @@
                             "referencedDeclaration": 232,
                             "src": "2117:6:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_bytes32",
-                              "typeString": "bytes32"
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 262,
+                            "name": "value",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 250,
+                            "src": "2108:5:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          {
+                            "argumentTypes": null,
+                            "id": 263,
+                            "name": "nonce",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 252,
+                            "src": "2115:5:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
                             }
                           }
                         ],
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_stringliteral_178a2411ab6fbc1ba11064408972259c558d0e82fd48b0aba3ad81d14f065e73",
-                              "typeString": "literal_string \"\u0019Ethereum Signed Message:\n32\""
+                              "typeIdentifier": "t_bytes_memory_ptr",
+                              "typeString": "bytes memory"
                             },
                             {
-                              "typeIdentifier": "t_bytes32",
-                              "typeString": "bytes32"
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            },
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            },
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
                             }
                           ],
                           "expression": {
@@ -2447,12 +2543,12 @@
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
-                          "memberName": "encodePacked",
+                          "memberName": "encode",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": null,
                           "src": "2064:16:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_function_abiencodepacked_pure$__$returns$_t_bytes_memory_ptr_$",
+                            "typeIdentifier": "t_function_abiencode_pure$__$returns$_t_bytes_memory_ptr_$",
                             "typeString": "function () pure returns (bytes memory)"
                           }
                         },
@@ -4909,7 +5005,7 @@
     "src": "0:3683:1"
   },
   "legacyAST": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
+    "absolutePath": "/home/krll/Desktop/EW/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
     "exportedSymbols": {
       "IERC1056": [
         82
@@ -5282,7 +5378,7 @@
               }
             },
             "value": null,
-            "visibility": "internal"
+            "visibility": "public"
           },
           {
             "constant": false,
@@ -5303,14 +5399,14 @@
                 "id": 89,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "436:7:1",
+                "src": "443:7:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "428:24:1",
+              "src": "435:24:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                 "typeString": "mapping(address => bool)"
@@ -5319,7 +5415,7 @@
                 "id": 90,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
-                "src": "447:4:1",
+                "src": "454:4:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_bool",
                   "typeString": "bool"
@@ -5346,7 +5442,7 @@
               "id": 93,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "473:7:1",
+              "src": "480:7:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -5384,7 +5480,7 @@
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "499:1:1",
+                  "src": "506:1:1",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_2_by_1",
@@ -5404,7 +5500,7 @@
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "502:3:1",
+                  "src": "509:3:1",
                   "subdenomination": null,
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_256_by_1",
@@ -5412,7 +5508,7 @@
                   },
                   "value": "256"
                 },
-                "src": "499:6:1",
+                "src": "506:6:1",
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639936_by_1",
                   "typeString": "int_const 1157...(70 digits omitted)...9936"
@@ -5430,7 +5526,7 @@
                 "kind": "number",
                 "lValueRequested": false,
                 "nodeType": "Literal",
-                "src": "508:1:1",
+                "src": "515:1:1",
                 "subdenomination": null,
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_1_by_1",
@@ -5438,12 +5534,57 @@
                 },
                 "value": "1"
               },
-              "src": "499:10:1",
+              "src": "506:10:1",
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
                 "typeString": "int_const 1157...(70 digits omitted)...9935"
               }
             },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 121,
+            "name": "digests",
+            "nodeType": "VariableDeclaration",
+            "scope": 461,
+            "src": "522:32:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_bool_$",
+              "typeString": "mapping(bytes32 => bool)"
+            },
+            "typeName": {
+              "id": 120,
+              "keyType": {
+                "id": 118,
+                "name": "bytes32",
+                "nodeType": "ElementaryTypeName",
+                "src": "530:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "522:24:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_bool_$",
+                "typeString": "mapping(bytes32 => bool)"
+              },
+              "valueType": {
+                "id": 119,
+                "name": "bool",
+                "nodeType": "ElementaryTypeName",
+                "src": "541:4:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                }
+              }
+            },
+            "value": null,
             "visibility": "internal"
           },
           {
@@ -5474,7 +5615,7 @@
                     "id": 100,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "538:5:1",
+                    "src": "583:5:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes_storage_ptr",
                       "typeString": "bytes"
@@ -5501,7 +5642,7 @@
                     "id": 102,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "550:7:1",
+                    "src": "595:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5529,7 +5670,7 @@
                     "id": 104,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "562:7:1",
+                    "src": "607:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -5539,9 +5680,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "537:39:1"
+              "src": "582:39:1"
             },
-            "src": "516:61:1"
+            "src": "561:61:1"
           },
           {
             "anonymous": false,
@@ -5571,7 +5712,7 @@
                     "id": 108,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "601:7:1",
+                    "src": "646:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5599,7 +5740,7 @@
                     "id": 110,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "619:7:1",
+                    "src": "664:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5627,7 +5768,7 @@
                     "id": 112,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "633:7:1",
+                    "src": "678:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5638,9 +5779,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "600:46:1"
+              "src": "645:46:1"
             },
-            "src": "582:65:1"
+            "src": "627:65:1"
           },
           {
             "anonymous": false,
@@ -5670,7 +5811,7 @@
                     "id": 116,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "677:7:1",
+                    "src": "722:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5681,9 +5822,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "676:15:1"
+              "src": "721:15:1"
             },
-            "src": "652:40:1"
+            "src": "697:40:1"
           },
           {
             "anonymous": false,
@@ -5713,7 +5854,7 @@
                     "id": 120,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "724:7:1",
+                    "src": "769:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5724,9 +5865,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "723:15:1"
+              "src": "768:15:1"
             },
-            "src": "697:42:1"
+            "src": "742:42:1"
           },
           {
             "body": {
@@ -5942,7 +6083,7 @@
                     "id": 124,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "757:7:1",
+                    "src": "802:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5953,7 +6094,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "756:18:1"
+              "src": "801:18:1"
             },
             "returnParameters": {
               "id": 127,

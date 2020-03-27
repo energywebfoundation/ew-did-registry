@@ -5,6 +5,7 @@ import {ProxyIdentity} from "./proxyIdentity.sol";
 contract ProxyFactory {
     address erc1056;
     ProxyIdentity[] proxies;
+    mapping(address => bool) identities;
     event ProxyCreated(address proxy);
 
     constructor(address _erc1056) public {

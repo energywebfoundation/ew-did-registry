@@ -11,10 +11,8 @@ import {
   IUpdateData,
   PubKeyType,
   IResolverSettings,
-  IDIDDocument,
   IPublicKey,
   IAuthentication,
-  IServiceEndpoint,
 } from '@ew-did-registry/did-resolver-interface';
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild } from '@ew-did-registry/proxyidentity';
