@@ -1,11 +1,9 @@
 import { Contract, providers, ContractFactory } from 'ethers';
 import { JsonRpcProvider } from 'ethers/providers';
 import { expect } from 'chai';
-import { ethrReg } from '../../did-ethr-resolver';
+import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi } from '../build/contracts/ProxyIdentity.json';
 import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../build/contracts/ProxyFactory.json';
-
-const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 
 describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
   this.timeout(0);
