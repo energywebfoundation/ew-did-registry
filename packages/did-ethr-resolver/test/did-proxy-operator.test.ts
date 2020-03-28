@@ -27,7 +27,7 @@ const { Secp256k1, ED25519 } = Algorithms;
 const { VerificationKey2018, SignatureAuthentication2018 } = PubKeyType;
 const { HEX } = Encoding;
 
-describe.only('[DID-PROXY-OPERATOR]', function () {
+describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys();
   let operator: ProxyOperator;

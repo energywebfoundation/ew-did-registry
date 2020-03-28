@@ -15,7 +15,7 @@
     "web3": "^1.2.6"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.10",
+    "@types/chai": "^4.2.4",
     "chai": "^4.2.0",
     "chai-events": "0.0.3",
     "ganache-cli": "^6.9.1",

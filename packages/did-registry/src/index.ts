@@ -1,9 +1,9 @@
+import { Contract } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Networks } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
-import { ContractFactory, providers, Contract } from 'ethers';
 import { IDIDRegistry } from './interface';
 
 class DIDRegistry implements IDIDRegistry {
@@ -76,23 +76,24 @@ class DIDRegistry implements IDIDRegistry {
      * ```typescript
      * import DIDRegistry from '@ew-did-registry/did-registry';
      *
-     * const proxyIdentity = await user.createProxy(erc1056.address, deployer, 0);
+     * const proxy = await DiDRegistry.createProxy();
      * ```
      *
      * @param { string } contractAddress
      * @param { JsonRpcSigner } deployer
      * @param { number } value
-     * @returns { Promsise<void> }
+     * @returns { Promsise<string> }
      */
 
-  async createProxy(proxyCreator: Contract, value: number) {
-    try {
-      const proxyIdentity = await proxyCreator.create({ value })
-        .then((tx: any) => tx.wait());
-      return proxyIdentity.events[proxyIdentity.events.length - 1].address;
-    } catch (e) {
-      throw new Error(e);
-    }
+  static async createProxy(proxyFactory: Contract): Promise<string> {
+    const tx = await proxyFactory.create();
+    await tx.wait();
+    return new Promise<string>(((resolve) => {
+      proxyFactory.on('ProxyCreated', (proxy) => {
+        proxyFactory.removeAllListeners('ProxyCreated');
+        resolve(proxy);
+      });
+    }));
   }
 }
 

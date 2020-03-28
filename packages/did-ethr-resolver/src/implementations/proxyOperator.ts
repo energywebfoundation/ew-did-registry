@@ -14,11 +14,11 @@ import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIden
 import {
   ethrReg,
 } from '../constants';
-import { DefaultOperator } from './defaultOperator';
+import { Operator } from './operator';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 
-export class ProxyOperator extends DefaultOperator {
+export class ProxyOperator extends Operator {
   private proxy: Contract;
 
   private web3: Web3;

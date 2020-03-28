@@ -9,3 +9,5 @@ build
 dist
 *.d.ts
 .npmrc
+.log
+packages/proxyIdentity/index.js
