@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
-import {DelegateTypes} from '@ew-did-registry/did-resolver-interface';
+import { DelegateTypes } from '@ew-did-registry/did-resolver-interface';
 import crypto from 'crypto';
-import {Claims} from '../claims';
-import {IClaimsVerifier} from '../interface';
-import {IPrivateClaim, IProofClaim, IPublicClaim,} from '../models';
+import { Claims } from '../claims';
+import { IClaimsVerifier } from '../interface';
+import { IPrivateClaim, IProofClaim, IPublicClaim } from '../models';
 
 const { bn, hash } = sjcl;
 

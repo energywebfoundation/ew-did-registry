@@ -1,0 +1,31 @@
+{
+  "name": "@ew-did-registry/did-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts"
+  },
+  "keywords": [
+    "store",
+    "identity",
+    "hub",
+    "did"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@decentralized-identity/did-auth-jose": "0.1.9",
+    "@decentralized-identity/did-common-typescript": "0.1.7",
+    "@decentralized-identity/hub-common-js": "0.1.1",
+    "@decentralized-identity/hub-sdk-js": "0.1.2",
+    "@ew-did-registry/keys": "^1.0.0",
+    "elliptic": "^6.5.2",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.5",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.0"
+  }
+}

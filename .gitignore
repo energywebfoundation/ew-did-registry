@@ -8,3 +8,5 @@ build
 !packages/proxyIdentity/build
 dist
 .npmrc
+*.d.ts
+packages/proxyIdentity/index.js
