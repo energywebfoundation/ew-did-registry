@@ -3,7 +3,9 @@ import { IResolverSettings, IOperator } from '@ew-did-registry/did-resolver-inte
 import { Operator } from './operator';
 import { ProxyOperator } from './proxyOperator';
 
-export const createOperator = (keys: IKeys, settings: IResolverSettings, proxyAddress?: string): IOperator => {
+export const createOperator = (
+  keys: IKeys, settings: IResolverSettings, proxyAddress?: string,
+): IOperator => {
   if (proxyAddress) {
     return new ProxyOperator(keys, settings, proxyAddress);
   }
