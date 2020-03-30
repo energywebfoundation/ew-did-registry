@@ -7,4 +7,7 @@ docs
 build
 !packages/proxyIdentity/build
 dist
+*.d.ts
 .npmrc
+.log
+packages/proxyIdentity/index.js

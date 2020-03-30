@@ -1,3 +1,4 @@
+import { Contract } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { IResolver } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Networks } from '@ew-did-registry/did';
@@ -65,6 +66,34 @@ class DIDRegistry implements IDIDRegistry {
     const didDocumentLite = temporaryFactory.createLite(this.resolver, did);
     await didDocumentLite.read(did);
     return didDocumentLite;
+  }
+
+
+  /**
+     * Creates a Proxy Identity
+     *
+     * @example
+     * ```typescript
+     * import DIDRegistry from '@ew-did-registry/did-registry';
+     *
+     * const proxy = await DiDRegistry.createProxy();
+     * ```
+     *
+     * @param { string } contractAddress
+     * @param { JsonRpcSigner } deployer
+     * @param { number } value
+     * @returns { Promsise<string> }
+     */
+
+  static async createProxy(proxyFactory: Contract): Promise<string> {
+    const tx = await proxyFactory.create();
+    await tx.wait();
+    return new Promise<string>(((resolve) => {
+      proxyFactory.on('ProxyCreated', (proxy) => {
+        proxyFactory.removeAllListeners('ProxyCreated');
+        resolve(proxy);
+      });
+    }));
   }
 }
 
