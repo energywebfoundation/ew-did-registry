@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts"
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "compile": "../../node_modules/.bin/tsc"
   },
   "keywords": [
     "store",
@@ -18,8 +19,11 @@
     "@decentralized-identity/did-auth-jose": "0.1.9",
     "@decentralized-identity/did-common-typescript": "0.1.7",
     "@decentralized-identity/hub-common-js": "0.1.1",
+    "@decentralized-identity/hub-node-core": "0.1.4",
     "@decentralized-identity/hub-sdk-js": "0.1.2",
     "@ew-did-registry/keys": "^1.0.0",
+    "ec-key": "0.0.4",
+    "eciesjs": "^0.3.5",
     "elliptic": "^6.5.2",
     "node-fetch": "^2.6.0"
   },
