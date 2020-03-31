@@ -3,3 +3,4 @@ docs/
 scripts/
 node_modules
 truffle-config.js
+*.d.ts
