@@ -3,8 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-const fs = require('fs');
-const { DidCryptoSuite, DidPrivateKey } = require('@ew-did-registry/did-store');
+const { DidCryptoSuite, DidPrivateKey } = require('@ew-did-registry/did-hub-client');
 
 const Hub = require('@decentralized-identity/hub-node-core');
 const hubMongo = require('@microsoft/hub-mongo-connector');
@@ -12,11 +11,9 @@ const didCommon = require('@decentralized-identity/did-common-typescript');
 const didAuth = require('@decentralized-identity/did-auth-jose');
 
 const universalResolverUrl = 'https://beta.discover.did.microsoft.com';
-const privateKeyFilePath = './private.jwk';
 const mongoUrl = 'mongodb://localhost:27017';
 
 async function runHub() {
-
   const app = express();
   const port = 8080;
   app.use(bodyParser.raw({
@@ -40,9 +37,7 @@ async function runHub() {
     d: 'qVMoTkgBB94luRVJjLVr+gRshw9W31gCG6G3IQIQEMw=',
   };
 
-  const privateJwk = JSON.parse(fs.readFileSync(privateKeyFilePath, 'utf8'));
   const hubPrivateKey = {
-    [privateJwk.kid]: didAuth.PrivateKeyRsa.wrapJwk(privateJwk.kid, privateJwk),
     [ecPrivJwk.kid]: DidPrivateKey.wrapJwk(ecPrivJwk.kid, ecPrivJwk),
   };
   const hubCryptoSuites = [new didAuth.RsaCryptoSuite(), new DidCryptoSuite()];

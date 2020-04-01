@@ -1,1 +1,0 @@
-{"kty":"EC","kid":"did:test:ccdc595e-7d72-46eb-ab1b-efa0a785b3cb#key-1","defaultEncryptionAlgorithm":"ECIES","crv":"P-256K","x":"XFitpRrkx1UgCIAoKkZAFgFiIuGjoDXyTu5Ll7ItlfU=","y":"DtCAxEnKOkZOYiphA8dvNaKKDfiXPgzbArHKdKk4K0s=","defaultSignAlgorithm":"ES256K","d":"e74iceDdkViL3K2hPSWcOZewIEEi36Hv75weP4iYvYw="}
