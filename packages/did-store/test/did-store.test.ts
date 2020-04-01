@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { DidStore } from '../src';
 
@@ -13,16 +14,19 @@ describe('[DID-STORE PACKAGE]', function () {
   let did: string;
   let store: DidStore;
 
-  it('register() should return DID', async () => {
+  before('registration', async () => {
     did = await DidStore.register(keys.privateKey, 'http://localhost:8080');
-    console.log('>>> registered did:', did);
     store = new DidStore(did, keys.privateKey, hubDid, hubEndpoint);
   });
 
-  it('store should store object', async () => {
-    const storeRes = await store.store('This is registration claim');
-    console.log('>>> store response:', storeRes);
-    const objectIds = await store.getObjectIds();
-    console.log('>>> object ids:', objectIds.getObjects());
+  it('fetchClaim should return claim by claim Id', async () => {
+    const claim = 'Test claim';
+    const claimId = await store.store(claim);
+    // console.log('>>> store response:', claimId);
+    // const objectIds = await store.getObjectIds();
+    // console.log('>>> object ids:', objectIds);
+    const fetchedclaim = await store.fetchClaim(claimId);
+    expect(claim).equal(fetchedclaim);
+    // console.log('>>> claim:', claim);
   });
 });

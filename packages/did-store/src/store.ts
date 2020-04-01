@@ -7,11 +7,13 @@ import fetch from 'node-fetch';
 import http from 'https';
 import fs from 'fs';
 import DidDocument from '@decentralized-identity/did-common-typescript/dist/lib/DidDocument';
+import { IHubCommitQueryOptions, IHubObjectQueryOptions, IObjectMetadata } from '@decentralized-identity/hub-common-js';
 import { DidCryptoSuite } from './crypto/DidCryptoSuit';
 import { CommitSigner } from './crypto/CommitSigner';
 import { createJwkFromHex } from './utils';
 
 const REG_KEY_ID = 'key-1';
+const CLAIM_TYPE = 'Claim';
 
 export class DidStore {
   private did: string;
@@ -59,14 +61,6 @@ export class DidStore {
     return (await this.resolver.resolve(this.did)).didDocument;
   }
 
-  async getObjectIds(): Promise<HubSdk.HubObjectQueryResponse> {
-    return this.session.send(new HubObjectQueryRequest({
-      interface: 'Collections',
-      context: 'identity.foundation/schemas',
-      type: 'Registration',
-    }));
-  }
-
   /**
    * Register new user and returns his DID in `test` method
    */
@@ -107,22 +101,56 @@ export class DidStore {
     });
   }
 
-  public async store(payload: string): Promise<string> {
+  private async getObjectIds(): Promise<string[]> {
+    const queryOptions: IHubObjectQueryOptions = {
+      interface: 'Collections',
+      context: 'identity.foundation/schemas',
+      type: CLAIM_TYPE,
+    };
+
+    // TODO: refactor fetching in separate func
+    const objects: IObjectMetadata[] = [];
+    let response: HubSdk.HubObjectQueryResponse | undefined;
+
+    do {
+      const skipTokenField: any = response && response.hasSkipToken()
+        ? { skip_token: response.getSkipToken() }
+        : {};
+      const request = new HubObjectQueryRequest(Object.assign(queryOptions, skipTokenField));
+      // eslint-disable-next-line no-await-in-loop
+      response = await this.session.send(request);
+      objects.push(...response.getObjects());
+      // console.log(response);
+      // console.log(`Fetched ${response.getObjects().length} objects.`);
+    } while (response.hasSkipToken());
+
+    const objectIds = objects.map(o => o.id);
+    // console.log('Discovered object IDs', objectIds.map(id => id.substr(0, 8)));
+    return objectIds;
+  }
+
+  /**
+   * 
+   * @param claim {string} stringified claim
+   * @returns {string} created claim id
+   */
+  public async store(claim: string): Promise<string> {
     const response = await this.writeCommit(new HubSdk.Commit({
       protected: this.getStandardHeaders('create'),
       payload: {
-        text: payload,
+        text: claim,
         done: false,
       },
     }));
-    return response.getRevisions()[0];
+    // console.log('>>> revisions of created object', response);
+    return response.getRevisions()[0]; // first revision is object id
   }
 
   private async writeCommit(commit: Commit): Promise<HubSdk.HubWriteResponse> {
     const signedCommit = await this.signer.sign(commit);
     const commitRequest = new HubSdk.HubWriteRequest(signedCommit);
     const commitResponse = await this.session.send(commitRequest);
-    console.log(commitResponse);
+    // console.log(commitResponse);
     return commitResponse;
   }
 
@@ -133,10 +161,98 @@ export class DidStore {
       sub: this.did,
       interface: 'Collections',
       context: 'identity.foundation/schemas',
-      type: 'Registration',
+      type: CLAIM_TYPE,
       operation,
       commit_strategy: 'basic',
       ...(object_id ? { object_id } : {}),
     };
+  }
+
+  /**
+   * Fetches stringified claim
+   * 
+   * @param claimId {string} claim id returned from `store` method
+   * @returns {string} claim
+   */
+  public async fetchClaim(claimId: string): Promise<string> {
+    const claims = await this.fetchClaims();
+    return claims.find((claim) => claim.claimId === claimId).claim;
+  }
+
+  public async fetchClaims(): Promise<Array<{ claimId: string; claim: string }>> {
+    const objectIds = await this.getObjectIds();
+
+    if (objectIds.length === 0) {
+      // console.log('No objects found.');
+      return [];
+    }
+
+    const relevantCommits = await this.fetchAllCommitsRelatedToObjects(objectIds);
+
+    // Group commits by object_id
+    const commitsByObject = this.groupCommitsByObjectId(relevantCommits);
+
+    const strategy = new HubSdk.CommitStrategyBasic();
+    const resolvedClaims = [];
+    const commitsByObjectEntries = Object.entries(commitsByObject);
+
+    // Iterate through each object and transform the commits into a final resolved state
+    for (let i = 0; i < commitsByObjectEntries.length; i += 1) {
+      const [objectId, commits] = commitsByObjectEntries[i];
+      // eslint-disable-next-line no-await-in-loop
+      const resolvedObject = await strategy.resolveObject(commits);
+
+      if (resolvedObject !== null) {
+        resolvedClaims.push({
+          claimId: objectId,
+          claim: resolvedObject.text,
+          // done: resolvedObject.done,
+        });
+      }
+    }
+    return resolvedClaims;
+  }
+
+  private async fetchAllCommitsRelatedToObjects(
+    objectIds: string[],
+  ): Promise<HubSdk.SignedCommit[]> {
+    const queryOptions: IHubCommitQueryOptions = {
+      object_id: objectIds,
+    };
+
+    const commits: HubSdk.SignedCommit[] = [];
+    let response: HubSdk.HubCommitQueryResponse | undefined;
+
+    do {
+      const skipTokenField: any = response && response.hasSkipToken()
+        ? { skip_token: response.getSkipToken() }
+        : {};
+      const request = new HubSdk.HubCommitQueryRequest(Object.assign(queryOptions, skipTokenField));
+      // eslint-disable-next-line no-await-in-loop
+      response = await this.session.send(request);
+      commits.push(...response.getCommits());
+      // console.log('>>> commit response:', response);
+      // console.log(`Fetched ${response.getCommits().length} commits.`);
+    } while (response.hasSkipToken());
+
+    // console.log('Retrieved commits', commits);
+
+    return commits;
+  }
+
+  private groupCommitsByObjectId(
+    commits: HubSdk.SignedCommit[],
+  ): { [id: string]: HubSdk.SignedCommit[] } {
+    const objects: { [id: string]: HubSdk.SignedCommit[] } = {};
+    commits.forEach((commit) => {
+      const commitObjectId = commit.getObjectId();
+      const object = objects[commitObjectId];
+      if (object) {
+        object.push(commit);
+      } else {
+        objects[commitObjectId] = [commit];
+      }
+    });
+    return objects;
   }
 }

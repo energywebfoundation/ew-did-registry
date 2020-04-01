@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "noImplicitAny": true
+    "typeRoots": [
+      "../../node_modules/@types",
+      "../../typings"
+    ]
   },
   "exclude": [
     "node_modules"
