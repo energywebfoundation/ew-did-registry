@@ -1,3 +1,3 @@
-export * from './store';
+export * from './hubClient';
 export * from './utils';
 export * from './crypto';

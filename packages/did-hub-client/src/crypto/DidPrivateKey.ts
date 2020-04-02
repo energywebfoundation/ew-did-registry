@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { EcPrivateKey, PublicKey, PrivateKey } from '@decentralized-identity/did-auth-jose';
-import EcPublicKey from '@decentralized-identity/did-auth-jose/dist/lib/crypto/ec/EcPublicKey';
+import { PublicKey, PrivateKey } from '@decentralized-identity/did-auth-jose';
 import { IDidDocumentPublicKey } from '@decentralized-identity/did-common-typescript';
 import { KeyOperation } from '@decentralized-identity/did-auth-jose/dist/lib/security/PublicKey';
 import ecKey from 'ec-key';
 import { DidPublicKey } from './DidPublicKey';
-
 
 /**
  * Represents an Elliptic Curve private key

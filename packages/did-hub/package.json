@@ -4,7 +4,7 @@
   "description": "An identity hub secured using decentralized identities and served over HTTP with a Mongo DB datastore",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node start.js"
   },
   "author": "",
   "license": "ISC",

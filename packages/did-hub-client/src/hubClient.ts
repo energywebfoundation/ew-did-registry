@@ -2,20 +2,19 @@
 import * as DidAuth from '@decentralized-identity/did-auth-jose';
 import * as HubSdk from '@decentralized-identity/hub-sdk-js';
 import { HttpResolver } from '@decentralized-identity/did-common-typescript';
+import DidDocument from '@decentralized-identity/did-common-typescript/dist/lib/DidDocument';
 import { HubObjectQueryRequest, Commit } from '@decentralized-identity/hub-sdk-js';
+import { IHubCommitQueryOptions, IHubObjectQueryOptions, IObjectMetadata } from '@decentralized-identity/hub-common-js';
 import fetch from 'node-fetch';
 import http from 'https';
 import fs from 'fs';
-import DidDocument from '@decentralized-identity/did-common-typescript/dist/lib/DidDocument';
-import { IHubCommitQueryOptions, IHubObjectQueryOptions, IObjectMetadata } from '@decentralized-identity/hub-common-js';
-import { DidCryptoSuite } from './crypto/DidCryptoSuit';
-import { CommitSigner } from './crypto/CommitSigner';
+import { DidPrivateKey, DidCryptoSuite, CommitSigner } from './crypto';
 import { createJwkFromHex } from './utils';
 
 const REG_KEY_ID = 'key-1';
 const CLAIM_TYPE = 'Claim';
 
-export class DidStore {
+export class HubClient {
   private did: string;
 
   private privJwk: DidAuth.PrivateKey;
@@ -35,12 +34,11 @@ export class DidStore {
    * Can be retrived from client document's service points
    */
   constructor(did: string, privateKey: string, hubDid?: string, hubEndpoint?: string) {
-    // TODO in abcense of hubEndpoint fetch it from client document
+    // TODO if hubEndpoint is not provided try to fetch hubEndpoint from client document
     this.did = did;
     this.privJwk = createJwkFromHex(privateKey, REG_KEY_ID);
     this.privJwk.kid = `${this.did}#${REG_KEY_ID}`;
     this.resolver = new HttpResolver({ resolverUrl: 'https://beta.discover.did.microsoft.com/', fetch });
-    // console.log('>>> store priv key:', this.privJwk);
     this.session = new HubSdk.HubSession({
       cryptoSuites: [new DidCryptoSuite()],
       clientDid: this.did,
@@ -64,17 +62,18 @@ export class DidStore {
   /**
    * Register new user and returns his DID in `test` method
    */
-  static async register(privateKey: string, hubEndpoint: string): Promise<string> {
-    const privJwk = createJwkFromHex(privateKey, REG_KEY_ID);
-    // console.log('>>> reg priv key:', privJwk);
+  static async register(
+    privateKey: string, hubEndpoint: string,
+  ): Promise<{ did: string; ecPrivJwk: DidPrivateKey }> {
+    const ecPrivJwk = createJwkFromHex(privateKey, REG_KEY_ID);
     const body = {
       didMethod: 'test',
       hubUri: hubEndpoint,
-      publicKey: [privJwk.getPublicKey()],
+      publicKey: [ecPrivJwk.getPublicKey()],
     };
     const cryptoFactory = new DidAuth.CryptoFactory([new DidCryptoSuite()]);
     const token = new DidAuth.JwsToken(JSON.stringify(body), cryptoFactory);
-    const signedRegistrationRequest = await token.sign(privJwk);
+    const signedRegistrationRequest = await token.sign(ecPrivJwk);
 
     const postOptions = {
       host: 'beta.register.did.microsoft.com',
@@ -86,14 +85,14 @@ export class DidStore {
       },
     };
 
-    return new Promise<string>((resolve) => {
+    return new Promise((resolve) => {
       const postReq = http.request({ ...postOptions, rejectUnauthorized: false }, (res) => {
         res.setEncoding('utf8');
         res.on('data', (chunk) => {
-          const { did, status } = JSON.parse(chunk);
-          privJwk.kid = `${did}#${REG_KEY_ID}`;
-          fs.writeFileSync('private.jwk', JSON.stringify(privJwk), { encoding: 'utf8' });
-          resolve(did);
+          const { did } = JSON.parse(chunk);
+          ecPrivJwk.kid = `${did}#${REG_KEY_ID}`;
+          fs.writeFileSync('private.jwk', JSON.stringify(ecPrivJwk), { encoding: 'utf8' });
+          resolve({ did, ecPrivJwk });
         });
       });
       postReq.write(signedRegistrationRequest);
@@ -108,7 +107,6 @@ export class DidStore {
       type: CLAIM_TYPE,
     };
 
-    // TODO: refactor fetching in separate func
     const objects: IObjectMetadata[] = [];
     let response: HubSdk.HubObjectQueryResponse | undefined;
 
@@ -120,12 +118,9 @@ export class DidStore {
       // eslint-disable-next-line no-await-in-loop
       response = await this.session.send(request);
       objects.push(...response.getObjects());
-      // console.log(response);
-      // console.log(`Fetched ${response.getObjects().length} objects.`);
     } while (response.hasSkipToken());
 
     const objectIds = objects.map(o => o.id);
-    // console.log('Discovered object IDs', objectIds.map(id => id.substr(0, 8)));
     return objectIds;
   }
 
@@ -136,13 +131,12 @@ export class DidStore {
    */
   public async store(claim: string): Promise<string> {
     const response = await this.writeCommit(new HubSdk.Commit({
-      protected: this.getStandardHeaders('create'),
+      protected: this.getStandardHeaders(),
       payload: {
         text: claim,
         done: false,
       },
     }));
-    // console.log('>>> revisions of created object', response);
     return response.getRevisions()[0]; // first revision is object id
   }
 
@@ -150,11 +144,10 @@ export class DidStore {
     const signedCommit = await this.signer.sign(commit);
     const commitRequest = new HubSdk.HubWriteRequest(signedCommit);
     const commitResponse = await this.session.send(commitRequest);
-    // console.log(commitResponse);
     return commitResponse;
   }
 
-  private getStandardHeaders(operation: 'create' | 'update' | 'delete', object_id?: string): object {
+  private getStandardHeaders(object_id?: string): object {
     return {
       committed_at: (new Date()).toISOString(),
       iss: this.did,
@@ -162,7 +155,7 @@ export class DidStore {
       interface: 'Collections',
       context: 'identity.foundation/schemas',
       type: CLAIM_TYPE,
-      operation,
+      operation: 'create',
       commit_strategy: 'basic',
       ...(object_id ? { object_id } : {}),
     };
@@ -183,20 +176,17 @@ export class DidStore {
     const objectIds = await this.getObjectIds();
 
     if (objectIds.length === 0) {
-      // console.log('No objects found.');
       return [];
     }
 
     const relevantCommits = await this.fetchAllCommitsRelatedToObjects(objectIds);
 
-    // Group commits by object_id
     const commitsByObject = this.groupCommitsByObjectId(relevantCommits);
 
     const strategy = new HubSdk.CommitStrategyBasic();
     const resolvedClaims = [];
     const commitsByObjectEntries = Object.entries(commitsByObject);
 
-    // Iterate through each object and transform the commits into a final resolved state
     for (let i = 0; i < commitsByObjectEntries.length; i += 1) {
       const [objectId, commits] = commitsByObjectEntries[i];
       // eslint-disable-next-line no-await-in-loop
@@ -206,7 +196,6 @@ export class DidStore {
         resolvedClaims.push({
           claimId: objectId,
           claim: resolvedObject.text,
-          // done: resolvedObject.done,
         });
       }
     }
@@ -231,11 +220,7 @@ export class DidStore {
       // eslint-disable-next-line no-await-in-loop
       response = await this.session.send(request);
       commits.push(...response.getCommits());
-      // console.log('>>> commit response:', response);
-      // console.log(`Fetched ${response.getCommits().length} commits.`);
     } while (response.hasSkipToken());
-
-    // console.log('Retrieved commits', commits);
 
     return commits;
   }

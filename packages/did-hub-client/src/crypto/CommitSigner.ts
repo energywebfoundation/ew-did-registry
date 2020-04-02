@@ -2,11 +2,10 @@ import {
   PrivateKey, JwsToken, CryptoFactory, RsaCryptoSuite, CryptoSuite,
 } from '@decentralized-identity/did-auth-jose';
 import { ICommitSigner, Commit, SignedCommit } from '@decentralized-identity/hub-sdk-js';
-// import objectAssign from '';
 
 interface CommitSignerOptions {
 
-  /** The DID of the identity that will the commit. */
+  /** The DID of the identity that will commit. */
   did: string;
 
   /** The private key to be used to sign the commit. */
@@ -48,9 +47,6 @@ export class CommitSigner implements ICommitSigner {
 
     const protectedHeaders = commit.getProtectedHeaders();
 
-    // const finalProtectedHeaders = objectAssign({}, protectedHeaders, {
-    //   iss: this.did,
-    // });
     const finalProtectedHeaders = { ...protectedHeaders, iss: this.did };
 
     const jws = new JwsToken(commit.getPayload(), new CryptoFactory([this.cryptoSuite]));

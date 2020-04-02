@@ -2,14 +2,11 @@ import {
   Secp256k1CryptoSuite, Encrypter, EcPrivateKey, PublicKey, PrivateKey, CryptoSuite, Signer,
 } from '@decentralized-identity/did-auth-jose';
 import { encrypt, decrypt } from 'eciesjs';
-import { ec as EC } from 'elliptic';
 import EcKey from 'ec-key';
 import EcPublicKey from '@decentralized-identity/did-auth-jose/dist/lib/crypto/ec/EcPublicKey';
 import { IDidDocumentPublicKey } from '@decentralized-identity/did-common-typescript';
 import { PublicKeyConstructors } from '@decentralized-identity/did-auth-jose/dist/lib/interfaces/CryptoSuite';
 import { DidPublicKey } from './DidPublicKey';
-
-const ec = new EC('secp256k1');
 
 export class DidCryptoSuite implements CryptoSuite {
 
@@ -83,11 +80,6 @@ export class DidCryptoSuite implements CryptoSuite {
       const encrypted = encrypt(pub, data);
       resolve(encrypted);
     });
-    // return new Promise<Buffer>((resolve) => {
-    //   const publicKey = jwkToPem(jwk.);
-    //   const encryptedDataBuffer = crypto.publicEncrypt({ key: publicKey, padding: constants.RSA_PKCS1_OAEP_PADDING }, data);
-    //   resolve(encryptedDataBuffer);
-    // });
   }
 
   /**
@@ -101,10 +93,5 @@ export class DidCryptoSuite implements CryptoSuite {
       const decrypted = decrypt(prv, data);
       resolve(decrypted);
     });
-    // return new Promise<Buffer>((resolve) => {
-    //   const privateKey = jwkToPem(jwk, { private: true });
-    //   const decryptedDataBuffer = crypto.privateDecrypt({ key: privateKey, padding: constants.RSA_PKCS1_OAEP_PADDING }, data);
-    //   resolve(decryptedDataBuffer);
-    // });
   }
 }
