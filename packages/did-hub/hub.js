@@ -31,6 +31,9 @@ async function runHub(ecPrivJwk, port) {
     databaseId: 'identity-hub',
     commitCollectionId: 'hub-commits',
     objectCollectionId: 'hub-objects',
+    clientOptions: {
+      useNewUrlParser: true,
+    },
   });
   await mongoStore.initialize();
   const hub = new Hub.default({
