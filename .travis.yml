@@ -14,7 +14,7 @@ deploy:
   provider: npm
   email: "$NPM_EMAIL"
   api_token: "$NPM_API_TOKEN"
-  ffile_glob: true
+  file_glob: true
   file: build/*
   skip_cleanup: true
   on:

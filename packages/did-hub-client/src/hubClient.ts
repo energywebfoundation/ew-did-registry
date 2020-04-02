@@ -55,8 +55,8 @@ export class HubClient {
     });
   }
 
-  async getDocument(): Promise<DidDocument> {
-    return (await this.resolver.resolve(this.did)).didDocument;
+  async getDocument(did: string = this.did): Promise<DidDocument> {
+    return (await this.resolver.resolve(did)).didDocument;
   }
 
   /**

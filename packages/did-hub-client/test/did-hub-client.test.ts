@@ -11,14 +11,14 @@ describe('[DID-HUB-CLIENT PACKAGE]', function () {
   const hubPrivKey = new Keys().privateKey;
   const hubPort = '8080';
   const hubEndpoint = `http://localhost:${hubPort}`;
-  const keys = new Keys();
+  const userPrivKey = new Keys().privateKey;
   let client: HubClient;
 
-  before('registration', async () => {
+  before('register and start hub', async () => {
     const { did: hubDid, ecPrivJwk: hubJwk } = await HubClient.register(hubPrivKey, hubEndpoint);
-    const { did } = await HubClient.register(keys.privateKey, hubEndpoint);
+    const { did } = await HubClient.register(userPrivKey, hubEndpoint);
     await runHub(hubJwk, hubPort);
-    client = new HubClient(did, keys.privateKey, hubDid, hubEndpoint);
+    client = new HubClient(did, userPrivKey, hubDid, hubEndpoint);
   });
 
   after('shutdown hub', () => {
