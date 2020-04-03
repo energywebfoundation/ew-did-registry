@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 const path = require('path');
 const fs = require('fs');
-const { exec } = require('child_process');
 
 const { series, src, dest } = require('gulp');
 const replace = require('gulp-replace');
@@ -30,7 +29,7 @@ const BUILD = path.join(__dirname, 'build/');
 const DOCS = path.join(__dirname, 'docs/');
 
 const packages = fs.readdirSync(path.join(__dirname, './packages'))
-  .filter((directory) => directory !== 'proxyIdentity' && directory !== 'did-hub')
+  .filter((directory) => directory !== 'proxyIdentity')
   .map((directory) => ({
     fileName: directory,
     expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
