@@ -11,3 +11,4 @@ dist
 .npmrc
 .log
 packages/proxyIdentity/index.js
+packages/*/dist

@@ -1,8 +1,8 @@
-import { IDID, Networks } from '@ew-did-registry/did';
-import { IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { IClaimsFactory } from '@ew-did-registry/claims';
-import { IResolver } from '@ew-did-registry/did-resolver-interface';
-import { IKeys } from '@ew-did-registry/keys';
+import {IDID, Methods} from '@ew-did-registry/did';
+import {IDIDDocumentFactory, IDIDDocumentLite} from '@ew-did-registry/did-document';
+import {IClaimsFactory} from '@ew-did-registry/claims';
+import {IResolver} from '@ew-did-registry/did-resolver-interface';
+import {IKeys} from '@ew-did-registry/keys';
 
 /**
  * This is responsible for registration and lifecycle management of DID
@@ -23,13 +23,13 @@ export interface IDIDRegistry {
     /**
      * IKeys is responsible for key management, signing, as well as verification of signature
      */
-    keys: Map<Networks | string, IKeys>;
+    keys: Map<Methods | string, IKeys>;
     /**
      * Resolver allows to create DID Documents for different ids
      */
     resolver: IResolver;
 
-    changeResolver(resolver: IResolver, network: Networks | string): void;
+    changeResolver(resolver: IResolver, method: Methods | string): void;
 
     read(did: string): Promise<IDIDDocumentLite>;
 }

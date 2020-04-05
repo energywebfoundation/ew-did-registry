@@ -1,19 +1,18 @@
-import { Keys } from '@ew-did-registry/keys';
-import { Networks } from '@ew-did-registry/did';
-import { expect } from 'chai';
-import { Operator } from '../src';
+import {Keys} from '@ew-did-registry/keys';
+import {expect} from 'chai';
+import {Operator} from '../src';
 import {
-  IResolverSettings,
-  DIDAttribute,
-  IUpdateData,
-  Algorithms,
-  PubKeyType,
-  Encoding,
-  IAuthentication,
-  IServiceEndpoint,
+    Algorithms,
+    DIDAttribute,
+    Encoding,
+    IAuthentication,
+    IResolverSettings,
+    IServiceEndpoint,
+    IUpdateData,
+    PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 
-import { getSettings } from '../../../tests/init-ganache';
+import {getSettings} from '../../../tests/init-ganache';
 
 describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);

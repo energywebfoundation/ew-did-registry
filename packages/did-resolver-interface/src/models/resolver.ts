@@ -1,4 +1,5 @@
-import { utils } from 'ethers';
+import {utils} from 'ethers';
+import {Methods} from '@ew-did-registry/did';
 
 /**
  * Specifies currently supported provider types. New types can be added in the future.
@@ -10,7 +11,7 @@ export enum ProviderTypes {
 
 /**
  * Specifies Provider to be used to communicate with blockchain.
- * The uri, path, and network are the parameters found in the ethers library.
+ * The uri, path, and method are the parameters found in the ethers library.
  * Hence, 'ethers' documentation is a good point to check the available options,
  * if one wants to extend the library.
  */
@@ -29,6 +30,7 @@ export interface IResolverSettings {
   provider?: IProvider;
   abi?: Array<string | utils.ParamType>;
   address?: string;
+  method: Methods;
 }
 
 /**

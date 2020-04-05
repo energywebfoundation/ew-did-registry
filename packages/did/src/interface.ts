@@ -1,4 +1,4 @@
-import { Networks } from './models';
+import {Methods} from './models';
 
 export interface IDID {
     /**
@@ -7,24 +7,24 @@ export interface IDID {
      */
 
     /**
-     * Sets a DID for a particular network (inferred from DID provided)
+     * Sets a DID for a particular method (inferred from DID provided)
      * @param {string} did
      * @returns {void}
      */
     set(did: string): IDID;
 
     /**
-     * Sets a DID for the provided network
-     * @param {Networks} network
+     * Sets a DID for the provided method
+     * @param {Methods} method
      * @param {string} id
      * @returns {void}
      */
-    set(network: string, id: string): IDID;
+    set(method: string, id: string): IDID;
 
     /**
-     * Gets a DID for a particular network
-     * @param {Networks} network
+     * Gets a DID for a particular method
+     * @param {Methods} method
      * @returns {string | undefined}
      */
-    get(network: string): string | undefined;
+    get(method: string): string | undefined;
 }

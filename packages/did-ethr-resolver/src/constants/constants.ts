@@ -1,5 +1,6 @@
-import { IResolverSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
-import { ethrReg } from './EthereumDIDRegistry';
+import {IResolverSettings, ProviderTypes} from '@ew-did-registry/did-resolver-interface';
+import {ethrReg} from './EthereumDIDRegistry';
+import {Methods} from "@ew-did-registry/did";
 
 // Address of ERC1056 smart contract on Volta
 export const address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
@@ -24,6 +25,7 @@ export const defaultResolverSettings: IResolverSettings = {
   provider: defaultProvider,
   abi: ethrReg.abi,
   address: address1056,
+  method: Methods.Erc1056,
 };
 
 // Various patterns to minimise errors
