@@ -162,7 +162,7 @@ export class ProxyOperator extends Operator {
    * @param didAttribute
    * @param updateData
    * @param validity
-   * @param overrides
+   * @param overrides TODO: either use or remove
    * @protected
    */
   protected async _sendTransaction(

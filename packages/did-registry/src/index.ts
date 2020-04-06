@@ -1,7 +1,7 @@
 import { Contract } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { IResolver } from '@ew-did-registry/did-resolver-interface';
-import { IDID, Networks } from '@ew-did-registry/did';
+import { IDID, Methods } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
 import { IDIDRegistry } from './interface';
@@ -9,7 +9,7 @@ import { IDIDRegistry } from './interface';
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Networks | string, IKeys>;
+  keys: Map<Methods | string, IKeys>;
 
   documentFactory: IDIDDocumentFactory;
 
@@ -18,32 +18,32 @@ class DIDRegistry implements IDIDRegistry {
   resolver: IResolver;
 
   constructor(keys: IKeys, did: string, resolver: IResolver) {
-    const [, network] = did.split(':');
-    this.keys = new Map<Networks | string, IKeys>();
-    this.keys.set(network, keys);
+    const [, method] = did.split(':');
+    this.keys = new Map<Methods | string, IKeys>();
+    this.keys.set(method, keys);
     this.documentFactory = new DIDDocumentFactory(did);
     this.claims = new ClaimsFactory(keys, resolver);
     this.resolver = resolver;
   }
 
   /**
-   * Configures registry for use with another network
+   * Configures registry for use with another method
    *
    * @example
    * ```typescript
    * import DIDRegistry from '@ew-did-registry/did-regsitry';
-   * import { Networks } from '@ew-did-registry/did';
+   * import { Method } from '@ew-did-registry/did';
    *
    * const reg = new DIDRegistry(keys, ethDid, ethResolver);
-   * reg.changeResolver(new Resolver(ewcSettings), Networks.EnergyWeb);
+   * reg.changeResolver(new Resolver(ewcSettings), Method.EnergyWeb);
    * ```
    * @param { IResolver } resolver
-   * @param { Networks } network
+   * @param { Methods } method
    * @returns { Promise<void> }
    */
-  changeResolver(resolver: IResolver, network: Networks | string): void {
-    const relevantKeys = this.keys.get(network);
-    this.documentFactory = new DIDDocumentFactory(this.did.get(network));
+  changeResolver(resolver: IResolver, method: Methods | string): void {
+    const relevantKeys = this.keys.get(method);
+    this.documentFactory = new DIDDocumentFactory(this.did.get(method));
     this.claims = new ClaimsFactory(relevantKeys, resolver);
     this.resolver = resolver;
   }

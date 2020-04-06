@@ -1,28 +1,22 @@
-import { expect } from 'chai';
-import { Resolver, Operator, ethrReg } from '@ew-did-registry/did-ethr-resolver';
+import {expect} from 'chai';
+import {ethrReg, Operator, Resolver} from '@ew-did-registry/did-ethr-resolver';
 import {
-  DIDAttribute,
-  IUpdateData,
-  PubKeyType,
   Algorithms,
+  DIDAttribute,
   Encoding,
   IResolverSettings,
+  IUpdateData,
+  PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { Keys } from '@ew-did-registry/keys';
-import { Networks } from '@ew-did-registry/did';
-import {
-  IProofData,
-  IPublicClaim,
-  IPrivateClaim,
-  IClaimsUser,
-  IClaimsIssuer,
-} from '@ew-did-registry/claims';
-import { proxyFactoryBuild } from '@ew-did-registry/proxyidentity';
-import { DIDDocumentFull } from '@ew-did-registry/did-document';
-import { JsonRpcProvider } from 'ethers/providers';
-import { providers, ContractFactory } from 'ethers';
+import {Keys} from '@ew-did-registry/keys';
+import {Methods} from '@ew-did-registry/did';
+import {IClaimsIssuer, IClaimsUser, IPrivateClaim, IProofData, IPublicClaim,} from '@ew-did-registry/claims';
+import {proxyFactoryBuild} from '@ew-did-registry/proxyidentity';
+import {DIDDocumentFull} from '@ew-did-registry/did-document';
+import {JsonRpcProvider} from 'ethers/providers';
+import {ContractFactory, providers} from 'ethers';
 import DIDRegistry from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import {getSettings} from '../../../tests/init-ganache';
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
@@ -31,21 +25,21 @@ describe('[REGISTRY PACKAGE]', function () {
     publicKey: '029462cf4b9ece1f84b600e3d924641aa359f068f1876cbf08b1b345e4c9831f23',
   });
   const userAddress = '0x7551eD4be4eFd75E602189E9d59af448A564AB3a';
-  const userDid = `did:${Networks.Ethereum}:${userAddress}`;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys({
     privateKey: '945d90baf66123693be97edff663d5c54f5d517d40928a9c0caa37dba3a0b042',
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   });
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B';
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   const verifierKeys = new Keys({
     privateKey: '37cd773efb8cd99b0f509ec118df8e9c6d6e5e22b214012a76be215f77250b9e',
     publicKey: '02335325b9d16aa046ea7275537d9aced84ed3683a7969db5f836b0e6d62770d1e',
   });
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd';
-  const verifierDid = `did:${Networks.EnergyWeb}:${verifierAddress}`;
+  const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
 
   let userOperator: Operator;
   let issuerOperator: Operator;
