@@ -7,14 +7,14 @@ significantly faster.
 * **Importing required modules**
 
 ``` typescript
-import { Resolver, DelegateTypes } from '@ew-did-registry/did-resolver';
+import { Resolver, DelegateTypes } from '@ew-did-registry/did-ethr-resolver';
 ```
 
 * **Reading the DID Document for particular id**
 
 ``` typescript  
-    const resolver = new Resolver();
-    const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
+    const resolver = new Resolver(resolverSettings);
+    const did = 'did:ethr:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDocument = await resolver.read(did);
 ```
 
@@ -23,7 +23,7 @@ import { Resolver, DelegateTypes } from '@ew-did-registry/did-resolver';
 This method doesn't require full document fetching.
 Returns did of the current owner.
 ``` typescript
-    const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
+    const did = 'did:ethr:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const owner = await resolver.identityOwner(did);
 ```
 
@@ -32,7 +32,7 @@ Returns did of the current owner.
 This read doesn't require full document fetching.
 Returns boolean if the delegate is present.
 ``` typescript
-    const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
+    const did = 'did:ethr:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDelegate = 'did:ewc:0xe2e457aods7BEd9AbdEE9410xt985E46e28a3947';
     const validDelegate = await resolver.validDelegate(did, DelegateTypes.verification, didDelegate);
 ```

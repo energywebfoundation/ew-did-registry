@@ -18,7 +18,7 @@ const operator = new Operator(keys, resolverSettings);
 //create the DIDDocumentFull instance
 const document = new DIDDocumentFull(did, operator);
 
-// For the 1056 implementation this will only add public key the user's DID Document
+// For the 1056 implementation this will only add public key the user's DID Document. There is no blockchain transaction involved
 const created = await document.create();
 ```
 ### Read
@@ -27,8 +27,7 @@ Using the EW DID resolver we can read the whole DID document. You can read speci
 ```typescript
 import { Resolver } from '@ew-did-registry/did-ethr-resolver';
 
-// Initialise Resolver here
-
+// did of the user
 const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
 
 // Read the whole document 
@@ -50,7 +49,7 @@ const publicKey = await didDocumentLite.read(Attributes.publicKey, 'Secp256k1Ver
 ```
 
 ### Update
-To update an attribute the DIDDocument instance can be used.
+#### Adding a valid public key for verfication.
 ```typescript
 // add an attribute to DID Document of the user
 const updated = await document.update(
@@ -64,7 +63,74 @@ const updated = await document.update(
   validity,
 );
 ```
+#### Adding an authentication method
+```typescript=
+const delegate = new Wallet(new Keys().privateKey);
+
+const updated = await document.update(
+  DIDAttribute.Authenticate,
+  {
+    type: PubKeyType.SignatureAuthentication2018,
+    algo: Algorithms.ED25519,
+    encoding: Encoding.HEX,
+    delegate: delegate.address,
+  },
+  validity,
+);
+```
+#### Adding a service endpoint for a claim
+```typescript
+// serviceEndPoint of the claim to be added
+const endpoint = 'https://claimstore.energyweb.org/gba42asdf';
+
+//add the service endpoint
+const updated = await document.update(
+  DIDAttribute.ServicePoint,
+  {
+    type: PubKeyType.VerificationKey2018,
+    value: endpoint,
+  },
+  validity,
+);
+```
 ### Delete/Revoke
+> Currently revocation functionality exposed only through IOperator interface. In future, it will available through the IDIDDocument interface
+#### Revocation of the public key
+```typescript
+//publicKey to be revoked
+const attribute = DIDAttribute.PublicKey;
+
+const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: keysAttribute.publicKey,
+    };
+const revoked = await operator.revokeAttribute(did, attribute, updateData);
+```
+#### Revocation of the authentication method
+```typescript
+//authentication method to be Revoked
+const delegateDid = `did:ewc:${delegate.address}`;
+
+//revoke the authentication method
+const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
+```
+#### Revocation of the service point
+```typescript
+//serviceEndpoint to be revoked
+const endpoint = 'https://claimstore.energyweb.org/gba42asdf';
+
+const revoked = await operator.revokeAttribute(
+    did, 
+    DIDAttribute.ServicePoint,
+   {
+    type: PubKeyType.VerificationKey2018,
+    value: endpoint,
+  }
+);
+```
+#### Revoking all attributes
 ```typescript
 // revokes attributes related to authentication and service endpoints
 const deactivated = await document.deactivate();

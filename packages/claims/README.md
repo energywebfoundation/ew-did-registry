@@ -1,16 +1,17 @@
 ## Claims Package
-The claims package provides an interface to manage public and private claims in a straightforward manner. It abstracts the claim lifecycle, that currently consists of two stages - creation and issuance of public and private claims. 
+The claims package provides an interface to manage public and private claims in a straightforward manner. It abstracts the claim lifecycle, that currently consists of the following stages:
+* creation and issuance of public and private claims
+* creation of proofs for the issued claims and verification thereof
 
 ### Public Claims
 * **Importing required modules**
 
 ``` typescript
-import { expect } from 'chai';
 import {
-  Resolver, Operator, DIDAttribute, IUpdateData, PubKeyType, Algorithms, Encoding,
-} from '@ew-did-registry/did-resolver';
+  IResolver, IOperator, DIDAttribute, IUpdateData, PubKeyType, Algorithms, Encoding,
+} from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
-import { Networks } from '@ew-did-registry/did';
+import { Methods } from '@ew-did-registry/did';
 import { IClaim } from '@ew-did-registry/claims';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import DIDRegistry from '@ew-did-registry/did-registry';
@@ -26,11 +27,11 @@ User is the claims subject
     publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
-  const userDid = `did:${Networks.Ethereum}:${userAddress}` ;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}` ;
 ```  
-`` `Operator` `` - is an interface responsible for DID document updating
+`Operator` - is an interface responsible for DID document updating
 ```typescript 
-  const userOperator = new Operator(userKeys);
+  const userOperator = new Operator(userKeys, resolverSettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its etherum address 
@@ -39,7 +40,7 @@ the document stores the user's public key associated with its etherum address
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver());
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -53,8 +54,8 @@ stored and verified
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver()); 
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -64,8 +65,8 @@ Same flow for verifier
     publicKey: '02335325b9d16aa046ea7275537d9aced84ed3683a7969db5f836b0e6d62770d1e',
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
-  const verifierDid = `did:${Networks.EnergyWeb}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver()); 
+  const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings)); 
 ```
 The time interval during which the corresponding record in the DID document will
 be valid
@@ -106,7 +107,7 @@ whether the delegate is valid for the DID
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver()); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
@@ -124,10 +125,10 @@ An ```IDIDDocumetFull``` interface is used to update a document
 ``` typescript
   import { expect } from 'chai';
   import {
-    Resolver, Operator, DIDAttribute, IUpdateData, PubKeyType, Algorithms, Encoding,
-  } from '@ew-did-registry/did-resolver';
+    Resolver, Operator, DIDAttribute, IUpdateData, PubKeyType, Algorithms, Encoding
+  } from '@ew-did-registry/did-resolver-interface';
   import { Keys } from '@ew-did-registry/keys';
-  import { Networks } from '@ew-did-registry/did';
+  import { Methods } from '@ew-did-registry/did';
   import { IClaim } from '@ew-did-registry/claims';
   import { DIDDocumentFull } from '@ew-did-registry/did-document';
   import DIDRegistry from '@ew-did-registry/did-registry';
@@ -141,7 +142,7 @@ User is the claims subject
     publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
-  const userDid = `did:${Networks.Ethereum}:${userAddress}` ;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}` ;
 ```
 ```Operator``` - an interface responsible for DID document updating
 ``` typescript
@@ -156,7 +157,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver());
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -170,8 +171,8 @@ stored and verified
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263,
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver()); 
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -181,8 +182,8 @@ Same flow for verifier
     publicKey: '02335325b9d16aa046ea7275537d9aced84ed3683a7969db5f836b0e6d62770d1e',
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
-  const verifierDid = `did:${Networks.EnergyWeb}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver());
+  const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -227,7 +228,7 @@ Issuer encodes private user data and then hashes it
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver()); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
