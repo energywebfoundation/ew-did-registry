@@ -1,28 +1,21 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import {
-  Contract, ethers, Event, Wallet,
-} from 'ethers';
-import { IKeys } from '@ew-did-registry/keys';
+import {Contract, ethers, Event, Wallet,} from 'ethers';
+import {IKeys} from '@ew-did-registry/keys';
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
+  IOperator,
   IPublicKey,
+  IResolverSettings,
   IServiceEndpoint,
   IUpdateData,
-  IOperator,
   ProviderTypes,
   PubKeyType,
-  IResolverSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
-import {
-  delegatePubKeyIdPattern,
-  DIDPattern,
-  pubKeyIdPattern,
-  serviceIdPattern,
-} from '../constants';
+import {delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,} from '../constants';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -75,7 +68,7 @@ export class Operator extends Resolver implements IOperator {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(): Promise<boolean> {
-    const did = `did:ewc:${this._wallet.address}`;
+    const did = `did:${this.settings.method}:${this._wallet.address}`;
     const document = await this.read(did);
     const pubKey = document.publicKey.find((pk) => pk.type === 'Secp256k1veriKey');
     if (pubKey) return true;

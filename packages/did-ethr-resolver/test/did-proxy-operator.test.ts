@@ -1,23 +1,21 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { assert, expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
-import {
-  ContractFactory, Contract, Wallet,
-} from 'ethers';
+import {assert, expect} from 'chai';
+import {Keys} from '@ew-did-registry/keys';
+import {Contract, ContractFactory, Wallet,} from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
+  IAuthentication,
+  IPublicKey,
+  IResolverSettings,
   IUpdateData,
   PubKeyType,
-  IResolverSettings,
-  IPublicKey,
-  IAuthentication,
 } from '@ew-did-registry/did-resolver-interface';
-import { JsonRpcProvider } from 'ethers/providers';
-import { proxyBuild } from '@ew-did-registry/proxyidentity';
-import { ProxyOperator, ethrReg } from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import {JsonRpcProvider} from 'ethers/providers';
+import {proxyBuild} from '@ew-did-registry/proxyidentity';
+import {ethrReg, ProxyOperator} from '../src';
+import {getSettings} from '../../../tests/init-ganache';
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
 const { abi: abi1056 } = ethrReg;
@@ -46,7 +44,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     erc1056 = new Contract(operatorSettings.address, abi1056, creator);
     proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
     identity = proxy.address;
-    did = `did:ewc:${identity}`;
+    did = `did:ethr:${identity}`;
     operator = new ProxyOperator(keys, operatorSettings, proxy.address);
   });
 
@@ -58,9 +56,9 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(`did:ewc:${identity}`, attribute, updateData);
-    const document = await operator.read(`did:ewc:${identity}`);
-    expect(document.id).equal(`did:ewc:${identity}`);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData);
+    const document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
@@ -75,9 +73,9 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(`did:ewc:${identity}`, attribute, updateData, validity);
-    const document = await operator.read(`did:ewc:${identity}`);
-    expect(document.id).equal(`did:ewc:${identity}`);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
+    const document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
@@ -250,7 +248,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       controller: did,
       ethereumAddress: updateData.delegate,
     });
-    const delegateDid = `did:ewc:${delegate.address}`;
+    const delegateDid = `did:ethr:${delegate.address}`;
     const revoked = await operator.revokeDelegate(did, VerificationKey2018, delegateDid);
     expect(revoked).to.be.true;
     document = await operator.read(did);
@@ -268,14 +266,14 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(`did:ewc:${identity}`, attribute, updateData, validity);
-    let document = await operator.read(`did:ewc:${identity}`);
-    expect(document.id).equal(`did:ewc:${identity}`);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
+    let document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     let publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
     expect(publicKey).to.be.not.null;
-    const revoked = await operator.revokeAttribute(`did:ewc:${identity}`, attribute, updateData);
+    const revoked = await operator.revokeAttribute(`did:ethr:${identity}`, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
@@ -287,7 +285,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
   it('owner change should lead to expected result', async () => {
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
     let currentOwner;
-    await operator.changeOwner(`did:ewc:${proxy.address}`, `did:ewc:${identityNewOwner}`);
+    await operator.changeOwner(`did:ethr:${proxy.address}`, `did:ethr:${identityNewOwner}`);
     currentOwner = await erc1056.functions.owners(proxy.address);
     expect(currentOwner).to.be.eql(identityNewOwner);
   });

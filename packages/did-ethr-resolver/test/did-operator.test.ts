@@ -1,19 +1,19 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { assert, expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
-import { Operator } from '../src'
+import {assert, expect} from 'chai';
+import {Keys} from '@ew-did-registry/keys';
+import {Wallet} from 'ethers';
+import {Operator} from '../src'
 import {
-  Algorithms,
-  DIDAttribute,
-  Encoding,
-  IUpdateData,
-  PubKeyType,
-  IAuthentication,
-  IResolverSettings,
-  IDIDDocument,
+    Algorithms,
+    DIDAttribute,
+    Encoding,
+    IAuthentication,
+    IDIDDocument,
+    IResolverSettings,
+    IUpdateData,
+    PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { getSettings } from '../../../tests/init-ganache';
+import {getSettings} from '../../../tests/init-ganache';
 
 const { fail } = assert;
 describe('[DID-OPERATOR]', function () {
@@ -26,7 +26,7 @@ describe('[DID-OPERATOR]', function () {
   let operatorSetting: IResolverSettings;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
-  const did = `did:ewc:${identity}`;
+  const did = `did:ethr:${identity}`;
 
   before(async () => {
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
@@ -233,7 +233,7 @@ describe('[DID-OPERATOR]', function () {
       ethereumAddress: updateData.delegate,
     });
 
-    const delegateDid = `did:ewc:${delegate.address}`;
+    const delegateDid = `did:ethr:${delegate.address}`;
     const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
     expect(revoked).to.be.true;
     document = await operator.read(did);
@@ -276,12 +276,12 @@ describe('[DID-OPERATOR]', function () {
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
     const operatorNewOwner = new Operator(secondKeys, operatorSetting);
     let currentOwner;
-    await operator.changeOwner(`did:ewc:${identity}`, `did:ewc:${identityNewOwner}`);
-    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identityNewOwner}`);
+    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
     expect(currentOwner).to.be.eql(identityNewOwner);
 
-    await operatorNewOwner.changeOwner(`did:ewc:${identity}`, `did:ewc:${identity}`);
-    currentOwner = await operator.identityOwner(`did:ewc:${identity}`);
+    await operatorNewOwner.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
+    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
     expect(currentOwner).to.be.eql(identity);
   });
 });

@@ -2,14 +2,14 @@ import {Keys} from '@ew-did-registry/keys';
 import {expect} from 'chai';
 import {Operator} from '../src';
 import {
-    Algorithms,
-    DIDAttribute,
-    Encoding,
-    IAuthentication,
-    IResolverSettings,
-    IServiceEndpoint,
-    IUpdateData,
-    PubKeyType,
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IAuthentication,
+  IResolverSettings,
+  IServiceEndpoint,
+  IUpdateData,
+  PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 
 import {getSettings} from '../../../tests/init-ganache';
@@ -24,7 +24,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   let operatorSetting: IResolverSettings;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
-  const did = `did:ewc:${identity}`;
+  const did = `did:ethr:${identity}`;
 
   before(async () => {
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
