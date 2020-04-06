@@ -6,7 +6,6 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "test-rpc": "",
     "compile": "../../node_modules/.bin/tsc",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
@@ -22,6 +21,12 @@
     "url": "https://www.energyweb.org/"
   },
   "license": "GPL-3.0-or-later",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@ew-did-registry/did-store-interface": "^1.0.0",
+    "bl": "^4.0.2",
+    "ipfs-http-client": "^43.0.0"
+  },
+  "devDependencies": {
+    "@types/bl": "^2.1.0"
+  }
 }
