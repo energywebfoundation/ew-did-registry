@@ -1,25 +1,22 @@
 import {
-  ethers,
-  utils,
-  providers,
-  Contract,
+  Contract, ethers, providers, utils,
 } from 'ethers';
 import {
+  DelegateTypes,
+  IAuthentication,
   IDIDDocument,
   IDIDLogData,
-  IResolverSettings,
-  ProviderTypes,
-  DelegateTypes,
   IPublicKey,
   IResolver,
+  IResolverSettings,
   IServiceEndpoint,
-  IAuthentication,
+  ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
 import { DIDPattern } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 /**
- * To support different networks compliant with ERC1056, the user/developer simply has to provide
+ * To support different methods compliant with ERC1056, the user/developer simply has to provide
  * different resolver settings. The default resolver settings are provided in the 'constants' folder
  * Any settings that follow the IResolverSettings interface are valid.
  *
