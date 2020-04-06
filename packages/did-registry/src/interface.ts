@@ -1,8 +1,8 @@
-import {IDID, Methods} from '@ew-did-registry/did';
-import {IDIDDocumentFactory, IDIDDocumentLite} from '@ew-did-registry/did-document';
-import {IClaimsFactory} from '@ew-did-registry/claims';
-import {IResolver} from '@ew-did-registry/did-resolver-interface';
-import {IKeys} from '@ew-did-registry/keys';
+import { IDID, Methods } from '@ew-did-registry/did';
+import { IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
+import { IClaimsFactory } from '@ew-did-registry/claims';
+import { IResolver } from '@ew-did-registry/did-resolver-interface';
+import { IKeys } from '@ew-did-registry/keys';
 
 /**
  * This is responsible for registration and lifecycle management of DID

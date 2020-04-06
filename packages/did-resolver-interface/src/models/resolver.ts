@@ -1,5 +1,5 @@
-import {utils} from 'ethers';
-import {Methods} from '@ew-did-registry/did';
+import { utils } from 'ethers';
+import { Methods } from '@ew-did-registry/did';
 
 /**
  * Specifies currently supported provider types. New types can be added in the future.

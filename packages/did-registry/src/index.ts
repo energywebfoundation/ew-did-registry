@@ -1,10 +1,10 @@
-import {Contract} from 'ethers';
-import {IKeys} from '@ew-did-registry/keys';
-import {IResolver} from '@ew-did-registry/did-resolver-interface';
-import {IDID, Methods} from '@ew-did-registry/did';
-import {DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite} from '@ew-did-registry/did-document';
-import {ClaimsFactory, IClaimsFactory} from '@ew-did-registry/claims';
-import {IDIDRegistry} from './interface';
+import { Contract } from 'ethers';
+import { IKeys } from '@ew-did-registry/keys';
+import { IResolver } from '@ew-did-registry/did-resolver-interface';
+import { IDID, Methods } from '@ew-did-registry/did';
+import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
+import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
+import { IDIDRegistry } from './interface';
 
 class DIDRegistry implements IDIDRegistry {
   did: IDID;

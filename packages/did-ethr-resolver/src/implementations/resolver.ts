@@ -1,17 +1,19 @@
-import {Contract, ethers, providers, utils,} from 'ethers';
 import {
-    DelegateTypes,
-    IAuthentication,
-    IDIDDocument,
-    IDIDLogData,
-    IPublicKey,
-    IResolver,
-    IResolverSettings,
-    IServiceEndpoint,
-    ProviderTypes,
+  Contract, ethers, providers, utils,
+} from 'ethers';
+import {
+  DelegateTypes,
+  IAuthentication,
+  IDIDDocument,
+  IDIDLogData,
+  IPublicKey,
+  IResolver,
+  IResolverSettings,
+  IServiceEndpoint,
+  ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
-import {DIDPattern} from '../constants';
-import {fetchDataFromEvents, wrapDidDocument} from '../functions';
+import { DIDPattern } from '../constants';
+import { fetchDataFromEvents, wrapDidDocument } from '../functions';
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide

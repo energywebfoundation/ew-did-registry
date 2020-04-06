@@ -1,9 +1,9 @@
-import {Wallet} from 'ethers';
-import {IDIDDocument, IResolver} from '@ew-did-registry/did-resolver-interface';
-import {DIDDocumentFactory} from '@ew-did-registry/did-document';
-import {IJWT, JWT} from '@ew-did-registry/jwt';
-import {IKeys} from '@ew-did-registry/keys';
-import {IClaims} from '../models';
+import { Wallet } from 'ethers';
+import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
+import { DIDDocumentFactory } from '@ew-did-registry/did-document';
+import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { IKeys } from '@ew-did-registry/keys';
+import { IClaims } from '../models';
 
 /**
  * @class

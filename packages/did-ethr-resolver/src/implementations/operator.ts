@@ -1,6 +1,8 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import {Contract, ethers, Event, Wallet,} from 'ethers';
-import {IKeys} from '@ew-did-registry/keys';
+import {
+  Contract, ethers, Event, Wallet,
+} from 'ethers';
+import { IKeys } from '@ew-did-registry/keys';
 import {
   Algorithms,
   DIDAttribute,
@@ -15,7 +17,9 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
-import {delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,} from '../constants';
+import {
+  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,
+} from '../constants';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
