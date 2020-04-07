@@ -37,7 +37,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * import { DIDDocumentFactory } from '@ew-did-registry/did-document';
    *
    * const sampleDid = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
-   * const resolver = new Resolver();
+   * const resolver = new Resolver(resolverSettings);
    * const didLiteDocument = DIDDocumentFactory.createLite(sampleDid, resolver);
    * const id = didDocumentLite.read('id');
    *

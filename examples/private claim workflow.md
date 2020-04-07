@@ -37,7 +37,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver());
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -52,7 +52,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Ethereum}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver()); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -63,7 +63,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver());
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -108,7 +108,7 @@ Issuer encodes private user data and then hashes it
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver()); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
