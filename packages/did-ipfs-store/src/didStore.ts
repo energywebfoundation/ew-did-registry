@@ -13,7 +13,7 @@ export class DidStore implements IDidStore {
     this.ipfs = ipfsClient(uri);
   }
 
-  async store(claim: string): Promise<string> {
+  async save(claim: string): Promise<string> {
     const asyncChunks = await this.ipfs.add(claim);
     let cid: any;
     for await (const chunk of asyncChunks) {

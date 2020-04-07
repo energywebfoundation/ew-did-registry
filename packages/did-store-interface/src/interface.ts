@@ -1,12 +1,11 @@
 
 export interface IDidStore {
   /**
-   * stores data in decentralized store. This method
-   *  should garantee immutability of the saved claim
+   * stores data in decentralized store
    *
    * @param claim {string} stringified claim
    */
-  store(claim: string): Promise<string>;
+  save(claim: string): Promise<string>;
 
   /**
    *
