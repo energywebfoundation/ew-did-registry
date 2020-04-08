@@ -1,5 +1,5 @@
 import {
-  DIDAttribute, IOperator, IUpdateData,
+  DIDAttribute, IOperator, IUpdateData, PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
@@ -78,6 +78,20 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
     validity?: number,
   ): Promise<boolean> {
     return this._operator.update(this.did, attribute, data, validity);
+  }
+
+  async revokeDelegate(
+    delegateType: PubKeyType,
+    delegateDID: string,
+  ): Promise<boolean> {
+    return this._operator.revokeDelegate(this.did, delegateType, delegateDID);
+  }
+
+  async revokeAttribute(
+    attributeType: DIDAttribute,
+    updateData: IUpdateData,
+  ): Promise<boolean> {
+    return this._operator.revokeAttribute(this.did, attributeType, updateData);
   }
 }
 

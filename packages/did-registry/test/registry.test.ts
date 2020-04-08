@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Operator, ethrReg } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
-import { Networks } from '@ew-did-registry/did';
+import { Methods } from '@ew-did-registry/did';
 import {
   IProofData,
   IPublicClaim,
@@ -23,15 +23,15 @@ describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
-  const userDid = `did:${Networks.Ethereum}:${userAddress}`;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   const verifierKeys = new Keys();
   const verifierAddress = verifierKeys.getAddress();
-  const verifierDid = `did:${Networks.EnergyWeb}:${verifierAddress}`;
+  const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
 
   let user: DIDRegistry;
   let userClaims: IClaimsUser;
@@ -72,7 +72,6 @@ describe('[REGISTRY PACKAGE]', function () {
     expect(claim.signer).equal(issuerDid);
     expect(claim.claimData).deep.equal(publicData);
     const claimUrl = await user.publishPublicClaim(issuedToken, publicData);
-    console.log('>>> issued pub claim url:', claimUrl);
     expect(claimUrl).to.not.be.empty;
   });
 

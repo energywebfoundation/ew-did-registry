@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { expect } from 'chai';
-import { DID, IDID, Networks } from '../src';
+import {expect} from 'chai';
+import {DID, IDID, Methods} from '../src';
 
 describe('[DID PACKAGE]', () => {
   let instance: IDID;
@@ -29,47 +29,47 @@ describe('[DID PACKAGE]', () => {
     expect(() => { instance.set(did); }).to.throw('DID must consist of three parts separated by a colon');
   });
 
-  it('Setting DID without network should throw an error', async () => {
+  it('Setting DID without method should throw an error', async () => {
     const did = 'did::specific_id';
     expect(() => { instance.set(did); })
       .to
       .throw('Network must not be empty and consist only of lowcase alphanumerical characters');
   });
 
-  it('Setting DID with invalid network should throw an error', async () => {
-    const did = 'did:my network:specific_id';
+  it('Setting DID with invalid method should throw an error', async () => {
+    const did = 'did:my method:specific_id';
     expect(() => { instance.set(did); })
       .to
       .throw('Network must not be empty and consist only of lowcase alphanumerical characters');
   });
 
-  it('Setting a valid ID and predefined network should not throw an error', async () => {
-    const network = Networks.Ethereum;
+  it('Setting a valid ID and predefined method should not throw an error', async () => {
+    const method = Methods.Erc725;
     const id = 'method_specific_id';
-    expect(() => { instance.set(network, id); }).to.not.throw();
+    expect(() => { instance.set(method, id); }).to.not.throw();
   });
 
-  it('Setting a valid ID and not predefined network should not throw an error', async () => {
-    const network = 'mynetwork001';
+  it('Setting a valid ID and not predefined method should not throw an error', async () => {
+    const method = 'mymethod001';
     const id = 'method_specific_id';
-    expect(() => { instance.set(network, id); }).to.not.throw();
+    expect(() => { instance.set(method, id); }).to.not.throw();
   });
 
-  it('Setting a valid ID and network should return an instance of DID', async () => {
-    const network = Networks.Ethereum;
+  it('Setting a valid ID and method should return an instance of DID', async () => {
+    const method = Methods.Erc725;
     const id = 'method_specific_id';
-    expect(instance.set(network, id)).to.be.instanceOf(DID);
+    expect(instance.set(method, id)).to.be.instanceOf(DID);
   });
 
   it(
     'Test scenario: setting valid id in both ways should correctly change the state of the DID',
     async () => {
-      instance.set(`did:${Networks.Ethereum}:id_in_Ethereum`);
-      instance.set(Networks.EnergyWeb, 'id_in_EnergyWeb');
-      expect(instance.get(Networks.Ethereum))
-        .equals(`did:${Networks.Ethereum}:id_in_Ethereum`);
-      expect(instance.get(Networks.EnergyWeb))
-        .equals(`did:${Networks.EnergyWeb}:id_in_EnergyWeb`);
+      instance.set(`did:${Methods.Erc725}:id_in_Ethereum`);
+      instance.set(Methods.Erc1056, 'id_in_EnergyWeb');
+      expect(instance.get(Methods.Erc725))
+        .equals(`did:${Methods.Erc725}:id_in_Ethereum`);
+      expect(instance.get(Methods.Erc1056))
+        .equals(`did:${Methods.Erc1056}:id_in_EnergyWeb`);
     },
   );
 });

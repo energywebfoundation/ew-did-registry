@@ -2,12 +2,12 @@ import { Contract } from 'ethers';
 import crypto from 'crypto';
 import { IKeys } from '@ew-did-registry/keys';
 import { IOperator, DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
-import { IDID, Networks } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentLite, IDIDDocumentFull } from '@ew-did-registry/did-document';
+import { IDID, Methods } from '@ew-did-registry/did';
+import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory, ISaltedFields } from '@ew-did-registry/claims';
+import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
-import { IJWT, JWT } from '../../jwt/dist';
 
 /**
  * @class {DIDRegistry}
@@ -15,7 +15,7 @@ import { IJWT, JWT } from '../../jwt/dist';
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Networks | string, IKeys>;
+  keys: Map<Methods | string, IKeys>;
 
   document: IDIDDocumentFull;
 
@@ -24,10 +24,10 @@ class DIDRegistry implements IDIDRegistry {
   jwt: IJWT;
 
   constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
-    const [, network] = did.split(':');
-    this.keys = new Map<Networks | string, IKeys>();
-    this.keys.set(network, keys);
-    this.jwt = new JWT(this.keys.get(network));
+    const [, method] = did.split(':');
+    this.keys = new Map<Methods | string, IKeys>();
+    this.keys.set(method, keys);
+    this.jwt = new JWT(this.keys.get(method));
     this.document = new DIDDocumentFactory(did).createFull(operator);
     this.claims = new ClaimsFactory(keys, operator);
     this.operator = operator;
@@ -66,23 +66,23 @@ class DIDRegistry implements IDIDRegistry {
   }
 
   /**
-   * Configures registry for use with another network
+   * Configures registry for use with another method
    *
    * @example
    * ```typescript
    * import DIDRegistry from '@ew-did-registry/did-regsitry';
-   * import { Networks } from '@ew-did-registry/did';
+   * import { Method } from '@ew-did-registry/did';
    *
    * const reg = new DIDRegistry(keys, ethDid, ethResolver);
-   * reg.changeResolver(new Resolver(ewcSettings), Networks.EnergyWeb);
+   * reg.changeResolver(new Resolver(ewcSettings), Method.EnergyWeb);
    * ```
    * @param { IResolver } resolver
-   * @param { Networks } network
+   * @param { Methods } method
    * @returns { Promise<void> }
    */
-  changeOperator(operator: IOperator, network: Networks | string): void {
-    const keys = this.keys.get(network);
-    this.document = new DIDDocumentFactory(this.did.get(network)).createFull(operator);
+  changeOperator(operator: IOperator, method: Methods | string): void {
+    const keys = this.keys.get(method);
+    this.document = new DIDDocumentFactory(this.did.get(method)).createFull(operator);
     this.claims = new ClaimsFactory(keys, operator);
     this.operator = operator;
   }
@@ -100,9 +100,9 @@ class DIDRegistry implements IDIDRegistry {
    * @param { string } did
    * @returns { Promsise<DIDDocumentLite> }
    */
-  async read(did: string): Promise<IDIDDocumentLite> {
+  async read(did: string): Promise<IDIDDocumentFull> {
     const temporaryFactory = new DIDDocumentFactory(did);
-    const didDocumentLite = temporaryFactory.createLite(this.operator, did);
+    const didDocumentLite = temporaryFactory.createFull(this.operator, did);
     await didDocumentLite.read(did);
     return didDocumentLite;
   }

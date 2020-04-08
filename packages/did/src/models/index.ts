@@ -2,9 +2,10 @@ export interface IDidStore {
     [key: string]: string;
 }
 
-export enum Networks {
-    Ethereum = 'eth',
-    EnergyWeb = 'ewc'
+export enum Methods {
+    Erc725 = 'erc725',
+    Erc1056 = 'ethr',
+    Jolocom = 'jolo'
 }
 
 export const DID_SCHEME_PATTERNS = {

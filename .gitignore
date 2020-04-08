@@ -12,4 +12,3 @@ dist
 .npmrc
 .log
 packages/proxyIdentity/index.js
-*.jwk

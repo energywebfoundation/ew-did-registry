@@ -28,26 +28,26 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   paranoia = 6;
 
   /**
- *
- * Creates token with data about subject provided in claimData
- *
- * @example
- * ```typescript
- * import { ClaimsUser } from '@ew-did-registry/claims';
- * import { Keys } from '@ew-did-registry/keys';
- *
- * const user = new Keys();
- * const claims = new ClaimsUser(user);
- * const claimData = {
- *     name: 'John'
- * };
- * const token = await claims.createPublicClaim(claimData);
- * ```
- * @param { IClaimData } publicData
- *
- * @returns { Promise<string> }
- */
-  async createPublicClaim(publicData: object, jwtOptions: any = {}): Promise<string> {
+   *
+   * Creates token with data about subject provided in claimData
+   *
+   * @example
+   * ```typescript
+   * import { ClaimsUser } from '@ew-did-registry/claims';
+   * import { Keys } from '@ew-did-registry/keys';
+   *
+   * const user = new Keys();
+   * const claims = new ClaimsUser(user);
+   * const claimData = {
+   *     name: 'John'
+   * };
+   * const token = await claims.createPublicClaim(claimData);
+   * ```
+   * @param { IClaimData } publicData
+   *
+   * @returns { Promise<string> }
+   */
+  async createPublicClaim(publicData: object, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
     const claim: IPublicClaim = {
@@ -88,7 +88,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createPrivateClaim(
     privateData: { [key: string]: string },
     issuer: string,
-    jwtOptions: any = {},
+    jwtOptions = { subject: '', issuer: '' },
   ): Promise<{ token: string; saltedFields: ISaltedFields }> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
@@ -141,7 +141,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createProofClaim(
     claimUrl: string,
     proofData: IProofData,
-    jwtOptions: any = {},
+    jwtOptions = { subject: '', issuer: '' },
   ): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;

@@ -1,4 +1,4 @@
-import { IUpdateData, DIDAttribute } from '@ew-did-registry/did-resolver-interface';
+import { IUpdateData, PubKeyType, DIDAttribute } from '@ew-did-registry/did-resolver-interface';
 import { BigNumber } from 'ethers/utils';
 import { IDIDDocumentLite } from '../lite';
 
@@ -29,4 +29,8 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
    * @returns {boolean}
    */
   deactivate(): Promise<boolean>;
+
+  revokeDelegate(delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+
+  revokeAttribute(attributeType: DIDAttribute, updateData: IUpdateData): Promise<boolean>;
 }

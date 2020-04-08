@@ -1,4 +1,4 @@
-import { IDID, Networks } from '@ew-did-registry/did';
+import { IDID, Methods } from '@ew-did-registry/did';
 import { IDIDDocumentLite, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IClaimsFactory, ISaltedFields } from '@ew-did-registry/claims';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
@@ -24,9 +24,9 @@ export interface IDIDRegistry {
   /**
    * IKeys is responsible for key management, signing, as well as verification of signature
    */
-  keys: Map<Networks | string, IKeys>;
+  keys: Map<Methods | string, IKeys>;
 
-  changeOperator(operator: IOperator, network: Networks | string): void;
+  changeOperator(operator: IOperator, network: Methods | string): void;
 
   read(did: string): Promise<IDIDDocumentLite>;
 
