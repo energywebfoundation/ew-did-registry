@@ -25,10 +25,5 @@
     "@ew-did-registry/did-store-interface": "^1.0.0",
     "bl": "^4.0.2",
     "ipfs-http-client": "^43.0.0"
-  },
-  "devDependencies": {
-    "@types/bl": "^2.1.0",
-    "ipfs": "^0.42.0",
-    "ipfsd-ctl": "^3.0.0"
   }
 }

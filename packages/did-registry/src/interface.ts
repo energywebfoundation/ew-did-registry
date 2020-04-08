@@ -1,35 +1,36 @@
 import { IDID, Networks } from '@ew-did-registry/did';
-import { IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { IClaimsFactory } from '@ew-did-registry/claims';
-import { IResolver } from '@ew-did-registry/did-resolver-interface';
+import { IDIDDocumentLite, IDIDDocumentFull } from '@ew-did-registry/did-document';
+import { IClaimsFactory, ISaltedFields } from '@ew-did-registry/claims';
+import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
 
 /**
- * This is responsible for registration and lifecycle management of DID
+ * @interface {IDIDRegistry}
+ * Serves as a single entry point for all identity functionality
  */
 export interface IDIDRegistry {
-    /**
-     * IDID specifies the interface for decentralised identities
-     */
-    did: IDID;
-    /**
-     * IDIDDocument exposes methods to operate with DID Documents
-     */
-    documentFactory: IDIDDocumentFactory;
-    /**
-     * IClaims exposes functionality needed to manage Private and Public claims
-     */
-    claims: IClaimsFactory;
-    /**
-     * IKeys is responsible for key management, signing, as well as verification of signature
-     */
-    keys: Map<Networks | string, IKeys>;
-    /**
-     * Resolver allows to create DID Documents for different ids
-     */
-    resolver: IResolver;
+  /**
+   * IDID specifies the interface for decentralised identities
+   */
+  did: IDID;
+  /**
+   * IDIDDocument exposes methods to operate with DID Documents
+   */
+  document: IDIDDocumentFull;
+  /**
+   * IClaims exposes functionality needed to manage Private and Public claims
+   */
+  claims: IClaimsFactory;
+  /**
+   * IKeys is responsible for key management, signing, as well as verification of signature
+   */
+  keys: Map<Networks | string, IKeys>;
 
-    changeResolver(resolver: IResolver, network: Networks | string): void;
+  changeOperator(operator: IOperator, network: Networks | string): void;
 
-    read(did: string): Promise<IDIDDocumentLite>;
+  read(did: string): Promise<IDIDDocumentLite>;
+
+  publishPublicClaim(issued: string, verifyData: object): Promise<string>;
+
+  publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string>;
 }

@@ -1,25 +1,18 @@
 import { expect } from 'chai';
-import Ctl from 'ipfsd-ctl';
-import path from 'path';
-import ipfsHttpModule from 'ipfs-http-client';
 import { DidStore } from '../src/didStore';
+import { spawnIpfsDaemon, shutDownIpfsDaemon } from '../../../tests';
 
 describe('[DID-STORE-PACKAGE]', function () {
   this.timeout(0);
-  let ipfsd: any;
   let store: any;
 
   before('start ipfs daemon', async () => {
-    const ipfsBin = path.resolve(__dirname, '../', 'node_modules/.bin', 'jsipfs');
-    ipfsd = await Ctl.createController({
-      type: 'js', disposable: true, test: true, ipfsBin, ipfsHttpModule,
-    });
-    const api = ipfsd.apiAddr;
+    const api = await spawnIpfsDaemon();
     store = new DidStore(api);
   });
 
   after('stop the daemon', async () => {
-    await ipfsd.stop();
+    await shutDownIpfsDaemon();
   });
 
   it('get() should fetch claim by uri returned from store()', async () => {

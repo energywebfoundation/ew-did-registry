@@ -62,8 +62,6 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    *  DIDAttribute.PublicKey,
    *  {
    *    type: PubKeyType.VerificationKey2018,
-   *    algo: Algorithms.ED25519,
-   *    encoding: Encoding.HEX,
    *    value: new Keys().publicKey,
    *  },
    *  validity,
@@ -77,7 +75,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
   async update(
     attribute: DIDAttribute,
     data: IUpdateData,
-    validity: number,
+    validity?: number,
   ): Promise<boolean> {
     return this._operator.update(this.did, attribute, data, validity);
   }

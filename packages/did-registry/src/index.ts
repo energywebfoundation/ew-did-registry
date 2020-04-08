@@ -1,29 +1,68 @@
 import { Contract } from 'ethers';
+import crypto from 'crypto';
 import { IKeys } from '@ew-did-registry/keys';
-import { IResolver } from '@ew-did-registry/did-resolver-interface';
+import { IOperator, DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Networks } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
+import { DIDDocumentFactory, IDIDDocumentLite, IDIDDocumentFull } from '@ew-did-registry/did-document';
+import { ClaimsFactory, IClaimsFactory, ISaltedFields } from '@ew-did-registry/claims';
+import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
+import { IJWT, JWT } from '../../jwt/dist';
 
+/**
+ * @class {DIDRegistry}
+ */
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
   keys: Map<Networks | string, IKeys>;
 
-  documentFactory: IDIDDocumentFactory;
+  document: IDIDDocumentFull;
 
   claims: IClaimsFactory;
 
-  resolver: IResolver;
+  jwt: IJWT;
 
-  constructor(keys: IKeys, did: string, resolver: IResolver) {
+  constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, network] = did.split(':');
     this.keys = new Map<Networks | string, IKeys>();
     this.keys.set(network, keys);
-    this.documentFactory = new DIDDocumentFactory(did);
-    this.claims = new ClaimsFactory(keys, resolver);
-    this.resolver = resolver;
+    this.jwt = new JWT(this.keys.get(network));
+    this.document = new DIDDocumentFactory(did).createFull(operator);
+    this.claims = new ClaimsFactory(keys, operator);
+    this.operator = operator;
+  }
+
+  /**
+   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
+   *
+   * @param issued {string} claim approved by the issuer
+   * @param verifyData {object} user data which should be contained in issued claim
+   *
+   * @returns {string} url of the saved claim
+   */
+  async publishPublicClaim(issued: string, verifyData: object): Promise<string> {
+    const verified = await this.claims.createClaimsUser().verifyPublicClaim(issued, verifyData);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued);
+    }
+    return '';
+  }
+
+  /**
+   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
+   *
+   * @param issued {string} claim with encrypted user data approved by the issuer
+   * @param saltedFields {ISaltedFields} private user data
+   *
+   * @returns {string} url of the saved claim
+   */
+  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string> {
+    const verified = await this.claims.createClaimsUser().verifyPrivateClaim(issued, saltedFields);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued);
+    }
+    return '';
   }
 
   /**
@@ -41,11 +80,11 @@ class DIDRegistry implements IDIDRegistry {
    * @param { Networks } network
    * @returns { Promise<void> }
    */
-  changeResolver(resolver: IResolver, network: Networks | string): void {
-    const relevantKeys = this.keys.get(network);
-    this.documentFactory = new DIDDocumentFactory(this.did.get(network));
-    this.claims = new ClaimsFactory(relevantKeys, resolver);
-    this.resolver = resolver;
+  changeOperator(operator: IOperator, network: Networks | string): void {
+    const keys = this.keys.get(network);
+    this.document = new DIDDocumentFactory(this.did.get(network)).createFull(operator);
+    this.claims = new ClaimsFactory(keys, operator);
+    this.operator = operator;
   }
 
   /**
@@ -63,28 +102,18 @@ class DIDRegistry implements IDIDRegistry {
    */
   async read(did: string): Promise<IDIDDocumentLite> {
     const temporaryFactory = new DIDDocumentFactory(did);
-    const didDocumentLite = temporaryFactory.createLite(this.resolver, did);
+    const didDocumentLite = temporaryFactory.createLite(this.operator, did);
     await didDocumentLite.read(did);
     return didDocumentLite;
   }
 
-
   /**
-     * Creates a Proxy Identity
-     *
-     * @example
-     * ```typescript
-     * import DIDRegistry from '@ew-did-registry/did-registry';
-     *
-     * const proxy = await DiDRegistry.createProxy();
-     * ```
-     *
-     * @param { string } contractAddress
-     * @param { JsonRpcSigner } deployer
-     * @param { number } value
-     * @returns { Promsise<string> }
-     */
-
+  * Creates proxy identity as smart contract
+  *
+  * @param proxyFactory {Contract}
+  *
+  * @returns {string} address of created proxy identity smart contract
+  */
   static async createProxy(proxyFactory: Contract): Promise<string> {
     const tx = await proxyFactory.create();
     await tx.wait();
@@ -94,6 +123,19 @@ class DIDRegistry implements IDIDRegistry {
         resolve(proxy);
       });
     }));
+  }
+
+  private async addClaimToServiceEndpoints(claim: string): Promise<string> {
+    const hash = crypto.createHash('sha256').update(claim).digest('hex');
+    const uri = await this.store.save(claim);
+    await this.document.update(
+      DIDAttribute.ServicePoint,
+      {
+        type: PubKeyType.VerificationKey2018,
+        value: JSON.stringify({ serviceEndpoint: uri, hash }),
+      },
+    );
+    return uri;
   }
 }
 

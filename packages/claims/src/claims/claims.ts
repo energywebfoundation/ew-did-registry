@@ -1,5 +1,5 @@
 import { Wallet } from 'ethers';
-import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
 import { DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
@@ -31,7 +31,7 @@ export class Claims implements IClaims {
   /**
    * @constructor
    *
-   * @param { IKeys } keys user key pair
+   * @param { IKeys } keys
    * @param { IResolver } resolver
    */
   constructor(keys: IKeys, resolver: IResolver) {

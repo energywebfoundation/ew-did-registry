@@ -28,25 +28,25 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   paranoia = 6;
 
   /**
-   *
-   * Creates token with data about subject provided in claimData
-   *
-   * @example
-   * ```typescript
-   * import { ClaimsUser } from '@ew-did-registry/claims';
-   * import { Keys } from '@ew-did-registry/keys';
-   *
-   * const user = new Keys();
-   * const claims = new ClaimsUser(user);
-   * const claimData = {
-   *     name: 'John'
-   * };
-   * const token = await claims.createPublicClaim(claimData);
-   * ```
-   * @param { IClaimData } publicData
-   *
-   * @returns { Promise<string> }
-   */
+ *
+ * Creates token with data about subject provided in claimData
+ *
+ * @example
+ * ```typescript
+ * import { ClaimsUser } from '@ew-did-registry/claims';
+ * import { Keys } from '@ew-did-registry/keys';
+ *
+ * const user = new Keys();
+ * const claims = new ClaimsUser(user);
+ * const claimData = {
+ *     name: 'John'
+ * };
+ * const token = await claims.createPublicClaim(claimData);
+ * ```
+ * @param { IClaimData } publicData
+ *
+ * @returns { Promise<string> }
+ */
   async createPublicClaim(publicData: object, jwtOptions: any = {}): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
@@ -194,7 +194,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPublicToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    * @throws if the proof failed
    */
   async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
@@ -219,7 +219,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPrivateToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    * @throw if the proof failed
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
