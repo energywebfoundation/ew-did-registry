@@ -125,17 +125,24 @@ class DIDRegistry implements IDIDRegistry {
     }));
   }
 
-  private async addClaimToServiceEndpoints(claim: string): Promise<string> {
-    const hash = crypto.createHash('sha256').update(claim).digest('hex');
-    const uri = await this.store.save(claim);
+  private async addClaimToServiceEndpoints(
+    claim: string,
+    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: this.sha256Hash },
+  ): Promise<string> {
+    const { hashAlg, createHash } = opts;
+    const url = await this.store.save(claim);
     await this.document.update(
       DIDAttribute.ServicePoint,
       {
         type: PubKeyType.VerificationKey2018,
-        value: JSON.stringify({ serviceEndpoint: uri, hash }),
+        value: JSON.stringify({ serviceEndpoint: url, hash: createHash(claim), hashAlg }),
       },
     );
-    return uri;
+    return url;
+  }
+
+  private sha256Hash(data: string): string {
+    return crypto.createHash('sha256').update(data).digest('hex');
   }
 }
 
