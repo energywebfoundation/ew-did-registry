@@ -1,6 +1,6 @@
 import { utils } from 'ethers';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication,
+  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication, PubKeyType,
 } from './models';
 
 export interface IResolver {
@@ -89,4 +89,8 @@ export interface IOperator extends IResolver {
    * @returns {boolean}
    */
   deactivate(did: string): Promise<boolean>;
+
+  revokeDelegate(did: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+
+  revokeAttribute(did: string, attributeType: DIDAttribute, updateData: IUpdateData): Promise<boolean>;
 }
