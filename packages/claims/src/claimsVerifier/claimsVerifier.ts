@@ -31,7 +31,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signatue');
     }
-    if (!this.resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
+    if (!this.document.validDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
   }
@@ -67,11 +67,11 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
       throw new Error('Invalid signature');
     }
     if (
-      !this.resolver
+      !this.document
         .validDelegate(
-          privateClaim.did,
           DelegateTypes.verification,
           privateClaim.signer,
+          privateClaim.did,
         )
     ) {
       throw new Error('Issuer isn\'t a use\'r delegate');

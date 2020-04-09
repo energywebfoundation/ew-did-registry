@@ -29,8 +29,4 @@ export interface IDIDRegistry {
   changeOperator(operator: IOperator, network: Methods | string): void;
 
   read(did: string): Promise<IDIDDocumentLite>;
-
-  publishPublicClaim(issued: string, verifyData: object): Promise<string>;
-
-  publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string>;
 }

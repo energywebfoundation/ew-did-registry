@@ -6,6 +6,7 @@ import { encrypt } from 'eciesjs';
 // @ts-ignore
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
+import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import {
   IPrivateClaim,
   IProofClaim,
@@ -98,7 +99,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: privateData,
     };
-    const issuerDocument = await this.getDocument(issuer);
+    const issuerDocument = await this.document.read(issuer);
     const issuerPK = issuerDocument
       .publicKey
       .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
@@ -236,5 +237,57 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     }
     return true;
+  }
+
+  /**
+     * Verifies content of the issued claim, issuer identity and adds claim to service endpoints
+     *
+     * @param issued {string} claim approved by the issuer
+     * @param verifyData {object} user data that should be contained in issued claim
+     *
+     * @returns {string} url of the saved claim
+     */
+  async publishPublicClaim(issued: string, verifyData: object): Promise<string> {
+    const verified = await this.verifyPublicClaim(issued, verifyData);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued);
+    }
+    return '';
+  }
+
+  /**
+   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
+   *
+   * @param issued {string} claim with encrypted user data approved by the issuer
+   * @param saltedFields {ISaltedFields} private user data
+   *
+   * @returns {string} url of the saved claim
+   */
+  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string> {
+    const verified = await this.verifyPrivateClaim(issued, saltedFields);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued);
+    }
+    return '';
+  }
+
+  private async addClaimToServiceEndpoints(
+    claim: string,
+    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: this.sha256Hash },
+  ): Promise<string> {
+    const { hashAlg, createHash } = opts;
+    const url = await this.store.save(claim);
+    await this.document.update(
+      DIDAttribute.ServicePoint,
+      {
+        type: PubKeyType.VerificationKey2018,
+        value: JSON.stringify({ serviceEndpoint: url, hash: createHash(claim), hashAlg }),
+      },
+    );
+    return url;
+  }
+
+  private sha256Hash(data: string): string {
+    return crypto.createHash('sha256').update(data).digest('hex');
   }
 }

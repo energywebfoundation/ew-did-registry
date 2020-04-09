@@ -1,10 +1,9 @@
 import { Contract } from 'ethers';
-import crypto from 'crypto';
 import { IKeys } from '@ew-did-registry/keys';
-import { IOperator, DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { ClaimsFactory, IClaimsFactory, ISaltedFields } from '@ew-did-registry/claims';
+import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
@@ -29,40 +28,8 @@ class DIDRegistry implements IDIDRegistry {
     this.keys.set(method, keys);
     this.jwt = new JWT(this.keys.get(method));
     this.document = new DIDDocumentFactory(did).createFull(operator);
-    this.claims = new ClaimsFactory(keys, operator);
+    this.claims = new ClaimsFactory(keys, this.document, store);
     this.operator = operator;
-  }
-
-  /**
-   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
-   *
-   * @param issued {string} claim approved by the issuer
-   * @param verifyData {object} user data which should be contained in issued claim
-   *
-   * @returns {string} url of the saved claim
-   */
-  async publishPublicClaim(issued: string, verifyData: object): Promise<string> {
-    const verified = await this.claims.createClaimsUser().verifyPublicClaim(issued, verifyData);
-    if (verified) {
-      return this.addClaimToServiceEndpoints(issued);
-    }
-    return '';
-  }
-
-  /**
-   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
-   *
-   * @param issued {string} claim with encrypted user data approved by the issuer
-   * @param saltedFields {ISaltedFields} private user data
-   *
-   * @returns {string} url of the saved claim
-   */
-  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string> {
-    const verified = await this.claims.createClaimsUser().verifyPrivateClaim(issued, saltedFields);
-    if (verified) {
-      return this.addClaimToServiceEndpoints(issued);
-    }
-    return '';
   }
 
   /**
@@ -83,7 +50,7 @@ class DIDRegistry implements IDIDRegistry {
   changeOperator(operator: IOperator, method: Methods | string): void {
     const keys = this.keys.get(method);
     this.document = new DIDDocumentFactory(this.did.get(method)).createFull(operator);
-    this.claims = new ClaimsFactory(keys, operator);
+    this.claims = new ClaimsFactory(keys, this.document, this.store);
     this.operator = operator;
   }
 
@@ -123,26 +90,6 @@ class DIDRegistry implements IDIDRegistry {
         resolve(proxy);
       });
     }));
-  }
-
-  private async addClaimToServiceEndpoints(
-    claim: string,
-    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: this.sha256Hash },
-  ): Promise<string> {
-    const { hashAlg, createHash } = opts;
-    const url = await this.store.save(claim);
-    await this.document.update(
-      DIDAttribute.ServicePoint,
-      {
-        type: PubKeyType.VerificationKey2018,
-        value: JSON.stringify({ serviceEndpoint: url, hash: createHash(claim), hashAlg }),
-      },
-    );
-    return url;
-  }
-
-  private sha256Hash(data: string): string {
-    return crypto.createHash('sha256').update(data).digest('hex');
   }
 }
 

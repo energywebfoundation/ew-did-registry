@@ -71,7 +71,7 @@ describe('[REGISTRY PACKAGE]', function () {
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
     expect(claim.claimData).deep.equal(publicData);
-    const claimUrl = await user.publishPublicClaim(issuedToken, publicData);
+    const claimUrl = await userClaims.publishPublicClaim(issuedToken, publicData);
     expect(claimUrl).to.not.be.empty;
   });
 
@@ -84,7 +84,7 @@ describe('[REGISTRY PACKAGE]', function () {
     // User sends claim to Issuer
     const issued = await issuerClaims.issuePrivateClaim(token);
     // Issuer sends claim to User
-    const claimUrl = await user.publishPrivateClaim(issued, saltedFields);
+    const claimUrl = await userClaims.publishPrivateClaim(issued, saltedFields);
     expect(claimUrl).to.not.be.empty;
     const encryptedSaltedFields: IProofData = {
       secret: { value: saltedFields.secret, encrypted: true },
