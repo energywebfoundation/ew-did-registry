@@ -1,68 +1,34 @@
-import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
+import {
+  IDIDDocument, IResolver, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
+} from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
   /**
-   * Resolver that fetches DID Document
-   */
-  private readonly resolver: IResolver;
+* @param {string} did
+* @param {Resolver} resolver
+*/
+  // eslint-disable-next-line no-useless-constructor
+  constructor(public did: string, private resolver: IResolver) { }
 
-  /**
-   * DID of concern
-   */
-  did: string;
-
-  /**
-   * Fetched DID Document
-   */
-  didDocument: IDIDDocument;
-
-  /**
-   * Constructor takes DID of interest and Resolver as inputs
-   * @param {string} did
-   * @param {Resolver} resolver
-   */
-  constructor(did: string, resolver: IResolver) {
-    this.resolver = resolver;
-    this.did = did;
+  identityOwner(did = this.did): Promise<string> {
+    return this.resolver.identityOwner(did);
   }
 
-  /**
-   * Method returns the attribute of interest. An optional type parameter can be provided for
-   * attributes, which are objects
-   *
-   * @example
-   * ```typescript
-   * import { Resolver } from '@ew-did-registry/did-resolver';
-   * import { DIDDocumentFactory } from '@ew-did-registry/did-document';
-   *
-   * const sampleDid = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
-   * const resolver = new Resolver();
-   * const didLiteDocument = DIDDocumentFactory.createLite(sampleDid, resolver);
-   * const id = didDocumentLite.read('id');
-   *
-   * console.log(`DID of the fetched document is ${id}`);
-   * ```
-   *
-   * @param {string} attribute
-   * @param {string} type
-   */
-  async read(attribute: string, type: string): Promise<string | object> {
-    this.didDocument = await this.resolver.read(this.did);
+  validDelegate(
+    delegateType: DelegateTypes, delegateDID: string, did = this.did,
+  ): Promise<boolean> {
+    return this.resolver.validDelegate(did, delegateType, delegateDID);
+  }
 
-    if (type === undefined) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      return this.didDocument[attribute];
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    const PubAuthService = this.didDocument[attribute];
-    if (PubAuthService === undefined) {
-      return PubAuthService;
-    }
-    const instance = PubAuthService.find((member: { type: string }) => member.type === type);
-    return instance;
+  readAttribute(
+    filter: { [key: string]: { [key: string]: string } }, did = this.did,
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+    return this.resolver.readAttribute(did, filter);
+  }
+
+  async read(did = this.did): Promise<IDIDDocument> {
+    return this.resolver.read(did);
   }
 }
 
