@@ -1,5 +1,5 @@
 import {
-  IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication
+  IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
 } from '@ew-did-registry/did-resolver-interface';
 
 /**
@@ -14,13 +14,13 @@ export interface IDIDDocumentLite {
 
   /**
    * Returns document of the given `did`
+   *
    * @param did {string}
    */
   read(did?: string): Promise<IDIDDocument>;
 
   /**
    * Returns the current owner for certain DID.
-   * If owner not assigned explicitly than identity is the owner of itself
    *
    * @param {string} did
    * @returns {Promise<string>}
@@ -48,7 +48,7 @@ export interface IDIDDocumentLite {
    *  like `publicKey`, `serviceEndpoints` or `authentication` and `prop` - properties
    *  of this attribute such as `type` or `value`
    * @param did {string}
-   * 
+   *
    * @returns {object | null}
    */
   readAttribute(
