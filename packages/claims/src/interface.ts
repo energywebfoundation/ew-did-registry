@@ -1,5 +1,5 @@
 import {
-  IClaims, IProofData, ISaltedFields,
+  IClaims, IProofData, ISaltedFields, IPublicClaim,
 } from './models';
 
 /**
@@ -28,6 +28,6 @@ export interface IClaimsIssuer extends IClaims {
 }
 
 export interface IClaimsVerifier extends IClaims {
-  verifyPublicProof(token: string): Promise<void>;
+  verifyPublicProof(claimUrl: string): Promise<IPublicClaim>;
   verifyPrivateProof(proofToken: string, privateToken: string): Promise<void>;
 }

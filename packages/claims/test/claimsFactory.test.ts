@@ -69,7 +69,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     };
     const proofToken = await claimsUser.createProofClaim(claimUrl, encryptedSaltedFields);
     // Verifier side
-    return claimsVerifier.verifyPrivateProof(proofToken, issuedToken).should.be.fulfilled;
+    return claimsVerifier.verifyPrivateProof(proofToken, claimUrl).should.be.fulfilled;
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
@@ -81,6 +81,6 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     // Application/User side
     const claimUrl = await claimsUser.publishPublicClaim(issuedToken, publicData);
     // Verifier side
-    return claimsVerifier.verifyPublicProof(issuedToken).should.be.fulfilled;
+    return claimsVerifier.verifyPublicProof(claimUrl).should.be.fulfilled;
   });
 });

@@ -91,8 +91,8 @@ describe('[REGISTRY PACKAGE]', function () {
       notSecret: { value: saltedFields.notSecret, encrypted: false },
     };
     const proof = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
-    const published = await verifier.store.get(claimUrl);
-    const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof, published);
+    // const published = await verifier.store.get(claimUrl);
+    const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof, claimUrl);
     return verified.should.be.fulfilled;
   });
 

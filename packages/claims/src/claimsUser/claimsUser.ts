@@ -18,7 +18,7 @@ import {
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
-
+import { hashes } from '../utils';
 
 const { bn, hash, bitArray } = sjcl;
 
@@ -296,7 +296,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
 
   private async addClaimToServiceEndpoints(
     claim: string,
-    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: this.sha256Hash },
+    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: hashes.SHA256 },
   ): Promise<string> {
     const { hashAlg, createHash } = opts;
     const url = await this.store.save(claim);
@@ -308,9 +308,5 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       },
     );
     return url;
-  }
-
-  private sha256Hash(data: string): string {
-    return crypto.createHash('sha256').update(data).digest('hex');
   }
 }

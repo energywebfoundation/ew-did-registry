@@ -5,13 +5,14 @@ import { DelegateTypes } from '@ew-did-registry/did-resolver-interface';
 import crypto from 'crypto';
 import { Claims } from '../claims';
 import { IClaimsVerifier } from '../interface';
-import { IPrivateClaim, IProofClaim, IPublicClaim } from '../models';
+import { IProofClaim, IPublicClaim } from '../models';
 
 const { bn, hash } = sjcl;
 
 export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   /**
-   * Checks issuer signature on token
+   * Verifies integrity of the claim, the claim is issued by the user
+   *  delegate and the authenticity of the issuer's signature
    *
    * @example
    * ```typescript
@@ -26,14 +27,8 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
    * @returns { Promise<void> } whether the proof was succesfull
    * @throws if the proof failed
    */
-  async verifyPublicProof(token: string): Promise<void> {
-    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
-      throw new Error('Invalid signatue');
-    }
-    if (!this.document.validDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
-      throw new Error('Issuer isn\'t a use\'r delegate');
-    }
+  async verifyPublicProof(claimUrl: string): Promise<IPublicClaim> {
+    return this.verify(claimUrl) as Promise<IPublicClaim>;
   }
 
   /**
@@ -54,16 +49,12 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   * @returns { Promise<void> } whether the proof was succesfull
   * @throws if the proof failed
   */
-  async verifyPrivateProof(proofToken: string, privateToken: string): Promise<void> {
+  async verifyPrivateProof(proofToken: string, claimUrl: string): Promise<void> {
+    const privateClaim = await this.verify(claimUrl);
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
     const proofClaim: IProofClaim = this.jwt.decode(proofToken) as IProofClaim;
     if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
-      throw new Error('Invalid signature');
-    }
-
-    const privateClaim: IPrivateClaim = this.jwt.decode(privateToken) as IPrivateClaim;
-    if (!(await this.verifySignature(privateToken, privateClaim.signer))) {
       throw new Error('Invalid signature');
     }
     if (

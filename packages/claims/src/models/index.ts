@@ -38,4 +38,7 @@ export interface IClaims {
   did: string;
   keys: IKeys;
   jwt: IJWT;
+  verify(
+    claimUrl: string, hashFns?: { [hashAlg: string]: (data: string) => string },
+  ): Promise<IPublicClaim | IPrivateClaim>;
 }
