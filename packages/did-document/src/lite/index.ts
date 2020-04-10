@@ -18,7 +18,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<string>}
    */
-  identityOwner(did = this.did): Promise<string> {
+  async identityOwner(did = this.did): Promise<string> {
     return this.resolver.identityOwner(did);
   }
 
@@ -30,7 +30,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<boolean>}
    */
-  validDelegate(
+  async validDelegate(
     delegateType: DelegateTypes, delegateDID: string, did = this.did,
   ): Promise<boolean> {
     return this.resolver.validDelegate(did, delegateType, delegateDID);
@@ -47,7 +47,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    *
    * @returns {object | null}
    */
-  readAttribute(
+  async readAttribute(
     filter: { [key: string]: { [key: string]: string } }, did = this.did,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
     return this.resolver.readAttribute(did, filter);
