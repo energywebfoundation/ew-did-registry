@@ -18,7 +18,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<string>}
    */
-  async identityOwner(did = this.did): Promise<string> {
+  async getController(did = this.did): Promise<string> {
     return this.resolver.identityOwner(did);
   }
 
@@ -30,7 +30,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<boolean>}
    */
-  async validDelegate(
+  async isValidDelegate(
     delegateType: DelegateTypes, delegateDID: string, did = this.did,
   ): Promise<boolean> {
     return this.resolver.validDelegate(did, delegateType, delegateDID);

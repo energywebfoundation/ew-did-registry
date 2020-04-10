@@ -25,7 +25,7 @@ export interface IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<string>}
    */
-  identityOwner(did?: string): Promise<string>;
+  getController(did?: string): Promise<string>;
 
   /**
    * Checks if the delegate is present for a particular DID.
@@ -36,7 +36,7 @@ export interface IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<boolean>}
    */
-  validDelegate(
+  isValidDelegate(
     delegateType: DelegateTypes, delegateDID: string, did?: string,
   ): Promise<boolean>;
 
