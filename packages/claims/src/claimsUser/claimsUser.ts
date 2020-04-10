@@ -6,7 +6,9 @@ import { encrypt } from 'eciesjs';
 // @ts-ignore
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
-import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute, PubKeyType, Algorithms, Encoding,
+} from '@ew-did-registry/did-resolver-interface';
 import {
   IPrivateClaim,
   IProofClaim,
@@ -16,6 +18,7 @@ import {
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
+
 
 const { bn, hash, bitArray } = sjcl;
 
@@ -199,11 +202,21 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @throws if the proof failed
    */
   async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
-    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    const claim = this.jwt.decode(token) as IPublicClaim;
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('Incorrect signature');
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
+    const [, , issAddress] = (claim.iss as string).split(':');
+    await this.document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.ED25519,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: issAddress,
+      },
+    );
     return true;
   }
 
@@ -224,8 +237,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @throw if the proof failed
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
-    const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    const claim = this.jwt.decode(token) as IPrivateClaim;
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('Invalid signature');
     }
     // eslint-disable-next-line no-restricted-syntax
@@ -236,6 +249,16 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }
+    const [, , issAddress] = (claim.iss as string).split(':');
+    await this.document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.ED25519,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: issAddress,
+      },
+    );
     return true;
   }
 

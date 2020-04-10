@@ -43,8 +43,8 @@ export class Claims implements IClaims {
    * @param { string } signer did of the signer
    */
   async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerDocument = await this.document.read(signer);
-    const issuerPublicKey = signerDocument
+    const signerDoc = await this.document.read(signer);
+    const issuerPublicKey = signerDoc
       .publicKey
       .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
       .publicKeyHex;
