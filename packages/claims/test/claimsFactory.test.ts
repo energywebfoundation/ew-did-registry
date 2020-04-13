@@ -69,7 +69,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     };
     const proofToken = await claimsUser.createProofClaim(claimUrl, encryptedSaltedFields);
     // Verifier side
-    return claimsVerifier.verifyPrivateProof(proofToken, claimUrl).should.be.fulfilled;
+    return claimsVerifier.verifyPrivateProof(proofToken).should.be.fulfilled;
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {

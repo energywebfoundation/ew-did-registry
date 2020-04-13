@@ -10,11 +10,11 @@ import {
   IClaimsIssuer,
 } from '@ew-did-registry/claims';
 import { proxyFactoryBuild } from '@ew-did-registry/proxyidentity';
+import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { JsonRpcProvider } from 'ethers/providers';
 import { providers, ContractFactory } from 'ethers';
 import DIDRegistry from '../src';
 import { getSettings, spawnIpfsDaemon, shutDownIpfsDaemon } from '../../../tests';
-import { DidStore } from '../../did-ipfs-store/src/didStore';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -48,9 +48,7 @@ describe('[REGISTRY PACKAGE]', function () {
     issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(issuerKeys, resolverSettings), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
     verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(verifierKeys, resolverSettings), store);
-    await user.document.deactivate();
     await user.document.create();
-    await issuer.document.deactivate();
     await issuer.document.create();
   });
 
@@ -91,8 +89,7 @@ describe('[REGISTRY PACKAGE]', function () {
       notSecret: { value: saltedFields.notSecret, encrypted: false },
     };
     const proof = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
-    // const published = await verifier.store.get(claimUrl);
-    const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof, claimUrl);
+    const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof);
     return verified.should.be.fulfilled;
   });
 

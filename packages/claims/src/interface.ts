@@ -29,5 +29,5 @@ export interface IClaimsIssuer extends IClaims {
 
 export interface IClaimsVerifier extends IClaims {
   verifyPublicProof(claimUrl: string): Promise<IPublicClaim>;
-  verifyPrivateProof(proofToken: string, privateToken: string): Promise<void>;
+  verifyPrivateProof(proofToken: string): Promise<void>;
 }
