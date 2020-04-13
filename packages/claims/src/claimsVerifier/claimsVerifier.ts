@@ -59,7 +59,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     }
     if (
       !this.document
-        .validDelegate(
+        .isValidDelegate(
           DelegateTypes.verification,
           privateClaim.signer,
           privateClaim.did,

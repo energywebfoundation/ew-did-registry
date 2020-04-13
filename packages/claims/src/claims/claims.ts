@@ -72,7 +72,7 @@ export class Claims implements IClaims {
     if (!(await this.verifySignature(token, claim.iss))) {
       throw new Error('Invalid signature');
     }
-    if (!this.document.validDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
+    if (!this.document.isValidDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
     const service = await this.document.readAttribute(
