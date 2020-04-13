@@ -14,18 +14,18 @@ export interface IDIDDocumentLite {
 
   /**
    * Returns document of the given `did`
+   *
    * @param did {string}
    */
   read(did?: string): Promise<IDIDDocument>;
 
   /**
    * Returns the current owner for certain DID.
-   * If owner not assigned explicitly than identity is the owner of itself
    *
    * @param {string} did
    * @returns {Promise<string>}
    */
-  identityOwner(did?: string): Promise<string>;
+  getController(did?: string): Promise<string>;
 
   /**
    * Checks if the delegate is present for a particular DID.
@@ -36,7 +36,7 @@ export interface IDIDDocumentLite {
    * @param {string} did
    * @returns {Promise<boolean>}
    */
-  validDelegate(
+  isValidDelegate(
     delegateType: DelegateTypes, delegateDID: string, did?: string,
   ): Promise<boolean>;
 

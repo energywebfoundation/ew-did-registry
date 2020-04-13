@@ -29,8 +29,5 @@
     "@ew-did-registry/did-ethr-resolver": "^1.0.0",
     "@ew-did-registry/did-resolver-interface": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0"
-  },
-  "devDependencies": {
-    "ganache-cli": "^6.9.1"
   }
 }
