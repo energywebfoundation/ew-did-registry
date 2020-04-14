@@ -24,7 +24,7 @@ User is the claims subject
     publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
-  const userDid = `did:${Methods.Ethereum}:${userAddress}` ;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}` ;
 ```  
 `` `Operator` `` - is an interface responsible for DID document updating
 ```typescript 
@@ -51,7 +51,7 @@ stored and verified
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
-  const issuerDid = `did:${Methods.Ethereum}:${issuerAddress}` ; 
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
   const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
@@ -62,7 +62,7 @@ Same flow for verifier
     publicKey: '02335325b9d16aa046ea7275537d9aced84ed3683a7969db5f836b0e6d62770d1e',
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
-  const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}` ; 
+  const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
   const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings)); 
 ```
 The time interval during which the corresponding record in the DID document will
