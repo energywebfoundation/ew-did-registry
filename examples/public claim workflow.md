@@ -25,20 +25,22 @@ import { DidStore } from '@ew-did-registry/did-ipfs-store';
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}` ;
 ```  
-`Operator` - is an interface responsible for DID document updating
+`Operator` - Interface used to access the document. User can provide his
+own implementation of the interface depending on the DID method. The library 
+provides reference implementation based on ERC-1056
 
 ```typescript 
   const userOperator = new Operator(userKeys, resolverSettings);
 ```
 
-` DIDRegistry ` - main interface for working with claims and DID documents
+` DIDRegistry ` - main class for working with claims and DID documents
 
 ``` typescript
   const user = new DIDRegistry(userKeys, userDid, userOperator, store);
 ```
 
 Before using DID document it needs to be initialized. During initialization, 
-the document stores the user's public key 
+the document stores the user's verification public key 
 
 ``` typescript
   await user.document.create();
