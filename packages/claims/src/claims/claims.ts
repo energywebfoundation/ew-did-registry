@@ -62,7 +62,7 @@ export class Claims implements IClaims {
    *  delegate and the authenticity of the issuer's signature
    *
    * @param claimUrl {string}
-   * @param hashFns {}
+   * @param hashFns {{ [alg: string]: (data: string) => string }}
    */
   async verify(
     claimUrl: string, hashFns?: { [alg: string]: (data: string) => string },

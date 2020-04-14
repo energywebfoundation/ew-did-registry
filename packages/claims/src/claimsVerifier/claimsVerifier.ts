@@ -42,7 +42,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
   *
   * const keys = new Keys();
   * const claims = new ClaimsVerifier(verifier);
-  * const verified = claims.verifyPrivateProof(proofToken, privateToken);
+  * const verified = claims.verifyPrivateProof(proofToken);
   * ```
   * @param { string } proofToken contains proof data
   * @param { string } privateToken contains private data

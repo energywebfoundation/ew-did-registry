@@ -98,10 +98,11 @@ Issuer encodes private data and then hashes it
   const issuedToken = await issuerClaims.issuePrivateClaim(token);
 ```
 
-* **Verification of issued claim**
+* **Publishing of the issued claim**
 
 Verifies issuer's signature, payload of the issued claim, adds issuer to 
-delegates and saves claim
+delegates and saves claim. Optionally hashing algorithm can be provided. 
+By default SHA256 is used
 
 ```typescript 
   const claimUrl = await userClaims.publishPrivateClaim(issued, saltedFields);
@@ -120,7 +121,8 @@ User creates proof claim optionally disclosing some data
 ```
 
 Retrieve issued claim, check if the issuer is user's delegate, verify claim
-integrity and cryptographically match proof against stored claim
+integrity and cryptographically match proof against stored claim. Optionally 
+a map of hashing algorithms can be provided. By default SHA256 is used
 
 ```typescript 
   const verified = await claimsVerifier.verifyPublicProof(proof);

@@ -270,10 +270,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns {string} url of the saved claim
      */
-  async publishPublicClaim(issued: string, verifyData: object): Promise<string> {
+  async publishPublicClaim(
+    issued: string, verifyData: object, opts?: { hashAlg: string; createHash: (data: string) => string },
+  ): Promise<string> {
     const verified = await this.verifyPublicClaim(issued, verifyData);
     if (verified) {
-      return this.addClaimToServiceEndpoints(issued);
+      return this.addClaimToServiceEndpoints(issued, opts);
     }
     return '';
   }
@@ -286,10 +288,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns {string} url of the saved claim
    */
-  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields): Promise<string> {
+  async publishPrivateClaim(
+    issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string },
+  ): Promise<string> {
     const verified = await this.verifyPrivateClaim(issued, saltedFields);
     if (verified) {
-      return this.addClaimToServiceEndpoints(issued);
+      return this.addClaimToServiceEndpoints(issued, opts);
     }
     return '';
   }

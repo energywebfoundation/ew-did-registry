@@ -94,9 +94,11 @@ const token = await userClaims.createPublicClaim(publicData);
   const issuedToken = await issuerClaims.issuePublicClaim(token);
 ```
 
-* **Verification of issued claim**
+* **Publishing of issued claim**
 
-Verifies issuer's signature, payload of the issued claim, adds issuer to delegates and saves claim
+Verifies issuer's signature, payload of the issued claim, adds issuer to 
+delegates and saves claim.  Optionally hashing algorithm can be provided. 
+By default SHA256 is used
 
 ```typescript 
   const claimUrl = await userClaims.publishPublicClaim(issuedToken, publicData); 
@@ -104,7 +106,9 @@ Verifies issuer's signature, payload of the issued claim, adds issuer to delegat
 
 * **Verification of the presented claim**
 
-Retrieve issued claim, check if the issuer is user's delegate and verify claim integrity
+Retrieve issued claim, check if the issuer is user's delegate and verify claim
+integrity. Optionally a map of hashing algorithms can be provided. By default 
+SHA256 is used
 
 ```typescript 
   const verified = await claimsVerifier.verifyPublicProof(claimUrl);
