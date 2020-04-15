@@ -77,7 +77,7 @@ export interface IOperator extends IResolver {
     did: string,
     attribute: DIDAttribute,
     value: IUpdateData,
-    validity: number | utils.BigNumber
+    validity?: number | utils.BigNumber
   ): Promise<boolean>;
 
   /**
