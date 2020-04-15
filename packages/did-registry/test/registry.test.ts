@@ -1,5 +1,5 @@
-import {expect} from 'chai';
-import {ethrReg, Operator, Resolver} from '@ew-did-registry/did-ethr-resolver';
+import { expect } from 'chai';
+import { ethrReg, Operator, Resolver } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
   DIDAttribute,
@@ -8,15 +8,15 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import {Keys} from '@ew-did-registry/keys';
-import {Methods} from '@ew-did-registry/did';
-import {IClaimsIssuer, IClaimsUser, IPrivateClaim, IProofData, IPublicClaim,} from '@ew-did-registry/claims';
-import {proxyFactoryBuild} from '@ew-did-registry/proxyidentity';
-import {DIDDocumentFull} from '@ew-did-registry/did-document';
-import {JsonRpcProvider} from 'ethers/providers';
-import {ContractFactory, providers} from 'ethers';
+import { Keys } from '@ew-did-registry/keys';
+import { Methods } from '@ew-did-registry/did';
+import { IClaimsIssuer, IClaimsUser, IPrivateClaim, IProofData, IPublicClaim, } from '@ew-did-registry/claims';
+import { proxyFactoryBuild } from '@ew-did-registry/proxyidentity';
+import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import { JsonRpcProvider } from 'ethers/providers';
+import { ContractFactory, providers } from 'ethers';
 import DIDRegistry from '../src';
-import {getSettings} from '../../../tests/init-ganache';
+import { getSettings } from '../../../tests/init-ganache';
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
@@ -116,14 +116,13 @@ describe('[REGISTRY PACKAGE]', function () {
       encoding: Encoding.HEX,
       delegate: issuerAddress,
     };
-    const userLigthDoc = user.documentFactory.createLite(new Resolver(resolverSettings));
-    await userLigthDoc.read(userDid);
-    let document = userLigthDoc.didDocument;
+    const liteDoc = user.documentFactory.createLite(new Resolver(resolverSettings));
+    let document = await liteDoc.read();
     const userFullDoc = user.documentFactory.createFull(userOperator);
     expect(userFullDoc).instanceOf(DIDDocumentFull);
     const updated = await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity);
     expect(updated).is.true;
-    await userLigthDoc.read(userDid);
+    await liteDoc.read(userDid);
     const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
     expect(document.publicKey.find((pk) => pk.id === expectedPkId)).to.not.undefined;
     const claimUrl = 'http://test.service.com';
@@ -146,7 +145,7 @@ describe('[REGISTRY PACKAGE]', function () {
     });
     const proofToken = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
     await verifier.claims.createClaimsVerifier().verifyPrivateProof(proofToken, issuedToken);
-    document = userLigthDoc.didDocument;
+    document = await liteDoc.read();
   });
 
   it('createProxy() should return proxy address', async () => {
