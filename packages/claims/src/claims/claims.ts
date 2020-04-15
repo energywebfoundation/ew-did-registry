@@ -1,9 +1,8 @@
 import { Wallet } from 'ethers';
-import { IResolver, IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
 import { DIDDocumentFactory } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
-import { Networks } from '@ew-did-registry/did';
 import { IClaims } from '../models';
 
 /**
@@ -39,7 +38,7 @@ export class Claims implements IClaims {
     this.keys = keys;
     this.jwt = new JWT(keys);
     const { address } = new Wallet(keys.privateKey);
-    this.did = `did:${Networks.Ethereum}:${address}`;
+    this.did = `did:${resolver.settings.method}:${address}`;
   }
 
   /**
@@ -52,17 +51,16 @@ export class Claims implements IClaims {
    *
    * const user = new Keys();
    * const claims = new Claims(user);
-   * const did = `did:${Networks.Ethereum}:user_id`;
+   * const did = `did:${Methods.Erc1056}:user_id`;
    * const document = await claims.getDocument(did);
    * ```
    *
    * @returns {Promise<IDIDDocument>}
    */
   async getDocument(did: string): Promise<IDIDDocument> {
-    const documentFactory = new DIDDocumentFactory(did);
-    const didDocumentLite = documentFactory.createLite(this.resolver);
-    await didDocumentLite.read(did);
-    return didDocumentLite.didDocument;
+    const factory = new DIDDocumentFactory(did);
+    const docLite = factory.createLite(this.resolver);
+    return docLite.read(did);
   }
 
   /**

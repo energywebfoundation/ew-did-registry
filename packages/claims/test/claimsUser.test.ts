@@ -1,16 +1,13 @@
 import chai from 'chai';
-import { Keys } from '@ew-did-registry/keys';
-import { Resolver, Operator } from '../../did-ethr-resolver';
-import {
-  IOperator,
-  IResolver,
-} from '../../did-resolver-interface';
-import { Networks } from '../../did';
-import { decrypt } from 'eciesjs';
-import { ClaimsUser } from '../src/claimsUser';
-import { IPrivateClaim, IProofClaim } from '../src/models';
-import { getSettings } from '../../../tests/init-ganache';
-import { IClaimsUser } from '../src';
+import {Keys} from '@ew-did-registry/keys';
+import {Operator, Resolver} from '../../did-ethr-resolver';
+import {IOperator, IResolver,} from '../../did-resolver-interface';
+import {Methods} from '../../did';
+import {decrypt} from 'eciesjs';
+import {ClaimsUser} from '../src/claimsUser';
+import {IPrivateClaim, IProofClaim} from '../src/models';
+import {getSettings} from '../../../tests/init-ganache';
+import {IClaimsUser} from '../src';
 
 chai.should();
 
@@ -21,13 +18,13 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
-  const userDdid = `did:${Networks.Ethereum}:${userAddress}`;
+  const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
   const issuer = new Keys({
     privateKey: '945d90baf66123693be97edff663d5c54f5d517d40928a9c0caa37dba3a0b042',
     publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   });
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B';
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   let userOperator: IOperator;
   let issuerOperator: IOperator;

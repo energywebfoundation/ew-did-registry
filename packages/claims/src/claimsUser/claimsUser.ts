@@ -47,7 +47,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(publicData: object, jwtOptions: any = {}): Promise<string> {
+  async createPublicClaim(publicData: object, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
     const claim: IPublicClaim = {
@@ -88,7 +88,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createPrivateClaim(
     privateData: { [key: string]: string },
     issuer: string,
-    jwtOptions: any = {},
+    jwtOptions = { subject: '', issuer: '' },
   ): Promise<{ token: string; saltedFields: ISaltedFields }> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
@@ -141,7 +141,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createProofClaim(
     claimUrl: string,
     proofData: IProofData,
-    jwtOptions: any = {},
+    jwtOptions = { subject: '', issuer: '' },
   ): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
