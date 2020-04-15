@@ -1,68 +1,65 @@
-import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
+import {
+  IDIDDocument, IResolver, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
+} from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
   /**
-   * Resolver that fetches DID Document
-   */
-  private readonly resolver: IResolver;
+* @param {string} did
+* @param {IResolver} resolver
+*/
+  // eslint-disable-next-line no-useless-constructor
+  constructor(public did: string, private resolver: IResolver) { }
 
   /**
-   * DID of concern
-   */
-  did: string;
-
-  /**
-   * Fetched DID Document
-   */
-  didDocument: IDIDDocument;
-
-  /**
-   * Constructor takes DID of interest and Resolver as inputs
+   * Returns the current owner for certain DID.
+   * If owner not assigned explicitly than identity is the owner of itself
+   *
    * @param {string} did
-   * @param {Resolver} resolver
+   * @returns {Promise<string>}
    */
-  constructor(did: string, resolver: IResolver) {
-    this.resolver = resolver;
-    this.did = did;
+  async getController(did = this.did): Promise<string> {
+    return this.resolver.identityOwner(did);
   }
 
   /**
-   * Method returns the attribute of interest. An optional type parameter can be provided for
-   * attributes, which are objects
+   * Checks if the delegate is present for a particular DID.
    *
-   * @example
-   * ```typescript
-   * import { Resolver } from '@ew-did-registry/did-resolver';
-   * import { DIDDocumentFactory } from '@ew-did-registry/did-document';
-   *
-   * const sampleDid = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
-   * const resolver = new Resolver();
-   * const didLiteDocument = DIDDocumentFactory.createLite(sampleDid, resolver);
-   * const id = didDocumentLite.read('id');
-   *
-   * console.log(`DID of the fetched document is ${id}`);
-   * ```
-   *
-   * @param {string} attribute
-   * @param {string} type
+   * @param {DelegateTypes} delegateType
+   * @param {string} delegateDID
+   * @param {string} did
+   * @returns {Promise<boolean>}
    */
-  async read(attribute: string, type: string): Promise<string | object> {
-    this.didDocument = await this.resolver.read(this.did);
+  async isValidDelegate(
+    delegateType: DelegateTypes, delegateDID: string, did = this.did,
+  ): Promise<boolean> {
+    return this.resolver.validDelegate(did, delegateType, delegateDID);
+  }
 
-    if (type === undefined) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      return this.didDocument[attribute];
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    const PubAuthService = this.didDocument[attribute];
-    if (PubAuthService === undefined) {
-      return PubAuthService;
-    }
-    const instance = PubAuthService.find((member: { type: string }) => member.type === type);
-    return instance;
+  /**
+   * Finds first attribute which satisfies filter
+   *
+   * @param filter {{ [attr: string]: { [prop: string]: string } }} object used
+   *  to describe part of the document. `attr` is one of standard DID attributes
+   *  like `publicKey`, `serviceEndpoints` or `authentication` and `prop` - properties
+   *  of this attribute such as `type` or `value`
+   * @param did {string}
+   *
+   * @returns {object | null}
+   */
+  async readAttribute(
+    filter: { [key: string]: { [key: string]: string } }, did = this.did,
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+    return this.resolver.readAttribute(did, filter);
+  }
+
+  /**
+   * Returns document of the given `did`
+   *
+   * @param did {string}
+   */
+  async read(did = this.did): Promise<IDIDDocument> {
+    return this.resolver.read(did);
   }
 }
 
