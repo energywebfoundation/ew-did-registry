@@ -6,16 +6,6 @@ import store from './state-management';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-const { ethereum } = window;
-console.log('ethereum:', ethereum);
-const { isMetaMask, isConnected } = ethereum;
-console.log('isMetaMask:', isMetaMask);
-console.log('isConnected:', isConnected);
-ethereum.enable()
-  .then((addresses) => {
-    console.log('enabled address:', addresses);
-  });
-
 console.log('SERVER_URL:', process.env.REACT_APP_SERVER_URL);
 
 ReactDOM.render(

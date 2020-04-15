@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import { login } from '../../state-management';
-import { Networks } from '@ew-did-registry/did';
-import { identityKeys, sendLoginClaim } from '../../utils/did';
+import { Methods } from '@ew-did-registry/did';
+import { defaultKeys, sendLoginClaim } from '../../utils/did';
 import './style.css';
 
 const layout = {
@@ -24,14 +24,14 @@ const tailLayout = {
 
 class SignIn extends React.Component {
 
-  onFinish = async (values) => {
+  onSubmit = async (values) => {
     console.log('>>> form values:', values);
     const { DID, privateKey } = values;
-    const isAuthenticated = await sendLoginClaim(DID, privateKey);
-    if (!isAuthenticated) {
+    const { authenticated, token } = await sendLoginClaim(DID, privateKey);
+    if (!authenticated) {
       return;
     }
-    this.props.login(DID);
+    this.props.login({ DID, token });
     console.log('>>> SignIn props:', this.props);
     this.props.history.push('/');
   }
@@ -39,8 +39,8 @@ class SignIn extends React.Component {
   onFinishFailed = () => { }
 
   render() {
-    const DID = `did:${Networks.EnergyWeb}:${identityKeys.getAddress()}`;
-    const privateKey = identityKeys.privateKey;
+    const DID = `did:${Methods.Erc1056}:${defaultKeys.getAddress()}`;
+    const privateKey = defaultKeys.privateKey;
     return (
       <Form
         style={{ width: '650px' }}
@@ -51,7 +51,7 @@ class SignIn extends React.Component {
           privateKey,
           remember: true,
         }}
-        onFinish={this.onFinish}
+        onFinish={this.onSubmit}
         onFinishFailed={this.onFinishFailed}
       >
         <Form.Item

@@ -11,7 +11,7 @@
   "author": "dmitry.fesenko@482.solutions",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.45",
-    "web3": "^1.2.6"
+    "ethers": "4.0.45",
+    "web3": "1.2.6"
   }
 }
