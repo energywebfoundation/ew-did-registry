@@ -1,16 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
-import { Resolver } from '@ew-did-registry/did-ethr-resolver';
 import { DelegateTypes } from '@ew-did-registry/did-resolver-interface';
 import crypto from 'crypto';
 import { Claims } from '../claims';
 import { IClaimsVerifier } from '../interface';
-import {
-  IProofClaim,
-  IPrivateClaim,
-  IPublicClaim,
-} from '../models';
+import { IPrivateClaim, IProofClaim, IPublicClaim } from '../models';
 
 const { bn, hash } = sjcl;
 
@@ -36,8 +31,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     if (!(await this.verifySignature(token, claim.signer))) {
       throw new Error('Invalid signatue');
     }
-    const resolver = new Resolver(this.resolver.settings);
-    if (!resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
+    if (!this.resolver.validDelegate(claim.did, DelegateTypes.verification, claim.signer)) {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
   }
@@ -67,14 +61,13 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
       throw new Error('Invalid signature');
     }
-    const resolver = new Resolver(this.resolver.settings);
 
     const privateClaim: IPrivateClaim = this.jwt.decode(privateToken) as IPrivateClaim;
     if (!(await this.verifySignature(privateToken, privateClaim.signer))) {
       throw new Error('Invalid signature');
     }
     if (
-      !resolver
+      !this.resolver
         .validDelegate(
           privateClaim.did,
           DelegateTypes.verification,

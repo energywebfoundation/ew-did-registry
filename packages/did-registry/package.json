@@ -28,8 +28,9 @@
     "@ew-did-registry/claims": "^1.0.0",
     "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/did-document": "^1.0.0",
-    "@ew-did-registry/did-resolver-interface": "^1.0.0",
     "@ew-did-registry/did-ethr-resolver": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0"
+    "@ew-did-registry/did-resolver-interface": "^1.0.0",
+    "@ew-did-registry/keys": "^1.0.0",
+    "@ew-did-registry/proxyidentity": "^1.0.0"
   }
 }

@@ -1,51 +1,64 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {assert, expect} from 'chai';
 import {Keys} from '@ew-did-registry/keys';
-import {Wallet} from 'ethers';
-import {Operator} from '../src'
+import {Contract, ContractFactory, Wallet,} from 'ethers';
 import {
-    Algorithms,
-    DIDAttribute,
-    Encoding,
-    IAuthentication,
-    IDIDDocument,
-    IResolverSettings,
-    IUpdateData,
-    PubKeyType,
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IAuthentication,
+  IPublicKey,
+  IResolverSettings,
+  IUpdateData,
+  PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import {JsonRpcProvider} from 'ethers/providers';
+import {proxyBuild} from '@ew-did-registry/proxyidentity';
+import {ethrReg, ProxyOperator} from '../src';
 import {getSettings} from '../../../tests/init-ganache';
 
+const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
+const { abi: abi1056 } = ethrReg;
 const { fail } = assert;
-describe('[DID-OPERATOR]', function () {
+const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
+const { Secp256k1, ED25519 } = Algorithms;
+const { VerificationKey2018, SignatureAuthentication2018 } = PubKeyType;
+const { HEX } = Encoding;
+
+describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
-  const keys = new Keys({
-    privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-    publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
-  });
-  let operator: Operator;
-  let operatorSetting: IResolverSettings;
-  const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
+  const keys = new Keys();
+  let operator: ProxyOperator;
+  let operatorSettings: IResolverSettings;
   const validity = 10 * 60 * 1000;
-  const did = `did:ethr:${identity}`;
+  let proxy: Contract;
+  let erc1056: Contract;
+  const provider = new JsonRpcProvider('http://localhost:8544');
+  const creator = new Wallet(keys.privateKey, provider);
+  const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
+  let identity: string;
+  let did: string;
 
   before(async () => {
-    operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
-    console.log(`registry: ${operatorSetting.address}`);
-
-    operator = new Operator(keys, operatorSetting);
+    operatorSettings = await getSettings([keys.getAddress()]);
+    erc1056 = new Contract(operatorSettings.address, abi1056, creator);
+    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
+    identity = proxy.address;
+    did = `did:ethr:${identity}`;
+    operator = new ProxyOperator(keys, operatorSettings, proxy.address);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
-    const attribute = DIDAttribute.PublicKey;
+    const attribute = PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: Secp256k1,
+      type: VerificationKey2018,
+      encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(did, attribute, updateData);
-    const document: IDIDDocument = await operator.read(did) as IDIDDocument;
-    expect(document.id).equal(did);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData);
+    const document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
@@ -53,16 +66,16 @@ describe('[DID-OPERATOR]', function () {
   });
 
   it('setting public key attribute should update public keys of DID document', async () => {
-    const attribute = DIDAttribute.PublicKey;
+    const attribute = PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: Secp256k1,
+      type: VerificationKey2018,
+      encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(did, attribute, updateData, validity);
-    const document = await operator.read(did);
-    expect(document.id).equal(did);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
+    const document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value,
     );
@@ -71,12 +84,12 @@ describe('[DID-OPERATOR]', function () {
 
   it('adding a delegate with a delegation type of VerificationKey should add a public key',
     async () => {
-      const attribute = DIDAttribute.Authenticate;
+      const attribute = Authenticate;
       const delegate = new Wallet(new Keys().privateKey);
       const updateData: IUpdateData = {
-        algo: Algorithms.ED25519,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
+        algo: ED25519,
+        type: VerificationKey2018,
+        encoding: HEX,
         delegate: delegate.address,
       };
       const updated = await operator.update(did, attribute, updateData, validity);
@@ -84,7 +97,7 @@ describe('[DID-OPERATOR]', function () {
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
-        (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+        (pk: IPublicKey) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
       );
       expect(authMethod).include({
         type: 'Secp256k1VerificationKey2018',
@@ -95,12 +108,12 @@ describe('[DID-OPERATOR]', function () {
 
   it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
      key and reference on it in authentication section of the DID document`, async () => {
-    const attribute = DIDAttribute.Authenticate;
+    const attribute = Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.SignatureAuthentication2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: SignatureAuthentication2018,
+      encoding: HEX,
       delegate: delegate.address,
     };
     const updated = await operator.update(did, attribute, updateData, validity);
@@ -113,7 +126,7 @@ describe('[DID-OPERATOR]', function () {
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
-      (pk) => pk.id === publicKeyId,
+      (pk: IPublicKey) => pk.id === publicKeyId,
     );
     expect(publicKey).include({
       type: 'Secp256k1VerificationKey2018',
@@ -123,10 +136,10 @@ describe('[DID-OPERATOR]', function () {
   });
 
   it('service endpoint update should add an entry in service section of the DID document', async () => {
-    const attribute = DIDAttribute.ServicePoint;
+    const attribute = ServicePoint;
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
-      type: PubKeyType.VerificationKey2018,
+      type: VerificationKey2018,
       value: endpoint,
     };
     const updated = await operator.update(did, attribute, updateData, validity);
@@ -140,11 +153,11 @@ describe('[DID-OPERATOR]', function () {
 
   it('setting attribute on invalid did should throw an error', async () => {
     const invalidDid = `did:${identity}`;
-    const attribute = DIDAttribute.PublicKey;
+    const attribute = PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: VerificationKey2018,
+      encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
     try {
@@ -156,11 +169,11 @@ describe('[DID-OPERATOR]', function () {
   });
 
   it('setting attribute with negative validity should throw an error', async () => {
-    const attribute = DIDAttribute.PublicKey;
+    const attribute = PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: VerificationKey2018,
+      encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
     try {
@@ -175,33 +188,36 @@ describe('[DID-OPERATOR]', function () {
 
   it('deactivating of document should resolve with true', async () => {
     // add public key
-    let attribute = DIDAttribute.PublicKey;
+    let attribute = PublicKey;
+    let document;
     let updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: VerificationKey2018,
+      encoding: HEX,
       value: `0x${new Keys().publicKey}`,
     };
     await operator.update(did, attribute, updateData, validity);
     // add authentication method
-    attribute = DIDAttribute.Authenticate;
+    attribute = Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     updateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.SignatureAuthentication2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: SignatureAuthentication2018,
+      encoding: HEX,
       delegate: delegate.address,
     };
+    document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
     // add service endpoint
-    attribute = DIDAttribute.ServicePoint;
+    attribute = ServicePoint;
     const endpoint = 'https://example.com';
     updateData = {
-      type: PubKeyType.VerificationKey2018,
+      type: VerificationKey2018,
       value: endpoint,
     };
+    document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
-    let document = await operator.read(did);
+    document = await operator.read(did);
     const result = await operator.deactivate(did);
     expect(result).to.be.true;
     document = await operator.read(did);
@@ -211,13 +227,13 @@ describe('[DID-OPERATOR]', function () {
   });
 
   it('delegate update and revocation makes no changes to the document', async () => {
-    const attribute = DIDAttribute.Authenticate;
+    const attribute = Authenticate;
     const keysDelegate = new Keys();
     const delegate = new Wallet(keysDelegate.privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
+      algo: ED25519,
+      type: VerificationKey2018,
+      encoding: HEX,
       delegate: delegate.address,
     };
     const updated = await operator.update(did, attribute, updateData, validity);
@@ -232,9 +248,8 @@ describe('[DID-OPERATOR]', function () {
       controller: did,
       ethereumAddress: updateData.delegate,
     });
-
     const delegateDid = `did:ethr:${delegate.address}`;
-    const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
+    const revoked = await operator.revokeDelegate(did, VerificationKey2018, delegateDid);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
@@ -244,44 +259,34 @@ describe('[DID-OPERATOR]', function () {
   });
 
   it('attribute update and revocation makes no changes to the document', async () => {
-    const keysAttribute = new Keys();
-    const attribute = DIDAttribute.PublicKey;
+    const attribute = PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
-      value: keysAttribute.publicKey,
+      algo: ED25519,
+      type: VerificationKey2018,
+      encoding: HEX,
+      value: `0x${new Keys().publicKey}`,
     };
-    await operator.update(did, attribute, updateData, validity);
-    let document = await operator.read(did);
-    expect(document.id).equal(did);
+    await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
+    let document = await operator.read(`did:ethr:${identity}`);
+    expect(document.id).equal(`did:ethr:${identity}`);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value,
     );
     expect(publicKey).to.be.not.null;
-    const revoked = await operator.revokeAttribute(did, attribute, updateData);
+    const revoked = await operator.revokeAttribute(`did:ethr:${identity}`, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value,
     );
     expect(publicKey).to.be.undefined;
   });
 
   it('owner change should lead to expected result', async () => {
-    const secondKeys = new Keys({
-      privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-      publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
-    });
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    const operatorNewOwner = new Operator(secondKeys, operatorSetting);
     let currentOwner;
-    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identityNewOwner}`);
-    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
+    await operator.changeOwner(`did:ethr:${proxy.address}`, `did:ethr:${identityNewOwner}`);
+    currentOwner = await erc1056.functions.owners(proxy.address);
     expect(currentOwner).to.be.eql(identityNewOwner);
-
-    await operatorNewOwner.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
-    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
-    expect(currentOwner).to.be.eql(identity);
   });
 });

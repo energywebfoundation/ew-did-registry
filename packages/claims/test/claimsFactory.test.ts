@@ -1,18 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Keys } from '../../keys';
-import { Resolver, Operator } from '../../did-ethr-resolver'
-import {
-  IResolver,
-  IOperator,
-  IResolverSettings,
-} from '../../did-resolver-interface';
-import { Networks } from '../../did';
-import { ClaimsFactory } from '../src/claimsFactory';
-import { IProofData } from '../src/models';
-import { IClaimsIssuer, IClaimsUser, IClaimsVerifier } from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import {Keys} from '../../keys';
+import {Operator, Resolver} from '../../did-ethr-resolver'
+import {IOperator, IResolver, IResolverSettings,} from '../../did-resolver-interface';
+import {Methods} from '../../did';
+import {ClaimsFactory} from '../src/claimsFactory';
+import {IProofData} from '../src/models';
+import {IClaimsIssuer, IClaimsUser, IClaimsVerifier} from '../src';
+import {getSettings} from '../../../tests/init-ganache';
 
 chai.use(chaiAsPromised);
 
@@ -24,7 +20,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     publicKey: '02cb7cd2b5eee35d55e1d5202862d4341fdd28f9b9739f370a254e3cabc368d9bd',
   });
   const userAddress = '0x5AAab994B9103F427bEDedc2173f33e347a3DeE2';
-  const userDid = `did:${Networks.EnergyWeb}:${userAddress}`;
+  const userDid = `did:${Methods.Erc1056}:${userAddress}`;
   let userOperator: IOperator;
 
   const issuer = new Keys({
@@ -32,7 +28,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     publicKey: '0315a744bd5583193d39f2b158abec9c4fca8871e83e83b21bf9fc7bd07c842a61',
   });
   const issuerAddress = '0x116b43b21F082e941c78486809AE0010bb60DFA4';
-  const issuerDid = `did:${Networks.Ethereum}:${issuerAddress}`;
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
   let issuerOperator: IOperator;
 
   const verifier = new Keys({
