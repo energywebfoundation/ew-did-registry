@@ -16,7 +16,7 @@
     "typeRoots": [
       "node_modules/@types",
       "typings"
-    ],
+    ]
   },
   "exclude": [
     "node_modules"
