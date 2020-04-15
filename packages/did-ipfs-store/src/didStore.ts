@@ -9,7 +9,7 @@ export class DidStore implements IDidStore {
   /**
    * @param uri {string} - IPFS API server uri
    */
-  constructor(uri: string) {
+  constructor(uri: string | object) {
     this.ipfs = ipfsClient(uri);
   }
 
