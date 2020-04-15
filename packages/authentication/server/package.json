@@ -10,15 +10,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
     "@ew-did-registry/claims": "^1.0.0",
+    "@ew-did-registry/did": "^1.0.0",
     "@ew-did-registry/did-ethr-resolver": "^1.0.0",
     "@ew-did-registry/did-resolver-interface": "^1.0.0",
     "@ew-did-registry/jwt": "^1.0.0",
     "@ew-did-registry/keys": "^1.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "jsonwebtoken": "^8.5.1"
   }
 }

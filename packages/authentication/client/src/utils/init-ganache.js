@@ -1,6 +1,7 @@
 import { ContractFactory, ethers, Wallet } from 'ethers';
 import Web3 from 'web3';
 import { defaultResolverSettings, ethrReg } from '@ew-did-registry/did-ethr-resolver';
+import { Methods } from '@ew-did-registry/did';
 
 const GANACHE_PORT = 8544;
 const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
@@ -23,6 +24,7 @@ export const getSettings = async (fillAccounts) => {
     abi: defaultResolverSettings.abi,
     provider: defaultResolverSettings.provider,
     address: registry.address,
+    method: Methods.Erc1056,
   };
 
   return resolverSetting;

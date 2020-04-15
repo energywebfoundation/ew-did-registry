@@ -6,7 +6,7 @@ const initialState = {
 
 const login = (payload) => ({
   isLoggedIn: true,
-  DID: payload.DID
+  ...payload
 });
 
 const logout = () => initialState;
