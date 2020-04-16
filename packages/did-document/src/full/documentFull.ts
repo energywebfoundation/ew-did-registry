@@ -1,4 +1,6 @@
-import { DIDAttribute, IOperator, IUpdateData, PubKeyType, } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute, IOperator, IUpdateData, PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 
