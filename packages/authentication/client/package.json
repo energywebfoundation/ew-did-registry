@@ -23,7 +23,7 @@
     "web3": "1.2.6"
   },
   "devDependencies": {
-    "ganache-cli": "^6.9.1"
+    "ganache-cli": "6.9.1"
   },
   "scripts": {
     "start": "react-scripts start",

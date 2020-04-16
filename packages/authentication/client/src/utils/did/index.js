@@ -5,7 +5,7 @@ import { getSettings } from '../init-ganache';
 
 export const defaultKeys = new Keys();
 
-export async function sendLoginClaim(did, privateKey) {
+export async function sendAuthClaim(did, privateKey) {
   const keys = new Keys({ privateKey });
   const resolverSettings = await getSettings([keys.getAddress()]);
   console.log('>>> resolver settings:', resolverSettings);
@@ -15,7 +15,6 @@ export async function sendLoginClaim(did, privateKey) {
   const loginToken = await claims.createPublicClaim(
     {
       id: `${did}`,
-      method: `${did.split(':')[1]}`,
       registry: resolverSettings.address,
       action: "login",
       uri: "https://origin.energyweb.org",

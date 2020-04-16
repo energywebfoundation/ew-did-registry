@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { Resolver, defaultResolverSettings } = require('@ew-did-registry/did-ethr-resolver');
@@ -12,7 +11,6 @@ const { Methods } = require('@ew-did-registry/did');
 const secret = '123abc';
 
 const app = express();
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(cors());
 app.use(express.text());
 app.use(function (req, res, next) {
@@ -43,13 +41,11 @@ app.get('/protected', async function (req, res) {
 app.post('/login', async function (req, res) {
   const token = req.body;
   const claim = new JWT().decode(token);
-  console.log('>>> registration claim:', claim);
-  const { iat, exp, iss, sub, claimData: { method, uri, action, registry } } = claim;
-  console.log('>>> claim:', claim);
+  const { iat, exp, iss, sub, claimData: { uri, action, registry } } = claim;
+  const method = sub.split(':')[1];
   const resolver = getResolver(method, { registry });
   const claims = new Claims(new Keys(), resolver);
   const verified = await claims.verifySignature(token, iss);
-  console.log('verified:', verified);
   if (!verified) {
     res.json({ authenticated: false });
   }

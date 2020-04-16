@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import { login } from '../../state-management';
 import { Methods } from '@ew-did-registry/did';
-import { defaultKeys, sendLoginClaim } from '../../utils/did';
+import { defaultKeys, sendAuthClaim } from '../../utils/did';
 import './style.css';
 
 const layout = {
@@ -27,7 +27,7 @@ class SignIn extends React.Component {
   onSubmit = async (values) => {
     console.log('>>> form values:', values);
     const { DID, privateKey } = values;
-    const { authenticated, token } = await sendLoginClaim(DID, privateKey);
+    const { authenticated, token } = await sendAuthClaim(DID, privateKey);
     if (!authenticated) {
       return;
     }
