@@ -16,8 +16,6 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: fals
 app.use(cors());
 app.use(express.text());
 app.use(function (req, res, next) {
-  console.log('>>> path:', req.path);
-  console.log('>>> headres:', req.headers);
   if (req.path === '/login') {
     return next();
   }
@@ -29,20 +27,14 @@ app.use(function (req, res, next) {
   if (token) {
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
-        return res.json({
-          success: false,
-          message: 'Token is not valid'
-        });
+        return res.redirect('http://localhost:3000/login');
       } else {
         req.decoded = decoded;
         next();
       }
     });
   } else {
-    return res.json({
-      success: false,
-      message: 'Auth token is not supplied'
-    });
+    return res.redirect('http://localhost:3000/login');
   }
 });
 app.get('/protected', async function (req, res) {
