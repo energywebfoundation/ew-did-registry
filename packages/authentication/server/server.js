@@ -44,7 +44,7 @@ app.post('/login', async function (req, res) {
   const token = req.body;
   const claim = new JWT().decode(token);
   console.log('>>> registration claim:', claim);
-  const { exp, iss, sub, claimData: { method, uri, action, registry } } = claim;
+  const { iat, exp, iss, sub, claimData: { method, uri, action, registry } } = claim;
   console.log('>>> claim:', claim);
   const resolver = getResolver(method, { registry });
   const claims = new Claims(new Keys(), resolver);
@@ -65,7 +65,7 @@ app.post('/login', async function (req, res) {
     return res.json({ authenticated });
   }
   res.json({
-    authenticated: true, token: jwt.sign({ did: sub }, secret, { expiresIn: exp })
+    authenticated: true, token: jwt.sign({ did: sub }, secret, { expiresIn: exp - iat })
   });
 });
 
