@@ -28,7 +28,7 @@ class ERC1056{
     revokeAttribute()
 }
 
-class ERC725{
+class myNewMethod{
     IResolverSettings
     create()
     update()
@@ -42,9 +42,15 @@ IResolver<|..ERC1056
 IResolver<|..ERC725
 
 ```
-### Psedo example of implementation
+### Pseudo example of implementation
 ```typescript
+// MyResolver - Implement the read only behaviour for your DID Method
 class Resolver implements IResolver{
+        
+    read(){
+    // return the whole DID Document
+    }
+    
     readAttribute(){
     // read an attribute as per did method requirement 
     }
@@ -55,7 +61,8 @@ class Resolver implements IResolver{
 
 }
 
-export class Operator extends Resolver implements IOperator {
+// MyResolver - Implement the update and revoke behaviour for your DID Method
+class Operator extends Resolver implements IOperator {
 
     create(){
     //create specific to did method
