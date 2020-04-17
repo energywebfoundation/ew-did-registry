@@ -12,4 +12,11 @@ export interface IDidStore {
    * @param uri {string}
    */
   get(uri: string): Promise<string>;
+
+  /**
+   * Attempts to delete claim
+   *
+   * @param uri {string}
+   */
+  delete(uri: string): Promise<boolean>;
 }

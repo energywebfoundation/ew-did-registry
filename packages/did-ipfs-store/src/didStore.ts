@@ -36,4 +36,8 @@ export class DidStore implements IDidStore {
     }
     return claim;
   }
+
+  async delete(uri: string): Promise<boolean> {
+    throw new Error('Not supported by IPFS');
+  }
 }
