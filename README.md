@@ -14,7 +14,7 @@ The EW-DID library implementation confirms to the requirements specified in the 
 | [`@energyweb/ew-did-registry/did-registry`](/packages/did-registry)           | entry-point package for end-users.                        |
 | [`@energyweb/ew-did-registry/did-document`](/packages/did-document)           | exposes CRUD operations for DID Documents that are based on DID W3C Specification. Main class is an abstract factory that allows to work with lite or full implementations of CRUD.                             |
 | [`@energyweb/ew-did-registry/did-ethr-resolver`](/packages/did-ethr-resolver) | connects did-document’s CRUD methods with a particular blockchain implementation of DID specification.                                                                                                        |
-| [`@energyweb/ew-did-registry/did-interface-resolver`](/packages/did-resolver-interface) | provides an interface to implement DID method specification.                                                                                                        |
+| [`@energyweb/ew-did-registry/did-interface-resolver`](/packages/did-resolver-interface) | provides an interface to implement DID method.                                                                                                        |
 | [`@energyweb/ew-did-registry/claims`](/packages/claims)                       | manages Public, Private and Proof claims.                 |
 | [`@energyweb/ew-did-registry/keys`](/packages/keys)                           | provides key management and asymmetric cryptography.      |
 | [`@energyweb/ew-did-registry/jwt`](/packages/jwt)                             | exposes methods to sign, verify, encode, and decode JWTs. |
