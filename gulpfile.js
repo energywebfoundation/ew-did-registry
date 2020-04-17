@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 const path = require('path');
 const fs = require('fs');
-const { exec } = require('child_process');
 
 const { series, src, dest } = require('gulp');
 const replace = require('gulp-replace');

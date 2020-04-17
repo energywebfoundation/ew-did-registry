@@ -1,0 +1,29 @@
+{
+  "name": "@ew-did-registry/did-ipfs-store",
+  "version": "1.0.0",
+  "description": "IPFS-based implementation of IDidStore",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "EnergyWeb",
+    "claim",
+    "store",
+    "did"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@ew-did-registry/did-store-interface": "^1.0.0",
+    "bl": "^4.0.2",
+    "ipfs-http-client": "^43.0.0"
+  }
+}
