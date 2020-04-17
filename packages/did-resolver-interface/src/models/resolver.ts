@@ -58,6 +58,7 @@ export interface IServiceEndpoint {
   description?: string;
   validity?: utils.BigNumber;
   block?: number;
+  hash?: string; // hash of the content located at service endpoint
   [key: string]: string | utils.BigNumber | number;
 }
 
