@@ -9,11 +9,17 @@ script:
   - npm run test-rpc
   - npm run browserTest:run
 deploy:
-  provider: npm
-  email: '$NPM_EMAIL'
-  api_token: '$NPM_API_TOKEN'
-  ffile_glob: true
-  file: build/*
-  skip_cleanup: true
-  on:
-    branch: development
+  - provider: script
+    script: 'git checkout master && npm run publish:canary'
+    email: '$NPM_EMAIL'
+    api_token: '$NPM_API_TOKEN'
+    skip_cleanup: true
+    on:
+      branch: master
+  - provider: script
+    script: 'git checkout release && npm run publish:release'
+    email: '$NPM_EMAIL'
+    api_token: '$NPM_API_TOKEN'
+    skip_cleanup: true
+    on:
+      branch: release
