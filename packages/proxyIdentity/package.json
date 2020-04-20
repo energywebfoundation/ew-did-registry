@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/proxyidentity",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "index.js",
   "scripts": {
