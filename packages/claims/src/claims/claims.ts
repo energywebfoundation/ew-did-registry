@@ -1,28 +1,18 @@
-import { Wallet } from 'ethers';
-import { IDIDDocument, IResolver } from '@ew-did-registry/did-resolver-interface';
-import { DIDDocumentFactory } from '@ew-did-registry/did-document';
+import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
+import { IDidStore } from '@ew-did-registry/did-store-interface';
+import { DelegateTypes, IPublicKey } from '@ew-did-registry/did-resolver-interface';
 import { IClaims } from '../models';
+import { hashes } from '../utils';
 
 /**
  * @class
  * Base class for extending by other claims classes
  */
 export class Claims implements IClaims {
-  /**
-   * Used for creation of new Resolvers
-   */
-  protected readonly resolver: IResolver;
-
-  /**
-   * jwt stores the JWT to manage web tokens
-   */
   public jwt: IJWT;
 
-  /**
-   * Key pair represents the implementation of key management interface
-   */
   public keys: IKeys;
 
   public did: string;
@@ -30,37 +20,13 @@ export class Claims implements IClaims {
   /**
    * @constructor
    *
-   * @param { IKeys } keys user key pair
+   * @param { IKeys } keys
    * @param { IResolver } resolver
    */
-  constructor(keys: IKeys, resolver: IResolver) {
-    this.resolver = resolver;
+  constructor(keys: IKeys, protected document: IDIDDocumentFull, protected store: IDidStore) {
     this.keys = keys;
     this.jwt = new JWT(keys);
-    const { address } = new Wallet(keys.privateKey);
-    this.did = `did:${resolver.settings.method}:${address}`;
-  }
-
-  /**
-   * Fetches DID document of the corresponding DID
-   *
-   * @example
-   * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { Claims } from '@ew-did-registry/claims';
-   *
-   * const user = new Keys();
-   * const claims = new Claims(user);
-   * const did = `did:${Methods.Erc1056}:user_id`;
-   * const document = await claims.getDocument(did);
-   * ```
-   *
-   * @returns {Promise<IDIDDocument>}
-   */
-  async getDocument(did: string): Promise<IDIDDocument> {
-    const factory = new DIDDocumentFactory(did);
-    const docLite = factory.createLite(this.resolver);
-    return docLite.read(did);
+    this.did = document.did;
   }
 
   /**
@@ -79,16 +45,44 @@ export class Claims implements IClaims {
    * @param { string } signer did of the signer
    */
   async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerDocument = await this.getDocument(signer);
-    const issuerPublicKey = signerDocument
-      .publicKey
-      .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
-      .publicKeyHex;
+    const signerPubKey = await this.document.readAttribute(
+      { publicKey: { type: 'Secp256k1veriKey', controller: signer.split(':')[2] } },
+      signer,
+    ) as IPublicKey;
     try {
-      await this.jwt.verify(token, issuerPublicKey.slice(2));
+      await this.jwt.verify(token, signerPubKey.publicKeyHex.slice(2));
     } catch (error) {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Verifies integrity of the claim, the claim is issued by the user
+   *  delegate and the authenticity of the issuer's signature
+   *
+   * @param claimUrl {string}
+   * @param hashFns {{ [alg: string]: (data: string) => string }}
+   */
+  async verify(
+    claimUrl: string, hashFns?: { [alg: string]: (data: string) => string },
+  ): Promise<any> {
+    const token = await this.store.get(claimUrl);
+    const claim: any = this.jwt.decode(token);
+    if (!(await this.verifySignature(token, claim.iss))) {
+      throw new Error('Invalid signature');
+    }
+    if (!this.document.isValidDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
+      throw new Error('Issuer isn\'t a use\'r delegate');
+    }
+    const service = await this.document.readAttribute(
+      { serviceEndpoints: { serviceEndpoint: claimUrl } }, (claim).sub,
+    );
+    const { hash, hashAlg } = service;
+    const createHash = { ...hashes, ...hashFns }[hashAlg as string];
+    if (hash !== createHash(token)) {
+      throw new Error('Claim was changed');
+    }
+    return claim;
   }
 }
