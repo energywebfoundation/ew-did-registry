@@ -5,13 +5,20 @@
   "main": "index.js",
   "scripts": {
     "compile": "../../node_modules/.bin/tsc",
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
   },
   "author": "dmitry.fesenko@482.solutions",
   "license": "ISC",
   "dependencies": {
+    "@energyweb/issuer": "^1.1.0",
+    "@energyweb/origin": "^4.0.2",
     "ethers": "^4.0.45",
+    "multi-token-standard": "^0.8.13",
     "web3": "^1.2.6"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts-ethereum-package": "^2.5.0",
+    "ganache-cli": "^6.9.1"
   }
 }

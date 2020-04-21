@@ -1,4 +1,8 @@
-pragma solidity 0.5.8;
+pragma solidity ^0.5.0;
+
+import './IERC165.sol';
+import './IERC1155.sol';
+import './IERC1155TokenReceiver.sol';
 
 interface IERC1056 {
     function addDelegate(
@@ -15,13 +19,15 @@ interface IERC1056 {
     ) external;
 }
 
-contract ProxyIdentity {
+contract ProxyIdentity is IERC1155TokenReceiver, IERC165{
     address public creator;
     address public owner;
     address public erc1056;
     mapping(address => bool) recoveryAgents;
     uint256 defaultValidity = 2**256 - 1;
     mapping(bytes32 => bool) digests;
+    bytes4 constant internal ERC1155_ACCEPTED = 0xf23a6e61;
+    bytes4 constant internal ERC1155_BATCH_ACCEPTED = 0xbc197c81;
 
     event TransactionSent(bytes data, address to, uint256 value);
     event OwnerChanged(address identity, address prev, address next);
@@ -135,6 +141,51 @@ contract ProxyIdentity {
 
     function _revokeDelegate(address delegate) internal {
         IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
+    }
+
+    function onERC1155Received(
+        address _operator,
+        address _from,
+        uint256 _id,
+        uint256 _value,
+        bytes calldata _data
+    ) external returns (bytes4) {
+        IERC1155(msg.sender).safeTransferFrom(address(this), owner, _id, _value, _data);
+        return ERC1155_ACCEPTED;
+    }
+
+    function onERC1155BatchReceived(
+        address _operator,
+        address _from,
+        uint256[] calldata _ids,
+        uint256[] calldata _values,
+        bytes calldata _data
+    ) external returns (bytes4) {
+        IERC1155(msg.sender).safeBatchTransferFrom(address(this), owner, _ids, _values, _data);
+        return ERC1155_BATCH_ACCEPTED;
+    }
+
+    /**
+    * INTERFACE_SIGNATURE_ERC165 = bytes4(keccak256("supportsInterface(bytes4)"));
+    */
+    bytes4 constant private INTERFACE_SIGNATURE_ERC165 = 0x01ffc9a7;
+
+    /**
+    * bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))^bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))
+    */
+    bytes4 constant private INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER = 0x4e2312e0;
+
+    /**
+    * @notice Query if a contract implements an interface
+    * @param _interfaceID  The interface identifier, as specified in ERC-165
+    * @return `true` if the contract implements `_interfaceID` and
+    */
+    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {
+      if (_interfaceID == INTERFACE_SIGNATURE_ERC165 ||
+          _interfaceID == INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER) {
+        return true;
+      }
+      return false;
     }
 
     function() external payable {}

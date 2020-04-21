@@ -8,6 +8,7 @@ import { BigNumber, Signature } from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
+import { abi as tokenAbi, bytecode as tokenBytecode } from '../build/contracts/ERC1155MintBurn.json';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -19,11 +20,13 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
   let proxy: Contract;
   let erc1056: Contract;
+  let token: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
   let creatorAddress: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  const tokenFactory = new ContractFactory(tokenAbi, tokenBytecode, creator);
   let identity: string;
   let accounts: string[];
 
@@ -249,5 +252,43 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
     const balance1 = await web3.eth.getBalance(dest);
     expect(balance1.toString()).equal(balance0.add(pay).toString());
+  });
+
+  it('token should be transfered to the proxy owner', async () => {
+    const amount = 100;
+    token = await (await tokenFactory.deploy()).deployed();
+    const minter = provider.getSigner(3);
+    token = token.connect(minter);
+    const minterAddr = await minter.getAddress();
+    await token.mint(minterAddr, 1, 1000, '0x0');
+    await token.safeTransferFrom(
+      minterAddr,
+      identity,
+      1,
+      amount,
+      '0x0',
+    );
+    const balance = await token.balanceOf(await creator.getAddress(), 1);
+    expect(balance.toNumber()).equal(amount);
+  });
+
+  it('tokens can be transfered batched', async () => {
+    const amount1 = 100;
+    const amount2 = 200;
+    token = await (await tokenFactory.deploy()).deployed();
+    const minter = provider.getSigner(3);
+    token = token.connect(minter);
+    const minterAddr = await minter.getAddress();
+    await token.batchMint(minterAddr, [1, 2], [1000, 2000], '0x0');
+    await token.safeBatchTransferFrom(
+      minterAddr,
+      identity,
+      [1, 2],
+      [amount1, amount2],
+      '0x0',
+    );
+    const creatorAddr = await creator.getAddress();
+    const balances = await token.balanceOfBatch([creatorAddr, creatorAddr], [1, 2]);
+    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
 });
