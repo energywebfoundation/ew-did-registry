@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import sjcl from 'sjcl-complete';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
-import { IPublicClaim, IPrivateClaim } from '../models';
+import { IPrivateClaim, IPublicClaim } from '../models';
 
 const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
@@ -28,11 +28,12 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    */
   async issuePublicClaim(token: string): Promise<string> {
     const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
-    const signedToken = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    delete claim.iss;
+    const signedToken = await this.jwt.sign(claim, { algorithm: 'ES256', issuer: this.did, noTimestamp: true });
     return signedToken;
   }
 
@@ -57,7 +58,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
@@ -71,7 +72,8 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
       const PK = g.mult(new bn(fieldHash));
       claim.claimData[key] = PK.toBits();
     });
-    return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    delete claim.iss;
+    return this.jwt.sign(claim, { algorithm: 'ES256', issuer: this.did, noTimestamp: true });
   }
 }
 
