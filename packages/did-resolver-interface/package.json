@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/did-resolver-interface",
   "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
