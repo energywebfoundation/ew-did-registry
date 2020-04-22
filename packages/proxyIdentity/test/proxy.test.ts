@@ -8,7 +8,8 @@ import { BigNumber, Signature } from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
-import { abi as tokenAbi, bytecode as tokenBytecode } from '../build/contracts/ERC1155MintBurn.json';
+import { abi as tokenERC1155Abi, bytecode as tokenERC1155Bytecode } from '../build/contracts/ERC1155MintBurn.json';
+import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build/contracts/ERC223Mintable.json';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -20,13 +21,12 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
   let proxy: Contract;
   let erc1056: Contract;
-  let token: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
   let creatorAddress: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
-  const tokenFactory = new ContractFactory(tokenAbi, tokenBytecode, creator);
+  const tokenERC1155Factory = new ContractFactory(tokenERC1155Abi, tokenERC1155Bytecode, creator);
   let identity: string;
   let accounts: string[];
 
@@ -256,7 +256,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
   it('ERC1155 token should be transfered to the proxy owner', async () => {
     const amount = 100;
-    token = await (await tokenFactory.deploy()).deployed();
+    let token = await (await tokenERC1155Factory.deploy()).deployed();
     const minter = provider.getSigner(3);
     token = token.connect(minter);
     const minterAddr = await minter.getAddress();
@@ -272,10 +272,10 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(balance.toNumber()).equal(amount);
   });
 
-  it('tokens can be transfered batched', async () => {
+  it('ERC1155 tokens should be transfered batched to proxy owner', async () => {
     const amount1 = 100;
     const amount2 = 200;
-    token = await (await tokenFactory.deploy()).deployed();
+    let token = await (await tokenERC1155Factory.deploy()).deployed();
     const minter = provider.getSigner(3);
     token = token.connect(minter);
     const minterAddr = await minter.getAddress();
@@ -291,24 +291,19 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const balances = await token.balanceOfBatch([creatorAddr, creatorAddr], [1, 2]);
     expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
-  
-  it('tokens can be transfered batched', async () => {
-    const amount1 = 100;
-    const amount2 = 200;
-    token = await (await tokenFactory.deploy()).deployed();
-    const minter = provider.getSigner(3);
-    token = token.connect(minter);
-    const minterAddr = await minter.getAddress();
-    await token.batchMint(minterAddr, [1, 2], [1000, 2000], '0x0');
-    await token.safeBatchTransferFrom(
-      minterAddr,
+
+  it('ERC223 tokens should be transfered to proxy owner', async () => {
+    const amount = 100;
+    const owner = provider.getSigner(3);
+    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, owner);
+    const token = await (await tokenERC223Factory.deploy()).deployed();
+    const ownerAddr = await owner.getAddress();
+    await (await token.mint(ownerAddr, 1000)).wait();
+    await token.transfer(
       identity,
-      [1, 2],
-      [amount1, amount2],
-      '0x0',
+      amount,
     );
-    const creatorAddr = await creator.getAddress();
-    const balances = await token.balanceOfBatch([creatorAddr, creatorAddr], [1, 2]);
-    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
+    const balance = await token.balanceOf(creatorAddress);
+    expect(balance.toNumber()).equal(amount);
   });
 });

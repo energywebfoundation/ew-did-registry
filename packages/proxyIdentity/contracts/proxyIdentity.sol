@@ -3,7 +3,8 @@ pragma solidity ^0.5.0;
 import "./interfaces/IERC165.sol";
 import "./interfaces/IERC1155.sol";
 import "./interfaces/IERC1155TokenReceiver.sol";
-import "./tokens/ERC223Receiver.sol";
+import "./interfaces/IERC223Receiver.sol";
+import "./interfaces/IERC223.sol";
 
 
 interface IERC1056 {
@@ -22,7 +23,8 @@ interface IERC1056 {
 }
 
 
-contract ProxyIdentity is IERC1155TokenReceiver, IERC165, ERC223Receiver {
+// TODO: implement interfaces separately and extend
+contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   address public creator;
   address public owner;
   address public erc1056;
@@ -31,6 +33,17 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, ERC223Receiver {
   mapping(bytes32 => bool) digests;
   bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;
   bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;
+  Tkn tkn;
+  bool __isTokenFallback;
+
+  struct Tkn {
+    address addr;
+    address sender;
+    address origin;
+    uint256 value;
+    bytes data;
+    bytes4 sig;
+  }
 
   event TransactionSent(bytes data, address to, uint256 value);
   event OwnerChanged(address identity, address prev, address next);
@@ -53,6 +66,12 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, ERC223Receiver {
       recoveryAgents[msg.sender],
       "Only recovery agent can change the owner"
     );
+    _;
+  }
+
+  modifier tokenPayable {
+    if (!__isTokenFallback)
+      revert("Method can be invoked only as part of ERC223 transfer");
     _;
   }
 
@@ -201,6 +220,36 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, ERC223Receiver {
       return true;
     }
     return false;
+  }
+
+  function tokenFallback(
+    address _sender,
+    address _origin,
+    uint256 _value,
+    bytes memory _data
+  ) public returns (bool) {
+    if (!supportsToken(msg.sender)) return false;
+    IERC223(msg.sender).transfer(owner, _value, _data);
+    tkn = Tkn(msg.sender, _sender, _origin, _value, _data, getSig(_data));
+    __isTokenFallback = true;
+    // solium-disable-next-line security/no-low-level-calls
+    (bool success, ) = address(this).delegatecall(_data);
+    __isTokenFallback = false;
+    return success;
+  }
+
+  function getSig(bytes memory _data) private pure returns (bytes4 sig) {
+    uint256 l = _data.length < 4 ? _data.length : 4;
+    for (uint256 i = 0; i < l; i++) {
+      sig = bytes4(
+        uint32(uint32(sig) + uint8(_data[i]) * (2**(8 * (l - 1 - i))))
+      );
+    }
+  }
+
+  // TODO: check if token - is IERC223
+  function supportsToken(address token) public returns (bool) {
+    return true;
   }
 
   function() external payable {}
