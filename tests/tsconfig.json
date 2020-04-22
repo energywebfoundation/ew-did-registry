@@ -12,6 +12,7 @@
       "ESNext",
       "DOM"
     ],
+    "typeRoots": ["../node_modules/@types", "../typings"],
     "experimentalDecorators": true
   }
 }

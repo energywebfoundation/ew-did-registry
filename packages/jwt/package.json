@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/jwt",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "The package manages JWTs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/keys": "^1.0.0",
+    "@ew-did-registry/keys": "^0.0.1-alpha.0",
     "jsonwebtoken": "^8.5.1",
     "key-encoder": "^2.0.3"
   }
