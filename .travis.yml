@@ -1,5 +1,5 @@
 language: node_js
-node_js: 10.18.1
+node_js: 11.15.0
 install:
   - npm install
   - npm run setup
@@ -10,9 +10,9 @@ script:
   - npm run browserTest:run
 deploy:
   provider: npm
-  email: '$NPM_EMAIL'
-  api_token: '$NPM_API_TOKEN'
-  ffile_glob: true
+  email: "$NPM_EMAIL"
+  api_token: "$NPM_API_TOKEN"
+  file_glob: true
   file: build/*
   skip_cleanup: true
   on:
