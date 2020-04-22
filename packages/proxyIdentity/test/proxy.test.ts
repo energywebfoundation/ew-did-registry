@@ -254,7 +254,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(balance1.toString()).equal(balance0.add(pay).toString());
   });
 
-  it('token should be transfered to the proxy owner', async () => {
+  it('ERC1155 token should be transfered to the proxy owner', async () => {
     const amount = 100;
     token = await (await tokenFactory.deploy()).deployed();
     const minter = provider.getSigner(3);
@@ -272,6 +272,26 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(balance.toNumber()).equal(amount);
   });
 
+  it('tokens can be transfered batched', async () => {
+    const amount1 = 100;
+    const amount2 = 200;
+    token = await (await tokenFactory.deploy()).deployed();
+    const minter = provider.getSigner(3);
+    token = token.connect(minter);
+    const minterAddr = await minter.getAddress();
+    await token.batchMint(minterAddr, [1, 2], [1000, 2000], '0x0');
+    await token.safeBatchTransferFrom(
+      minterAddr,
+      identity,
+      [1, 2],
+      [amount1, amount2],
+      '0x0',
+    );
+    const creatorAddr = await creator.getAddress();
+    const balances = await token.balanceOfBatch([creatorAddr, creatorAddr], [1, 2]);
+    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
+  });
+  
   it('tokens can be transfered batched', async () => {
     const amount1 = 100;
     const amount2 = 200;
