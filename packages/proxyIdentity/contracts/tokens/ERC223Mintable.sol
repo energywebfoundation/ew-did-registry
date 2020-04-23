@@ -51,7 +51,7 @@ contract ERC223Mintable is IERC223, ERC20Mintable {
     return reciever.tokenFallback(msg.sender, _origin, _value, _data);
   }
 
-  function isContract(address _addr) private returns (bool is_contract) {
+  function isContract(address _addr) private view returns (bool is_contract) {
     uint256 length;
     // solium-disable-next-line security/no-inline-assembly
     assembly {
