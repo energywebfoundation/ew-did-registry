@@ -7,7 +7,11 @@ import { encrypt } from 'eciesjs';
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
 import {
-  Algorithms, DIDAttribute, Encoding, PubKeyType, DelegateTypes,
+  Algorithms,
+  DelegateTypes,
+  DIDAttribute,
+  Encoding,
+  PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import {
   IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
@@ -15,7 +19,6 @@ import {
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';
-import { Methods } from '../../../did/dist';
 
 const { bn, hash, bitArray } = sjcl;
 
