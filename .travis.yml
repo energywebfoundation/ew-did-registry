@@ -1,5 +1,11 @@
 language: node_js
 node_js: 11.15.0
+before_deploy:
+  - git config --global user.email ${GITHUB_EMAIL}
+  - git config --global user.name ${GITHUB_USER}
+  - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
+  - git reset --hard
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_API_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 install:
   - npm install
   - npm run setup
@@ -10,16 +16,12 @@ script:
   - npm run browserTest:run
 deploy:
   - provider: script
-    script: 'git checkout master && npm run publish:canary'
-    email: '$NPM_EMAIL'
-    api_token: '$NPM_API_TOKEN'
+    script: "git checkout master && npm run publish:canary"
     skip_cleanup: true
     on:
       branch: master
   - provider: script
-    script: 'git checkout release && npm run publish:release'
-    email: '$NPM_EMAIL'
-    api_token: '$NPM_API_TOKEN'
+    script: "git checkout release && npm run publish:release"
     skip_cleanup: true
     on:
       branch: release
