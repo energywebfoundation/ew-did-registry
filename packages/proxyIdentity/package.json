@@ -17,15 +17,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@energyweb/issuer": "^1.1.0",
-    "@energyweb/origin": "^4.0.2",
-    "ethers": "^4.0.45",
-    "multi-token-standard": "^0.8.13",
-    "web3": "^1.2.6"
-  },
-  "devDependencies": {
-    "@openzeppelin/contracts": "^2.5.0",
-    "@openzeppelin/contracts-ethereum-package": "^2.5.0",
-    "ganache-cli": "^6.9.1"
+    "ethers": "4.0.45",
+    "web3": "1.2.6"
   }
 }

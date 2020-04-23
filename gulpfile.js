@@ -22,7 +22,7 @@ const BUILD = path.join(__dirname, 'build/');
 const DOCS = path.join(__dirname, 'docs/');
 
 const packages = fs.readdirSync(path.join(__dirname, './packages'))
-  .filter((directory) => directory !== 'proxyIdentity')
+  .filter((directory) => !['proxyIdentity', 'authentication'].includes(directory))
   .map((directory) => ({
     fileName: directory,
     expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
