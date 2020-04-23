@@ -59,11 +59,8 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       // eslint-disable-next-line no-await-in-loop
       claims.push({ token: (await userClaims.createPublicClaim(data)), data });
     }
-    let i = 0;
     // eslint-disable-next-line no-restricted-syntax
     for (const { token, data } of claims) {
-      // eslint-disable-next-line no-plusplus
-      console.log(`verifying claim ${++i}`);
       // eslint-disable-next-line no-await-in-loop
       (await userClaims.verifyPublicClaim(token, data)).should.be.true;
     }

@@ -206,7 +206,6 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
     const [, , issAddress] = (claim.iss as string).split(':');
     const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
-    console.log('>>> issuer is delegate:', issIsDelegate);
     if (issIsDelegate) {
       return true;
     }
