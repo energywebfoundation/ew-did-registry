@@ -222,6 +222,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     return false;
   }
 
+  event CallbackOnTransfer(bytes data, bool success, address sender);
+
   function tokenFallback(
     address _sender,
     address _origin,
