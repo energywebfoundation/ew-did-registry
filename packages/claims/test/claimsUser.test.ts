@@ -26,12 +26,10 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     console.log(`registry: ${resolverSettings.address}`);
 
     const store = new DidStore(await spawnIpfsDaemon());
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
     const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
     userClaims = new ClaimsUser(user, userDoc, store);
 
     await userDoc.create();
-    await issuerDoc.create();
   });
 
   after(async () => {
@@ -52,6 +50,23 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       signer: userDdid,
       claimData: publicData,
     });
+  });
+
+  it('creates and verifies 100 claims', async () => {
+    const claims: { token: string; data: object }[] = [];
+    for (let i = 0; i < 100; i++) {
+      const data = { name: 'John', lastName: 'Doe', index: i };
+      // eslint-disable-next-line no-await-in-loop
+      claims.push({ token: (await userClaims.createPublicClaim(data)), data });
+    }
+    let i = 0;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { token, data } of claims) {
+      // eslint-disable-next-line no-plusplus
+      console.log(`verifying claim ${++i}`);
+      // eslint-disable-next-line no-await-in-loop
+      (await userClaims.verifyPublicClaim(token, data)).should.be.true;
+    }
   });
 
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
