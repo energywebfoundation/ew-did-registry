@@ -1,7 +1,9 @@
 import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { IClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, } from '../interface';
+import {
+  IClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier,
+} from '../interface';
 import { ClaimsUser } from '../claimsUser';
 import { ClaimsIssuer } from '../claimsIssuer';
 import { ClaimsVerifier } from '../claimsVerifier';

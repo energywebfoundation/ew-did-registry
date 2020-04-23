@@ -6,8 +6,12 @@ import { encrypt } from 'eciesjs';
 // @ts-ignore
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
-import { Algorithms, DIDAttribute, Encoding, PubKeyType, } from '@ew-did-registry/did-resolver-interface';
-import { IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields, } from '../models';
+import {
+  Algorithms, DIDAttribute, Encoding, PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
+import {
+  IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
+} from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';

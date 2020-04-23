@@ -1,5 +1,7 @@
 /* eslint-disable no-empty */
-import { Contract, ethers, providers, utils, } from 'ethers';
+import {
+  Contract, ethers, providers, utils,
+} from 'ethers';
 
 import {
   IAuthentication,
