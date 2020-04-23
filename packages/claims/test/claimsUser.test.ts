@@ -29,7 +29,10 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
     userClaims = new ClaimsUser(user, userDoc, store);
 
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
+
     await userDoc.create();
+    await issuerDoc.create();
   });
 
   after(async () => {
