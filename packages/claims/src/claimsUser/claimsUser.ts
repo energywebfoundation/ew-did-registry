@@ -254,6 +254,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     }
     const [, , issAddress] = (claim.iss as string).split(':');
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    if (issIsDelegate) {
+      return true;
+    }
     await this.document.update(
       DIDAttribute.Authenticate,
       {
