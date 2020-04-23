@@ -1,0 +1,50 @@
+{
+  "name": "@ew-did-registry/authentication-client",
+  "version": "0.0.1-alpha.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^4.0.2",
+    "@ew-did-registry/claims": "^0.0.1-alpha.0",
+    "@ew-did-registry/did": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-ethr-resolver": "^0.0.1-alpha.0",
+    "@ew-did-registry/keys": "^0.0.1-alpha.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "antd": "4.0.3",
+    "ethers": "4.0.45",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
+    "react-redux": "7.2.0",
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.4.0",
+    "redux": "4.0.5",
+    "redux-thunk": "2.3.0",
+    "web3": "1.2.6"
+  },
+  "devDependencies": {
+    "ganache-cli": "6.9.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject",
+    "start-rpc": "../../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run start\""
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
