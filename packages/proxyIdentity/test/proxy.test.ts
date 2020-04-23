@@ -292,18 +292,38 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
 
-  it('ERC223 tokens should be transfered to proxy owner', async () => {
+  it('when ERC223 tokens transfered to proxy they should be forwarded to proxy owner', async () => {
     const amount = 100;
-    const owner = provider.getSigner(3);
-    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, owner);
+    const sender = provider.getSigner(3);
+    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
     const token = await (await tokenERC223Factory.deploy()).deployed();
-    const ownerAddr = await owner.getAddress();
-    await (await token.mint(ownerAddr, 1000)).wait();
-    await token.transfer(
+    const senderAddr = await sender.getAddress();
+    await (await token.mint(senderAddr, 1000)).wait();
+    await token['transfer(address,uint256,bytes)'](
       identity,
       amount,
+      '0x0',
     );
     const balance = await token.balanceOf(creatorAddress);
     expect(balance.toNumber()).equal(amount);
+  });
+
+  it('when ERC223 tokens transfered to proxy provided callback should be executed', async () => {
+    const amount = 100;
+    const sender = provider.getSigner(3);
+    const senderAddr = await sender.getAddress();
+    const changeOwnerAbi: any = proxyAbi.find((f) => f.name === 'changeOwner');
+    const callback: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [senderAddr]);
+    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
+    const token = await (await tokenERC223Factory.deploy()).deployed();
+    await (await token.mint(senderAddr, 1000)).wait();
+    await proxy.addRecoveryAgent(token.address); // to invoke callback on proxy
+    await (await token['transfer(address,uint256,bytes)'](
+      identity,
+      amount,
+      callback,
+    )).wait();
+    const owner = await proxy.owner();
+    expect(owner).equal(senderAddr);
   });
 });

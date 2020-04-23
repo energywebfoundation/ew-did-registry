@@ -12,14 +12,14 @@
     "absolutePath": "multi-token-standard/contracts/utils/Address.sol",
     "exportedSymbols": {
       "Address": [
-        2952
+        2958
       ]
     },
-    "id": 2953,
+    "id": 2959,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2927,
+        "id": 2933,
         "literals": [
           "solidity",
           "^",
@@ -35,19 +35,19 @@
         "contractKind": "library",
         "documentation": "Utility library of inline functions on addresses",
         "fullyImplemented": true,
-        "id": 2952,
+        "id": 2958,
         "linearizedBaseContracts": [
-          2952
+          2958
         ],
         "name": "Address",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2930,
+            "id": 2936,
             "name": "ACCOUNT_HASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2952,
+            "scope": 2958,
             "src": "167:107:21",
             "stateVariable": true,
             "storageLocation": "default",
@@ -56,7 +56,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2928,
+              "id": 2934,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "167:7:21",
@@ -68,7 +68,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863356432343630313836663732333363393237653764623264636337303363306535303062363533636138323237336237626661643830343564383561343730",
-              "id": 2929,
+              "id": 2935,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -87,21 +87,21 @@
           },
           {
             "body": {
-              "id": 2950,
+              "id": 2956,
               "nodeType": "Block",
               "src": "610:331:21",
               "statements": [
                 {
                   "assignments": [
-                    2938
+                    2944
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2938,
+                      "id": 2944,
                       "name": "codehash",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2950,
+                      "scope": 2956,
                       "src": "616:16:21",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -110,7 +110,7 @@
                         "typeString": "bytes32"
                       },
                       "typeName": {
-                        "id": 2937,
+                        "id": 2943,
                         "name": "bytes32",
                         "nodeType": "ElementaryTypeName",
                         "src": "616:7:21",
@@ -123,7 +123,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2939,
+                  "id": 2945,
                   "initialValue": null,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "616:16:21"
@@ -132,7 +132,7 @@
                   "externalReferences": [
                     {
                       "codehash": {
-                        "declaration": 2938,
+                        "declaration": 2944,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "844:8:21",
@@ -141,7 +141,7 @@
                     },
                     {
                       "_address": {
-                        "declaration": 2932,
+                        "declaration": 2938,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "868:8:21",
@@ -149,7 +149,7 @@
                       }
                     }
                   ],
-                  "id": 2940,
+                  "id": 2946,
                   "nodeType": "InlineAssembly",
                   "operations": "{\n    codehash := extcodehash(_address)\n}",
                   "src": "833:46:21"
@@ -164,7 +164,7 @@
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
                         },
-                        "id": 2947,
+                        "id": 2953,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -175,18 +175,18 @@
                             "typeIdentifier": "t_bytes32",
                             "typeString": "bytes32"
                           },
-                          "id": 2943,
+                          "id": 2949,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 2941,
+                            "id": 2947,
                             "name": "codehash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2938,
+                            "referencedDeclaration": 2944,
                             "src": "892:8:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -198,7 +198,7 @@
                           "rightExpression": {
                             "argumentTypes": null,
                             "hexValue": "307830",
-                            "id": 2942,
+                            "id": 2948,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -227,18 +227,18 @@
                             "typeIdentifier": "t_bytes32",
                             "typeString": "bytes32"
                           },
-                          "id": 2946,
+                          "id": 2952,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 2944,
+                            "id": 2950,
                             "name": "codehash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2938,
+                            "referencedDeclaration": 2944,
                             "src": "911:8:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -249,11 +249,11 @@
                           "operator": "!=",
                           "rightExpression": {
                             "argumentTypes": null,
-                            "id": 2945,
+                            "id": 2951,
                             "name": "ACCOUNT_HASH",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2930,
+                            "referencedDeclaration": 2936,
                             "src": "923:12:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -273,7 +273,7 @@
                         }
                       }
                     ],
-                    "id": 2948,
+                    "id": 2954,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -286,30 +286,30 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 2936,
-                  "id": 2949,
+                  "functionReturnParameters": 2942,
+                  "id": 2955,
                   "nodeType": "Return",
                   "src": "884:52:21"
                 }
               ]
             },
             "documentation": "Returns whether the target address is a contract\n@dev This function will return false if invoked during the constructor of a contract.\n@param _address address of the account to check\n@return Whether the target address is a contract",
-            "id": 2951,
+            "id": 2957,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isContract",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2933,
+              "id": 2939,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2932,
+                  "id": 2938,
                   "name": "_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2951,
+                  "scope": 2957,
                   "src": "563:16:21",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -318,7 +318,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2931,
+                    "id": 2937,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "563:7:21",
@@ -335,15 +335,15 @@
               "src": "562:18:21"
             },
             "returnParameters": {
-              "id": 2936,
+              "id": 2942,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2935,
+                  "id": 2941,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2951,
+                  "scope": 2957,
                   "src": "604:4:21",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -352,7 +352,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 2934,
+                    "id": 2940,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "604:4:21",
@@ -367,14 +367,14 @@
               ],
               "src": "603:6:21"
             },
-            "scope": 2952,
+            "scope": 2958,
             "src": "543:398:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 2953,
+        "scope": 2959,
         "src": "87:856:21"
       }
     ],
@@ -384,14 +384,14 @@
     "absolutePath": "multi-token-standard/contracts/utils/Address.sol",
     "exportedSymbols": {
       "Address": [
-        2952
+        2958
       ]
     },
-    "id": 2953,
+    "id": 2959,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2927,
+        "id": 2933,
         "literals": [
           "solidity",
           "^",
@@ -407,19 +407,19 @@
         "contractKind": "library",
         "documentation": "Utility library of inline functions on addresses",
         "fullyImplemented": true,
-        "id": 2952,
+        "id": 2958,
         "linearizedBaseContracts": [
-          2952
+          2958
         ],
         "name": "Address",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 2930,
+            "id": 2936,
             "name": "ACCOUNT_HASH",
             "nodeType": "VariableDeclaration",
-            "scope": 2952,
+            "scope": 2958,
             "src": "167:107:21",
             "stateVariable": true,
             "storageLocation": "default",
@@ -428,7 +428,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2928,
+              "id": 2934,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "167:7:21",
@@ -440,7 +440,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863356432343630313836663732333363393237653764623264636337303363306535303062363533636138323237336237626661643830343564383561343730",
-              "id": 2929,
+              "id": 2935,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -459,21 +459,21 @@
           },
           {
             "body": {
-              "id": 2950,
+              "id": 2956,
               "nodeType": "Block",
               "src": "610:331:21",
               "statements": [
                 {
                   "assignments": [
-                    2938
+                    2944
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2938,
+                      "id": 2944,
                       "name": "codehash",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2950,
+                      "scope": 2956,
                       "src": "616:16:21",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -482,7 +482,7 @@
                         "typeString": "bytes32"
                       },
                       "typeName": {
-                        "id": 2937,
+                        "id": 2943,
                         "name": "bytes32",
                         "nodeType": "ElementaryTypeName",
                         "src": "616:7:21",
@@ -495,7 +495,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2939,
+                  "id": 2945,
                   "initialValue": null,
                   "nodeType": "VariableDeclarationStatement",
                   "src": "616:16:21"
@@ -504,7 +504,7 @@
                   "externalReferences": [
                     {
                       "codehash": {
-                        "declaration": 2938,
+                        "declaration": 2944,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "844:8:21",
@@ -513,7 +513,7 @@
                     },
                     {
                       "_address": {
-                        "declaration": 2932,
+                        "declaration": 2938,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "868:8:21",
@@ -521,7 +521,7 @@
                       }
                     }
                   ],
-                  "id": 2940,
+                  "id": 2946,
                   "nodeType": "InlineAssembly",
                   "operations": "{\n    codehash := extcodehash(_address)\n}",
                   "src": "833:46:21"
@@ -536,7 +536,7 @@
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
                         },
-                        "id": 2947,
+                        "id": 2953,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -547,18 +547,18 @@
                             "typeIdentifier": "t_bytes32",
                             "typeString": "bytes32"
                           },
-                          "id": 2943,
+                          "id": 2949,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 2941,
+                            "id": 2947,
                             "name": "codehash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2938,
+                            "referencedDeclaration": 2944,
                             "src": "892:8:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -570,7 +570,7 @@
                           "rightExpression": {
                             "argumentTypes": null,
                             "hexValue": "307830",
-                            "id": 2942,
+                            "id": 2948,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -599,18 +599,18 @@
                             "typeIdentifier": "t_bytes32",
                             "typeString": "bytes32"
                           },
-                          "id": 2946,
+                          "id": 2952,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 2944,
+                            "id": 2950,
                             "name": "codehash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2938,
+                            "referencedDeclaration": 2944,
                             "src": "911:8:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -621,11 +621,11 @@
                           "operator": "!=",
                           "rightExpression": {
                             "argumentTypes": null,
-                            "id": 2945,
+                            "id": 2951,
                             "name": "ACCOUNT_HASH",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2930,
+                            "referencedDeclaration": 2936,
                             "src": "923:12:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -645,7 +645,7 @@
                         }
                       }
                     ],
-                    "id": 2948,
+                    "id": 2954,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -658,30 +658,30 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 2936,
-                  "id": 2949,
+                  "functionReturnParameters": 2942,
+                  "id": 2955,
                   "nodeType": "Return",
                   "src": "884:52:21"
                 }
               ]
             },
             "documentation": "Returns whether the target address is a contract\n@dev This function will return false if invoked during the constructor of a contract.\n@param _address address of the account to check\n@return Whether the target address is a contract",
-            "id": 2951,
+            "id": 2957,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isContract",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2933,
+              "id": 2939,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2932,
+                  "id": 2938,
                   "name": "_address",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2951,
+                  "scope": 2957,
                   "src": "563:16:21",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -690,7 +690,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2931,
+                    "id": 2937,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "563:7:21",
@@ -707,15 +707,15 @@
               "src": "562:18:21"
             },
             "returnParameters": {
-              "id": 2936,
+              "id": 2942,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2935,
+                  "id": 2941,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2951,
+                  "scope": 2957,
                   "src": "604:4:21",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -724,7 +724,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 2934,
+                    "id": 2940,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "604:4:21",
@@ -739,14 +739,14 @@
               ],
               "src": "603:6:21"
             },
-            "scope": 2952,
+            "scope": 2958,
             "src": "543:398:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 2953,
+        "scope": 2959,
         "src": "87:856:21"
       }
     ],
@@ -758,7 +758,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2020-04-22T12:46:15.846Z",
+  "updatedAt": "2020-04-23T09:28:03.784Z",
   "devdoc": {
     "methods": {}
   },

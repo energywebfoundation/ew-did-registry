@@ -28,7 +28,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   address public creator;
   address public owner;
   address public erc1056;
-  mapping(address => bool) recoveryAgents;
+  mapping(address => bool) public recoveryAgents;
   uint256 defaultValidity = 2**256 - 1;
   mapping(bytes32 => bool) digests;
   bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;
@@ -222,6 +222,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     return false;
   }
 
+  event CallbackOnTransfer(bytes data, bool success, address sender);
+
   function tokenFallback(
     address _sender,
     address _origin,
@@ -235,6 +237,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     // solium-disable-next-line security/no-low-level-calls
     (bool success, ) = address(this).delegatecall(_data);
     __isTokenFallback = false;
+    emit CallbackOnTransfer(_data, success, msg.sender);
     return success;
   }
 
@@ -248,7 +251,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   }
 
   // TODO: check if token - is IERC223
-  function supportsToken(address token) public returns (bool) {
+  function supportsToken(address token) public pure returns (bool) {
     return true;
   }
 
