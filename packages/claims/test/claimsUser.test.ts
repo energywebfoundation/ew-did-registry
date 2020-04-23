@@ -5,7 +5,9 @@ import { Methods } from '@ew-did-registry/did';
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
-import { ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim, } from '../src';
+import {
+  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
+} from '../src';
 import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.should();
