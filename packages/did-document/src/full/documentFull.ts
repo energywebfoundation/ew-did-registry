@@ -1,9 +1,19 @@
-import { DIDAttribute, IOperator, IUpdateData, PubKeyType, } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute,
+  IAuthentication,
+  IOperator,
+  IPublicKey,
+  IServiceEndpoint,
+  IUpdateData,
+  PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 
 class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
   private _operator: IOperator;
+
+  private _createCalled = false;
 
   constructor(did: string, operator: IOperator) {
     super(did, operator);
@@ -23,7 +33,16 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * @return { boolean }
    */
   async create(): Promise<boolean> {
+    this._createCalled = true;
     return this._operator.create();
+  }
+
+  async readAttribute(
+    filter: { [key: string]: { [key: string]: string } }, did = this.did,
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+    /* make sure that create has been called before reading an attribute */
+    if (!this._createCalled) await this.create();
+    return super.readAttribute(filter, did);
   }
 
   /**

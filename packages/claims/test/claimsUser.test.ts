@@ -26,8 +26,8 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     console.log(`registry: ${resolverSettings.address}`);
 
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
     const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
+    const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
     userClaims = new ClaimsUser(user, userDoc, store);
 
     await userDoc.create();
@@ -43,6 +43,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
+    (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
     const claim = await userClaims.jwt.verify(
       token, userClaims.keys.publicKey, { noTimestamp: true },
     );
