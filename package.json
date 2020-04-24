@@ -15,7 +15,7 @@
     "browserTest:run": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"karma start\"",
     "lint": "lerna run lint --parallel --stream -- -- --ignore-path=../../.eslintignore",
     "fix": "lerna run fix --parallel --stream",
-    "publish:canary": "lerna publish from-package prerelease --pre-dist-tag prerelease --preid=alpha.$TRAVIS_BUILD_NUMBER --exact --yes",
+    "publish:canary": "lerna publish from-package --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.$TRAVIS_BUILD_NUMBER --exact --yes",
     "publish:release": "lerna version --conventional-commits --exact --yes && lerna publish from-git --yes",
     "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/package-lock.json"
   },
