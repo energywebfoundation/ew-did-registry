@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/claims",
   "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,5 +38,8 @@
     "@ew-did-registry/keys": "^0.0.1-alpha.0",
     "eciesjs": "^0.3.4",
     "sjcl-complete": "1.0.0"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.9.1"
   }
 }

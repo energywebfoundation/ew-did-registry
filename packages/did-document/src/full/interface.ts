@@ -1,4 +1,4 @@
-import { IUpdateData, PubKeyType, DIDAttribute } from '@ew-did-registry/did-resolver-interface';
+import { DIDAttribute, IUpdateData, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import { BigNumber } from 'ethers/utils';
 import { IDIDDocumentLite } from '../lite';
 
