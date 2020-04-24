@@ -1,20 +1,15 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Operator, ethrReg } from '@ew-did-registry/did-ethr-resolver';
+import { ethrReg, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import {
-  IProofData,
-  IPublicClaim,
-  IClaimsUser,
-  IClaimsIssuer,
-} from '@ew-did-registry/claims';
+import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim, } from '@ew-did-registry/claims';
 import { proxyFactoryBuild } from '@ew-did-registry/proxyidentity';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { JsonRpcProvider } from 'ethers/providers';
-import { providers, ContractFactory } from 'ethers';
+import { ContractFactory, providers } from 'ethers';
 import DIDRegistry from '../src';
-import { getSettings, spawnIpfsDaemon, shutDownIpfsDaemon } from '../../../tests';
+import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();

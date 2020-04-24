@@ -1,20 +1,17 @@
 /* eslint-disable no-empty */
 import {
-  Contract,
-  ethers,
-  providers,
-  utils,
+  Contract, ethers, providers, utils,
 } from 'ethers';
 
 import {
+  IAuthentication,
   IDIDDocument,
   IDIDLogData,
-  ISmartContractEvent,
-  IResolverSettings,
-  IPublicKey,
   IHandlers,
+  IPublicKey,
+  IResolverSettings,
   IServiceEndpoint,
-  IAuthentication,
+  ISmartContractEvent,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
