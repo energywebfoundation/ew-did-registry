@@ -1,14 +1,8 @@
-/* eslint-disable semi */
-/* eslint-disable prefer-template */
-/* eslint-disable quote-props */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable comma-dangle */
 /* eslint-disable @typescript-eslint/camelcase */
 const path = require('path');
 const fs = require('fs');
 
 const { series, src, dest } = require('gulp');
-const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const streamify = require('gulp-streamify');
 const sourcemaps = require('gulp-sourcemaps');
@@ -22,14 +16,13 @@ const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const tsify = require('tsify');
 
-const lernaJSON = require('./lerna.json');
 const configDependabot = require('./.dependabot');
 
 const BUILD = path.join(__dirname, 'build/');
 const DOCS = path.join(__dirname, 'docs/');
 
 const packages = fs.readdirSync(path.join(__dirname, './packages'))
-  .filter((directory) => directory !== 'proxyIdentity')
+  .filter((directory) => !['proxyIdentity', 'authentication'].includes(directory))
   .map((directory) => ({
     fileName: directory,
     expose: directory.replace(/-([a-z])/g, (g) => g[1].toUpperCase()),
@@ -42,32 +35,14 @@ const uglifyOptions = {
     dead_code: true,
     drop_debugger: true,
     global_defs: {
-      DEBUG: false
-    }
-  }
+      DEBUG: false,
+    },
+  },
 };
 
 function clean(done) {
   del([BUILD, DOCS]);
   done();
-}
-
-function changeVersion() {
-  if (!lernaJSON.version) {
-    throw new Error('version property is missing from lerna.json');
-  }
-
-  const { version } = lernaJSON;
-  const jsonPattern = /"version": "[.0-9\-a-z]*"/;
-  const glob = [
-    './package.json',
-  ];
-
-  return src(glob, {
-    base: './'
-  })
-    .pipe(replace(jsonPattern, `"version": "${version}"`))
-    .pipe(dest('./'));
 }
 
 function bundling(pckg) {
@@ -92,12 +67,12 @@ function bundling(pckg) {
       compact: true,
       presets: [
         ['@babel/env', {
-          'modules': false
-        }]
-      ]
+          modules: false
+        }],
+      ],
     })))
     .pipe(streamify(uglify(uglifyOptions)))
-    .pipe(rename(pckg.fileName + '.min.js'))
+    .pipe(rename(`${pckg.fileName}.min.js`))
     .pipe(sourcemaps.write('./'))
     .pipe(dest(BUILD));
 }
@@ -106,7 +81,7 @@ function bundleAll(done) {
   packages.forEach((pckg) => {
     bundling(pckg);
   });
-  done()
+  done();
 }
 
 function generateDependabotConfig(done) {
@@ -117,13 +92,10 @@ function generateDependabotConfig(done) {
 function buildDocs() {
   return src(['packages/**/*.ts', '!./packages/**/node_modules/**/*.ts', '!./packages/**/*.d.ts'])
     .pipe(typedoc({
-      // TypeScript options (see typescript docs)
       module: 'commonjs',
       target: 'es5',
       includeDeclarations: false,
       lib: ['lib.esnext.full.d.ts'],
-
-      // TypeDoc options (see typedoc docs)
       out: './docs',
       exclude: '**/*+(e2e|spec).ts',
       excludeExternals: true,
@@ -138,14 +110,12 @@ function buildDocs() {
       suppressImplicitAnyIndexErrors: true,
       esModuleInterop: true,
       mode: 'file',
-      plugins: ['typedoc-plugin-markdown']
-      // externalPattern: '**/node_modules/**',
+      plugins: ['typedoc-plugin-markdown'],
     }));
 }
 
 exports.clean = clean;
-exports.changeVersion = changeVersion;
 exports.bundleAll = bundleAll;
 exports.generateDependabotConfig = generateDependabotConfig;
 exports.buildDocs = buildDocs;
-exports.default = series(clean, changeVersion, bundleAll, buildDocs);
+exports.default = series(clean, bundleAll, buildDocs);

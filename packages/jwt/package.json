@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/jwt",
   "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package manages JWTs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

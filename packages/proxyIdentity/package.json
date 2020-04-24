@@ -1,17 +1,23 @@
 {
   "name": "@ew-did-registry/proxyidentity",
   "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Implementation of contract representing ERC1056 identity",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "compile": "../../node_modules/.bin/tsc",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
   },
-  "author": "dmitry.fesenko@482.solutions",
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.45",
-    "web3": "^1.2.6"
+    "ethers": "4.0.45",
+    "web3": "1.2.6"
   }
 }
