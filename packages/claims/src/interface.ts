@@ -1,6 +1,4 @@
-import {
-  IClaims, IProofData, ISaltedFields, IPublicClaim,
-} from './models';
+import { IClaims, IProofData, IPublicClaim, ISaltedFields, } from './models';
 
 /**
  * IClaims interface is a factory to create Public, Private, and Proof Claims

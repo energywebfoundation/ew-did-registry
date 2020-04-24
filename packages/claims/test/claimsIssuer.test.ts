@@ -5,11 +5,9 @@ import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
-import {
-  ClaimsFactory, IProofData, IClaimsIssuer, IClaimsUser, IClaimsVerifier,
-} from '../src';
-import { getSettings, spawnIpfsDaemon, shutDownIpfsDaemon } from '../../../tests';
 import { JWT } from '@ew-did-registry/jwt';
+import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
+import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();

@@ -7,14 +7,14 @@ import { encrypt } from 'eciesjs';
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
 import {
-  DIDAttribute, PubKeyType, Algorithms, Encoding,
+  Algorithms,
+  DelegateTypes,
+  DIDAttribute,
+  Encoding,
+  PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  IPrivateClaim,
-  IProofClaim,
-  IProofData,
-  IPublicClaim,
-  ISaltedFields,
+  IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
@@ -208,6 +208,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
     const [, , issAddress] = (claim.iss as string).split(':');
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    if (issIsDelegate) {
+      return true;
+    }
     await this.document.update(
       DIDAttribute.Authenticate,
       {
@@ -250,6 +254,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     }
     const [, , issAddress] = (claim.iss as string).split(':');
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    if (issIsDelegate) {
+      return true;
+    }
     await this.document.update(
       DIDAttribute.Authenticate,
       {

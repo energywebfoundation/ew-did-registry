@@ -21,7 +21,8 @@ export class Claims implements IClaims {
    * @constructor
    *
    * @param { IKeys } keys
-   * @param { IResolver } resolver
+   * @param document
+   * @param store
    */
   constructor(keys: IKeys, protected document: IDIDDocumentFull, protected store: IDidStore) {
     this.keys = keys;
