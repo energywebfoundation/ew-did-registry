@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/claims",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,11 +28,18 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did-document": "^1.0.0",
-    "@ew-did-registry/did-resolver-interface": "^1.0.0",
-    "@ew-did-registry/jwt": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0",
+    "@ew-did-registry/did": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-document": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-ethr-resolver": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-ipfs-store": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-resolver-interface": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-store-interface": "^0.0.1-alpha.0",
+    "@ew-did-registry/jwt": "^0.0.1-alpha.0",
+    "@ew-did-registry/keys": "^0.0.1-alpha.0",
     "eciesjs": "^0.3.4",
     "sjcl-complete": "1.0.0"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.9.1"
   }
 }

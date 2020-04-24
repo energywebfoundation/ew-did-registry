@@ -7,14 +7,18 @@ import { encrypt } from 'eciesjs';
 import sjcl from 'sjcl-complete';
 import assert from 'assert';
 import {
-  IPrivateClaim,
-  IProofClaim,
-  IProofData,
-  IPublicClaim,
-  ISaltedFields,
+  Algorithms,
+  DelegateTypes,
+  DIDAttribute,
+  Encoding,
+  PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
+import {
+  IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
+import { hashes } from '../utils';
 
 const { bn, hash, bitArray } = sjcl;
 
@@ -98,7 +102,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: privateData,
     };
-    const issuerDocument = await this.getDocument(issuer);
+    const issuerDocument = await this.document.read(issuer);
     const issuerPK = issuerDocument
       .publicKey
       .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
@@ -194,15 +198,29 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPublicToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    * @throws if the proof failed
    */
   async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
-    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    const claim = this.jwt.decode(token) as IPublicClaim;
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('Incorrect signature');
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
+    const [, , issAddress] = (claim.iss as string).split(':');
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    if (issIsDelegate) {
+      return true;
+    }
+    await this.document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.ED25519,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: issAddress,
+      },
+    );
     return true;
   }
 
@@ -219,12 +237,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * const verified = await claims.verifyPrivateToken(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    * @throw if the proof failed
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
-    const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    const claim = this.jwt.decode(token) as IPrivateClaim;
+    if (!(await this.verifySignature(token, (claim as any).iss))) {
       throw new Error('Invalid signature');
     }
     // eslint-disable-next-line no-restricted-syntax
@@ -235,6 +253,72 @@ export class ClaimsUser extends Claims implements IClaimsUser {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }
+    const [, , issAddress] = (claim.iss as string).split(':');
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    if (issIsDelegate) {
+      return true;
+    }
+    await this.document.update(
+      DIDAttribute.Authenticate,
+      {
+        algo: Algorithms.ED25519,
+        type: PubKeyType.VerificationKey2018,
+        encoding: Encoding.HEX,
+        delegate: issAddress,
+      },
+    );
     return true;
+  }
+
+  /**
+     * Verifies content of the issued claim, issuer identity and adds claim to service endpoints
+     *
+     * @param issued {string} claim approved by the issuer
+     * @param verifyData {object} user data that should be contained in issued claim
+     *
+     * @returns {string} url of the saved claim
+     */
+  async publishPublicClaim(
+    issued: string, verifyData: object, opts?: { hashAlg: string; createHash: (data: string) => string },
+  ): Promise<string> {
+    const verified = await this.verifyPublicClaim(issued, verifyData);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued, opts);
+    }
+    return '';
+  }
+
+  /**
+   * Verifies content of the issued claim, issuer identity and add claim to service endpoints
+   *
+   * @param issued {string} claim with encrypted user data approved by the issuer
+   * @param saltedFields {ISaltedFields} private user data
+   *
+   * @returns {string} url of the saved claim
+   */
+  async publishPrivateClaim(
+    issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string },
+  ): Promise<string> {
+    const verified = await this.verifyPrivateClaim(issued, saltedFields);
+    if (verified) {
+      return this.addClaimToServiceEndpoints(issued, opts);
+    }
+    return '';
+  }
+
+  private async addClaimToServiceEndpoints(
+    claim: string,
+    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: hashes.SHA256 },
+  ): Promise<string> {
+    const { hashAlg, createHash } = opts;
+    const url = await this.store.save(claim);
+    await this.document.update(
+      DIDAttribute.ServicePoint,
+      {
+        type: PubKeyType.VerificationKey2018,
+        value: JSON.stringify({ serviceEndpoint: url, hash: createHash(claim), hashAlg }),
+      },
+    );
+    return url;
   }
 }

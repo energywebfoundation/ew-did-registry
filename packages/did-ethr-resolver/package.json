@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/did-ethr-resolver",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,9 +27,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did": "^1.0.0",
-    "@ew-did-registry/did-resolver-interface": "^1.0.0",
-    "@ew-did-registry/keys": "^1.0.0",
-    "@ew-did-registry/proxyidentity": "^1.0.0"
+    "@ew-did-registry/did": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-resolver-interface": "^0.0.1-alpha.0",
+    "@ew-did-registry/keys": "^0.0.1-alpha.0",
+    "@ew-did-registry/proxyidentity": "^0.0.1-alpha.0"
   }
 }

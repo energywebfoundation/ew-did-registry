@@ -1,19 +1,17 @@
+/* eslint-disable no-empty */
 import {
-  Contract,
-  ethers,
-  providers,
-  utils,
+  Contract, ethers, providers, utils,
 } from 'ethers';
 
 import {
+  IAuthentication,
   IDIDDocument,
   IDIDLogData,
-  ISmartContractEvent,
-  IResolverSettings,
-  IPublicKey,
   IHandlers,
+  IPublicKey,
+  IResolverSettings,
   IServiceEndpoint,
-  IAuthentication,
+  ISmartContractEvent,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
@@ -140,15 +138,22 @@ const handleAttributeChange = (
         const serviceId = `${did}#service-${algo}-${event.values.value}`;
         if (document.serviceEndpoints[serviceId] === undefined
           || document.serviceEndpoints[serviceId].block < block) {
+          let serviceEndpoint = Buffer.from(
+            event.values.value.slice(2),
+            'hex',
+          ).toString();
+          let parsed: any = {};
+          try {
+            parsed = JSON.parse(serviceEndpoint);
+            serviceEndpoint = parsed.serviceEndpoint;
+          } catch (err) { }
           document.serviceEndpoints[serviceId] = {
             id: serviceId,
             type: algo,
-            serviceEndpoint: Buffer.from(
-              event.values.value.slice(2),
-              'hex',
-            ).toString(),
+            serviceEndpoint,
             validity: validTo,
             block,
+            ...parsed,
           };
           return document;
         }

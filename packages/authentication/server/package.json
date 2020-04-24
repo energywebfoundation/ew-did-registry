@@ -1,0 +1,25 @@
+{
+  "name": "@ew-did-registry/authentication-server",
+  "version": "0.0.1-alpha.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ew-did-registry/claims": "^0.0.1-alpha.0",
+    "@ew-did-registry/did": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-ethr-resolver": "^0.0.1-alpha.0",
+    "@ew-did-registry/did-resolver-interface": "^0.0.1-alpha.0",
+    "@ew-did-registry/jwt": "^0.0.1-alpha.0",
+    "@ew-did-registry/keys": "^0.0.1-alpha.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
