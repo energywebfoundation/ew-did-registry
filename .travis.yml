@@ -24,4 +24,5 @@ deploy:
     script: "git checkout release && npm run publish:release"
     skip_cleanup: true
     on:
-      branch: release
+      all_branches: true
+      condition: $TRAVIS_BRANCH =~ /^release/
