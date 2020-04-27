@@ -316,7 +316,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       DIDAttribute.ServicePoint,
       {
         type: PubKeyType.VerificationKey2018,
-        value: JSON.stringify({ serviceEndpoint: url, hash: createHash(claim), hashAlg }),
+        value: { svcEndPoint: url, hash: createHash(claim), hashAlg },
       },
     );
     return url;
