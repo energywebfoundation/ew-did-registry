@@ -21,8 +21,8 @@ deploy:
     on:
       branch: master
   - provider: script
-    script: "git checkout release && npm run publish:release"
+    script: "git checkout release/rc0.1 && npm run publish:release"
     skip_cleanup: true
     on:
       all_branches: true
-      condition: $TRAVIS_BRANCH =~ /^release/
+      condition: $TRAVIS_BRANCH =~ ^release/rc0.1$
