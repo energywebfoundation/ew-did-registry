@@ -53,7 +53,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
       value: {svcEndPoint: endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
-    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value}` } }) as IServiceEndpoint;
+    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.svcEndPoint}` } }) as IServiceEndpoint;
     expect(serviceEndpointAttr.serviceEndpoint === updateData.value);
   });
 
