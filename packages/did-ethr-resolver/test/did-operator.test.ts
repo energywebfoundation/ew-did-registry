@@ -41,7 +41,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-1'},
     };
     await operator.update(did, attribute, updateData);
     const document: IDIDDocument = await operator.read(did) as IDIDDocument;
@@ -58,7 +58,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-2'},
     };
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
@@ -127,7 +127,7 @@ describe('[DID-OPERATOR]', function () {
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
       type: PubKeyType.VerificationKey2018,
-      value: endpoint,
+      value: {svcEndPoint:endpoint},
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -145,7 +145,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`,tag:'key-3'},
     };
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
@@ -161,7 +161,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-4'},
     };
     try {
       await operator.update(did, attribute, updateData, -100);
@@ -180,7 +180,7 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-5'},
     };
     await operator.update(did, attribute, updateData, validity);
     // add authentication method
@@ -198,7 +198,7 @@ describe('[DID-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: PubKeyType.VerificationKey2018,
-      value: endpoint,
+      value: {svcEndPoint:endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
@@ -250,20 +250,20 @@ describe('[DID-OPERATOR]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: keysAttribute.publicKey,
+      value: {publicKey:keysAttribute.publicKey, tag:'key-6'},
     };
     await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
     const revoked = await operator.revokeAttribute(did, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.undefined;
   });

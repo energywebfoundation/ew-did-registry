@@ -110,7 +110,7 @@ const handleAttributeChange = (
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = KeyTag.key;
+              pk.publicKeyHex = KeyTag.publicKey;
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(

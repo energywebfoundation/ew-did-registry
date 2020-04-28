@@ -42,7 +42,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         type: PubKeyType.VerificationKey2018,
         algo: Algorithms.ED25519,
         encoding: Encoding.HEX,
-        value: {key: `0x${new Keys().publicKey}`, tag:'key1'},
+        value: {publicKey: `0x${new Keys().publicKey}`, tag:'key1'},
       },
       validity,
     );
@@ -93,7 +93,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value:{ key: `0x${keysAttribute.publicKey}`, tag:'key-2'},
+      value:{ publicKey: `0x${keysAttribute.publicKey}`, tag:'key-2'},
     };
     await Document.update(attribute, updateData, validity);
     let document = await operator.read(did);

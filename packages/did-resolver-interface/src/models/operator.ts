@@ -29,7 +29,7 @@ export enum Algorithms {
 /** This interface represents the attribute payload
 */
 export interface IAttributePayload {
-  key?: string;
+  publicKey?: string;
   svcEndPoint?: string;
   tag?: string;
   hash?: string;

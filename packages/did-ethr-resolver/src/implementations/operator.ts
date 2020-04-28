@@ -82,7 +82,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { key: `0x${this._keys.publicKey}`, tag: 'key0' },
+      value: { publicKey: `0x${this._keys.publicKey}`, tag: 'key0' },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);
@@ -339,7 +339,7 @@ export class Operator extends Resolver implements IOperator {
       const publicKeyTag = pk.id.split('#')[1];
 
       const keyValue: IAttributePayload = {
-        key: value,
+        publicKey: value,
         tag: publicKeyTag,
       };
 

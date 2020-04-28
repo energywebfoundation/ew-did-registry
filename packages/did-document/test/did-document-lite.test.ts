@@ -35,7 +35,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: {key: `0x${new Keys().publicKey}`, tag:'key-4'},
+      value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-4'},
     });
     const publicKey = await docLite.readAttribute({ publicKey: { type: 'Secp256k1VerificationKey' } });
     expect(publicKey).to.be.not.undefined;
