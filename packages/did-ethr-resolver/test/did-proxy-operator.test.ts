@@ -60,7 +60,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const document = await operator.read(`did:ethr:${identity}`);
     expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
@@ -77,7 +77,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const document = await operator.read(`did:ethr:${identity}`);
     expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
