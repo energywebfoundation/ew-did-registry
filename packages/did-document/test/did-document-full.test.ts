@@ -99,14 +99,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.key.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
     const revoked = await Document.revokeAttribute(attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.key.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.undefined;
   });
