@@ -7,7 +7,7 @@
   "scripts": {
     "test": "lerna run test",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"lerna run test \"",
-    "setup": "lerna bootstrap --hoist --no-ci --max-buffer=99999999999999",
+    "setup": "lerna bootstrap --hoist --no-ci",
     "build": "rm -rf build docs packages/*/dist && lerna run compile && gulp",
     "compile": "lerna run compile",
     "ganache": "ganache-cli -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000",

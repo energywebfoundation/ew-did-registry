@@ -322,7 +322,6 @@ export class Operator extends Resolver implements IOperator {
       const match = pk.id.match(pubKeyIdPattern);
       // eslint-disable-next-line no-continue
       if (!match) continue;
-
       const didAttribute = DIDAttribute.PublicKey;
       const encodings = Object.values(Encoding);
       const encoding = encodings.find((e) => {
