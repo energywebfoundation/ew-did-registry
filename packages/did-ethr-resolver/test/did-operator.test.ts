@@ -47,7 +47,7 @@ describe('[DID-OPERATOR]', function () {
     const document: IDIDDocument = await operator.read(did) as IDIDDocument;
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
@@ -64,7 +64,7 @@ describe('[DID-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
