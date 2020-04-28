@@ -93,10 +93,10 @@ const handleAttributeChange = (
     const encoding = match[6];
     switch (section) {
       case 'pub':
-          // eslint-disable-next-line no-case-declarations
-          const KeyTag: IAttributePayload = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
-          // eslint-disable-next-line no-case-declarations
-          const pk: IPublicKey = {
+        // eslint-disable-next-line no-case-declarations
+        const KeyTag: IAttributePayload = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        // eslint-disable-next-line no-case-declarations
+        const pk: IPublicKey = {
           // method should be defined from did provided
           id: `${did}#${KeyTag.tag}`,
           type: `${algo}${type}`,

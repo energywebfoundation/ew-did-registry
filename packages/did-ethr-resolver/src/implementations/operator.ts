@@ -322,7 +322,6 @@ export class Operator extends Resolver implements IOperator {
       const match = pk.id.match(pubKeyIdPattern);
       // eslint-disable-next-line no-continue
       if (!match) continue;
-
       const didAttribute = DIDAttribute.PublicKey;
       const encodings = Object.values(Encoding);
       const encoding = encodings.find((e) => {
@@ -333,7 +332,6 @@ export class Operator extends Resolver implements IOperator {
       if (!encoding) {
         throw new Error('Unknown encoding');
       }
-
       // Reconstruct the publicKey value as it is
       const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
       const publicKeyTag = pk.id.split('#')[1];
