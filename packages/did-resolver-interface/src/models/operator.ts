@@ -30,7 +30,7 @@ export enum Algorithms {
 */
 export interface IAttributePayload {
   publicKey?: string;
-  svcEndPoint?: string;
+  serviceEndpoint?: string;
   tag?: string;
   hash?: string;
   hashAlg?: string;

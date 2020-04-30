@@ -140,7 +140,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
       type: VerificationKey2018,
-      value: {svcEndPoint:endpoint},
+      value: {serviceEndpoint:endpoint},
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -213,7 +213,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: VerificationKey2018,
-      value: {svcEndPoint: endpoint},
+      value: {serviceEndpoint: endpoint},
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);

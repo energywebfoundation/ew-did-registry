@@ -45,7 +45,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
     const url = 'http://test.com';
     await operator.update(did, DIDAttribute.ServicePoint, {
       type: PubKeyType.VerificationKey2018,
-      value:{svcEndPoint: url},
+      value:{serviceEndpoint: url},
     });
     const service = await docLite.readAttribute({ serviceEndpoints: { serviceEndpoint: url } });
     expect(service).to.be.not.undefined;

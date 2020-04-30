@@ -381,7 +381,7 @@ export class Operator extends Resolver implements IOperator {
         {
           type,
           value: {
-            svcEndPoint: value,
+            serviceEndpoint: value,
           },
         },
         null,

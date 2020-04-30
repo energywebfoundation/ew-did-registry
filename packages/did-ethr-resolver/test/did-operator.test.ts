@@ -127,7 +127,7 @@ describe('[DID-OPERATOR]', function () {
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
       type: PubKeyType.VerificationKey2018,
-      value: {svcEndPoint:endpoint},
+      value: {serviceEndpoint:endpoint},
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -198,7 +198,7 @@ describe('[DID-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: PubKeyType.VerificationKey2018,
-      value: {svcEndPoint:endpoint},
+      value: {serviceEndpoint:endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);

@@ -50,10 +50,10 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const endpoint = 'https://test.readAttribute.com';
     const updateData: IUpdateData = {
       type: PubKeyType.VerificationKey2018,
-      value: {svcEndPoint: endpoint},
+      value: {serviceEndpoint: endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
-    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.svcEndPoint}` } }) as IServiceEndpoint;
+    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.serviceEndpoint}` } }) as IServiceEndpoint;
     expect(serviceEndpointAttr.serviceEndpoint === updateData.value);
   });
 
