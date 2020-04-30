@@ -141,10 +141,10 @@ const handleAttributeChange = (
         const serviceId = `${did}#service-${algo}-${event.values.value}`;
         if (document.serviceEndpoints[serviceId] === undefined
           || document.serviceEndpoints[serviceId].block < block) {
-            let serviceEndpoint = Buffer.from(
-              event.values.value.slice(2),
-              'hex',
-            ).toString(); 
+          let serviceEndpoint = Buffer.from(
+            event.values.value.slice(2),
+            'hex',
+          ).toString();
           let parsed: any = {};
           try {
             parsed = JSON.parse(serviceEndpoint);
