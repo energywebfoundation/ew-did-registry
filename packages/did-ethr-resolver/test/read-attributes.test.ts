@@ -35,7 +35,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const attribute = DIDAttribute.PublicKey;
     const k = new Keys();
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: {publicKey:`0x${k.publicKey}`, tag:'key-1'},
