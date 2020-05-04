@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
-import { IOperator } from '@ew-did-registry/did-resolver-interface';
+import { IOperator, KeyTags } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
@@ -14,7 +14,7 @@ import { IDIDRegistry } from './interface';
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Methods | string, IKeys>;
+  keyStore: Map<string, IKeys>;
 
   document: IDIDDocumentFull;
 
@@ -24,9 +24,15 @@ class DIDRegistry implements IDIDRegistry {
 
   constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, method] = did.split(':');
-    this.keys = new Map<Methods | string, IKeys>();
-    this.keys.set(method, keys);
-    this.jwt = new JWT(this.keys.get(method));
+        
+    if(!Object.values(Methods).includes(method as Methods)){
+      throw new Error('Unknown Method!');
+    }
+
+    this.keyStore = new Map<string, IKeys>();
+    this.keyStore.set(KeyTags.OWNER, keys);
+
+    this.jwt = new JWT(this.keyStore.get(KeyTags.OWNER));
     this.document = new DIDDocumentFactory(did).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, store);
     this.operator = operator;
@@ -48,7 +54,7 @@ class DIDRegistry implements IDIDRegistry {
    * @returns { Promise<void> }
    */
   changeOperator(operator: IOperator, method: Methods | string): void {
-    const keys = this.keys.get(method);
+    const keys = this.keyStore.get(KeyTags.OWNER);
     this.document = new DIDDocumentFactory(this.did.get(method)).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, this.store);
     this.operator = operator;
