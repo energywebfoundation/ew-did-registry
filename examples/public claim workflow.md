@@ -64,7 +64,6 @@ stored and verified
   const issuerClaims = issuer.claims.createClaimsIssuer(); 
 
 ``` 
-
 Same flow for verifier
 
 ```typescript 
@@ -76,7 +75,6 @@ Same flow for verifier
   const verifierClaims = verifier.claims.createClaimsVerifier();
 
 ``` 
-
 * **Claim creation**
 
 ```typescript 
