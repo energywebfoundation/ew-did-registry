@@ -67,7 +67,6 @@ stored and verified
 Same flow for verifier
 
 ```typescript 
-
   const verifierKeys = new Keys(); 
   const verifierAddress = verifierKeys.getAddress(); 
   const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}` ; 
