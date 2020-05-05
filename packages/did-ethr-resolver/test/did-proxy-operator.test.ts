@@ -54,13 +54,13 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-1'},
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData);
     const document = await operator.read(`did:ethr:${identity}`);
     expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
@@ -71,13 +71,13 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-2'},
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
     const document = await operator.read(`did:ethr:${identity}`);
     expect(document.id).equal(`did:ethr:${identity}`);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
     expect(publicKey).is.not.undefined;
   });
@@ -140,7 +140,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
       type: VerificationKey2018,
-      value: endpoint,
+      value: {serviceEndpoint:endpoint},
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -158,7 +158,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-3'},
     };
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
@@ -174,7 +174,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-4'},
     };
     try {
       await operator.update(did, attribute, updateData, -100);
@@ -194,7 +194,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-5'},
     };
     await operator.update(did, attribute, updateData, validity);
     // add authentication method
@@ -213,7 +213,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: VerificationKey2018,
-      value: endpoint,
+      value: {serviceEndpoint: endpoint},
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
@@ -264,7 +264,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-6'},
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
     let document = await operator.read(`did:ethr:${identity}`);
