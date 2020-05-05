@@ -13,7 +13,11 @@ import { Resolver, DelegateTypes } from '@ew-did-registry/did-resolver';
 * **Reading the DID Document for particular id**
 
 ``` typescript  
+<<<<<<< HEAD
     const resolver = new Resolver();
+=======
+    const resolver = new Resolver(resolverSettings);
+>>>>>>> 7d1654a20a6cb9854dbb65709769675cba2487c6
     const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDocument = await resolver.read(did);
 ```

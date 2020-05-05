@@ -9,6 +9,7 @@ import {
   IDIDLogData,
   IHandlers,
   IPublicKey,
+  IAttributePayload,
   IResolverSettings,
   IServiceEndpoint,
   ISmartContractEvent,
@@ -93,9 +94,11 @@ const handleAttributeChange = (
     switch (section) {
       case 'pub':
         // eslint-disable-next-line no-case-declarations
+        const KeyTag: IAttributePayload = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `${did}#key-${algo}${type}-${event.values.value}`,
+          id: `${did}#${KeyTag.tag}`,
           type: `${algo}${type}`,
           controller: identity,
           validity: validTo,
@@ -107,7 +110,7 @@ const handleAttributeChange = (
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = event.values.value;
+              pk.publicKeyHex = KeyTag.publicKey;
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(

@@ -62,9 +62,7 @@ stored and verified
   const issuerOperator = new Operator(issuerKeys, resolverSettings); 
   const issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store); 
   const issuerClaims = issuer.claims.createClaimsIssuer(); 
-
 ``` 
-
 Same flow for verifier
 
 ```typescript 
@@ -76,7 +74,6 @@ Same flow for verifier
   const verifierClaims = verifier.claims.createClaimsVerifier();
 
 ``` 
-
 * **Claim creation**
 
 ```typescript 

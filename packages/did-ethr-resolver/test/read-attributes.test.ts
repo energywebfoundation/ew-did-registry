@@ -35,13 +35,13 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const attribute = DIDAttribute.PublicKey;
     const k = new Keys();
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${k.publicKey}`,
+      value: {publicKey:`0x${k.publicKey}`, tag:'key-1'},
     };
     await operator.update(did, attribute, updateData, validity);
-    const publicKeyAttr = await operator.readAttribute(did, { publicKey: { publicKeyHex: updateData.value, type: `${updateData.algo}${updateData.type}` } });
+    const publicKeyAttr = await operator.readAttribute(did, { publicKey: { publicKeyHex: updateData.value.publicKey, type: `${updateData.algo}${updateData.type}` } });
     expect(publicKeyAttr.publicKeyHex === updateData.value);
   });
 
@@ -50,10 +50,10 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const endpoint = 'https://test.readAttribute.com';
     const updateData: IUpdateData = {
       type: PubKeyType.VerificationKey2018,
-      value: endpoint,
+      value: {serviceEndpoint: endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
-    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value}` } }) as IServiceEndpoint;
+    const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.serviceEndpoint}` } }) as IServiceEndpoint;
     expect(serviceEndpointAttr.serviceEndpoint === updateData.value);
   });
 
