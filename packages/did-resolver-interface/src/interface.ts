@@ -1,6 +1,6 @@
 import { utils } from 'ethers';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IServiceEndpoint, IAuthentication, PubKeyType,
+  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IAttributePayload, IServiceEndpoint, IAuthentication, PubKeyType,
 } from './models';
 
 export interface IResolver {

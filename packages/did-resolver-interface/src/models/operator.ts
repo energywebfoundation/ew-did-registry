@@ -26,6 +26,16 @@ export enum Algorithms {
   ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
 }
 
+/** This interface represents the attribute payload
+*/
+export interface IAttributePayload {
+  publicKey?: string;
+  serviceEndpoint?: string;
+  tag?: string;
+  hash?: string;
+  hashAlg?: string;
+}
+
 /**
  * Data used to update DID Document. To update the public key you need to set its value in value
  * field, and to set authentication method, the delegate's Ethereum address must be set in the
@@ -35,6 +45,6 @@ export interface IUpdateData {
   encoding?: Encoding;
   algo?: Algorithms;
   type: PubKeyType;
-  value?: string;
+  value?: IAttributePayload;
   delegate?: string;
 }

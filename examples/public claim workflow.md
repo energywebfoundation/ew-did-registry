@@ -56,7 +56,6 @@ Same flow for issuer. Issuer checks claim data and issue token, which can be
 stored and verified
 
 ```typescript 
-
   const issuerKeys = new Keys(); 
   const issuerAddress = issuerKeys.getAddress(); 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
