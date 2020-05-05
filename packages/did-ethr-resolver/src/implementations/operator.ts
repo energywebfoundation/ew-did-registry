@@ -340,7 +340,6 @@ export class Operator extends Resolver implements IOperator {
         publicKey: value,
         tag: publicKeyTag,
       };
-
       const updateData: IUpdateData = {
         algo: match[1] as Algorithms,
         type: match[2] as PubKeyType,
