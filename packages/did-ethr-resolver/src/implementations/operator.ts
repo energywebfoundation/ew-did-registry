@@ -13,6 +13,7 @@ import {
   IResolverSettings,
   IServiceEndpoint,
   IUpdateData,
+  IAttributePayload,
   ProviderTypes,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
@@ -81,7 +82,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${this._keys.publicKey}`,
+      value: { publicKey: `0x${this._keys.publicKey}`, tag: 'key0' },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);
@@ -327,15 +328,23 @@ export class Operator extends Resolver implements IOperator {
         const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
         return pk[`publicKey${suffix}`];
       });
+
       if (!encoding) {
         throw new Error('Unknown encoding');
       }
+      // Reconstruct the publicKey value as it is
       const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
+      const publicKeyTag = pk.id.split('#')[1];
+
+      const keyValue: IAttributePayload = {
+        publicKey: value,
+        tag: publicKeyTag,
+      };
       const updateData: IUpdateData = {
         algo: match[1] as Algorithms,
         type: match[2] as PubKeyType,
         encoding,
-        value,
+        value: keyValue,
       };
       const method = this._didRegistry.revokeAttribute;
       const revoked = await this._sendTransaction(
@@ -369,7 +378,10 @@ export class Operator extends Resolver implements IOperator {
         did,
         didAttribute,
         {
-          type, value,
+          type,
+          value: {
+            serviceEndpoint: value,
+          },
         },
         null,
         { nonce },

@@ -38,5 +38,8 @@
     "@ew-did-registry/keys": "^0.0.1-alpha.0",
     "eciesjs": "^0.3.4",
     "sjcl-complete": "1.0.0"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.9.1"
   }
 }

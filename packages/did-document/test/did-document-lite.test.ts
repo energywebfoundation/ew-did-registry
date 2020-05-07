@@ -35,7 +35,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: `0x${new Keys().publicKey}`,
+      value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-4'},
     });
     const publicKey = await docLite.readAttribute({ publicKey: { type: 'Secp256k1VerificationKey' } });
     expect(publicKey).to.be.not.undefined;
@@ -45,7 +45,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
     const url = 'http://test.com';
     await operator.update(did, DIDAttribute.ServicePoint, {
       type: PubKeyType.VerificationKey2018,
-      value: url,
+      value:{serviceEndpoint: url},
     });
     const service = await docLite.readAttribute({ serviceEndpoints: { serviceEndpoint: url } });
     expect(service).to.be.not.undefined;

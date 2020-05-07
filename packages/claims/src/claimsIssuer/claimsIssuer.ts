@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import sjcl from 'sjcl-complete';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
-import { IPublicClaim, IPrivateClaim } from '../models';
+import { IPrivateClaim, IPublicClaim } from '../models';
 
 const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {

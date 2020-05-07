@@ -76,7 +76,7 @@ class Resolver implements IResolver {
    * ```typescript
    * import { Resolver } from '@ew-did-registry/did-resolver';
    *
-   * const resolver = new Resolver();
+   * const resolver = new Resolver(resolverSettings);
    * const didDocument = await resolver.read(did);
    * ```
    *

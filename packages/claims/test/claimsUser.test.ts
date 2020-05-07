@@ -6,9 +6,9 @@ import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
-  IPrivateClaim, IProofClaim, IClaimsUser, ClaimsUser,
+  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
 } from '../src';
-import { getSettings, spawnIpfsDaemon, shutDownIpfsDaemon } from '../../../tests';
+import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.should();
 
@@ -29,8 +29,9 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
 
     const store = new DidStore(await spawnIpfsDaemon());
     const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
     userClaims = new ClaimsUser(user, userDoc, store);
+
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
 
     await userDoc.create();
     await issuerDoc.create();
@@ -45,6 +46,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
+    (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
     const claim = await userClaims.jwt.verify(
       token, userClaims.keys.publicKey, { noTimestamp: true },
     );
@@ -53,6 +55,20 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       signer: userDdid,
       claimData: publicData,
     });
+  });
+
+  it('creates and verifies 100 claims', async () => {
+    const claims: { token: string; data: object }[] = [];
+    for (let i = 0; i < 100; i++) {
+      const data = { name: 'John', lastName: 'Doe', index: i };
+      // eslint-disable-next-line no-await-in-loop
+      claims.push({ token: (await userClaims.createPublicClaim(data)), data });
+    }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { token, data } of claims) {
+      // eslint-disable-next-line no-await-in-loop
+      (await userClaims.verifyPublicClaim(token, data)).should.be.true;
+    }
   });
 
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
