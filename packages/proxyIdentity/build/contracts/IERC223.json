@@ -69,15 +69,15 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":\"IERC223\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":{\"keccak256\":\"0x3e3d1fc80b2e7c13015946457c9f4a5255f3b6f385b48616159e78c7b2c74737\",\"urls\":[\"bzz-raw://3f3458d0c93202f964bbf51a349b99165344f8eec5c43bb3ca5291c13488286f\",\"dweb:/ipfs/QmQ6ZV1eJqKffWcYqa5iQ22zPkQvgjXiNnciajAE6eb8ep\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9\",\"urls\":[\"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91\",\"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":\"IERC223\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":{\"keccak256\":\"0x3e3d1fc80b2e7c13015946457c9f4a5255f3b6f385b48616159e78c7b2c74737\",\"urls\":[\"bzz-raw://3f3458d0c93202f964bbf51a349b99165344f8eec5c43bb3ca5291c13488286f\",\"dweb:/ipfs/QmQ6ZV1eJqKffWcYqa5iQ22zPkQvgjXiNnciajAE6eb8ep\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9\",\"urls\":[\"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91\",\"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\n\nimport \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\n\n\ninterface IERC223 {\n  function transfer(\n    address to,\n    uint256 value,\n    bytes calldata data\n  ) external returns (bool);\n\n  function transferFrom(\n    address from,\n    address to,\n    uint256 value,\n    bytes calldata data\n  ) external returns (bool);\n}\n",
-  "sourcePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
+  "sourcePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
   "ast": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
+    "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
     "exportedSymbols": {
       "IERC223": [
         187
@@ -103,7 +103,7 @@
         "id": 162,
         "nodeType": "ImportDirective",
         "scope": 188,
-        "sourceUnit": 2245,
+        "sourceUnit": 2044,
         "src": "25:56:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -424,7 +424,7 @@
     "src": "0:347:3"
   },
   "legacyAST": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
+    "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol",
     "exportedSymbols": {
       "IERC223": [
         187
@@ -450,7 +450,7 @@
         "id": 162,
         "nodeType": "ImportDirective",
         "scope": 188,
-        "sourceUnit": 2245,
+        "sourceUnit": 2044,
         "src": "25:56:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -775,8 +775,8 @@
     "version": "0.5.17+commit.d19bba13.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2020-04-23T09:28:03.720Z",
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2020-05-07T21:15:42.909Z",
   "devdoc": {
     "methods": {}
   },

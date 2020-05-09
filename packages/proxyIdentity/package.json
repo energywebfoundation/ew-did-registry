@@ -19,5 +19,9 @@
   "dependencies": {
     "ethers": "4.0.45",
     "web3": "1.2.6"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^2.5.0",
+    "multi-token-standard": "^0.8.13"
   }
 }

@@ -170,13 +170,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     uint256 _value,
     bytes calldata _data
   ) external returns (bytes4) {
-    IERC1155(msg.sender).safeTransferFrom(
-      address(this),
-      owner,
-      _id,
-      _value,
-      _data
-    );
     return ERC1155_ACCEPTED;
   }
 
@@ -187,13 +180,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     uint256[] calldata _values,
     bytes calldata _data
   ) external returns (bytes4) {
-    IERC1155(msg.sender).safeBatchTransferFrom(
-      address(this),
-      owner,
-      _ids,
-      _values,
-      _data
-    );
     return ERC1155_BATCH_ACCEPTED;
   }
 
@@ -231,8 +217,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     bytes memory _data
   ) public returns (bool) {
     if (!supportsToken(msg.sender)) return false;
-    IERC223(msg.sender).transfer(owner, _value, _data);
-    tkn = Tkn(msg.sender, _sender, _origin, _value, _data, getSig(_data));
     __isTokenFallback = true;
     // solium-disable-next-line security/no-low-level-calls
     (bool success, ) = address(this).delegatecall(_data);

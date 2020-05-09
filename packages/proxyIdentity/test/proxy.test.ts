@@ -178,26 +178,18 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
           }
         });
       })
-      .then(() => {
-        return proxy.addRecoveryAgent(agentAddress);
-      })
-      .then((tx: any) => {
-        return tx.wait();
-      })
+      .then(() => proxy.addRecoveryAgent(agentAddress))
+      .then((tx: any) => tx.wait())
       .then(() => {
         const asAgent = proxy.connect(agent);
         return asAgent.changeOwner(newOwner);
       })
-      .then((tx: any) => {
-        return tx.wait();
-      })
-      .then(() => {
-        return proxy.owner();
-      })
+      .then((tx: any) => tx.wait())
+      .then(() => proxy.owner())
       .then((owner: string) => {
         owner.should.equal(newOwner);
       })
-      .catch(e => expect.fail(e));
+      .catch((e) => expect.fail(e));
   });
 
   it('changeOwner() called by non-recovery agent should revert', async () => {
@@ -254,7 +246,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(balance1.toString()).equal(balance0.add(pay).toString());
   });
 
-  it('ERC1155 token should be transfered to the proxy owner', async () => {
+  it('ERC1155 token should be transfered to the proxy contract and returned by it', async () => {
     const amount = 100;
     let token = await (await tokenERC1155Factory.deploy()).deployed();
     const minter = provider.getSigner(3);
@@ -268,8 +260,15 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       amount,
       '0x0',
     );
-    const balance = await token.balanceOf(await creator.getAddress(), 1);
-    expect(balance.toNumber()).equal(amount);
+    expect((await token.balanceOf(identity, 1)).toNumber()).equal(amount);
+    expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000 - amount);
+    const safeTransferFrom: any = tokenERC1155Abi.find((f) => f.name === 'safeTransferFrom');
+    const params: Array<any> = [identity, minterAddr, 1, amount, '0x0'];
+    const data: string = web3.eth.abi.encodeFunctionCall(safeTransferFrom, params);
+    await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
+      .then((tx: any) => tx.wait());
+    expect((await token.balanceOf(identity, 1)).toNumber()).equal(0);
+    expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000);
   });
 
   it('ERC1155 tokens should be transfered batched to proxy owner', async () => {
@@ -287,12 +286,11 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       [amount1, amount2],
       '0x0',
     );
-    const creatorAddr = await creator.getAddress();
-    const balances = await token.balanceOfBatch([creatorAddr, creatorAddr], [1, 2]);
+    const balances = await token.balanceOfBatch([identity, identity], [1, 2]);
     expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
 
-  it('when ERC223 tokens transfered to proxy they should be forwarded to proxy owner', async () => {
+  it('when ERC223 tokens transfered to proxy and returned by it', async () => {
     const amount = 100;
     const sender = provider.getSigner(3);
     const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
@@ -304,8 +302,18 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       amount,
       '0x0',
     );
-    const balance = await token.balanceOf(creatorAddress);
+    const balance = await token.balanceOf(identity);
     expect(balance.toNumber()).equal(amount);
+
+    const transfer: any = tokenERC223Abi.find(
+      (f) => f.name === 'transfer' && f.inputs.find((input: any) => input.type === 'bytes'),
+    );
+    const params: Array<any> = [senderAddr, amount, '0x0'];
+    const data: string = web3.eth.abi.encodeFunctionCall(transfer, params);
+    await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
+      .then((tx: any) => tx.wait());
+    expect((await token.balanceOf(identity)).toNumber()).equal(0);
+    expect((await token.balanceOf(senderAddr)).toNumber()).equal(1000);
   });
 
   it('when ERC223 tokens transfered to proxy provided callback should be executed', async () => {
