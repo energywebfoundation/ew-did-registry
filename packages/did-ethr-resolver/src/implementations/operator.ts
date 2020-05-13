@@ -16,6 +16,7 @@ import {
   IAttributePayload,
   ProviderTypes,
   PubKeyType,
+  KeyTags,
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
 import {
@@ -82,7 +83,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: `0x${this._keys.publicKey}`, tag: 'key0' },
+      value: { publicKey: `0x${this._keys.publicKey}`, tag: KeyTags.OWNER },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);

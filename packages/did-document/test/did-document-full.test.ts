@@ -42,7 +42,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         type: PubKeyType.VerificationKey2018,
         algo: Algorithms.ED25519,
         encoding: Encoding.HEX,
-        value: {publicKey: `0x${new Keys().publicKey}`, tag:'key1'},
+        value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-1'},
       },
       validity,
     );

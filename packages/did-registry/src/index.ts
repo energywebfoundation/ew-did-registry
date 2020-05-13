@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
-import { IKeys } from '@ew-did-registry/keys';
-import { IOperator } from '@ew-did-registry/did-resolver-interface';
+import { IKeys, Keys } from '@ew-did-registry/keys';
+import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
@@ -14,7 +14,7 @@ import { IDIDRegistry } from './interface';
 class DIDRegistry implements IDIDRegistry {
   did: IDID;
 
-  keys: Map<Methods | string, IKeys>;
+  keyStore: Map<string, IKeys>;
 
   document: IDIDDocumentFull;
 
@@ -24,9 +24,15 @@ class DIDRegistry implements IDIDRegistry {
 
   constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, method] = did.split(':');
-    this.keys = new Map<Methods | string, IKeys>();
-    this.keys.set(method, keys);
-    this.jwt = new JWT(this.keys.get(method));
+
+    if (!Object.values(Methods).includes(method as Methods)) {
+      throw new Error('Unknown Method!');
+    }
+
+    this.keyStore = new Map<string, IKeys>();
+    this.keyStore.set(KeyTags.OWNER, keys);
+
+    this.jwt = new JWT(this.keyStore.get(KeyTags.OWNER));
     this.document = new DIDDocumentFactory(did).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, store);
     this.operator = operator;
@@ -48,10 +54,37 @@ class DIDRegistry implements IDIDRegistry {
    * @returns { Promise<void> }
    */
   changeOperator(operator: IOperator, method: Methods | string): void {
-    const keys = this.keys.get(method);
+    const keys = this.keyStore.get(KeyTags.OWNER);
     this.document = new DIDDocumentFactory(this.did.get(method)).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, this.store);
     this.operator = operator;
+  }
+
+  /**
+   *
+   * Update keyStore from user's didDocument
+   */
+  async updateKeyStore(): Promise<boolean> {
+    const doc = await this.document.read();
+
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const key in doc.publicKey) {
+      const pubKey = doc.publicKey[key];
+      const publicKeyTag = pubKey.id.split('#')[1];
+
+      const encoding = Object.values(Encoding).find((e) => {
+        const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
+        return pubKey[`publicKey${suffix}`];
+      });
+
+      if (!encoding) {
+        throw new Error('Unknown encoding');
+      }
+      const value = pubKey[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
+
+      this.keyStore.set(publicKeyTag, new Keys({ publicKey: value.slice(2) }));
+    }
+    return true;
   }
 
   /**
