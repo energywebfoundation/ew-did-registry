@@ -67,7 +67,7 @@ function bundling(pckg) {
       compact: true,
       presets: [
         ['@babel/env', {
-          modules: false
+          modules: false,
         }],
       ],
     })))

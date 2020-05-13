@@ -8,6 +8,8 @@ import { BigNumber, Signature } from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
+import { abi as tokenERC1155Abi, bytecode as tokenERC1155Bytecode } from '../build/contracts/ERC1155MintBurn.json';
+import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build/contracts/ERC223Mintable.json';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -24,6 +26,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let creatorAddress: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  const tokenERC1155Factory = new ContractFactory(tokenERC1155Abi, tokenERC1155Bytecode, creator);
   let identity: string;
   let accounts: string[];
 
@@ -175,26 +178,18 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
           }
         });
       })
-      .then(() => {
-        return proxy.addRecoveryAgent(agentAddress);
-      })
-      .then((tx: any) => {
-        return tx.wait();
-      })
+      .then(() => proxy.addRecoveryAgent(agentAddress))
+      .then((tx: any) => tx.wait())
       .then(() => {
         const asAgent = proxy.connect(agent);
         return asAgent.changeOwner(newOwner);
       })
-      .then((tx: any) => {
-        return tx.wait();
-      })
-      .then(() => {
-        return proxy.owner();
-      })
+      .then((tx: any) => tx.wait())
+      .then(() => proxy.owner())
       .then((owner: string) => {
         owner.should.equal(newOwner);
       })
-      .catch(e => expect.fail(e));
+      .catch((e) => expect.fail(e));
   });
 
   it('changeOwner() called by non-recovery agent should revert', async () => {
@@ -249,5 +244,94 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
     const balance1 = await web3.eth.getBalance(dest);
     expect(balance1.toString()).equal(balance0.add(pay).toString());
+  });
+
+  it('ERC1155 token should be transfered to the proxy contract and returned by it', async () => {
+    const amount = 100;
+    let token = await (await tokenERC1155Factory.deploy()).deployed();
+    const minter = provider.getSigner(3);
+    token = token.connect(minter);
+    const minterAddr = await minter.getAddress();
+    await token.mint(minterAddr, 1, 1000, '0x0');
+    await token.safeTransferFrom(
+      minterAddr,
+      identity,
+      1,
+      amount,
+      '0x0',
+    );
+    expect((await token.balanceOf(identity, 1)).toNumber()).equal(amount);
+    expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000 - amount);
+    const safeTransferFrom: any = tokenERC1155Abi.find((f) => f.name === 'safeTransferFrom');
+    const params: Array<any> = [identity, minterAddr, 1, amount, '0x0'];
+    const data: string = web3.eth.abi.encodeFunctionCall(safeTransferFrom, params);
+    await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
+      .then((tx: any) => tx.wait());
+    expect((await token.balanceOf(identity, 1)).toNumber()).equal(0);
+    expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000);
+  });
+
+  it('ERC1155 tokens should be transfered batched to proxy owner', async () => {
+    const amount1 = 100;
+    const amount2 = 200;
+    let token = await (await tokenERC1155Factory.deploy()).deployed();
+    const minter = provider.getSigner(3);
+    token = token.connect(minter);
+    const minterAddr = await minter.getAddress();
+    await token.batchMint(minterAddr, [1, 2], [1000, 2000], '0x0');
+    await token.safeBatchTransferFrom(
+      minterAddr,
+      identity,
+      [1, 2],
+      [amount1, amount2],
+      '0x0',
+    );
+    const balances = await token.balanceOfBatch([identity, identity], [1, 2]);
+    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
+  });
+
+  it('when ERC223 tokens transfered to proxy and returned by it', async () => {
+    const amount = 100;
+    const sender = provider.getSigner(3);
+    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
+    const token = await (await tokenERC223Factory.deploy()).deployed();
+    const senderAddr = await sender.getAddress();
+    await (await token.mint(senderAddr, 1000)).wait();
+    await token['transfer(address,uint256,bytes)'](
+      identity,
+      amount,
+      '0x0',
+    );
+    const balance = await token.balanceOf(identity);
+    expect(balance.toNumber()).equal(amount);
+
+    const transfer: any = tokenERC223Abi.find(
+      (f) => f.name === 'transfer' && f.inputs.find((input: any) => input.type === 'bytes'),
+    );
+    const params: Array<any> = [senderAddr, amount, '0x0'];
+    const data: string = web3.eth.abi.encodeFunctionCall(transfer, params);
+    await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
+      .then((tx: any) => tx.wait());
+    expect((await token.balanceOf(identity)).toNumber()).equal(0);
+    expect((await token.balanceOf(senderAddr)).toNumber()).equal(1000);
+  });
+
+  it('when ERC223 tokens transfered to proxy provided callback should be executed', async () => {
+    const amount = 100;
+    const sender = provider.getSigner(3);
+    const senderAddr = await sender.getAddress();
+    const changeOwnerAbi: any = proxyAbi.find((f) => f.name === 'changeOwner');
+    const callback: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [senderAddr]);
+    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
+    const token = await (await tokenERC223Factory.deploy()).deployed();
+    await (await token.mint(senderAddr, 1000)).wait();
+    await proxy.addRecoveryAgent(token.address); // to invoke callback on proxy
+    await (await token['transfer(address,uint256,bytes)'](
+      identity,
+      amount,
+      callback,
+    )).wait();
+    const owner = await proxy.owner();
+    expect(owner).equal(senderAddr);
   });
 });
