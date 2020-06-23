@@ -26,6 +26,13 @@ export enum Algorithms {
   ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
 }
 
+/**
+ * KeyTags specifies the tags associated with different purposes of the keys
+ */
+export enum KeyTags {
+  OWNER = 'owner'
+}
+
 /** This interface represents the attribute payload
 */
 export interface IAttributePayload {

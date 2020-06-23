@@ -22,9 +22,9 @@ export interface IDIDRegistry {
    */
   claims: IClaimsFactory;
   /**
-   * IKeys is responsible for key management, signing, as well as verification of signature
+   * IKey is responsible for key management, signing, as well as verification of signature
    */
-  keys: Map<Methods | string, IKeys>;
+  keyStore: Map<string, IKeys>;
 
   changeOperator(operator: IOperator, network: Methods | string): void;
 
