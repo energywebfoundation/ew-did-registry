@@ -16,7 +16,7 @@ export enum PubKeyType {
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem', BASE58 = 'base58'
+  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
 }
 
 /**

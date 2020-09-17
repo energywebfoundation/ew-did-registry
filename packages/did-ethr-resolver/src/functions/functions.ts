@@ -118,12 +118,6 @@ const handleAttributeChange = (
                 'hex',
               ).toString('base64');
               break;
-            case 'base58':
-              pk.publicKeyBase58 = Buffer.from(
-                event.values.value.slice(2),
-                'hex',
-              ).toString('base58');
-              break;
             case 'pem':
               pk.publicKeyPem = Buffer.from(
                 event.values.value.slice(2),
@@ -240,7 +234,7 @@ const getEventsFromBlock = (
     toBlock: block.toNumber(),
     topics,
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]);
+    const event: ISmartContractEvent = contractInterface.parseLog(log[0]) as ISmartContractEvent;
     const eventName = event.name;
     updateDocument(event, eventName, did, document, block.toNumber());
 
@@ -313,7 +307,6 @@ export const fetchDataFromEvents = async (
   document.topBlock = topBlock;
   return null;
 };
-
 
 /**
  * Provided with the fetched data, the function parses it and returns the
