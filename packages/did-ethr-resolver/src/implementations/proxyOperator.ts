@@ -65,7 +65,6 @@ export class ProxyOperator extends Operator {
     return authRevoked && pubKeysRevoked && endpointsRevoked;
   }
 
-
   /**
    * Revokes the delegate from DID Document
    * Returns true on success
@@ -152,7 +151,6 @@ export class ProxyOperator extends Operator {
     }
     return true;
   }
-
 
   /**
    * Function to send transactions to using proxy
