@@ -1,26 +1,27 @@
 import { expect } from 'chai';
 
 import { Keys, IKeys } from '@ew-did-registry/keys';
-import { JWT } from '../src';
+import { IJWT, JWT } from '../src';
+import { Wallet } from 'ethers';
+import { sign } from 'jsonwebtoken';
 
-let payload: object;
-let token: string;
-let keyPairAlice: IKeys;
 
-before(async () => {
-  keyPairAlice = new Keys({ privateKey: '635a1ba32ab7218f6df7785c8e128f485c612cdb68cf12a1157987130e7e6d0d' });
+const keyPairAlice = new Keys({ privateKey: '635a1ba32ab7218f6df7785c8e128f485c612cdb68cf12a1157987130e7e6d0d' });
 
-  const jwtAlice = new JWT(keyPairAlice);
-  payload = { claim: 'test' };
+const jwtAlice = new JWT(keyPairAlice);
+const payload = { claim: 'test' };
 
-  try {
-    token = await jwtAlice.sign({ claim: 'test' }, { algorithm: 'ES256', noTimestamp: true });
-  } catch (e) {
-    console.log(e);
-  }
-});
+describe('[JWT PACKAGE: sign with Keys]', () => {
+  let token: string;
 
-describe('[JWT PACKAGE]', () => {
+  before(async () => {
+    try {
+      token = await jwtAlice.sign({ claim: 'test' }, { algorithm: 'ES256', noTimestamp: true });
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
   it('jwt signed with private key should return a string', async () => {
     expect(token).to.be.a('string');
   });
@@ -58,4 +59,23 @@ describe('[JWT PACKAGE]', () => {
 
     expect(decoded).to.eql(payload);
   });
+});
+
+const testSuite = (jwt: IJWT) => {
+  it('correct signature should be verified', async () => {
+    const token = await jwt.sign(payload);
+    console.log('token:', token);
+    expect(await jwt.verify(token, keyPairAlice.publicKey)).deep.equal(payload);
+  });
+};
+
+describe('[JWT PACKAGE: sign with Signer]', () => {
+  let jwt: IJWT;
+
+  before(() => {
+    const signer = new Wallet(keyPairAlice.privateKey);
+    jwt = new JWT(signer);
+  });
+
+  testSuite(jwt);
 });

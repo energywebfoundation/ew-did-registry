@@ -1,22 +1,14 @@
 import * as jwt from 'jsonwebtoken';
 import KeyEncoder from 'key-encoder';
+import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
+import { createSignWithEthersSigner, createSignWithKeys } from './sign';
 
 const keyEncoder = new KeyEncoder('secp256k1');
 
 class JWT implements IJWT {
-  private readonly _keys: IKeys;
-
-  /**
-   * Key pair has to be passed on construction to JWT
-   * @param {Keys} keys
-   */
-  constructor(keys: IKeys) {
-    this._keys = keys;
-  }
-
   /**
    * Sign payload and return JWT
    *
@@ -37,26 +29,27 @@ class JWT implements IJWT {
    *   console.log(e);
    * }
    * ```
-   *
+   *  *
    * @param {object} payload
    * @param {object} options
    * @returns {Promise<string>}
    */
-  async sign(
-    payload: string | { [key: string]: string | object},
-    options?: object,
-  ): Promise<string> {
-    return new Promise(
-      (resolve, reject) => {
-        const pemPrivateKey = keyEncoder.encodePrivate(this._keys.privateKey, 'raw', 'pem');
+  public sign: (
+    payload: string | { [key: string]: string | object },
+    options?: object) => Promise<string>;
 
-        jwt.sign(payload, pemPrivateKey, options, (error: Error, token: string) => {
-          if (error) reject(error);
-
-          resolve(token);
-        });
-      },
-    );
+  /**
+   * Key pair has to be passed on construction to JWT
+   * @param {Keys} keys
+   */
+  constructor(signerMethod: IKeys | Signer) {
+    const keys = signerMethod as IKeys;
+    const signer = signerMethod as Signer;
+    if (keys.privateKey) {
+      this.sign = createSignWithKeys(keys);
+    } else {
+      this.sign = createSignWithEthersSigner(signer);
+    }
   }
 
   /**

@@ -27,6 +27,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/keys": "^0.0.1-alpha.0",
+    "base64url": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "key-encoder": "^2.0.3"
   }
