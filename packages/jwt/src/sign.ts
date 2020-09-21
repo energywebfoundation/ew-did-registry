@@ -40,7 +40,7 @@ export function createSignWithEthersSigner(signer: Signer) {
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString('hex')}`;
     const signature = await signer.signMessage(arrayify(keccak256(msg)));
     const encodedSignature = base64url(signature);
-    return base64url(`${encodedHeader}.${encodedPayload}.${encodedSignature}`);
+    return `${encodedHeader}.${encodedPayload}.${encodedSignature}`;
   };
   return sign;
 }

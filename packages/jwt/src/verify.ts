@@ -29,7 +29,7 @@ const verifyJwtSignature = () => {
 
 const verifyEthersSignature = () => {
   const verify = async (token: string, publicKey: string) => {
-    const [encodedHeader, encodedPayload, encodedSignature] = base64url.decode(token).split('.');
+    const [encodedHeader, encodedPayload, encodedSignature] = token.split('.');
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString('hex')}`;
     const signature = base64url.decode(encodedSignature);
     const digest = arrayify(hashMessage(arrayify(keccak256(msg))));

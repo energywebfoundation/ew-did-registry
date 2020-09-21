@@ -18,30 +18,6 @@ let token: string;
 let jwt: JWT;
 
 const testSuite = (): void => {
-
-  it('signature verification by corresponding public key should pass', async () => {
-    token = await jwt.sign(payload);
-
-    expect(await jwt.verify(token, keyPairAlice.publicKey)).deep.equal(payload);
-  });
-
-  it('signature verification by inappropriate public key should throw', async () => {
-    token = await jwt.sign(payload);
-
-    return jwt.verify(token, new Keys().publicKey).should.be.rejectedWith('invalid signature');
-  });
-};
-
-describe('[JWT PACKAGE: sign with Keys]', () => {
-
-  before(async () => {
-    try {
-      token = await jwtAlice.sign({ claim: 'test' }, { algorithm: 'ES256', noTimestamp: true });
-    } catch (e) {
-      console.log(e);
-    }
-  });
-
   it('jwt signed with private key should return a string', async () => {
     expect(token).to.be.a('string');
   });
@@ -79,13 +55,25 @@ describe('[JWT PACKAGE: sign with Keys]', () => {
 
     expect(decoded).to.eql(payload);
   });
+};
+
+describe('[JWT PACKAGE: sign with Keys]', () => {
+  before(async () => {
+    try {
+      token = await jwtAlice.sign({ claim: 'test' }, { algorithm: 'ES256', noTimestamp: true });
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  testSuite();
 });
 
 describe('[JWT PACKAGE: sign with Signer]', () => {
-
-  before(() => {
+  before(async () => {
     const signer = new Wallet(keyPairAlice.privateKey);
     jwt = new JWT(signer);
+    token = await jwt.sign(payload);
   });
 
   testSuite();
