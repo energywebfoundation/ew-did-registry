@@ -13,7 +13,7 @@ const {
 const keyEncoder = new KeyEncoder('secp256k1');
 
 const verifyJwtSignature = () => {
-  const verify = async (token: string, publicKey: string, options?: object): 
+  const verify = async (token: string, publicKey: string, options?: object):
   Promise<object> => new Promise(
     (resolve) => {
       const pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');

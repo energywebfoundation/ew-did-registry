@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
+import { PromiseRejection, PromiseResolution } from 'promise.allsettled';
 import { IJWT } from './interface';
 import { createSignWithEthersSigner, createSignWithKeys } from './sign';
 import { verificationMethods } from './verify';
@@ -86,7 +87,11 @@ class JWT implements IJWT {
     for (const verifyMethod of verificationMethods) {
       verifications.push(verifyMethod(token, publicKey, options));
     }
-    const results = await Promise.allSettled(verifications);
+    const results = await Promise.all(Array.from(verifications, (item) => {
+      return item
+        .then((value) => ({ status: 'fulfilled', value } as PromiseResolution<object>))
+        .catch((reason) => ({ status: 'rejected', reason } as PromiseRejection<typeof reason>));
+    }));
     for (const result of results) {
       if (result.status === 'fulfilled' && (result.value as any).success) {
         return (result.value as any).payload;
