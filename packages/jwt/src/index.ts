@@ -1,12 +1,11 @@
+/* eslint-disable no-restricted-syntax */
 import * as jwt from 'jsonwebtoken';
-import KeyEncoder from 'key-encoder';
 import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
 import { createSignWithEthersSigner, createSignWithKeys } from './sign';
-
-const keyEncoder = new KeyEncoder('secp256k1');
+import { verificationMethods } from './verify';
 
 class JWT implements IJWT {
   /**
@@ -29,7 +28,6 @@ class JWT implements IJWT {
    *   console.log(e);
    * }
    * ```
-   *  *
    * @param {object} payload
    * @param {object} options
    * @returns {Promise<string>}
@@ -45,7 +43,7 @@ class JWT implements IJWT {
   constructor(signerMethod: IKeys | Signer) {
     const keys = signerMethod as IKeys;
     const signer = signerMethod as Signer;
-    if (keys.privateKey) {
+    if (keys.privateKey && keys.sign && keys.verify) {
       this.sign = createSignWithKeys(keys);
     } else {
       this.sign = createSignWithEthersSigner(signer);
@@ -84,16 +82,17 @@ class JWT implements IJWT {
    * @returns {Promise<object>}
    */
   async verify(token: string, publicKey: string, options?: object): Promise<object> {
-    return new Promise(
-      (resolve, reject) => {
-        const pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');
-        jwt.verify(token, pemPublicKey, options, (error: Error, payload: object) => {
-          if (error) reject(error);
-
-          resolve(payload);
-        });
-      },
-    );
+    const verifications = [];
+    for (const verifyMethod of verificationMethods) {
+      verifications.push(verifyMethod(token, publicKey, options));
+    }
+    const results = await Promise.allSettled(verifications);
+    for (const result of results) {
+      if (result.status === 'fulfilled' && (result.value as any).success) {
+        return (result.value as any).payload;
+      }
+    }
+    throw new Error('invalid signature');
   }
 
   /**
@@ -121,7 +120,9 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns string | { [key: string]: any }
    */
-  decode(token: string, options?: object): string | { [key: string]: string | object } {
+  decode(token: string, options?: object): string | {
+    [key: string]: string | object;
+  } {
     return jwt.decode(token, options);
   }
 }

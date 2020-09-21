@@ -1,18 +1,38 @@
-import { expect } from 'chai';
-
-import { Keys, IKeys } from '@ew-did-registry/keys';
-import { IJWT, JWT } from '../src';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Wallet } from 'ethers';
-import { sign } from 'jsonwebtoken';
+import { Keys } from '@ew-did-registry/keys';
+import { JWT } from '../src';
 
+const { expect, should } = chai;
+chai.use(chaiAsPromised);
+
+should();
 
 const keyPairAlice = new Keys({ privateKey: '635a1ba32ab7218f6df7785c8e128f485c612cdb68cf12a1157987130e7e6d0d' });
 
 const jwtAlice = new JWT(keyPairAlice);
 const payload = { claim: 'test' };
 
+let token: string;
+let jwt: JWT;
+
+const testSuite = (): void => {
+
+  it('signature verification by corresponding public key should pass', async () => {
+    token = await jwt.sign(payload);
+
+    expect(await jwt.verify(token, keyPairAlice.publicKey)).deep.equal(payload);
+  });
+
+  it('signature verification by inappropriate public key should throw', async () => {
+    token = await jwt.sign(payload);
+
+    return jwt.verify(token, new Keys().publicKey).should.be.rejectedWith('invalid signature');
+  });
+};
+
 describe('[JWT PACKAGE: sign with Keys]', () => {
-  let token: string;
 
   before(async () => {
     try {
@@ -61,21 +81,12 @@ describe('[JWT PACKAGE: sign with Keys]', () => {
   });
 });
 
-const testSuite = (jwt: IJWT) => {
-  it('correct signature should be verified', async () => {
-    const token = await jwt.sign(payload);
-    console.log('token:', token);
-    expect(await jwt.verify(token, keyPairAlice.publicKey)).deep.equal(payload);
-  });
-};
-
 describe('[JWT PACKAGE: sign with Signer]', () => {
-  let jwt: IJWT;
 
   before(() => {
     const signer = new Wallet(keyPairAlice.privateKey);
     jwt = new JWT(signer);
   });
 
-  testSuite(jwt);
+  testSuite();
 });
