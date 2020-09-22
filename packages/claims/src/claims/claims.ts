@@ -1,3 +1,4 @@
+import { ethers, Signer } from 'ethers';
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
@@ -13,7 +14,12 @@ import { hashes } from '../utils';
 export class Claims implements IClaims {
   public jwt: IJWT;
 
-  public keys: IKeys;
+  public keys: {
+    privateKey: string;
+    publicKey: Promise<string>;
+  };
+
+  public signer: Signer;
 
   public did: string;
 
@@ -24,10 +30,34 @@ export class Claims implements IClaims {
    * @param document
    * @param store
    */
-  constructor(keys: IKeys, protected document: IDIDDocumentFull, protected store: IDidStore) {
-    this.keys = keys;
-    this.jwt = new JWT(keys);
+  constructor(
+    signMethod: IKeys | Signer,
+    protected document: IDIDDocumentFull,
+    protected store: IDidStore,
+  ) {
+    const keys = signMethod as IKeys;
+    const signer = signMethod as Signer;
+    if (keys.privateKey && keys.publicKey) {
+      this.keys = {
+        privateKey: keys.privateKey,
+        publicKey: Promise.resolve(keys.publicKey),
+      };
+    } else {
+      this.signer = signer;
+      this.keys.publicKey = this.getPublicKey();
+    }
+    this.jwt = new JWT(signMethod);
     this.did = document.did;
+  }
+
+  private async getPublicKey(): Promise<string> {
+    if (this.keys?.publicKey) {
+      return this.keys.publicKey;
+    }
+    const hash = await ethers.utils.keccak256(await this.signer.getAddress());
+    const sig = await this.signer.signMessage(ethers.utils.arrayify(hash));
+    // eslint-disable-next-line no-return-assign
+    return this.keys.publicKey = Promise.resolve(ethers.utils.recoverPublicKey(hash, sig));
   }
 
   /**
