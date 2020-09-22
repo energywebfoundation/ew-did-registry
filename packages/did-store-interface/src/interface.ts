@@ -1,4 +1,3 @@
-
 export interface IDidStore {
   /**
    * stores data in decentralized store

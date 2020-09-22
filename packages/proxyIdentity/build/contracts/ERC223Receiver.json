@@ -1,0 +1,207 @@
+{
+  "contractName": "ERC223Receiver",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_origin",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_data",
+          "type": "bytes"
+        }
+      ],
+      "name": "tokenFallback",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_origin\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"tokenFallback\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol\":\"ERC223Receiver\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol\":{\"keccak256\":\"0x3d4cacfc4d9b98e6d79a1f30ac15f171253771454fff2605d0eeeff14ddd8996\",\"urls\":[\"bzz-raw://c9537e6ef6b75a1fd320b099e6d0ee5eb85c89b6147b22196331b2b3393c736b\",\"dweb:/ipfs/Qmd32qvh5cncrttSuk92ugFakEK8YTLCkMP2tadfymBT6q\"]},\"/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol\":{\"keccak256\":\"0x42c3392dc57388b38ada5f712866e9da620b65666cedbe8049fb609ea833cba9\",\"urls\":[\"bzz-raw://176f8eda74b995232dbb7e4d7267ad50e52592b1d0baf65e9210cb92d1a46c71\",\"dweb:/ipfs/QmRABEBcuwFcLReAfM7jcvtkZb3trzVaSKio6e3Msca6nU\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.5.0;\n\nimport \"../interfaces/IERC223Receiver.sol\";\n\n\ncontract ERC223Receiver is IERC223Receiver {}\n",
+  "sourcePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol",
+  "ast": {
+    "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol",
+    "exportedSymbols": {
+      "ERC223Receiver": [
+        1355
+      ]
+    },
+    "id": 1356,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1351,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:9"
+      },
+      {
+        "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol",
+        "file": "../interfaces/IERC223Receiver.sol",
+        "id": 1352,
+        "nodeType": "ImportDirective",
+        "scope": 1356,
+        "sourceUnit": 204,
+        "src": "25:43:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1353,
+              "name": "IERC223Receiver",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 203,
+              "src": "98:15:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IERC223Receiver_$203",
+                "typeString": "contract IERC223Receiver"
+              }
+            },
+            "id": 1354,
+            "nodeType": "InheritanceSpecifier",
+            "src": "98:15:9"
+          }
+        ],
+        "contractDependencies": [
+          203
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 1355,
+        "linearizedBaseContracts": [
+          1355,
+          203
+        ],
+        "name": "ERC223Receiver",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 1356,
+        "src": "71:45:9"
+      }
+    ],
+    "src": "0:117:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol",
+    "exportedSymbols": {
+      "ERC223Receiver": [
+        1355
+      ]
+    },
+    "id": 1356,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1351,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:9"
+      },
+      {
+        "absolutePath": "/Users/mroon/Documents/projects/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol",
+        "file": "../interfaces/IERC223Receiver.sol",
+        "id": 1352,
+        "nodeType": "ImportDirective",
+        "scope": 1356,
+        "sourceUnit": 204,
+        "src": "25:43:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1353,
+              "name": "IERC223Receiver",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 203,
+              "src": "98:15:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IERC223Receiver_$203",
+                "typeString": "contract IERC223Receiver"
+              }
+            },
+            "id": 1354,
+            "nodeType": "InheritanceSpecifier",
+            "src": "98:15:9"
+          }
+        ],
+        "contractDependencies": [
+          203
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 1355,
+        "linearizedBaseContracts": [
+          1355,
+          203
+        ],
+        "name": "ERC223Receiver",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 1356,
+        "src": "71:45:9"
+      }
+    ],
+    "src": "0:117:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.17+commit.d19bba13.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2020-05-07T21:15:42.950Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

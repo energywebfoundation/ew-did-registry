@@ -67,7 +67,7 @@ function bundling(pckg) {
       compact: true,
       presets: [
         ['@babel/env', {
-          modules: false
+          modules: false,
         }],
       ],
     })))
@@ -109,6 +109,7 @@ function buildDocs() {
       suppressExcessPropertyErrors: true,
       suppressImplicitAnyIndexErrors: true,
       esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
       mode: 'file',
       plugins: ['typedoc-plugin-markdown'],
     }));

@@ -16,7 +16,7 @@ export enum PubKeyType {
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem', BASE58 = 'base58'
+  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
 }
 
 /**
@@ -24,6 +24,23 @@ export enum Encoding {
  */
 export enum Algorithms {
   ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
+}
+
+/**
+ * KeyTags specifies the tags associated with different purposes of the keys
+ */
+export enum KeyTags {
+  OWNER = 'owner'
+}
+
+/** This interface represents the attribute payload
+*/
+export interface IAttributePayload {
+  publicKey?: string;
+  serviceEndpoint?: string;
+  tag?: string;
+  hash?: string;
+  hashAlg?: string;
 }
 
 /**
@@ -35,6 +52,6 @@ export interface IUpdateData {
   encoding?: Encoding;
   algo?: Algorithms;
   type: PubKeyType;
-  value?: string;
+  value?: IAttributePayload;
   delegate?: string;
 }

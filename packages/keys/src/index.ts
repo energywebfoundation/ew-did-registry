@@ -1,7 +1,7 @@
 import { ec as EC } from 'elliptic';
 import BN from 'bn.js';
 // @ts-ignore
-import {encrypt, decrypt} from 'eciesjs';
+import { encrypt, decrypt } from 'eciesjs';
 
 import { Wallet } from 'ethers';
 import { IKeys } from './interface';
@@ -134,7 +134,6 @@ class Keys implements IKeys {
       canonical: true,
       pers: true,
     });
-
     return signature.r.toString(16, 64) + signature.s.toString(16, 64);
   }
 
@@ -162,8 +161,8 @@ class Keys implements IKeys {
       keyPair = ec.keyFromPublic(publicKey, 'hex');
     }
 
-    const r = new BN(signature.slice(0, 64), 16);
-    const s = new BN(signature.slice(64, 128), 16);
+    const r = new BN(signature.slice(0, 64), 16).toString('hex');
+    const s = new BN(signature.slice(64, 128), 16).toString('hex');
 
     const hash = sha256(data);
     return keyPair.verify(hash, { r, s });

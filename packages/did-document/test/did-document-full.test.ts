@@ -42,7 +42,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         type: PubKeyType.VerificationKey2018,
         algo: Algorithms.ED25519,
         encoding: Encoding.HEX,
-        value: new Keys().publicKey,
+        value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-1'},
       },
       validity,
     );
@@ -93,20 +93,20 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: keysAttribute.publicKey,
+      value:{ publicKey: `0x${keysAttribute.publicKey}`, tag:'key-2'},
     };
     await Document.update(attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
     const revoked = await Document.revokeAttribute(attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.undefined;
   });

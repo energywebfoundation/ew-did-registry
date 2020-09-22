@@ -9,6 +9,7 @@ import {
   IDIDLogData,
   IHandlers,
   IPublicKey,
+  IAttributePayload,
   IResolverSettings,
   IServiceEndpoint,
   ISmartContractEvent,
@@ -93,9 +94,11 @@ const handleAttributeChange = (
     switch (section) {
       case 'pub':
         // eslint-disable-next-line no-case-declarations
+        const publicKeysPayload: IAttributePayload = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
-          id: `${did}#key-${algo}${type}-${event.values.value}`,
+          id: `${did}#${publicKeysPayload.tag}`,
           type: `${algo}${type}`,
           controller: identity,
           validity: validTo,
@@ -107,19 +110,13 @@ const handleAttributeChange = (
             case null:
             case undefined:
             case 'hex':
-              pk.publicKeyHex = event.values.value;
+              pk.publicKeyHex = publicKeysPayload.publicKey;
               break;
             case 'base64':
               pk.publicKeyBase64 = Buffer.from(
                 event.values.value.slice(2),
                 'hex',
               ).toString('base64');
-              break;
-            case 'base58':
-              pk.publicKeyBase58 = Buffer.from(
-                event.values.value.slice(2),
-                'hex',
-              ).toString('base58');
               break;
             case 'pem':
               pk.publicKeyPem = Buffer.from(
@@ -237,7 +234,7 @@ const getEventsFromBlock = (
     toBlock: block.toNumber(),
     topics,
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]);
+    const event: ISmartContractEvent = contractInterface.parseLog(log[0]) as ISmartContractEvent;
     const eventName = event.name;
     updateDocument(event, eventName, did, document, block.toNumber());
 
@@ -310,7 +307,6 @@ export const fetchDataFromEvents = async (
   document.topBlock = topBlock;
   return null;
 };
-
 
 /**
  * Provided with the fetched data, the function parses it and returns the
