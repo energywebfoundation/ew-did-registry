@@ -37,7 +37,10 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
-  private readonly _keys: IKeys;
+  private readonly _keys = {
+    privateKey: '',
+    publicKey: '',
+  };
 
   private address: string;
 
@@ -54,7 +57,7 @@ export class Operator extends Resolver implements IOperator {
     } = this.settings;
     const keys = signMethod as IKeys;
     const signer = signMethod as Signer;
-    if (keys.privateKey) {
+    if (Object.prototype.hasOwnProperty.call(signMethod, 'privateKey')) {
       this._keys = keys;
       const { privateKey } = this._keys;
       const wallet = new ethers.Wallet(privateKey, this._provider);
@@ -72,6 +75,9 @@ export class Operator extends Resolver implements IOperator {
   }
 
   private async getPublicKey(): Promise<string> {
+    if (this._keys.publicKey) {
+      return this._keys.publicKey;
+    }
     const hash = await ethers.utils.keccak256(await this.getAddress());
     const sig = await this._signer.signMessage(ethers.utils.arrayify(hash));
     // eslint-disable-next-line no-return-assign
@@ -98,7 +104,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: `0x${this?._keys?.publicKey || await this.getPublicKey()}`, tag: KeyTags.OWNER },
+      value: { publicKey: `0x${await this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);
