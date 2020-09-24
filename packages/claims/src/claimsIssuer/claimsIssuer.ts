@@ -55,6 +55,9 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * @returns { Promise<string> } issued token
    */
   async issuePrivateClaim(token: string): Promise<string> {
+    if (!this.keys.privateKey) {
+      throw new Error('Private claim not supported');
+    }
     const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;

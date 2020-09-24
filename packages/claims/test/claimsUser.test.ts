@@ -48,7 +48,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const token = await userClaims.createPublicClaim(publicData);
     (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
     const claim = await userClaims.jwt.verify(
-      token, userClaims.keys.publicKey, { noTimestamp: true },
+      token, await userClaims.keys.publicKey, { noTimestamp: true },
     );
     claim.should.deep.include({
       did: userDdid,
@@ -86,7 +86,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const claimUrl = 'http://test.com';
     const proofData = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, proofData);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { noTimestamp: true }) as IProofClaim;
+    const claim = await userClaims.jwt.verify(token, await userClaims.keys.publicKey, { noTimestamp: true }) as IProofClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
     claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
     claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
