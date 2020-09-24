@@ -30,7 +30,7 @@ export enum Algorithms {
  * KeyTags specifies the tags associated with different purposes of the keys
  */
 export enum KeyTags {
-  OWNER = 'owner'
+  OWNER = 'key-owner'
 }
 
 /** This interface represents the attribute payload
