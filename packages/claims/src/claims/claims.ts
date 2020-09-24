@@ -37,7 +37,7 @@ export class Claims implements IClaims {
   ) {
     const keys = signMethod as IKeys;
     const signer = signMethod as Signer;
-    if (keys.privateKey && keys.publicKey) {
+    if (Object.prototype.hasOwnProperty.call(signMethod, 'privateKey')) {
       this.keys = {
         privateKey: keys.privateKey,
         publicKey: Promise.resolve(keys.publicKey),
