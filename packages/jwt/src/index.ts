@@ -5,7 +5,9 @@ import { Signer } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import { PromiseRejection, PromiseResolution } from 'promise.allsettled';
 import { IJWT } from './interface';
-import { createSignWithEthersSigner, createSignWithKeys } from './sign';
+import {
+  createSignWithEthersSigner, createSignWithKeys, JwtOptions, JwtPayload,
+} from './sign';
 import { verificationMethods } from './verify';
 
 class JWT implements IJWT {
@@ -34,8 +36,8 @@ class JWT implements IJWT {
    * @returns {Promise<string>}
    */
   public sign: (
-    payload: string | { [key: string]: string | object },
-    options?: object) => Promise<string>;
+    payload: string | JwtPayload,
+    options?: JwtOptions) => Promise<string>;
 
   /**
    * Key pair has to be passed on construction to JWT

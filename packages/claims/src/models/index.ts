@@ -36,7 +36,10 @@ export interface IProofData {
 
 export interface IClaims {
   did: string;
-  keys: IKeys;
+  keys: {
+    privateKey: string;
+    publicKey: Promise<string>;
+  };
   jwt: IJWT;
   verify(
     claimUrl: string, hashFns?: { [hashAlg: string]: (data: string) => string },
