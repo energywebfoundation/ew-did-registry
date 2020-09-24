@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { Wallet, providers } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -194,10 +194,9 @@ const testSuite = (): void => {
       value: { serviceEndpoint: endpoint },
     };
     await operator.update(did, attribute, updateData, validity);
-    let document = await operator.read(did);
     const result = await operator.deactivate(did);
     expect(result).to.be.true;
-    document = await operator.read(did);
+    const document = await operator.read(did);
     expect(document.service).to.be.empty;
     expect(document.publicKey).to.be.empty;
     expect(document.authentication.length).equal(1);
@@ -296,8 +295,13 @@ describe('[DID-OPERATOR: sign method Signer]', function () {
 
   before(async () => {
     operatorSettings = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
-    const signer = new Wallet(keys.privateKey);
+    const provider = new providers.JsonRpcProvider(
+      operatorSettings.provider.uriOrInfo,
+      operatorSettings.provider.network,
+    );
+    const signer = new Wallet(keys.privateKey, provider);
     operator = new Operator(signer, operatorSettings);
+    await operator.create();
   });
 
   testSuite();
