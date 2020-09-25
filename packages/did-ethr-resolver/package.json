@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-ethr-resolver",
-  "version": "0.0.1-alpha.632.0",
+  "version": "0.0.1-alpha.644.0",
   "publishConfig": {
     "access": "public"
   },
