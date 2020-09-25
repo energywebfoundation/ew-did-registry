@@ -37,7 +37,7 @@ export interface IProofData {
 export interface IClaims {
   did: string;
   keys: {
-    privateKey: string;
+    privateKey?: string;
     publicKey: Promise<string>;
   };
   jwt: IJWT;

@@ -15,7 +15,7 @@ export class Claims implements IClaims {
   public jwt: IJWT;
 
   public keys: {
-    privateKey: string;
+    privateKey?: string;
     publicKey: Promise<string>;
   };
 
@@ -44,7 +44,7 @@ export class Claims implements IClaims {
       };
     } else {
       this.signer = signer;
-      this.keys.publicKey = this.getPublicKey();
+      this.keys = { publicKey: this.getPublicKey() };
     }
     this.jwt = new JWT(signMethod);
     this.did = document.did;
@@ -57,7 +57,9 @@ export class Claims implements IClaims {
     const hash = await ethers.utils.keccak256(await this.signer.getAddress());
     const sig = await this.signer.signMessage(ethers.utils.arrayify(hash));
     // eslint-disable-next-line no-return-assign
-    return this.keys.publicKey = Promise.resolve(ethers.utils.recoverPublicKey(hash, sig));
+    const publicKey = Promise.resolve(ethers.utils.recoverPublicKey(hash, sig));
+    this.keys = { publicKey };
+    return publicKey;
   }
 
   /**
