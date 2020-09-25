@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import {
-  Contract, ethers, Event, Signer,
+  Contract, ethers, Event, Signer, utils,
 } from 'ethers';
 import { IKeys } from '@ew-did-registry/keys';
 import {
@@ -22,6 +22,10 @@ import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,
 } from '../constants';
+
+const {
+  arrayify, keccak256, recoverPublicKey, hashMessage,
+} = utils;
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -74,14 +78,15 @@ export class Operator extends Resolver implements IOperator {
     return this.address || this._signer.getAddress();
   }
 
-  private async getPublicKey(): Promise<string> {
+  public async getPublicKey(): Promise<string> {
     if (this._keys.publicKey) {
       return this._keys.publicKey;
     }
-    const hash = await ethers.utils.keccak256(await this.getAddress());
-    const sig = await this._signer.signMessage(ethers.utils.arrayify(hash));
+    const hash = keccak256(await this.getAddress());
+    const sig = await this._signer.signMessage(arrayify(hash));
+    const digest = arrayify(hashMessage(arrayify(hash)));
     // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = ethers.utils.recoverPublicKey(hash, sig);
+    return this._keys.publicKey = `02${recoverPublicKey(digest, sig).slice(4, 68)}`;
   }
 
   /**
