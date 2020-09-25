@@ -1,4 +1,4 @@
-import { ethers, Signer } from 'ethers';
+import { utils, Signer } from 'ethers';
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
@@ -6,6 +6,10 @@ import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { DelegateTypes, IPublicKey } from '@ew-did-registry/did-resolver-interface';
 import { IClaims } from '../models';
 import { hashes } from '../utils';
+
+const {
+  arrayify, keccak256, hashMessage, recoverPublicKey,
+} = utils;
 
 /**
  * @class
@@ -15,7 +19,7 @@ export class Claims implements IClaims {
   public jwt: IJWT;
 
   public keys: {
-    privateKey: string;
+    privateKey?: string;
     publicKey: Promise<string>;
   };
 
@@ -44,7 +48,7 @@ export class Claims implements IClaims {
       };
     } else {
       this.signer = signer;
-      this.keys.publicKey = this.getPublicKey();
+      this.keys = { publicKey: this.getPublicKey() };
     }
     this.jwt = new JWT(signMethod);
     this.did = document.did;
@@ -54,10 +58,13 @@ export class Claims implements IClaims {
     if (this.keys?.publicKey) {
       return this.keys.publicKey;
     }
-    const hash = await ethers.utils.keccak256(await this.signer.getAddress());
-    const sig = await this.signer.signMessage(ethers.utils.arrayify(hash));
+    const hash = keccak256(await this.signer.getAddress());
+    const sig = await this.signer.signMessage(arrayify(hash));
+    const digest = arrayify(hashMessage(arrayify(hash)));
     // eslint-disable-next-line no-return-assign
-    return this.keys.publicKey = Promise.resolve(ethers.utils.recoverPublicKey(hash, sig));
+    const publicKey = `02${recoverPublicKey(digest, sig).slice(4, 68)}`;
+    this.keys = { publicKey: Promise.resolve(publicKey) };
+    return publicKey;
   }
 
   /**

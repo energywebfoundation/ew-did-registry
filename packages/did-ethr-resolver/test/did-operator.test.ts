@@ -28,6 +28,10 @@ let operator: Operator;
 let operatorSettings: IResolverSettings;
 
 const testSuite = (): void => {
+  it('operator public key should be equl to public key of signer', async () => {
+    expect(await (await operator.getPublicKey()).slice(2)).equal(keys.publicKey.slice(2));
+  });
+
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
