@@ -94,7 +94,16 @@ const handleAttributeChange = (
     switch (section) {
       case 'pub':
         // eslint-disable-next-line no-case-declarations
-        const publicKeysPayload: IAttributePayload = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        let publicKeysPayload: IAttributePayload = null;
+        try {
+          const parsed = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+          if (typeof parsed === 'object') {
+            publicKeysPayload = parsed;
+          }
+        } catch (e) { }
+        if (!publicKeysPayload) {
+          return document;
+        }
         // eslint-disable-next-line no-case-declarations
         const pk: IPublicKey = {
           // method should be defined from did provided
