@@ -280,6 +280,18 @@ const testSuite = (): void => {
     currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
     expect(currentOwner).to.be.eql(identity);
   });
+
+  it.only('public key with invalid value should be ignored', async () => {
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: any = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: '0x123abc',
+    };
+    await operator.update(did, attribute, updateData, validity);
+    return operator.read(did).should.not.be.rejected;
+  });
 };
 
 describe('[DID-OPERATOR: sign method Keys]', function () {
