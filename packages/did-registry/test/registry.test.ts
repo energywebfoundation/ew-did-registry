@@ -1,13 +1,10 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { ethrReg, Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim, } from '@ew-did-registry/claims';
-import { proxyFactoryBuild } from '@ew-did-registry/proxyidentity';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
-import { JsonRpcProvider } from 'ethers/providers';
-import { ContractFactory, providers } from 'ethers';
 import DIDRegistry from '../src';
 import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -86,18 +83,5 @@ describe('[REGISTRY PACKAGE]', function () {
     const proof = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
     const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof);
     return verified.should.be.fulfilled;
-  });
-
-  it('createProxy() should return proxy address', async () => {
-    const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
-    const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
-    const provider = new JsonRpcProvider('http://localhost:8544');
-    const deployer: providers.JsonRpcSigner = provider.getSigner(0);
-    const erc1056Factory = new ContractFactory(abi1056, bytecode1056, deployer);
-    const erc1056 = await (await erc1056Factory.deploy()).deployed();
-    const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
-    const proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address)).deployed();
-    const proxy = await DIDRegistry.createProxy(proxyFactory);
-    expect(proxy).to.match(/^0x[a-fA-F0-9]{40}$/);
   });
 });
