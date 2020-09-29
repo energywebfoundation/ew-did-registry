@@ -11,7 +11,7 @@ const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBui
 chai.use(chaiAsPromised);
 chai.should();
 
-describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
+describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
