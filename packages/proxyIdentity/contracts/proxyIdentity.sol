@@ -142,7 +142,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     address oldOwner = owner;
     if (owner != address(0x0)) {
       removeRecoveryAgent(owner);
-      _revokeDelegate(owner);
     }
     owner = newOwner;
     _addRecoveryAgent(newOwner);
