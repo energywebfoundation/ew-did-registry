@@ -210,7 +210,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     }
   }
 
-  // TODO: check if token - is IERC223
   function supportsToken(address token) public pure returns (bool) {
     return true;
   }

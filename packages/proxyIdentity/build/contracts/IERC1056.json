@@ -57,12 +57,12 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"identity\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"delegateType\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"delegate\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"validity\",\"type\":\"uint256\"}],\"name\":\"addDelegate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"identity\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"delegateType\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"delegate\",\"type\":\"address\"}],\"name\":\"revokeDelegate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol\":\"IERC1056\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":{\"keccak256\":\"0x3e3d1fc80b2e7c13015946457c9f4a5255f3b6f385b48616159e78c7b2c74737\",\"urls\":[\"bzz-raw://3f3458d0c93202f964bbf51a349b99165344f8eec5c43bb3ca5291c13488286f\",\"dweb:/ipfs/QmQ6ZV1eJqKffWcYqa5iQ22zPkQvgjXiNnciajAE6eb8ep\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol\":{\"keccak256\":\"0x3d4cacfc4d9b98e6d79a1f30ac15f171253771454fff2605d0eeeff14ddd8996\",\"urls\":[\"bzz-raw://c9537e6ef6b75a1fd320b099e6d0ee5eb85c89b6147b22196331b2b3393c736b\",\"dweb:/ipfs/Qmd32qvh5cncrttSuk92ugFakEK8YTLCkMP2tadfymBT6q\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol\":{\"keccak256\":\"0xb8222fc268e2a1ee14baf55b9dea5c9d3383372eedc148cafe7bb52e6fa0eccd\",\"urls\":[\"bzz-raw://99ba118d28b9a77d3cc9c26155096521fc9ebcf8cea8a2a3aa7528e4f7676596\",\"dweb:/ipfs/QmbM5FoBpncqpqvfduUgqsN4EMW4KgApUjxUZHYiVBGXDH\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC1155Multiproxy.sol\":{\"keccak256\":\"0x08f8df5c9b1a8fd211bbc6994a94a9fcdd38ea7250c3119ec9e6e841c395164a\",\"urls\":[\"bzz-raw://5e326d4233238a559dd8bb921b7249d2310c286a0af7e8c360b9c9e6a6e64b15\",\"dweb:/ipfs/QmSteQD2wQ3QaCHNxtPs36vUEx9TfJs8UhWtK7g86UpkzG\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9\",\"urls\":[\"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91\",\"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc\"]},\"multi-token-standard/contracts/interfaces/IERC1155.sol\":{\"keccak256\":\"0x9632273d1c5272823807d1d0b1630af9e2dad7f1e41a65bfdbc66bda702c53a1\",\"urls\":[\"bzz-raw://6deb9bdff007e4b367d4561699f45f0f8521a4412a770a9292c109844f739f58\",\"dweb:/ipfs/QmTXrB3rTHHrNcHAa3PYoq2BRJiT4nMmMrPmA6AjDsk7HB\"]},\"multi-token-standard/contracts/interfaces/IERC1155TokenReceiver.sol\":{\"keccak256\":\"0xdf097e5f122d544a93027619c941dc8475bead114e421b9398d9a1482b9bffb8\",\"urls\":[\"bzz-raw://9bdc0f8d96e08965b0e7c98b8ba9e67a56afc26c014784caf53ea4e04a966eb3\",\"dweb:/ipfs/QmRiuqBiDqfQNUtpjiwj5rR1iD5Psh6KdzKiBNNriiq68m\"]},\"multi-token-standard/contracts/interfaces/IERC165.sol\":{\"keccak256\":\"0x5561863476cd7598c203efcd18bb436746a2596ac61e37c7bbf73790a511de39\",\"urls\":[\"bzz-raw://92f034ed08c66e4a1579b6ad8dd53e615cb7d39b2f26a131fd62f90f3d30e25b\",\"dweb:/ipfs/QmXKMPTepiBrfEKgpQR8PneSgAsVi2769wy9THBM65BspH\"]},\"multi-token-standard/contracts/tokens/ERC1155/ERC1155.sol\":{\"keccak256\":\"0x454f992789731d8ca2e284409dc69115285e48c8c9ad8f38b1f35d9e7bc23320\",\"urls\":[\"bzz-raw://e101d27d80cecb9b8cc788982914974022984f90b213550bc1290818a7047139\",\"dweb:/ipfs/QmZu2HKUsQa5GbGrrtKbCkX5VLRZiPxAtDUxBDf1V7QtR1\"]},\"multi-token-standard/contracts/utils/Address.sol\":{\"keccak256\":\"0xc089dcd9159bf02993336e47f629e8e86dcd3086cf2278e9ea06145b4094be5f\",\"urls\":[\"bzz-raw://bf05b053fb01bda8c24854d5d5c652c3c46c411597d90692e0c146b02a5154a0\",\"dweb:/ipfs/QmP5madVNQjx9JHqkdx9R79MdZZgeQJFEWVW5iwRYBV4ny\"]},\"multi-token-standard/contracts/utils/SafeMath.sol\":{\"keccak256\":\"0x0a904266aa9620d2f126588f1a964ec47bd8e777f3b2281a6e8f6897bc1d9fbd\",\"urls\":[\"bzz-raw://c4fcd436cda8c33574b2146bb9098f560095e4b2d63084563c176c2d402a9554\",\"dweb:/ipfs/QmW3Jo5Lt6LUf8pp6r7vE5kfpMpknJNoFEqTH9FbK7eFiU\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.17+commit.d19bba13\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"identity\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"delegateType\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"delegate\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"validity\",\"type\":\"uint256\"}],\"name\":\"addDelegate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"identity\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"delegateType\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"delegate\",\"type\":\"address\"}],\"name\":\"revokeDelegate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol\":\"IERC1056\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223.sol\":{\"keccak256\":\"0x3e3d1fc80b2e7c13015946457c9f4a5255f3b6f385b48616159e78c7b2c74737\",\"urls\":[\"bzz-raw://3f3458d0c93202f964bbf51a349b99165344f8eec5c43bb3ca5291c13488286f\",\"dweb:/ipfs/QmQ6ZV1eJqKffWcYqa5iQ22zPkQvgjXiNnciajAE6eb8ep\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol\":{\"keccak256\":\"0x3d4cacfc4d9b98e6d79a1f30ac15f171253771454fff2605d0eeeff14ddd8996\",\"urls\":[\"bzz-raw://c9537e6ef6b75a1fd320b099e6d0ee5eb85c89b6147b22196331b2b3393c736b\",\"dweb:/ipfs/Qmd32qvh5cncrttSuk92ugFakEK8YTLCkMP2tadfymBT6q\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol\":{\"keccak256\":\"0x1136df5c983d3da4c099064ea9d3aeb6b7ea6fa87b356f8cec98de4a1eabd11c\",\"urls\":[\"bzz-raw://8de49ee3e05e6ce744c32728dad6f9a8b51cd086f74ea696c0e118844f74c821\",\"dweb:/ipfs/QmQSdbcjZtw8y86tUGfYtm4a9vY6TEyBceVVfaAwokwXdg\"]},\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC1155Multiproxy.sol\":{\"keccak256\":\"0x20642ca730aacf10e46823664fc4f1654be2713e5643d18af19fab8dc1b5a934\",\"urls\":[\"bzz-raw://7121e27574afefb3d1cd067e91e81d09f46d9f0759b8e6c5e0ca5dbf1f176322\",\"dweb:/ipfs/QmaF3tvUZQY8h5fCaGPsCrx1a1nXQd9vbFnHjJuSGq7SX4\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9\",\"urls\":[\"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91\",\"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc\"]},\"multi-token-standard/contracts/interfaces/IERC1155.sol\":{\"keccak256\":\"0x9632273d1c5272823807d1d0b1630af9e2dad7f1e41a65bfdbc66bda702c53a1\",\"urls\":[\"bzz-raw://6deb9bdff007e4b367d4561699f45f0f8521a4412a770a9292c109844f739f58\",\"dweb:/ipfs/QmTXrB3rTHHrNcHAa3PYoq2BRJiT4nMmMrPmA6AjDsk7HB\"]},\"multi-token-standard/contracts/interfaces/IERC1155TokenReceiver.sol\":{\"keccak256\":\"0xdf097e5f122d544a93027619c941dc8475bead114e421b9398d9a1482b9bffb8\",\"urls\":[\"bzz-raw://9bdc0f8d96e08965b0e7c98b8ba9e67a56afc26c014784caf53ea4e04a966eb3\",\"dweb:/ipfs/QmRiuqBiDqfQNUtpjiwj5rR1iD5Psh6KdzKiBNNriiq68m\"]},\"multi-token-standard/contracts/interfaces/IERC165.sol\":{\"keccak256\":\"0x5561863476cd7598c203efcd18bb436746a2596ac61e37c7bbf73790a511de39\",\"urls\":[\"bzz-raw://92f034ed08c66e4a1579b6ad8dd53e615cb7d39b2f26a131fd62f90f3d30e25b\",\"dweb:/ipfs/QmXKMPTepiBrfEKgpQR8PneSgAsVi2769wy9THBM65BspH\"]},\"multi-token-standard/contracts/tokens/ERC1155/ERC1155.sol\":{\"keccak256\":\"0x454f992789731d8ca2e284409dc69115285e48c8c9ad8f38b1f35d9e7bc23320\",\"urls\":[\"bzz-raw://e101d27d80cecb9b8cc788982914974022984f90b213550bc1290818a7047139\",\"dweb:/ipfs/QmZu2HKUsQa5GbGrrtKbCkX5VLRZiPxAtDUxBDf1V7QtR1\"]},\"multi-token-standard/contracts/utils/Address.sol\":{\"keccak256\":\"0xc089dcd9159bf02993336e47f629e8e86dcd3086cf2278e9ea06145b4094be5f\",\"urls\":[\"bzz-raw://bf05b053fb01bda8c24854d5d5c652c3c46c411597d90692e0c146b02a5154a0\",\"dweb:/ipfs/QmP5madVNQjx9JHqkdx9R79MdZZgeQJFEWVW5iwRYBV4ny\"]},\"multi-token-standard/contracts/utils/SafeMath.sol\":{\"keccak256\":\"0x0a904266aa9620d2f126588f1a964ec47bd8e777f3b2281a6e8f6897bc1d9fbd\",\"urls\":[\"bzz-raw://c4fcd436cda8c33574b2146bb9098f560095e4b2d63084563c176c2d402a9554\",\"dweb:/ipfs/QmW3Jo5Lt6LUf8pp6r7vE5kfpMpknJNoFEqTH9FbK7eFiU\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.5.0;\n\nimport \"multi-token-standard/contracts/interfaces/IERC165.sol\";\nimport \"multi-token-standard/contracts/interfaces/IERC1155.sol\";\nimport \"multi-token-standard/contracts/interfaces/IERC1155TokenReceiver.sol\";\nimport \"./interfaces/IERC223Receiver.sol\";\nimport \"./interfaces/IERC223.sol\";\nimport \"./tokens/ERC1155Multiproxy.sol\";\n\ninterface IERC1056 {\n  function addDelegate(\n    address identity,\n    bytes32 delegateType,\n    address delegate,\n    uint256 validity\n  ) external;\n\n  function revokeDelegate(\n    address identity,\n    bytes32 delegateType,\n    address delegate\n  ) external;\n}\n\ncontract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {\n  address public owner;\n  address public creator;\n  address public erc1056;\n  address public erc1155;\n  uint256 defaultValidity = 2**256 - 1;\n  mapping(bytes32 => bool) digests;\n  bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;\n  bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;\n  Tkn tkn;\n  bool __isTokenFallback;\n  uint256 uid;\n\n  struct Tkn {\n    address addr;\n    address sender;\n    address origin;\n    uint256 value;\n    bytes data;\n    bytes4 sig;\n  }\n\n  event TransactionSent(bytes data, address to, uint256 value);\n  event OwnerChanged(address identity, address prev, address next);\n  event RecoveryAgentAdded(address agent);\n  event RecoveryAgentRemoved(address agent);\n\n  constructor(address _erc1056, address _erc1155, uint256 _uid) public {\n    erc1056 = _erc1056;\n    erc1155 = _erc1155;\n    uid = _uid;\n    creator = msg.sender;\n    owner = msg.sender;\n    ERC1155Multiproxy(_erc1155).mint(msg.sender, uid, '');\n    addDelegate(msg.sender);\n  }\n\n  modifier _owner() {\n    require(msg.sender == owner, \"Only owner allowed\");\n    _;\n  }\n\n  modifier tokenPayable {\n    if (!__isTokenFallback)\n      revert(\"Method can be invoked only as part of ERC223 transfer\");\n    _;\n  }\n  \n  modifier _erc1155() {\n    require(msg.sender == erc1155, 'Only ERC1155 allowed'); \n    _;\n  }\n\n  function sendTransaction(\n    bytes memory _data,\n    address to,\n    uint256 value\n  ) public payable _owner() {\n    require(_sendTransaction(_data, to, value), \"Can't send transaction\");\n  }\n\n  function sendSignedTransaction(\n    bytes memory data,\n    address to,\n    uint8 v,\n    bytes32 r,\n    bytes32 s,\n    uint256 value,\n    uint256 nonce\n  ) public payable {\n    bytes32 digest = keccak256(abi.encode(data, to, value, nonce));\n    require(digests[digest] == false, \"This transaction has already been sent\");\n    digests[digest] = true;\n    bytes32 hash = keccak256(\n      abi.encodePacked(\"\\x19Ethereum Signed Message:\\n32\", digest)\n    );\n    address signer = ecrecover(hash, v, r, s);\n    require(ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1 , \"Signature is not valid\");\n    require(_sendTransaction(data, to, value), \"Can't send transaction\");\n  }\n \n  function addDelegate(address delegate) public _owner() {\n    _addDelegate(delegate);\n  }\n\n  function revokeDelegate(address delegate) public _owner() {\n    IERC1056(erc1056).revokeDelegate(address(this), \"sigAuth\", delegate);\n  }\n\n  function onERC1155Received(\n    address _operator,\n    address _from,\n    uint256 _id,\n    uint256 _value,\n    bytes calldata _data\n  ) external returns (bytes4) {\n    return ERC1155_ACCEPTED;\n  }\n\n  function onERC1155BatchReceived(\n    address _operator,\n    address _from,\n    uint256[] calldata _ids,\n    uint256[] calldata _values,\n    bytes calldata _data\n  ) external returns (bytes4) {\n    return ERC1155_BATCH_ACCEPTED;\n  }\n  \n  function onOwnerChanged(address newOwner) public _erc1155 {\n    owner = newOwner;\n    _addDelegate(newOwner);\n  }\n  \n  function _sendTransaction(\n    bytes memory _data,\n    address to,\n    uint256 value\n  ) internal returns (bool success) {\n    bytes memory data = _data;\n    uint256 len = data.length;\n    // solium-disable-next-line security/no-inline-assembly\n    assembly {\n      success := call(gas, to, value, add(data, 0x20), len, 0, 0)\n    }\n    emit TransactionSent(_data, to, value);\n  }\n  \n  function _addDelegate(address delegate) internal {\n    IERC1056(erc1056).addDelegate(\n      address(this),\n      \"sigAuth\",\n      delegate,\n      defaultValidity\n    );\n  }\n\n  /**\n   * INTERFACE_SIGNATURE_ERC165 = bytes4(keccak256(\"supportsInterface(bytes4)\"));\n   */\n  bytes4 private constant INTERFACE_SIGNATURE_ERC165 = 0x01ffc9a7;\n\n  /**\n   * bytes4(keccak256(\"onERC1155Received(address,address,uint256,uint256,bytes)\"))^bytes4(keccak256(\"onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)\"))\n   */\n  bytes4 private constant INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER = 0x4e2312e0;\n\n  /**\n   * @notice Query if a contract implements an interface\n   * @param _interfaceID  The interface identifier, as specified in ERC-165\n   * @return `true` if the contract implements `_interfaceID` and\n   */\n  function supportsInterface(bytes4 _interfaceID) external view returns (bool) {\n    if (\n      _interfaceID == INTERFACE_SIGNATURE_ERC165 ||\n      _interfaceID == INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER\n    ) {\n      return true;\n    }\n    return false;\n  }\n\n  event CallbackOnTransfer(bytes data, bool success, address sender);\n\n  function tokenFallback(\n    address _sender,\n    address _origin,\n    uint256 _value,\n    bytes memory _data\n  ) public returns (bool) {\n    if (!supportsToken(msg.sender)) return false;\n    __isTokenFallback = true;\n    // solium-disable-next-line security/no-low-level-calls\n    (bool success, ) = address(this).delegatecall(_data);\n    __isTokenFallback = false;\n    emit CallbackOnTransfer(_data, success, msg.sender);\n    return success;\n  }\n\n  function getSig(bytes memory _data) private pure returns (bytes4 sig) {\n    uint256 l = _data.length < 4 ? _data.length : 4;\n    for (uint256 i = 0; i < l; i++) {\n      sig = bytes4(\n        uint32(uint32(sig) + uint8(_data[i]) * (2**(8 * (l - 1 - i))))\n      );\n    }\n  }\n\n  // TODO: check if token - is IERC223\n  function supportsToken(address token) public pure returns (bool) {\n    return true;\n  }\n\n  function() external payable {}\n}\n",
+  "source": "pragma solidity ^0.5.0;\n\nimport \"multi-token-standard/contracts/interfaces/IERC165.sol\";\nimport \"multi-token-standard/contracts/interfaces/IERC1155.sol\";\nimport \"multi-token-standard/contracts/interfaces/IERC1155TokenReceiver.sol\";\nimport \"./interfaces/IERC223Receiver.sol\";\nimport \"./interfaces/IERC223.sol\";\nimport \"./tokens/ERC1155Multiproxy.sol\";\n\ninterface IERC1056 {\n  function addDelegate(\n    address identity,\n    bytes32 delegateType,\n    address delegate,\n    uint256 validity\n  ) external;\n\n  function revokeDelegate(\n    address identity,\n    bytes32 delegateType,\n    address delegate\n  ) external;\n}\n\ncontract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {\n  address public owner;\n  address public creator;\n  address public erc1056;\n  address public erc1155;\n  uint256 defaultValidity = 2**256 - 1;\n  mapping(bytes32 => bool) digests;\n  bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;\n  bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;\n  Tkn tkn;\n  bool __isTokenFallback;\n  uint256 uid;\n\n  struct Tkn {\n    address addr;\n    address sender;\n    address origin;\n    uint256 value;\n    bytes data;\n    bytes4 sig;\n  }\n\n  event TransactionSent(bytes data, address to, uint256 value);\n  event OwnerChanged(address identity, address prev, address next);\n  event RecoveryAgentAdded(address agent);\n  event RecoveryAgentRemoved(address agent);\n\n  constructor(address _erc1056, address _erc1155, uint256 _uid) public {\n    erc1056 = _erc1056;\n    erc1155 = _erc1155;\n    uid = _uid;\n    creator = msg.sender;\n    owner = msg.sender;\n    ERC1155Multiproxy(_erc1155).mint(msg.sender, uid, '');\n    addDelegate(msg.sender);\n  }\n\n  modifier _owner() {\n    require(msg.sender == owner, \"Only owner allowed\");\n    _;\n  }\n\n  modifier tokenPayable {\n    if (!__isTokenFallback)\n      revert(\"Method can be invoked only as part of ERC223 transfer\");\n    _;\n  }\n  \n  modifier _erc1155() {\n    require(msg.sender == erc1155, 'Only ERC1155 allowed'); \n    _;\n  }\n\n  function sendTransaction(\n    bytes memory _data,\n    address to,\n    uint256 value\n  ) public payable _owner() {\n    require(_sendTransaction(_data, to, value), \"Can't send transaction\");\n  }\n\n  function sendSignedTransaction(\n    bytes memory data,\n    address to,\n    uint8 v,\n    bytes32 r,\n    bytes32 s,\n    uint256 value,\n    uint256 nonce\n  ) public payable {\n    bytes32 digest = keccak256(abi.encode(data, to, value, nonce));\n    require(digests[digest] == false, \"This transaction has already been sent\");\n    digests[digest] = true;\n    bytes32 hash = keccak256(\n      abi.encodePacked(\"\\x19Ethereum Signed Message:\\n32\", digest)\n    );\n    address signer = ecrecover(hash, v, r, s);\n    require(ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1 , \"Signature is not valid\");\n    require(_sendTransaction(data, to, value), \"Can't send transaction\");\n  }\n \n  function addDelegate(address delegate) public _owner() {\n    _addDelegate(delegate);\n  }\n\n  function revokeDelegate(address delegate) public _owner() {\n    IERC1056(erc1056).revokeDelegate(address(this), \"sigAuth\", delegate);\n  }\n\n  function onERC1155Received(\n    address _operator,\n    address _from,\n    uint256 _id,\n    uint256 _value,\n    bytes calldata _data\n  ) external returns (bytes4) {\n    return ERC1155_ACCEPTED;\n  }\n\n  function onERC1155BatchReceived(\n    address _operator,\n    address _from,\n    uint256[] calldata _ids,\n    uint256[] calldata _values,\n    bytes calldata _data\n  ) external returns (bytes4) {\n    return ERC1155_BATCH_ACCEPTED;\n  }\n  \n  function onOwnerChanged(address newOwner) public _erc1155 {\n    owner = newOwner;\n    _addDelegate(newOwner);\n  }\n  \n  function _sendTransaction(\n    bytes memory _data,\n    address to,\n    uint256 value\n  ) internal returns (bool success) {\n    bytes memory data = _data;\n    uint256 len = data.length;\n    // solium-disable-next-line security/no-inline-assembly\n    assembly {\n      success := call(gas, to, value, add(data, 0x20), len, 0, 0)\n    }\n    emit TransactionSent(_data, to, value);\n  }\n  \n  function _addDelegate(address delegate) internal {\n    IERC1056(erc1056).addDelegate(\n      address(this),\n      \"sigAuth\",\n      delegate,\n      defaultValidity\n    );\n  }\n\n  /**\n   * INTERFACE_SIGNATURE_ERC165 = bytes4(keccak256(\"supportsInterface(bytes4)\"));\n   */\n  bytes4 private constant INTERFACE_SIGNATURE_ERC165 = 0x01ffc9a7;\n\n  /**\n   * bytes4(keccak256(\"onERC1155Received(address,address,uint256,uint256,bytes)\"))^bytes4(keccak256(\"onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)\"))\n   */\n  bytes4 private constant INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER = 0x4e2312e0;\n\n  /**\n   * @notice Query if a contract implements an interface\n   * @param _interfaceID  The interface identifier, as specified in ERC-165\n   * @return `true` if the contract implements `_interfaceID` and\n   */\n  function supportsInterface(bytes4 _interfaceID) external view returns (bool) {\n    if (\n      _interfaceID == INTERFACE_SIGNATURE_ERC165 ||\n      _interfaceID == INTERFACE_SIGNATURE_ERC1155TOKENRECEIVER\n    ) {\n      return true;\n    }\n    return false;\n  }\n\n  event CallbackOnTransfer(bytes data, bool success, address sender);\n\n  function tokenFallback(\n    address _sender,\n    address _origin,\n    uint256 _value,\n    bytes memory _data\n  ) public returns (bool) {\n    if (!supportsToken(msg.sender)) return false;\n    __isTokenFallback = true;\n    // solium-disable-next-line security/no-low-level-calls\n    (bool success, ) = address(this).delegatecall(_data);\n    __isTokenFallback = false;\n    emit CallbackOnTransfer(_data, success, msg.sender);\n    return success;\n  }\n\n  function getSig(bytes memory _data) private pure returns (bytes4 sig) {\n    uint256 l = _data.length < 4 ? _data.length : 4;\n    for (uint256 i = 0; i < l; i++) {\n      sig = bytes4(\n        uint32(uint32(sig) + uint8(_data[i]) * (2**(8 * (l - 1 - i))))\n      );\n    }\n  }\n\n  function supportsToken(address token) public pure returns (bool) {\n    return true;\n  }\n\n  function() external payable {}\n}\n",
   "sourcePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
   "ast": {
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
@@ -94,7 +94,7 @@
         "id": 115,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2315,
+        "sourceUnit": 2381,
         "src": "25:63:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -105,7 +105,7 @@
         "id": 116,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2263,
+        "sourceUnit": 2329,
         "src": "89:64:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -116,7 +116,7 @@
         "id": 117,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2305,
+        "sourceUnit": 2371,
         "src": "154:77:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -149,7 +149,7 @@
         "id": 120,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 1080,
+        "sourceUnit": 1146,
         "src": "310:40:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -422,10 +422,10 @@
               "id": 142,
               "name": "IERC1155TokenReceiver",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2304,
+              "referencedDeclaration": 2370,
               "src": "642:21:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC1155TokenReceiver_$2304",
+                "typeIdentifier": "t_contract$_IERC1155TokenReceiver_$2370",
                 "typeString": "contract IERC1155TokenReceiver"
               }
             },
@@ -440,10 +440,10 @@
               "id": 144,
               "name": "IERC165",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2314,
+              "referencedDeclaration": 2380,
               "src": "665:7:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC165_$2314",
+                "typeIdentifier": "t_contract$_IERC165_$2380",
                 "typeString": "contract IERC165"
               }
             },
@@ -472,8 +472,8 @@
         ],
         "contractDependencies": [
           43,
-          2304,
-          2314
+          2370,
+          2380
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -482,8 +482,8 @@
         "linearizedBaseContracts": [
           693,
           43,
-          2314,
-          2304
+          2380,
+          2370
         ],
         "name": "ProxyIdentity",
         "nodeType": "ContractDefinition",
@@ -1551,7 +1551,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3016,
+                        "referencedDeclaration": 3082,
                         "src": "1546:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -1613,7 +1613,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3016,
+                        "referencedDeclaration": 3082,
                         "src": "1570:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -1656,7 +1656,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "1619:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1752,10 +1752,10 @@
                           "name": "ERC1155Multiproxy",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1079,
+                          "referencedDeclaration": 1145,
                           "src": "1586:17:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1079_$",
+                            "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1145_$",
                             "typeString": "type(contract ERC1155Multiproxy)"
                           }
                         },
@@ -1769,7 +1769,7 @@
                         "nodeType": "FunctionCall",
                         "src": "1586:27:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1079",
+                          "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1145",
                           "typeString": "contract ERC1155Multiproxy"
                         }
                       },
@@ -1817,7 +1817,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "1657:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -2012,7 +2012,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "1709:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -2088,10 +2088,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "1701:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2210,10 +2210,10 @@
                         "name": "revert",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [
-                          3021,
-                          3022
+                          3087,
+                          3088
                         ],
-                        "referencedDeclaration": 3022,
+                        "referencedDeclaration": 3088,
                         "src": "1825:6:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_revert_pure$_t_string_memory_ptr_$returns$__$",
@@ -2288,7 +2288,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "1940:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -2364,10 +2364,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "1932:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2539,10 +2539,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2121:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2817,7 +2817,7 @@
                             "name": "abi",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3003,
+                            "referencedDeclaration": 3069,
                             "src": "2402:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_abi",
@@ -2864,7 +2864,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3010,
+                      "referencedDeclaration": 3076,
                       "src": "2392:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -3003,10 +3003,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2443:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3197,7 +3197,7 @@
                             "name": "abi",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3003,
+                            "referencedDeclaration": 3069,
                             "src": "2584:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_abi",
@@ -3244,7 +3244,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3010,
+                      "referencedDeclaration": 3076,
                       "src": "2567:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -3381,7 +3381,7 @@
                       "name": "ecrecover",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3008,
+                      "referencedDeclaration": 3074,
                       "src": "2673:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_ecrecover_pure$_t_bytes32_$_t_uint8_$_t_bytes32_$_t_bytes32_$returns$_t_address_$",
@@ -3489,10 +3489,10 @@
                                 "name": "ERC1155Multiproxy",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 1079,
+                                "referencedDeclaration": 1145,
                                 "src": "2711:17:3",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1079_$",
+                                  "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1145_$",
                                   "typeString": "type(contract ERC1155Multiproxy)"
                                 }
                               },
@@ -3506,7 +3506,7 @@
                               "nodeType": "FunctionCall",
                               "src": "2711:26:3",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1079",
+                                "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1145",
                                 "typeString": "contract ERC1155Multiproxy"
                               }
                             },
@@ -3517,7 +3517,7 @@
                             "lValueRequested": false,
                             "memberName": "balanceOf",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 2751,
+                            "referencedDeclaration": 2817,
                             "src": "2711:36:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
@@ -3598,10 +3598,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2703:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3747,10 +3747,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2799:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4140,7 +4140,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "3074:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -4594,7 +4594,7 @@
             "scope": 693,
             "src": "3110:196:3",
             "stateMutability": "nonpayable",
-            "superFunction": 2279,
+            "superFunction": 2345,
             "visibility": "external"
           },
           {
@@ -4826,7 +4826,7 @@
             "scope": 693,
             "src": "3310:231:3",
             "stateMutability": "nonpayable",
-            "superFunction": 2296,
+            "superFunction": 2362,
             "visibility": "external"
           },
           {
@@ -5424,7 +5424,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "4151:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -6006,7 +6006,7 @@
             "scope": 693,
             "src": "4864:257:3",
             "stateMutability": "view",
-            "superFunction": 2313,
+            "superFunction": 2379,
             "visibility": "external"
           },
           {
@@ -6135,7 +6135,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "5356:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -6342,7 +6342,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "5504:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -6504,7 +6504,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "5606:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -7632,7 +7632,7 @@
             "body": {
               "id": 687,
               "nodeType": "Block",
-              "src": "6026:22:3",
+              "src": "5987:22:3",
               "statements": [
                 {
                   "expression": {
@@ -7645,7 +7645,7 @@
                     "kind": "bool",
                     "lValueRequested": false,
                     "nodeType": "Literal",
-                    "src": "6039:4:3",
+                    "src": "6000:4:3",
                     "subdenomination": null,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
@@ -7656,7 +7656,7 @@
                   "functionReturnParameters": 684,
                   "id": 686,
                   "nodeType": "Return",
-                  "src": "6032:11:3"
+                  "src": "5993:11:3"
                 }
               ]
             },
@@ -7677,7 +7677,7 @@
                   "name": "token",
                   "nodeType": "VariableDeclaration",
                   "scope": 688,
-                  "src": "5984:13:3",
+                  "src": "5945:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -7688,7 +7688,7 @@
                     "id": 679,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "5984:7:3",
+                    "src": "5945:7:3",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -7699,7 +7699,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "5983:15:3"
+              "src": "5944:15:3"
             },
             "returnParameters": {
               "id": 684,
@@ -7711,7 +7711,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 688,
-                  "src": "6020:4:3",
+                  "src": "5981:4:3",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -7722,7 +7722,7 @@
                     "id": 682,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "6020:4:3",
+                    "src": "5981:4:3",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -7732,10 +7732,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "6019:6:3"
+              "src": "5980:6:3"
             },
             "scope": 693,
-            "src": "5961:87:3",
+            "src": "5922:87:3",
             "stateMutability": "pure",
             "superFunction": null,
             "visibility": "public"
@@ -7744,7 +7744,7 @@
             "body": {
               "id": 691,
               "nodeType": "Block",
-              "src": "6080:2:3",
+              "src": "6041:2:3",
               "statements": []
             },
             "documentation": null,
@@ -7758,26 +7758,26 @@
               "id": 689,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "6060:2:3"
+              "src": "6021:2:3"
             },
             "returnParameters": {
               "id": 690,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "6080:0:3"
+              "src": "6041:0:3"
             },
             "scope": 693,
-            "src": "6052:30:3",
+            "src": "6013:30:3",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
         "scope": 694,
-        "src": "616:5468:3"
+        "src": "616:5429:3"
       }
     ],
-    "src": "0:6085:3"
+    "src": "0:6046:3"
   },
   "legacyAST": {
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/proxyIdentity.sol",
@@ -7809,7 +7809,7 @@
         "id": 115,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2315,
+        "sourceUnit": 2381,
         "src": "25:63:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -7820,7 +7820,7 @@
         "id": 116,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2263,
+        "sourceUnit": 2329,
         "src": "89:64:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -7831,7 +7831,7 @@
         "id": 117,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 2305,
+        "sourceUnit": 2371,
         "src": "154:77:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -7864,7 +7864,7 @@
         "id": 120,
         "nodeType": "ImportDirective",
         "scope": 694,
-        "sourceUnit": 1080,
+        "sourceUnit": 1146,
         "src": "310:40:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -8137,10 +8137,10 @@
               "id": 142,
               "name": "IERC1155TokenReceiver",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2304,
+              "referencedDeclaration": 2370,
               "src": "642:21:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC1155TokenReceiver_$2304",
+                "typeIdentifier": "t_contract$_IERC1155TokenReceiver_$2370",
                 "typeString": "contract IERC1155TokenReceiver"
               }
             },
@@ -8155,10 +8155,10 @@
               "id": 144,
               "name": "IERC165",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2314,
+              "referencedDeclaration": 2380,
               "src": "665:7:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IERC165_$2314",
+                "typeIdentifier": "t_contract$_IERC165_$2380",
                 "typeString": "contract IERC165"
               }
             },
@@ -8187,8 +8187,8 @@
         ],
         "contractDependencies": [
           43,
-          2304,
-          2314
+          2370,
+          2380
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -8197,8 +8197,8 @@
         "linearizedBaseContracts": [
           693,
           43,
-          2314,
-          2304
+          2380,
+          2370
         ],
         "name": "ProxyIdentity",
         "nodeType": "ContractDefinition",
@@ -9266,7 +9266,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3016,
+                        "referencedDeclaration": 3082,
                         "src": "1546:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -9328,7 +9328,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3016,
+                        "referencedDeclaration": 3082,
                         "src": "1570:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -9371,7 +9371,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "1619:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -9467,10 +9467,10 @@
                           "name": "ERC1155Multiproxy",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1079,
+                          "referencedDeclaration": 1145,
                           "src": "1586:17:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1079_$",
+                            "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1145_$",
                             "typeString": "type(contract ERC1155Multiproxy)"
                           }
                         },
@@ -9484,7 +9484,7 @@
                         "nodeType": "FunctionCall",
                         "src": "1586:27:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1079",
+                          "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1145",
                           "typeString": "contract ERC1155Multiproxy"
                         }
                       },
@@ -9532,7 +9532,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "1657:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -9727,7 +9727,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "1709:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -9803,10 +9803,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "1701:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -9925,10 +9925,10 @@
                         "name": "revert",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [
-                          3021,
-                          3022
+                          3087,
+                          3088
                         ],
-                        "referencedDeclaration": 3022,
+                        "referencedDeclaration": 3088,
                         "src": "1825:6:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_revert_pure$_t_string_memory_ptr_$returns$__$",
@@ -10003,7 +10003,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "1940:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -10079,10 +10079,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "1932:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -10254,10 +10254,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2121:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -10532,7 +10532,7 @@
                             "name": "abi",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3003,
+                            "referencedDeclaration": 3069,
                             "src": "2402:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_abi",
@@ -10579,7 +10579,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3010,
+                      "referencedDeclaration": 3076,
                       "src": "2392:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -10718,10 +10718,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2443:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -10912,7 +10912,7 @@
                             "name": "abi",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3003,
+                            "referencedDeclaration": 3069,
                             "src": "2584:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_abi",
@@ -10959,7 +10959,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3010,
+                      "referencedDeclaration": 3076,
                       "src": "2567:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -11096,7 +11096,7 @@
                       "name": "ecrecover",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3008,
+                      "referencedDeclaration": 3074,
                       "src": "2673:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_ecrecover_pure$_t_bytes32_$_t_uint8_$_t_bytes32_$_t_bytes32_$returns$_t_address_$",
@@ -11204,10 +11204,10 @@
                                 "name": "ERC1155Multiproxy",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 1079,
+                                "referencedDeclaration": 1145,
                                 "src": "2711:17:3",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1079_$",
+                                  "typeIdentifier": "t_type$_t_contract$_ERC1155Multiproxy_$1145_$",
                                   "typeString": "type(contract ERC1155Multiproxy)"
                                 }
                               },
@@ -11221,7 +11221,7 @@
                               "nodeType": "FunctionCall",
                               "src": "2711:26:3",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1079",
+                                "typeIdentifier": "t_contract$_ERC1155Multiproxy_$1145",
                                 "typeString": "contract ERC1155Multiproxy"
                               }
                             },
@@ -11232,7 +11232,7 @@
                             "lValueRequested": false,
                             "memberName": "balanceOf",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 2751,
+                            "referencedDeclaration": 2817,
                             "src": "2711:36:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
@@ -11313,10 +11313,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2703:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -11462,10 +11462,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        3019,
-                        3020
+                        3085,
+                        3086
                       ],
-                      "referencedDeclaration": 3020,
+                      "referencedDeclaration": 3086,
                       "src": "2799:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -11855,7 +11855,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "3074:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -12309,7 +12309,7 @@
             "scope": 693,
             "src": "3110:196:3",
             "stateMutability": "nonpayable",
-            "superFunction": 2279,
+            "superFunction": 2345,
             "visibility": "external"
           },
           {
@@ -12541,7 +12541,7 @@
             "scope": 693,
             "src": "3310:231:3",
             "stateMutability": "nonpayable",
-            "superFunction": 2296,
+            "superFunction": 2362,
             "visibility": "external"
           },
           {
@@ -13139,7 +13139,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "4151:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -13721,7 +13721,7 @@
             "scope": 693,
             "src": "4864:257:3",
             "stateMutability": "view",
-            "superFunction": 2313,
+            "superFunction": 2379,
             "visibility": "external"
           },
           {
@@ -13850,7 +13850,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3016,
+                            "referencedDeclaration": 3082,
                             "src": "5356:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -14057,7 +14057,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3052,
+                            "referencedDeclaration": 3118,
                             "src": "5504:4:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_ProxyIdentity_$693",
@@ -14219,7 +14219,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3016,
+                          "referencedDeclaration": 3082,
                           "src": "5606:3:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -15347,7 +15347,7 @@
             "body": {
               "id": 687,
               "nodeType": "Block",
-              "src": "6026:22:3",
+              "src": "5987:22:3",
               "statements": [
                 {
                   "expression": {
@@ -15360,7 +15360,7 @@
                     "kind": "bool",
                     "lValueRequested": false,
                     "nodeType": "Literal",
-                    "src": "6039:4:3",
+                    "src": "6000:4:3",
                     "subdenomination": null,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
@@ -15371,7 +15371,7 @@
                   "functionReturnParameters": 684,
                   "id": 686,
                   "nodeType": "Return",
-                  "src": "6032:11:3"
+                  "src": "5993:11:3"
                 }
               ]
             },
@@ -15392,7 +15392,7 @@
                   "name": "token",
                   "nodeType": "VariableDeclaration",
                   "scope": 688,
-                  "src": "5984:13:3",
+                  "src": "5945:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -15403,7 +15403,7 @@
                     "id": 679,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "5984:7:3",
+                    "src": "5945:7:3",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -15414,7 +15414,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "5983:15:3"
+              "src": "5944:15:3"
             },
             "returnParameters": {
               "id": 684,
@@ -15426,7 +15426,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 688,
-                  "src": "6020:4:3",
+                  "src": "5981:4:3",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -15437,7 +15437,7 @@
                     "id": 682,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "6020:4:3",
+                    "src": "5981:4:3",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -15447,10 +15447,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "6019:6:3"
+              "src": "5980:6:3"
             },
             "scope": 693,
-            "src": "5961:87:3",
+            "src": "5922:87:3",
             "stateMutability": "pure",
             "superFunction": null,
             "visibility": "public"
@@ -15459,7 +15459,7 @@
             "body": {
               "id": 691,
               "nodeType": "Block",
-              "src": "6080:2:3",
+              "src": "6041:2:3",
               "statements": []
             },
             "documentation": null,
@@ -15473,26 +15473,26 @@
               "id": 689,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "6060:2:3"
+              "src": "6021:2:3"
             },
             "returnParameters": {
               "id": 690,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "6080:0:3"
+              "src": "6041:0:3"
             },
             "scope": 693,
-            "src": "6052:30:3",
+            "src": "6013:30:3",
             "stateMutability": "payable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
         "scope": 694,
-        "src": "616:5468:3"
+        "src": "616:5429:3"
       }
     ],
-    "src": "0:6085:3"
+    "src": "0:6046:3"
   },
   "compiler": {
     "name": "solc",
@@ -15500,7 +15500,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2020-10-02T06:31:07.305Z",
+  "updatedAt": "2020-10-02T11:44:39.794Z",
   "devdoc": {
     "methods": {}
   },

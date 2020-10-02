@@ -26,10 +26,20 @@ contract ERC1155Multiproxy is ERC1155 {
     {
       super.safeTransferFrom(from, to, id, amount, data);
       if (amount == 1) {
-        ProxyIdentity proxy = ProxyIdentity(proxies[id]);
-        proxy.onOwnerChanged(to);
+        _onProxyOwnerChanged(id, to);
       }
     }
+    
+    function safeBatchTransferFrom(address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+    public
+  {
+    super.safeBatchTransferFrom(from, to, ids, amounts, data);
+    for (uint256 i = 0; i < ids.length; i++) {
+      if (amounts[i] == 1) {
+        _onProxyOwnerChanged(ids[i], to);
+      }
+    }
+  }
     
   function _mint(address account, uint256 id, uint256 amount, bytes memory data) internal {
     require(account != address(0), "ERC1155: mint to the zero address");
@@ -40,5 +50,10 @@ contract ERC1155Multiproxy is ERC1155 {
     emit TransferSingle(operator, address(0), account, id, amount);
 
     _callonERC1155Received(address(0), account, id, amount, gasleft(), data);
+  }
+  
+  function _onProxyOwnerChanged(uint256 id, address owner) internal {
+    ProxyIdentity proxy = ProxyIdentity(proxies[id]);
+    proxy.onOwnerChanged(owner);
   }  
 }

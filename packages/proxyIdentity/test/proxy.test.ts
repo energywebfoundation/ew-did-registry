@@ -25,7 +25,7 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let erc1155: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
-  let creatorAddress: string;
+  let creatorAddr: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
   const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
@@ -36,7 +36,7 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
   beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
-    creatorAddress = await creator.getAddress();
+    creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
     erc1155 = await (await erc1155Factory.deploy()).deployed();
     proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid)).deployed();
@@ -46,12 +46,12 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   it('proxy creator should be identity owner and delegate', (done) => {
     erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
       erc1056.removeAllListeners('DIDDelegateChanged');
-      expect(delegate).equal(creatorAddress);
+      expect(delegate).equal(creatorAddr);
       done();
     });
     erc1056.identityOwner(identity)
       .then((owner: string) => {
-        expect(owner === creatorAddress);
+        expect(owner === creatorAddr);
       });
   });
 
@@ -293,10 +293,21 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
     const proxyOwner = await proxy.owner();
 
-    expect(await proxy.owner()).equal(creatorAddress);
+    expect(await proxy.owner()).equal(creatorAddr);
 
     await erc1155.safeTransferFrom(proxyOwner, receiverAddr, uid, 1, '0x0');
 
     expect(await proxy.owner()).equal(receiverAddr);
+  });
+
+  it('batch transfer should transfer ownership', async () => {
+    const id2 = 1234;
+    const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2)).deployed();
+    const receiverAddr = await provider.getSigner(3).getAddress();
+
+    await erc1155.safeBatchTransferFrom(creatorAddr, receiverAddr, [uid, id2], [1, 1], '0x0');
+
+    expect(await proxy.owner()).equal(receiverAddr);
+    expect(await proxy2.owner()).equal(receiverAddr);
   });
 });
