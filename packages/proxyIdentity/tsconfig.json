@@ -5,6 +5,6 @@
     "resolveJsonModule": true
   },
   "files": [
-    "./index.ts"
+    "./src/index.ts"
   ]
 }
