@@ -316,4 +316,18 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect(parseInt(await erc1155.balanceOf(creatorAddr, uid), 16)).equal(0);
     expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
   });
+
+  it.only('batch burning should cease ownership of the burnded proxies', async () => {
+    const id2 = 1234;
+    const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2, creatorAddr)).deployed();
+
+    await erc1155.burn(creatorAddr, uid);
+    await erc1155.burn(creatorAddr, id2);
+
+    expect(parseInt(await erc1155.balanceOf(creatorAddr, uid), 16)).equal(0);
+    expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
+
+    expect(parseInt(await erc1155.balanceOf(creatorAddr, id2), 16)).equal(0);
+    expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
+  });
 });
