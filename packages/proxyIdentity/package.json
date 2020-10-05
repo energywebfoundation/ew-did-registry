@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "Implementation of contract representing ERC1056 identity",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "compile": "../../node_modules/.bin/tsc",
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",

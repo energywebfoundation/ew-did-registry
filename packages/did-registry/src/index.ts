@@ -1,4 +1,3 @@
-import { Contract } from 'ethers';
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods } from '@ew-did-registry/did';
@@ -105,24 +104,6 @@ class DIDRegistry implements IDIDRegistry {
     const didDocumentLite = temporaryFactory.createFull(this.operator, did);
     await didDocumentLite.read(did);
     return didDocumentLite;
-  }
-
-  /**
-  * Creates proxy identity as smart contract
-  *
-  * @param proxyFactory {Contract}
-  *
-  * @returns {string} address of created proxy identity smart contract
-  */
-  static async createProxy(proxyFactory: Contract): Promise<string> {
-    const tx = await proxyFactory.create();
-    await tx.wait();
-    return new Promise<string>(((resolve) => {
-      proxyFactory.on('ProxyCreated', (proxy) => {
-        proxyFactory.removeAllListeners('ProxyCreated');
-        resolve(proxy);
-      });
-    }));
   }
 }
 

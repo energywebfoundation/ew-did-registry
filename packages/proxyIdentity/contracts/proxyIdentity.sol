@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "./interfaces/IERC165.sol";
-import "./interfaces/IERC1155.sol";
-import "./interfaces/IERC1155TokenReceiver.sol";
+import "multi-token-standard/contracts/interfaces/IERC165.sol";
+import "multi-token-standard/contracts/interfaces/IERC1155.sol";
+import "multi-token-standard/contracts/interfaces/IERC1155TokenReceiver.sol";
 import "./interfaces/IERC223Receiver.sol";
 import "./interfaces/IERC223.sol";
-
+import "./tokens/ERC1155Multiproxy.sol";
 
 interface IERC1056 {
   function addDelegate(
@@ -22,19 +22,18 @@ interface IERC1056 {
   ) external;
 }
 
-
-// TODO: implement interfaces separately and extend
 contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
-  address public creator;
   address public owner;
+  address public creator;
   address public erc1056;
-  mapping(address => bool) public recoveryAgents;
+  address public erc1155;
   uint256 defaultValidity = 2**256 - 1;
   mapping(bytes32 => bool) digests;
   bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;
   bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;
   Tkn tkn;
   bool __isTokenFallback;
+  uint256 uid;
 
   struct Tkn {
     address addr;
@@ -50,22 +49,23 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   event RecoveryAgentAdded(address agent);
   event RecoveryAgentRemoved(address agent);
 
-  constructor(address _erc1056) public {
+  constructor(
+    address _erc1056,
+    address _erc1155,
+    uint256 _uid,
+    address _owner
+  ) public {
     erc1056 = _erc1056;
+    erc1155 = _erc1155;
+    uid = _uid;
     creator = msg.sender;
-    _changeOwner(msg.sender);
+    owner = _owner;
+    ERC1155Multiproxy(_erc1155).mint(_owner, uid, "");
+    _addDelegate(_owner);
   }
 
   modifier _owner() {
     require(msg.sender == owner, "Only owner allowed");
-    _;
-  }
-
-  modifier _recoveryAgent() {
-    require(
-      recoveryAgents[msg.sender],
-      "Only recovery agent can change the owner"
-    );
     _;
   }
 
@@ -75,26 +75,17 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     _;
   }
 
+  modifier _erc1155() {
+    require(msg.sender == erc1155, "Only ERC1155 allowed");
+    _;
+  }
+
   function sendTransaction(
     bytes memory _data,
     address to,
     uint256 value
-  ) public payable _owner {
+  ) public payable _owner() {
     require(_sendTransaction(_data, to, value), "Can't send transaction");
-  }
-
-  function _sendTransaction(
-    bytes memory _data,
-    address to,
-    uint256 value
-  ) internal returns (bool success) {
-    bytes memory data = _data;
-    uint256 len = data.length;
-    // solium-disable-next-line security/no-inline-assembly
-    assembly {
-      success := call(gas, to, value, add(data, 0x20), len, 0, 0)
-    }
-    emit TransactionSent(_data, to, value);
   }
 
   function sendSignedTransaction(
@@ -113,53 +104,18 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
       abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
     );
     address signer = ecrecover(hash, v, r, s);
-    require(owner == signer, "Signature is not valid");
+    require(
+      ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1,
+      "Signature is not valid"
+    );
     require(_sendTransaction(data, to, value), "Can't send transaction");
   }
 
-  function addRecoveryAgent(address agent) public _owner {
-    _addRecoveryAgent(agent);
+  function addDelegate(address delegate) public _owner() {
+    _addDelegate(delegate);
   }
 
-  function _addRecoveryAgent(address agent) internal {
-    recoveryAgents[agent] = true;
-    emit RecoveryAgentAdded(agent);
-  }
-
-  function removeRecoveryAgent(address agent) public _recoveryAgent {
-    recoveryAgents[agent] = false;
-    emit RecoveryAgentRemoved(agent);
-  }
-
-  /**
-   * Used by the proxy factory to make sender the owner
-   */
-  function changeOwner(address newOwner) public _recoveryAgent {
-    _changeOwner(newOwner);
-  }
-
-  function _changeOwner(address newOwner) internal {
-    address oldOwner = owner;
-    if (owner != address(0x0)) {
-      removeRecoveryAgent(owner);
-      _revokeDelegate(owner);
-    }
-    owner = newOwner;
-    _addRecoveryAgent(newOwner);
-    _addDelegate(newOwner);
-    emit OwnerChanged(address(this), oldOwner, newOwner);
-  }
-
-  function _addDelegate(address delegate) internal {
-    IERC1056(erc1056).addDelegate(
-      address(this),
-      "sigAuth",
-      delegate,
-      defaultValidity
-    );
-  }
-
-  function _revokeDelegate(address delegate) internal {
+  function revokeDelegate(address delegate) public _owner() {
     IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
   }
 
@@ -181,6 +137,38 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     bytes calldata _data
   ) external returns (bytes4) {
     return ERC1155_BATCH_ACCEPTED;
+  }
+
+  function onOwnerChanged(address newOwner) public _erc1155 {
+    owner = newOwner;
+    _addDelegate(newOwner);
+  }
+  
+  function onBurn() public _erc1155 {
+    owner = address(0);
+  }
+
+  function _sendTransaction(
+    bytes memory _data,
+    address to,
+    uint256 value
+  ) internal returns (bool success) {
+    bytes memory data = _data;
+    uint256 len = data.length;
+    // solium-disable-next-line security/no-inline-assembly
+    assembly {
+      success := call(gas, to, value, add(data, 0x20), len, 0, 0)
+    }
+    emit TransactionSent(_data, to, value);
+  }
+
+  function _addDelegate(address delegate) internal {
+    IERC1056(erc1056).addDelegate(
+      address(this),
+      "sigAuth",
+      delegate,
+      defaultValidity
+    );
   }
 
   /**
@@ -234,7 +222,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     }
   }
 
-  // TODO: check if token - is IERC223
   function supportsToken(address token) public pure returns (bool) {
     return true;
   }
