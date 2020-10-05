@@ -16,16 +16,16 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
-  const assetOwner: providers.JsonRpcSigner = provider.getSigner(2);
   let proxyFactory: Contract;
   let device1: Contract;
   let device2: Contract;
+  const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
 
   before(async () => {
     const erc1056Factory = new ContractFactory(abi1056, bytecode1056, oem);
     const erc1056 = await (await erc1056Factory.deploy()).deployed();
     const erc1155Factory = new ContractFactory(abi1155, bytecode1155, oem);
-    const erc1155 = await (await erc1155Factory.deploy()).deployed();
+    const erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
     const proxyFactoryCreator = new ContractFactory(
       proxyFactoryAbi, proxyFactoryBytecode, oem,
     );
