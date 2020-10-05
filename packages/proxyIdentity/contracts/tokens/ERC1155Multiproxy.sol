@@ -1,13 +1,18 @@
 pragma solidity ^0.5.0;
 
 import "multi-token-standard/contracts/tokens/ERC1155/ERC1155.sol";
+import "multi-token-standard/contracts/tokens/ERC1155/ERC1155Metadata.sol";
 import "../proxyIdentity.sol";
 
 /**
  * @dev Implementation of the multi-token standard with tokens being a proxy identity contracts.
  */
-contract ERC1155Multiproxy is ERC1155 {
+contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   mapping(uint256 => address payable) private proxies;
+
+  constructor(string memory baseMetadataUri) public {
+    _setBaseMetadataURI(baseMetadataUri);
+  }
 
   modifier isOwnerOrApproved(address account) {
     require(
@@ -65,6 +70,10 @@ contract ERC1155Multiproxy is ERC1155 {
     for (uint256 i = 0; i < ids.length; i++) {
       _burn(account, ids[i]);
     }
+  }
+
+  function updateUri(string memory newBaseMetadataUri) public {
+    _setBaseMetadataURI(newBaseMetadataUri);
   }
 
   function _burn(address account, uint256 id) internal {
