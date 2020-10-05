@@ -18,7 +18,7 @@ const web3 = new Web3('http://localhost:8544');
 
 const { JsonRpcProvider } = providers;
 
-describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
+describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
   let proxy: Contract;
   let erc1056: Contract;
@@ -39,7 +39,7 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
     erc1155 = await (await erc1155Factory.deploy()).deployed();
-    proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid)).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid, creatorAddr)).deployed();
     identity = proxy.address;
   });
 
@@ -302,12 +302,18 @@ describe.only('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
   it('batch transfer should transfer ownership', async () => {
     const id2 = 1234;
-    const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2)).deployed();
+    const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2, creatorAddr)).deployed();
     const receiverAddr = await provider.getSigner(3).getAddress();
 
     await erc1155.safeBatchTransferFrom(creatorAddr, receiverAddr, [uid, id2], [1, 1], '0x0');
 
     expect(await proxy.owner()).equal(receiverAddr);
     expect(await proxy2.owner()).equal(receiverAddr);
+  });
+
+  it.only('burning should cease ownership of the proxy', async () => {
+    await erc1155.burn(creatorAddr, uid);
+    expect(parseInt(await erc1155.balanceOf(creatorAddr, uid), 16)).equal(0);
+    expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
   });
 });

@@ -8,8 +8,8 @@ import { abi as proxyAbi } from '../build/contracts/ProxyIdentity.json';
   *
   * @returns {string} address of created proxy identity smart contract
   */
-export const createProxy = async (proxyFactory: Contract): Promise<Contract> => {
-  const tx = await proxyFactory.create();
+export const createProxy = async (proxyFactory: Contract, uid: number): Promise<Contract> => {
+  const tx = await proxyFactory.create(uid);
   await tx.wait();
   return new Promise<Contract>(((resolve) => {
     proxyFactory.on('ProxyCreated', (address) => {

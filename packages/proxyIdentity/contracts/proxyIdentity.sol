@@ -49,14 +49,19 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   event RecoveryAgentAdded(address agent);
   event RecoveryAgentRemoved(address agent);
 
-  constructor(address _erc1056, address _erc1155, uint256 _uid) public {
+  constructor(
+    address _erc1056,
+    address _erc1155,
+    uint256 _uid,
+    address _owner
+  ) public {
     erc1056 = _erc1056;
     erc1155 = _erc1155;
     uid = _uid;
     creator = msg.sender;
-    owner = msg.sender;
-    ERC1155Multiproxy(_erc1155).mint(msg.sender, uid, '');
-    addDelegate(msg.sender);
+    owner = _owner;
+    ERC1155Multiproxy(_erc1155).mint(_owner, uid, "");
+    _addDelegate(_owner);
   }
 
   modifier _owner() {
@@ -69,9 +74,9 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
       revert("Method can be invoked only as part of ERC223 transfer");
     _;
   }
-  
+
   modifier _erc1155() {
-    require(msg.sender == erc1155, 'Only ERC1155 allowed'); 
+    require(msg.sender == erc1155, "Only ERC1155 allowed");
     _;
   }
 
@@ -99,10 +104,13 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
       abi.encodePacked("\x19Ethereum Signed Message:\n32", digest)
     );
     address signer = ecrecover(hash, v, r, s);
-    require(ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1 , "Signature is not valid");
+    require(
+      ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1,
+      "Signature is not valid"
+    );
     require(_sendTransaction(data, to, value), "Can't send transaction");
   }
- 
+
   function addDelegate(address delegate) public _owner() {
     _addDelegate(delegate);
   }
@@ -130,12 +138,16 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   ) external returns (bytes4) {
     return ERC1155_BATCH_ACCEPTED;
   }
-  
+
   function onOwnerChanged(address newOwner) public _erc1155 {
     owner = newOwner;
     _addDelegate(newOwner);
   }
   
+  function onBurn() public _erc1155 {
+    owner = address(0);
+  }
+
   function _sendTransaction(
     bytes memory _data,
     address to,
@@ -149,7 +161,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     }
     emit TransactionSent(_data, to, value);
   }
-  
+
   function _addDelegate(address delegate) internal {
     IERC1056(erc1056).addDelegate(
       address(this),

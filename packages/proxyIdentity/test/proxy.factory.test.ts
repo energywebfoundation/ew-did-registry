@@ -26,26 +26,30 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
   });
 
   it('create() should set sender as owner of created proxy and proxyFactory as creator', (done) => {
-    proxyFactory.on('ProxyCreated', (proxyAddress: string) => {
+    proxyFactory.on('ProxyCreated', async (proxyAddress: string) => {
       proxyFactory.removeAllListeners('ProxyCreated');
       const proxy = new Contract(proxyAddress, proxyAbi, deployer);
-      proxy.owner()
-        .then((proxyOwner: string) => {
-          expect(proxyOwner).equal(deployerAddress);
-          return proxy.creator()
-        })
-        .then((creator: string) => {
-          expect(creator).equal(proxyFactory.address);
-          done();
-        })
-        .catch((e: Error) => {
-          expect.fail(e.message);
-        });
+      expect(await proxy.owner()).equal(deployerAddress);
+      expect(await proxy.creator()).equal(proxyFactory.address);
+      done();
     });
     const uid = 123;
-    proxyFactory.create(uid)
-      .then((tx: any) => {
-        tx.wait();
+    proxyFactory.create(uid);
+  });
+
+  it('createBatch() should set sender as owner of created proxies', (done) => {
+    proxyFactory.on('BatchProxyCreated', async (addresses: string[]) => {
+      proxyFactory.removeAllListeners('BatchProxyCreated');
+      const owners = addresses.map(async (address) => {
+        const proxy = new Contract(address, proxyAbi, deployer);
+        return proxy.owner();
       });
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const owner of owners) {
+        expect(owner).equal(deployerAddress);
+      }
+      done();
+    });
+    proxyFactory.createBatch([1, 2]);
   });
 });
