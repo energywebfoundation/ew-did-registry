@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, providers } from 'ethers';
+import { Wallet, providers, Signer } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -12,18 +12,18 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import { arrayify, hashMessage, keccak256, recoverPublicKey } from 'ethers/utils';
 import { Operator } from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
 
-const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
+const keys = new Keys({
+  privateKey: '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
+});
+const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
-const keys = new Keys({
-  privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-  publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
-});
 let operator: Operator;
 let operatorSettings: IResolverSettings;
 
@@ -298,7 +298,7 @@ describe('[DID-OPERATOR: sign method Keys]', function () {
   this.timeout(0);
 
   before(async () => {
-    operatorSettings = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    operatorSettings = await getSettings([identity]);
     console.log(`registry: ${operatorSettings.address}`);
     operator = new Operator(keys, operatorSettings);
   });
@@ -308,17 +308,29 @@ describe('[DID-OPERATOR: sign method Keys]', function () {
 
 describe('[DID-OPERATOR: sign method Signer]', function () {
   this.timeout(0);
+  let signer: Signer;
 
   before(async () => {
-    operatorSettings = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    operatorSettings = await getSettings([identity]);
     const provider = new providers.JsonRpcProvider(
       operatorSettings.provider.uriOrInfo,
       operatorSettings.provider.network,
     );
-    const signer = new Wallet(keys.privateKey, provider);
+    signer = new Wallet(keys.privateKey, provider);
     operator = new Operator(signer, operatorSettings);
     await operator.create();
   });
 
   testSuite();
+
+  it.only('public key recovered from address signed by WalletConnect Signer should be equal to connected account key', async () => {
+    const hash = keccak256(await signer.getAddress());
+    const digest = arrayify(hashMessage(arrayify(hash)));
+
+    const signature = '0x564ba696c765130a49de026dbc8a88dd9fb71a6bac1d7325a5fdde997ad8a9bd729f0ba0412a69bf102e7bdb4d74bea96d3180399aedd77ba9bcaf05980574b11b';
+    const fullKey = recoverPublicKey(digest, signature);
+    const pub1 = fullKey.slice(4, 68);
+    const pub2 = fullKey.slice(68);
+    expect(keys.publicKey).to.be.oneOf([pub1, pub2]);
+  });
 });
