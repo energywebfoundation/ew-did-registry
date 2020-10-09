@@ -1,6 +1,8 @@
-import { Signer, utils } from "ethers";
+import { Signer, utils } from 'ethers';
 
-const { keccak256, hashMessage, arrayify, recoverAddress, recoverPublicKey, computePublicKey } = utils;
+const {
+  keccak256, hashMessage, arrayify, recoverAddress, recoverPublicKey, computePublicKey,
+} = utils;
 
 export async function getSignerPublicKey(signer: Signer): Promise<string> {
   const address = await signer.getAddress();
@@ -9,7 +11,7 @@ export async function getSignerPublicKey(signer: Signer): Promise<string> {
 
   const signatures = [
     await signer.signMessage(arrayify(hash)),
-    await signer.signMessage(arrayify(digest))
+    await signer.signMessage(arrayify(digest)),
   ];
   // eslint-disable-next-line no-restricted-syntax
   for (const sig of signatures) {
