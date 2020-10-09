@@ -22,10 +22,7 @@ import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,
 } from '../constants';
-
-const {
-  arrayify, keccak256, recoverPublicKey, computePublicKey, hashMessage,
-} = utils;
+import { getSignerPublicKey } from '../utils';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -82,15 +79,8 @@ export class Operator extends Resolver implements IOperator {
     if (this._keys.publicKey) {
       return this._keys.publicKey;
     }
-    const hash = keccak256(await this.getAddress());
-    const digest = arrayify(hashMessage(arrayify(hash)));
-    const sig = await this._signer.signMessage(arrayify(hash));
-
-    const uncompressedKey = recoverPublicKey(digest, sig);
-    const compressedKey = computePublicKey(uncompressedKey, true);
-
     // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = compressedKey.slice(2, 68);
+    return this._keys.publicKey = await getSignerPublicKey(this._signer);
   }
 
   /**
@@ -470,6 +460,7 @@ export class Operator extends Resolver implements IOperator {
       );
       if (!event) return false;
     } catch (e) {
+      console.error('Error updating doc:', e);
       throw new Error(e.message);
     }
     return true;
