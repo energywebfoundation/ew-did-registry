@@ -24,7 +24,7 @@ import {
 } from '../constants';
 
 const {
-  arrayify, keccak256, recoverPublicKey, hashMessage,
+  arrayify, keccak256, recoverPublicKey, computePublicKey, hashMessage,
 } = utils;
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
@@ -83,10 +83,14 @@ export class Operator extends Resolver implements IOperator {
       return this._keys.publicKey;
     }
     const hash = keccak256(await this.getAddress());
-    const sig = await this._signer.signMessage(arrayify(hash));
     const digest = arrayify(hashMessage(arrayify(hash)));
+    const sig = await this._signer.signMessage(arrayify(hash));
+
+    const uncompressedKey = recoverPublicKey(digest, sig);
+    const compressedKey = computePublicKey(uncompressedKey, true);
+
     // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = `02${recoverPublicKey(digest, sig).slice(4, 68)}`;
+    return this._keys.publicKey = compressedKey.slice(2, 68);
   }
 
   /**
