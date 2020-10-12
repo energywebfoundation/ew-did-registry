@@ -1,15 +1,13 @@
-import { utils, Signer } from 'ethers';
+import { Signer } from 'ethers';
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IKeys } from '@ew-did-registry/keys';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { DelegateTypes, IPublicKey } from '@ew-did-registry/did-resolver-interface';
+import { getSignerPublicKey } from '@ew-did-registry/did-ethr-resolver';
 import { IClaims } from '../models';
 import { hashes } from '../utils';
 
-const {
-  arrayify, keccak256, hashMessage, recoverPublicKey,
-} = utils;
 
 /**
  * @class
@@ -55,16 +53,7 @@ export class Claims implements IClaims {
   }
 
   private async getPublicKey(): Promise<string> {
-    if (this.keys?.publicKey) {
-      return this.keys.publicKey;
-    }
-    const hash = keccak256(await this.signer.getAddress());
-    const sig = await this.signer.signMessage(arrayify(hash));
-    const digest = arrayify(hashMessage(arrayify(hash)));
-    // eslint-disable-next-line no-return-assign
-    const publicKey = `02${recoverPublicKey(digest, sig).slice(4, 68)}`;
-    this.keys = { publicKey: Promise.resolve(publicKey) };
-    return publicKey;
+    return getSignerPublicKey(this.signer);
   }
 
   /**

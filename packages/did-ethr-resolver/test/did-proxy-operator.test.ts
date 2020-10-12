@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {assert, expect} from 'chai';
-import {Keys} from '@ew-did-registry/keys';
-import {Contract, ContractFactory, Wallet,} from 'ethers';
+import { assert, expect } from 'chai';
+import { Keys } from '@ew-did-registry/keys';
+import { Contract, ContractFactory, Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -12,12 +12,13 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import {JsonRpcProvider} from 'ethers/providers';
-import {proxyBuild} from '@ew-did-registry/proxyidentity';
-import {ethrReg, ProxyOperator} from '../src';
-import {getSettings} from '../../../tests/init-ganache';
+import { JsonRpcProvider } from 'ethers/providers';
+import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
+import { ethrReg, ProxyOperator } from '../src';
+import { getSettings } from '../../../tests/init-ganache';
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
+const { abi: abi1155, bytecode: bytecode1155 } = multiproxyBuild;
 const { abi: abi1056 } = ethrReg;
 const { fail } = assert;
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
@@ -33,16 +34,21 @@ describe('[DID-PROXY-OPERATOR]', function () {
   const validity = 10 * 60 * 1000;
   let proxy: Contract;
   let erc1056: Contract;
+  let erc1155: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator = new Wallet(keys.privateKey, provider);
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
+  const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
   let identity: string;
   let did: string;
+  const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
+  const uid = 123;
 
   before(async () => {
     operatorSettings = await getSettings([keys.getAddress()]);
     erc1056 = new Contract(operatorSettings.address, abi1056, creator);
-    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
+    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid, creator.address)).deployed();
     identity = proxy.address;
     did = `did:ethr:${identity}`;
     operator = new ProxyOperator(keys, operatorSettings, proxy.address);
@@ -54,7 +60,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-1'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData);
     const document = await operator.read(`did:ethr:${identity}`);
@@ -71,7 +77,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-2'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-2' },
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
     const document = await operator.read(`did:ethr:${identity}`);
@@ -140,7 +146,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://test.algo.com';
     const updateData: IUpdateData = {
       type: VerificationKey2018,
-      value: {serviceEndpoint:endpoint},
+      value: { serviceEndpoint: endpoint },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -158,7 +164,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-3'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-3' },
     };
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
@@ -174,7 +180,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-4'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     };
     try {
       await operator.update(did, attribute, updateData, -100);
@@ -194,7 +200,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-5'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-5' },
     };
     await operator.update(did, attribute, updateData, validity);
     // add authentication method
@@ -213,7 +219,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: VerificationKey2018,
-      value: {serviceEndpoint: endpoint},
+      value: { serviceEndpoint: endpoint },
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
@@ -264,7 +270,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       algo: ED25519,
       type: VerificationKey2018,
       encoding: HEX,
-      value: {publicKey:`0x${new Keys().publicKey}`, tag:'key-6'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-6' },
     };
     await operator.update(`did:ethr:${identity}`, attribute, updateData, validity);
     let document = await operator.read(`did:ethr:${identity}`);

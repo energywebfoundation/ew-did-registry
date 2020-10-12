@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, providers } from 'ethers';
+import { Wallet, providers, Signer } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -17,13 +17,16 @@ import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
 
-const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
+const keys = new Keys({
+  privateKey: '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
+});
+const newOwnerKeys = new Keys({
+  privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
+  publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
+});
+const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
-const keys = new Keys({
-  privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-  publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
-});
 let operator: Operator;
 let operatorSettings: IResolverSettings;
 
@@ -264,33 +267,25 @@ const testSuite = (): void => {
     expect(publicKey).to.be.undefined;
   });
 
-  it('owner change should lead to expected result', async () => {
-    const secondKeys = new Keys({
-      privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-      publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
-    });
-    const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    const operatorNewOwner = new Operator(secondKeys, operatorSettings);
-    let currentOwner: any;
-    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identityNewOwner}`);
-    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
-    expect(currentOwner).to.be.eql(identityNewOwner);
-
-    await operatorNewOwner.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
-    currentOwner = await operator.identityOwner(`did:ethr:${identity}`);
-    expect(currentOwner).to.be.eql(identity);
-  });
-
-  it.only('public key with invalid value should be ignored', async () => {
-    const attribute = DIDAttribute.PublicKey;
+  it('public key with invalid value should be ignored', async () => {
     const updateData: any = {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: '0x123abc',
     };
-    await operator.update(did, attribute, updateData, validity);
+    await operator.update(did, DIDAttribute.PublicKey, updateData, validity);
     return operator.read(did).should.not.be.rejected;
+  });
+
+  it('owner change should lead to expected result', async () => {
+    const newOwnerOperator = new Operator(newOwnerKeys, operatorSettings);
+
+    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
+    expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
+
+    await newOwnerOperator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
+    expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
   });
 };
 
@@ -298,7 +293,7 @@ describe('[DID-OPERATOR: sign method Keys]', function () {
   this.timeout(0);
 
   before(async () => {
-    operatorSettings = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    operatorSettings = await getSettings([identity, newOwnerKeys.getAddress()]);
     console.log(`registry: ${operatorSettings.address}`);
     operator = new Operator(keys, operatorSettings);
   });
@@ -308,17 +303,22 @@ describe('[DID-OPERATOR: sign method Keys]', function () {
 
 describe('[DID-OPERATOR: sign method Signer]', function () {
   this.timeout(0);
+  let signer: Signer;
 
   before(async () => {
-    operatorSettings = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    operatorSettings = await getSettings([identity, newOwnerKeys.getAddress()]);
     const provider = new providers.JsonRpcProvider(
       operatorSettings.provider.uriOrInfo,
       operatorSettings.provider.network,
     );
-    const signer = new Wallet(keys.privateKey, provider);
+    signer = new Wallet(keys.privateKey, provider);
     operator = new Operator(signer, operatorSettings);
     await operator.create();
   });
 
   testSuite();
+
+  it('public key recovered from address signed by WalletConnect Signer should be equal to connected account key', async () => {
+    expect(keys.publicKey).to.be.equal(await operator.getPublicKey());
+  });
 });

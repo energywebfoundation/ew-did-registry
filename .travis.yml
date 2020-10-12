@@ -16,7 +16,7 @@ script:
   - npm run browserTest:run
 deploy:
   - provider: script
-    script: "git checkout master && npm run publish:canary && git checkout development && git merge master && git push"
+    script: "git checkout master && npm run publish:canary && git fetch && git checkout development && git merge master && git push"
     skip_cleanup: true
     on:
       branch: master

@@ -9,6 +9,7 @@ import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
 import { abi as tokenERC1155Abi, bytecode as tokenERC1155Bytecode } from '../build/contracts/ERC1155MintBurn.json';
+import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC1155Multiproxy.json';
 import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build/contracts/ERC223Mintable.json';
 
 chai.use(chaiAsPromised);
@@ -21,32 +22,37 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
   let proxy: Contract;
   let erc1056: Contract;
+  let erc1155: Contract;
   const provider = new JsonRpcProvider('http://localhost:8544');
   const creator: providers.JsonRpcSigner = provider.getSigner(0);
-  let creatorAddress: string;
+  let creatorAddr: string;
   const proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, creator);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, creator);
+  const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
   const tokenERC1155Factory = new ContractFactory(tokenERC1155Abi, tokenERC1155Bytecode, creator);
   let identity: string;
   let accounts: string[];
+  const uid = 123;
+  const baseMetadataUri = 'https://token-cdn-domain/';
 
   beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
-    creatorAddress = await creator.getAddress();
+    creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    proxy = await (await proxyFactory.deploy(erc1056.address)).deployed();
+    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid, creatorAddr)).deployed();
     identity = proxy.address;
   });
 
   it('proxy creator should be identity owner and delegate', (done) => {
     erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
       erc1056.removeAllListeners('DIDDelegateChanged');
-      expect(delegate).equal(creatorAddress);
+      expect(delegate).equal(creatorAddr);
       done();
     });
     erc1056.identityOwner(identity)
       .then((owner: string) => {
-        expect(owner === creatorAddress);
+        expect(owner === creatorAddr);
       });
   });
 
@@ -162,40 +168,6 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       data, erc1056.address, v, r, s, 0, nonce,
     )
       .should.be.rejectedWith('This transaction has already been sent');
-  });
-
-  it('changeOwner() called by recovery agent should add sender to identity delegates', (done) => {
-    const agent = provider.getSigner(1);
-    const newOwner = accounts[5];
-    let agentAddress: string;
-    agent.getAddress()
-      .then((address) => {
-        agentAddress = address;
-        erc1056.on('DIDDelegateChanged', (id, type, delegate) => {
-          if (delegate === newOwner) {
-            erc1056.removeAllListeners('DIDDelegateChanged');
-            done();
-          }
-        });
-      })
-      .then(() => proxy.addRecoveryAgent(agentAddress))
-      .then((tx: any) => tx.wait())
-      .then(() => {
-        const asAgent = proxy.connect(agent);
-        return asAgent.changeOwner(newOwner);
-      })
-      .then((tx: any) => tx.wait())
-      .then(() => proxy.owner())
-      .then((owner: string) => {
-        owner.should.equal(newOwner);
-      })
-      .catch((e) => expect.fail(e));
-  });
-
-  it('changeOwner() called by non-recovery agent should revert', async () => {
-    const agent = provider.getSigner(2);
-    const asAgent = proxy.connect(agent);
-    asAgent.changeOwner(await agent.getAddress()).should.be.rejectedWith('Only recovery agent can change the owner');
   });
 
   it('along with transaction a value can be send', async () => {
@@ -316,22 +288,62 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect((await token.balanceOf(senderAddr)).toNumber()).equal(1000);
   });
 
-  it('when ERC223 tokens transfered to proxy provided callback should be executed', async () => {
-    const amount = 100;
-    const sender = provider.getSigner(3);
-    const senderAddr = await sender.getAddress();
-    const changeOwnerAbi: any = proxyAbi.find((f) => f.name === 'changeOwner');
-    const callback: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [senderAddr]);
-    const tokenERC223Factory = new ContractFactory(tokenERC223Abi, tokenERC223Bytecode, sender);
-    const token = await (await tokenERC223Factory.deploy()).deployed();
-    await (await token.mint(senderAddr, 1000)).wait();
-    await proxy.addRecoveryAgent(token.address); // to invoke callback on proxy
-    await (await token['transfer(address,uint256,bytes)'](
-      identity,
-      amount,
-      callback,
-    )).wait();
-    const owner = await proxy.owner();
-    expect(owner).equal(senderAddr);
+  describe('ERC1155Multiproxy', () => {
+    it('after proxy-token is transfered receiver must become a proxy owner', async () => {
+      const receiver = provider.getSigner(3);
+      const receiverAddr = await receiver.getAddress();
+
+      const proxyOwner = await proxy.owner();
+
+      expect(await proxy.owner()).equal(creatorAddr);
+
+      await erc1155.safeTransferFrom(proxyOwner, receiverAddr, uid, 1, '0x0');
+
+      expect(await proxy.owner()).equal(receiverAddr);
+    });
+
+    it('batch transfer should transfer ownership', async () => {
+      const id2 = 1234;
+      const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2, creatorAddr)).deployed();
+      const receiverAddr = await provider.getSigner(3).getAddress();
+
+      await erc1155.safeBatchTransferFrom(creatorAddr, receiverAddr, [uid, id2], [1, 1], '0x0');
+
+      expect(await proxy.owner()).equal(receiverAddr);
+      expect(await proxy2.owner()).equal(receiverAddr);
+    });
+
+    it('burning should cease ownership of the proxy', async () => {
+      await erc1155.burn(creatorAddr, uid);
+      expect(parseInt(await erc1155.balanceOf(creatorAddr, uid), 16)).equal(0);
+      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
+    });
+
+    it('batch burning should cease ownership of the burnded proxies', async () => {
+      const id2 = 1234;
+      const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, id2, creatorAddr)).deployed();
+
+      await erc1155.burn(creatorAddr, uid);
+      await erc1155.burn(creatorAddr, id2);
+
+      expect(parseInt(await erc1155.balanceOf(creatorAddr, uid), 16)).equal(0);
+      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
+
+      expect(parseInt(await erc1155.balanceOf(creatorAddr, id2), 16)).equal(0);
+      expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
+    });
+  });
+
+  describe.only('ERC1155MetadataUri', () => {
+    it('should return metadata uri', async () => {
+      expect(await erc1155.uri(uid)).equal(`${baseMetadataUri}${uid}.json`);
+    });
+
+    it('base metadata uri can be changed', async () => {
+      const newBaseMetadataUri = 'http://proxy-domain/';
+      await erc1155.updateUri(newBaseMetadataUri);
+
+      expect(await erc1155.uri(uid)).equal(`${newBaseMetadataUri}${uid}.json`);
+    });
   });
 });
