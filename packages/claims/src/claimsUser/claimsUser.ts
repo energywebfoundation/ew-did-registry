@@ -212,15 +212,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     if (issIsDelegate) {
       return true;
     }
-    await this.document.update(
-      DIDAttribute.Authenticate,
-      {
-        algo: Algorithms.ED25519,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        delegate: issAddress,
-      },
-    );
+
     return true;
   }
 
