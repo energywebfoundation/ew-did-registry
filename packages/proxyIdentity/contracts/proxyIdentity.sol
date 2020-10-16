@@ -60,7 +60,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     uid = _uid;
     creator = msg.sender;
     owner = _owner;
-    ERC1155Multiproxy(_erc1155).mint(_owner, uid, "");
+    ERC1155Multiproxy(_erc1155).mint(_owner, msg.sender, uid, "");
     _addDelegate(_owner);
   }
 

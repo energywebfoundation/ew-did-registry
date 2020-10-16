@@ -33,13 +33,12 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   let identity: string;
   let accounts: string[];
   const uid = 123;
-  const baseMetadataUri = 'https://token-cdn-domain/';
 
   beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
     creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    erc1155 = await (await erc1155Factory.deploy()).deployed();
     proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid, creatorAddr)).deployed();
     identity = proxy.address;
   });
@@ -331,19 +330,6 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
       expect(parseInt(await erc1155.balanceOf(creatorAddr, id2), 16)).equal(0);
       expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
-    });
-  });
-
-  describe.only('ERC1155MetadataUri', () => {
-    it('should return metadata uri', async () => {
-      expect(await erc1155.uri(uid)).equal(`${baseMetadataUri}${uid}.json`);
-    });
-
-    it('base metadata uri can be changed', async () => {
-      const newBaseMetadataUri = 'http://proxy-domain/';
-      await erc1155.updateUri(newBaseMetadataUri);
-
-      expect(await erc1155.uri(uid)).equal(`${newBaseMetadataUri}${uid}.json`);
     });
   });
 });
