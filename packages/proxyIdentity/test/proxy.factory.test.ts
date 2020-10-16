@@ -17,12 +17,11 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
   const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, deployer);
   const erc1056Factory = new ContractFactory(abi1056, bytecode1056, deployer);
   const erc1155Factory = new ContractFactory(abi1155, bytecode1155, deployer);
-  const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
 
   beforeEach(async () => {
     deployerAddress = await deployer.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
-    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    erc1155 = await (await erc1155Factory.deploy()).deployed();
     proxyFactory = await (await proxyFactoryCreator.deploy(erc1056.address, erc1155.address)).deployed();
   });
 

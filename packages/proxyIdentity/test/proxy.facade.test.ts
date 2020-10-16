@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 chai.use(assetArray);
 chai.should();
 
-describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
+describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
@@ -22,13 +22,12 @@ describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   let erc1155: Contract;
   let device1: Contract;
   let device2: Contract;
-  const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
 
   beforeEach(async () => {
     const erc1056Factory = new ContractFactory(abi1056, bytecode1056, oem);
     const erc1056 = await (await erc1056Factory.deploy()).deployed();
     const erc1155Factory = new ContractFactory(abi1155, bytecode1155, oem);
-    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    erc1155 = await (await erc1155Factory.deploy()).deployed();
     const proxyFactoryCreator = new ContractFactory(
       proxyFactoryAbi, proxyFactoryBytecode, oem,
     );
@@ -74,5 +73,18 @@ describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     const ids = (await erc1155.allTokens()).map((id: string) => parseInt(id, 16));
 
     expect(ids).to.be.equalTo([2, 3, 4]);
+  });
+
+  it('should update metadata uri', async () => {
+    const id = 1;
+    const exampleUri = 'https://example.com';
+
+    await createProxy(proxyFactory, id);
+
+    expect(await erc1155.uri(id)).equal('');
+
+    await erc1155.updateUri(id, exampleUri);
+
+    expect(await erc1155.uri(id)).equal(exampleUri);
   });
 });

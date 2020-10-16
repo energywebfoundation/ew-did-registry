@@ -20,10 +20,6 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   mapping(uint256 => Proxy) private proxies;
   uint256[] uids;
 
-  constructor(string memory baseMetadataUri) public {
-    _setBaseMetadataURI(baseMetadataUri);
-  }
-
   modifier isOwnerOrApproved(address account) {
     require(
       account == msg.sender || isApprovedForAll(account, msg.sender),
@@ -87,8 +83,15 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     }
   }
 
-  function updateUri(string memory newBaseMetadataUri) public {
-    _setBaseMetadataURI(newBaseMetadataUri);
+  function updateUri(uint256 id, string memory uri)
+    public
+    isOwnerOrApproved(proxies[id].owner)
+  {
+    proxies[id].metadataUri = uri;
+  }
+
+  function uri(uint256 id) public view returns (string memory) {
+    return proxies[id].metadataUri;
   }
 
   function tokensOwnedBy(address owner) public view returns (uint256[] memory) {
@@ -105,8 +108,12 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     }
     return result;
   }
-  
-  function tokensCreatedBy(address creator) public view returns (uint256[] memory) {
+
+  function tokensCreatedBy(address creator)
+    public
+    view
+    returns (uint256[] memory)
+  {
     uint256[] memory ids = new uint256[](uids.length);
     uint256 count = 0;
     for (uint256 i = 0; i < uids.length; i++) {
@@ -120,7 +127,7 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     }
     return result;
   }
-  
+
   function allTokens() public view returns (uint256[] memory) {
     return uids;
   }
