@@ -24,7 +24,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   let device2: Contract;
   const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
 
-  before(async () => {
+  beforeEach(async () => {
     const erc1056Factory = new ContractFactory(abi1056, bytecode1056, oem);
     const erc1056 = await (await erc1056Factory.deploy()).deployed();
     const erc1155Factory = new ContractFactory(abi1155, bytecode1155, oem);
@@ -42,7 +42,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     expect(await device2.owner()).equal(await oem.getAddress());
   });
 
-  it.only('should return tokens owned by owner', async () => {
+  it.only('should return list of owned tokens', async () => {
     const id2 = 2;
     const id3 = 3;
     await createProxy(proxyFactory, id2);
@@ -50,5 +50,15 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
 
     const oemIds = (await erc1155.tokensOwnedBy(await oem.getAddress())).map((id: string) => parseInt(id, 16));
     expect(oemIds).to.be.equalTo([id2, id3]);
+  });
+
+  it.only('should return list of created tokens', async () => {
+    const id2 = 2;
+    const id3 = 3;
+    await createProxy(proxyFactory, id2);
+    await createProxy(proxyFactory, id3);
+
+    const ids = (await erc1155.tokensCreatedBy(proxyFactory.address)).map((id: string) => parseInt(id, 16));
+    expect(ids).to.be.equalTo([id2, id3]);
   });
 });

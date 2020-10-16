@@ -5,7 +5,9 @@ import "multi-token-standard/contracts/tokens/ERC1155/ERC1155Metadata.sol";
 import "../proxyIdentity.sol";
 
 /**
- * @dev Implementation of the multi-token standard with tokens being a proxy identity contracts.
+ * @dev Implementation of the multi-token standard with tokens being a proxy identity contracts
+ * @ToDo: 1. On mint check if token with given id already exists
+ *        2. Only ProxyIdentity contract allowed to mint its token
  */
 contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   struct Proxy {
@@ -94,6 +96,21 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     uint256 count = 0;
     for (uint256 i = 0; i < uids.length; i++) {
       if (proxies[uids[i]].owner == owner) {
+        ids[count++] = uids[i];
+      }
+    }
+    uint256[] memory result = new uint256[](count);
+    for (uint256 i = 0; i < count; i++) {
+      result[i] = ids[i];
+    }
+    return result;
+  }
+  
+  function tokensCreatedBy(address creator) public view returns (uint256[] memory) {
+    uint256[] memory ids = new uint256[](uids.length);
+    uint256 count = 0;
+    for (uint256 i = 0; i < uids.length; i++) {
+      if (proxies[uids[i]].creator == creator) {
         ids[count++] = uids[i];
       }
     }
