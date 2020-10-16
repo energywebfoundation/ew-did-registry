@@ -8,7 +8,6 @@ import { getSignerPublicKey } from '@ew-did-registry/did-ethr-resolver';
 import { IClaims } from '../models';
 import { hashes } from '../utils';
 
-
 /**
  * @class
  * Base class for extending by other claims classes

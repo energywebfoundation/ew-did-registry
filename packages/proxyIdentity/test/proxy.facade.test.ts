@@ -1,4 +1,5 @@
 import chai, { expect } from 'chai';
+import assetArray from 'chai-arrays';
 import chaiAsPromised from 'chai-as-promised';
 import { providers, ContractFactory, Contract } from 'ethers';
 import { JsonRpcProvider } from 'ethers/providers';
@@ -10,6 +11,7 @@ const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
 
 chai.use(chaiAsPromised);
+chai.use(assetArray);
 chai.should();
 
 describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
@@ -17,6 +19,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
   let proxyFactory: Contract;
+  let erc1155: Contract;
   let device1: Contract;
   let device2: Contract;
   const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
@@ -25,7 +28,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     const erc1056Factory = new ContractFactory(abi1056, bytecode1056, oem);
     const erc1056 = await (await erc1056Factory.deploy()).deployed();
     const erc1155Factory = new ContractFactory(abi1155, bytecode1155, oem);
-    const erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
+    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
     const proxyFactoryCreator = new ContractFactory(
       proxyFactoryAbi, proxyFactoryBytecode, oem,
     );
@@ -37,5 +40,15 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     expect(await device1.owner()).equal(await oem.getAddress());
     device2 = await createProxy(proxyFactory, 2);
     expect(await device2.owner()).equal(await oem.getAddress());
+  });
+
+  it.only('should return tokens owned by owner', async () => {
+    const id2 = 2;
+    const id3 = 3;
+    await createProxy(proxyFactory, id2);
+    await createProxy(proxyFactory, id3);
+
+    const oemIds = (await erc1155.tokensOwnedBy(await oem.getAddress())).map((id: string) => parseInt(id, 16));
+    expect(oemIds).to.be.equalTo([id2, id3]);
   });
 });

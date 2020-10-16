@@ -8,7 +8,15 @@ import "../proxyIdentity.sol";
  * @dev Implementation of the multi-token standard with tokens being a proxy identity contracts.
  */
 contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
-  mapping(uint256 => address payable) private proxies;
+  struct Proxy {
+    address payable itsAddress;
+    address owner;
+    address creator;
+    string metadataUri;
+  }
+
+  mapping(uint256 => Proxy) private proxies;
+  uint256[] uids;
 
   constructor(string memory baseMetadataUri) public {
     _setBaseMetadataURI(baseMetadataUri);
@@ -22,13 +30,18 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     _;
   }
 
+  /**
+   * @notice Invoked only by proxy when it is created
+   */
   function mint(
-    address receiver,
+    address owner,
+    address creator,
     uint256 id,
     bytes memory data
   ) public {
-    _mint(receiver, id, 1, "");
-    proxies[id] = msg.sender;
+    _mint(owner, id, 1, "");
+    proxies[id] = Proxy(msg.sender, owner, creator, "");
+    uids.push(id);
   }
 
   function safeTransferFrom(
@@ -76,6 +89,21 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     _setBaseMetadataURI(newBaseMetadataUri);
   }
 
+  function tokensOwnedBy(address owner) public view returns (uint256[] memory) {
+    uint256[] memory ids = new uint256[](uids.length);
+    uint256 count = 0;
+    for (uint256 i = 0; i < uids.length; i++) {
+      if (proxies[uids[i]].owner == owner) {
+        ids[count++] = uids[i];
+      }
+    }
+    uint256[] memory result = new uint256[](count);
+    for (uint256 i = 0; i < count; i++) {
+      result[i] = ids[i];
+    }
+    return result;
+  }
+
   function _burn(address account, uint256 id) internal {
     require(account != address(0), "ERC1155: burn from the zero address");
 
@@ -85,9 +113,9 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
 
     balances[account][id] = 0;
 
-    ProxyIdentity proxy = ProxyIdentity(proxies[id]);
+    ProxyIdentity proxy = ProxyIdentity(proxies[id].itsAddress);
     proxy.onBurn();
-    proxies[id] = address(0);
+    proxies[id] = Proxy(address(0), address(0), address(0), "");
 
     emit TransferSingle(operator, account, address(0), id, amount);
   }
@@ -110,7 +138,7 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   }
 
   function _onProxyOwnerChanged(uint256 id, address owner) internal {
-    ProxyIdentity proxy = ProxyIdentity(proxies[id]);
+    ProxyIdentity proxy = ProxyIdentity(proxies[id].itsAddress);
     proxy.onOwnerChanged(owner);
   }
 }

@@ -334,7 +334,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     });
   });
 
-  describe.only('ERC1155MetadataUri', () => {
+  describe('ERC1155MetadataUri', () => {
     it('should return metadata uri', async () => {
       expect(await erc1155.uri(uid)).equal(`${baseMetadataUri}${uid}.json`);
     });
