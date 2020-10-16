@@ -6,8 +6,8 @@ import "../proxyIdentity.sol";
 
 /**
  * @dev Implementation of the multi-token standard with tokens being a proxy identity contracts
- * @ToDo: 1. On mint check if token with given id already exists
- *        2. Only ProxyIdentity contract allowed to mint its token
+ * Todo    1. On mint check if token with given id already exists
+ *         2. Only ProxyIdentity contract allowed to mint its token
  */
 contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   struct Proxy {
@@ -119,6 +119,10 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
       result[i] = ids[i];
     }
     return result;
+  }
+  
+  function allTokens() public view returns (uint256[] memory) {
+    return uids;
   }
 
   function _burn(address account, uint256 id) internal {

@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 chai.use(assetArray);
 chai.should();
 
-describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
+describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
@@ -42,23 +42,37 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     expect(await device2.owner()).equal(await oem.getAddress());
   });
 
-  it.only('should return list of owned tokens', async () => {
+  it('should return list of owned tokens', async () => {
     const id2 = 2;
     const id3 = 3;
     await createProxy(proxyFactory, id2);
     await createProxy(proxyFactory, id3);
 
-    const oemIds = (await erc1155.tokensOwnedBy(await oem.getAddress())).map((id: string) => parseInt(id, 16));
+    const oemIds = (await erc1155.tokensOwnedBy(await oem.getAddress()))
+      .map((id: string) => parseInt(id, 16));
+
     expect(oemIds).to.be.equalTo([id2, id3]);
   });
 
-  it.only('should return list of created tokens', async () => {
+  it('should return list of created tokens', async () => {
     const id2 = 2;
     const id3 = 3;
     await createProxy(proxyFactory, id2);
     await createProxy(proxyFactory, id3);
 
-    const ids = (await erc1155.tokensCreatedBy(proxyFactory.address)).map((id: string) => parseInt(id, 16));
+    const ids = (await erc1155.tokensCreatedBy(proxyFactory.address))
+      .map((id: string) => parseInt(id, 16));
+
     expect(ids).to.be.equalTo([id2, id3]);
+  });
+
+  it('should list all tokens', async () => {
+    await createProxy(proxyFactory, 2);
+    await createProxy(proxyFactory.connect(oem), 3);
+    await createProxy(proxyFactory, 4);
+
+    const ids = (await erc1155.allTokens()).map((id: string) => parseInt(id, 16));
+
+    expect(ids).to.be.equalTo([2, 3, 4]);
   });
 });
