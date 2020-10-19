@@ -33,8 +33,8 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
       expect(await proxy.creator()).equal(proxyFactory.address);
       done();
     });
-    const uid = 123;
-    proxyFactory.create(uid);
+    const serial = '123';
+    proxyFactory.create(serial);
   });
 
   it('createBatch() should set sender as owner of created proxies', (done) => {
@@ -50,6 +50,6 @@ describe('[PROXY IDENTITY PACKAGE/PROXY FACTORY CONTRACT]', function () {
       }
       done();
     });
-    proxyFactory.createBatch([1, 2]);
+    proxyFactory.createBatch(['1', '2']);
   });
 });

@@ -38,14 +38,12 @@ describe('Identities shared management with proxies', function () {
   let erc1155: Contract;
   let proxyFactory: Contract;
 
-  const uid = 1;
+  const serial = '1';
   let device: Contract;
 
   let store: DidStore;
 
-  let oemClaims: IClaimsUser;
   let installerClaims: IClaimsUser;
-  let ownerClaims: IClaimsUser;
 
   let installerDoc: DIDDocumentFull;
   let oemDoc: DIDDocumentFull;
@@ -83,30 +81,28 @@ describe('Identities shared management with proxies', function () {
 
     ownerDoc = new DIDDocumentFull(ownerDid, new Operator(owner, resolverSettings));
 
-    oemClaims = new ClaimsUser(oem, oemDoc, store);
     installerClaims = new ClaimsUser(installer, installerDoc, store);
-    ownerClaims = new ClaimsUser(installer, ownerDoc, store);
   });
 
   it('BEBAT creates proxy identity and becomes its owner', async () => {
-    device = await createProxy(proxyFactory, uid);
+    device = await createProxy(proxyFactory, serial);
     expect(await device.owner()).equal(await bebat.getAddress());
     expect(
-      parseInt(await erc1155.balanceOf(await bebat.getAddress(), uid), 16),
+      parseInt(await erc1155.balanceOf(await bebat.getAddress(), serial), 16),
     )
       .equal(1);
   });
 
   it('BEBAT transfers ownership to OEM', async () => {
-    await erc1155.connect(bebat).safeTransferFrom(await bebat.getAddress(), await oem.getAddress(), uid, 1, '0x0');
+    await erc1155.connect(bebat).transfer(await bebat.getAddress(), await oem.getAddress(), serial, 1, '0x0');
     expect(await device.owner()).equal(await oem.getAddress());
-    expect(parseInt(await erc1155.balanceOf(await oem.getAddress(), uid), 16)).equal(1);
+    expect(parseInt(await erc1155.balance(await oem.getAddress(), serial), 16)).equal(1);
   });
 
   it('OEM updates Battery metadata', async () => {
     const uri = 'ipfs://123abc';
-    await erc1155.connect(oem).updateUri(uid, uri);
-    expect(await erc1155.uri(uid)).equal(uri);
+    await erc1155.connect(oem).updateUri(serial, uri);
+    expect(await erc1155.uri(serial)).equal(uri);
   });
 
   it('OEM as the owner adds Installer to approved agents', async () => {
@@ -128,7 +124,7 @@ describe('Identities shared management with proxies', function () {
   it('Installer transfers ownership from OEM to asset owner', async () => {
     expect(await device.owner()).equal(await oem.getAddress());
 
-    await erc1155.connect(installer).safeTransferFrom(await oem.getAddress(), await owner.getAddress(), uid, 1, '0x0');
+    await erc1155.connect(installer).transfer(await oem.getAddress(), await owner.getAddress(), serial, 1, '0x0');
 
     expect(await device.owner()).equal(await owner.getAddress());
   });
