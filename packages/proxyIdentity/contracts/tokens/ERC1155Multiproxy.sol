@@ -51,6 +51,7 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   ) public {
     super.safeTransferFrom(from, to, id, amount, data);
     if (amount == 1) {
+      proxies[id].owner = to;
       _onProxyOwnerChanged(id, to);
     }
   }
@@ -65,6 +66,7 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
     super.safeBatchTransferFrom(from, to, ids, amounts, data);
     for (uint256 i = 0; i < ids.length; i++) {
       if (amounts[i] == 1) {
+        proxies[ids[i]].owner = to;
         _onProxyOwnerChanged(ids[i], to);
       }
     }

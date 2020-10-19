@@ -3,8 +3,9 @@ import chaiAsPromised from 'chai-as-promised';
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim, } from '@ew-did-registry/claims';
+import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim } from '@ew-did-registry/claims/';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
+import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import DIDRegistry from '../src';
 import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -31,11 +32,14 @@ describe('[REGISTRY PACKAGE]', function () {
   let issuerClaims: IClaimsIssuer;
   let verifier: DIDRegistry;
 
+  let userOperator: Operator;
+
   before(async () => {
     const resolverSettings = await getSettings([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
     const store = new DidStore(ipfsApi);
-    user = new DIDRegistry(userKeys, userDid, new Operator(userKeys, resolverSettings), store);
+    userOperator = new Operator(userKeys, resolverSettings);
+    user = new DIDRegistry(userKeys, userDid, userOperator, store);
     userClaims = user.claims.createClaimsUser();
     issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(issuerKeys, resolverSettings), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
@@ -54,6 +58,15 @@ describe('[REGISTRY PACKAGE]', function () {
       sn: 'abc123',
     };
     const token = await userClaims.createPublicClaim(publicData);
+    // add issuer to delegates
+    await userOperator.update(
+      userDid,
+      DIDAttribute.Authenticate,
+      {
+        type: PubKeyType.VerificationKey2018,
+        delegate: issuerAddress,
+      },
+    );
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePublicClaim(token);
     // send to User

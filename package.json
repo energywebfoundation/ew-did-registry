@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "lerna run test",
-    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"lerna run test \"",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"lerna run test\" ",
+    "test-integration": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"mocha -r ts-node/register tests/integration/*.test.ts \"",
     "setup": "lerna bootstrap --hoist --no-ci",
     "build": "rm -rf build docs packages/*/dist && lerna run compile",
     "compile": "lerna run compile",

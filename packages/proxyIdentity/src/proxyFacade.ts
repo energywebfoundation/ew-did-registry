@@ -2,7 +2,9 @@ import { Contract } from 'ethers';
 import { abi as proxyAbi } from '../build/contracts/ProxyIdentity.json';
 
 /**
-  * Creates proxy identity as smart contract
+  * Creates proxy identity as smart contract,
+  * sets proxy factory as creator and invoker as owner of created proxy.
+  * Owner is also recovery agent and delegate
   *
   * @param proxyFactory {Contract}
   *
