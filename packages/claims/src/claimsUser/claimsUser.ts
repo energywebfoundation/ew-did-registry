@@ -19,6 +19,7 @@ import {
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';
+import { Methods } from '../../../did-resolver-interface/node_modules/@ew-did-registry/did/dist';
 
 const { bn, hash, bitArray } = sjcl;
 
@@ -203,17 +204,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    */
   async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, (claim as any).iss))) {
+    const issuer = claim.iss as string;
+    if (!(await this.verifySignature(token, issuer))) {
       throw new Error('Incorrect signature');
     }
     assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
-    const [, , issAddress] = (claim.iss as string).split(':');
-    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
-    if (issIsDelegate) {
-      return true;
-    }
-
-    return true;
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, issuer);
+    const owner = `did:${Methods.Erc1056}:${await this.document.getController()}`;
+    return issIsDelegate || owner === issuer;
   }
 
   /**
