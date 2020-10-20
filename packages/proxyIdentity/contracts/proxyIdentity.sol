@@ -33,7 +33,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;
   Tkn tkn;
   bool __isTokenFallback;
-  uint256 uid;
+  string serial;
 
   struct Tkn {
     address addr;
@@ -52,15 +52,15 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   constructor(
     address _erc1056,
     address _erc1155,
-    uint256 _uid,
+    string memory _serial,
     address _owner
   ) public {
     erc1056 = _erc1056;
     erc1155 = _erc1155;
-    uid = _uid;
+    serial = _serial;
     creator = msg.sender;
     owner = _owner;
-    ERC1155Multiproxy(_erc1155).mint(_owner, uid, "");
+    ERC1155Multiproxy(_erc1155).mint(_owner, msg.sender, serial, "");
     _addDelegate(_owner);
   }
 
@@ -105,7 +105,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     );
     address signer = ecrecover(hash, v, r, s);
     require(
-      ERC1155Multiproxy(erc1155).balanceOf(signer, uid) == 1,
+      ERC1155Multiproxy(erc1155).balance(signer, serial) == 1,
       "Signature is not valid"
     );
     require(_sendTransaction(data, to, value), "Can't send transaction");

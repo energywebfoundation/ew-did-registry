@@ -41,14 +41,13 @@ describe('[DID-PROXY-OPERATOR]', function () {
   const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
   let identity: string;
   let did: string;
-  const baseMetadataUri = 'https://token-cdn-domain/{id}.json';
-  const uid = 123;
+  const serial = '123';
 
   before(async () => {
     operatorSettings = await getSettings([keys.getAddress()]);
     erc1056 = new Contract(operatorSettings.address, abi1056, creator);
-    erc1155 = await (await erc1155Factory.deploy(baseMetadataUri)).deployed();
-    proxy = await (await proxyFactory.deploy(erc1056.address, erc1155.address, uid, creator.address)).deployed();
+    erc1155 = await (await erc1155Factory.deploy()).deployed();
+    proxy = await proxyFactory.deploy(erc1056.address, erc1155.address, serial, creator.address);
     identity = proxy.address;
     did = `did:ethr:${identity}`;
     operator = new ProxyOperator(keys, operatorSettings, proxy.address);
