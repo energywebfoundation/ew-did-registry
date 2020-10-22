@@ -1,4 +1,4 @@
-import { IServiceEndpoint } from "./resolver";
+import { IServiceEndpoint } from './resolver';
 
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
@@ -40,7 +40,7 @@ export enum KeyTags {
 */
 export interface IAttributePayload {
   id?: string;
-  type?: string,
+  type?: string;
   publicKey?: string;
   serviceEndpoint?: string;
   tag?: string;

@@ -20,7 +20,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
 import {
-  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,
+  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
 import { getSignerPublicKey } from '../utils';
 
@@ -390,15 +390,15 @@ export class Operator extends Resolver implements IOperator {
     const sender = await this.getAddress();
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
-        const revoked = await this._sendTransaction(
+      const revoked = await this._sendTransaction(
         this._didRegistry.revokeAttribute,
         did,
         DIDAttribute.ServicePoint,
         {
-          type:DIDAttribute.ServicePoint,
+          type: DIDAttribute.ServicePoint,
           value: {
-            id:service.id,
-            type:service.type,
+            id: service.id,
+            type: service.type,
             serviceEndpoint: service.serviceEndpoint,
           },
         },
