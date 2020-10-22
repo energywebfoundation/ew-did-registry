@@ -1,3 +1,5 @@
+import { IServiceEndpoint } from "./resolver";
+
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
@@ -34,8 +36,11 @@ export enum KeyTags {
 }
 
 /** This interface represents the attribute payload
+ * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
 */
 export interface IAttributePayload {
+  id?: string;
+  type?: string,
   publicKey?: string;
   serviceEndpoint?: string;
   tag?: string;
@@ -51,7 +56,7 @@ export interface IAttributePayload {
 export interface IUpdateData {
   encoding?: Encoding;
   algo?: Algorithms;
-  type: PubKeyType;
-  value?: IAttributePayload;
+  type: PubKeyType | DIDAttribute;
+  value?: IAttributePayload ;
   delegate?: string;
 }

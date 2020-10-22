@@ -141,12 +141,15 @@ describe('[DID-PROXY-OPERATOR]', function () {
   });
 
   it('service endpoint update should add an entry in service section of the DID document', async () => {
-    const attribute = ServicePoint;
+    const attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://test.algo.com';
     const serviceId = 'UserClaimURL3';
     const updateData: IUpdateData = {
-      type: 'ClaimStore',
-      value: { id: `${did}#service-${serviceId}`, serviceEndpoint: endpoint },
+      type: attribute,
+      value: { 
+        id: `${did}#service-${serviceId}`, 
+        type:'ClaimStore', 
+        serviceEndpoint: endpoint },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -215,12 +218,15 @@ describe('[DID-PROXY-OPERATOR]', function () {
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
     // add service endpoint
-    attribute = ServicePoint;
+    attribute = DIDAttribute.ServicePoint;
     const serviceId = 'UserClaimURL4';
     const endpoint = 'https://example.com';
     updateData = {
-      type: 'ClaimStore',
-      value: { id: `${did}#service-${serviceId}`, serviceEndpoint: endpoint },
+      type: attribute,
+      value: { 
+        id: `${did}#service-${serviceId}`, 
+        type:'ClaimStore', 
+        serviceEndpoint: endpoint },
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
