@@ -48,9 +48,10 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   it('readAttribute should read service endpoint', async () => {
     const attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://test.readAttribute.com';
+    const serviceId = 'UserClaimURL';
     const updateData: IUpdateData = {
-      type: PubKeyType.VerificationKey2018,
-      value: {serviceEndpoint: endpoint},
+      type: 'ClaimStore',
+      value: { id: `${did}#service-${serviceId}`, serviceEndpoint: endpoint},
     };
     await operator.update(did, attribute, updateData, validity);
     const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.serviceEndpoint}` } }) as IServiceEndpoint;

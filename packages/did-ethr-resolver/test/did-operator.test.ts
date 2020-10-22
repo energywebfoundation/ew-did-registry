@@ -125,9 +125,10 @@ const testSuite = (): void => {
   it('service endpoint update should add an entry in service section of the DID document', async () => {
     const attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://test.algo.com';
+    const serviceId = 'UserClaimURL1';
     const updateData: IUpdateData = {
-      type: PubKeyType.VerificationKey2018,
-      value: { serviceEndpoint: endpoint },
+      type: 'ClaimStore',
+      value: { id: `${did}#service-${serviceId}`, serviceEndpoint: endpoint },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -196,9 +197,10 @@ const testSuite = (): void => {
     // add service endpoint
     attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://example.com';
+    const serviceId = 'AssetClaimURL2';
     updateData = {
-      type: PubKeyType.VerificationKey2018,
-      value: { serviceEndpoint: endpoint },
+      type: 'ClaimStore',
+      value: { id: `${did}#service-${serviceId}` ,serviceEndpoint: endpoint },
     };
     await operator.update(did, attribute, updateData, validity);
     const result = await operator.deactivate(did);
