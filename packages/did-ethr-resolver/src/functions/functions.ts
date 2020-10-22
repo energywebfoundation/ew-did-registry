@@ -141,26 +141,18 @@ const handleAttributeChange = (
         return document;
       case 'svc':
         // eslint-disable-next-line no-case-declarations
-        const serviceId = `${did}#service-${algo}-${event.values.value}`;
-        if (document.serviceEndpoints[serviceId] === undefined
-          || document.serviceEndpoints[serviceId].block < block) {
-          let serviceEndpoint = Buffer.from(
-            event.values.value.slice(2),
-            'hex',
-          ).toString();
-          let parsed: any = {};
-          try {
-            parsed = JSON.parse(serviceEndpoint);
-            serviceEndpoint = parsed.serviceEndpoint;
-          } catch (err) { }
-          document.serviceEndpoints[serviceId] = {
-            id: serviceId,
-            type: algo,
-            serviceEndpoint,
-            validity: validTo,
-            block,
-            ...parsed,
-          };
+        const servicePoint: IServiceEndpoint = JSON.parse(Buffer.from(
+          event.values.value.slice(2),
+          'hex',
+        ).toString());
+
+        servicePoint.validity = validTo;
+        servicePoint.block = block;
+
+        if (document.serviceEndpoints[servicePoint.id] === undefined
+          || document.serviceEndpoints[servicePoint.id].block < block) {
+          document.serviceEndpoints[servicePoint.id] = servicePoint;
+
           return document;
         }
         break;

@@ -1,5 +1,3 @@
-import { IServiceEndpoint } from './resolver';
-
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
