@@ -32,7 +32,6 @@ describe('Identities shared management with proxies', function () {
 
   let oemDid: string;
   let installerDid: string;
-  let ownerDid: string;
 
   let erc1056: Contract;
   let erc1155: Contract;
@@ -47,7 +46,6 @@ describe('Identities shared management with proxies', function () {
 
   let installerDoc: DIDDocumentFull;
   let oemDoc: DIDDocumentFull;
-  let ownerDoc: DIDDocumentFull;
 
   const claimData = {
     type: 'lithium',
@@ -57,7 +55,6 @@ describe('Identities shared management with proxies', function () {
   before(async () => {
     oemDid = `did:${Methods.Erc1056}:${await oem.getAddress()}`;
     installerDid = `did:${Methods.Erc1056}:${await installer.getAddress()}`;
-    ownerDid = `did:${Methods.Erc1056}:${await owner.getAddress()}`;
 
     const erc1056Creator = new ContractFactory(erc1056Abi, erc1056Bytecode, deployer);
     erc1056 = await erc1056Creator.deploy();
@@ -79,36 +76,29 @@ describe('Identities shared management with proxies', function () {
     installerDoc = new DIDDocumentFull(installerDid, new Operator(installer, resolverSettings));
     await installerDoc.create();
 
-    ownerDoc = new DIDDocumentFull(ownerDid, new Operator(owner, resolverSettings));
-
     installerClaims = new ClaimsUser(installer, installerDoc, store);
   });
 
   it('BEBAT creates proxy identity and becomes its owner', async () => {
     device = await createProxy(proxyFactory, serial);
     expect(await device.owner()).equal(await bebat.getAddress());
-    expect(
-      parseInt(await erc1155.balanceOf(await bebat.getAddress(), serial), 16),
-    )
-      .equal(1);
   });
 
   it('BEBAT transfers ownership to OEM', async () => {
-    await erc1155.connect(bebat).transfer(await bebat.getAddress(), await oem.getAddress(), serial, 1, '0x0');
+    await device.connect(bebat).changeOwner(await oem.getAddress());
     expect(await device.owner()).equal(await oem.getAddress());
-    expect(parseInt(await erc1155.balance(await oem.getAddress(), serial), 16)).equal(1);
   });
 
   it('OEM updates Battery metadata', async () => {
     const uri = 'ipfs://123abc';
-    await erc1155.connect(oem).updateUri(serial, uri);
-    expect(await erc1155.uri(serial)).equal(uri);
+    await device.connect(oem).updateUri(uri);
+    expect(await device.uri()).equal(uri);
   });
 
   it('OEM as the owner adds Installer to approved agents', async () => {
-    await erc1155.connect(oem).setApprovalForAll(await installer.getAddress(), true);
+    await device.connect(oem).addApprovedAgent(await installer.getAddress());
     expect(
-      await erc1155.isApprovedForAll(await oem.getAddress(), await installer.getAddress()),
+      await device.isApproved(await installer.getAddress()),
     )
       .true;
   });
@@ -124,7 +114,7 @@ describe('Identities shared management with proxies', function () {
   it('Installer transfers ownership from OEM to asset owner', async () => {
     expect(await device.owner()).equal(await oem.getAddress());
 
-    await erc1155.connect(installer).transfer(await oem.getAddress(), await owner.getAddress(), serial, 1, '0x0');
+    await device.connect(installer).changeOwner(await owner.getAddress());
 
     expect(await device.owner()).equal(await owner.getAddress());
   });

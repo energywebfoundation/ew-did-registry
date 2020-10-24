@@ -36,7 +36,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   bool __isTokenFallback;
   string serial;
   uint256 id;
-  mapping(address => bool) isApproved;
+  mapping(address => bool) public isApproved;
 
   struct Tkn {
     address addr;
