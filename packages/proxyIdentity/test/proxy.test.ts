@@ -287,7 +287,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect((await token.balanceOf(senderAddr)).toNumber()).equal(1000);
   });
 
-  describe('ERC1155Multiproxy', () => {
+  describe.only('ERC1155Multiproxy', () => {
     it('proxy token receiver must become a proxy owner', async () => {
 
       const receiver = await provider.getSigner(3).getAddress();

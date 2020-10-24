@@ -24,6 +24,7 @@ interface IERC1056 {
 
 contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   address public owner;
+  address[] public agents;
   address public creator;
   address public erc1056;
   address public erc1155;
@@ -34,6 +35,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   Tkn tkn;
   bool __isTokenFallback;
   string serial;
+  uint256 id;
+  mapping(address => bool) isApproved;
 
   struct Tkn {
     address addr;
@@ -45,9 +48,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   }
 
   event TransactionSent(bytes data, address to, uint256 value);
-  event OwnerChanged(address identity, address prev, address next);
-  event RecoveryAgentAdded(address agent);
-  event RecoveryAgentRemoved(address agent);
+  event ApprovedAgentAdded(address agent);
+  event ApprovedAgentRemoved(address agent);
 
   constructor(
     address _erc1056,
@@ -60,7 +62,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     serial = _serial;
     creator = msg.sender;
     owner = _owner;
-    ERC1155Multiproxy(_erc1155).mint(_owner, msg.sender, serial, "");
+    id = ERC1155Multiproxy(_erc1155).tokenCount();
+    ERC1155Multiproxy(_erc1155).mint(id);
     _addDelegate(_owner);
   }
 
@@ -69,14 +72,17 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     _;
   }
 
-  modifier tokenPayable {
-    if (!__isTokenFallback)
-      revert("Method can be invoked only as part of ERC223 transfer");
+  modifier isOwnerOrApproved() {
+    require(
+      msg.sender == owner || isApproved[msg.sender],
+      "ProxyIdentity: Only owner or approved agent allowed"
+    );
     _;
   }
 
-  modifier _erc1155() {
-    require(msg.sender == erc1155, "Only ERC1155 allowed");
+  modifier tokenPayable {
+    if (!__isTokenFallback)
+      revert("Method can be invoked only as part of ERC223 transfer");
     _;
   }
 
@@ -105,7 +111,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     );
     address signer = ecrecover(hash, v, r, s);
     require(
-      ERC1155Multiproxy(erc1155).balance(signer, serial) == 1,
+      ERC1155Multiproxy(erc1155).balanceOf(signer, id) == 1,
       "Signature is not valid"
     );
     require(_sendTransaction(data, to, value), "Can't send transaction");
@@ -117,6 +123,24 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
 
   function revokeDelegate(address delegate) public _owner() {
     IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
+  }
+
+  function addApprovedAgent(address agent) public isOwnerOrApproved {
+    isApproved[agent] = true;
+    ERC1155Multiproxy(erc1155).setApprovalForAll(agent, true);
+  }
+
+  function removeApprovedAgent(address agent) public isOwnerOrApproved {
+    isApproved[agent] = false;
+    ERC1155Multiproxy(erc1155).setApprovalForAll(agent, false);
+  }
+
+  function uri() public view returns (string memory) {
+    return ERC1155Multiproxy(erc1155).uri(id);
+  }
+
+  function updateUri(string memory uri) public {
+    ERC1155Multiproxy(erc1155).updateUri(id, uri);
   }
 
   function onERC1155Received(
@@ -137,15 +161,6 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     bytes calldata _data
   ) external returns (bytes4) {
     return ERC1155_BATCH_ACCEPTED;
-  }
-
-  function onOwnerChanged(address newOwner) public _erc1155 {
-    owner = newOwner;
-    _addDelegate(newOwner);
-  }
-  
-  function onBurn() public _erc1155 {
-    owner = address(0);
   }
 
   function _sendTransaction(
