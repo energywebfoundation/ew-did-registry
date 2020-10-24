@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/claims",
-  "version": "0.0.1-alpha.676.0",
+  "version": "0.0.1-alpha.694.0",
   "publishConfig": {
     "access": "public"
   },
@@ -29,8 +29,8 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did": "0.0.1-alpha.632.0",
-    "@ew-did-registry/did-document": "0.0.1-alpha.676.0",
-    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.676.0",
+    "@ew-did-registry/did-document": "0.0.1-alpha.694.0",
+    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.694.0",
     "@ew-did-registry/did-ipfs-store": "0.0.1-alpha.632.0",
     "@ew-did-registry/did-resolver-interface": "0.0.1-alpha.632.0",
     "@ew-did-registry/did-store-interface": "0.0.1-alpha.632.0",
