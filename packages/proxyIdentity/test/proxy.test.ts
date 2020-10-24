@@ -116,8 +116,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
         const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
         const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        const asNonOwner: Contract = proxy.connect(nonOwner);
-        const tx = await asNonOwner.sendSignedTransaction(
+        const tx = await proxy.connect(nonOwner).sendSignedTransaction(
           data, erc1056.address, v, r, s, 0, nonce + 1,
         );
         await tx.wait();
@@ -287,47 +286,36 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     expect((await token.balanceOf(senderAddr)).toNumber()).equal(1000);
   });
 
-  describe.only('ERC1155Multiproxy', () => {
-    it('proxy token receiver must become a proxy owner', async () => {
+  describe('ERC1155Multiproxy', () => {
+    it('proxy owner can be changed', async () => {
 
       const receiver = await provider.getSigner(3).getAddress();
 
       expect(await proxy.owner()).equal(creatorAddr);
 
-      await erc1155.transfer(creatorAddr, receiver, serial, 1, '0x0');
+      await proxy.changeOwner(receiver);
 
       expect(await proxy.owner()).equal(receiver);
     });
 
-    it('ownership can be transfered batched', async () => {
-      const serial2 = '1234';
-      const proxy2 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr);
-      const receiverAddr = await provider.getSigner(3).getAddress();
+    // it('burning should cease ownership of the proxy', async () => {
+    //   await erc1155.burn(creatorAddr, serial);
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
+    //   expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
+    // });
 
-      await erc1155.transferBatch(creatorAddr, receiverAddr, [serial, serial2], [1, 1], '0x0');
+    // it('batch burning should cease ownership of the burnded proxies', async () => {
+    //   const serial2 = '1234';
+    //   const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr)).deployed();
 
-      expect(await proxy.owner()).equal(receiverAddr);
-      expect(await proxy2.owner()).equal(receiverAddr);
-    });
+    //   await erc1155.burn(creatorAddr, serial);
+    //   await erc1155.burn(creatorAddr, serial2);
 
-    it('burning should cease ownership of the proxy', async () => {
-      await erc1155.burn(creatorAddr, serial);
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
-      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
-    });
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
+    //   expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
 
-    it('batch burning should cease ownership of the burnded proxies', async () => {
-      const serial2 = '1234';
-      const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr)).deployed();
-
-      await erc1155.burn(creatorAddr, serial);
-      await erc1155.burn(creatorAddr, serial2);
-
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
-      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
-
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial2), 16)).equal(0);
-      expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
-    });
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial2), 16)).equal(0);
+    //   expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
+    // });
   });
 });

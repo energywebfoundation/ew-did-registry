@@ -111,7 +111,7 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     );
     address signer = ecrecover(hash, v, r, s);
     require(
-      ERC1155Multiproxy(erc1155).balanceOf(signer, id) == 1,
+      signer == owner,
       "Signature is not valid"
     );
     require(_sendTransaction(data, to, value), "Can't send transaction");
@@ -123,6 +123,10 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
 
   function revokeDelegate(address delegate) public _owner() {
     IERC1056(erc1056).revokeDelegate(address(this), "sigAuth", delegate);
+  }
+
+  function changeOwner(address newOwner) public isOwnerOrApproved {
+    owner = newOwner;
   }
 
   function addApprovedAgent(address agent) public isOwnerOrApproved {

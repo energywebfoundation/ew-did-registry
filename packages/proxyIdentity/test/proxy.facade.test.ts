@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 chai.use(assetArray);
 chai.should();
 
-describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
+describe.only('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem: providers.JsonRpcSigner = provider.getSigner(0);
@@ -73,16 +73,14 @@ describe('[PROXY IDENTITY PACKAGE / PROXY FACADE]', function () {
     expect(serials).to.be.equalTo(['2', '3', '4']);
   });
 
-  it('should update metadata uri', async () => {
-    const id = '1';
+  it.only('should update metadata uri', async () => {
+    const device = await createProxy(proxyFactory, '1');
     const exampleUri = 'https://example.com';
 
-    await createProxy(proxyFactory, id);
+    expect(await device.uri()).equal('');
 
-    expect(await erc1155.uri(id)).equal('');
+    await device.updateUri(exampleUri);
 
-    await erc1155.updateUri(id, exampleUri);
-
-    expect(await erc1155.uri(id)).equal(exampleUri);
+    expect(await device.uri()).equal(exampleUri);
   });
 });
