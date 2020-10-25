@@ -28,7 +28,7 @@ describe('Identities shared management with proxies', function () {
   const bebat = provider.getSigner(1);
   const oem = provider.getSigner(2);
   const installer = provider.getSigner(3);
-  const owner = provider.getSigner(4);
+  const customer = provider.getSigner(4);
 
   let oemDid: string;
   let installerDid: string;
@@ -67,7 +67,7 @@ describe('Identities shared management with proxies', function () {
 
     store = new DidStore(await spawnIpfsDaemon());
     const resolverSettings = await getSettings([
-      await oem.getAddress(), await installer.getAddress(), await owner.getAddress(),
+      await oem.getAddress(), await installer.getAddress(), await customer.getAddress(),
     ]);
 
     oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, resolverSettings));
@@ -111,12 +111,17 @@ describe('Identities shared management with proxies', function () {
     expect(await store.get(claimUrl)).equal(claim);
   });
 
-  it('Installer transfers ownership from OEM to asset owner', async () => {
-    expect(await device.owner()).equal(await oem.getAddress());
+  it('Installer adds customer to approved agents', async () => {
+    await device.connect(installer).addApprovedAgent(await customer.getAddress());
 
-    await device.connect(installer).changeOwner(await owner.getAddress());
+    expect(await device.isApproved(await customer.getAddress())).true;
+  });
 
-    expect(await device.owner()).equal(await owner.getAddress());
+  it('Approved customer can update metadata uri', async () => {
+    const uri = 'ipfs://ipfs/123abc';
+    await device.connect(customer).updateUri(uri);
+
+    expect(await device.uri()).equal(uri);
   });
 
   after(async () => {
