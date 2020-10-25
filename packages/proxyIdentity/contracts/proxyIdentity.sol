@@ -24,8 +24,8 @@ interface IERC1056 {
 
 contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   address public owner;
-  address[] public agents;
   address public creator;
+  address[] public agents;
   address public erc1056;
   address public erc1155;
   uint256 defaultValidity = 2**256 - 1;
@@ -34,8 +34,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   bytes4 internal constant ERC1155_BATCH_ACCEPTED = 0xbc197c81;
   Tkn tkn;
   bool __isTokenFallback;
-  string serial;
-  uint256 id;
+  string public serial;
+  uint256 public id;
   mapping(address => bool) public isApproved;
 
   struct Tkn {
@@ -55,16 +55,16 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     address _erc1056,
     address _erc1155,
     string memory _serial,
-    address _owner
+    address _creator
   ) public {
     erc1056 = _erc1056;
     erc1155 = _erc1155;
     serial = _serial;
-    creator = msg.sender;
-    owner = _owner;
+    creator = _creator;
+    owner = _creator;
     id = ERC1155Multiproxy(_erc1155).tokenCount();
     ERC1155Multiproxy(_erc1155).mint(id);
-    _addDelegate(_owner);
+    _addDelegate(_creator);
   }
 
   modifier _owner() {
@@ -143,8 +143,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     return ERC1155Multiproxy(erc1155).uri(id);
   }
 
-  function updateUri(string memory uri) public {
-    ERC1155Multiproxy(erc1155).updateUri(id, uri);
+  function updateUri(string memory _uri) public {
+    ERC1155Multiproxy(erc1155).updateUri(id, _uri);
   }
 
   function onERC1155Received(

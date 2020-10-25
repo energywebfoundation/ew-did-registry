@@ -11,6 +11,7 @@ contract ERC1155Multiproxy is ERC1155MintBurn, ERC1155Metadata {
   mapping(uint256 => string) uris;
   mapping(uint256 => address) owners;
   uint256 public tokenCount;
+  address[] _proxies;
   
   function uri(uint256 id) public view returns(string memory) {
     return uris[id];
@@ -24,6 +25,11 @@ contract ERC1155Multiproxy is ERC1155MintBurn, ERC1155Metadata {
   function mint(uint256 id) public {
     _mint(msg.sender, id, 1, "0x0");
     owners[id] = msg.sender;
+    _proxies.push(msg.sender);
     tokenCount++;
+  }
+  
+  function proxies() public view returns (address[] memory) {
+    return _proxies;
   }
 }
