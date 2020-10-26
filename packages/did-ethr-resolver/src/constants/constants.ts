@@ -36,4 +36,4 @@ export const attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+
 export const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})`;
 export const delegatePubKeyIdPattern = `^did:ethr:${ethAddrPattern}#delegate-(sigAuth|veriKey)-(${pubKeyPattern}|${ethAddrPattern})$`;
 export const pubKeyIdPattern = `^did:ethr:${ethAddrPattern}#key-([A-Za-z0-9]+)`;
-export const serviceIdPattern = `^did:ethr:${ethAddrPattern}#service-([A-Za-z0-9]+)-([A-Za-z0-9]+)$`;
+export const serviceIdPattern = `^did:ethr:${ethAddrPattern}#service-([A-Za-z0-9]+)`;
