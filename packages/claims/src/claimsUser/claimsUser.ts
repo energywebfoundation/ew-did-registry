@@ -13,13 +13,13 @@ import {
   Encoding,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import { Methods } from '@ew-did-registry/did';
 import {
   IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';
-import { Methods } from '../../../did-resolver-interface/node_modules/@ew-did-registry/did/dist';
 
 const { bn, hash, bitArray } = sjcl;
 

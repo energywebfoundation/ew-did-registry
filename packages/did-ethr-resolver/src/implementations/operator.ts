@@ -20,7 +20,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
 import {
-  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern, serviceIdPattern,
+  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
 import { getSignerPublicKey } from '../utils';
 
@@ -390,18 +390,16 @@ export class Operator extends Resolver implements IOperator {
     const sender = await this.getAddress();
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
-      const match = service.id.match(serviceIdPattern);
-      const type = match[1] as PubKeyType;
-      const value = service.serviceEndpoint;
-      const didAttribute = DIDAttribute.ServicePoint;
       const revoked = await this._sendTransaction(
         this._didRegistry.revokeAttribute,
         did,
-        didAttribute,
+        DIDAttribute.ServicePoint,
         {
-          type,
+          type: DIDAttribute.ServicePoint,
           value: {
-            serviceEndpoint: value,
+            id: service.id,
+            type: service.type,
+            serviceEndpoint: service.serviceEndpoint,
           },
         },
         null,
@@ -483,7 +481,7 @@ export class Operator extends Resolver implements IOperator {
       case DIDAttribute.Authenticate:
         return updateData.type;
       case DIDAttribute.ServicePoint:
-        return `did/${DIDAttribute.ServicePoint}/${type}`;
+        return `did/${DIDAttribute.ServicePoint}/${updateData.value.type}`;
       default:
         throw new Error('Unknown attribute name');
     }

@@ -4,6 +4,8 @@ before_deploy:
   - git config --global user.email ${GITHUB_EMAIL}
   - git config --global user.name ${GITHUB_USER}
   - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
+  - git fetch origin master:master
+  - git fetch origin development:development
   - git reset --hard
   - echo "//registry.npmjs.org/:_authToken=\${NPM_API_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 install:
@@ -16,7 +18,7 @@ script:
   - npm run browserTest:run
 deploy:
   - provider: script
-    script: "git checkout master && npm run publish:canary && git fetch && git checkout development && git merge master && git push"
+    script: "git checkout master && npm run publish:canary && git checkout development && git merge master && git push --set-upstream origin development"
     skip_cleanup: true
     on:
       branch: master
