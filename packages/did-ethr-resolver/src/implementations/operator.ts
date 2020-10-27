@@ -2,7 +2,6 @@
 import {
   Contract, ethers, Event, Signer, utils,
 } from 'ethers';
-import { IKeys } from '@ew-did-registry/keys';
 import {
   Algorithms,
   DIDAttribute,
@@ -18,11 +17,12 @@ import {
   PubKeyType,
   KeyTags,
 } from '@ew-did-registry/did-resolver-interface';
+import { BaseProvider } from 'ethers/providers';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
-import { getSignerPublicKey } from '../utils';
+import { getSignerPublicKey, ConnectedSigner } from '../utils';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -51,24 +51,14 @@ export class Operator extends Resolver implements IOperator {
  * @param { IKeys } keys - identifies an account which acts as a
  * controller in a subsequent operations with DID document
  */
-  constructor(signMethod: IKeys | Signer, settings: IResolverSettings) {
+  constructor(signer: Signer, settings: IResolverSettings) {
     super(settings);
     const {
       address, abi,
     } = this.settings;
-    const keys = signMethod as IKeys;
-    const signer = signMethod as Signer;
-    if (Object.prototype.hasOwnProperty.call(signMethod, 'privateKey')) {
-      this._keys = keys;
-      const { privateKey } = this._keys;
-      const wallet = new ethers.Wallet(privateKey, this._provider);
-      this.address = keys.getAddress();
-      this._didRegistry = new ethers.Contract(address, abi, wallet);
-    } else {
-      this._signer = signer;
-      this._didRegistry = new ethers.Contract(address, abi, signer);
-      signer.getAddress().then((addr) => { this.address = addr; });
-    }
+    this._signer = signer.provider ? signer : new ConnectedSigner(signer, this._provider);
+    this._didRegistry = new ethers.Contract(address, abi, this._signer);
+    signer.getAddress().then((addr) => { this.address = addr; });
   }
 
   private async getAddress(): Promise<string> {

@@ -1,7 +1,7 @@
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Keys} from '@ew-did-registry/keys';
-import {Operator, Resolver} from '../src';
+import {Operator, Resolver, signerFromKeys} from '../src';
 import {DelegateTypes, IResolver, IResolverSettings,} from '@ew-did-registry/did-resolver-interface';
 import {getSettings} from '../../../tests/init-ganache';
 
@@ -20,7 +20,7 @@ describe('[RESOLVER PACKAGE]', function () {
 
   before(async () => {
     operatorSetting = await getSettings([]);
-    operator = new Operator(keys, operatorSetting);
+    operator = new Operator(signerFromKeys(keys), operatorSetting);
   });
 
   beforeEach(() => {

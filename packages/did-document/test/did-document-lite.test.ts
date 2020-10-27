@@ -3,6 +3,7 @@ import { DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator } from '@ew-d
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
+import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 import { getSettings } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
@@ -15,7 +16,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
 
   before(async () => {
     const resolverSettings = await getSettings([keys.getAddress()]);
-    operator = new Operator(keys, resolverSettings);
+    operator = new Operator(signerFromKeys(keys), resolverSettings);
     docLite = new DIDDocumentLite(did, operator);
   });
 
@@ -35,7 +36,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-4'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     });
     const publicKey = await docLite.readAttribute({ publicKey: { type: 'Secp256k1VerificationKey' } });
     expect(publicKey).to.be.not.undefined;
@@ -45,7 +46,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
     const url = 'http://test.com';
     await operator.update(did, DIDAttribute.ServicePoint, {
       type: PubKeyType.VerificationKey2018,
-      value:{serviceEndpoint: url},
+      value: { serviceEndpoint: url },
     });
     const service = await docLite.readAttribute({ serviceEndpoints: { serviceEndpoint: url } });
     expect(service).to.be.not.undefined;

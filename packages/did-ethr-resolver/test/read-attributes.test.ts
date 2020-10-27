@@ -1,6 +1,6 @@
 import {Keys} from '@ew-did-registry/keys';
 import {expect} from 'chai';
-import {Operator} from '../src';
+import {Operator, signerFromKeys} from '../src';
 import {
   Algorithms,
   DIDAttribute,
@@ -28,7 +28,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
 
   before(async () => {
     operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
-    operator = new Operator(keys, operatorSetting);
+    operator = new Operator(signerFromKeys(keys), operatorSetting);
   });
 
   it('readAttribute should read public key by its hex value and type', async () => {
