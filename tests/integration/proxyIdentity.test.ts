@@ -13,7 +13,7 @@ import { Methods } from '../../packages/did-registry/node_modules/@ew-did-regist
 import { DidStore } from '../../packages/did-ipfs-store/src';
 import { Operator } from '../../packages/did-ethr-resolver/src';
 
-import { spawnIpfsDaemon, shutDownIpfsDaemon, getSettings } from '..';
+import { spawnIpfsDaemon, shutDownIpfsDaemon, deployRegistry } from '..';
 
 const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
 const { ethrReg: { abi: erc1056Abi, bytecode: erc1056Bytecode } } = erc1056Build;
@@ -66,14 +66,14 @@ describe('Identities shared management with proxies', function () {
     proxyFactory = await proxyFactoryCreator.deploy(erc1056.address, erc1155.address);
 
     store = new DidStore(await spawnIpfsDaemon());
-    const resolverSettings = await getSettings([
+    const registry = await deployRegistry([
       await oem.getAddress(), await installer.getAddress(), await customer.getAddress(),
     ]);
 
-    oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, resolverSettings));
+    oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, { address: registry }));
     await oemDoc.create();
 
-    installerDoc = new DIDDocumentFull(installerDid, new Operator(installer, resolverSettings));
+    installerDoc = new DIDDocumentFull(installerDid, new Operator(installer, { address: registry }));
     await installerDoc.create();
 
     installerClaims = new ClaimsUser(installer, installerDoc, store);

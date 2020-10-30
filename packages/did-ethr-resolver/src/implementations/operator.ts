@@ -1,6 +1,7 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import {
-  Contract, ethers, Event, Signer, utils,
+  Contract, ethers, Event, Signer,
 } from 'ethers';
 import {
   Algorithms,
@@ -9,20 +10,18 @@ import {
   IAuthentication,
   IOperator,
   IPublicKey,
-  IResolverSettings,
   IServiceEndpoint,
   IUpdateData,
   IAttributePayload,
-  ProviderTypes,
   PubKeyType,
   KeyTags,
+  RegistrySettings,
 } from '@ew-did-registry/did-resolver-interface';
-import { BaseProvider } from 'ethers/providers';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
-import { getSignerPublicKey, ConnectedSigner } from '../utils';
+import { getSignerPublicKey } from '../utils';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -48,21 +47,24 @@ export class Operator extends Resolver implements IOperator {
   private readonly _signer: Signer;
 
   /**
- * @param { IKeys } keys - identifies an account which acts as a
+ * @param { Signer } signer - signer. It should be connected to provider
  * controller in a subsequent operations with DID document
  */
-  constructor(signer: Signer, settings: IResolverSettings) {
-    super(settings);
+  constructor(signer: Signer, settings: RegistrySettings) {
+    super(signer.provider, settings);
     const {
       address, abi,
     } = this.settings;
-    this._signer = signer.provider ? signer : new ConnectedSigner(signer, this._provider);
+    this._signer = signer;
     this._didRegistry = new ethers.Contract(address, abi, this._signer);
-    signer.getAddress().then((addr) => { this.address = addr; });
   }
 
   private async getAddress(): Promise<string> {
-    return this.address || this._signer.getAddress();
+    return this.address || (this.address = await this._signer.getAddress());
+  }
+
+  private async did(): Promise<string> {
+    return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
   public async getPublicKey(): Promise<string> {
@@ -70,7 +72,8 @@ export class Operator extends Resolver implements IOperator {
       return this._keys.publicKey;
     }
     // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = await getSignerPublicKey(this._signer);
+    return this._keys.publicKey = await this.readOwnerPubKey(await this.did())
+      || await getSignerPublicKey(this._signer);
   }
 
   /**
@@ -84,10 +87,10 @@ export class Operator extends Resolver implements IOperator {
  */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(): Promise<boolean> {
-    const did = `did:${this.settings.method}:${await this.getAddress()}`;
-    const document = await this.read(did);
-    const pubKey = document.publicKey.find((pk) => pk.type === 'Secp256k1veriKey');
-    if (pubKey) return true;
+    const did = await this.did();
+    if (await this.readOwnerPubKey(did)) {
+      return true;
+    }
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
       algo: Algorithms.Secp256k1,
@@ -101,36 +104,36 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
- * Sets attribute value in DID document identified by the did
- *
- * @example
- *```typescript
- * import {
- * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
- *  } from '@ew-did-registry/did-resolver';
- * import { Keys } from '@ew-did-registry/keys';
- *
- * const ownerKeys = new Keys();
- * const operator = new Operator(ownerKeys);
- * const pKey = DIDAttribute.PublicKey;
- * const updateData = {
- *     algo: Algorithms.ED25519,
- *     type: PubKeyType.VerificationKey2018,
- *     encoding: Encoding.HEX,
- *     value: new Keys().publicKey,
- * };
- * const validity = 10 * 60 * 1000;
- * const updated = await operator.update(did, pKey, updateData, validity);
- * ```
- *
- * @param { string } did - did associated with DID document
- * @param { DIDAttribute } didAttribute - specifies updated section in DID document. Must be 31
- * bytes or shorter
- * @param { IUpdateData } updateData
- * @param { number } validity - time in milliseconds during which
- *                              attribute will be valid
- * @returns Promise<boolean>
- */
+  * Sets attribute value in DID document identified by the did
+  *
+  * @example
+  *```typescript
+  * import {
+  * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
+  *  } from '@ew-did-registry/did-resolver';
+  * import { Keys } from '@ew-did-registry/keys';
+  *
+  * const ownerKeys = new Keys();
+  * const operator = new Operator(ownerKeys);
+  * const pKey = DIDAttribute.PublicKey;
+  * const updateData = {
+  *     algo: Algorithms.ED25519,
+  *     type: PubKeyType.VerificationKey2018,
+  *     encoding: Encoding.HEX,
+  *     value: new Keys().publicKey,
+  * };
+  * const validity = 10 * 60 * 1000;
+  * const updated = await operator.update(did, pKey, updateData, validity);
+  * ```
+  *
+  * @param { string } did - did associated with DID document
+  * @param { DIDAttribute } didAttribute - specifies updated section in DID document. Must be 31
+  * bytes or shorter
+  * @param { IUpdateData } updateData
+  * @param { number } validity - time in milliseconds during which
+  *                              attribute will be valid
+  * @returns Promise<boolean>
+  */
   async update(
     did: string,
     didAttribute: DIDAttribute,
@@ -148,14 +151,14 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
- * Revokes the delegate from DID Document
- * Returns true on success
- *
- * @param { string } identityDID - did of identity of interest
- * @param { PubKeyType } delegateType - type of delegate of interest
- * @param { string } delegateDID - did of delegate of interest
- * @returns Promise<boolean>
- */
+  * Revokes the delegate from DID Document
+  * Returns true on success
+  *
+  * @param { string } identityDID - did of identity of interest
+  * @param { PubKeyType } delegateType - type of delegate of interest
+  * @param { string } delegateDID - did of delegate of interest
+  * @returns Promise<boolean>
+  */
   async revokeDelegate(
     identityDID: string,
     delegateType: PubKeyType,
@@ -183,14 +186,14 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
- * Revokes the attribute from DID Document
- * Returns true on success
- *
- * @param { string } identityDID - did of identity of interest
- * @param { DIDAttribute } attributeType - type of attribute to revoke
- * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
- * @returns Promise<boolean>
- */
+  * Revokes the attribute from DID Document
+  * Returns true on success
+  *
+  * @param { string } identityDID - did of identity of interest
+  * @param { DIDAttribute } attributeType - type of attribute to revoke
+  * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+  * @returns Promise<boolean>
+  */
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
@@ -218,13 +221,13 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
- * Changes the owner of particular decentralised identity
- * Returns true on success
- *
- * @param { string } identityDID - did of current identity owner
- * @param { string } newOwnerDid - did of new owner that will be set on success
- * @returns Promise<boolean>
- */
+  * Changes the owner of particular decentralised identity
+  * Returns true on success
+  *
+  * @param { string } identityDID - did of current identity owner
+  * @param { string } newOwnerDid - did of new owner that will be set on success
+  * @returns Promise<boolean>
+  */
   async changeOwner(
     identityDID: string,
     newOwnerDid: string,
@@ -249,21 +252,21 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
- * Revokes authentication methods, public keys and delegates from DID document
- *
- * @example
- * ```typescript
- *import { Operator } from '@ew-did-registry/did-resolver';
- *import { Keys } from '@ew-did-registry/keys';
- *
- * const ownerKeys = new Keys();
- * const operator = new Operator(ownerKeys);
- * const updated = await operator.deactivate(did);
- * ```
- *
- * @param { string } did
- * @returns Promise<boolean>
- */
+  * Revokes authentication methods, public keys and delegates from DID document
+  *
+  * @example
+  * ```typescript
+  *import { Operator } from '@ew-did-registry/did-resolver';
+  *import { Keys } from '@ew-did-registry/keys';
+  *
+  * const ownerKeys = new Keys();
+  * const operator = new Operator(ownerKeys);
+  * const updated = await operator.deactivate(did);
+  * ```
+  *
+  * @param { string } did
+  * @returns Promise<boolean>
+  */
   async deactivate(did: string): Promise<boolean> {
     const document = await this.read(did);
     const authRevoked = await this._revokeAuthentications(
@@ -485,23 +488,6 @@ export class Operator extends Resolver implements IOperator {
       ? value
       : JSON.stringify(value))
       .toString('hex')}`;
-  }
-
-  /**
- * Returns relevant provider
- *
- * @private
- */
-  private _getProvider(): ethers.providers.JsonRpcProvider | ethers.providers.BaseProvider {
-    const { provider } = this.settings;
-    switch (provider.type) {
-      case ProviderTypes.HTTP:
-        return new ethers.providers.JsonRpcProvider(provider.uriOrInfo, provider.network);
-      case ProviderTypes.IPC:
-        return new ethers.providers.IpcProvider(provider.path, provider.network);
-      default:
-        return ethers.getDefaultProvider();
-    }
   }
 
   /**

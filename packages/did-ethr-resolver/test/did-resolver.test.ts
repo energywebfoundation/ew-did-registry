@@ -1,9 +1,10 @@
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Keys} from '@ew-did-registry/keys';
-import {Operator, Resolver, signerFromKeys} from '../src';
-import {DelegateTypes, IResolver, IResolverSettings,} from '@ew-did-registry/did-resolver-interface';
-import {getSettings} from '../../../tests/init-ganache';
+import { Keys } from '@ew-did-registry/keys';
+import { DelegateTypes, IResolver, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import { Methods } from '@ew-did-registry/did';
+import { Resolver, getProvider, ethrReg } from '../src';
+import { deployRegistry } from '../../../tests/init-ganache';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,20 +12,15 @@ chai.use(chaiAsPromised);
 describe('[RESOLVER PACKAGE]', function () {
   this.timeout(60000);
   let resolver: IResolver;
-  const keys = new Keys({
-    privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-    publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
-  });
-  let operator: Operator;
-  let operatorSetting: IResolverSettings;
+  let registry: string;
 
   before(async () => {
-    operatorSetting = await getSettings([]);
-    operator = new Operator(signerFromKeys(keys), operatorSetting);
+    registry = await deployRegistry([]);
   });
 
   beforeEach(() => {
-    resolver = new Resolver(operatorSetting);
+    resolver = new Resolver(getProvider({ type: ProviderTypes.HTTP, uriOrInfo: 'http://localhost:8545' }),
+      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry });
   });
 
   it('invalid did should throw an error', async () => {

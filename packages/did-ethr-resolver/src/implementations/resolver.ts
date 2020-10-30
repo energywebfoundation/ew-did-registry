@@ -8,12 +8,16 @@ import {
   IDIDLogData,
   IPublicKey,
   IResolver,
-  IResolverSettings,
   IServiceEndpoint,
-  ProviderTypes,
+  RegistrySettings,
+  KeyTags,
 } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '../constants';
+import { Methods } from '@ew-did-registry/did';
+import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
+import { cachedKeys } from '../utils';
+
+const { Provider } = providers;
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -29,12 +33,12 @@ class Resolver implements IResolver {
   /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
-  readonly settings: IResolverSettings;
+  readonly settings: RegistrySettings;
 
   /**
    * Stores the provider to connect to blockchain
    */
-  protected readonly _provider: providers.BaseProvider;
+  protected readonly _provider: providers.Provider;
 
   /**
    * Stores the smart contract instance with read functionality available
@@ -52,21 +56,11 @@ class Resolver implements IResolver {
    * Settings have to be passed to construct resolver
    * @param {IResolverSettings} settings
    */
-  constructor(settings: IResolverSettings) {
-    this.settings = settings;
-    if (settings.provider.type === ProviderTypes.HTTP) {
-      this._provider = new ethers.providers.JsonRpcProvider(
-        settings.provider.uriOrInfo,
-        settings.provider.network,
-      );
-    } else if (settings.provider.type === ProviderTypes.IPC) {
-      this._provider = new ethers.providers.IpcProvider(
-        settings.provider.path,
-        settings.provider.network,
-      );
-    }
+  constructor(provider: providers.Provider, settings: RegistrySettings) {
+    this._provider = provider;
+    this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
 
-    this._contract = new ethers.Contract(settings.address, settings.abi, this._provider);
+    this._contract = new ethers.Contract(settings.address, this.settings.abi, this._provider);
   }
 
   /**
@@ -132,6 +126,21 @@ class Resolver implements IResolver {
     filter?: { [key: string]: { [key: string]: string } },
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
     return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
+  }
+
+  async readOwnerPubKey(did: string): Promise<string> {
+    const [, , address] = did.split(':');
+    let key = cachedKeys.read[address];
+    if (key) {
+      return key;
+    }
+    key = (await this.read(did))
+      .publicKey.find((pk) => pk.id.endsWith(KeyTags.OWNER))
+      ?.publicKeyHex;
+    if (key) {
+      cachedKeys.read[address] = key;
+    }
+    return key;
   }
 
   /**

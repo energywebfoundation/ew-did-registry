@@ -1,5 +1,7 @@
 import { expect } from 'chai';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, ConnectedSigner, getProvider,
+} from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
   DIDAttribute,
@@ -10,9 +12,8 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
-import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
-import { getSettings } from '../../../tests/init-ganache';
+import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
@@ -28,9 +29,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   const validity = 5 * 60 * 1000;
 
   before(async () => {
-    const resolverSettings = await getSettings([ownerAddress]);
-    console.log(`registry: ${resolverSettings.address}`);
-    operator = new Operator(signerFromKeys(keys), resolverSettings);
+    const registry = await deployRegistry([ownerAddress]);
+    console.log(`registry: ${registry}`);
+    operator = new Operator(
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
+    );
     Document = new DIDDocumentFull(did, operator);
     const created = await Document.create();
     expect(created).to.be.true;
@@ -43,7 +47,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         type: PubKeyType.VerificationKey2018,
         algo: Algorithms.ED25519,
         encoding: Encoding.HEX,
-        value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-1'},
+        value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
       },
       validity,
     );
@@ -94,7 +98,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value:{ publicKey: `0x${keysAttribute.publicKey}`, tag:'key-2'},
+      value: { publicKey: `0x${keysAttribute.publicKey}`, tag: 'key-2' },
     };
     await Document.update(attribute, updateData, validity);
     let document = await operator.read(did);
