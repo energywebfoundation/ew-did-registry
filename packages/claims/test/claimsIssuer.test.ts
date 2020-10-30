@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, signerFromKeys } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -29,8 +29,8 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const resolverSettings = await getSettings([userAddress, issuerAddress]);
     console.log(`registry: ${resolverSettings.address}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(user, resolverSettings));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(signerFromKeys(user), resolverSettings));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
     await userDoc.create();
     await issuerDoc.create();
 

@@ -2,7 +2,7 @@ import { decrypt } from 'eciesjs';
 import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, signerFromKeys } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
@@ -28,10 +28,10 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     console.log(`registry: ${resolverSettings.address}`);
 
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDdid, new Operator(user, resolverSettings));
+    const userDoc = new DIDDocumentFull(userDdid, new Operator(signerFromKeys(user), resolverSettings));
     userClaims = new ClaimsUser(user, userDoc, store);
 
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
 
     await userDoc.create();
     await issuerDoc.create();

@@ -1,5 +1,5 @@
 import { Keys } from '../packages/keys';
-import { Operator } from '../packages/did-ethr-resolver';
+import { Operator, signerFromKeys } from '../packages/did-ethr-resolver';
 import DIDRegistry from '../packages/did-registry';
 import { DidStore } from '../packages/did-ipfs-store';
 import { Methods } from '../packages/did';
@@ -10,7 +10,7 @@ export const createAndStoreClaim = async (): Promise<string> => {
   const did = `did:${Methods.Erc1056}:${keys.getAddress()}`;
   const resolverSettings = await getSettings([]);
   const store = new DidStore('http://mockApi');
-  const user = new DIDRegistry(keys, did, new Operator(keys, resolverSettings), store);
+  const user = new DIDRegistry(keys, did, new Operator(signerFromKeys(keys), resolverSettings), store);
   const userClaims = user.claims.createClaimsUser();
   const claim = await userClaims.createPublicClaim({ name: 'John' });
   localStorage.setItem('EW-DID-CONFIG', claim);

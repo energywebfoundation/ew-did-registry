@@ -8,6 +8,7 @@ import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData, } from '../src';
 import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -34,9 +35,9 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     const resolverSettings = await getSettings([userAddress, issuerAddress]);
     console.log(`registry: ${resolverSettings.address}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(user, resolverSettings));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, resolverSettings));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(issuer, resolverSettings));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(signerFromKeys(user), resolverSettings));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
+    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(signerFromKeys(issuer), resolverSettings));
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();

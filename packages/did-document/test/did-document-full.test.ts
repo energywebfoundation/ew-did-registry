@@ -10,6 +10,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
+import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { getSettings } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
@@ -29,7 +30,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   before(async () => {
     const resolverSettings = await getSettings([ownerAddress]);
     console.log(`registry: ${resolverSettings.address}`);
-    operator = new Operator(keys, resolverSettings);
+    operator = new Operator(signerFromKeys(keys), resolverSettings);
     Document = new DIDDocumentFull(did, operator);
     const created = await Document.create();
     expect(created).to.be.true;
