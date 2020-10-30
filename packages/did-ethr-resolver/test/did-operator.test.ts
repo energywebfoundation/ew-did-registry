@@ -12,7 +12,7 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator } from '../src';
+import { Operator, signerFromKeys } from '../src';
 import { getSettings } from '../../../tests/init-ganache';
 
 const { fail } = assert;
@@ -288,7 +288,7 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const newOwnerOperator = new Operator(newOwnerKeys, operatorSettings);
+    const newOwnerOperator = new Operator(signerFromKeys(newOwnerKeys), operatorSettings);
 
     await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
     expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
@@ -298,13 +298,14 @@ const testSuite = (): void => {
   });
 };
 
-describe('[DID-OPERATOR: sign method Keys]', function () {
+describe.only('[DID-OPERATOR: sign method Keys]', function () {
   this.timeout(0);
 
   before(async () => {
     operatorSettings = await getSettings([identity, newOwnerKeys.getAddress()]);
     console.log(`registry: ${operatorSettings.address}`);
-    operator = new Operator(keys, operatorSettings);
+    const signer = signerFromKeys(keys);
+    operator = new Operator(signer, operatorSettings);
   });
 
   testSuite();

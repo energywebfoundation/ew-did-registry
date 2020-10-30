@@ -1,6 +1,6 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, signerFromKeys } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim } from '@ew-did-registry/claims/';
@@ -38,12 +38,12 @@ describe('[REGISTRY PACKAGE]', function () {
     const resolverSettings = await getSettings([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
     const store = new DidStore(ipfsApi);
-    userOperator = new Operator(userKeys, resolverSettings);
+    userOperator = new Operator(signerFromKeys(userKeys), resolverSettings);
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
     userClaims = user.claims.createClaimsUser();
-    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(issuerKeys, resolverSettings), store);
+    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(signerFromKeys(issuerKeys), resolverSettings), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
-    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(verifierKeys, resolverSettings), store);
+    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(signerFromKeys(verifierKeys), resolverSettings), store);
     await user.document.create();
     await issuer.document.create();
   });

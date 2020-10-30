@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';
@@ -19,7 +20,7 @@ describe('[DID DOCUMENT FACTORY]', () => {
   before(async () => {
     const resolverSettings = await getSettings([]);
     console.log(`registry: ${resolverSettings.address}`);
-    operator = new Operator(keys, resolverSettings);
+    operator = new Operator(signerFromKeys(keys), resolverSettings);
   });
 
   it('createLite should return instance of DIDDocumentLite', () => {

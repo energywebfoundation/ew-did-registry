@@ -15,6 +15,7 @@ import {
   ethrReg,
 } from '../constants';
 import { Operator } from './operator';
+import { signerFromKeys } from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 
@@ -30,7 +31,7 @@ export class ProxyOperator extends Operator {
    * @param proxyAddress {string} - address of proxy smart contract representing identity
    */
   constructor(keys: IKeys, settings: IResolverSettings, proxyAddress: string) {
-    super(keys, settings);
+    super(signerFromKeys(keys), settings);
     const { privateKey } = keys;
     const wallet = new ethers.Wallet(privateKey, this._provider);
     this.proxy = new Contract(proxyAddress, proxyBuild.abi, wallet);

@@ -6,6 +6,7 @@ import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import { Signer, Wallet } from 'ethers';
 import { JsonRpcProvider } from 'ethers/providers';
+import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
 import {
   Claims,
   IClaims,
@@ -27,7 +28,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
     console.log(`registry: ${resolverSettings.address}`);
 
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDdid, new Operator(keys, resolverSettings));
+    const userDoc = new DIDDocumentFull(userDdid, new Operator(signerFromKeys(keys), resolverSettings));
     const signer: Signer = new Wallet(keys.privateKey, new JsonRpcProvider(
       resolverSettings.provider.uriOrInfo,
       resolverSettings.provider.network,
