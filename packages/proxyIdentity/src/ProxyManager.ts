@@ -43,18 +43,41 @@ export class ProxyManager {
     return new ProxyManager(this.erc1056, this.erc1155, newowner);
   }
 
-  async allProxies(): Promise<string[]> {
-    return Promise.all((await this._allProxies()).map((p) => p.serial()));
+  async allProxies(): Promise<Contract[]> {
+    return this._allProxies();
   }
 
-  async proxiesOwnedBy(address: string): Promise<string[]> {
-    const addresses = [];
+  async proxiesOwnedBy(address: string): Promise<Contract[]> {
+    const proxies = [];
     for await (const proxy of await this._allProxies()) {
       if (await proxy.owner() === address) {
-        addresses.push(await proxy.serial());
+        proxies.push(proxy);
       }
     }
-    return addresses;
+    return proxies;
+  }
+
+  async proxiesCreatedBy(address: string): Promise<Contract[]> {
+    const proxies = [];
+    for await (const proxy of await this._allProxies()) {
+      if (await proxy.creator() === address) {
+        proxies.push(proxy);
+      }
+    }
+    return proxies;
+  }
+
+  async proxyById(serial: string): Promise<Contract> {
+    for await (const proxy of await this._allProxies()) {
+      if (await proxy.serial() === serial) {
+        return proxy;
+      }
+    }
+    return null;
+  }
+
+  static async mapProxiesBy(proxies: Contract[], fn: (proxy: Contract) => Promise<any>) {
+    return Promise.all(proxies.map((p) => fn(p)));
   }
 
   private async _allProxies(): Promise<Contract[]> {

@@ -8,6 +8,7 @@ import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC
 import { ProxyManager } from '../src/ProxyManager';
 
 const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
+const { mapProxiesBy } = ProxyManager;
 
 chai.use(chaiAsPromised);
 chai.use(assetArray);
@@ -57,15 +58,26 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
     await pm.connect(oem).createProxyBatch(['1', '2']);
     await pm.connect(installer).createProxyBatch(['3', '4']);
 
-    expect(await pm.allProxies()).to.be.equalTo(['1', '2', '3', '4']);
+    expect(
+      await mapProxiesBy(await pm.allProxies(), async (p) => p.serial()),
+    )
+      .to.be.equalTo(['1', '2', '3', '4']);
   });
 
   it('should list created tokens', async () => {
     await pm.connect(oem).createProxyBatch([id1, id2]);
     await pm.connect(installer).createProxyBatch([id3, id4]);
 
-    expect(await pm.proxiesOwnedBy(await oem.getAddress())).to.be.equalTo([id1, id2]);
-    expect(await pm.proxiesOwnedBy(await installer.getAddress())).to.be.equalTo([id3, id4]);
+    expect(await mapProxiesBy(
+      await pm.proxiesOwnedBy(await oem.getAddress()),
+      (p) => p.serial(),
+    ))
+      .to.be.equalTo([id1, id2]);
+    expect(await mapProxiesBy(
+      await pm.proxiesOwnedBy(await installer.getAddress()),
+      (p) => p.serial(),
+    ))
+      .to.be.equalTo([id3, id4]);
   });
 
   it('owner can be changed', async () => {
@@ -73,7 +85,13 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
     await pm.connect(installer).createProxyBatch([id3, id4]);
 
     await pm.connect(oem).changeOwner(id1, await installer.getAddress());
-    expect(await pm.proxiesOwnedBy(await installer.getAddress())).to.be.equalTo([id1, id3, id4]);
+
+    expect(await mapProxiesBy(
+      await pm.proxiesOwnedBy(await installer.getAddress()),
+      (p) => p.serial(),
+    ))
+      .to.be.equalTo([id1, id3, id4]);
+    expect(await (await pm.proxyById(id2)).owner()).equal(await oem.getAddress());
   });
 
   it('owner can be changed batched', async () => {
@@ -81,8 +99,16 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
     await pm.connect(installer).createProxyBatch([id3, id4]);
 
     await pm.connect(oem).changeOwnerBatch([id1, id2], await installer.getAddress());
-    expect(await pm.proxiesOwnedBy(await installer.getAddress()))
+    expect(await mapProxiesBy(
+      await pm.proxiesOwnedBy(await installer.getAddress()),
+      (p) => p.serial(),
+    ))
       .to.be.equalTo([id1, id2, id3, id4]);
+    expect(await mapProxiesBy(
+      await pm.proxiesCreatedBy(await oem.getAddress()),
+      (p) => p.serial(),
+    ))
+      .to.be.equalTo([id1, id2]);
   });
 
   it('should update metadata uri', async () => {
