@@ -1,34 +1,12 @@
-import { IResolverSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
-import { ethrReg } from './EthereumDIDRegistry';
+import { ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 
 // Address of ERC1056 smart contract on Volta
-export const address1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
+export const VoltaAddress1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';
 
-// ABI of smart contract that has the address above
-export const abi1056 = ethrReg.abi;
-
-// Our default endpoint for communication with blockchain
 export const defaultProvider = {
-  // uriOrInfo: 'https://volta-rpc.energyweb.org/',
-  uriOrInfo: 'http://localhost:8544', // to reduce testing time,
-  // uriOrInfo: 'https://volta-internal-archive.energyweb.org/',
+  uriOrInfo: 'http://localhost:8544',
   type: ProviderTypes.HTTP,
 };
-
-/**
- * The three above comprise the minimal settings for resolver.
- * One can adjust them to use the resolver with a different provider
- * or with a different smart contract.
- */
-export const defaultResolverSettings: IResolverSettings = {
-  provider: defaultProvider,
-  abi: ethrReg.abi,
-  address: address1056,
-  method: Methods.Erc1056,
-};
-
-// Various patterns to minimise errors
 
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const pubKeyPattern = '0x[A-Fa-f0-9]{66}';

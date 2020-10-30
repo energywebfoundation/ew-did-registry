@@ -10,9 +10,9 @@ import {
   IHandlers,
   IPublicKey,
   IAttributePayload,
-  IResolverSettings,
   IServiceEndpoint,
   ISmartContractEvent,
+  RegistrySettings,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
@@ -222,7 +222,7 @@ const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.BaseProvider,
+  provider: ethers.providers.Provider,
   contractInterface: utils.Interface,
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
@@ -250,16 +250,16 @@ const getEventsFromBlock = (
  *
  * @param did
  * @param document
- * @param resolverSettings
+ * @param registrySettings
  * @param contract
  * @param provider
  */
 export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
-  resolverSettings: IResolverSettings,
+  registrySettings: RegistrySettings,
   contract: Contract,
-  provider: providers.BaseProvider,
+  provider: providers.Provider,
   filter?: { [key: string]: { [key: string]: string } },
 ): Promise<null | IPublicKey | IAuthentication | IServiceEndpoint> => {
   const [, , identity] = did.split(':');
@@ -279,8 +279,8 @@ export const fetchDataFromEvents = async (
     document.owner = identity;
   }
 
-  const contractInterface = new ethers.utils.Interface(resolverSettings.abi);
-  const { address } = resolverSettings;
+  const contractInterface = new ethers.utils.Interface(registrySettings.abi);
+  const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
     && nextBlock.toNumber() > document.topBlock.toNumber()

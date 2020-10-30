@@ -36,23 +36,18 @@ export class Claims implements IClaims {
     protected document: IDIDDocumentFull,
     protected store: IDidStore,
   ) {
-    const keys = signMethod as IKeys;
-    const signer = signMethod as Signer;
-    if (Object.prototype.hasOwnProperty.call(signMethod, 'privateKey')) {
+    if (Object.prototype.hasOwnProperty.call(signMethod, 'privateKey')
+      && Object.prototype.hasOwnProperty.call(signMethod, 'publicKey')) {
+      const keys = signMethod as IKeys;
       this.keys = {
         privateKey: keys.privateKey,
         publicKey: Promise.resolve(keys.publicKey),
       };
     } else {
-      this.signer = signer;
-      this.keys = { publicKey: this.getPublicKey() };
+      this.keys = { publicKey: getSignerPublicKey(signMethod as Signer) };
     }
     this.jwt = new JWT(signMethod);
     this.did = document.did;
-  }
-
-  private async getPublicKey(): Promise<string> {
-    return getSignerPublicKey(this.signer);
   }
 
   /**

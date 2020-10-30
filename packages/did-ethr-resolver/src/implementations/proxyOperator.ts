@@ -1,21 +1,19 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers } from 'ethers';
+import { Contract, ethers, Signer } from 'ethers';
 import Web3 from 'web3';
 import {
   DIDAttribute,
   IUpdateData,
-  IResolverSettings,
   PubKeyType,
   IAuthentication,
   IPublicKey,
+  RegistrySettings,
 } from '@ew-did-registry/did-resolver-interface';
-import { IKeys } from '@ew-did-registry/keys';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
 import {
   ethrReg,
 } from '../constants';
 import { Operator } from './operator';
-import { signerFromKeys } from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 
@@ -26,16 +24,14 @@ export class ProxyOperator extends Operator {
 
   /**
    *
-   * @param keys
-   * @param settings
-   * @param proxyAddress {string} - address of proxy smart contract representing identity
+   * @param signer - Signer connected to provider
+   * @param settings - Settings to establish connection with Ethereum DID registry
+   * @param proxy {string} - address of contract which proxies the identity
    */
-  constructor(keys: IKeys, settings: IResolverSettings, proxyAddress: string) {
-    super(signerFromKeys(keys), settings);
-    const { privateKey } = keys;
-    const wallet = new ethers.Wallet(privateKey, this._provider);
-    this.proxy = new Contract(proxyAddress, proxyBuild.abi, wallet);
-    this.web3 = new Web3('http://localhost:8544');
+  constructor(signer: Signer, settings: RegistrySettings, proxy: string) {
+    super(signer, settings);
+    this.proxy = new Contract(proxy, proxyBuild.abi, signer);
+    this.web3 = new Web3();
   }
 
   /**
