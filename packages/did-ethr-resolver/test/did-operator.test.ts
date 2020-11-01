@@ -179,7 +179,7 @@ const testSuite = (): void => {
     }
   });
 
-  it('deactivating of document should resolve with true', async () => {
+  it.only('deactivating of document should resolve with true', async () => {
     // add public key
     let attribute = DIDAttribute.PublicKey;
     let updateData: IUpdateData = {
@@ -328,7 +328,7 @@ describe('[DID-OPERATOR: sign method Signer]', function () {
 
   before(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    const provider = getProvider({ type: ProviderTypes.HTTP, uriOrInfo: 'http://localhost:8545' });
+    const provider = getProvider();
     signer = new Wallet(keys.privateKey, provider);
     operator = new Operator(
       signer,

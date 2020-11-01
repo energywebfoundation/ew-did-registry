@@ -4,14 +4,15 @@ const {
   keccak256, hashMessage, arrayify, recoverAddress, recoverPublicKey, computePublicKey,
 } = utils;
 
-export const cachedKeys: {
-  read: { [key: string]: string };
-  recovered: { [key: string]: string };
-} = { read: {}, recovered: {} };
+// cached public keys mapped from addresses;
+export const keyOf: { [address: string]: string } = {};
+
+// cached public keys of did owners mapped from owned did's
+export const keyOfOwnerOf: { [did: string]: string } = {};
 
 export async function getSignerPublicKey(signer: Signer): Promise<string> {
   const address = await signer.getAddress();
-  let key = cachedKeys.read[address] || cachedKeys.recovered[address];
+  let key = keyOf[address];
   if (key) {
     return key;
   }
@@ -27,7 +28,7 @@ export async function getSignerPublicKey(signer: Signer): Promise<string> {
   for (const sig of signatures) {
     if (address === recoverAddress(digest, sig)) {
       key = computePublicKey(recoverPublicKey(digest, sig), true).slice(2);
-      cachedKeys.recovered[address] = key;
+      keyOf[address] = key;
       return key;
     }
   }

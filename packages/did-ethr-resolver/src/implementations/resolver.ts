@@ -15,7 +15,7 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
-import { cachedKeys } from '../utils';
+import { keyOf, keyOfOwnerOf } from '../utils';
 
 const { Provider } = providers;
 
@@ -129,8 +129,7 @@ class Resolver implements IResolver {
   }
 
   async readOwnerPubKey(did: string): Promise<string> {
-    const [, , address] = did.split(':');
-    let key = cachedKeys.read[address];
+    let key = keyOfOwnerOf[did];
     if (key) {
       return key;
     }
@@ -138,7 +137,7 @@ class Resolver implements IResolver {
       .publicKey.find((pk) => pk.id.endsWith(KeyTags.OWNER))
       ?.publicKeyHex;
     if (key) {
-      cachedKeys.read[address] = key;
+      keyOfOwnerOf[did] = key;
     }
     return key;
   }
