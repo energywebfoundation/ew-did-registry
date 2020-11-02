@@ -9,11 +9,11 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, signerFromKeys, ethrReg } from '../src';
+import {
+  Operator, signerFromKeys, getProvider, ConnectedSigner,
+} from '../src';
 
 import { deployRegistry } from '../../../tests/init-ganache';
-import { Methods } from '@ew-did-registry/did';
-import { ethers } from 'ethers';
 
 describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);
@@ -30,8 +30,8 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   before(async () => {
     registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     operator = new Operator(
-      signerFromKeys(keys),
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry }
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
     );
   });
 
@@ -58,7 +58,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
       value: {
         id: `${did}#service-${serviceId}`,
         type: 'ClaimStore',
-        serviceEndpoint: endpoint
+        serviceEndpoint: endpoint,
       },
     };
     await operator.update(did, attribute, updateData, validity);
