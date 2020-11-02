@@ -2,25 +2,34 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-useless-constructor */
 import { Signer, Contract, ContractFactory } from 'ethers';
+import { Provider } from 'ethers/providers';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
 import { abi as erc1155Abi } from '../build/contracts/ERC1155Multiproxy.json';
 
 export class ProxyManager {
   private proxyFactory: ContractFactory;
 
+  private provider: Provider;
+
   constructor(private erc1056: string, private erc1155: string, private owner: Signer) {
     this.proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, this.owner);
+    this.provider = owner.provider;
   }
 
   async createProxy(serial: string): Promise<Contract> {
+    const address = await this.proxyFactory.signer.getAddress();
     return this.proxyFactory.deploy(
       this.erc1056, this.erc1155, serial, await this.owner.getAddress(),
+      { nonce: await this.provider.getTransactionCount(address) },
     );
   }
 
   async createProxyBatch(serials: string[]): Promise<Contract[]> {
-    const proxies = serials.map((s) => this.createProxy(s));
-    return Promise.all(proxies);
+    const proxies = [];
+    for await (const serial of serials) {
+      proxies.push(await this.createProxy(serial));
+    }
+    return proxies;
   }
 
   async changeOwner(serial: string, newOwner: string) {
@@ -77,7 +86,11 @@ export class ProxyManager {
   }
 
   static async mapProxiesBy(proxies: Contract[], fn: (proxy: Contract) => Promise<any>) {
-    return Promise.all(proxies.map((p) => fn(p)));
+    const mapped = [];
+    for await (const proxy of proxies) {
+      mapped.push(await fn(proxy));
+    }
+    return mapped;
   }
 
   private async _allProxies(): Promise<Contract[]> {

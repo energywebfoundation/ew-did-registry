@@ -44,7 +44,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
     expect(await device2.owner()).equal(await oem.getAddress());
   });
 
-  it('createBatch() should set sender as owner of created proxies', async () => {
+  it('createProxyBatch() should set sender as owner of created proxies', async () => {
     const serials = ['1', '2'];
     const proxies = await pm.createProxyBatch(serials);
 
@@ -52,6 +52,17 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
 
     const oemAddr = await oem.getAddress();
     expect(owners.every((o) => o === oemAddr)).true;
+  });
+
+  it('createProxyBatch should create 10 proxies', async () => {
+    const serials = new Array(10).fill(0).map((v, i) => i.toString());
+    const proxies = await pm.createProxyBatch(serials);
+
+    const createdSerials = await mapProxiesBy(
+      proxies,
+      (p) => p.serial(),
+    );
+    expect(createdSerials).to.be.equalTo(serials);
   });
 
   it('should return list of all proxies', async () => {
