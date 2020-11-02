@@ -1,13 +1,15 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator, signerFromKeys } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, ConnectedSigner, getProvider,
+} from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import { JWT } from '@ew-did-registry/jwt';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
-import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -26,11 +28,11 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   let claimsIssuer: IClaimsIssuer;
 
   before(async () => {
-    const resolverSettings = await getSettings([userAddress, issuerAddress]);
-    console.log(`registry: ${resolverSettings.address}`);
+    const registry = await deployRegistry([userAddress, issuerAddress]);
+    console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(signerFromKeys(user), resolverSettings));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(new ConnectedSigner(signerFromKeys(user), getProvider()), { address: registry }));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(new ConnectedSigner(signerFromKeys(issuer), getProvider()), { address: registry }));
     await userDoc.create();
     await issuerDoc.create();
 

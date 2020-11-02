@@ -1,19 +1,20 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, providers, Signer } from 'ethers';
+import { Wallet, Signer } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
   IDIDDocument,
-  IResolverSettings,
   IUpdateData,
   PubKeyType,
+  ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, signerFromKeys } from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import { Methods } from '@ew-did-registry/did';
+import { Operator, signerFromKeys, ethrReg, getProvider, ConnectedSigner } from '../src';
+import { deployRegistry } from '../../../tests/init-ganache';
 
 const { fail } = assert;
 
@@ -28,7 +29,7 @@ const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
-let operatorSettings: IResolverSettings;
+let registry: string;
 
 const testSuite = (): void => {
   it('operator public key should be equl to public key of signer', async () => {
@@ -128,10 +129,11 @@ const testSuite = (): void => {
     const serviceId = 'UserClaimURL1';
     const updateData: IUpdateData = {
       type: attribute,
-      value: { 
-        id: `${did}#service-${serviceId}`, 
-        type:'ClaimStore', 
-        serviceEndpoint: endpoint },
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint
+      },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -203,10 +205,11 @@ const testSuite = (): void => {
     const serviceId = 'AssetClaimURL2';
     updateData = {
       type: attribute,
-      value:{ 
-        id: `${did}#service-${serviceId}`, 
-        type:'ClaimStore', 
-        serviceEndpoint: endpoint },
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
     await operator.update(did, attribute, updateData, validity);
     const result = await operator.deactivate(did);
@@ -288,7 +291,11 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const newOwnerOperator = new Operator(signerFromKeys(newOwnerKeys), operatorSettings);
+    const provider = getProvider();
+    const newOwnerOperator = new Operator(
+      new ConnectedSigner(signerFromKeys(newOwnerKeys), provider),
+      { address: registry },
+    );
 
     await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
     expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
@@ -298,14 +305,18 @@ const testSuite = (): void => {
   });
 };
 
-describe.only('[DID-OPERATOR: sign method Keys]', function () {
+describe('[DID-OPERATOR: sign method Keys]', function () {
   this.timeout(0);
 
   before(async () => {
-    operatorSettings = await getSettings([identity, newOwnerKeys.getAddress()]);
-    console.log(`registry: ${operatorSettings.address}`);
-    const signer = signerFromKeys(keys);
-    operator = new Operator(signer, operatorSettings);
+    registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
+    const provider = getProvider();
+    console.log(`registry: ${registry}`);
+    const signer = new ConnectedSigner(signerFromKeys(keys), provider);
+    operator = new Operator(
+      signer,
+      { address: registry },
+    );
   });
 
   testSuite();
@@ -316,13 +327,13 @@ describe('[DID-OPERATOR: sign method Signer]', function () {
   let signer: Signer;
 
   before(async () => {
-    operatorSettings = await getSettings([identity, newOwnerKeys.getAddress()]);
-    const provider = new providers.JsonRpcProvider(
-      operatorSettings.provider.uriOrInfo,
-      operatorSettings.provider.network,
-    );
+    registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
+    const provider = getProvider();
     signer = new Wallet(keys.privateKey, provider);
-    operator = new Operator(signer, operatorSettings);
+    operator = new Operator(
+      signer,
+      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+    );
     await operator.create();
   });
 

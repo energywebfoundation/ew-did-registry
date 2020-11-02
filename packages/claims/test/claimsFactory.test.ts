@@ -2,13 +2,16 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, ConnectedSigner, getProvider,
+} from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
-import { ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData, } from '../src';
-import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
-import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
+import {
+  ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData,
+} from '../src';
+import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -32,12 +35,12 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   let claimsVerifier: IClaimsVerifier;
 
   before(async () => {
-    const resolverSettings = await getSettings([userAddress, issuerAddress]);
-    console.log(`registry: ${resolverSettings.address}`);
+    const registry = await deployRegistry([userAddress, issuerAddress]);
+    console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(signerFromKeys(user), resolverSettings));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(signerFromKeys(issuer), resolverSettings));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(new ConnectedSigner(signerFromKeys(user), getProvider()), { address: registry }));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(new ConnectedSigner(signerFromKeys(issuer), getProvider()), { address: registry }));
+    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(new ConnectedSigner(signerFromKeys(issuer), getProvider()), { address: registry }));
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();

@@ -1,9 +1,9 @@
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Keys} from '@ew-did-registry/keys';
-import {Operator, Resolver, signerFromKeys} from '../src';
-import {DelegateTypes, IResolver, IResolverSettings,} from '@ew-did-registry/did-resolver-interface';
-import {getSettings} from '../../../tests/init-ganache';
+import { Keys } from '@ew-did-registry/keys';
+import { DelegateTypes, IResolver } from '@ew-did-registry/did-resolver-interface';
+import { Resolver, getProvider } from '../src';
+import { deployRegistry } from '../../../tests/init-ganache';
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -11,28 +11,24 @@ chai.use(chaiAsPromised);
 describe('[RESOLVER PACKAGE]', function () {
   this.timeout(60000);
   let resolver: IResolver;
-  const keys = new Keys({
-    privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-    publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
-  });
-  let operator: Operator;
-  let operatorSetting: IResolverSettings;
+  let registry: string;
 
   before(async () => {
-    operatorSetting = await getSettings([]);
-    operator = new Operator(signerFromKeys(keys), operatorSetting);
+    registry = await deployRegistry([]);
   });
 
   beforeEach(() => {
-    resolver = new Resolver(operatorSetting);
+    resolver = new Resolver(getProvider(), { address: registry });
   });
 
-  it('invalid did should throw an error', async () => {
+  it('read document of invalid did should throw error', async () => {
     const invalidDidFirst = 'did:ethr1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
-    resolver.read(invalidDidFirst).should.be.rejected;
-
     const invalidDidSecond = 'did:ethr1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3944352749528734062daagdsgasdbv';
-    resolver.read(invalidDidSecond).should.be.rejected;
+
+    return Promise.all([
+      resolver.read(invalidDidFirst).should.be.rejected,
+      resolver.read(invalidDidSecond).should.be.rejected,
+    ]);
   });
 
   it('expect any valid did to have a document', async () => {

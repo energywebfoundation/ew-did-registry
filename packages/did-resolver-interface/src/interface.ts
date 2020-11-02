@@ -1,10 +1,9 @@
 import { utils } from 'ethers';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IAttributePayload, IServiceEndpoint, IAuthentication, PubKeyType,
+  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, PubKeyType,
 } from './models';
 
 export interface IResolver {
-  readonly settings: IResolverSettings;
   /**
    * Constructor takes keys and resolver settings to create a new Resolver
    * constructor(settings?: IResolverSettings);

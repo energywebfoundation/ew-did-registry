@@ -15,7 +15,7 @@ export enum ProviderTypes {
  * Hence, 'ethers' documentation is a good point to check the available options,
  * if one wants to extend the library.
  */
-export interface IProvider {
+export interface ProviderSettings {
   type: ProviderTypes;
   uriOrInfo?: string | utils.ConnectionInfo;
   path?: string;
@@ -26,11 +26,10 @@ export interface IProvider {
  * Resolver requires provider, as well as application binary interface and
  * address of the smart contract representing DID Registry
  */
-export interface IResolverSettings {
-  provider?: IProvider;
+export interface RegistrySettings {
+  address: string;
   abi?: Array<string | utils.ParamType>;
-  address?: string;
-  method: Methods;
+  method?: Methods;
 }
 
 /**

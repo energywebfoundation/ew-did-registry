@@ -8,20 +8,21 @@ import {
   Encoding,
   IAuthentication,
   IPublicKey,
-  IResolverSettings,
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
-import { ethrReg, ProxyOperator } from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import {
+  ethrReg, ProxyOperator, signerFromKeys, ConnectedSigner, getProvider,
+} from '../src';
+import { deployRegistry } from '../../../tests/init-ganache';
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
 const { abi: abi1155, bytecode: bytecode1155 } = multiproxyBuild;
 const { abi: abi1056 } = ethrReg;
 const { fail } = assert;
-const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
+const { Authenticate, PublicKey } = DIDAttribute;
 const { Secp256k1, ED25519 } = Algorithms;
 const { VerificationKey2018, SignatureAuthentication2018 } = PubKeyType;
 const { HEX } = Encoding;
@@ -30,7 +31,6 @@ describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys();
   let operator: ProxyOperator;
-  let operatorSettings: IResolverSettings;
   const validity = 10 * 60 * 1000;
   let proxy: Contract;
   let erc1056: Contract;
@@ -42,15 +42,20 @@ describe('[DID-PROXY-OPERATOR]', function () {
   let identity: string;
   let did: string;
   const serial = '123';
+  let registry: string;
 
   before(async () => {
-    operatorSettings = await getSettings([keys.getAddress()]);
-    erc1056 = new Contract(operatorSettings.address, abi1056, creator);
+    registry = await deployRegistry([keys.getAddress()]);
+    erc1056 = new Contract(registry, abi1056, creator);
     erc1155 = await (await erc1155Factory.deploy()).deployed();
     proxy = await proxyFactory.deploy(erc1056.address, erc1155.address, serial, creator.address);
     identity = proxy.address;
     did = `did:ethr:${identity}`;
-    operator = new ProxyOperator(keys, operatorSettings, proxy.address);
+    operator = new ProxyOperator(
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
+      proxy.address,
+    );
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -146,10 +151,11 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const serviceId = 'UserClaimURL3';
     const updateData: IUpdateData = {
       type: attribute,
-      value: { 
-        id: `${did}#service-${serviceId}`, 
-        type:'ClaimStore', 
-        serviceEndpoint: endpoint },
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
     expect(updated).to.be.true;
@@ -223,10 +229,11 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const endpoint = 'https://example.com';
     updateData = {
       type: attribute,
-      value: { 
-        id: `${did}#service-${serviceId}`, 
-        type:'ClaimStore', 
-        serviceEndpoint: endpoint },
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);

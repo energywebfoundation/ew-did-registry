@@ -1,18 +1,19 @@
-import {Keys} from '@ew-did-registry/keys';
-import {expect} from 'chai';
-import {Operator, signerFromKeys} from '../src';
+import { Keys } from '@ew-did-registry/keys';
+import { expect } from 'chai';
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
-  IResolverSettings,
   IServiceEndpoint,
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import {
+  Operator, signerFromKeys, getProvider, ConnectedSigner,
+} from '../src';
 
-import {getSettings} from '../../../tests/init-ganache';
+import { deployRegistry } from '../../../tests/init-ganache';
 
 describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);
@@ -21,14 +22,17 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
   });
   let operator: Operator;
-  let operatorSetting: IResolverSettings;
+  let registry: string;
   const identity = '0x37155f6d56b3be462bbd6b154c5E960D19827167';
   const validity = 10 * 60 * 1000;
   const did = `did:ethr:${identity}`;
 
   before(async () => {
-    operatorSetting = await getSettings([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
-    operator = new Operator(signerFromKeys(keys), operatorSetting);
+    registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
+    operator = new Operator(
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
+    );
   });
 
   it('readAttribute should read public key by its hex value and type', async () => {
@@ -38,7 +42,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: {publicKey:`0x${k.publicKey}`, tag:'key-1'},
+      value: { publicKey: `0x${k.publicKey}`, tag: 'key-1' },
     };
     await operator.update(did, attribute, updateData, validity);
     const publicKeyAttr = await operator.readAttribute(did, { publicKey: { publicKeyHex: updateData.value.publicKey, type: `${updateData.algo}${updateData.type}` } });
@@ -51,10 +55,11 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const serviceId = 'UserClaimURL';
     const updateData: IUpdateData = {
       type: attribute,
-      value: { 
-        id: `${did}#service-${serviceId}`, 
-        type:'ClaimStore', 
-        serviceEndpoint: endpoint },
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
     await operator.update(did, attribute, updateData, validity);
     const serviceEndpointAttr = await operator.readAttribute(did, { serviceEndpoints: { serviceEndpoint: `${updateData.value.serviceEndpoint}` } }) as IServiceEndpoint;

@@ -1,10 +1,14 @@
 import { expect } from 'chai';
-import { DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator } from '@ew-did-registry/did-resolver-interface';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator,
+} from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
-import { signerFromKeys } from '@ew-did-registry/did-ethr-resolver/src';
-import { getSettings } from '../../../tests/init-ganache';
+import {
+  getProvider, ConnectedSigner, signerFromKeys, Operator,
+} from '@ew-did-registry/did-ethr-resolver';
+
+import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
@@ -15,8 +19,11 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   let docLite: IDIDDocumentLite;
 
   before(async () => {
-    const resolverSettings = await getSettings([keys.getAddress()]);
-    operator = new Operator(signerFromKeys(keys), resolverSettings);
+    const registry = await deployRegistry([keys.getAddress()]);
+    operator = new Operator(
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
+    );
     docLite = new DIDDocumentLite(did, operator);
   });
 

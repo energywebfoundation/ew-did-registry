@@ -2,13 +2,15 @@ import { decrypt } from 'eciesjs';
 import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { Operator, signerFromKeys } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, ConnectedSigner, getProvider,
+} from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
   ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
 } from '../src';
-import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.should();
 
@@ -24,14 +26,20 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   let userClaims: IClaimsUser;
 
   before(async () => {
-    const resolverSettings = await getSettings([issuerAddress, userAddress]);
-    console.log(`registry: ${resolverSettings.address}`);
+    const registry = await deployRegistry([issuerAddress, userAddress]);
+    console.log(`registry: ${registry}`);
 
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDdid, new Operator(signerFromKeys(user), resolverSettings));
+    const userDoc = new DIDDocumentFull(
+      userDdid,
+      new Operator(new ConnectedSigner(signerFromKeys(user), getProvider()), { address: registry }),
+    );
     userClaims = new ClaimsUser(user, userDoc, store);
 
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(signerFromKeys(issuer), resolverSettings));
+    const issuerDoc = new DIDDocumentFull(
+      issuerDid,
+      new Operator(new ConnectedSigner(signerFromKeys(issuer), getProvider()), { address: registry }),
+    );
 
     await userDoc.create();
     await issuerDoc.create();
