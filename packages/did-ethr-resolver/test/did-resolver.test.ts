@@ -1,9 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { DelegateTypes, IResolver, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
-import { Resolver, getProvider, ethrReg } from '../src';
+import { DelegateTypes, IResolver } from '@ew-did-registry/did-resolver-interface';
+import { Resolver, getProvider } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
 chai.should();
@@ -19,16 +18,17 @@ describe('[RESOLVER PACKAGE]', function () {
   });
 
   beforeEach(() => {
-    resolver = new Resolver(getProvider({ type: ProviderTypes.HTTP, uriOrInfo: 'http://localhost:8545' }),
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry });
+    resolver = new Resolver(getProvider(), { address: registry });
   });
 
-  it('invalid did should throw an error', async () => {
+  it('read document of invalid did should throw error', async () => {
     const invalidDidFirst = 'did:ethr1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a394~';
-    resolver.read(invalidDidFirst).should.be.rejected;
-
     const invalidDidSecond = 'did:ethr1:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3944352749528734062daagdsgasdbv';
-    resolver.read(invalidDidSecond).should.be.rejected;
+
+    return Promise.all([
+      resolver.read(invalidDidFirst).should.be.rejected,
+      resolver.read(invalidDidSecond).should.be.rejected,
+    ]);
   });
 
   it('expect any valid did to have a document', async () => {
