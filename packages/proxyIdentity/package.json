@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/proxyidentity",
-  "version": "0.0.1-alpha.741.0",
+  "version": "0.0.1-alpha.757.0",
   "publishConfig": {
     "access": "public"
   },
