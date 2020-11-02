@@ -208,7 +208,7 @@ const testSuite = (): void => {
       value: {
         id: `${did}#service-${serviceId}`,
         type: 'ClaimStore',
-        serviceEndpoint: endpoint
+        serviceEndpoint: endpoint,
       },
     };
     await operator.update(did, attribute, updateData, validity);
@@ -305,7 +305,7 @@ const testSuite = (): void => {
   });
 };
 
-describe.only('[DID-OPERATOR: sign method Keys]', function () {
+describe('[DID-OPERATOR: sign method Keys]', function () {
   this.timeout(0);
 
   before(async () => {
@@ -328,7 +328,7 @@ describe('[DID-OPERATOR: sign method Signer]', function () {
 
   before(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    const provider = getProvider({ type: ProviderTypes.HTTP, uriOrInfo: 'http://localhost:8545' });
+    const provider = getProvider();
     signer = new Wallet(keys.privateKey, provider);
     operator = new Operator(
       signer,

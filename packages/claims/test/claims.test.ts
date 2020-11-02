@@ -39,7 +39,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
     await shutDownIpfsDaemon();
   });
 
-  it.only('Claims instance should have public key', async () => {
+  it('Claims instance should have public key', async () => {
     const pubKey = await claims.keys.publicKey;
     expect(pubKey.slice(2)).equal(keys.publicKey.slice(2));
   });

@@ -15,9 +15,6 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument } from '../functions';
-import { cachedKeys } from '../utils';
-
-const { Provider } = providers;
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -129,18 +126,9 @@ class Resolver implements IResolver {
   }
 
   async readOwnerPubKey(did: string): Promise<string> {
-    const [, , address] = did.split(':');
-    let key = cachedKeys.read[address];
-    if (key) {
-      return key;
-    }
-    key = (await this.read(did))
+    return (await this.read(did))
       .publicKey.find((pk) => pk.id.endsWith(KeyTags.OWNER))
       ?.publicKeyHex;
-    if (key) {
-      cachedKeys.read[address] = key;
-    }
-    return key;
   }
 
   /**

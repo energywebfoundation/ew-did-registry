@@ -72,8 +72,7 @@ export class Operator extends Resolver implements IOperator {
       return this._keys.publicKey;
     }
     // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = await this.readOwnerPubKey(await this.did())
-      || await getSignerPublicKey(this._signer);
+    return this._keys.publicKey = await getSignerPublicKey(this._signer);
   }
 
   /**
