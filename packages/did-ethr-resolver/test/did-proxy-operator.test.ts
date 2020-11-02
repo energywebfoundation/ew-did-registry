@@ -13,8 +13,9 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
-import { Methods } from '@ew-did-registry/did';
-import { ethrReg, ProxyOperator, signerFromKeys } from '../src';
+import {
+  ethrReg, ProxyOperator, signerFromKeys, ConnectedSigner, getProvider,
+} from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
@@ -51,7 +52,9 @@ describe('[DID-PROXY-OPERATOR]', function () {
     identity = proxy.address;
     did = `did:ethr:${identity}`;
     operator = new ProxyOperator(
-      signerFromKeys(keys), { address: registry }, proxy.address,
+      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      { address: registry },
+      proxy.address,
     );
   });
 
