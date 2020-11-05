@@ -371,7 +371,7 @@ export const wrapDidDocument = (
       const serviceEndpointCopy = { ...serviceEndpoint };
       delete serviceEndpointCopy.validity;
       delete serviceEndpointCopy.block;
-      didDocument.service.push(serviceEndpoint);
+      didDocument.service.push(serviceEndpointCopy);
     }
   }
 
