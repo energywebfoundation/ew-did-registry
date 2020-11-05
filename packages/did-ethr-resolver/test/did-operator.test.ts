@@ -10,10 +10,11 @@ import {
   IDIDDocument,
   IUpdateData,
   PubKeyType,
-  ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { Operator, signerFromKeys, ethrReg, getProvider, ConnectedSigner } from '../src';
+import {
+  Operator, signerFromKeys, ethrReg, getProvider, ConnectedSigner,
+} from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
 const { fail } = assert;
@@ -85,7 +86,7 @@ const testSuite = (): void => {
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
-        (pk: { id: string; }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+        (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
       );
       expect(authMethod).include({
         type: 'Secp256k1VerificationKey2018',
@@ -132,7 +133,7 @@ const testSuite = (): void => {
       value: {
         id: `${did}#service-${serviceId}`,
         type: 'ClaimStore',
-        serviceEndpoint: endpoint
+        serviceEndpoint: endpoint,
       },
     };
     const updated = await operator.update(did, attribute, updateData, validity);
@@ -140,7 +141,7 @@ const testSuite = (): void => {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     expect(document.service.find(
-      (sv: { serviceEndpoint: string; }) => sv.serviceEndpoint === endpoint,
+      (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint,
     )).not.undefined;
   });
 
@@ -235,7 +236,7 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
-      (pk: { id: string; }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
     );
     expect(authMethod).include({
       type: 'Secp256k1VerificationKey2018',
@@ -248,7 +249,7 @@ const testSuite = (): void => {
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
-      (pk: { id: string; }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
     );
     expect(authMethod).to.be.undefined;
   });
@@ -266,7 +267,7 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
       (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
