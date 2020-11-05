@@ -76,7 +76,7 @@ class Resolver implements IResolver {
    */
   private async _read(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    filter?: Record<string, { [key: string]: string }>,
   ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
     const [, address] = did.match(DIDPattern);
     if (!address) {
@@ -125,12 +125,6 @@ class Resolver implements IResolver {
     return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
   }
 
-  async readOwnerPubKey(did: string): Promise<string> {
-    return (await this.read(did))
-      .publicKey.find((pk) => pk.id.endsWith(KeyTags.OWNER))
-      ?.publicKeyHex;
-  }
-
   /**
    * Returns the Ethereum address of current identity owner
    *
@@ -174,6 +168,15 @@ class Resolver implements IResolver {
     }
 
     return valid;
+  }
+
+  async readOwnerPubKey(did: string): Promise<string> {
+    return (await this.readAttribute(
+      did,
+      {
+        publicKey: { id: `${did}#${KeyTags.OWNER}` },
+      },
+    ) as IPublicKey)?.publicKeyHex.slice(2);
   }
 }
 
