@@ -2,7 +2,10 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  Operator, signerFromKeys, ConnectedSigner, getProvider,
+  Operator, signerFromKeys, getProvider,
+  walletPubKey,
+  withKey,
+  withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
@@ -31,8 +34,13 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(new ConnectedSigner(signerFromKeys(user), getProvider()), { address: registry }));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(new ConnectedSigner(signerFromKeys(issuer), getProvider()), { address: registry }));
+    const userDoc = new DIDDocumentFull(
+      userDid,
+      new Operator(withKey(withProvider(signerFromKeys(user), getProvider()), walletPubKey), { address: registry }),
+    );
+    const issuerDoc = new DIDDocumentFull(
+      issuerDid, new Operator(withKey(withProvider(signerFromKeys(issuer), getProvider()), walletPubKey), { address: registry }),
+    );
     await userDoc.create();
     await issuerDoc.create();
 

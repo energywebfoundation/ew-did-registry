@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, Signer } from 'ethers';
+import { Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -10,10 +10,11 @@ import {
   IDIDDocument,
   IUpdateData,
   PubKeyType,
+  IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, ethrReg, getProvider, ConnectedSigner,
+  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -31,10 +32,11 @@ const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
+let owner: IdentityOwner;
 
 const testSuite = (): void => {
-  it('operator public key should be equl to public key of signer', async () => {
-    expect(await (await operator.getPublicKey()).slice(2)).equal(keys.publicKey.slice(2));
+  it('operator public key should be equl to public key of signer', () => {
+    expect(operator.getPublicKey().slice(2)).equal(keys.publicKey.slice(2));
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -294,7 +296,7 @@ const testSuite = (): void => {
   it('owner change should lead to expected result', async () => {
     const provider = getProvider();
     const newOwnerOperator = new Operator(
-      new ConnectedSigner(signerFromKeys(newOwnerKeys), provider),
+      withKey(withProvider(signerFromKeys(newOwnerKeys), provider), walletPubKey),
       { address: registry },
     );
 
@@ -305,34 +307,14 @@ const testSuite = (): void => {
     expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
   });
 };
-
-describe('[DID-OPERATOR: sign method Keys]', function () {
+describe('[RESOLVER PACKAGE]: DID-OPERATOR', function () {
   this.timeout(0);
 
   before(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    const provider = getProvider();
-    console.log(`registry: ${registry}`);
-    const signer = new ConnectedSigner(signerFromKeys(keys), provider);
+    owner = withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey);
     operator = new Operator(
-      signer,
-      { address: registry },
-    );
-  });
-
-  testSuite();
-});
-
-describe('[DID-OPERATOR: sign method Signer]', function () {
-  this.timeout(0);
-  let signer: Signer;
-
-  before(async () => {
-    registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    const provider = getProvider();
-    signer = new Wallet(keys.privateKey, provider);
-    operator = new Operator(
-      signer,
+      owner,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
     );
     await operator.create();
@@ -340,7 +322,7 @@ describe('[DID-OPERATOR: sign method Signer]', function () {
 
   testSuite();
 
-  it('public key recovered from address signed by WalletConnect Signer should be equal to connected account key', async () => {
-    expect(keys.publicKey).to.be.equal(await operator.getPublicKey());
+  it('operator and signer public keys should be equals', () => {
+    expect(keys.publicKey).equal(operator.getPublicKey());
   });
 });

@@ -5,11 +5,13 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  getProvider, ConnectedSigner, signerFromKeys, Operator,
+  getProvider, signerFromKeys, Operator,
+  walletPubKey,
 } from '@ew-did-registry/did-ethr-resolver';
 
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
+import { withKey, withProvider } from '@ew-did-registry/did-ethr-resolver/src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
   this.timeout(0);
@@ -21,7 +23,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
       { address: registry },
     );
     docLite = new DIDDocumentLite(did, operator);

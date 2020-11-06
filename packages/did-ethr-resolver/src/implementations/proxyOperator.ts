@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers, Signer } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import Web3 from 'web3';
 import {
   DIDAttribute,
@@ -8,6 +8,7 @@ import {
   IAuthentication,
   IPublicKey,
   RegistrySettings,
+  IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
 import {
@@ -24,13 +25,13 @@ export class ProxyOperator extends Operator {
 
   /**
    *
-   * @param signer - Signer connected to provider
+   * @param owner - Signer connected to provider
    * @param settings - Settings to establish connection with Ethereum DID registry
    * @param proxy {string} - address of contract which proxies the identity
    */
-  constructor(signer: Signer, settings: RegistrySettings, proxy: string) {
-    super(signer, settings);
-    this.proxy = new Contract(proxy, proxyBuild.abi, signer);
+  constructor(owner: IdentityOwner, settings: RegistrySettings, proxy: string) {
+    super(owner, settings);
+    this.proxy = new Contract(proxy, proxyBuild.abi, owner);
     this.web3 = new Web3();
   }
 

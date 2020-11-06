@@ -14,7 +14,7 @@ import {
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
 import {
-  ethrReg, ProxyOperator, signerFromKeys, ConnectedSigner, getProvider,
+  ethrReg, ProxyOperator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -52,7 +52,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     identity = proxy.address;
     did = `did:ethr:${identity}`;
     operator = new ProxyOperator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      withKey(withProvider(signerFromKeys(keys), provider), walletPubKey),
       { address: registry },
       proxy.address,
     );
@@ -304,9 +304,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
 
   it('owner change should lead to expected result', async () => {
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    let currentOwner;
     await operator.changeOwner(`did:ethr:${proxy.address}`, `did:ethr:${identityNewOwner}`);
-    currentOwner = await erc1056.functions.owners(proxy.address);
-    expect(currentOwner).to.be.eql(identityNewOwner);
+    expect(await erc1056.functions.owners(proxy.address)).to.be.eql(identityNewOwner);
   });
 });
