@@ -51,6 +51,8 @@ export interface IResolver {
     did: string,
     filter?: { [key: string]: { [key: string]: string } },
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+
+  readOwnerPubKey(did: string): Promise<string>;
 }
 
 export interface IOperator extends IResolver {
