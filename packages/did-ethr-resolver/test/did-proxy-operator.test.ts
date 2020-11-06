@@ -14,7 +14,7 @@ import {
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
 import {
-  ethrReg, ProxyOperator, signerFromKeys, getProvider, walletPubKey,
+  ethrReg, ProxyOperator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -52,7 +52,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     identity = proxy.address;
     did = `did:ethr:${identity}`;
     operator = new ProxyOperator(
-      signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey),
+      withKey(withProvider(signerFromKeys(keys), provider), walletPubKey),
       { address: registry },
       proxy.address,
     );

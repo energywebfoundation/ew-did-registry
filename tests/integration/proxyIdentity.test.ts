@@ -9,9 +9,11 @@ import {
   IClaimsUser, ClaimsUser,
 } from '../../packages/claims';
 import { DIDDocumentFull } from '../../packages/did-document';
-import { Methods } from '../../packages/did/src';
+import { Methods } from '../../packages/did';
 import { DidStore } from '../../packages/did-ipfs-store';
-import { Operator, signerFromKeys, walletPubKey } from '../../packages/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, walletPubKey, withKey, withProvider,
+} from '../../packages/did-ethr-resolver';
 
 import { spawnIpfsDaemon, shutDownIpfsDaemon, deployRegistry } from '..';
 import { Keys } from '../../packages/keys/src';
@@ -25,11 +27,11 @@ describe('Identities shared management with proxies', function () {
 
   const provider = new JsonRpcProvider('http://localhost:8544');
 
-  const deployer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
-  const bebat = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
-  const oem = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
-  const installer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
-  const customer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
+  const deployer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const bebat = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const oem = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const installer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const customer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
 
   let oemDid: string;
   let installerDid: string;

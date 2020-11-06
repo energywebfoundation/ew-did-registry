@@ -3,7 +3,7 @@ import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, walletPubKey, getProvider,
+  Operator, signerFromKeys, walletPubKey, getProvider, withKey, withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -17,12 +17,12 @@ chai.should();
 describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = signerFromKeys(userKeys).withProvider(getProvider()).withKey(walletPubKey);
+  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
   const userAddress = userKeys.getAddress();
   const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
-  const issuer = signerFromKeys(issuerKeys).withProvider(getProvider()).withKey(walletPubKey);
+  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 

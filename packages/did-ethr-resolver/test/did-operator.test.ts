@@ -14,7 +14,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey,
+  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -296,7 +296,7 @@ const testSuite = (): void => {
   it('owner change should lead to expected result', async () => {
     const provider = getProvider();
     const newOwnerOperator = new Operator(
-      await signerFromKeys(newOwnerKeys).withProvider(provider).withKey(walletPubKey),
+      withKey(withProvider(signerFromKeys(newOwnerKeys), provider), walletPubKey),
       { address: registry },
     );
 
@@ -312,7 +312,7 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function () {
 
   before(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    owner = signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey);
+    owner = withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey);
     operator = new Operator(
       owner,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },

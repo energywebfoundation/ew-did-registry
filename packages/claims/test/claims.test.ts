@@ -3,6 +3,7 @@ import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey,
+  withKey, withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -25,7 +26,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
   before(async () => {
     const registry = await deployRegistry([userAddress]);
     const store = new DidStore(await spawnIpfsDaemon());
-    const owner = await signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey);
+    const owner = withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey);
     const userDoc = new DIDDocumentFull(
       userDdid,
       new Operator(owner, { address: registry }),

@@ -5,6 +5,7 @@ import Web3 from 'web3';
 import { Keys } from '@ew-did-registry/keys';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey,
+  withKey, withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
@@ -17,23 +18,20 @@ import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../te
 chai.use(chaiAsPromised);
 chai.should();
 
-const GANACHE_PORT = 8544;
-const web3 = new Web3(`http://localhost:${GANACHE_PORT}`);
-
 describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = signerFromKeys(userKeys).withProvider(getProvider()).withKey(walletPubKey);
+  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
-  const issuer = signerFromKeys(issuerKeys).withProvider(getProvider()).withKey(walletPubKey);
+  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   const verifierKeys = new Keys();
-  const verifier = signerFromKeys(verifierKeys).withProvider(getProvider()).withKey(walletPubKey);
+  const verifier = withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey);
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
 
