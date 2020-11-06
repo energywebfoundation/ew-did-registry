@@ -1,6 +1,6 @@
 import { Keys } from '../packages/keys';
 import {
-  Operator, signerFromKeys, ConnectedSigner, getProvider,
+  Operator, signerFromKeys, getProvider, walletPubKey,
 } from '../packages/did-ethr-resolver';
 import DIDRegistry from '../packages/did-registry';
 import { DidStore } from '../packages/did-ipfs-store';
@@ -15,7 +15,7 @@ export const createAndStoreClaim = async (): Promise<string> => {
   const user = new DIDRegistry(
     keys,
     did,
-    new Operator(new ConnectedSigner(signerFromKeys(keys), getProvider()), { address: registry }),
+    new Operator(signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey), { address: registry }),
     store,
   );
   const userClaims = user.claims.createClaimsUser();

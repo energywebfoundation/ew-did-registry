@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import {
-  Operator, signerFromKeys, ConnectedSigner, getProvider,
+  Operator, signerFromKeys, getProvider,
+  walletPubKey,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
@@ -32,7 +33,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const registry = await deployRegistry([ownerAddress]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     );
     Document = new DIDDocumentFull(did, operator);

@@ -1,6 +1,8 @@
-import { IKeys } from '@ew-did-registry/keys';
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
+import { IdentityOwner } from '@ew-did-registry/did-resolver-interface';
+import { signerFromKeys, walletPubKey } from '@ew-did-registry/did-ethr-resolver';
+import { IKeys } from '@ew-did-registry/keys';
 import {
   IClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier,
 } from '../interface';
@@ -13,8 +15,12 @@ import { ClaimsVerifier } from '../claimsVerifier';
  * @class
  */
 export class ClaimsFactory implements IClaimsFactory {
+  private owner: IdentityOwner;
+
   // eslint-disable-next-line no-useless-constructor
-  constructor(private keys: IKeys, private document: IDIDDocumentFull, private store: IDidStore) { }
+  constructor(private keys: IKeys, private document: IDIDDocumentFull, private store: IDidStore) {
+    this.owner = signerFromKeys(keys).withKey(walletPubKey);
+  }
 
   /**
    * Constructs instance of ClaimsUser
@@ -22,7 +28,7 @@ export class ClaimsFactory implements IClaimsFactory {
    * @returns { IClaimsUser }
    */
   createClaimsUser(): IClaimsUser {
-    return new ClaimsUser(this.keys, this.document, this.store);
+    return new ClaimsUser(this.owner, this.document, this.store);
   }
 
   /**
@@ -31,7 +37,7 @@ export class ClaimsFactory implements IClaimsFactory {
    * @returns { IClaimsIssuer }
    */
   createClaimsIssuer(): IClaimsIssuer {
-    return new ClaimsIssuer(this.keys, this.document, this.store);
+    return new ClaimsIssuer(this.owner, this.document, this.store);
   }
 
   /**
@@ -40,6 +46,6 @@ export class ClaimsFactory implements IClaimsFactory {
    * @returns { IClaimsVerifier }
    */
   createClaimsVerifier(): IClaimsVerifier {
-    return new ClaimsVerifier(this.keys, this.document, this.store);
+    return new ClaimsVerifier(this.owner, this.document, this.store);
   }
 }

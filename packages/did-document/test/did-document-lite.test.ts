@@ -5,7 +5,8 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  getProvider, ConnectedSigner, signerFromKeys, Operator,
+  getProvider, signerFromKeys, Operator,
+  walletPubKey,
 } from '@ew-did-registry/did-ethr-resolver';
 
 import { deployRegistry } from '../../../tests/init-ganache';
@@ -21,7 +22,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     );
     docLite = new DIDDocumentLite(did, operator);

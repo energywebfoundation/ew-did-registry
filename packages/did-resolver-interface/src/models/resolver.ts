@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { utils, Signer } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -150,4 +150,9 @@ export interface IHandlers {
 export enum DelegateTypes {
   authentication = 'sigAuth',
   verification = 'veriKey',
+}
+
+export interface IdentityOwner extends Signer {
+  publicKey: string;
+  privateKey?: string;
 }

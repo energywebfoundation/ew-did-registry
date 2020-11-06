@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {
-  Operator, signerFromKeys, ConnectedSigner, getProvider,
+  Operator, signerFromKeys, ConnectedSigner, getProvider, walletPubKey,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
@@ -43,18 +43,18 @@ describe('[REGISTRY PACKAGE]', function () {
     const ipfsApi = await spawnIpfsDaemon();
     const store = new DidStore(ipfsApi);
     userOperator = new Operator(
-      new ConnectedSigner(signerFromKeys(userKeys), getProvider()),
+      signerFromKeys(userKeys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     );
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
     userClaims = user.claims.createClaimsUser();
     issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(
-      new ConnectedSigner(signerFromKeys(issuerKeys), getProvider()),
+      signerFromKeys(issuerKeys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     ), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
     verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(
-      new ConnectedSigner(signerFromKeys(verifierKeys), getProvider()),
+      signerFromKeys(verifierKeys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     ), store);
     await user.document.create();

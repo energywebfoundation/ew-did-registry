@@ -10,7 +10,7 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  Operator, signerFromKeys, getProvider, ConnectedSigner,
+  Operator, signerFromKeys, getProvider, walletPubKey,
 } from '../src';
 
 import { deployRegistry } from '../../../tests/init-ganache';
@@ -30,7 +30,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   before(async () => {
     registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     operator = new Operator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      signerFromKeys(keys).withProvider(getProvider()).withKey(walletPubKey),
       { address: registry },
     );
   });

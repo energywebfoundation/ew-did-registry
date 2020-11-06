@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import {
-  Contract, ethers, Event, Signer,
+  Contract, ethers, Event,
 } from 'ethers';
 import {
   Algorithms,
@@ -16,12 +16,12 @@ import {
   PubKeyType,
   KeyTags,
   RegistrySettings,
+  IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
-import { getSignerPublicKey } from '../utils';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 
@@ -44,35 +44,31 @@ export class Operator extends Resolver implements IOperator {
 
   private address: string;
 
-  private readonly _signer: Signer;
+  private readonly _owner: IdentityOwner;
 
   /**
- * @param { Signer } signer - signer. It should be connected to provider
- * controller in a subsequent operations with DID document
+ * @param { IdentityOwner } owner - entity which controls document updatable by this operator
  */
-  constructor(signer: Signer, settings: RegistrySettings) {
-    super(signer.provider, settings);
+  constructor(owner: IdentityOwner, settings: RegistrySettings) {
+    super(owner.provider, settings);
     const {
       address, abi,
     } = this.settings;
-    this._signer = signer;
-    this._didRegistry = new ethers.Contract(address, abi, this._signer);
+    this._owner = owner;
+    this._didRegistry = new ethers.Contract(address, abi, this._owner);
+    this._keys.publicKey = owner.publicKey;
   }
 
   private async getAddress(): Promise<string> {
-    return this.address || (this.address = await this._signer.getAddress());
+    return this.address || (this.address = await this._owner.getAddress());
   }
 
   private async did(): Promise<string> {
     return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
-  public async getPublicKey(): Promise<string> {
-    if (this._keys.publicKey) {
-      return this._keys.publicKey;
-    }
-    // eslint-disable-next-line no-return-assign
-    return this._keys.publicKey = await getSignerPublicKey(this._signer);
+  public getPublicKey(): string {
+    return this._keys.publicKey;
   }
 
   /**
@@ -95,7 +91,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: `0x${await this.getPublicKey()}`, tag: KeyTags.OWNER },
+      value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);

@@ -4,16 +4,17 @@ import { expect } from 'chai';
 
 import {
   erc1056Build, createProxy, proxyFactoryBuild, multiproxyBuild,
-} from '../../packages/proxyIdentity/src';
+} from '../../packages/proxyIdentity';
 import {
   IClaimsUser, ClaimsUser,
-} from '../../packages/did-registry/node_modules/@ew-did-registry/claims/src';
-import { DIDDocumentFull } from '../../packages/claims/node_modules/@ew-did-registry/did-document/src';
-import { Methods } from '../../packages/did-registry/node_modules/@ew-did-registry/did/src';
-import { DidStore } from '../../packages/did-ipfs-store/src';
-import { Operator } from '../../packages/did-ethr-resolver/src';
+} from '../../packages/claims';
+import { DIDDocumentFull } from '../../packages/did-document';
+import { Methods } from '../../packages/did/src';
+import { DidStore } from '../../packages/did-ipfs-store';
+import { Operator, signerFromKeys, walletPubKey } from '../../packages/did-ethr-resolver';
 
 import { spawnIpfsDaemon, shutDownIpfsDaemon, deployRegistry } from '..';
+import { Keys } from '../../packages/keys/src';
 
 const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
 const { ethrReg: { abi: erc1056Abi, bytecode: erc1056Bytecode } } = erc1056Build;
@@ -24,11 +25,11 @@ describe('Identities shared management with proxies', function () {
 
   const provider = new JsonRpcProvider('http://localhost:8544');
 
-  const deployer = provider.getSigner(0);
-  const bebat = provider.getSigner(1);
-  const oem = provider.getSigner(2);
-  const installer = provider.getSigner(3);
-  const customer = provider.getSigner(4);
+  const deployer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
+  const bebat = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
+  const oem = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
+  const installer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
+  const customer = signerFromKeys(new Keys()).withProvider(provider).withKey(walletPubKey);
 
   let oemDid: string;
   let installerDid: string;
@@ -53,6 +54,14 @@ describe('Identities shared management with proxies', function () {
   };
 
   before(async () => {
+    const registry = await deployRegistry([
+      await deployer.getAddress(),
+      await bebat.getAddress(),
+      await oem.getAddress(),
+      await installer.getAddress(),
+      await customer.getAddress(),
+    ]);
+
     oemDid = `did:${Methods.Erc1056}:${await oem.getAddress()}`;
     installerDid = `did:${Methods.Erc1056}:${await installer.getAddress()}`;
 
@@ -66,9 +75,6 @@ describe('Identities shared management with proxies', function () {
     proxyFactory = await proxyFactoryCreator.deploy(erc1056.address, erc1155.address);
 
     store = new DidStore(await spawnIpfsDaemon());
-    const registry = await deployRegistry([
-      await oem.getAddress(), await installer.getAddress(), await customer.getAddress(),
-    ]);
 
     oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, { address: registry }));
     await oemDoc.create();
