@@ -1,33 +1,18 @@
-import { Signer, utils } from 'ethers';
+import { Keys } from '@ew-did-registry/keys';
+import { Wallet, Signer } from 'ethers';
+import {
+  keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
+} from 'ethers/utils';
 
-const {
-  keccak256, hashMessage, arrayify, recoverAddress, recoverPublicKey, computePublicKey,
-} = utils;
+export const walletPubKey = (
+  { privateKey }: Wallet,
+): string => new Keys({ privateKey: privateKey.slice(2) }).publicKey;
 
-// cached public keys mapped from addresses;
-export const keyOf: { [address: string]: string } = {};
-
-export async function getSignerPublicKey(signer: Signer): Promise<string> {
-  const address = await signer.getAddress();
-  let key = keyOf[address];
-  if (key) {
-    return key;
-  }
-  const hash = keccak256(address);
+export async function signerPubKey(signer: Signer): Promise<string> {
+  const msg = 'Hello';
+  const hash = keccak256(msg);
   const digest = hashMessage(arrayify(hash));
+  const signature = await signer.signMessage(arrayify(digest));
 
-  const signatures = [
-    await signer.signMessage(arrayify(hash)),
-    await signer.signMessage(arrayify(digest)),
-  ];
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (const sig of signatures) {
-    if (address === recoverAddress(digest, sig)) {
-      key = computePublicKey(recoverPublicKey(digest, sig), true).slice(2);
-      keyOf[address] = key;
-      return key;
-    }
-  }
-  return '';
+  return computePublicKey(recoverPublicKey(digest, signature), true).slice(2);
 }

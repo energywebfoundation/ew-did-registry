@@ -4,7 +4,9 @@ import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import {
-  Operator, signerFromKeys, getProvider, ConnectedSigner,
+  Operator, signerFromKeys, getProvider,
+  walletPubKey,
+  withKey, withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 
 import { DIDDocumentFactory } from '../src/factory';
@@ -23,7 +25,7 @@ describe('[DID DOCUMENT FACTORY]', () => {
     const registry = await deployRegistry([]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      new ConnectedSigner(signerFromKeys(keys), getProvider()),
+      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
       { address: registry },
     );
   });

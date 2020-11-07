@@ -7,7 +7,7 @@ import { Provider, TransactionResponse, TransactionRequest } from 'ethers/provid
 
 export const signerFromKeys = (keys: IKeys): Signer => new ethers.Wallet(keys.privateKey);
 
-export class ConnectedSigner extends Signer {
+export class ConnectedSigner extends ethers.Signer {
   readonly provider: Provider;
 
   constructor(private signer: Signer, provider: Provider) {

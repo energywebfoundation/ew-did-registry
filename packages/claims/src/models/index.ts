@@ -1,4 +1,3 @@
-import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from '@ew-did-registry/jwt';
 
 export interface IPublicClaim {
@@ -38,7 +37,7 @@ export interface IClaims {
   did: string;
   keys: {
     privateKey?: string;
-    publicKey: Promise<string>;
+    publicKey: string;
   };
   jwt: IJWT;
   verify(

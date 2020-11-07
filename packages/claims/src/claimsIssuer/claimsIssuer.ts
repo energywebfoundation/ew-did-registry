@@ -33,7 +33,12 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     }
     claim.signer = this.did;
     delete claim.iss;
-    const signedToken = await this.jwt.sign(claim, { algorithm: 'ES256', issuer: this.did, noTimestamp: true });
+    const signedToken = await this.jwt.sign(
+      claim,
+      {
+        algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+      },
+    );
     return signedToken;
   }
 
@@ -76,7 +81,9 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
       claim.claimData[key] = PK.toBits();
     });
     delete claim.iss;
-    return this.jwt.sign(claim, { algorithm: 'ES256', issuer: this.did, noTimestamp: true });
+    return this.jwt.sign(claim, {
+      algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+    });
   }
 }
 
