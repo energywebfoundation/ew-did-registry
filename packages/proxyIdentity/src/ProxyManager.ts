@@ -5,81 +5,85 @@ import { Signer, Contract, ContractFactory } from 'ethers';
 import { Provider } from 'ethers/providers';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
 import { abi as erc1155Abi } from '../build/contracts/ERC1155Multiproxy.json';
+import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../build/contracts/ProxyFactory.json';
+
+interface Proxy {
+  itsAddress: string;
+  creator: string;
+  owner: string;
+  agents: string[];
+  serial: string;
+}
 
 export class ProxyManager {
-  private proxyFactory: ContractFactory;
+  private factory: Contract;
 
   private provider: Provider;
 
-  constructor(private erc1056: string, private erc1155: string, private owner: Signer) {
-    this.proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, this.owner);
+  constructor(
+    private erc1056: string,
+    private erc1155: string,
+    private proxyFactory: string,
+    private owner: Signer,
+  ) {
+    this.factory = new Contract(proxyFactory, proxyFactoryAbi, this.owner);
     this.provider = owner.provider;
   }
 
   async createProxy(serial: string): Promise<Contract> {
-    const address = await this.proxyFactory.signer.getAddress();
-    return this.proxyFactory.deploy(
-      this.erc1056, this.erc1155, serial, await this.owner.getAddress(),
-      { nonce: await this.provider.getTransactionCount(address) },
-    );
+    await this.factory.create(serial);
+    const proxy = await this.factory.proxyBySerial(serial);
+    return new Contract(proxy.itsAddress, proxyAbi, this.owner);
   }
 
   async createProxyBatch(serials: string[]): Promise<Contract[]> {
-    const proxies = [];
-    for await (const serial of serials) {
-      proxies.push(await this.createProxy(serial));
-    }
-    return proxies;
+    await this.factory.createBatch(serials);
+    const proxies = await this.factory.proxiesBySerials(serials);
+    return (proxies)
+      .map((p: Proxy) => new Contract(p.itsAddress, proxyAbi, this.owner));
   }
 
   async changeOwner(serial: string, newOwner: string) {
-    const proxies = await this._allProxies();
-    for await (const proxy of proxies) {
-      if (await proxy.serial() === serial) {
-        await proxy.changeOwner(newOwner);
-        return;
-      }
-    }
+    await this.factory.changeOwner(serial, newOwner);
   }
 
   async changeOwnerBatch(serials: string[], newOwner: string) {
-    for await (const serial of serials) {
-      await this.changeOwner(serial, newOwner);
-    }
+    await this.factory.changeOwnerBatch(serials, newOwner);
   }
 
   connect(newowner: Signer): ProxyManager {
-    return new ProxyManager(this.erc1056, this.erc1155, newowner);
+    return new ProxyManager(this.erc1056, this.erc1155, this.proxyFactory, newowner);
   }
 
   async allProxies(): Promise<Contract[]> {
-    return this._allProxies();
+    const proxies: Proxy[] = await this.factory.allProxies();
+    return proxies.map((a) => new Contract(a.itsAddress, proxyAbi, this.owner));
   }
 
-  async proxiesOwnedBy(address: string): Promise<Contract[]> {
+  async proxiesOwnedBy(account: string): Promise<Contract[]> {
     const proxies = [];
-    for await (const proxy of await this._allProxies()) {
-      if (await proxy.owner() === address) {
-        proxies.push(proxy);
+    for (const proxy of await this.factory.allProxies()) {
+      if (proxy.owner === account) {
+        proxies.push(new Contract(proxy.itsAddress, proxyAbi, this.owner));
       }
     }
     return proxies;
   }
 
-  async proxiesCreatedBy(address: string): Promise<Contract[]> {
+  async proxiesCreatedBy(account: string): Promise<Contract[]> {
     const proxies = [];
-    for await (const proxy of await this._allProxies()) {
-      if (await proxy.creator() === address) {
-        proxies.push(proxy);
+    for (const proxy of await this.factory.allProxies()) {
+      if (proxy.creator === account) {
+        proxies.push(new Contract(proxy.itsAddress, proxyAbi, this.owner));
       }
     }
     return proxies;
   }
 
   async proxyById(serial: string): Promise<Contract> {
-    for await (const proxy of await this._allProxies()) {
-      if (await proxy.serial() === serial) {
-        return proxy;
+    for await (const proxy of await this.factory.allProxies()) {
+      if (proxy.serial === serial) {
+        return new Contract(proxy.itsAddress, proxyAbi, this.owner);
       }
     }
     return null;
@@ -91,10 +95,5 @@ export class ProxyManager {
       mapped.push(await fn(proxy));
     }
     return mapped;
-  }
-
-  private async _allProxies(): Promise<Contract[]> {
-    const addresses: string[] = await new Contract(this.erc1155, erc1155Abi, this.owner).proxies();
-    return addresses.map((a) => new Contract(a, proxyAbi, this.owner));
   }
 }

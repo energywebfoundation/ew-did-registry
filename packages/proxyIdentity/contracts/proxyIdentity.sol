@@ -22,12 +22,17 @@ interface IERC1056 {
   ) external;
 }
 
+interface ProxyFactory {
+  function proxyOwnerChanged(address newOwner) external;
+}
+
 contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
   address public owner;
   address public creator;
   address[] public agents;
   address public erc1056;
   address public erc1155;
+  address public factory;
   uint256 defaultValidity = 2**256 - 1;
   mapping(bytes32 => bool) digests;
   bytes4 internal constant ERC1155_ACCEPTED = 0xf23a6e61;
@@ -65,6 +70,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
     id = ERC1155Multiproxy(_erc1155).tokenCount();
     ERC1155Multiproxy(_erc1155).mint(id);
     _addDelegate(_creator);
+    isApproved[msg.sender] = true;
+    factory = msg.sender;
   }
 
   modifier _owner() {
@@ -127,6 +134,8 @@ contract ProxyIdentity is IERC1155TokenReceiver, IERC165, IERC223Receiver {
 
   function changeOwner(address newOwner) public isOwnerOrApproved {
     owner = newOwner;
+    ProxyFactory proxyFactory = ProxyFactory(factory);
+    proxyFactory.proxyOwnerChanged(newOwner);
   }
 
   function addApprovedAgent(address agent) public isOwnerOrApproved {

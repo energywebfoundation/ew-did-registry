@@ -5,6 +5,7 @@ import { ContractFactory, Contract } from 'ethers';
 import { JsonRpcProvider } from 'ethers/providers';
 import { ethrReg } from '../constants/EthereumDIDRegistry';
 import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC1155Multiproxy.json';
+import { abi as proxyFactoryAbi, bytecode as proxyFactoryBytecode } from '../build/contracts/ProxyFactory.json';
 import { ProxyManager } from '../src/ProxyManager';
 
 const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
@@ -14,7 +15,7 @@ chai.use(chaiAsPromised);
 chai.use(assetArray);
 chai.should();
 
-describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
+describe.only('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem = provider.getSigner(0);
@@ -31,10 +32,12 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
 
   beforeEach(async () => {
     const erc1056Factory = new ContractFactory(abi1056, bytecode1056, oem);
-    const erc1056 = await (await erc1056Factory.deploy()).deployed();
+    const erc1056 = await erc1056Factory.deploy();
     const erc1155Factory = new ContractFactory(abi1155, bytecode1155, oem);
-    erc1155 = await (await erc1155Factory.deploy()).deployed();
-    pm = new ProxyManager(erc1056.address, erc1155.address, oem);
+    erc1155 = await erc1155Factory.deploy();
+    const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, oem);
+    const proxyFactory = await proxyFactoryCreator.deploy(erc1056.address, erc1155.address);
+    pm = new ProxyManager(erc1056.address, erc1155.address, proxyFactory.address, oem);
   });
 
   it('created proxies should be owned by oem', async () => {
@@ -54,8 +57,8 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
     expect(owners.every((o) => o === oemAddr)).true;
   });
 
-  it('createProxyBatch should create 10 proxies', async () => {
-    const serials = new Array(10).fill(0).map((v, i) => i.toString());
+  it('createProxyBatch should create 3 proxies', async () => {
+    const serials = new Array(3).fill(0).map((v, i) => i.toString());
     const proxies = await pm.createProxyBatch(serials);
 
     const createdSerials = await mapProxiesBy(
@@ -66,16 +69,16 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
   });
 
   it('should return list of all proxies', async () => {
-    await pm.connect(oem).createProxyBatch(['1', '2']);
-    await pm.connect(installer).createProxyBatch(['3', '4']);
+    await pm.connect(oem).createProxyBatch([id1, id2]);
+    await pm.connect(installer).createProxyBatch([id3, id4]);
 
     expect(
       await mapProxiesBy(await pm.allProxies(), async (p) => p.serial()),
     )
-      .to.be.equalTo(['1', '2', '3', '4']);
+      .to.be.equalTo([id1, id2, id3, id4]);
   });
 
-  it('should list created tokens', async () => {
+  it('should list created proxies', async () => {
     await pm.connect(oem).createProxyBatch([id1, id2]);
     await pm.connect(installer).createProxyBatch([id3, id4]);
 
