@@ -430,14 +430,15 @@ export class Operator extends Resolver implements IOperator {
         ? updateData.value
         : updateData.delegate,
     );
-    const argums = [identity,
-      bytesOfAttribute,
-      bytesOfValue,
-      validity || overrides,
-      validity && overrides,
-    ];
+    const params: any = [identity, bytesOfAttribute, bytesOfValue];
+    if (validity !== undefined) {
+      params.push(validity);
+    }
+    if (overrides) {
+      params.push(overrides);
+    }
     try {
-      const tx = await method(...argums.filter((a) => a));
+      const tx = await method(...params);
       const receipt = await tx.wait();
       const event = receipt.events.find(
         (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
