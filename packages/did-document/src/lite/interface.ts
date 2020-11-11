@@ -54,4 +54,11 @@ export interface IDIDDocumentLite {
   readAttribute(
     filter: { [attr: string]: { [prop: string]: string } }, did?: string,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+
+  /**
+   * Document owner public key
+   *
+   * @param {string} did
+   */
+  ownerPubKey(did: string): Promise<string>;
 }

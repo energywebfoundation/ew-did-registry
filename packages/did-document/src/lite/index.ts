@@ -61,6 +61,10 @@ class DIDDocumentLite implements IDIDDocumentLite {
   async read(did = this.did): Promise<IDIDDocument> {
     return this.resolver.read(did);
   }
+
+  async ownerPubKey(did = this.did): Promise<string> {
+    return this.resolver.readOwnerPubKey(did);
+  }
 }
 
 export { IDIDDocumentLite, DIDDocumentLite };
