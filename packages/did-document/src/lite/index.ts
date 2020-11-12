@@ -1,5 +1,11 @@
 import {
-  IDIDDocument, IResolver, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
+  IDIDDocument,
+  IResolver,
+  DelegateTypes,
+  IPublicKey,
+  IServiceEndpoint,
+  IAuthentication,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
@@ -39,7 +45,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
   /**
    * Finds first attribute which satisfies filter
    *
-   * @param filter {{ [attr: string]: { [prop: string]: string } }} object used
+   * @param selector {{ [attr: string]: { [prop: string]: string } }} object used
    *  to describe part of the document. `attr` is one of standard DID attributes
    *  like `publicKey`, `serviceEndpoints` or `authentication` and `prop` - properties
    *  of this attribute such as `type` or `value`
@@ -48,9 +54,9 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @returns {object | null}
    */
   async readAttribute(
-    filter: { [key: string]: { [key: string]: string } }, did = this.did,
+    selector: DocumentSelector, did = this.did,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
-    return this.resolver.readAttribute(did, filter);
+    return this.resolver.readAttribute(did, selector);
   }
 
   /**

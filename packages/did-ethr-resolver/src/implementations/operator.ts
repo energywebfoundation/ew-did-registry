@@ -307,7 +307,7 @@ export class Operator extends Resolver implements IOperator {
         delegate: delegateAddress,
       };
       const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, null, { nonce },
+        method, did, didAttribute, updateData, undefined, { nonce },
       );
       if (!revoked) {
         return false;
@@ -357,7 +357,7 @@ export class Operator extends Resolver implements IOperator {
       };
       const method = this._didRegistry.revokeAttribute;
       const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, null, { nonce },
+        method, did, didAttribute, updateData, undefined, { nonce },
       );
       if (!revoked) {
         return false;
@@ -390,7 +390,7 @@ export class Operator extends Resolver implements IOperator {
             serviceEndpoint: service.serviceEndpoint,
           },
         },
-        null,
+        undefined,
         { nonce },
       );
       if (!revoked) {

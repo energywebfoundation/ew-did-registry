@@ -47,7 +47,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     });
-    const publicKey = await docLite.readAttribute({ publicKey: { type: 'Secp256k1VerificationKey' } });
+    const publicKey = await docLite.readAttribute({ publicKey: { type: `${Algorithms.ED25519}${PubKeyType.VerificationKey2018}` } });
     expect(publicKey).to.be.not.undefined;
   });
 
@@ -57,13 +57,13 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
       type: PubKeyType.VerificationKey2018,
       value: { serviceEndpoint: url },
     });
-    const service = await docLite.readAttribute({ serviceEndpoints: { serviceEndpoint: url } });
+    const service = await docLite.readAttribute({ service: { serviceEndpoint: url } });
     expect(service).to.be.not.undefined;
   });
 
   it('null should be return when attribute not found', async () => {
-    const attr = await docLite.readAttribute({ serviceEndpoints: { nonexist: 'nonexist' } });
-    expect(attr).to.be.null;
+    const attr = await docLite.readAttribute({ service: { nonexist: 'nonexist' } });
+    expect(attr).to.be.undefined;
   });
 
   it('owner public key should be returned from created document', async () => {

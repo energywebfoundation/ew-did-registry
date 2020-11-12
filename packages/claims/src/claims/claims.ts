@@ -85,7 +85,7 @@ export class Claims implements IClaims {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
     const service = await this.document.readAttribute(
-      { serviceEndpoints: { serviceEndpoint: claimUrl } }, (claim).sub,
+      { service: { serviceEndpoint: claimUrl } }, (claim).sub,
     );
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];

@@ -11,10 +11,11 @@ import {
   IServiceEndpoint,
   RegistrySettings,
   KeyTags,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
-import { fetchDataFromEvents, wrapDidDocument } from '../functions';
+import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -76,8 +77,8 @@ class Resolver implements IResolver {
    */
   private async _read(
     did: string,
-    filter?: Record<string, { [key: string]: string }>,
-  ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
+    selector?: DocumentSelector,
+  ): Promise<IDIDDocument> {
     const [, address] = did.match(DIDPattern);
     if (!address) {
       throw new Error('Invalid did provided');
@@ -89,20 +90,19 @@ class Resolver implements IResolver {
         topBlock: new utils.BigNumber(0),
         authentication: {},
         publicKey: {},
-        serviceEndpoints: {},
+        service: {},
         attributes: new Map(),
       };
     }
     try {
-      const data = await fetchDataFromEvents(
+      await fetchDataFromEvents(
         did,
         this._document,
         this.settings,
         this._contract,
         this._provider,
-        filter,
+        selector,
       );
-      if (filter) return data;
       const document = wrapDidDocument(did, this._document);
       return document;
     } catch (error) {
@@ -120,9 +120,10 @@ class Resolver implements IResolver {
 
   async readAttribute(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    selector: DocumentSelector,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
-    return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
+    const doc = await this._read(did, selector);
+    return query(doc, selector);
   }
 
   /**

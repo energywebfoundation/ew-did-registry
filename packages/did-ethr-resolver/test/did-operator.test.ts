@@ -306,6 +306,21 @@ const testSuite = (): void => {
     await newOwnerOperator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
     expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
   });
+
+  it('attribute updated with zero validity should not be read', async () => {
+    const tag = 'key-2';
+    const attribute = DIDAttribute.PublicKey;
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag },
+    };
+    await operator.update(did, attribute, updateData, validity);
+    await operator.update(did, attribute, updateData, 0);
+    const pubKey = await operator.readAttribute(did, { publicKey: { id: `${did}#${tag}` } });
+    expect(pubKey).undefined;
+  });
 };
 describe('[RESOLVER PACKAGE]: DID-OPERATOR', function () {
   this.timeout(0);
@@ -321,8 +336,4 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function () {
   });
 
   testSuite();
-
-  it('operator and signer public keys should be equals', () => {
-    expect(keys.publicKey).equal(operator.getPublicKey());
-  });
 });
