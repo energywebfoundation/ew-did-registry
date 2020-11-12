@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
 import {
   Operator, signerFromKeys, getProvider,
@@ -116,5 +117,25 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.undefined;
+  });
+
+  it.only('should be possible to add 10 public keys', async () => {
+    const count = 10;
+    const keyBefore = (await Document.read()).publicKey.length;
+    const tags = new Array(count).fill(0).map((k, i) => i.toString());
+    for await (const tag of tags) {
+      await Document.update(
+        DIDAttribute.PublicKey,
+        {
+          type: PubKeyType.VerificationKey2018,
+          algo: Algorithms.ED25519,
+          encoding: Encoding.HEX,
+          value: { publicKey: `0x${new Keys().publicKey}`, tag },
+        },
+        validity,
+      );
+    }
+    const keyAfter = (await Document.read()).publicKey.length;
+    expect(keyAfter).equal(keyBefore + count);
   });
 });
