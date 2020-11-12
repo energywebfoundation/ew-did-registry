@@ -1,6 +1,6 @@
 import { utils } from 'ethers';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, PubKeyType,
+  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, PubKeyType, DocumentSelector,
 } from './models';
 
 export interface IResolver {
@@ -49,7 +49,7 @@ export interface IResolver {
 
   readAttribute(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    selector: DocumentSelector,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
 
   readOwnerPubKey(did: string): Promise<string>;
