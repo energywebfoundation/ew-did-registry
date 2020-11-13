@@ -54,12 +54,9 @@ export class Claims implements IClaims {
    * @param { string } signer did of the signer
    */
   async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerPubKey = await this.document.readAttribute(
-      { publicKey: { type: 'Secp256k1veriKey', controller: signer.split(':')[2] } },
-      signer,
-    ) as IPublicKey;
+    const signerPubKey = await this.document.ownerPubKey(signer);
     try {
-      await this.jwt.verify(token, signerPubKey.publicKeyHex.slice(2));
+      await this.jwt.verify(token, signerPubKey);
     } catch (error) {
       return false;
     }
