@@ -18,6 +18,7 @@ import { Wallet } from 'ethers';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
+import { Methods } from '@ew-did-registry/did';
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
@@ -27,7 +28,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
-  let Document: IDIDDocumentFull;
+  let fullDoc: IDIDDocumentFull;
   let operator: IOperator;
   const validity = 5 * 60 * 1000;
 
@@ -38,13 +39,13 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
       { address: registry },
     );
-    Document = new DIDDocumentFull(did, operator);
-    const created = await Document.create();
+    fullDoc = new DIDDocumentFull(did, operator);
+    const created = await fullDoc.create();
     expect(created).to.be.true;
   });
 
   it('update document public key should return true', async () => {
-    const updated = await Document.update(
+    const updated = await fullDoc.update(
       DIDAttribute.PublicKey,
       {
         type: PubKeyType.VerificationKey2018,
@@ -58,7 +59,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('deactivate document should return true', async () => {
-    const deactivated = await Document.deactivate();
+    const deactivated = await fullDoc.deactivate();
     expect(deactivated).to.be.true;
   });
 
@@ -72,7 +73,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       encoding: Encoding.HEX,
       delegate: delegate.address,
     };
-    const updated = await Document.update(attribute, updateData, validity);
+    const updated = await fullDoc.update(attribute, updateData, validity);
     expect(updated).to.be.true;
     let document = await operator.read(did);
     expect(document.id).equal(did);
@@ -85,7 +86,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       ethereumAddress: updateData.delegate,
     });
     const delegateDid = `did:ewc:${delegate.address}`;
-    const revoked = await Document.revokeDelegate(PubKeyType.VerificationKey2018, delegateDid);
+    const revoked = await fullDoc.revokeDelegate(PubKeyType.VerificationKey2018, delegateDid);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
@@ -103,14 +104,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       encoding: Encoding.HEX,
       value: { publicKey: `0x${keysAttribute.publicKey}`, tag: 'key-2' },
     };
-    await Document.update(attribute, updateData, validity);
+    await fullDoc.update(attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
-    const revoked = await Document.revokeAttribute(attribute, updateData);
+    const revoked = await fullDoc.revokeAttribute(attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
@@ -121,10 +122,10 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
 
   it('should be possible to add 10 public keys', async () => {
     const count = 10;
-    const keyBefore = (await Document.read()).publicKey.length;
+    const keyBefore = (await fullDoc.read()).publicKey.length;
     const tags = new Array(count).fill(0).map((k, i) => i.toString());
     for await (const tag of tags) {
-      await Document.update(
+      await fullDoc.update(
         DIDAttribute.PublicKey,
         {
           type: PubKeyType.VerificationKey2018,
@@ -135,7 +136,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         validity,
       );
     }
-    const keyAfter = (await Document.read()).publicKey.length;
+    const keyAfter = (await fullDoc.read()).publicKey.length;
     expect(keyAfter).equal(keyBefore + count);
   });
 
@@ -143,7 +144,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const tag = 'test';
     const keyId = `${did}#${tag}`;
     const shortValidity = 1;
-    await Document.update(
+    await fullDoc.update(
       DIDAttribute.PublicKey,
       {
         type: PubKeyType.VerificationKey2018,
@@ -156,6 +157,26 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     await new Promise((resolve) => {
       setTimeout(resolve, (shortValidity * 1.1) * 1000);
     });
-    expect(await Document.readAttribute({ publicKey: { id: keyId } })).undefined;
+    expect(await fullDoc.readAttribute({ publicKey: { id: keyId } })).undefined;
+  });
+
+  it('adding of one delegate with two different types should add two public keys', async () => {
+    const attribute = DIDAttribute.Authenticate;
+    const delegate = new Wallet(new Keys().privateKey);
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    const keysBefore = (await fullDoc.read()).publicKey.length;
+    await fullDoc.update(attribute, updateData, validity);
+    await fullDoc.update(
+      attribute,
+      { ...updateData, type: PubKeyType.SignatureAuthentication2018 },
+      validity,
+    );
+    const keysAfter = (await fullDoc.read()).publicKey.length;
+    expect(keysAfter).equal(keysBefore + 2);
   });
 });
