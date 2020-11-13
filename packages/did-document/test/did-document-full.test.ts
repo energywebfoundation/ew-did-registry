@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
@@ -18,7 +19,9 @@ import { Wallet } from 'ethers';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
-import { Methods } from '@ew-did-registry/did';
+
+chai.use(chaiAsPromised);
+chai.should();
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
@@ -28,12 +31,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
+  const keys1 = new Keys();
   let fullDoc: IDIDDocumentFull;
   let operator: IOperator;
+  let registry: string;
   const validity = 5 * 60 * 1000;
 
   before(async () => {
-    const registry = await deployRegistry([ownerAddress]);
+    registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
       withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
@@ -178,5 +183,17 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     );
     const keysAfter = (await fullDoc.read()).publicKey.length;
     expect(keysAfter).equal(keysBefore + 2);
+  });
+
+  it('document must not be updated by non-owning identity', async () => {
+    console.error = function f(): void { };
+    const doc = new DIDDocumentFull(
+      did,
+      new Operator(
+        withKey(withProvider(signerFromKeys(keys1), getProvider()), walletPubKey),
+        { address: registry },
+      ),
+    );
+    return doc.deactivate().should.be.rejected;
   });
 });
