@@ -25,3 +25,8 @@ deploy:
     skip_cleanup: true
     on:
       branch: release
+  - provider: script
+    script: "git checkout bug/MYEN-351 && lerna version v0.0.1-alpha.694.1 --yes && lerna publish from-package --yes"
+    skip_cleanup: true
+    on:
+      branch: bug/MYEN-351
