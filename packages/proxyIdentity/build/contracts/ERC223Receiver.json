@@ -49,14 +49,14 @@
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol",
     "exportedSymbols": {
       "ERC223Receiver": [
-        1220
+        1911
       ]
     },
-    "id": 1221,
+    "id": 1912,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1216,
+        "id": 1907,
         "literals": [
           "solidity",
           "^",
@@ -69,9 +69,9 @@
       {
         "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol",
         "file": "../interfaces/IERC223Receiver.sol",
-        "id": 1217,
+        "id": 1908,
         "nodeType": "ImportDirective",
-        "scope": 1221,
+        "scope": 1912,
         "sourceUnit": 44,
         "src": "25:43:7",
         "symbolAliases": [],
@@ -83,7 +83,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1218,
+              "id": 1909,
               "name": "IERC223Receiver",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 43,
@@ -93,7 +93,7 @@
                 "typeString": "contract IERC223Receiver"
               }
             },
-            "id": 1219,
+            "id": 1910,
             "nodeType": "InheritanceSpecifier",
             "src": "98:15:7"
           }
@@ -104,15 +104,15 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1220,
+        "id": 1911,
         "linearizedBaseContracts": [
-          1220,
+          1911,
           43
         ],
         "name": "ERC223Receiver",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 1221,
+        "scope": 1912,
         "src": "71:45:7"
       }
     ],
@@ -122,14 +122,14 @@
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/tokens/ERC223Receiver.sol",
     "exportedSymbols": {
       "ERC223Receiver": [
-        1220
+        1911
       ]
     },
-    "id": 1221,
+    "id": 1912,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1216,
+        "id": 1907,
         "literals": [
           "solidity",
           "^",
@@ -142,9 +142,9 @@
       {
         "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/interfaces/IERC223Receiver.sol",
         "file": "../interfaces/IERC223Receiver.sol",
-        "id": 1217,
+        "id": 1908,
         "nodeType": "ImportDirective",
-        "scope": 1221,
+        "scope": 1912,
         "sourceUnit": 44,
         "src": "25:43:7",
         "symbolAliases": [],
@@ -156,7 +156,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1218,
+              "id": 1909,
               "name": "IERC223Receiver",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 43,
@@ -166,7 +166,7 @@
                 "typeString": "contract IERC223Receiver"
               }
             },
-            "id": 1219,
+            "id": 1910,
             "nodeType": "InheritanceSpecifier",
             "src": "98:15:7"
           }
@@ -177,15 +177,15 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1220,
+        "id": 1911,
         "linearizedBaseContracts": [
-          1220,
+          1911,
           43
         ],
         "name": "ERC223Receiver",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 1221,
+        "scope": 1912,
         "src": "71:45:7"
       }
     ],
@@ -197,7 +197,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2020-10-01T13:45:50.916Z",
+  "updatedAt": "2020-11-17T15:15:49.601Z",
   "devdoc": {
     "methods": {}
   },

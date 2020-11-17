@@ -68,10 +68,10 @@ contract ERC1155Multiproxy is ERC1155, ERC1155Metadata {
   ) public {
     uint256[] memory ids = _idsBySerials(_serials);
     super.safeBatchTransferFrom(from, to, ids, amounts, data);
-    for (uint256 i = 0; i < serials.length; i++) {
+    for (uint256 i = 0; i < _serials.length; i++) {
       if (amounts[i] == 1) {
-        proxies[serials[i]].owner = to;
-        _onProxyOwnerChanged(serials[i], to);
+        proxies[_serials[i]].owner = to;
+        _onProxyOwnerChanged(_serials[i], to);
       }
     }
   }

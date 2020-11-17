@@ -310,6 +310,25 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       expect(await proxy2.owner()).equal(receiverAddr);
     });
 
+    it('only transferred proxies should change owner', async () => {
+      const serial1 = '10';
+      const serial2 = '20';
+      const serial3 = '30';
+      const serial4 = '40';
+      const proxy1 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial1, creatorAddr);
+      const proxy2 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr);
+      const proxy3 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial3, creatorAddr);
+      const proxy4 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial4, creatorAddr);
+      const receiverAddr = await provider.getSigner(3).getAddress();
+
+      await erc1155.transferBatch(creatorAddr, receiverAddr, [serial1, serial2], [1, 1], '0x0');
+
+      expect(await proxy1.owner()).equal(receiverAddr);
+      expect(await proxy2.owner()).equal(receiverAddr);
+      expect(await proxy3.owner()).equal(creatorAddr);
+      expect(await proxy4.owner()).equal(creatorAddr);
+    });
+
     it('burning should cease ownership of the proxy', async () => {
       await erc1155.burn(creatorAddr, serial);
       expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
