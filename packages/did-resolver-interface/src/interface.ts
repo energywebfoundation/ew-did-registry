@@ -11,8 +11,6 @@ import {
   DocumentSelector,
 } from './models';
 
-const { BigNumber } = utils;
-
 export interface IResolver {
   /**
    * Constructor takes keys and resolver settings to create a new Resolver

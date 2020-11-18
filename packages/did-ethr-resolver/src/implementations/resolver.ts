@@ -17,8 +17,6 @@ import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
-const { BigNumber } = utils;
-
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
  * different resolver settings. The default resolver settings are provided in the 'constants' folder

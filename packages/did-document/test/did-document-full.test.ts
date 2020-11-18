@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import chai, { expect } from 'chai';
+import chai, { expect, should } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {
   Operator, signerFromKeys, getProvider,
@@ -20,8 +20,8 @@ import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
 
+should();
 chai.use(chaiAsPromised);
-chai.should();
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
@@ -60,15 +60,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       },
       validity,
     );
-    expect(updated).to.be.true;
+    expect(updated.toNumber()).to.be.an('number');
   });
 
-  it('deactivate document should return true', async () => {
-    const deactivated = await fullDoc.deactivate();
-    expect(deactivated).to.be.true;
-  });
+  it('document can be deactivated', async () => fullDoc.deactivate().should.be.fulfilled);
 
-  it('revokeDelegate makes removes authentication method and corresponding public key', async () => {
+  it('revokeDelegate removes authentication method and corresponding public key', async () => {
     const attribute = DIDAttribute.Authenticate;
     const keysDelegate = new Keys();
     const delegate = new Wallet(keysDelegate.privateKey);
@@ -78,8 +75,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       encoding: Encoding.HEX,
       delegate: delegate.address,
     };
-    const updated = await fullDoc.update(attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await fullDoc.update(attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
