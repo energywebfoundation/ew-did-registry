@@ -65,7 +65,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     };
     await operator.update(did, attribute, updateData, validity);
     const serviceEndpointAttr = await operator.readAttribute(did, {
-      serviceEndpoints: { serviceEndpoint: `${updateData.value.serviceEndpoint}` },
+      service: { serviceEndpoint: `${updateData.value.serviceEndpoint}` },
     }) as IServiceEndpoint;
     expect(serviceEndpointAttr.serviceEndpoint === updateData.value);
   });

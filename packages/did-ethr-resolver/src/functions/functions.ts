@@ -1,10 +1,10 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable no-empty */
 import {
   Contract, ethers, providers, utils,
 } from 'ethers';
 
 import {
-  IAuthentication,
   IDIDDocument,
   IDIDLogData,
   IHandlers,
@@ -13,6 +13,8 @@ import {
   IServiceEndpoint,
   ISmartContractEvent,
   RegistrySettings,
+  IAuthentication,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
@@ -149,9 +151,9 @@ const handleAttributeChange = (
         servicePoint.validity = validTo;
         servicePoint.block = block;
 
-        if (document.serviceEndpoints[servicePoint.id] === undefined
-          || document.serviceEndpoints[servicePoint.id].block < block) {
-          document.serviceEndpoints[servicePoint.id] = servicePoint;
+        if (document.service[servicePoint.id] === undefined
+          || document.service[servicePoint.id].block < block) {
+          document.service[servicePoint.id] = servicePoint;
 
           return document;
         }
@@ -245,6 +247,17 @@ const getEventsFromBlock = (
   });
 });
 
+export const query = (
+  document: IDIDDocument, selector: DocumentSelector,
+): IPublicKey | IServiceEndpoint | IAuthentication => {
+  const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
+  const attr = Object.values(document[attrName])
+    .find((a: IPublicKey | IServiceEndpoint | IAuthentication) => Object
+      .entries(selector[attrName])
+      .every(([prop, val]) => a[prop] && a[prop] === val));
+  return attr;
+};
+
 /**
  * A high level function that manages the flow to read data from the blockchain
  *
@@ -260,10 +273,9 @@ export const fetchDataFromEvents = async (
   registrySettings: RegistrySettings,
   contract: Contract,
   provider: providers.Provider,
-  filter?: { [key: string]: { [key: string]: string } },
-): Promise<null | IPublicKey | IAuthentication | IServiceEndpoint> => {
+  selector?: DocumentSelector,
+): Promise<void> => {
   const [, , identity] = did.split(':');
-
   let nextBlock;
   let topBlock;
   try {
@@ -294,19 +306,14 @@ export const fetchDataFromEvents = async (
       contractInterface,
       address,
     );
-    if (filter) {
-      const attribute = Object.keys(filter)[0] as 'publicKey' | 'serviceEndpoints' | 'authentication';
-      const attrId = Object.keys(document[attribute]).find((id) => {
-        const attr = document[attribute][id];
-        return Object.keys(filter[attribute]).every(
-          (prop) => attr[prop] === filter[attribute][prop],
-        );
-      });
-      if (attrId) return document[attribute][attrId];
+    if (selector) {
+      const attribute = query(document as unknown as IDIDDocument, selector);
+      if (attribute) {
+        return;
+      }
     }
   }
   document.topBlock = topBlock;
-  return null;
 };
 
 /**
@@ -365,8 +372,8 @@ export const wrapDidDocument = (
   }
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
-  for (const key in document.serviceEndpoints) {
-    const serviceEndpoint = document.serviceEndpoints[key];
+  for (const key in document.service) {
+    const serviceEndpoint = document.service[key];
     if (serviceEndpoint.validity.gt(now)) {
       const serviceEndpointCopy = { ...serviceEndpoint };
       delete serviceEndpointCopy.validity;

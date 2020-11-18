@@ -124,7 +124,7 @@ export interface IDIDLogData {
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];
-  serviceEndpoints?: { [key: string]: IServiceEndpoint };
+  service?: { [key: string]: IServiceEndpoint };
   created?: string;
   updated?: string;
   proof?: ILinkedDataProof;
@@ -156,3 +156,9 @@ export interface IdentityOwner extends Signer {
   publicKey: string;
   privateKey?: string;
 }
+
+export type DocumentSelector = Partial<{
+  publicKey: Partial<IPublicKey>;
+  service: Partial<IServiceEndpoint>;
+  authentication: Partial<IAuthentication>;
+}>

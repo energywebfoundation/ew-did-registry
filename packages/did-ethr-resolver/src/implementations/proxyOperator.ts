@@ -179,7 +179,7 @@ export class ProxyOperator extends Operator {
         ? updateData.value
         : updateData.delegate,
     );
-    const validityValue = validity !== null ? validity.toString() : '';
+    const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
     let methodName: string;
     if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {

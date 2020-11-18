@@ -307,7 +307,7 @@ export class Operator extends Resolver implements IOperator {
         delegate: delegateAddress,
       };
       const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, null, { nonce },
+        method, did, didAttribute, updateData, undefined, { nonce },
       );
       if (!revoked) {
         return false;
@@ -357,7 +357,7 @@ export class Operator extends Resolver implements IOperator {
       };
       const method = this._didRegistry.revokeAttribute;
       const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, null, { nonce },
+        method, did, didAttribute, updateData, undefined, { nonce },
       );
       if (!revoked) {
         return false;
@@ -390,7 +390,7 @@ export class Operator extends Resolver implements IOperator {
             serviceEndpoint: service.serviceEndpoint,
           },
         },
-        null,
+        undefined,
         { nonce },
       );
       if (!revoked) {
@@ -430,14 +430,19 @@ export class Operator extends Resolver implements IOperator {
         ? updateData.value
         : updateData.delegate,
     );
-    const argums = [identity,
+    const params: (string | number | Record<string, unknown>)[] = [
+      identity,
       bytesOfAttribute,
       bytesOfValue,
-      validity || overrides,
-      validity && overrides,
     ];
+    if (validity !== undefined) {
+      params.push(validity);
+    }
+    if (overrides) {
+      params.push(overrides);
+    }
     try {
-      const tx = await method(...argums.filter((a) => a));
+      const tx = await method(...params);
       const receipt = await tx.wait();
       const event = receipt.events.find(
         (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
@@ -446,7 +451,6 @@ export class Operator extends Resolver implements IOperator {
       );
       if (!event) return false;
     } catch (e) {
-      console.error('Error updating doc:', e);
       throw new Error(e.message);
     }
     return true;

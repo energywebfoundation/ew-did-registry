@@ -1,5 +1,5 @@
 import {
-  IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
+  IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 
 /**
@@ -43,7 +43,7 @@ export interface IDIDDocumentLite {
   /**
    * Finds first attribute which satisfies filter
    *
-   * @param filter {{ [attr: string]: { [prop: string]: string } }} object used
+   * @param selector {{ [attr: string]: { [prop: string]: string } }} object used
    *  to describe part of the document. `attr` is one of standard DID attributes
    *  like `publicKey`, `serviceEndpoints` or `authentication` and `prop` - properties
    *  of this attribute such as `type` or `value`
@@ -52,6 +52,13 @@ export interface IDIDDocumentLite {
    * @returns {object | null}
    */
   readAttribute(
-    filter: { [attr: string]: { [prop: string]: string } }, did?: string,
+    selector: DocumentSelector, did?: string,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+
+  /**
+   * Document owner public key
+   *
+   * @param {string} did
+   */
+  ownerPubKey(did: string): Promise<string>;
 }

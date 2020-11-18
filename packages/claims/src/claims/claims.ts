@@ -54,12 +54,9 @@ export class Claims implements IClaims {
    * @param { string } signer did of the signer
    */
   async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerPubKey = await this.document.readAttribute(
-      { publicKey: { type: 'Secp256k1veriKey', controller: signer.split(':')[2] } },
-      signer,
-    ) as IPublicKey;
+    const signerPubKey = await this.document.ownerPubKey(signer);
     try {
-      await this.jwt.verify(token, signerPubKey.publicKeyHex.slice(2));
+      await this.jwt.verify(token, signerPubKey);
     } catch (error) {
       return false;
     }
@@ -85,7 +82,7 @@ export class Claims implements IClaims {
       throw new Error('Issuer isn\'t a use\'r delegate');
     }
     const service = await this.document.readAttribute(
-      { serviceEndpoints: { serviceEndpoint: claimUrl } }, (claim).sub,
+      { service: { serviceEndpoint: claimUrl } }, (claim).sub,
     );
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];

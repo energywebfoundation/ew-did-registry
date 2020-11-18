@@ -14,6 +14,10 @@ import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../te
 
 chai.should();
 
+const claimData = {
+  name: 'John',
+};
+
 describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
@@ -104,5 +108,13 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
     claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
     claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
+  });
+
+  it('self signed claim should be verified', async () => {
+    const claim = await userClaims.createPublicClaim(claimData);
+
+    const url = await userClaims.publishPublicClaim(claim, claimData);
+
+    return userClaims.verify(url).should.be.fulfilled;
   });
 });
