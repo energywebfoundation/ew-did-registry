@@ -186,7 +186,6 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('document must not be updated by non-owning identity', async () => {
-    console.error = function f(): void { };
     const doc = new DIDDocumentFull(
       did,
       new Operator(
