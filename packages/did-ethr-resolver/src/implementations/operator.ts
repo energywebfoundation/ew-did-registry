@@ -430,7 +430,11 @@ export class Operator extends Resolver implements IOperator {
         ? updateData.value
         : updateData.delegate,
     );
-    const params: any = [identity, bytesOfAttribute, bytesOfValue];
+    const params: (string | number | Record<string, unknown>)[] = [
+      identity,
+      bytesOfAttribute,
+      bytesOfValue,
+    ];
     if (validity !== undefined) {
       params.push(validity);
     }
