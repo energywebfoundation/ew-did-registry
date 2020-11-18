@@ -1,6 +1,7 @@
 import {
   IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
+import { utils } from 'ethers';
 
 /**
  * Interface describes the lite version of DID Document with only read functionality
@@ -61,4 +62,11 @@ export interface IDIDDocumentLite {
    * @param {string} did
    */
   ownerPubKey(did: string): Promise<string>;
+
+  lastBlock(did: string): Promise<utils.BigNumber>;
+
+  readFromBlock(
+    did: string,
+    from: utils.BigNumber,
+  ): Promise<IDIDDocument>;
 }

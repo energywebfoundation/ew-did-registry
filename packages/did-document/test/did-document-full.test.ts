@@ -191,4 +191,44 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     );
     return doc.deactivate().should.be.rejected;
   });
+
+  it('document be can read from specified block', async () => {
+    let i = 0;
+
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` },
+    };
+    const firstBlock = await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+
+    i += 1;
+    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` };
+    const secondBlock = await fullDoc.update(DIDAttribute.PublicKey, updateData);
+    i += 1;
+    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` };
+    const thirdBlock = await fullDoc.update(DIDAttribute.PublicKey, updateData);
+
+    expect((await fullDoc.readFromBlock(did, firstBlock)).publicKey.length).equal(3);
+    expect((await fullDoc.readFromBlock(did, secondBlock)).publicKey.length).equal(2);
+    expect((await fullDoc.readFromBlock(did, thirdBlock)).publicKey.length).equal(1);
+  });
+
+  it('each identity update should increment its last block', async () => {
+    const from = await fullDoc.lastBlock(did);
+
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
+    };
+
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+    expect((await fullDoc.lastBlock(did)).eq(from.add(1)));
+
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+    expect((await fullDoc.lastBlock(did)).eq(from.add(2)));
+  });
 });
