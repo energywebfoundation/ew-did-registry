@@ -14,7 +14,7 @@ import {
 import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
 import {
-  ethrReg, ProxyOperator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
+  ethrReg, ProxyOperator, signerFromKeys, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -102,8 +102,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
         encoding: HEX,
         delegate: delegate.address,
       };
-      const updated = await operator.update(did, attribute, updateData, validity);
-      expect(updated).to.be.true;
+      await operator.update(did, attribute, updateData, validity);
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
@@ -126,8 +125,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       delegate: delegate.address,
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
@@ -157,8 +155,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
         serviceEndpoint: endpoint,
       },
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
     expect(document.service.find(
@@ -238,8 +235,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
     document = await operator.read(did);
-    const result = await operator.deactivate(did);
-    expect(result).to.be.true;
+    await operator.deactivate(did);
     document = await operator.read(did);
     expect(document.service).to.be.empty;
     expect(document.publicKey).to.be.empty;
@@ -256,8 +252,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       delegate: delegate.address,
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(

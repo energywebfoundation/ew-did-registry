@@ -1,6 +1,7 @@
 import {
   DIDAttribute, IOperator, IUpdateData, PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import { utils } from 'ethers';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 
@@ -42,8 +43,8 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * ```
    * @return { boolean }
    */
-  async deactivate(): Promise<boolean> {
-    return this._operator.deactivate(this.did);
+  async deactivate(): Promise<void> {
+    await this._operator.deactivate(this.did);
   }
 
   /**
@@ -77,7 +78,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
     attribute: DIDAttribute,
     data: IUpdateData,
     validity?: number,
-  ): Promise<boolean> {
+  ): Promise<utils.BigNumber> {
     return this._operator.update(this.did, attribute, data, validity);
   }
 

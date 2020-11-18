@@ -84,7 +84,7 @@ class Resolver implements IResolver {
       throw new Error('Invalid did provided');
     }
 
-    if (this._document === undefined || this._document.owner !== did) {
+    if (this._document === undefined || this._document.owner !== address) {
       this._document = {
         owner: address,
         topBlock: new utils.BigNumber(0),
@@ -178,6 +178,29 @@ class Resolver implements IResolver {
         publicKey: { id: `${did}#${KeyTags.OWNER}` },
       },
     ) as IPublicKey)?.publicKeyHex.slice(2);
+  }
+
+  async readFromBlock(
+    did: string,
+    topBlock: utils.BigNumber,
+  ): Promise<IDIDDocument> {
+    const [, , address] = did.split(':');
+    if (this._document === undefined || this._document.owner !== address) {
+      this._document = {
+        owner: address,
+        topBlock,
+        authentication: {},
+        publicKey: {},
+        service: {},
+        attributes: new Map(),
+      };
+    }
+    return this.read(did);
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    const [, , address] = did.split(':');
+    return this._contract.changed(address);
   }
 }
 

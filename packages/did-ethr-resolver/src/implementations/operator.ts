@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import {
-  Contract, ethers, Event,
+  Contract, ethers, Event, utils,
 } from 'ethers';
 import {
   Algorithms,
@@ -24,6 +24,7 @@ import {
 } from '../constants';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
+const { BigNumber } = utils;
 
 /**
  * To support/extend this Class, one just has to work with this file.
@@ -127,14 +128,14 @@ export class Operator extends Resolver implements IOperator {
   * @param { IUpdateData } updateData
   * @param { number } validity - time in milliseconds during which
   *                              attribute will be valid
-  * @returns Promise<boolean>
+  * @returns Promise<number>
   */
   async update(
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity: number = Number.MAX_SAFE_INTEGER,
-  ): Promise<boolean> {
+  ): Promise<utils.BigNumber> {
     const registry = this._didRegistry;
     const method = didAttribute === PublicKey || didAttribute === ServicePoint
       ? registry.setAttribute
@@ -262,16 +263,19 @@ export class Operator extends Resolver implements IOperator {
   * @param { string } did
   * @returns Promise<boolean>
   */
-  async deactivate(did: string): Promise<boolean> {
+  async deactivate(did: string): Promise<void> {
     const document = await this.read(did);
-    const authRevoked = await this._revokeAuthentications(
-      did,
-      document.authentication as IAuthentication[],
-      document.publicKey,
-    );
-    const pubKeysRevoked = await this._revokePublicKeys(did, document.publicKey);
-    const endpointsRevoked = await this._revokeServices(did, document.service);
-    return authRevoked && pubKeysRevoked && endpointsRevoked;
+    try {
+      await this._revokeAuthentications(
+        did,
+        document.authentication as IAuthentication[],
+        document.publicKey,
+      );
+      await this._revokePublicKeys(did, document.publicKey);
+      await this._revokeServices(did, document.service);
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 
   /**
@@ -286,7 +290,7 @@ export class Operator extends Resolver implements IOperator {
     did: string,
     auths: IAuthentication[],
     publicKeys: IPublicKey[],
-  ): Promise<boolean> {
+  ): Promise<void> {
     const sender = await this.getAddress();
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     // eslint-disable-next-line no-restricted-syntax
@@ -306,15 +310,15 @@ export class Operator extends Resolver implements IOperator {
         encoding: Encoding.HEX,
         delegate: delegateAddress,
       };
-      const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, undefined, { nonce },
-      );
-      if (!revoked) {
-        return false;
+      try {
+        await this._sendTransaction(
+          method, did, didAttribute, updateData, undefined, { nonce },
+        );
+      } catch (e) {
+        throw new Error(`Can't revoke delegate: ${e.message}`);
       }
       nonce += 1;
     }
-    return true;
   }
 
   /**
@@ -324,7 +328,7 @@ export class Operator extends Resolver implements IOperator {
  * @param publicKeys
  * @private
  */
-  protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<boolean> {
+  protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<void> {
     const sender = await this.getAddress();
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const pk of publicKeys) {
@@ -356,15 +360,15 @@ export class Operator extends Resolver implements IOperator {
         value: keyValue,
       };
       const method = this._didRegistry.revokeAttribute;
-      const revoked = await this._sendTransaction(
-        method, did, didAttribute, updateData, undefined, { nonce },
-      );
-      if (!revoked) {
-        return false;
+      try {
+        await this._sendTransaction(
+          method, did, didAttribute, updateData, undefined, { nonce },
+        );
+      } catch (e) {
+        throw new Error(`Can't revoke public key: ${e.message}`);
       }
       nonce += 1;
     }
-    return true;
   }
 
   /**
@@ -374,31 +378,31 @@ export class Operator extends Resolver implements IOperator {
  * @param services
  * @private
  */
-  protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<boolean> {
+  protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<void> {
     const sender = await this.getAddress();
     let nonce = await this._didRegistry.provider.getTransactionCount(sender);
     for (const service of services) {
-      const revoked = await this._sendTransaction(
-        this._didRegistry.revokeAttribute,
-        did,
-        DIDAttribute.ServicePoint,
-        {
-          type: DIDAttribute.ServicePoint,
-          value: {
-            id: service.id,
-            type: service.type,
-            serviceEndpoint: service.serviceEndpoint,
+      try {
+        await this._sendTransaction(
+          this._didRegistry.revokeAttribute,
+          did,
+          DIDAttribute.ServicePoint,
+          {
+            type: DIDAttribute.ServicePoint,
+            value: {
+              id: service.id,
+              type: service.type,
+              serviceEndpoint: service.serviceEndpoint,
+            },
           },
-        },
-        undefined,
-        { nonce },
-      );
-      if (!revoked) {
-        return false;
+          undefined,
+          { nonce },
+        );
+      } catch (e) {
+        throw new Error(`Can't revoke service: ${e.message}`);
       }
       nonce += 1;
     }
-    return true;
   }
 
   /**
@@ -421,7 +425,7 @@ export class Operator extends Resolver implements IOperator {
     overrides?: {
       nonce?: number;
     },
-  ): Promise<boolean> {
+  ): Promise<utils.BigNumber> {
     const identity = this._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
@@ -444,16 +448,15 @@ export class Operator extends Resolver implements IOperator {
     try {
       const tx = await method(...params);
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event: Event = receipt.events.find(
         (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
-      if (!event) return false;
+      return new BigNumber(event.blockNumber);
     } catch (e) {
       throw new Error(e.message);
     }
-    return true;
   }
 
   /**
