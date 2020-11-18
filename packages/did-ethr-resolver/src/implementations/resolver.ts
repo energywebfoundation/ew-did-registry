@@ -17,6 +17,8 @@ import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
+const { BigNumber } = utils;
+
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
  * different resolver settings. The default resolver settings are provided in the 'constants' folder
@@ -84,7 +86,7 @@ class Resolver implements IResolver {
       throw new Error('Invalid did provided');
     }
 
-    if (this._document === undefined || this._document.owner !== did) {
+    if (this._document === undefined || this._document.owner !== address) {
       this._document = {
         owner: address,
         topBlock: new utils.BigNumber(0),
@@ -178,6 +180,29 @@ class Resolver implements IResolver {
         publicKey: { id: `${did}#${KeyTags.OWNER}` },
       },
     ) as IPublicKey)?.publicKeyHex.slice(2);
+  }
+
+  async readFromBlock(
+    did: string,
+    topBlock: utils.BigNumber,
+  ): Promise<IDIDDocument> {
+    const [, , address] = did.split(':');
+    if (this._document === undefined || this._document.owner !== address) {
+      this._document = {
+        owner: address,
+        topBlock,
+        authentication: {},
+        publicKey: {},
+        service: {},
+        attributes: new Map(),
+      };
+    }
+    return this.read(did);
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    const [, , address] = did.split(':');
+    return this._contract.changed(address);
   }
 }
 

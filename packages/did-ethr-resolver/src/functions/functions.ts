@@ -295,7 +295,7 @@ export const fetchDataFromEvents = async (
   const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
-    && nextBlock.toNumber() > document.topBlock.toNumber()
+    && nextBlock.toNumber() >= document.topBlock.toNumber()
   ) {
     // eslint-disable-next-line no-await-in-loop
     nextBlock = await getEventsFromBlock(
