@@ -252,9 +252,9 @@ export const query = (
 ): IPublicKey | IServiceEndpoint | IAuthentication => {
   const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
   const attr = Object.values(document[attrName])
-    .find((a: any) => Object.entries(selector[attrName]).every(
-      ([prop, val]) => a[prop] && a[prop] === val,
-    ));
+    .find((a: IPublicKey | IServiceEndpoint | IAuthentication) => Object
+      .entries(selector[attrName])
+      .every(([prop, val]) => a[prop] && a[prop] === val));
   return attr;
 };
 
