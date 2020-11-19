@@ -1,5 +1,11 @@
 import {
-  IDIDDocument, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication, DocumentSelector,
+  IDIDDocument,
+  DelegateTypes,
+  IPublicKey,
+  IServiceEndpoint,
+  IAuthentication,
+  DocumentSelector,
+  IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
 import { utils } from 'ethers';
 
@@ -68,5 +74,7 @@ export interface IDIDDocumentLite {
   readFromBlock(
     did: string,
     from: utils.BigNumber,
-  ): Promise<IDIDDocument>;
+  ): Promise<IDIDLogData>;
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument;
 }

@@ -183,7 +183,7 @@ class Resolver implements IResolver {
   async readFromBlock(
     did: string,
     topBlock: utils.BigNumber,
-  ): Promise<IDIDDocument> {
+  ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
     if (this._document === undefined || this._document.owner !== address) {
       this._document = {
@@ -195,7 +195,25 @@ class Resolver implements IResolver {
         attributes: new Map(),
       };
     }
-    return this.read(did);
+    await fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider);
+    return { ...this._document };
+  }
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
+    const mergedLogs: IDIDLogData = logs.reduce(
+      (doc, log) => {
+        doc.service = { ...doc.service, ...log.service };
+
+        doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+
+        doc.authentication = { ...doc.authentication, ...log.authentication };
+
+        return doc;
+      },
+      logs[0],
+    );
+
+    return wrapDidDocument(did, mergedLogs);
   }
 
   async lastBlock(did: string): Promise<utils.BigNumber> {
