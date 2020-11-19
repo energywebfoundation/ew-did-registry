@@ -1,5 +1,7 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import { Contract, ethers } from 'ethers';
+import {
+  Contract, Event, ethers, utils,
+} from 'ethers';
 import Web3 from 'web3';
 import {
   DIDAttribute,
@@ -11,6 +13,7 @@ import {
   IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
+import { BigNumber } from 'ethers/utils';
 import {
   ethrReg,
 } from '../constants';
@@ -20,6 +23,8 @@ const { PublicKey, ServicePoint } = DIDAttribute;
 
 export class ProxyOperator extends Operator {
   private proxy: Contract;
+
+  private registry: Contract;
 
   private web3: Web3;
 
@@ -32,6 +37,7 @@ export class ProxyOperator extends Operator {
   constructor(owner: IdentityOwner, settings: RegistrySettings, proxy: string) {
     super(owner, settings);
     this.proxy = new Contract(proxy, proxyBuild.abi, owner);
+    this.registry = new Contract(this.settings.address, this.settings.abi, owner);
     this.web3 = new Web3();
   }
 
@@ -51,16 +57,19 @@ export class ProxyOperator extends Operator {
    * @param { string } did
    * @returns Promise<boolean>
    */
-  async deactivate(did: string): Promise<boolean> {
+  async deactivate(did: string): Promise<void> {
     const document = await this.read(did);
-    const authRevoked = await this._revokeAuthentications(
-      did,
-      document.authentication as IAuthentication[],
-      document.publicKey as IPublicKey[],
-    );
-    const pubKeysRevoked = await this._revokePublicKeys(did, document.publicKey);
-    const endpointsRevoked = await this._revokeServices(did, document.service);
-    return authRevoked && pubKeysRevoked && endpointsRevoked;
+    try {
+      await this._revokeAuthentications(
+        did,
+        document.authentication as IAuthentication[],
+        document.publicKey as IPublicKey[],
+      );
+      await this._revokePublicKeys(did, document.publicKey);
+      await this._revokeServices(did, document.service);
+    } catch (e) {
+      throw new Error(`Can't deactivate document: ${e.message}`);
+    }
   }
 
   /**
@@ -170,7 +179,7 @@ export class ProxyOperator extends Operator {
     overrides?: {
       nonce?: number;
     },
-  ): Promise<boolean> {
+  ): Promise<utils.BigNumber> {
     const identity = this._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
@@ -179,7 +188,7 @@ export class ProxyOperator extends Operator {
         ? updateData.value
         : updateData.delegate,
     );
-    const validityValue = validity !== null ? validity.toString() : '';
+    const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
     let methodName: string;
     if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
@@ -187,15 +196,16 @@ export class ProxyOperator extends Operator {
     } else {
       methodName = 'addDelegate';
     }
+    const methodAbi: any = ethrReg.abi.find((f) => f.name === methodName);
+    const data: string = this.web3.eth.abi.encodeFunctionCall(methodAbi, params);
+    let event: Event;
     try {
-      const methodAbi: any = ethrReg.abi.find((f) => f.name === methodName);
-      const data: string = this.web3.eth.abi.encodeFunctionCall(methodAbi, params);
-      await this.proxy
-        .sendTransaction(data, this.settings.address, 0)
-        .then((tx: any) => tx.wait());
-    } catch (error) {
-      throw new Error(error.message);
+      const tx = await this.proxy.sendTransaction(data, this.settings.address, 0);
+      const receipt = await tx.wait();
+      event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
+      return new BigNumber(event.blockNumber);
+    } catch (e) {
+      throw new Error(`Can't send transaction: ${e.message}`);
     }
-    return true;
   }
 }

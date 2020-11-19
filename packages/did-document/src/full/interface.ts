@@ -1,5 +1,6 @@
 import { DIDAttribute, IUpdateData, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import { BigNumber } from 'ethers/utils';
+import { utils } from 'ethers';
 import { IDIDDocumentLite } from '../lite';
 
 /**
@@ -22,13 +23,13 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
    */
   update(
     attribute: DIDAttribute, data: IUpdateData, validity?: number | BigNumber
-  ): Promise<boolean>;
+  ): Promise<utils.BigNumber>;
 
   /**
    * On success the status of the DID Document is changed from “active” to “deactivated”.
    * @returns {boolean}
    */
-  deactivate(): Promise<boolean>;
+  deactivate(): Promise<void>;
 
   revokeDelegate(delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
 

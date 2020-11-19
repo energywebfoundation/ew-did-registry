@@ -11,10 +11,11 @@ import {
   IServiceEndpoint,
   RegistrySettings,
   KeyTags,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
-import { fetchDataFromEvents, wrapDidDocument } from '../functions';
+import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -76,33 +77,32 @@ class Resolver implements IResolver {
    */
   private async _read(
     did: string,
-    filter?: Record<string, { [key: string]: string }>,
-  ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
+    selector?: DocumentSelector,
+  ): Promise<IDIDDocument> {
     const [, address] = did.match(DIDPattern);
     if (!address) {
       throw new Error('Invalid did provided');
     }
 
-    if (this._document === undefined || this._document.owner !== did) {
+    if (this._document === undefined || this._document.owner !== address) {
       this._document = {
         owner: address,
         topBlock: new utils.BigNumber(0),
         authentication: {},
         publicKey: {},
-        serviceEndpoints: {},
+        service: {},
         attributes: new Map(),
       };
     }
     try {
-      const data = await fetchDataFromEvents(
+      await fetchDataFromEvents(
         did,
         this._document,
         this.settings,
         this._contract,
         this._provider,
-        filter,
+        selector,
       );
-      if (filter) return data;
       const document = wrapDidDocument(did, this._document);
       return document;
     } catch (error) {
@@ -120,9 +120,10 @@ class Resolver implements IResolver {
 
   async readAttribute(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    selector: DocumentSelector,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
-    return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
+    const doc = await this._read(did, selector);
+    return query(doc, selector);
   }
 
   /**
@@ -177,6 +178,51 @@ class Resolver implements IResolver {
         publicKey: { id: `${did}#${KeyTags.OWNER}` },
       },
     ) as IPublicKey)?.publicKeyHex.slice(2);
+  }
+
+  async readFromBlock(
+    did: string,
+    topBlock: utils.BigNumber,
+  ): Promise<IDIDLogData> {
+    const [, , address] = did.split(':');
+    if (this._document === undefined || this._document.owner !== address) {
+      this._document = {
+        owner: address,
+        topBlock,
+        authentication: {},
+        publicKey: {},
+        service: {},
+        attributes: new Map(),
+      };
+    }
+    await fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider);
+    return { ...this._document };
+  }
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
+    const mergedLogs: IDIDLogData = this.mergeLogs(logs);
+
+    return wrapDidDocument(did, mergedLogs);
+  }
+
+  mergeLogs(logs: IDIDLogData[]): IDIDLogData {
+    return logs.reduce(
+      (doc, log) => {
+        doc.service = { ...doc.service, ...log.service };
+
+        doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+
+        doc.authentication = { ...doc.authentication, ...log.authentication };
+
+        return doc;
+      },
+      logs[0],
+    );
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    const [, , address] = did.split(':');
+    return this._contract.changed(address);
   }
 }
 
