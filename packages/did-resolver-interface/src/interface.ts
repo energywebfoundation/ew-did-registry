@@ -9,6 +9,7 @@ import {
   IAuthentication,
   PubKeyType,
   DocumentSelector,
+  IDIDLogData,
 } from './models';
 
 export interface IResolver {
@@ -71,7 +72,9 @@ export interface IResolver {
    */
   readFromBlock(did: string,
     topBlock: utils.BigNumber,
-  ): Promise<IDIDDocument>;
+  ): Promise<IDIDLogData>;
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument;
 
   lastBlock(did: string): Promise<utils.BigNumber>;
 }

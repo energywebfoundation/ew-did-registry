@@ -1,3 +1,4 @@
+import { utils } from 'ethers';
 import {
   IDIDDocument,
   IResolver,
@@ -6,6 +7,7 @@ import {
   IServiceEndpoint,
   IAuthentication,
   DocumentSelector,
+  IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
@@ -70,6 +72,18 @@ class DIDDocumentLite implements IDIDDocumentLite {
 
   async ownerPubKey(did = this.did): Promise<string> {
     return this.resolver.readOwnerPubKey(did);
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    return this.resolver.lastBlock(did);
+  }
+
+  async readFromBlock(did: string, from: utils.BigNumber): Promise<IDIDLogData> {
+    return this.resolver.readFromBlock(did, from);
+  }
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
+    return this.resolver.documentFromLogs(did, logs);
   }
 }
 

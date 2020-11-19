@@ -302,29 +302,6 @@ const testSuite = (): void => {
     expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
   });
 
-  it('can read from specified block', async () => {
-    let i = 0;
-
-    const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
-      value: { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` },
-    };
-    const firstBlock = await operator.update(did, DIDAttribute.PublicKey, updateData, validity);
-
-    i += 1;
-    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` };
-    const secondBlock = await operator.update(did, DIDAttribute.PublicKey, updateData);
-    i += 1;
-    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: `key-${i}` };
-    const thirdBlock = await operator.update(did, DIDAttribute.PublicKey, updateData);
-
-    expect((await operator.readFromBlock(did, firstBlock)).publicKey.length).equal(3);
-    expect((await operator.readFromBlock(did, secondBlock)).publicKey.length).equal(2);
-    expect((await operator.readFromBlock(did, thirdBlock)).publicKey.length).equal(1);
-  });
-
   it('each identity update should increment its last block', async () => {
     const from = await operator.lastBlock(did);
 

@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import chai, { expect, should } from 'chai';
+import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
 import {
   Operator, signerFromKeys, getProvider,
@@ -16,12 +17,14 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
+import { BigNumber } from 'ethers/utils';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
 
 should();
 chai.use(chaiAsPromised);
+chai.use(deepEqualInAnyOrder);
 
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
@@ -190,5 +193,71 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       ),
     );
     return doc.deactivate().should.be.rejected;
+  });
+
+  it('separate read of two logs should restore full document', async () => {
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' },
+    };
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+
+    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' };
+    const from = await fullDoc.update(DIDAttribute.PublicKey, updateData);
+
+    const logs = [
+      logsUpToFirstUpdate,
+      await fullDoc.readFromBlock(did, from),
+    ];
+
+    expect(fullDoc.documentFromLogs(did, logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
+  });
+
+  it('attribute invalidated in new block should be excluded from document', async () => {
+    const tag = 'key-0';
+    const keyId = `${did}#${tag}`;
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag },
+    };
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const initialDoc = fullDoc.documentFromLogs(did, [logsUpToFirstUpdate]);
+
+    expect(initialDoc.publicKey.find(({ id }) => id === keyId)).not.undefined;
+
+    updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' };
+    const from = await fullDoc.update(DIDAttribute.PublicKey, updateData, 0);
+
+    const updatedDoc = fullDoc.documentFromLogs(did, [
+      logsUpToFirstUpdate,
+      await fullDoc.readFromBlock(did, from),
+    ]);
+
+    expect(updatedDoc.publicKey.find(({ id }) => id === keyId)).undefined;
+  });
+
+  it('each identity update should increment its last block', async () => {
+    const from = await fullDoc.lastBlock(did);
+
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
+    };
+
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+    expect((await fullDoc.lastBlock(did)).eq(from.add(1)));
+
+    await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
+    expect((await fullDoc.lastBlock(did)).eq(from.add(2)));
   });
 });
