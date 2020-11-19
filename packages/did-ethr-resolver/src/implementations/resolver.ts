@@ -200,7 +200,13 @@ class Resolver implements IResolver {
   }
 
   documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
-    const mergedLogs: IDIDLogData = logs.reduce(
+    const mergedLogs: IDIDLogData = this.mergeLogs(logs);
+
+    return wrapDidDocument(did, mergedLogs);
+  }
+
+  mergeLogs(logs: IDIDLogData[]): IDIDLogData {
+    return logs.reduce(
       (doc, log) => {
         doc.service = { ...doc.service, ...log.service };
 
@@ -212,8 +218,6 @@ class Resolver implements IResolver {
       },
       logs[0],
     );
-
-    return wrapDidDocument(did, mergedLogs);
   }
 
   async lastBlock(did: string): Promise<utils.BigNumber> {
