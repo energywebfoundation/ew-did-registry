@@ -7,6 +7,7 @@ import {
   IServiceEndpoint,
   IAuthentication,
   DocumentSelector,
+  IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
 import { IDIDDocumentLite } from './interface';
 
@@ -77,8 +78,12 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.lastBlock(did);
   }
 
-  async readFromBlock(did: string, from: utils.BigNumber): Promise<IDIDDocument> {
+  async readFromBlock(did: string, from: utils.BigNumber): Promise<IDIDLogData> {
     return this.resolver.readFromBlock(did, from);
+  }
+
+  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
+    return this.resolver.documentFromLogs(did, logs);
   }
 }
 
