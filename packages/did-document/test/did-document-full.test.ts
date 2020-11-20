@@ -18,6 +18,7 @@ import {
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
 import { BigNumber } from 'ethers/utils';
+import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
@@ -215,6 +216,37 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     ];
 
     expect(fullDoc.fromLogs(logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
+  });
+
+  it('logs order should not influence restored document', async () => {
+    const updateData: IUpdateData = {
+      algo: Algorithms.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' },
+    };
+    await fullDoc.update(DIDAttribute.PublicKey, updateData);
+
+    const log1 = await fullDoc.readFromBlock(did, new BigNumber(0));
+
+    const block2 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } });
+    await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-2' } });
+    const log2 = await fullDoc.readFromBlock(did, block2);
+
+    const block4 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-3' } });
+    await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } }, 0);
+    const log3 = await fullDoc.readFromBlock(did, block4);
+
+    const doc = await fullDoc.read();
+
+    const merged1 = mergeLogs([log1, log2, log3]);
+    const merged2 = mergeLogs([log1, log3, log2]);
+    const merged3 = mergeLogs([log2, log1, log3]);
+
+    expect(merged1).to.deep.equalInAnyOrder(merged2);
+    expect(merged2).to.deep.equalInAnyOrder(merged3);
+
+    expect(fullDoc.fromLogs([merged1])).to.deep.equalInAnyOrder(doc);
   });
 
   it('attribute invalidated in new block should be excluded from document', async () => {
