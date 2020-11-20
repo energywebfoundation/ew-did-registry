@@ -214,7 +214,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       await fullDoc.readFromBlock(did, from),
     ];
 
-    expect(fullDoc.documentFromLogs(did, logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
+    expect(fullDoc.fromLogs(logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
   });
 
   it('attribute invalidated in new block should be excluded from document', async () => {
@@ -229,14 +229,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
     const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
-    const initialDoc = fullDoc.documentFromLogs(did, [logsUpToFirstUpdate]);
+    const initialDoc = fullDoc.fromLogs([logsUpToFirstUpdate]);
 
     expect(initialDoc.publicKey.find(({ id }) => id === keyId)).not.undefined;
 
     updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' };
     const from = await fullDoc.update(DIDAttribute.PublicKey, updateData, 0);
 
-    const updatedDoc = fullDoc.documentFromLogs(did, [
+    const updatedDoc = fullDoc.fromLogs([
       logsUpToFirstUpdate,
       await fullDoc.readFromBlock(did, from),
     ]);
