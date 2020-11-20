@@ -9,6 +9,8 @@ import {
   DocumentSelector,
   IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
+import { documentFromLogs } from '@ew-did-registry/did-ethr-resolver';
+
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
@@ -82,8 +84,8 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.readFromBlock(did, from);
   }
 
-  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
-    return this.resolver.documentFromLogs(did, logs);
+  fromLogs(logs: IDIDLogData[], did = this.did): IDIDDocument {
+    return documentFromLogs(did, logs);
   }
 }
 

@@ -199,27 +199,6 @@ class Resolver implements IResolver {
     return { ...this._document };
   }
 
-  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument {
-    const mergedLogs: IDIDLogData = this.mergeLogs(logs);
-
-    return wrapDidDocument(did, mergedLogs);
-  }
-
-  mergeLogs(logs: IDIDLogData[]): IDIDLogData {
-    return logs.reduce(
-      (doc, log) => {
-        doc.service = { ...doc.service, ...log.service };
-
-        doc.publicKey = { ...doc.publicKey, ...log.publicKey };
-
-        doc.authentication = { ...doc.authentication, ...log.authentication };
-
-        return doc;
-      },
-      logs[0],
-    );
-  }
-
   async lastBlock(did: string): Promise<utils.BigNumber> {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
