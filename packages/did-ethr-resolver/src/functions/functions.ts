@@ -384,3 +384,30 @@ export const wrapDidDocument = (
 
   return didDocument;
 };
+
+/**
+ * Restore document from partially read logs
+ *
+ * @param logs {IDIDLogData[]}
+ */
+export const mergeLogs = (logs: IDIDLogData[]): IDIDLogData => {
+  logs = logs.sort((a, b) => a.topBlock.sub(b.topBlock).toNumber());
+  return logs.reduce(
+    (doc, log) => {
+      doc.service = { ...doc.service, ...log.service };
+
+      doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+
+      doc.authentication = { ...doc.authentication, ...log.authentication };
+
+      return doc;
+    },
+    logs[0],
+  );
+};
+
+export const documentFromLogs = (did: string, logs: IDIDLogData[]): IDIDDocument => {
+  const mergedLogs: IDIDLogData = mergeLogs(logs);
+
+  return wrapDidDocument(did, mergedLogs);
+};

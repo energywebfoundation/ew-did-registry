@@ -67,14 +67,14 @@ export interface IDIDDocumentLite {
    *
    * @param {string} did
    */
-  ownerPubKey(did: string): Promise<string>;
+  ownerPubKey(did?: string): Promise<string>;
 
-  lastBlock(did: string): Promise<utils.BigNumber>;
+  lastBlock(did?: string): Promise<utils.BigNumber>;
 
   readFromBlock(
     did: string,
     from: utils.BigNumber,
   ): Promise<IDIDLogData>;
 
-  documentFromLogs(did: string, logs: IDIDLogData[]): IDIDDocument;
+  fromLogs(logs: IDIDLogData[], did?: string): IDIDDocument;
 }
