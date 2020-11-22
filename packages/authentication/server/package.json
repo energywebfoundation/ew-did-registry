@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/authentication-server",
-  "version": "0.0.1-alpha.813.0",
+  "version": "0.0.1-alpha.827.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -11,10 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/claims": "0.0.1-alpha.813.0",
+    "@ew-did-registry/claims": "0.0.1-alpha.827.0",
     "@ew-did-registry/did": "0.0.1-alpha.632.0",
-    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.813.0",
-    "@ew-did-registry/did-resolver-interface": "0.0.1-alpha.813.0",
+    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.827.0",
+    "@ew-did-registry/did-resolver-interface": "0.0.1-alpha.827.0",
     "@ew-did-registry/jwt": "0.0.1-alpha.676.0",
     "@ew-did-registry/keys": "0.0.1-alpha.632.0",
     "body-parser": "^1.19.0",
