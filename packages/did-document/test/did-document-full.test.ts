@@ -219,6 +219,19 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     expect(fullDoc.fromLogs(logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
   });
 
+  it('service endpoint should have key when read', async () => {
+    const updateData: IUpdateData = {
+      type: PubKeyType.VerificationKey2018,
+      value: { serviceEndpoint: 'my-endpoint', hash: 'hashOfToken' },
+    };
+    await fullDoc.update(DIDAttribute.ServicePoint, updateData, validity);
+
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const serviceEndpointKeys = Object.keys(logsUpToFirstUpdate.service);
+
+    expect(serviceEndpointKeys.includes('undefined')).equal(false);
+  });
+
   it('logs order should not influence restored document', async () => {
     const updateData: IUpdateData = {
       algo: Algorithms.ED25519,
