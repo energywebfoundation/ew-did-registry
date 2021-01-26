@@ -9,7 +9,7 @@
   "scripts": {
     "compile": "../../node_modules/.bin/tsc",
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
   },
   "author": {
     "name": "EnergyWeb",
@@ -17,11 +17,12 @@
   },
   "license": "ISC",
   "dependencies": {
-    "ethers": "4.0.45",
-    "web3": "1.2.6"
+    "ethers": "4.0.45"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^2.5.0",
-    "multi-token-standard": "^0.8.13"
+    "multi-token-standard": "^0.8.13",
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.12.2"
   }
 }
