@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import Web3 from 'web3';
 import { Keys } from '@ew-did-registry/keys';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey,

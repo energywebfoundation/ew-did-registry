@@ -94,8 +94,7 @@
     "typedoc-plugin-markdown": "^2.2.11",
     "typescript": "^3.7.2",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "web3": "1.2.6"
+    "vinyl-source-stream": "^2.0.0"
   },
   "husky": {
     "hooks": {
