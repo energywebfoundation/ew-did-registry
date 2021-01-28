@@ -2,7 +2,6 @@
 import {
   Contract, Event, ethers, utils,
 } from 'ethers';
-import Web3 from 'web3';
 import {
   DIDAttribute,
   IUpdateData,
@@ -13,7 +12,7 @@ import {
   IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
-import { BigNumber } from 'ethers/utils';
+import { BigNumber, Interface } from 'ethers/utils';
 import {
   ethrReg,
 } from '../constants';
@@ -26,8 +25,6 @@ export class ProxyOperator extends Operator {
 
   private registry: Contract;
 
-  private web3: Web3;
-
   /**
    *
    * @param owner - Signer connected to provider
@@ -38,7 +35,6 @@ export class ProxyOperator extends Operator {
     super(owner, settings);
     this.proxy = new Contract(proxy, proxyBuild.abi, owner);
     this.registry = new Contract(this.settings.address, this.settings.abi, owner);
-    this.web3 = new Web3();
   }
 
   /**
@@ -92,8 +88,7 @@ export class ProxyOperator extends Operator {
     const params = [identityAddress, bytesType, delegateAddress];
 
     try {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'revokeDelegate');
-      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
+      const data = new Interface(ethrReg.abi).functions.revokeDelegate.encode(params);
       await this.proxy
         .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
@@ -124,8 +119,7 @@ export class ProxyOperator extends Operator {
     const params = [identityAddress, bytesType, bytesValue];
 
     try {
-      const signatureAbi: any = ethrReg.abi.find((f) => f.name === 'revokeAttribute');
-      const data: string = this.web3.eth.abi.encodeFunctionCall(signatureAbi, params);
+      const data = new Interface(ethrReg.abi).functions.revokeAttribute.encode(params);
       await this.proxy
         .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
@@ -148,8 +142,7 @@ export class ProxyOperator extends Operator {
     const [, , delegateAddress] = newOwnerDid.split(':');
     const params = [identityAddress, delegateAddress];
     try {
-      const changeOwnerAbi: any = ethrReg.abi.find((f) => f.name === 'changeOwner');
-      const data: string = this.web3.eth.abi.encodeFunctionCall(changeOwnerAbi, params);
+      const data = new Interface(ethrReg.abi).functions.changeOwner.encode(params);
       await this.proxy
         .sendTransaction(data, this.settings.address, 0)
         .then((tx: any) => tx.wait());
@@ -196,8 +189,7 @@ export class ProxyOperator extends Operator {
     } else {
       methodName = 'addDelegate';
     }
-    const methodAbi: any = ethrReg.abi.find((f) => f.name === methodName);
-    const data: string = this.web3.eth.abi.encodeFunctionCall(methodAbi, params);
+    const data = new Interface(ethrReg.abi).functions[methodName].encode(params);
     let event: Event;
     try {
       const tx = await this.proxy.sendTransaction(data, this.settings.address, 0);
