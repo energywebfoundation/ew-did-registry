@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/proxyidentity",
-  "version": "0.0.1-alpha.757.0",
+  "version": "0.0.1-alpha.842.0",
   "publishConfig": {
     "access": "public"
   },
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^2.5.0",
+    "ganache-cli": "6.12.2",
     "multi-token-standard": "^0.8.13",
-    "run-with-testrpc": "0.3.1",
-    "ganache-cli": "6.12.2"
+    "run-with-testrpc": "0.3.1"
   }
 }
