@@ -1,12 +1,12 @@
 {
   "name": "@ew-did-registry/authentication-client",
-  "version": "0.0.1-alpha.827.0",
+  "version": "0.0.1-alpha.842.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.0.2",
-    "@ew-did-registry/claims": "0.0.1-alpha.827.0",
+    "@ew-did-registry/claims": "0.0.1-alpha.842.0",
     "@ew-did-registry/did": "0.0.1-alpha.632.0",
-    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.827.0",
+    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.842.0",
     "@ew-did-registry/keys": "0.0.1-alpha.632.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -19,8 +19,7 @@
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.0",
     "redux": "4.0.5",
-    "redux-thunk": "2.3.0",
-    "web3": "1.2.6"
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "ganache-cli": "6.9.1"
