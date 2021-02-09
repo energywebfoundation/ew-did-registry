@@ -7,7 +7,7 @@ before_deploy:
   - git fetch origin master:master
   - git fetch origin development:development
   - git reset --hard
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_API_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 install:
   - npm install
   - npm run setup
