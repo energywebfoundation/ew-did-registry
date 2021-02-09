@@ -8,15 +8,14 @@ before_deploy:
   - git fetch origin development:development
   - git reset --hard
   - echo "registry=http://registry.npmjs.org/" >> $HOME/.npmrc 2> /dev/null
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_API_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+  - npm whoami
 install:
   - npm install
   - npm run setup
   - npm run build
-  - npm run browserTest:build
 script:
   - npm run test-rpc
-  - npm run browserTest:run
 deploy:
   - provider: script
     script: "git checkout master && npm run publish:canary && git checkout development && git merge master && git push --set-upstream origin development"
