@@ -1,3 +1,1 @@
-import * as schemes from './schemes';
-
-export { schemes }
+export * from './did';
