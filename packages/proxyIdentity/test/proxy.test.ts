@@ -1,10 +1,11 @@
 import {
-  Contract, providers, ContractFactory, ethers,
+  Contract, providers, ContractFactory, ethers, utils,
 } from 'ethers';
-import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { BigNumber, Signature } from 'ethers/utils';
+import {
+  BigNumber, bigNumberify, Interface, Signature,
+} from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
@@ -14,9 +15,9 @@ import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build
 
 chai.use(chaiAsPromised);
 chai.should();
-const web3 = new Web3('http://localhost:8544');
 
 const { JsonRpcProvider } = providers;
+const encoder = utils.defaultAbiCoder;
 
 describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
@@ -31,11 +32,9 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
   const tokenERC1155Factory = new ContractFactory(tokenERC1155Abi, tokenERC1155Bytecode, creator);
   let identity: string;
-  let accounts: string[];
   const serial = '123';
 
   beforeEach(async () => {
-    accounts = await web3.eth.getAccounts();
     creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
     erc1155 = await (await erc1155Factory.deploy()).deployed();
@@ -63,8 +62,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const newOwner = new Keys().getAddress();
     erc1056.identityOwner(identity)
       .then((owner: string) => {
-        const changeOwnerAbi: any = abi1056.find((f) => f.name === 'changeOwner');
-        const data: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [owner, newOwner]);
+        const data = new Interface(abi1056).functions.changeOwner.encode([owner, newOwner]);
         return proxy.sendTransaction(data, erc1056.address, 0);
       })
       .then((tx: any) => tx.wait())
@@ -79,18 +77,16 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
     });
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     proxy.sendTransaction(data, erc1056.address, 0).then((tx: any) => tx.wait());
   });
 
   it('sendTransaction with setAttribute() calldata from non-owner should revert', () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     const nonOwned = proxy.connect(provider.getSigner(1));
     return nonOwned.sendTransaction(data, erc1056.address, 0).should.be.rejectedWith('Only owner allowed');
   });
@@ -100,15 +96,14 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
     });
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     const nonOwner = provider.getSigner(2);
     nonOwner.getTransactionCount()
       .then(async (nonce) => {
         const digest = ethers.utils.keccak256(
-          web3.eth.abi.encodeParameters(
+          ethers.utils.defaultAbiCoder.encode(
             ['bytes', 'address', 'uint256', 'uint256'],
             [data, erc1056.address, 0, nonce + 1],
           ),
@@ -124,10 +119,9 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('sendSignedTransaction with signed by the non-owner setAttribute() calldata should revert', () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
     const digest = ethers.utils.keccak256(data);
     const nonOwner = provider.getSigner(1);
     return nonOwner.signMessage(ethers.utils.arrayify(digest))
@@ -142,14 +136,13 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('sendSignedTransaction twice should revert', async () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
     const digest = ethers.utils.keccak256(
-      web3.eth.abi.encodeParameters(
+      encoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, erc1056.address, 0, nonce],
       ),
@@ -169,7 +162,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('along with transaction a value can be send', async () => {
-    const payee = accounts[4];
+    const payee = await provider.getSigner(4).getAddress();
     const balance0 = new BigNumber(await provider.getBalance(payee));
     const pay = '10000000000000000000';
     await (await proxy.sendTransaction('0x0', payee, pay, { value: (new BigNumber(pay)).toHexString() })).wait();
@@ -178,14 +171,14 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('along with signed transaction value can be send from proxy', async () => {
-    const payee = accounts[4];
+    const payee = await provider.getSigner(4).getAddress();
     const pay = new BigNumber('1000000000000000000');
     const initialBalance = await provider.getBalance(payee);
     const data = '0x0';
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
     const digest = ethers.utils.keccak256(
-      web3.eth.abi.encodeParameters(
+      utils.defaultAbiCoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, payee, pay, nonce],
       ),
@@ -203,17 +196,19 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('pre-existing balance can be sent', async () => {
-    const dest = accounts[2];
+    const dest = await provider.getSigner(2).getAddress();
     const pay = '10000000000000000000';
-    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest));
-    await web3.eth.sendTransaction({
-      from: accounts[3],
+    const balance0: BigNumber = new BigNumber(
+      await provider.getBalance(dest),
+    );
+    await provider.getSigner(3).sendTransaction({
       to: proxy.address,
-      value: (new BigNumber(pay)).toHexString(),
+      value: bigNumberify(pay),
     });
     await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
-    const balance1 = await web3.eth.getBalance(dest);
+    const balance1 = await provider.getBalance(dest);
     expect(balance1.toString()).equal(balance0.add(pay).toString());
+    expect(balance1.eq(balance0));
   });
 
   it('ERC1155 token should be transfered to the proxy contract and returned by it', async () => {
@@ -232,9 +227,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     );
     expect((await token.balanceOf(identity, 1)).toNumber()).equal(amount);
     expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000 - amount);
-    const safeTransferFrom: any = tokenERC1155Abi.find((f) => f.name === 'safeTransferFrom');
-    const params: Array<any> = [identity, minterAddr, 1, amount, '0x0'];
-    const data: string = web3.eth.abi.encodeFunctionCall(safeTransferFrom, params);
+    const data = new Interface(tokenERC1155Abi).functions.safeTransferFrom.encode([identity, minterAddr, 1, amount, '0x0']);
     await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
       .then((tx: any) => tx.wait());
     expect((await token.balanceOf(identity, 1)).toNumber()).equal(0);
@@ -275,11 +268,8 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const balance = await token.balanceOf(identity);
     expect(balance.toNumber()).equal(amount);
 
-    const transfer: any = tokenERC223Abi.find(
-      (f) => f.name === 'transfer' && f.inputs.find((input: any) => input.type === 'bytes'),
-    );
     const params: Array<any> = [senderAddr, amount, '0x0'];
-    const data: string = web3.eth.abi.encodeFunctionCall(transfer, params);
+    const data = new Interface(tokenERC223Abi).functions['transfer(address,uint256,bytes)'].encode(params);
     await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
       .then((tx: any) => tx.wait());
     expect((await token.balanceOf(identity)).toNumber()).equal(0);
