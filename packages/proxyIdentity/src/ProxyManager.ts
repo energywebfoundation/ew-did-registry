@@ -1,15 +1,16 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-useless-constructor */
-import { Signer, Contract, ContractFactory } from 'ethers';
-import { Provider } from 'ethers/providers';
+import {
+  Signer, Contract, ContractFactory, providers,
+} from 'ethers';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
 import { abi as erc1155Abi } from '../build/contracts/ERC1155Multiproxy.json';
 
 export class ProxyManager {
   private proxyFactory: ContractFactory;
 
-  private provider: Provider;
+  private provider: providers.Provider;
 
   constructor(private erc1056: string, private erc1155: string, private owner: Signer) {
     this.proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, this.owner);

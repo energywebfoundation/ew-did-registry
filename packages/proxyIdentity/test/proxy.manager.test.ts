@@ -1,11 +1,12 @@
 import chai, { expect } from 'chai';
 import assetArray from 'chai-arrays';
 import chaiAsPromised from 'chai-as-promised';
-import { ContractFactory, Contract } from 'ethers';
-import { JsonRpcProvider } from 'ethers/providers';
+import { ContractFactory, Contract, providers } from 'ethers';
 import { ethrReg } from '../constants/EthereumDIDRegistry';
 import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC1155Multiproxy.json';
 import { ProxyManager } from '../src/ProxyManager';
+
+const { JsonRpcProvider } = providers;
 
 const { abi: abi1056, bytecode: bytecode1056 } = ethrReg;
 const { mapProxiesBy } = ProxyManager;

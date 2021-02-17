@@ -1,17 +1,19 @@
 import {
-  Contract, providers, ContractFactory, ethers, utils,
+  Contract, providers, ContractFactory, utils,
 } from 'ethers';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {
-  BigNumber, bigNumberify, Interface, Signature,
-} from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
 import { abi as tokenERC1155Abi, bytecode as tokenERC1155Bytecode } from '../build/contracts/ERC1155MintBurn.json';
 import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC1155Multiproxy.json';
 import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build/contracts/ERC223Mintable.json';
+
+const {
+  BigNumber, bigNumberify, Interface, arrayify, keccak256, defaultAbiCoder,
+  splitSignature, formatBytes32String,
+} = utils;
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -102,14 +104,12 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const nonOwner = provider.getSigner(2);
     nonOwner.getTransactionCount()
       .then(async (nonce) => {
-        const digest = ethers.utils.keccak256(
-          ethers.utils.defaultAbiCoder.encode(
-            ['bytes', 'address', 'uint256', 'uint256'],
-            [data, erc1056.address, 0, nonce + 1],
-          ),
-        );
-        const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-        const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+        const digest = keccak256(defaultAbiCoder.encode(
+          ['bytes', 'address', 'uint256', 'uint256'],
+          [data, erc1056.address, 0, nonce + 1],
+        ));
+        const flatSignature = await creator.signMessage(arrayify(digest));
+        const expSignature: utils.Signature = splitSignature(flatSignature);
         const { r, s, v } = expSignature;
         const tx = await proxy.connect(nonOwner).sendSignedTransaction(
           data, erc1056.address, v, r, s, 0, nonce + 1,
@@ -119,20 +119,20 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('sendSignedTransaction with signed by the non-owner setAttribute() calldata should revert', () => {
-    const attribute = utils.formatBytes32String('name');
+    const attribute = formatBytes32String('name');
     const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
     const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
-    const digest = ethers.utils.keccak256(data);
+    const digest = keccak256(data);
     const nonOwner = provider.getSigner(1);
-    return nonOwner.signMessage(ethers.utils.arrayify(digest))
+    return nonOwner.signMessage(arrayify(digest))
       .then(async (flatSignature) => {
-        const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+        const expSignature: utils.Signature = splitSignature(flatSignature);
         const { r, s, v } = expSignature;
         return proxy.sendSignedTransaction(
           data, erc1056.address, v, r, s, 0, await creator.getTransactionCount(),
         );
       })
-      .should.be.rejectedWith('Signature is not valid');
+      .should.be.rejectedWith('VM Exception while processing transaction: revert Signature is not valid');
   });
 
   it('sendSignedTransaction twice should revert', async () => {
@@ -141,14 +141,14 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
-    const digest = ethers.utils.keccak256(
+    const digest = keccak256(
       encoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, erc1056.address, 0, nonce],
       ),
     );
-    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const flatSignature = await creator.signMessage(arrayify(digest));
+    const expSignature: utils.Signature = splitSignature(flatSignature);
     const { r, s, v } = expSignature;
     const asNonOwner: Contract = proxy.connect(nonOwner);
     const tx = await asNonOwner.sendSignedTransaction(
@@ -177,14 +177,14 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const data = '0x0';
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
-    const digest = ethers.utils.keccak256(
+    const digest = keccak256(
       utils.defaultAbiCoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, payee, pay, nonce],
       ),
     );
-    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const flatSignature = await creator.signMessage(arrayify(digest));
+    const expSignature: utils.Signature = splitSignature(flatSignature);
     const { r, s, v } = expSignature;
     const asNonOwner: Contract = proxy.connect(nonOwner);
     const tx = await asNonOwner.sendSignedTransaction(
@@ -198,7 +198,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   it('pre-existing balance can be sent', async () => {
     const dest = await provider.getSigner(2).getAddress();
     const pay = '10000000000000000000';
-    const balance0: BigNumber = new BigNumber(
+    const balance0: utils.BigNumber = new BigNumber(
       await provider.getBalance(dest),
     );
     await provider.getSigner(3).sendTransaction({
@@ -250,7 +250,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       '0x0',
     );
     const balances = await token.balanceOfBatch([identity, identity], [1, 2]);
-    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
+    expect(balances.map((b: utils.BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
 
   it('when ERC223 tokens transfered to proxy and returned by it', async () => {
@@ -278,7 +278,6 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
 
   describe('ERC1155Multiproxy', () => {
     it('proxy owner can be changed', async () => {
-
       const receiver = await provider.getSigner(3).getAddress();
 
       expect(await proxy.owner()).equal(creatorAddr);

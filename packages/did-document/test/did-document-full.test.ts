@@ -16,12 +16,13 @@ import {
   IUpdateData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
-import { BigNumber } from 'ethers/utils';
+import { Wallet, utils } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
+
+const { BigNumber } = utils;
 
 should();
 chai.use(chaiAsPromised);

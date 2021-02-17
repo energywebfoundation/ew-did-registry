@@ -1,5 +1,4 @@
 import { DIDAttribute, IUpdateData, PubKeyType } from '@ew-did-registry/did-resolver-interface';
-import { BigNumber } from 'ethers/utils';
 import { utils } from 'ethers';
 import { IDIDDocumentLite } from '../lite';
 
@@ -22,7 +21,7 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
    * @returns {boolean}
    */
   update(
-    attribute: DIDAttribute, data: IUpdateData, validity?: number | BigNumber
+    attribute: DIDAttribute, data: IUpdateData, validity?: number | utils.BigNumber
   ): Promise<utils.BigNumber>;
 
   /**
