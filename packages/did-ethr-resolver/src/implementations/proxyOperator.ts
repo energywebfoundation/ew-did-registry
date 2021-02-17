@@ -1,7 +1,5 @@
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
-import {
-  Contract, Event, ethers, utils,
-} from 'ethers';
+import { Contract, Event, utils } from 'ethers';
 import {
   DIDAttribute,
   IUpdateData,
@@ -12,11 +10,12 @@ import {
   IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
-import { BigNumber, Interface } from 'ethers/utils';
 import {
   ethrReg,
 } from '../constants';
 import { Operator } from './operator';
+
+const { BigNumber, Interface, formatBytes32String } = utils;
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 
@@ -82,7 +81,7 @@ export class ProxyOperator extends Operator {
     delegateType: PubKeyType,
     delegateDID: string,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(delegateType);
+    const bytesType = formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
     const params = [identityAddress, bytesType, delegateAddress];
@@ -114,7 +113,7 @@ export class ProxyOperator extends Operator {
   ): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
-    const bytesType = ethers.utils.formatBytes32String(attribute);
+    const bytesType = formatBytes32String(attribute);
     const bytesValue = this._hexify(updateData.value);
     const params = [identityAddress, bytesType, bytesValue];
 
@@ -175,7 +174,7 @@ export class ProxyOperator extends Operator {
   ): Promise<utils.BigNumber> {
     const identity = this._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
+    const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value

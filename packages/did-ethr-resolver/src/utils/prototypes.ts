@@ -1,6 +1,5 @@
-import { Signer } from 'ethers';
+import { Signer, providers } from 'ethers';
 import { IdentityOwner } from '@ew-did-registry/did-resolver-interface';
-import { Provider } from 'ethers/providers';
 import { ConnectedSigner } from './signers';
 
 export function withKey(
@@ -14,6 +13,6 @@ export function withKey(
   return signer as IdentityOwner;
 }
 
-export function withProvider(signer: Signer, provider: Provider): ConnectedSigner {
+export function withProvider(signer: Signer, provider: providers.Provider): ConnectedSigner {
   return new ConnectedSigner(signer, provider);
 }

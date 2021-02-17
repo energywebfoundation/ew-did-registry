@@ -1,8 +1,9 @@
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, Signer } from 'ethers';
-import {
+import { Wallet, Signer, utils } from 'ethers';
+
+const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
-} from 'ethers/utils';
+} = utils;
 
 export const walletPubKey = (
   { privateKey }: Wallet,

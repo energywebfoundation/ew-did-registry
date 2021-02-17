@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, providers, utils,
+  Contract, providers, utils,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -16,6 +16,8 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { DIDPattern, ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
+
+const { formatBytes32String } = utils;
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -58,7 +60,7 @@ class Resolver implements IResolver {
     this._provider = provider;
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
 
-    this._contract = new ethers.Contract(settings.address, this.settings.abi, this._provider);
+    this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
 
   /**
@@ -157,7 +159,7 @@ class Resolver implements IResolver {
     delegateType: DelegateTypes,
     delegateDID: string,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(delegateType);
+    const bytesType = formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
 
