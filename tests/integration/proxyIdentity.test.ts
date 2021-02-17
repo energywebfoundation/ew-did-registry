@@ -1,7 +1,5 @@
-import { JsonRpcProvider } from 'ethers/providers';
-import { ContractFactory, Contract } from 'ethers';
+import { ContractFactory, Contract, providers } from 'ethers';
 import { expect } from 'chai';
-
 import {
   erc1056Build, createProxy, proxyFactoryBuild, multiproxyBuild,
 } from '../../packages/proxyIdentity';
@@ -17,6 +15,8 @@ import {
 
 import { spawnIpfsDaemon, shutDownIpfsDaemon, deployRegistry } from '..';
 import { Keys } from '../../packages/keys/src';
+
+const { JsonRpcProvider } = providers;
 
 const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
 const { ethrReg: { abi: erc1056Abi, bytecode: erc1056Bytecode } } = erc1056Build;

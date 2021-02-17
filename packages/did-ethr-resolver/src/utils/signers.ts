@@ -2,15 +2,14 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { IKeys } from '@ew-did-registry/keys';
-import { ethers, Signer } from 'ethers';
-import { Provider, TransactionResponse, TransactionRequest } from 'ethers/providers';
+import { ethers, Signer, providers } from 'ethers';
 
 export const signerFromKeys = (keys: IKeys): Signer => new ethers.Wallet(keys.privateKey);
 
 export class ConnectedSigner extends ethers.Signer {
-  readonly provider: Provider;
+  readonly provider: providers.Provider;
 
-  constructor(private signer: Signer, provider: Provider) {
+  constructor(private signer: Signer, provider: providers.Provider) {
     super();
     const signerProto = Object.getPrototypeOf(signer);
     for (const propName of Object.keys(signerProto)) {
@@ -36,7 +35,7 @@ export class ConnectedSigner extends ethers.Signer {
     return this.signer.getAddress.bind(this)();
   }
 
-  sendTransaction(tx: TransactionRequest): Promise<TransactionResponse> {
+  sendTransaction(tx: providers.TransactionRequest): Promise<providers.TransactionResponse> {
     return this.signer.sendTransaction.bind(this)(tx);
   }
 

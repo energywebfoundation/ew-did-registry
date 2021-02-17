@@ -1,7 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Contract, ContractFactory, Wallet } from 'ethers';
+import {
+  Contract, ContractFactory, Wallet, providers,
+} from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -11,12 +13,13 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
 import {
   ethrReg, ProxyOperator, signerFromKeys, walletPubKey, withProvider, withKey,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
+
+const { JsonRpcProvider } = providers;
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
 const { abi: abi1155, bytecode: bytecode1155 } = multiproxyBuild;
@@ -129,8 +132,8 @@ describe('[DID-PROXY-OPERATOR]', function () {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
-    const auth = document.authentication.find(
-      (a: IAuthentication) => a.publicKey === publicKeyId,
+    const auth = (document.authentication as IAuthentication[]).find(
+      (a) => a.publicKey === publicKeyId,
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
