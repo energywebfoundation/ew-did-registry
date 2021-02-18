@@ -8,7 +8,6 @@ before_deploy:
   - git fetch origin development:development
   - git reset --hard
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
-  - npm whoami
 install:
   - npm install
   - npm run setup
@@ -17,12 +16,12 @@ script:
   - npm run test-rpc
 deploy:
   - provider: script
-    script: "git checkout master && npm run publish:canary && git checkout development && git merge master && git push --set-upstream origin development"
+    script: "git checkout master && npm run publish:canary"
     skip_cleanup: true
     on:
-      branch: master
+      branch: development
   - provider: script
     script: "git checkout release && npm run publish:release"
     skip_cleanup: true
     on:
-      branch: release
+      branch: master
