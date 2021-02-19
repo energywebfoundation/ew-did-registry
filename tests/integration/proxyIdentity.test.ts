@@ -1,19 +1,22 @@
-import { JsonRpcProvider } from 'ethers/providers';
-import { ContractFactory, Contract } from 'ethers';
+import { ContractFactory, Contract, providers } from 'ethers';
 import { expect } from 'chai';
-
 import {
   erc1056Build, createProxy, proxyFactoryBuild, multiproxyBuild,
-} from '../../packages/proxyIdentity/src';
+} from '../../packages/proxyIdentity';
 import {
   IClaimsUser, ClaimsUser,
-} from '../../packages/did-registry/node_modules/@ew-did-registry/claims/src';
-import { DIDDocumentFull } from '../../packages/claims/node_modules/@ew-did-registry/did-document/src';
-import { Methods } from '../../packages/did-registry/node_modules/@ew-did-registry/did/src';
-import { DidStore } from '../../packages/did-ipfs-store/src';
-import { Operator } from '../../packages/did-ethr-resolver/src';
+} from '../../packages/claims';
+import { DIDDocumentFull } from '../../packages/did-document';
+import { Methods } from '../../packages/did';
+import { DidStore } from '../../packages/did-ipfs-store';
+import {
+  Operator, signerFromKeys, walletPubKey, withKey, withProvider,
+} from '../../packages/did-ethr-resolver';
 
-import { spawnIpfsDaemon, shutDownIpfsDaemon, getSettings } from '..';
+import { spawnIpfsDaemon, shutDownIpfsDaemon, deployRegistry } from '..';
+import { Keys } from '../../packages/keys/src';
+
+const { JsonRpcProvider } = providers;
 
 const { abi: proxyFactoryAbi, bytecode: proxyFactoryBytecode } = proxyFactoryBuild;
 const { ethrReg: { abi: erc1056Abi, bytecode: erc1056Bytecode } } = erc1056Build;
@@ -24,15 +27,14 @@ describe('Identities shared management with proxies', function () {
 
   const provider = new JsonRpcProvider('http://localhost:8544');
 
-  const deployer = provider.getSigner(0);
-  const bebat = provider.getSigner(1);
-  const oem = provider.getSigner(2);
-  const installer = provider.getSigner(3);
-  const owner = provider.getSigner(4);
+  const deployer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const bebat = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const oem = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const installer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+  const customer = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
 
   let oemDid: string;
   let installerDid: string;
-  let ownerDid: string;
 
   let erc1056: Contract;
   let erc1155: Contract;
@@ -47,7 +49,6 @@ describe('Identities shared management with proxies', function () {
 
   let installerDoc: DIDDocumentFull;
   let oemDoc: DIDDocumentFull;
-  let ownerDoc: DIDDocumentFull;
 
   const claimData = {
     type: 'lithium',
@@ -55,9 +56,16 @@ describe('Identities shared management with proxies', function () {
   };
 
   before(async () => {
+    const registry = await deployRegistry([
+      await deployer.getAddress(),
+      await bebat.getAddress(),
+      await oem.getAddress(),
+      await installer.getAddress(),
+      await customer.getAddress(),
+    ]);
+
     oemDid = `did:${Methods.Erc1056}:${await oem.getAddress()}`;
     installerDid = `did:${Methods.Erc1056}:${await installer.getAddress()}`;
-    ownerDid = `did:${Methods.Erc1056}:${await owner.getAddress()}`;
 
     const erc1056Creator = new ContractFactory(erc1056Abi, erc1056Bytecode, deployer);
     erc1056 = await erc1056Creator.deploy();
@@ -69,17 +77,12 @@ describe('Identities shared management with proxies', function () {
     proxyFactory = await proxyFactoryCreator.deploy(erc1056.address, erc1155.address);
 
     store = new DidStore(await spawnIpfsDaemon());
-    const resolverSettings = await getSettings([
-      await oem.getAddress(), await installer.getAddress(), await owner.getAddress(),
-    ]);
 
-    oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, resolverSettings));
+    oemDoc = new DIDDocumentFull(oemDid, new Operator(oem, { address: registry }));
     await oemDoc.create();
 
-    installerDoc = new DIDDocumentFull(installerDid, new Operator(installer, resolverSettings));
+    installerDoc = new DIDDocumentFull(installerDid, new Operator(installer, { address: registry }));
     await installerDoc.create();
-
-    ownerDoc = new DIDDocumentFull(ownerDid, new Operator(owner, resolverSettings));
 
     installerClaims = new ClaimsUser(installer, installerDoc, store);
   });
@@ -87,28 +90,23 @@ describe('Identities shared management with proxies', function () {
   it('BEBAT creates proxy identity and becomes its owner', async () => {
     device = await createProxy(proxyFactory, serial);
     expect(await device.owner()).equal(await bebat.getAddress());
-    expect(
-      parseInt(await erc1155.balanceOf(await bebat.getAddress(), serial), 16),
-    )
-      .equal(1);
   });
 
   it('BEBAT transfers ownership to OEM', async () => {
-    await erc1155.connect(bebat).transfer(await bebat.getAddress(), await oem.getAddress(), serial, 1, '0x0');
+    await device.connect(bebat).changeOwner(await oem.getAddress());
     expect(await device.owner()).equal(await oem.getAddress());
-    expect(parseInt(await erc1155.balance(await oem.getAddress(), serial), 16)).equal(1);
   });
 
   it('OEM updates Battery metadata', async () => {
     const uri = 'ipfs://123abc';
-    await erc1155.connect(oem).updateUri(serial, uri);
-    expect(await erc1155.uri(serial)).equal(uri);
+    await device.connect(oem).updateUri(uri);
+    expect(await device.uri()).equal(uri);
   });
 
   it('OEM as the owner adds Installer to approved agents', async () => {
-    await erc1155.connect(oem).setApprovalForAll(await installer.getAddress(), true);
+    await device.connect(oem).addApprovedAgent(await installer.getAddress());
     expect(
-      await erc1155.isApprovedForAll(await oem.getAddress(), await installer.getAddress()),
+      await device.isApproved(await installer.getAddress()),
     )
       .true;
   });
@@ -121,12 +119,17 @@ describe('Identities shared management with proxies', function () {
     expect(await store.get(claimUrl)).equal(claim);
   });
 
-  it('Installer transfers ownership from OEM to asset owner', async () => {
-    expect(await device.owner()).equal(await oem.getAddress());
+  it('Installer adds customer to approved agents', async () => {
+    await device.connect(installer).addApprovedAgent(await customer.getAddress());
 
-    await erc1155.connect(installer).transfer(await oem.getAddress(), await owner.getAddress(), serial, 1, '0x0');
+    expect(await device.isApproved(await customer.getAddress())).true;
+  });
 
-    expect(await device.owner()).equal(await owner.getAddress());
+  it('Approved customer can update metadata uri', async () => {
+    const uri = 'ipfs://ipfs/123abc';
+    await device.connect(customer).updateUri(uri);
+
+    expect(await device.uri()).equal(uri);
   });
 
   after(async () => {

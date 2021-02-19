@@ -1,5 +1,6 @@
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
+import { signerFromKeys, getProvider } from '@ew-did-registry/did-ethr-resolver';
 import { IDID, Methods } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';

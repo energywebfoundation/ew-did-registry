@@ -1,18 +1,20 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable no-empty */
 import {
   Contract, ethers, providers, utils,
 } from 'ethers';
 
 import {
-  IAuthentication,
   IDIDDocument,
   IDIDLogData,
   IHandlers,
   IPublicKey,
   IAttributePayload,
-  IResolverSettings,
   IServiceEndpoint,
   ISmartContractEvent,
+  RegistrySettings,
+  IAuthentication,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
@@ -141,26 +143,18 @@ const handleAttributeChange = (
         return document;
       case 'svc':
         // eslint-disable-next-line no-case-declarations
-        const serviceId = `${did}#service-${algo}-${event.values.value}`;
-        if (document.serviceEndpoints[serviceId] === undefined
-          || document.serviceEndpoints[serviceId].block < block) {
-          let serviceEndpoint = Buffer.from(
-            event.values.value.slice(2),
-            'hex',
-          ).toString();
-          let parsed: any = {};
-          try {
-            parsed = JSON.parse(serviceEndpoint);
-            serviceEndpoint = parsed.serviceEndpoint;
-          } catch (err) { }
-          document.serviceEndpoints[serviceId] = {
-            id: serviceId,
-            type: algo,
-            serviceEndpoint,
-            validity: validTo,
-            block,
-            ...parsed,
-          };
+        const servicePoint: IServiceEndpoint = JSON.parse(Buffer.from(
+          event.values.value.slice(2),
+          'hex',
+        ).toString());
+
+        servicePoint.validity = validTo;
+        servicePoint.block = block;
+
+        if (document.service[servicePoint.id] === undefined
+          || document.service[servicePoint.id].block < block) {
+          document.service[servicePoint.id] = servicePoint;
+
           return document;
         }
         break;
@@ -230,7 +224,7 @@ const getEventsFromBlock = (
   block: ethers.utils.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.BaseProvider,
+  provider: ethers.providers.Provider,
   contractInterface: utils.Interface,
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
@@ -253,25 +247,35 @@ const getEventsFromBlock = (
   });
 });
 
+export const query = (
+  document: IDIDDocument, selector: DocumentSelector,
+): IPublicKey | IServiceEndpoint | IAuthentication => {
+  const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
+  const attr = Object.values(document[attrName])
+    .find((a: IPublicKey | IServiceEndpoint | IAuthentication) => Object
+      .entries(selector[attrName])
+      .every(([prop, val]) => a[prop] && a[prop] === val));
+  return attr;
+};
+
 /**
  * A high level function that manages the flow to read data from the blockchain
  *
  * @param did
  * @param document
- * @param resolverSettings
+ * @param registrySettings
  * @param contract
  * @param provider
  */
 export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
-  resolverSettings: IResolverSettings,
+  registrySettings: RegistrySettings,
   contract: Contract,
-  provider: providers.BaseProvider,
-  filter?: { [key: string]: { [key: string]: string } },
-): Promise<null | IPublicKey | IAuthentication | IServiceEndpoint> => {
+  provider: providers.Provider,
+  selector?: DocumentSelector,
+): Promise<void> => {
   const [, , identity] = did.split(':');
-
   let nextBlock;
   let topBlock;
   try {
@@ -287,11 +291,11 @@ export const fetchDataFromEvents = async (
     document.owner = identity;
   }
 
-  const contractInterface = new ethers.utils.Interface(resolverSettings.abi);
-  const { address } = resolverSettings;
+  const contractInterface = new ethers.utils.Interface(registrySettings.abi);
+  const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
-    && nextBlock.toNumber() > document.topBlock.toNumber()
+    && nextBlock.toNumber() >= document.topBlock.toNumber()
   ) {
     // eslint-disable-next-line no-await-in-loop
     nextBlock = await getEventsFromBlock(
@@ -302,19 +306,14 @@ export const fetchDataFromEvents = async (
       contractInterface,
       address,
     );
-    if (filter) {
-      const attribute = Object.keys(filter)[0] as 'publicKey' | 'serviceEndpoints' | 'authentication';
-      const attrId = Object.keys(document[attribute]).find((id) => {
-        const attr = document[attribute][id];
-        return Object.keys(filter[attribute]).every(
-          (prop) => attr[prop] === filter[attribute][prop],
-        );
-      });
-      if (attrId) return document[attribute][attrId];
+    if (selector) {
+      const attribute = query(document as unknown as IDIDDocument, selector);
+      if (attribute) {
+        return;
+      }
     }
   }
   document.topBlock = topBlock;
-  return null;
 };
 
 /**
@@ -373,15 +372,42 @@ export const wrapDidDocument = (
   }
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
-  for (const key in document.serviceEndpoints) {
-    const serviceEndpoint = document.serviceEndpoints[key];
+  for (const key in document.service) {
+    const serviceEndpoint = document.service[key];
     if (serviceEndpoint.validity.gt(now)) {
       const serviceEndpointCopy = { ...serviceEndpoint };
       delete serviceEndpointCopy.validity;
       delete serviceEndpointCopy.block;
-      didDocument.service.push(serviceEndpoint);
+      didDocument.service.push(serviceEndpointCopy);
     }
   }
 
   return didDocument;
+};
+
+/**
+ * Restore document from partially read logs
+ *
+ * @param logs {IDIDLogData[]}
+ */
+export const mergeLogs = (logs: IDIDLogData[]): IDIDLogData => {
+  logs = logs.sort((a, b) => a.topBlock.sub(b.topBlock).toNumber());
+  return logs.reduce(
+    (doc, log) => {
+      doc.service = { ...doc.service, ...log.service };
+
+      doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+
+      doc.authentication = { ...doc.authentication, ...log.authentication };
+
+      return doc;
+    },
+    logs[0],
+  );
+};
+
+export const documentFromLogs = (did: string, logs: IDIDLogData[]): IDIDDocument => {
+  const mergedLogs: IDIDLogData = mergeLogs(logs);
+
+  return wrapDidDocument(did, mergedLogs);
 };

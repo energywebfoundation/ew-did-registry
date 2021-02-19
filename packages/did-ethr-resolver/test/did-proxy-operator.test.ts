@@ -1,27 +1,31 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Contract, ContractFactory, Wallet } from 'ethers';
+import {
+  Contract, ContractFactory, Wallet, providers,
+} from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
   IPublicKey,
-  IResolverSettings,
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { JsonRpcProvider } from 'ethers/providers';
 import { proxyBuild, multiproxyBuild } from '@ew-did-registry/proxyidentity';
-import { ethrReg, ProxyOperator } from '../src';
-import { getSettings } from '../../../tests/init-ganache';
+import {
+  ethrReg, ProxyOperator, signerFromKeys, walletPubKey, withProvider, withKey,
+} from '../src';
+import { deployRegistry } from '../../../tests/init-ganache';
+
+const { JsonRpcProvider } = providers;
 
 const { abi: proxyAbi, bytecode: proxyBytecode } = proxyBuild;
 const { abi: abi1155, bytecode: bytecode1155 } = multiproxyBuild;
 const { abi: abi1056 } = ethrReg;
 const { fail } = assert;
-const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
+const { Authenticate, PublicKey } = DIDAttribute;
 const { Secp256k1, ED25519 } = Algorithms;
 const { VerificationKey2018, SignatureAuthentication2018 } = PubKeyType;
 const { HEX } = Encoding;
@@ -30,7 +34,6 @@ describe('[DID-PROXY-OPERATOR]', function () {
   this.timeout(0);
   const keys = new Keys();
   let operator: ProxyOperator;
-  let operatorSettings: IResolverSettings;
   const validity = 10 * 60 * 1000;
   let proxy: Contract;
   let erc1056: Contract;
@@ -42,15 +45,20 @@ describe('[DID-PROXY-OPERATOR]', function () {
   let identity: string;
   let did: string;
   const serial = '123';
+  let registry: string;
 
   before(async () => {
-    operatorSettings = await getSettings([keys.getAddress()]);
-    erc1056 = new Contract(operatorSettings.address, abi1056, creator);
+    registry = await deployRegistry([keys.getAddress()]);
+    erc1056 = new Contract(registry, abi1056, creator);
     erc1155 = await (await erc1155Factory.deploy()).deployed();
     proxy = await proxyFactory.deploy(erc1056.address, erc1155.address, serial, creator.address);
     identity = proxy.address;
     did = `did:ethr:${identity}`;
-    operator = new ProxyOperator(keys, operatorSettings, proxy.address);
+    operator = new ProxyOperator(
+      withKey(withProvider(signerFromKeys(keys), provider), walletPubKey),
+      { address: registry },
+      proxy.address,
+    );
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -97,8 +105,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
         encoding: HEX,
         delegate: delegate.address,
       };
-      const updated = await operator.update(did, attribute, updateData, validity);
-      expect(updated).to.be.true;
+      await operator.update(did, attribute, updateData, validity);
       const document = await operator.read(did);
       expect(document.id).equal(did);
       const authMethod = document.publicKey.find(
@@ -121,13 +128,12 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       delegate: delegate.address,
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
-    const auth = document.authentication.find(
-      (a: IAuthentication) => a.publicKey === publicKeyId,
+    const auth = (document.authentication as IAuthentication[]).find(
+      (a) => a.publicKey === publicKeyId,
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
@@ -141,14 +147,18 @@ describe('[DID-PROXY-OPERATOR]', function () {
   });
 
   it('service endpoint update should add an entry in service section of the DID document', async () => {
-    const attribute = ServicePoint;
+    const attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://test.algo.com';
+    const serviceId = 'UserClaimURL3';
     const updateData: IUpdateData = {
-      type: VerificationKey2018,
-      value: { serviceEndpoint: endpoint },
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
     expect(document.service.find(
@@ -214,17 +224,21 @@ describe('[DID-PROXY-OPERATOR]', function () {
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
     // add service endpoint
-    attribute = ServicePoint;
+    attribute = DIDAttribute.ServicePoint;
+    const serviceId = 'UserClaimURL4';
     const endpoint = 'https://example.com';
     updateData = {
-      type: VerificationKey2018,
-      value: { serviceEndpoint: endpoint },
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
     };
     document = await operator.read(did);
     await operator.update(did, attribute, updateData, validity);
     document = await operator.read(did);
-    const result = await operator.deactivate(did);
-    expect(result).to.be.true;
+    await operator.deactivate(did);
     document = await operator.read(did);
     expect(document.service).to.be.empty;
     expect(document.publicKey).to.be.empty;
@@ -241,8 +255,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
       encoding: HEX,
       delegate: delegate.address,
     };
-    const updated = await operator.update(did, attribute, updateData, validity);
-    expect(updated).to.be.true;
+    await operator.update(did, attribute, updateData, validity);
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
@@ -289,9 +302,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
 
   it('owner change should lead to expected result', async () => {
     const identityNewOwner = '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7';
-    let currentOwner;
     await operator.changeOwner(`did:ethr:${proxy.address}`, `did:ethr:${identityNewOwner}`);
-    currentOwner = await erc1056.functions.owners(proxy.address);
-    expect(currentOwner).to.be.eql(identityNewOwner);
+    expect(await erc1056.functions.owners(proxy.address)).to.be.eql(identityNewOwner);
   });
 });

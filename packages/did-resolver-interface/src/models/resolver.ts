@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { utils, Signer } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -15,7 +15,7 @@ export enum ProviderTypes {
  * Hence, 'ethers' documentation is a good point to check the available options,
  * if one wants to extend the library.
  */
-export interface IProvider {
+export interface ProviderSettings {
   type: ProviderTypes;
   uriOrInfo?: string | utils.ConnectionInfo;
   path?: string;
@@ -26,11 +26,10 @@ export interface IProvider {
  * Resolver requires provider, as well as application binary interface and
  * address of the smart contract representing DID Registry
  */
-export interface IResolverSettings {
-  provider?: IProvider;
+export interface RegistrySettings {
+  address: string;
   abi?: Array<string | utils.ParamType>;
-  address?: string;
-  method: Methods;
+  method?: Methods;
 }
 
 /**
@@ -125,7 +124,7 @@ export interface IDIDLogData {
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];
-  serviceEndpoints?: { [key: string]: IServiceEndpoint };
+  service?: { [key: string]: IServiceEndpoint };
   created?: string;
   updated?: string;
   proof?: ILinkedDataProof;
@@ -152,3 +151,14 @@ export enum DelegateTypes {
   authentication = 'sigAuth',
   verification = 'veriKey',
 }
+
+export interface IdentityOwner extends Signer {
+  publicKey: string;
+  privateKey?: string;
+}
+
+export type DocumentSelector = Partial<{
+  publicKey: Partial<IPublicKey>;
+  service: Partial<IServiceEndpoint>;
+  authentication: Partial<IAuthentication>;
+}>

@@ -1,13 +1,17 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, signerFromKeys, getProvider, walletPubKey, withKey, withProvider,
+} from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim } from '@ew-did-registry/claims/';
+import {
+  IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim,
+} from '@ew-did-registry/claims/';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import DIDRegistry from '../src';
-import { getSettings, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -35,15 +39,24 @@ describe('[REGISTRY PACKAGE]', function () {
   let userOperator: Operator;
 
   before(async () => {
-    const resolverSettings = await getSettings([userAddress, issuerAddress, verifierAddress]);
+    const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
     const store = new DidStore(ipfsApi);
-    userOperator = new Operator(userKeys, resolverSettings);
+    userOperator = new Operator(
+      withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey),
+      { address: registry },
+    );
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
     userClaims = user.claims.createClaimsUser();
-    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(issuerKeys, resolverSettings), store);
+    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(
+      withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey),
+      { address: registry },
+    ), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
-    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(verifierKeys, resolverSettings), store);
+    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(
+      withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey),
+      { address: registry },
+    ), store);
     await user.document.create();
     await issuer.document.create();
   });

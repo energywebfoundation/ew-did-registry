@@ -1,6 +1,16 @@
+import { utils } from 'ethers';
 import {
-  IDIDDocument, IResolver, DelegateTypes, IPublicKey, IServiceEndpoint, IAuthentication,
+  IDIDDocument,
+  IResolver,
+  DelegateTypes,
+  IPublicKey,
+  IServiceEndpoint,
+  IAuthentication,
+  DocumentSelector,
+  IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
+import { documentFromLogs } from '@ew-did-registry/did-ethr-resolver';
+
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
@@ -39,7 +49,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
   /**
    * Finds first attribute which satisfies filter
    *
-   * @param filter {{ [attr: string]: { [prop: string]: string } }} object used
+   * @param selector {{ [attr: string]: { [prop: string]: string } }} object used
    *  to describe part of the document. `attr` is one of standard DID attributes
    *  like `publicKey`, `serviceEndpoints` or `authentication` and `prop` - properties
    *  of this attribute such as `type` or `value`
@@ -48,9 +58,9 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @returns {object | null}
    */
   async readAttribute(
-    filter: { [key: string]: { [key: string]: string } }, did = this.did,
+    selector: DocumentSelector, did = this.did,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
-    return this.resolver.readAttribute(did, filter);
+    return this.resolver.readAttribute(did, selector);
   }
 
   /**
@@ -60,6 +70,22 @@ class DIDDocumentLite implements IDIDDocumentLite {
    */
   async read(did = this.did): Promise<IDIDDocument> {
     return this.resolver.read(did);
+  }
+
+  async ownerPubKey(did = this.did): Promise<string> {
+    return this.resolver.readOwnerPubKey(did);
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    return this.resolver.lastBlock(did);
+  }
+
+  async readFromBlock(did: string, from: utils.BigNumber): Promise<IDIDLogData> {
+    return this.resolver.readFromBlock(did, from);
+  }
+
+  fromLogs(logs: IDIDLogData[], did = this.did): IDIDDocument {
+    return documentFromLogs(did, logs);
   }
 }
 

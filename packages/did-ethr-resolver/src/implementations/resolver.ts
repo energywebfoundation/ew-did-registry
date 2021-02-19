@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, providers, utils,
+  Contract, providers, utils,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -8,12 +8,16 @@ import {
   IDIDLogData,
   IPublicKey,
   IResolver,
-  IResolverSettings,
   IServiceEndpoint,
-  ProviderTypes,
+  RegistrySettings,
+  KeyTags,
+  DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '../constants';
-import { fetchDataFromEvents, wrapDidDocument } from '../functions';
+import { Methods } from '@ew-did-registry/did';
+import { DIDPattern, ethrReg } from '../constants';
+import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
+
+const { formatBytes32String } = utils;
 
 /**
  * To support different methods compliant with ERC1056, the user/developer simply has to provide
@@ -29,12 +33,12 @@ class Resolver implements IResolver {
   /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
-  readonly settings: IResolverSettings;
+  readonly settings: RegistrySettings;
 
   /**
    * Stores the provider to connect to blockchain
    */
-  protected readonly _provider: providers.BaseProvider;
+  protected readonly _provider: providers.Provider;
 
   /**
    * Stores the smart contract instance with read functionality available
@@ -52,21 +56,11 @@ class Resolver implements IResolver {
    * Settings have to be passed to construct resolver
    * @param {IResolverSettings} settings
    */
-  constructor(settings: IResolverSettings) {
-    this.settings = settings;
-    if (settings.provider.type === ProviderTypes.HTTP) {
-      this._provider = new ethers.providers.JsonRpcProvider(
-        settings.provider.uriOrInfo,
-        settings.provider.network,
-      );
-    } else if (settings.provider.type === ProviderTypes.IPC) {
-      this._provider = new ethers.providers.IpcProvider(
-        settings.provider.path,
-        settings.provider.network,
-      );
-    }
+  constructor(provider: providers.Provider, settings: RegistrySettings) {
+    this._provider = provider;
+    this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
 
-    this._contract = new ethers.Contract(settings.address, settings.abi, this._provider);
+    this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
 
   /**
@@ -85,33 +79,32 @@ class Resolver implements IResolver {
    */
   private async _read(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
-  ): Promise<IDIDDocument | IPublicKey | IServiceEndpoint | IAuthentication> {
+    selector?: DocumentSelector,
+  ): Promise<IDIDDocument> {
     const [, address] = did.match(DIDPattern);
     if (!address) {
       throw new Error('Invalid did provided');
     }
 
-    if (this._document === undefined || this._document.owner !== did) {
+    if (this._document === undefined || this._document.owner !== address) {
       this._document = {
         owner: address,
         topBlock: new utils.BigNumber(0),
         authentication: {},
         publicKey: {},
-        serviceEndpoints: {},
+        service: {},
         attributes: new Map(),
       };
     }
     try {
-      const data = await fetchDataFromEvents(
+      await fetchDataFromEvents(
         did,
         this._document,
         this.settings,
         this._contract,
         this._provider,
-        filter,
+        selector,
       );
-      if (filter) return data;
       const document = wrapDidDocument(did, this._document);
       return document;
     } catch (error) {
@@ -129,9 +122,10 @@ class Resolver implements IResolver {
 
   async readAttribute(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    selector: DocumentSelector,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
-    return this._read(did, filter) as Promise<IPublicKey | IAuthentication | IServiceEndpoint>;
+    const doc = await this._read(did, selector);
+    return query(doc, selector);
   }
 
   /**
@@ -165,7 +159,7 @@ class Resolver implements IResolver {
     delegateType: DelegateTypes,
     delegateDID: string,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(delegateType);
+    const bytesType = formatBytes32String(delegateType);
     const [, , identityAddress] = identityDID.split(':');
     const [, , delegateAddress] = delegateDID.split(':');
 
@@ -177,6 +171,39 @@ class Resolver implements IResolver {
     }
 
     return valid;
+  }
+
+  async readOwnerPubKey(did: string): Promise<string> {
+    return (await this.readAttribute(
+      did,
+      {
+        publicKey: { id: `${did}#${KeyTags.OWNER}` },
+      },
+    ) as IPublicKey)?.publicKeyHex.slice(2);
+  }
+
+  async readFromBlock(
+    did: string,
+    topBlock: utils.BigNumber,
+  ): Promise<IDIDLogData> {
+    const [, , address] = did.split(':');
+    if (this._document === undefined || this._document.owner !== address) {
+      this._document = {
+        owner: address,
+        topBlock,
+        authentication: {},
+        publicKey: {},
+        service: {},
+        attributes: new Map(),
+      };
+    }
+    await fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider);
+    return { ...this._document };
+  }
+
+  async lastBlock(did: string): Promise<utils.BigNumber> {
+    const [, , address] = did.split(':');
+    return this._contract.changed(address);
   }
 }
 

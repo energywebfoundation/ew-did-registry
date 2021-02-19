@@ -1,10 +1,8 @@
 import {
-  Contract, providers, ContractFactory, ethers,
+  Contract, providers, ContractFactory, utils,
 } from 'ethers';
-import Web3 from 'web3';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { BigNumber, Signature } from 'ethers/utils';
 import { Keys } from '../../keys';
 import { abi as abi1056, bytecode as bytecode1056 } from '../build/contracts/ERC1056.json';
 import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/ProxyIdentity.json';
@@ -12,11 +10,16 @@ import { abi as tokenERC1155Abi, bytecode as tokenERC1155Bytecode } from '../bui
 import { abi as abi1155, bytecode as bytecode1155 } from '../build/contracts/ERC1155Multiproxy.json';
 import { abi as tokenERC223Abi, bytecode as tokenERC223Bytecode } from '../build/contracts/ERC223Mintable.json';
 
+const {
+  BigNumber, bigNumberify, Interface, arrayify, keccak256, defaultAbiCoder,
+  splitSignature, formatBytes32String,
+} = utils;
+
 chai.use(chaiAsPromised);
 chai.should();
-const web3 = new Web3('http://localhost:8544');
 
 const { JsonRpcProvider } = providers;
+const encoder = utils.defaultAbiCoder;
 
 describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   this.timeout(0);
@@ -31,11 +34,9 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   const erc1155Factory = new ContractFactory(abi1155, bytecode1155, creator);
   const tokenERC1155Factory = new ContractFactory(tokenERC1155Abi, tokenERC1155Bytecode, creator);
   let identity: string;
-  let accounts: string[];
   const serial = '123';
 
   beforeEach(async () => {
-    accounts = await web3.eth.getAccounts();
     creatorAddr = await creator.getAddress();
     erc1056 = await (await erc1056Factory.deploy()).deployed();
     erc1155 = await (await erc1155Factory.deploy()).deployed();
@@ -63,8 +64,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const newOwner = new Keys().getAddress();
     erc1056.identityOwner(identity)
       .then((owner: string) => {
-        const changeOwnerAbi: any = abi1056.find((f) => f.name === 'changeOwner');
-        const data: string = web3.eth.abi.encodeFunctionCall(changeOwnerAbi, [owner, newOwner]);
+        const data = new Interface(abi1056).functions.changeOwner.encode([owner, newOwner]);
         return proxy.sendTransaction(data, erc1056.address, 0);
       })
       .then((tx: any) => tx.wait())
@@ -79,18 +79,16 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
     });
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     proxy.sendTransaction(data, erc1056.address, 0).then((tx: any) => tx.wait());
   });
 
   it('sendTransaction with setAttribute() calldata from non-owner should revert', () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [proxy.address, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     const nonOwned = proxy.connect(provider.getSigner(1));
     return nonOwned.sendTransaction(data, erc1056.address, 0).should.be.rejectedWith('Only owner allowed');
   });
@@ -100,24 +98,20 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       erc1056.removeAllListeners('DIDAttributeChanged');
       done();
     });
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([proxy.address, attribute, value, '1000']);
     const nonOwner = provider.getSigner(2);
     nonOwner.getTransactionCount()
       .then(async (nonce) => {
-        const digest = ethers.utils.keccak256(
-          web3.eth.abi.encodeParameters(
-            ['bytes', 'address', 'uint256', 'uint256'],
-            [data, erc1056.address, 0, nonce + 1],
-          ),
-        );
-        const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-        const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+        const digest = keccak256(defaultAbiCoder.encode(
+          ['bytes', 'address', 'uint256', 'uint256'],
+          [data, erc1056.address, 0, nonce + 1],
+        ));
+        const flatSignature = await creator.signMessage(arrayify(digest));
+        const expSignature: utils.Signature = splitSignature(flatSignature);
         const { r, s, v } = expSignature;
-        const asNonOwner: Contract = proxy.connect(nonOwner);
-        const tx = await asNonOwner.sendSignedTransaction(
+        const tx = await proxy.connect(nonOwner).sendSignedTransaction(
           data, erc1056.address, v, r, s, 0, nonce + 1,
         );
         await tx.wait();
@@ -125,38 +119,36 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('sendSignedTransaction with signed by the non-owner setAttribute() calldata should revert', () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
-    const digest = ethers.utils.keccak256(data);
+    const attribute = formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
+    const digest = keccak256(data);
     const nonOwner = provider.getSigner(1);
-    return nonOwner.signMessage(ethers.utils.arrayify(digest))
+    return nonOwner.signMessage(arrayify(digest))
       .then(async (flatSignature) => {
-        const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+        const expSignature: utils.Signature = splitSignature(flatSignature);
         const { r, s, v } = expSignature;
         return proxy.sendSignedTransaction(
           data, erc1056.address, v, r, s, 0, await creator.getTransactionCount(),
         );
       })
-      .should.be.rejectedWith('Signature is not valid');
+      .should.be.rejectedWith('VM Exception while processing transaction: revert Signature is not valid');
   });
 
   it('sendSignedTransaction twice should revert', async () => {
-    const setAttributeAbi: any = abi1056.find((f) => f.name === 'setAttribute');
-    const attribute = web3.eth.abi.encodeParameter('bytes32', web3.utils.asciiToHex('name'));
-    const value = web3.eth.abi.encodeParameter('bytes', web3.utils.asciiToHex('John'));
-    const data: string = web3.eth.abi.encodeFunctionCall(setAttributeAbi, [identity, attribute, value, '1000']);
+    const attribute = utils.formatBytes32String('name');
+    const value = encoder.encode(['bytes'], [`0x${Buffer.from('John').toString('hex')}`]);
+    const data = new Interface(abi1056).functions.setAttribute.encode([identity, attribute, value, '1000']);
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
-    const digest = ethers.utils.keccak256(
-      web3.eth.abi.encodeParameters(
+    const digest = keccak256(
+      encoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, erc1056.address, 0, nonce],
       ),
     );
-    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const flatSignature = await creator.signMessage(arrayify(digest));
+    const expSignature: utils.Signature = splitSignature(flatSignature);
     const { r, s, v } = expSignature;
     const asNonOwner: Contract = proxy.connect(nonOwner);
     const tx = await asNonOwner.sendSignedTransaction(
@@ -170,7 +162,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('along with transaction a value can be send', async () => {
-    const payee = accounts[4];
+    const payee = await provider.getSigner(4).getAddress();
     const balance0 = new BigNumber(await provider.getBalance(payee));
     const pay = '10000000000000000000';
     await (await proxy.sendTransaction('0x0', payee, pay, { value: (new BigNumber(pay)).toHexString() })).wait();
@@ -179,20 +171,20 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('along with signed transaction value can be send from proxy', async () => {
-    const payee = accounts[4];
+    const payee = await provider.getSigner(4).getAddress();
     const pay = new BigNumber('1000000000000000000');
     const initialBalance = await provider.getBalance(payee);
     const data = '0x0';
     const nonOwner = provider.getSigner(2);
     const nonce = await nonOwner.getTransactionCount();
-    const digest = ethers.utils.keccak256(
-      web3.eth.abi.encodeParameters(
+    const digest = keccak256(
+      utils.defaultAbiCoder.encode(
         ['bytes', 'address', 'uint256', 'uint256'],
         [data, payee, pay, nonce],
       ),
     );
-    const flatSignature = await creator.signMessage(ethers.utils.arrayify(digest));
-    const expSignature: Signature = ethers.utils.splitSignature(flatSignature);
+    const flatSignature = await creator.signMessage(arrayify(digest));
+    const expSignature: utils.Signature = splitSignature(flatSignature);
     const { r, s, v } = expSignature;
     const asNonOwner: Contract = proxy.connect(nonOwner);
     const tx = await asNonOwner.sendSignedTransaction(
@@ -204,17 +196,19 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   it('pre-existing balance can be sent', async () => {
-    const dest = accounts[2];
+    const dest = await provider.getSigner(2).getAddress();
     const pay = '10000000000000000000';
-    const balance0: BigNumber = new BigNumber(await web3.eth.getBalance(dest));
-    await web3.eth.sendTransaction({
-      from: accounts[3],
+    const balance0: utils.BigNumber = new BigNumber(
+      await provider.getBalance(dest),
+    );
+    await provider.getSigner(3).sendTransaction({
       to: proxy.address,
-      value: (new BigNumber(pay)).toHexString(),
+      value: bigNumberify(pay),
     });
     await proxy.sendTransaction('0x0', dest, pay).then((tx: any) => tx.wait());
-    const balance1 = await web3.eth.getBalance(dest);
+    const balance1 = await provider.getBalance(dest);
     expect(balance1.toString()).equal(balance0.add(pay).toString());
+    expect(balance1.eq(balance0));
   });
 
   it('ERC1155 token should be transfered to the proxy contract and returned by it', async () => {
@@ -233,9 +227,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     );
     expect((await token.balanceOf(identity, 1)).toNumber()).equal(amount);
     expect((await token.balanceOf(minterAddr, 1)).toNumber()).equal(1000 - amount);
-    const safeTransferFrom: any = tokenERC1155Abi.find((f) => f.name === 'safeTransferFrom');
-    const params: Array<any> = [identity, minterAddr, 1, amount, '0x0'];
-    const data: string = web3.eth.abi.encodeFunctionCall(safeTransferFrom, params);
+    const data = new Interface(tokenERC1155Abi).functions.safeTransferFrom.encode([identity, minterAddr, 1, amount, '0x0']);
     await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
       .then((tx: any) => tx.wait());
     expect((await token.balanceOf(identity, 1)).toNumber()).equal(0);
@@ -258,7 +250,7 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
       '0x0',
     );
     const balances = await token.balanceOfBatch([identity, identity], [1, 2]);
-    expect(balances.map((b: BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
+    expect(balances.map((b: utils.BigNumber) => b.toNumber())).deep.equal([amount1, amount2]);
   });
 
   it('when ERC223 tokens transfered to proxy and returned by it', async () => {
@@ -276,11 +268,8 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
     const balance = await token.balanceOf(identity);
     expect(balance.toNumber()).equal(amount);
 
-    const transfer: any = tokenERC223Abi.find(
-      (f) => f.name === 'transfer' && f.inputs.find((input: any) => input.type === 'bytes'),
-    );
     const params: Array<any> = [senderAddr, amount, '0x0'];
-    const data: string = web3.eth.abi.encodeFunctionCall(transfer, params);
+    const data = new Interface(tokenERC223Abi).functions['transfer(address,uint256,bytes)'].encode(params);
     await proxy.sendTransaction(data, token.address, 0, { gasLimit: 100000 })
       .then((tx: any) => tx.wait());
     expect((await token.balanceOf(identity)).toNumber()).equal(0);
@@ -288,65 +277,34 @@ describe('[PROXY IDENTITY PACKAGE/PROXY CONTRACT]', function () {
   });
 
   describe('ERC1155Multiproxy', () => {
-    it('proxy token receiver must become a proxy owner', async () => {
-
+    it('proxy owner can be changed', async () => {
       const receiver = await provider.getSigner(3).getAddress();
 
       expect(await proxy.owner()).equal(creatorAddr);
 
-      await erc1155.transfer(creatorAddr, receiver, serial, 1, '0x0');
+      await proxy.changeOwner(receiver);
 
       expect(await proxy.owner()).equal(receiver);
     });
 
-    it('ownership can be transfered batched', async () => {
-      const serial2 = '1234';
-      const proxy2 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr);
-      const receiverAddr = await provider.getSigner(3).getAddress();
+    // it('burning should cease ownership of the proxy', async () => {
+    //   await erc1155.burn(creatorAddr, serial);
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
+    //   expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
+    // });
 
-      await erc1155.transferBatch(creatorAddr, receiverAddr, [serial, serial2], [1, 1], '0x0');
+    // it('batch burning should cease ownership of the burnded proxies', async () => {
+    //   const serial2 = '1234';
+    //   const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr)).deployed();
 
-      expect(await proxy.owner()).equal(receiverAddr);
-      expect(await proxy2.owner()).equal(receiverAddr);
-    });
+    //   await erc1155.burn(creatorAddr, serial);
+    //   await erc1155.burn(creatorAddr, serial2);
 
-    it('only transferred proxies should change owner', async () => {
-      const serial1 = '10';
-      const serial2 = '20';
-      const serial3 = '30';
-      const serial4 = '40';
-      const proxy1 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial1, creatorAddr);
-      const proxy2 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr);
-      const proxy3 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial3, creatorAddr);
-      const proxy4 = await proxyFactory.deploy(erc1056.address, erc1155.address, serial4, creatorAddr);
-      const receiverAddr = await provider.getSigner(3).getAddress();
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
+    //   expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
 
-      await erc1155.transferBatch(creatorAddr, receiverAddr, [serial1, serial2], [1, 1], '0x0');
-
-      expect(await proxy1.owner()).equal(receiverAddr);
-      expect(await proxy2.owner()).equal(receiverAddr);
-      expect(await proxy3.owner()).equal(creatorAddr);
-      expect(await proxy4.owner()).equal(creatorAddr);
-    });
-
-    it('burning should cease ownership of the proxy', async () => {
-      await erc1155.burn(creatorAddr, serial);
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
-      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
-    });
-
-    it('batch burning should cease ownership of the burnded proxies', async () => {
-      const serial2 = '1234';
-      const proxy2 = await (await proxyFactory.deploy(erc1056.address, erc1155.address, serial2, creatorAddr)).deployed();
-
-      await erc1155.burn(creatorAddr, serial);
-      await erc1155.burn(creatorAddr, serial2);
-
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial), 16)).equal(0);
-      expect(await proxy.owner()).equal('0x0000000000000000000000000000000000000000');
-
-      expect(parseInt(await erc1155.balanceOf(creatorAddr, serial2), 16)).equal(0);
-      expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
-    });
+    //   expect(parseInt(await erc1155.balanceOf(creatorAddr, serial2), 16)).equal(0);
+    //   expect(await proxy2.owner()).equal('0x0000000000000000000000000000000000000000');
+    // });
   });
 });

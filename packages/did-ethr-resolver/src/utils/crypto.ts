@@ -1,23 +1,19 @@
-import { Signer, utils } from 'ethers';
+import { Keys } from '@ew-did-registry/keys';
+import { Wallet, Signer, utils } from 'ethers';
 
 const {
-  keccak256, hashMessage, arrayify, recoverAddress, recoverPublicKey, computePublicKey,
+  keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
 } = utils;
 
-export async function getSignerPublicKey(signer: Signer): Promise<string> {
-  const address = await signer.getAddress();
-  const hash = keccak256(address);
-  const digest = hashMessage(arrayify(hash));
+export const walletPubKey = (
+  { privateKey }: Wallet,
+): string => new Keys({ privateKey: privateKey.slice(2) }).publicKey;
 
-  const signatures = [
-    await signer.signMessage(arrayify(hash)),
-    await signer.signMessage(arrayify(digest)),
-  ];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const sig of signatures) {
-    if (address === recoverAddress(digest, sig)) {
-      return computePublicKey(recoverPublicKey(digest, sig), true).slice(2);
-    }
-  }
-  return '';
+export async function signerPubKey(signer: Signer): Promise<string> {
+  const msg = 'Hello';
+  const hash = keccak256(msg);
+  const digest = hashMessage(arrayify(hash));
+  const signature = await signer.signMessage(arrayify(digest));
+
+  return computePublicKey(recoverPublicKey(digest, signature), true).slice(2);
 }

@@ -1,9 +1,16 @@
 import { expect } from 'chai';
-import { DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator } from '@ew-did-registry/did-resolver-interface';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator,
+} from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
-import { getSettings } from '../../../tests/init-ganache';
+import {
+  getProvider, signerFromKeys, Operator,
+  walletPubKey,
+} from '@ew-did-registry/did-ethr-resolver';
+
+import { withKey, withProvider } from '@ew-did-registry/did-ethr-resolver/src';
+import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
@@ -14,8 +21,11 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   let docLite: IDIDDocumentLite;
 
   before(async () => {
-    const resolverSettings = await getSettings([keys.getAddress()]);
-    operator = new Operator(keys, resolverSettings);
+    const registry = await deployRegistry([keys.getAddress()]);
+    operator = new Operator(
+      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      { address: registry },
+    );
     docLite = new DIDDocumentLite(did, operator);
   });
 
@@ -30,29 +40,39 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
     expect(id).to.equal(did);
   });
 
-  it('readAttribute should find public key', async () => {
+  it('public key should be read by its type', async () => {
     await operator.update(did, DIDAttribute.PublicKey, {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: {publicKey: `0x${new Keys().publicKey}`, tag:'key-4'},
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     });
-    const publicKey = await docLite.readAttribute({ publicKey: { type: 'Secp256k1VerificationKey' } });
+    const publicKey = await docLite.readAttribute({ publicKey: { type: `${Algorithms.ED25519}${PubKeyType.VerificationKey2018}` } });
     expect(publicKey).to.be.not.undefined;
   });
 
-  it('readAttribute should find service endpoint', async () => {
+  it('service endpoint should be read by its url', async () => {
     const url = 'http://test.com';
     await operator.update(did, DIDAttribute.ServicePoint, {
       type: PubKeyType.VerificationKey2018,
-      value:{serviceEndpoint: url},
+      value: { serviceEndpoint: url },
     });
-    const service = await docLite.readAttribute({ serviceEndpoints: { serviceEndpoint: url } });
+    const service = await docLite.readAttribute({ service: { serviceEndpoint: url } });
     expect(service).to.be.not.undefined;
   });
 
-  it('invalid attribute should return null', async () => {
-    const attr = await docLite.readAttribute({ serviceEndpoints: { nonexist: 'nonexist' } });
-    expect(attr).to.be.null;
+  it('null should be return when attribute not found', async () => {
+    const attr = await docLite.readAttribute({ service: { nonexist: 'nonexist' } });
+    expect(attr).to.be.undefined;
+  });
+
+  it('owner public key should be returned from created document', async () => {
+    await operator.create();
+    expect(await docLite.ownerPubKey(did)).equal(keys.publicKey);
+  });
+
+  it('owner public key should be undefined on deactivated document', async () => {
+    await operator.deactivate(did);
+    expect(await docLite.ownerPubKey(did)).undefined;
   });
 });

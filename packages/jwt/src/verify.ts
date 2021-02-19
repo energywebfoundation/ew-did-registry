@@ -2,7 +2,8 @@ import base64url from 'base64url';
 import jsonwebtoken from 'jsonwebtoken';
 import KeyEncoder from 'key-encoder';
 import { utils } from 'ethers';
-import { computePublicKey } from 'ethers/utils';
+
+const { computePublicKey } = utils;
 
 const {
   keccak256,

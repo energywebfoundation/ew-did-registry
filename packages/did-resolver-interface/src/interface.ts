@@ -1,10 +1,18 @@
 import { utils } from 'ethers';
 import {
-  IDIDDocument, DIDAttribute, IUpdateData, DelegateTypes, IResolverSettings, IPublicKey, IAttributePayload, IServiceEndpoint, IAuthentication, PubKeyType,
+  IDIDDocument,
+  DIDAttribute,
+  IUpdateData,
+  DelegateTypes,
+  IPublicKey,
+  IServiceEndpoint,
+  IAuthentication,
+  PubKeyType,
+  DocumentSelector,
+  IDIDLogData,
 } from './models';
 
 export interface IResolver {
-  readonly settings: IResolverSettings;
   /**
    * Constructor takes keys and resolver settings to create a new Resolver
    * constructor(settings?: IResolverSettings);
@@ -50,8 +58,23 @@ export interface IResolver {
 
   readAttribute(
     did: string,
-    filter?: { [key: string]: { [key: string]: string } },
+    selector: DocumentSelector,
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+
+  readOwnerPubKey(did: string): Promise<string>;
+
+  /**
+   * Reads events starting from specified block
+   *
+   * @param block {number} - block to start reading from
+   *
+   * @returns - part of document along with last read block
+   */
+  readFromBlock(did: string,
+    topBlock: utils.BigNumber,
+  ): Promise<IDIDLogData>;
+
+  lastBlock(did: string): Promise<utils.BigNumber>;
 }
 
 export interface IOperator extends IResolver {
@@ -78,7 +101,7 @@ export interface IOperator extends IResolver {
     attribute: DIDAttribute,
     value: IUpdateData,
     validity?: number | utils.BigNumber
-  ): Promise<boolean>;
+  ): Promise<utils.BigNumber>;
 
   /**
    * Attempts to deactivate the DID Document for a given DID.
@@ -88,7 +111,7 @@ export interface IOperator extends IResolver {
    * @param {string} did
    * @returns {boolean}
    */
-  deactivate(did: string): Promise<boolean>;
+  deactivate(did: string): Promise<void>;
 
   revokeDelegate(did: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
 
