@@ -1,13 +1,13 @@
 {
   "name": "@ew-did-registry/authentication-client",
-  "version": "0.0.1-alpha.694.2",
+  "version": "0.1.0-alpha.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.0.2",
-    "@ew-did-registry/claims": "0.0.1-alpha.694.2",
-    "@ew-did-registry/did": "^0.0.1-alpha.694.1",
-    "@ew-did-registry/did-ethr-resolver": "0.0.1-alpha.694.2",
-    "@ew-did-registry/keys": "^0.0.1-alpha.694.1",
+    "@ew-did-registry/claims": "0.1.0-alpha.0",
+    "@ew-did-registry/did": "0.1.0-alpha.0",
+    "@ew-did-registry/did-ethr-resolver": "0.1.0-alpha.0",
+    "@ew-did-registry/keys": "0.1.0-alpha.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
