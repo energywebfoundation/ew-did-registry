@@ -700,3 +700,9 @@ class Operator extends Resolver implements IOperator {
 ```
 ## Future Work
 >
+
+## Development
+
+### Publishing 
+Push to `development` will trigger canary publishing. To publish latest stable version merge PR from `development` to `master`
+To bump version commit message must conform to conventional commits specification
