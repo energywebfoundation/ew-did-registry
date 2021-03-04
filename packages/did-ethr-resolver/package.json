@@ -30,6 +30,7 @@
     "@ew-did-registry/did": "^0.0.1",
     "@ew-did-registry/did-resolver-interface": "^0.0.1",
     "@ew-did-registry/keys": "^0.0.1",
-    "@ew-did-registry/proxyidentity": "^0.0.1"
+    "@ew-did-registry/proxyidentity": "^0.0.1",
+    "ethers": "4.0.45"
   }
 }
