@@ -27,6 +27,8 @@
     "run-with-testrpc": "0.3.1",
     "ganache-cli": "6.9.1",
     "typescript": "3.9.7",
-    "eslint": "6.6.0"
+    "eslint": "6.6.0",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1"
   }
 }
