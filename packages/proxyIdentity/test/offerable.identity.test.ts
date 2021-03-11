@@ -88,8 +88,16 @@ describe('[PROXY IDENTITY PACKAGE/OFFERABLE IDENTITY]', function () {
     });
 
     it('Rejecting offer should remain identity owner', async () => {
+      const event = new Promise((resolve) => {
+        manager.on('OfferRejected', (offered, offeredTo) => {
+          manager.removeAllListeners('OfferRejected');
+          resolve({ offered, offeredTo });
+        });
+      });
+
       await identity.connect(receiver).reject();
 
+      expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
       expect(await identity.owner()).equal(ownerAddr);
     });
 
