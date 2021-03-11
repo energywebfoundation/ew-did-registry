@@ -74,8 +74,16 @@ describe('[PROXY IDENTITY PACKAGE/OFFERABLE IDENTITY]', function () {
     });
 
     it('Accepting offer should change identity owner', async () => {
+      const event = new Promise((resolve) => {
+        manager.on('IdentityTransferred', (offered, offeredTo) => {
+          manager.removeAllListeners('IdentityTransferred');
+          resolve({ offered, offeredTo });
+        });
+      });
+
       await identity.connect(receiver).accept();
 
+      expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
       expect(await identity.owner()).equal(receiverAddr);
     });
 
