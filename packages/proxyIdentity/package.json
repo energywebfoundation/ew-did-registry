@@ -7,9 +7,9 @@
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "dist/src/index.js",
   "scripts": {
-    "compile": "../../node_modules/.bin/tsc",
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
+    "compile": "tsc",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test-ganache\" ",
+    "test-ganache": "mocha -r ts-node/register test/*test.ts"
   },
   "author": {
     "name": "EnergyWeb",
@@ -22,6 +22,11 @@
   "devDependencies": {
     "@openzeppelin/contracts": "^2.5.0",
     "multi-token-standard": "^0.8.13",
-    "run-with-testrpc": "0.3.1"
+    "ethers": "4.0.45",
+    "mocha": "7.1.0",
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.9.1",
+    "typescript": "3.9.7",
+    "eslint": "6.6.0"
   }
 }
