@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/jwt",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -26,7 +26,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/keys": "^0.0.1",
+    "@ew-did-registry/keys": "0.1.0",
     "@types/promise.allsettled": "^1.0.3",
     "base64url": "^3.0.1",
     "ethereumjs-util": "^7.0.5",
