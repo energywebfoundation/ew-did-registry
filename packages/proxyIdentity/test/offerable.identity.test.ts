@@ -35,14 +35,14 @@ describe('[PROXY IDENTITY PACKAGE/OFFERABLE IDENTITY]', function () {
     });
 
     it('Identity should notify manager when created', async () => {
-      const address = new Promise((resolve) => {
-        manager.on('OfferableIdentityCreated', (i) => {
-          manager.removeAllListeners('OfferableIdentityCreated');
-          resolve(i);
+      const event = new Promise((resolve) => {
+        manager.on('IdentityCreated', (created) => {
+          manager.removeAllListeners('IdentityCreated');
+          resolve(created);
         });
       });
 
-      expect(await address).equal(identity.address);
+      expect(await event).equal(identity.address);
     });
 
     it('identity creator should be identity owner', async () => {
@@ -60,6 +60,17 @@ describe('[PROXY IDENTITY PACKAGE/OFFERABLE IDENTITY]', function () {
       identity = await identityFactory.deploy(id, ownerAddr, manager.address);
 
       await identity.connect(owner).functions.offer(receiverAddr);
+    });
+
+    it('Manager should be notified when identity offered', async () => {
+      const event = await new Promise((resolve) => {
+        manager.on('IdentityOffered', (offered, offeredTo) => {
+          manager.removeAllListeners('IdentityOffered');
+          resolve({ offered, offeredTo });
+        });
+      });
+
+      expect(event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
     });
 
     it('Accepting offer should change identity owner', async () => {

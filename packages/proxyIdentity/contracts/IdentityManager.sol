@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 
 contract IdentityManager {
-  event OfferableIdentityCreated(address identity, address owner);
+  event IdentityCreated(address identity, address owner);
   event IdentityOffered(address identity, address offeredTo);
   event IdentityTransferred(address identity, address owner);
   event OfferRejected(address identity, address offeredTo);
@@ -19,7 +19,7 @@ contract IdentityManager {
     external
     isIdentity(msg.sender, identity)
   {
-    emit OfferableIdentityCreated(identity, owner);
+    emit IdentityCreated(identity, owner);
   }
 
   function identityOffered(address identity, address offeredTo)
