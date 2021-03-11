@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "publishConfig": {
     "access": "public"
   },
