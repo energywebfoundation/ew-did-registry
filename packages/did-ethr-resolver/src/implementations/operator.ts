@@ -45,7 +45,7 @@ export class Operator extends Resolver implements IOperator {
 
   private address: string;
 
-  private readonly _owner: IdentityOwner;
+  protected readonly _owner: IdentityOwner;
 
   /**
  * @param { IdentityOwner } owner - entity which controls document updatable by this operator
@@ -60,7 +60,7 @@ export class Operator extends Resolver implements IOperator {
     this._keys.publicKey = owner.publicKey;
   }
 
-  private async getAddress(): Promise<string> {
+  protected async getAddress(): Promise<string> {
     return this.address || (this.address = await this._owner.getAddress());
   }
 
