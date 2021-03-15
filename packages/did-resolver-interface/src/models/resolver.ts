@@ -58,7 +58,7 @@ export interface IServiceEndpoint {
   validity?: utils.BigNumber;
   block?: number;
   hash?: string; // hash of the content located at service endpoint
-  [key: string]: string | utils.BigNumber | number;
+  [key: string]: string | utils.BigNumber | number | undefined;
 }
 
 export interface IPublicKey {
@@ -74,7 +74,7 @@ export interface IPublicKey {
   publicKeyMultibase?: string;
   validity?: utils.BigNumber;
   block?: number;
-  [key: string]: string | number | utils.BigNumber;
+  [key: string]: string | number | utils.BigNumber | undefined;
 }
 
 export interface IAuthentication {
@@ -82,7 +82,7 @@ export interface IAuthentication {
   publicKey: string;
   validity?: utils.BigNumber;
   block?: number;
-  [key: string]: string | utils.BigNumber | number;
+  [key: string]: string | utils.BigNumber | number | undefined;
 }
 
 export interface ILinkedDataProof {
