@@ -3,12 +3,11 @@ import { decrypt } from 'eciesjs';
 import crypto from 'crypto';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
-import sjcl from 'sjcl-complete';
+import { bn, ecc } from 'sjcl';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
 import { IPrivateClaim, IPublicClaim } from '../models';
 
-const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
   /**
    * Verifies user signature on token and issue new token signed by issuer./
@@ -28,7 +27,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    */
   async issuePublicClaim(token: string): Promise<string> {
     const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, (claim as any).iss))) {
+    if (!(await this.verifySignature(token, claim.iss as string))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
@@ -63,22 +62,22 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     if (!this.keys.privateKey) {
       throw new Error('Private claim not supported');
     }
-    const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
+    const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, (claim as any).iss))) {
+    if (!(await this.verifySignature(token, claim.iss as string))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
     Object.entries(claim.claimData).forEach(([key, value]) => {
       const decryptedField = decrypt(
         this.keys.privateKey,
-        Buffer.from(value, 'hex'),
+        Buffer.from(value as string, 'hex'),
         // Buffer.from((value as { data: Array<number> }).data),
       );
       const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
       const PK = g.mult(new bn(fieldHash));
-      claim.claimData[key] = PK.toBits();
+      claim.claimData[key] = PK.toBits() as [];
     });
     delete claim.iss;
     return this.jwt.sign(claim, {

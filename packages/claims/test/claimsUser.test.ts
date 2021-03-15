@@ -95,7 +95,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const claim = userClaims.jwt.decode(token, { noTimestamp: true }) as IPrivateClaim;
     const decrypted = decrypt(
       issuerKeys.privateKey,
-      Buffer.from(claim.claimData.secret, 'hex'),
+      Buffer.from(claim.claimData.secret as string, 'hex'),
     );
     decrypted.toString().should.equal(saltedFields.secret);
   });
