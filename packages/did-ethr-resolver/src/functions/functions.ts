@@ -151,6 +151,9 @@ const handleAttributeChange = (
         servicePoint.validity = validTo;
         servicePoint.block = block;
 
+        // Use the serviceEndpoint as id if none is provided
+        servicePoint.id = servicePoint.id ?? servicePoint.serviceEndpoint;
+
         if (document.service[servicePoint.id] === undefined
           || document.service[servicePoint.id].block < block) {
           document.service[servicePoint.id] = servicePoint;
