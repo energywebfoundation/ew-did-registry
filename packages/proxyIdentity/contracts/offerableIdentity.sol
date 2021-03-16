@@ -52,6 +52,7 @@ contract OfferableIdentity {
 
   function sendTransaction(bytes memory _data, address to, uint256 value)
     public
+    isOwner
     returns (bool success)
   {
     bytes memory data = _data;
