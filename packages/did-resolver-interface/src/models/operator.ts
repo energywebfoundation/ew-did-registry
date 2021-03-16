@@ -37,7 +37,7 @@ export enum KeyTags {
  * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
 */
 export interface IAttributePayload {
-  id?: string;
+  id: string;
   type?: string;
   publicKey?: string;
   serviceEndpoint?: string;

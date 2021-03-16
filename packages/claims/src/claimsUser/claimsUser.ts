@@ -5,6 +5,7 @@ import { encrypt } from 'eciesjs';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import sjcl from 'sjcl-complete';
+import { v4 as uuid } from 'uuid';
 import assert from 'assert';
 import {
   Algorithms,
@@ -306,7 +307,12 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       DIDAttribute.ServicePoint,
       {
         type: PubKeyType.VerificationKey2018,
-        value: { serviceEndpoint: url, hash: createHash(claim), hashAlg },
+        value: {
+          id: uuid(),
+          serviceEndpoint: url,
+          hash: createHash(claim),
+          hashAlg,
+        },
       },
     );
     return url;

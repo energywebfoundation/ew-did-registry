@@ -3,6 +3,7 @@
 import {
   Contract, ethers, Event, utils,
 } from 'ethers';
+import { v4 as uuid } from 'uuid';
 import {
   Algorithms,
   DIDAttribute,
@@ -92,7 +93,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
+      value: { id: uuid(), publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
     const validity = 10 * 60 * 1000;
     await this.update(did, attribute, updateData, validity);
@@ -350,6 +351,7 @@ export class Operator extends Resolver implements IOperator {
       const publicKeyTag = pk.id.split('#')[1];
 
       const keyValue: IAttributePayload = {
+        id: 'NEED TO DETERMINE',
         publicKey: value,
         tag: publicKeyTag,
       };
