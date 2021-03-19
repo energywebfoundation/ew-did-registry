@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-registry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -28,15 +28,15 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/claims": "0.1.0",
-    "@ew-did-registry/did": "0.1.0",
-    "@ew-did-registry/did-document": "0.1.0",
-    "@ew-did-registry/did-ethr-resolver": "0.1.0",
-    "@ew-did-registry/did-ipfs-store": "0.1.0",
-    "@ew-did-registry/did-resolver-interface": "0.1.0",
-    "@ew-did-registry/did-store-interface": "0.1.0",
-    "@ew-did-registry/jwt": "0.1.0",
-    "@ew-did-registry/keys": "0.1.0",
-    "@ew-did-registry/proxyidentity": "0.1.0"
+    "@ew-did-registry/claims": "0.2.0",
+    "@ew-did-registry/did": "0.2.0",
+    "@ew-did-registry/did-document": "0.2.0",
+    "@ew-did-registry/did-ethr-resolver": "0.2.0",
+    "@ew-did-registry/did-ipfs-store": "0.2.0",
+    "@ew-did-registry/did-resolver-interface": "0.2.0",
+    "@ew-did-registry/did-store-interface": "0.2.0",
+    "@ew-did-registry/jwt": "0.2.0",
+    "@ew-did-registry/keys": "0.2.0",
+    "@ew-did-registry/proxyidentity": "0.2.0"
   }
 }
