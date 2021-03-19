@@ -2,10 +2,10 @@ pragma solidity 0.8.0;
 
 
 contract IdentityManager {
-  event IdentityCreated(address identity, address owner);
-  event IdentityOffered(address identity, address offeredTo);
-  event IdentityTransferred(address identity, address owner);
-  event OfferRejected(address identity, address offeredTo);
+  event IdentityCreated(address identity, address owner, uint at);
+  event IdentityOffered(address identity, address offeredTo, uint at);
+  event IdentityTransferred(address identity, address owner, uint at);
+  event OfferRejected(address identity, address offeredTo, uint at);
 
   modifier isIdentity(address sender, address identity) {
     require(
@@ -19,27 +19,27 @@ contract IdentityManager {
     external
     isIdentity(msg.sender, identity)
   {
-    emit IdentityCreated(identity, owner);
+    emit IdentityCreated(identity, owner, block.timestamp);
   }
 
   function identityOffered(address identity, address offeredTo)
     external
     isIdentity(msg.sender, identity)
   {
-    emit IdentityOffered(identity, offeredTo);
+    emit IdentityOffered(identity, offeredTo, block.timestamp);
   }
 
   function identityAccepted(address identity, address owner)
     external
     isIdentity(msg.sender, identity)
   {
-    emit IdentityTransferred(identity, owner);
+    emit IdentityTransferred(identity, owner, block.timestamp);
   }
 
   function identityRejected(address identity, address offeredTo)
     external
     isIdentity(msg.sender, identity)
   {
-    emit OfferRejected(identity, offeredTo);
+    emit OfferRejected(identity, offeredTo, block.timestamp);
   }
 }
