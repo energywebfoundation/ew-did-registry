@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.2.0...v0.3.0) (2021-03-19)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/jwt:** add jsonwebtoken types ([9698864](https://github.com/energywebfoundation/ew-did-registry/commit/969886441910705a2bf9ccead6bf31dbfe8f12dc))
+
+
+### Features
+
+* **@ew-did-registry/did-ethr-resolver:** compile in strict mode ([4315227](https://github.com/energywebfoundation/ew-did-registry/commit/4315227d704364211ed66864eac3bc6a84262681))
+
+
+
+
+
 # 0.2.0 (2021-03-19)
 
 
