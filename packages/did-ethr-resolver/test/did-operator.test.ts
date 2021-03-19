@@ -35,13 +35,13 @@ let registry: string;
 let owner: IdentityOwner;
 
 const testSuite = (): void => {
-  it('operator public key should be equl to public key of signer', () => {
+  it('operator public key should be equal to public key of signer', () => {
     expect(operator.getPublicKey().slice(2)).equal(keys.publicKey.slice(2));
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
@@ -49,6 +49,7 @@ const testSuite = (): void => {
     };
     await operator.update(did, attribute, updateData);
     const document: IDIDDocument = await operator.read(did) as IDIDDocument;
+
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.publicKey,
@@ -58,7 +59,7 @@ const testSuite = (): void => {
 
   it('setting public key attribute should update public keys of DID document', async () => {
     const attribute = DIDAttribute.PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
@@ -77,7 +78,7 @@ const testSuite = (): void => {
     async () => {
       const attribute = DIDAttribute.Authenticate;
       const delegate = new Wallet(new Keys().privateKey);
-      const updateData: IUpdateData = {
+      const updateData = {
         algo: Algorithms.ED25519,
         type: PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
@@ -100,7 +101,7 @@ const testSuite = (): void => {
        key and reference on it in authentication section of the DID document`, async () => {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.ED25519,
       type: PubKeyType.SignatureAuthentication2018,
       encoding: Encoding.HEX,
@@ -111,7 +112,7 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
     const auth = document.authentication.find(
-      (a: IAuthentication) => a.publicKey === publicKeyId,
+      (a) => (a as IAuthentication).publicKey === publicKeyId,
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
@@ -254,7 +255,7 @@ const testSuite = (): void => {
   it('attribute update and revocation makes no changes to the document', async () => {
     const keysAttribute = new Keys();
     const attribute = DIDAttribute.PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
@@ -264,7 +265,6 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      // eslint-disable-next-line
       (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
     );
     expect(publicKey).to.be.not.null;
@@ -278,11 +278,11 @@ const testSuite = (): void => {
   });
 
   it('public key with invalid value should be ignored', async () => {
-    const updateData: any = {
+    const updateData = {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: '0x123abc',
+      value: { publicKey: '0x123abc', tag: 'key-6' },
     };
     await operator.update(did, DIDAttribute.PublicKey, updateData, validity);
     return operator.read(did).should.not.be.rejected;
@@ -337,7 +337,7 @@ const testSuite = (): void => {
   });
 };
 
-describe('[RESOLVER PACKAGE]: DID-OPERATOR', function () {
+describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
   this.timeout(0);
 
   beforeEach(async () => {

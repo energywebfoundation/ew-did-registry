@@ -40,22 +40,29 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   it('readAttribute should read public key by its hex value and type', async () => {
     const attribute = DIDAttribute.PublicKey;
     const k = new Keys();
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${k.publicKey}`, tag: 'key-1' },
     };
     await operator.update(did, attribute, updateData, validity);
-    const publicKeyAttr = await operator.readAttribute(did, { publicKey: { publicKeyHex: updateData.value.publicKey, type: `${updateData.algo}${updateData.type}` } });
-    expect(publicKeyAttr.publicKeyHex === updateData.value);
+    const publicKeyAttr = await operator.readAttribute(
+      did,
+      {
+        publicKey: {
+          publicKeyHex: updateData.value.publicKey, type: `${updateData.algo}${updateData.type}`,
+        },
+      },
+    );
+    expect(publicKeyAttr && publicKeyAttr.publicKeyHex === updateData.value.publicKey);
   });
 
   it('readAttribute should read service endpoint', async () => {
     const attribute = DIDAttribute.ServicePoint;
     const endpoint = 'https://test.readAttribute.com';
     const serviceId = 'UserClaimURL';
-    const updateData: IUpdateData = {
+    const updateData = {
       type: attribute,
       value: {
         id: `${did}#service-${serviceId}`,
@@ -67,7 +74,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const serviceEndpointAttr = await operator.readAttribute(did, {
       service: { serviceEndpoint: `${updateData.value.serviceEndpoint}` },
     }) as IServiceEndpoint;
-    expect(serviceEndpointAttr.serviceEndpoint === updateData.value);
+    expect(serviceEndpointAttr.serviceEndpoint === updateData.value.serviceEndpoint);
   });
 
   it('readAttribute should read delegate by given Ethereum address', async () => {

@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-await-in-loop,no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils,
+  Contract, ethers, Event, utils, providers,
 } from 'ethers';
 import {
   Algorithms,
@@ -43,7 +43,7 @@ export class Operator extends Resolver implements IOperator {
     publicKey: '',
   };
 
-  private address: string;
+  private address?: string;
 
   protected readonly _owner: IdentityOwner;
 
@@ -51,7 +51,7 @@ export class Operator extends Resolver implements IOperator {
  * @param { IdentityOwner } owner - entity which controls document updatable by this operator
  */
   constructor(owner: IdentityOwner, settings: RegistrySettings) {
-    super(owner.provider, settings);
+    super(owner.provider as providers.Provider, settings);
     const {
       address, abi,
     } = this.settings;
@@ -198,7 +198,7 @@ export class Operator extends Resolver implements IOperator {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = ethers.utils.formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value);
+    const bytesValue = this._hexify(updateData.value as IAttributePayload);
     try {
       const tx = await this._didRegistry.revokeAttribute(
         identityAddress,
@@ -431,8 +431,8 @@ export class Operator extends Resolver implements IOperator {
     const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
-        ? updateData.value
-        : updateData.delegate,
+        ? updateData.value as IAttributePayload
+        : updateData.delegate as string,
     );
     const params: (string | number | Record<string, unknown>)[] = [
       identity,
@@ -453,7 +453,7 @@ export class Operator extends Resolver implements IOperator {
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
-      return new BigNumber(event.blockNumber);
+      return new BigNumber(event.blockNumber as number);
     } catch (e) {
       throw new Error(e.message);
     }
@@ -476,7 +476,7 @@ export class Operator extends Resolver implements IOperator {
       case DIDAttribute.Authenticate:
         return updateData.type;
       case DIDAttribute.ServicePoint:
-        return `did/${DIDAttribute.ServicePoint}/${updateData.value.type}`;
+        return `did/${DIDAttribute.ServicePoint}/${(updateData.value as IAttributePayload).type}`;
       default:
         throw new Error('Unknown attribute name');
     }

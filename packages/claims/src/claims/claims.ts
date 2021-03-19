@@ -1,8 +1,8 @@
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { DelegateTypes, IPublicKey, IdentityOwner } from '@ew-did-registry/did-resolver-interface';
-import { IClaims } from '../models';
+import { DelegateTypes, IdentityOwner, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import { IClaims, IPublicClaim, IPrivateClaim } from '../models';
 import { hashes } from '../utils';
 
 /**
@@ -16,8 +16,6 @@ export class Claims implements IClaims {
     privateKey?: string;
     publicKey: string;
   };
-
-  public owner: IdentityOwner;
 
   public did: string;
 
@@ -56,7 +54,7 @@ export class Claims implements IClaims {
   async verifySignature(token: string, signer: string): Promise<boolean> {
     const signerPubKey = await this.document.ownerPubKey(signer);
     try {
-      await this.jwt.verify(token, signerPubKey);
+      await this.jwt.verify(token, signerPubKey as string);
     } catch (error) {
       return false;
     }
@@ -72,9 +70,10 @@ export class Claims implements IClaims {
    */
   async verify(
     claimUrl: string, hashFns?: { [alg: string]: (data: string) => string },
-  ): Promise<any> {
+  ): Promise<IPublicClaim | IPrivateClaim> {
     const token = await this.store.get(claimUrl);
-    const claim: any = this.jwt.decode(token);
+    const claim = this.jwt.decode(token) as
+      (IPublicClaim | IPrivateClaim) & { iss: string; sub: string };
     if (!(await this.verifySignature(token, claim.iss))) {
       throw new Error('Invalid signature');
     }
@@ -83,7 +82,7 @@ export class Claims implements IClaims {
     }
     const service = await this.document.readAttribute(
       { service: { serviceEndpoint: claimUrl } }, (claim).sub,
-    );
+    ) as IServiceEndpoint;
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];
     if (hash !== createHash(token)) {

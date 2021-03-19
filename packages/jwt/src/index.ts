@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
-import { PromiseRejection, PromiseResolution } from 'promise.allsettled';
 import { IJWT } from './interface';
 import {
   createSignWithEthersSigner, createSignWithKeys, JwtOptions, JwtPayload,
@@ -84,17 +83,21 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns {Promise<object>}
    */
-  async verify(token: string, publicKey: string, options?: object): Promise<object> {
+  async verify(
+    token: string,
+    publicKey: string,
+    options?: Record<string, unknown>,
+  ): Promise<object> {
     const verifications = [];
     for (const verifyMethod of verificationMethods) {
       verifications.push(verifyMethod(token, publicKey, options));
     }
     const results = await Promise.all(Array.from(verifications, (item) => item
-      .then((value) => ({ status: 'fulfilled', value } as PromiseResolution<object>))
-      .catch((reason) => ({ status: 'rejected', reason } as PromiseRejection<typeof reason>))));
+      .then((value) => ({ ...value }))
+      .catch((reason) => ({ success: false, payload: reason }))));
     for (const result of results) {
-      if (result.status === 'fulfilled' && (result.value as any).success) {
-        return (result.value as any).payload;
+      if (result.success) {
+        return result.payload;
       }
     }
     throw new Error('invalid signature');
@@ -128,7 +131,7 @@ class JWT implements IJWT {
   decode(token: string, options?: object): string | {
     [key: string]: string | object;
   } {
-    return jwt.decode(token, options);
+    return jwt.decode(token, options) || '';
   }
 }
 

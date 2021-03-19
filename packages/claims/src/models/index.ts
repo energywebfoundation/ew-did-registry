@@ -10,7 +10,7 @@ export interface IPublicClaim {
 export interface IPrivateClaim {
   did: string;
   signer: string;
-  claimData: { [key: string]: string }; // so that they can be salted
+  claimData: { [key: string]: string | [] }; // so that they can be salted
   [key: string]: string | object;
 }
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0 (2021-03-19)
+
+
+### Bug Fixes
+
+* remove prerelease id ([09d4aec](https://github.com/energywebfoundation/ew-did-registry/commit/09d4aec87b2ad3e960d3907c641d6152c118e68b))
+
+
+
+
+
 # 0.1.0-alpha.0 (2021-02-25)
 
 **Note:** Version bump only for package @ew-did-registry/keys

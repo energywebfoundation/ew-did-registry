@@ -6,6 +6,8 @@ import {
   IUpdateData,
   RegistrySettings,
   IdentityOwner,
+  UpdateAttributeData,
+  UpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
@@ -64,7 +66,7 @@ export class OfferableIdenitytOperator extends Operator {
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
-    updateData: IUpdateData,
+    updateData: UpdateAttributeData,
   ): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
@@ -95,8 +97,8 @@ export class OfferableIdenitytOperator extends Operator {
     const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
-        ? updateData.value
-        : updateData.delegate,
+        ? (updateData as UpdateAttributeData).value
+        : (updateData as UpdateDelegateData).delegate,
     );
     const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
@@ -112,7 +114,7 @@ export class OfferableIdenitytOperator extends Operator {
       const tx = await this.identity.sendTransaction(data, this.settings.address, 0);
       const receipt = await tx.wait();
       event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
-      return new BigNumber(event.blockNumber);
+      return new BigNumber(event.blockNumber as number);
     } catch (e) {
       throw new Error(e);
     }

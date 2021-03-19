@@ -47,6 +47,7 @@
     "@typescript-eslint/eslint-plugin": "2.8.0",
     "@typescript-eslint/parser": "2.8.0",
     "babelify": "10.0.0",
+    "bn.js": "5.2.0",
     "browserify": "16.5.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",

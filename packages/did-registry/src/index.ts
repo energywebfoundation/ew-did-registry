@@ -1,7 +1,6 @@
 import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
-import { signerFromKeys, getProvider } from '@ew-did-registry/did-ethr-resolver';
-import { IDID, Methods } from '@ew-did-registry/did';
+import { IDID, Methods, DID } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
@@ -12,7 +11,7 @@ import { IDIDRegistry } from './interface';
  * @class {DIDRegistry}
  */
 class DIDRegistry implements IDIDRegistry {
-  did: IDID;
+  did: IDID = new DID();
 
   keyStore: Map<string, IKeys>;
 
@@ -24,6 +23,7 @@ class DIDRegistry implements IDIDRegistry {
 
   constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, method] = did.split(':');
+    this.did.set(did);
 
     if (!Object.values(Methods).includes(method as Methods)) {
       throw new Error('Unknown Method!');
@@ -32,7 +32,7 @@ class DIDRegistry implements IDIDRegistry {
     this.keyStore = new Map<string, IKeys>();
     this.keyStore.set(KeyTags.OWNER, keys);
 
-    this.jwt = new JWT(this.keyStore.get(KeyTags.OWNER));
+    this.jwt = new JWT(keys);
     this.document = new DIDDocumentFactory(did).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, store);
     this.operator = operator;
@@ -55,7 +55,14 @@ class DIDRegistry implements IDIDRegistry {
    */
   changeOperator(operator: IOperator, method: Methods | string): void {
     const keys = this.keyStore.get(KeyTags.OWNER);
-    this.document = new DIDDocumentFactory(this.did.get(method)).createFull(operator);
+    if (!keys) {
+      return;
+    }
+    const did = this.did.get(method);
+    if (!did) {
+      return;
+    }
+    this.document = new DIDDocumentFactory(did).createFull(operator);
     this.claims = new ClaimsFactory(keys, this.document, this.store);
     this.operator = operator;
   }

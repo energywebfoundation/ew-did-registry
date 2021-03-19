@@ -104,7 +104,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   it('revokeAttribute provided with PublicKey type removes public key', async () => {
     const keysAttribute = new Keys();
     const attribute = DIDAttribute.PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Algorithms.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
