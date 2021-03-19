@@ -2,9 +2,9 @@
 /* eslint-disable max-len */
 import crypto from 'crypto';
 import { encrypt } from 'eciesjs';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import sjcl from 'sjcl-complete';
+import {
+  bn, hash, bitArray, ecc,
+} from 'sjcl';
 import assert from 'assert';
 import {
   Algorithms,
@@ -12,6 +12,8 @@ import {
   DIDAttribute,
   Encoding,
   PubKeyType,
+  KeyTags,
+  IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
@@ -21,10 +23,20 @@ import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';
 
-const { bn, hash, bitArray } = sjcl;
+declare module 'sjcl' {
+  interface SjclEllipticalCurve {
+    r: number;
+    G: sjcl.SjclEllipticalPoint;
+  }
+
+  interface SjclEllipticalPoint {
+    x: sjcl.BigNumber;
+    y: sjcl.BigNumber;
+  }
+}
 
 export class ClaimsUser extends Claims implements IClaimsUser {
-  curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
+  curve = ecc.curves.k256;
 
   q = this.curve.r;
 
@@ -103,11 +115,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: privateData,
     };
-    const issuerDocument = await this.document.read(issuer);
-    const issuerPK = issuerDocument
-      .publicKey
-      .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
-      .publicKeyHex;
+    const issuerPK = (await this.document.readAttribute(
+      {
+        publicKey:
+          { id: `${issuer}#${KeyTags.OWNER}` },
+
+      },
+      issuer,
+    ) as IPublicKey).publicKeyHex as string;
     Object.entries(privateData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
@@ -232,19 +247,19 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, (claim as any).iss))) {
+    if (!(await this.verifySignature(token, claim.iss as string))) {
       throw new Error('Invalid signature');
     }
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(saltedFields)) {
       const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
       const PK = this.g.mult(new bn(fieldHash));
-      if (!bitArray.equal(claim.claimData[key], PK.toBits())) {
+      if (!bitArray.equal(claim.claimData[key] as [], PK.toBits())) {
         throw new Error('Issued claim data doesn\'t match user data');
       }
     }
     const [, , issAddress] = (claim.iss as string).split(':');
-    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, (claim as any).iss);
+    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, claim.iss as string);
     if (issIsDelegate) {
       return true;
     }

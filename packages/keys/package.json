@@ -28,6 +28,8 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "eciesjs": "^0.3.4",
-    "elliptic": "^6.5.2"
+    "elliptic": "^6.5.2",
+    "ethers": "4.0.45",
+    "bn.js": "5.2.0"
   }
 }

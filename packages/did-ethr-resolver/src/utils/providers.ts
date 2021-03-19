@@ -13,7 +13,7 @@ export function getProvider(
     case ProviderTypes.HTTP:
       return new JsonRpcProvider(uriOrInfo, network);
     case ProviderTypes.IPC:
-      return new IpcProvider(path, network);
+      return new IpcProvider(path as string, network);
     default:
       throw new Error('Unsupported provider');
   }

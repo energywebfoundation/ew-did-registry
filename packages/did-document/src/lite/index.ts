@@ -59,7 +59,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    */
   async readAttribute(
     selector: DocumentSelector, did = this.did,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
     return this.resolver.readAttribute(did, selector);
   }
 
@@ -72,7 +72,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.read(did);
   }
 
-  async ownerPubKey(did = this.did): Promise<string> {
+  async ownerPubKey(did = this.did): Promise<string | undefined> {
     return this.resolver.readOwnerPubKey(did);
   }
 

@@ -33,7 +33,7 @@ class Resolver implements IResolver {
   /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
-  readonly settings: RegistrySettings;
+  readonly settings: Required<RegistrySettings>;
 
   /**
    * Stores the provider to connect to blockchain
@@ -48,7 +48,7 @@ class Resolver implements IResolver {
   /**
    * Caches the blockchain data for further reads
    */
-  private _document: IDIDLogData;
+  private _document?: IDIDLogData;
 
   /**
    * Constructor
@@ -81,12 +81,13 @@ class Resolver implements IResolver {
     did: string,
     selector?: DocumentSelector,
   ): Promise<IDIDDocument> {
-    const [, address] = did.match(DIDPattern);
-    if (!address) {
+    const match = did.match(DIDPattern);
+    if (!match) {
       throw new Error('Invalid did provided');
     }
+    const address = match[1];
 
-    if (this._document === undefined || this._document.owner !== address) {
+    if (!this._document || this._document.owner !== address) {
       this._document = {
         owner: address,
         topBlock: new utils.BigNumber(0),
@@ -123,7 +124,7 @@ class Resolver implements IResolver {
   async readAttribute(
     did: string,
     selector: DocumentSelector,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication> {
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
     const doc = await this._read(did, selector);
     return query(doc, selector);
   }
@@ -173,13 +174,15 @@ class Resolver implements IResolver {
     return valid;
   }
 
-  async readOwnerPubKey(did: string): Promise<string> {
-    return (await this.readAttribute(
+  async readOwnerPubKey(did: string): Promise<string | undefined> {
+    const selector = {
+      publicKey: { id: `${did}#${KeyTags.OWNER}` },
+    };
+    const pk = await this.readAttribute(
       did,
-      {
-        publicKey: { id: `${did}#${KeyTags.OWNER}` },
-      },
-    ) as IPublicKey)?.publicKeyHex.slice(2);
+      selector,
+    );
+    return pk ? ((pk as IPublicKey).publicKeyHex as string).slice(2) : undefined;
   }
 
   async readFromBlock(
