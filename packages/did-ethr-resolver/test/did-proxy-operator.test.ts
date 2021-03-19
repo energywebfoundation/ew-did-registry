@@ -63,7 +63,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,
@@ -80,7 +80,7 @@ describe('[DID-PROXY-OPERATOR]', function () {
 
   it('setting public key attribute should update public keys of DID document', async () => {
     const attribute = PublicKey;
-    const updateData: IUpdateData = {
+    const updateData = {
       algo: Secp256k1,
       type: VerificationKey2018,
       encoding: HEX,

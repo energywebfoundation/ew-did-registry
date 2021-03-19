@@ -58,3 +58,7 @@ export interface IUpdateData {
   value?: IAttributePayload ;
   delegate?: string;
 }
+
+export type UpdateAttributeData = Required<Omit<IUpdateData, 'delegate'>>;
+
+export type UpdateDelegateData = Required<Omit<IUpdateData, 'value'>>;

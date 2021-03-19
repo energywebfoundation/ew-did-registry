@@ -59,9 +59,9 @@ export interface IResolver {
   readAttribute(
     did: string,
     selector: DocumentSelector,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
 
-  readOwnerPubKey(did: string): Promise<string>;
+  readOwnerPubKey(did: string): Promise<string | undefined>;
 
   /**
    * Reads events starting from specified block

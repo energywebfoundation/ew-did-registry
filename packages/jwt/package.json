@@ -28,6 +28,7 @@
   "dependencies": {
     "@ew-did-registry/keys": "0.1.0",
     "@types/promise.allsettled": "^1.0.3",
+    "@types/jsonwebtoken": "8.5.0",
     "base64url": "^3.0.1",
     "ethereumjs-util": "^7.0.5",
     "jsonwebtoken": "^8.5.1",

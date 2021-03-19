@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { IKeys } from '@ew-did-registry/keys';
@@ -13,13 +12,13 @@ export class ConnectedSigner extends ethers.Signer {
     super();
     const signerProto = Object.getPrototypeOf(signer);
     for (const propName of Object.keys(signerProto)) {
-      const propDesc = Object.getOwnPropertyDescriptor(signerProto, propName);
+      const propDesc = Object.getOwnPropertyDescriptor(signerProto, propName) as PropertyDescriptor;
       const { value, get } = propDesc;
       if ((typeof value === 'function' || typeof get === 'function') && propName !== 'constructor') {
         Object.defineProperty(
           this,
           propName,
-          Object.getOwnPropertyDescriptor(signerProto, propName),
+          Object.getOwnPropertyDescriptor(signerProto, propName) as PropertyDescriptor,
         );
       }
     }

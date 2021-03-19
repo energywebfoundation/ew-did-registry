@@ -8,6 +8,7 @@ import {
   IPublicKey,
   RegistrySettings,
   IdentityOwner,
+  IAttributePayload,
 } from '@ew-did-registry/did-resolver-interface';
 import proxyBuild from '@ew-did-registry/proxyidentity/build/contracts/ProxyIdentity.json';
 import {
@@ -114,7 +115,7 @@ export class ProxyOperator extends Operator {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value);
+    const bytesValue = this._hexify(updateData.value as IAttributePayload);
     const params = [identityAddress, bytesType, bytesValue];
 
     try {
@@ -168,6 +169,7 @@ export class ProxyOperator extends Operator {
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity?: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     overrides?: {
       nonce?: number;
     },
@@ -177,8 +179,8 @@ export class ProxyOperator extends Operator {
     const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = this._hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
-        ? updateData.value
-        : updateData.delegate,
+        ? updateData.value as IAttributePayload
+        : updateData.delegate as string,
     );
     const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
@@ -194,7 +196,7 @@ export class ProxyOperator extends Operator {
       const tx = await this.proxy.sendTransaction(data, this.settings.address, 0);
       const receipt = await tx.wait();
       event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
-      return new BigNumber(event.blockNumber);
+      return new BigNumber(event.blockNumber as number);
     } catch (e) {
       throw new Error(`Can't send transaction: ${e.message}`);
     }
