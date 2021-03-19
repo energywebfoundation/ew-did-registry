@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0 (2021-03-19)
+
+
+### Bug Fixes
+
+* remove prerelease id ([09d4aec](https://github.com/energywebfoundation/ew-did-registry/commit/09d4aec87b2ad3e960d3907c641d6152c118e68b))
+
+
+### Features
+
+* **@ew-did-registry/did-ethr-resolver:** add documentFromLogs ([aa00834](https://github.com/energywebfoundation/ew-did-registry/commit/aa008349867af4430f9805a1b77d3f22b5d3730b))
+* **@ew-did-registry/did-ethr-resolver:** add readFromBlock ([faffd31](https://github.com/energywebfoundation/ew-did-registry/commit/faffd316d655d730db1f61348fa643e7f9e8af4d))
+* **@ew-did-registry/did-ethr-resolver:** update to return block number ([1f1e7d7](https://github.com/energywebfoundation/ew-did-registry/commit/1f1e7d77a24133f0165dc31e053f1524dcbdeabf))
+
+
+
+
+
 # 0.1.0-alpha.0 (2021-02-25)
 
 
