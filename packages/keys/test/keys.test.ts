@@ -31,7 +31,7 @@ describe('[KEYS PACKAGE]', () => {
     const keyPair = Keys.generateKeyPair();
     const keys = new Keys({ publicKey: keyPair.publicKey });
 
-    expect(keys.privateKey).is.equal(undefined);
+    expect(keys.privateKey).is.equal('');
     expect(keys.publicKey).to.match(ECDSA_PATTERNS.secp256k1.PUBLIC_KEY);
   });
 

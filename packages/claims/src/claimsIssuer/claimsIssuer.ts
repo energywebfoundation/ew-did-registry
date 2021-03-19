@@ -71,9 +71,8 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     claim.signer = this.did;
     Object.entries(claim.claimData).forEach(([key, value]) => {
       const decryptedField = decrypt(
-        this.keys.privateKey,
+        this.keys.privateKey as string,
         Buffer.from(value as string, 'hex'),
-        // Buffer.from((value as { data: Array<number> }).data),
       );
       const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
       const PK = g.mult(new bn(fieldHash));

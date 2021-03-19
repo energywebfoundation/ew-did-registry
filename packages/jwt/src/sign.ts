@@ -9,21 +9,20 @@ const keyEncoder = new KeyEncoder('secp256k1');
 const { keccak256, arrayify } = utils;
 
 export function createSignWithKeys(keys: IKeys) {
-  const sign = async (
+  return async (
     payload: string | JwtPayload,
     options?: JwtOptions,
   ): Promise<string> => new Promise(
     (resolve, reject) => {
       const pemPrivateKey = keyEncoder.encodePrivate(keys.privateKey, 'raw', 'pem');
 
-      jwt.sign(payload, pemPrivateKey, options, (error: Error, token: string) => {
+      jwt.sign(payload, pemPrivateKey, options || {}, (error, token) => {
         if (error) reject(error);
 
         resolve(token);
       });
     },
   );
-  return sign;
 }
 
 export type JwtOptions = {
@@ -33,7 +32,7 @@ export type JwtPayload =
   { [key: string]: string | object } & { iss?: string; sub?: string; iat?: number };
 
 export function createSignWithEthersSigner(signer: Signer) {
-  const sign = async (
+  return async (
     payload: string | JwtPayload,
     options?: JwtOptions,
   ): Promise<string> => {
@@ -58,5 +57,4 @@ export function createSignWithEthersSigner(signer: Signer) {
     const encodedSignature = base64url(signature);
     return `${encodedHeader}.${encodedPayload}.${encodedSignature}`;
   };
-  return sign;
 }

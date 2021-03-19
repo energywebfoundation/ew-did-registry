@@ -12,7 +12,7 @@ export class ProxyManager {
 
   private provider: providers.Provider;
 
-  constructor(private erc1056: string, private erc1155: string, private owner: Signer) {
+  constructor(private erc1056: string, private erc1155: string, private owner: Required<Signer>) {
     this.proxyFactory = new ContractFactory(proxyAbi, proxyBytecode, this.owner);
     this.provider = owner.provider;
   }
@@ -49,7 +49,7 @@ export class ProxyManager {
     }
   }
 
-  connect(newowner: Signer): ProxyManager {
+  connect(newowner: Required<Signer>): ProxyManager {
     return new ProxyManager(this.erc1056, this.erc1155, newowner);
   }
 
@@ -77,7 +77,7 @@ export class ProxyManager {
     return proxies;
   }
 
-  async proxyById(serial: string): Promise<Contract> {
+  async proxyById(serial: string): Promise<Contract | null> {
     for await (const proxy of await this._allProxies()) {
       if (await proxy.serial() === serial) {
         return proxy;
@@ -86,7 +86,10 @@ export class ProxyManager {
     return null;
   }
 
-  static async mapProxiesBy(proxies: Contract[], fn: (proxy: Contract) => Promise<any>) {
+  static async mapProxiesBy(
+    proxies: Contract[],
+    fn: (proxy: Contract) => Promise<[]>,
+  ): Promise<[][]> {
     const mapped = [];
     for await (const proxy of proxies) {
       mapped.push(await fn(proxy));

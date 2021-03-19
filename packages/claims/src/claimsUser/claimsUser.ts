@@ -12,6 +12,8 @@ import {
   DIDAttribute,
   Encoding,
   PubKeyType,
+  KeyTags,
+  IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
@@ -113,11 +115,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: privateData,
     };
-    const issuerDocument = await this.document.read(issuer);
-    const issuerPK = issuerDocument
-      .publicKey
-      .find((pk: { type: string }) => pk.type === 'Secp256k1veriKey')
-      .publicKeyHex;
+    const issuerPK = (await this.document.readAttribute(
+      {
+        publicKey:
+          { id: `${issuer}#${KeyTags.OWNER}` },
+
+      },
+      issuer,
+    ) as IPublicKey).publicKeyHex as string;
     Object.entries(privateData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;

@@ -60,14 +60,14 @@ export interface IDIDDocumentLite {
    */
   readAttribute(
     selector: DocumentSelector, did?: string,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication>;
+  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
 
   /**
    * Document owner public key
    *
    * @param {string} did
    */
-  ownerPubKey(did?: string): Promise<string>;
+  ownerPubKey(did?: string): Promise<string | undefined>;
 
   lastBlock(did?: string): Promise<utils.BigNumber>;
 

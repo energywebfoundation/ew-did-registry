@@ -15,7 +15,7 @@ chai.use(chaiAsPromised);
 chai.use(assetArray);
 chai.should();
 
-describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
+describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function proxyManagerTests() {
   this.timeout(0);
   const provider = new JsonRpcProvider('http://localhost:8544');
   const oem = provider.getSigner(0);
@@ -103,7 +103,7 @@ describe('[PROXY IDENTITY PACKAGE / PROXY MANAGER]', function () {
       (p) => p.serial(),
     ))
       .to.be.equalTo([id1, id3, id4]);
-    expect(await (await pm.proxyById(id2)).owner()).equal(await oem.getAddress());
+    expect(await (await pm.proxyById(id2) as Contract).owner()).equal(await oem.getAddress());
   });
 
   it('owner can be changed batched', async () => {

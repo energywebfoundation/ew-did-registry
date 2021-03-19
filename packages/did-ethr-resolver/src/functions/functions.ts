@@ -1,5 +1,3 @@
-/* eslint-disable no-loop-func */
-/* eslint-disable no-empty */
 import {
   Contract, ethers, providers, utils,
 } from 'ethers';
@@ -7,14 +5,15 @@ import {
 import {
   IDIDDocument,
   IDIDLogData,
-  IHandlers,
   IPublicKey,
   IAttributePayload,
   IServiceEndpoint,
-  ISmartContractEvent,
   RegistrySettings,
   IAuthentication,
   DocumentSelector,
+  AttributeChangedEvent,
+  DelegateChangedEvent,
+  DidEventNames,
 } from '@ew-did-registry/did-resolver-interface';
 
 import { attributeNamePattern, DIDPattern } from '../constants';
@@ -29,7 +28,7 @@ import { attributeNamePattern, DIDPattern } from '../constants';
  * @param block
  */
 const handleDelegateChange = (
-  event: ISmartContractEvent,
+  event: DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
   validTo: utils.BigNumber,
@@ -75,111 +74,98 @@ const handleDelegateChange = (
  * @param block
  */
 const handleAttributeChange = (
-  event: ISmartContractEvent,
+  event: AttributeChangedEvent,
   did: string,
   document: IDIDLogData,
   validTo: utils.BigNumber,
   block: number,
 ): IDIDLogData => {
-  const [, identity] = did.match(DIDPattern);
-  if (!identity) {
+  let match = did.match(DIDPattern);
+  if (!match) {
     throw new Error('Invalid DID');
   }
+  const identity = match[1];
   const attributeType = event.values.name;
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
-  const match = stringAttributeType.match(attributeNamePattern);
+  match = stringAttributeType.match(attributeNamePattern);
   if (match) {
     const section = match[1];
     const algo = match[2];
     const type = match[4];
     const encoding = match[6];
-    switch (section) {
-      case 'pub':
-        // eslint-disable-next-line no-case-declarations
-        let publicKeysPayload: IAttributePayload = null;
-        try {
-          const parsed = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
-          if (typeof parsed === 'object') {
-            publicKeysPayload = parsed;
-          }
-        } catch (e) { }
-        if (!publicKeysPayload) {
+    if (section === 'pub') {
+      let publicKeysPayload: IAttributePayload;
+      try {
+        const parsed = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        if (typeof parsed === 'object') {
+          publicKeysPayload = parsed;
+        } else {
           return document;
         }
-        // eslint-disable-next-line no-case-declarations
-        const pk: IPublicKey = {
-          // method should be defined from did provided
-          id: `${did}#${publicKeysPayload.tag}`,
-          type: `${algo}${type}`,
-          controller: identity,
-          validity: validTo,
-          block,
-        };
-        if (document.publicKey[pk.id] === undefined
-          || document.publicKey[pk.id].block < block) {
-          switch (encoding) {
-            case null:
-            case undefined:
-            case 'hex':
-              pk.publicKeyHex = publicKeysPayload.publicKey;
-              break;
-            case 'base64':
-              pk.publicKeyBase64 = Buffer.from(
-                event.values.value.slice(2),
-                'hex',
-              ).toString('base64');
-              break;
-            case 'pem':
-              pk.publicKeyPem = Buffer.from(
-                event.values.value.slice(2),
-                'hex',
-              ).toString();
-              break;
-            default:
-              break;
-          }
-          document.publicKey[pk.id] = pk;
-        }
+      } catch (e) {
         return document;
-      case 'svc':
-        // eslint-disable-next-line no-case-declarations
-        const servicePoint: IServiceEndpoint = JSON.parse(Buffer.from(
-          event.values.value.slice(2),
-          'hex',
-        ).toString());
-
-        servicePoint.validity = validTo;
-        servicePoint.block = block;
-
-        if (document.service[servicePoint.id] === undefined
-          || document.service[servicePoint.id].block < block) {
-          document.service[servicePoint.id] = servicePoint;
-
-          return document;
+      }
+      const pk: IPublicKey = {
+        id: `${did}#${publicKeysPayload.tag}`,
+        type: `${algo}${type}`,
+        controller: identity,
+        validity: validTo,
+        block,
+      };
+      if ((document.publicKey[pk.id] === undefined
+        || document.publicKey[pk.id].block < block)) {
+        switch (encoding) {
+          case null:
+          case undefined:
+          case 'hex':
+            pk.publicKeyHex = publicKeysPayload.publicKey;
+            break;
+          case 'base64':
+            pk.publicKeyBase64 = Buffer.from(
+              event.values.value.slice(2),
+              'hex',
+            ).toString('base64');
+            break;
+          case 'pem':
+            pk.publicKeyPem = Buffer.from(
+              event.values.value.slice(2),
+              'hex',
+            ).toString();
+            break;
+          default:
+            break;
         }
-        break;
-      default:
-        break;
+        document.publicKey[pk.id] = pk;
+      }
+      return document;
     }
-  } else if (document.attributes.get(stringAttributeType) === undefined
-    || (document.attributes.get(stringAttributeType)).block < block) {
+    if (section === 'svc') {
+      const servicePoint: IServiceEndpoint = JSON.parse(Buffer.from(
+        event.values.value.slice(2),
+        'hex',
+      ).toString());
+
+      servicePoint.validity = validTo;
+      servicePoint.block = block;
+
+      if ((document.service[servicePoint.id] === undefined
+        || document.service[servicePoint.id].block < block)) {
+        document.service[servicePoint.id] = servicePoint;
+      }
+      return document;
+    }
+    return document;
+  }
+  const attrBlock = document.attributes.get(stringAttributeType)?.block as number;
+  if (!attrBlock || attrBlock < block) {
     const attributeData = {
       attribute: Buffer.from(event.values.value.slice(2), 'hex').toString(),
       validity: validTo,
       block,
     };
     document.attributes.set(stringAttributeType, attributeData);
-    return document;
   }
   return document;
-};
-
-/**
- * Simply a handler for delegate vs attribute change
- */
-const handlers: IHandlers = {
-  DIDDelegateChanged: handleDelegateChange,
-  DIDAttributeChanged: handleAttributeChange,
 };
 
 /**
@@ -193,8 +179,7 @@ const handlers: IHandlers = {
  * @param block
  */
 const updateDocument = (
-  event: ISmartContractEvent,
-  eventName: string,
+  event: AttributeChangedEvent | DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
   block: number,
@@ -202,10 +187,15 @@ const updateDocument = (
   const { validTo } = event.values;
 
   if (validTo) {
-    const handler = handlers[eventName];
-    return handler(event, did, document, validTo, block);
+    switch (event.name) {
+      case DidEventNames.AttributeChanged:
+        return handleAttributeChange(event, did, document, validTo, block);
+      case DidEventNames.DelegateChanged:
+        return handleDelegateChange(event, did, document, validTo, block);
+      default:
+        return document;
+    }
   }
-
   return document;
 };
 
@@ -229,17 +219,16 @@ const getEventsFromBlock = (
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
   const [, , identity] = did.split(':');
-  const topics = [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`];
 
   provider.getLogs({
     address,
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
-    topics,
+    topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
   }).then((log) => {
-    const event: ISmartContractEvent = contractInterface.parseLog(log[0]) as ISmartContractEvent;
-    const eventName = event.name;
-    updateDocument(event, eventName, did, document, block.toNumber());
+    const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
+      DelegateChangedEvent;
+    updateDocument(event, did, document, block.toNumber());
 
     resolve(event.values.previousChange);
   }).catch((error) => {
@@ -249,13 +238,17 @@ const getEventsFromBlock = (
 
 export const query = (
   document: IDIDDocument, selector: DocumentSelector,
-): IPublicKey | IServiceEndpoint | IAuthentication => {
+): IPublicKey | IServiceEndpoint | IAuthentication | undefined => {
   const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
-  const attr = Object.values(document[attrName])
-    .find((a: IPublicKey | IServiceEndpoint | IAuthentication) => Object
-      .entries(selector[attrName])
-      .every(([prop, val]) => a[prop] && a[prop] === val));
-  return attr;
+  const attributes = Object.values(document[attrName]);
+  if (attributes.length === 0) {
+    return undefined;
+  }
+  const filter = Object.entries(
+    selector[attrName] as
+    Partial<IPublicKey> | Partial<IAuthentication> | Partial<IServiceEndpoint>,
+  );
+  return attributes.find((a) => filter.every(([prop, val]) => a[prop] && a[prop] === val));
 };
 
 /**
@@ -270,7 +263,7 @@ export const query = (
 export const fetchDataFromEvents = async (
   did: string,
   document: IDIDLogData,
-  registrySettings: RegistrySettings,
+  registrySettings: Required<RegistrySettings>,
   contract: Contract,
   provider: providers.Provider,
   selector?: DocumentSelector,
@@ -338,6 +331,7 @@ export const wrapDidDocument = (
     {
       type: 'owner',
       publicKey: `${did}#owner`,
+      validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
     },
   ];
 
