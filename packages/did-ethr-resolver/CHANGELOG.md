@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.3.0...v0.4.0) (2021-03-22)
+
+
+### Features
+
+* **@ew-did-registry/proxyidenity:** timestamp in events ([3826a35](https://github.com/energywebfoundation/ew-did-registry/commit/3826a354193da67dc3260a0add7789cfdba02689))
+* **@ew-did-registry/proxyidentity:** send tx through identity ([55e21e6](https://github.com/energywebfoundation/ew-did-registry/commit/55e21e6b368d536a2cf455726d5f8aaabac7a62d))
+* **@ew-did-registry/proxyidentity:** test identity transfer ([6026bc1](https://github.com/energywebfoundation/ew-did-registry/commit/6026bc18c1e60b52194ceadaa8205a16d3186346))
+
+
+
+
+
 # [0.3.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.2.0...v0.3.0) (2021-03-19)
 
 

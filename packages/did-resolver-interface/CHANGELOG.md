@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.3.0...v0.4.0) (2021-03-22)
+
+
+### Features
+
+* **@ew-did-registry/proxyidenity:** timestamp in events ([9930171](https://github.com/energywebfoundation/ew-did-registry/commit/99301719f5d98449085735b8cbc374f7bc8e6fdc))
+
+
+
+
+
 # [0.3.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.2.0...v0.3.0) (2021-03-19)
 
 
