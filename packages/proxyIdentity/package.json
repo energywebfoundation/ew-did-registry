@@ -29,6 +29,7 @@
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",
     "multi-token-standard": "^0.8.13",
-    "run-with-testrpc": "0.3.1"
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.9.1"
   }
 }
