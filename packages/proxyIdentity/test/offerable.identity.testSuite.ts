@@ -8,8 +8,9 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 chai.should();
 
+const emptyAddress = `0x${'0'.repeat(40)}`;
+
 export function identityTestSuite(): void {
-  const id = '123';
   let identity: Contract;
   let identityFactory: ContractFactory;
   let manager: Contract;
@@ -26,7 +27,7 @@ export function identityTestSuite(): void {
 
   describe('[Identity Creation]', async () => {
     before(async () => {
-      identity = await identityFactory.deploy(id, ownerAddr, manager.address);
+      identity = await identityFactory.deploy(ownerAddr, manager.address);
     });
 
     it('Identity should notify manager when created', async () => {
@@ -55,7 +56,7 @@ export function identityTestSuite(): void {
     });
 
     beforeEach(async () => {
-      identity = await identityFactory.deploy(id, ownerAddr, manager.address);
+      identity = await identityFactory.deploy(ownerAddr, manager.address);
 
       await identity.connect(owner).functions.offer(receiverAddr);
     });
@@ -79,7 +80,7 @@ export function identityTestSuite(): void {
         });
       });
 
-      await identity.connect(receiver).accept();
+      await identity.connect(receiver).acceptOffer();
 
       expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
       expect(await identity.owner()).equal(receiverAddr);
@@ -87,13 +88,13 @@ export function identityTestSuite(): void {
 
     it('Rejecting offer should remain identity owner', async () => {
       const event = new Promise((resolve) => {
-        manager.on('OfferRejected', (offered, offeredTo) => {
-          manager.removeAllListeners('OfferRejected');
+        manager.on('IdentityOfferRejected', (offered, offeredTo) => {
+          manager.removeAllListeners('IdentityOfferRejected');
           resolve({ offered, offeredTo });
         });
       });
 
-      await identity.connect(receiver).reject();
+      await identity.connect(receiver).rejectOffer();
 
       expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
       expect(await identity.owner()).equal(ownerAddr);
@@ -102,13 +103,21 @@ export function identityTestSuite(): void {
     it('Can\'t accept identity offered to other', async () => {
       const nonReceiver = provider.getSigner(3);
 
-      return (identity.connect(nonReceiver).accept()).should.be.rejected;
+      return (identity.connect(nonReceiver).acceptOffer()).should.be.rejected;
     });
 
     it('Can\'t reject identity offered to other', async () => {
       const nonReceiver = provider.getSigner(3);
 
-      return (identity.connect(nonReceiver).reject()).should.be.rejected;
+      return (identity.connect(nonReceiver).rejectOffer()).should.be.rejected;
+    });
+
+    it('Offer can be canceled', async () => {
+      expect(await identity.offeredTo()).equal(receiverAddr);
+
+      await identity.connect(owner).cancelOffer();
+
+      expect(await identity.offeredTo()).equal(emptyAddress);
     });
   });
 }

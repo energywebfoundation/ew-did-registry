@@ -5,15 +5,13 @@ import "./IdentityManager.sol";
 
 contract OfferableIdentity {
   address public owner;
-  string public id;
   address manager;
 
   address public offeredTo;
 
   event TransactionSent(bytes data, address to, uint256 value);
 
-  constructor(string memory _id, address _owner, address _manager) public {
-    id = _id;
+  constructor(address _owner, address _manager) {
     owner = _owner;
     manager = _manager;
     IdentityManager(manager).identityCreated(address(this), owner);
@@ -35,15 +33,21 @@ contract OfferableIdentity {
     IdentityManager(manager).identityOffered(address(this), offeredTo);
   }
 
-  function accept() external isOfferedTo {
+  function acceptOffer() external isOfferedTo {
     owner = offeredTo;
     IdentityManager(manager).identityAccepted(address(this), offeredTo);
     closeOffer();
   }
 
-  function reject() external isOfferedTo {
+  function rejectOffer() external isOfferedTo {
     IdentityManager(manager).identityRejected(address(this), offeredTo);
     closeOffer();
+  }
+  
+  function cancelOffer() external isOwner {
+    closeOffer();
+    
+    IdentityManager(manager).identityOfferCanceled(address(this), offeredTo);
   }
 
   function closeOffer() internal {
@@ -59,7 +63,7 @@ contract OfferableIdentity {
     uint256 len = data.length;
     // solium-disable-next-line security/no-inline-assembly
     assembly {
-      success := call(gas, to, value, add(data, 0x20), len, 0, 0)
+      success := call(gas(), to, value, add(data, 0x20), len, 0, 0)
     }
     emit TransactionSent(_data, to, value);
   }

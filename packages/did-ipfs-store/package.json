@@ -28,5 +28,9 @@
     "@ew-did-registry/did-store-interface": "0.2.0",
     "bl": "^4.0.2",
     "ipfs-http-client": "^43.0.0"
+  },
+  "devDependencies": {
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.9.1"    
   }
 }

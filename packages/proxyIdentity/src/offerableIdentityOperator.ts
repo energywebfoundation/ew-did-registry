@@ -86,7 +86,7 @@ export class OfferableIdenitytOperator extends Operator {
   }
 
   protected async _sendTransaction(
-    method: Function,
+    method: (...args: (string | number | Record<string, unknown>)[]) => Promise<void>,
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,

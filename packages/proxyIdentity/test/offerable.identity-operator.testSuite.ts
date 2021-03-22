@@ -30,7 +30,6 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let operator: IOperator;
   const validity = 10 * 60 * 1000;
   let did: string;
-  const id = '123';
   let identityFactory: ContractFactory;
   let identity: Contract;
   let manager: Contract;
@@ -47,7 +46,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     owner = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
     ownerAddr = await owner.getAddress();
 
-    identity = await identityFactory.deploy(id, ownerAddr, manager.address);
+    identity = await identityFactory.deploy(ownerAddr, manager.address);
     did = `did:${Methods.Erc1056}:${identity.address}`;
 
     await provider.getSigner(0).sendTransaction({
