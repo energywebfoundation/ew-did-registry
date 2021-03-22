@@ -21,7 +21,7 @@ deploy:
     on:
       branch: development
   - provider: script
-    script: "git checkout master && npm run publish:release && git checkout development && git merge origin/master && git push"
+    script: "git checkout master && npm run publish:release && git checkout development && git merge origin/master && git push origin development"
     skip_cleanup: true
     on:
       branch: master

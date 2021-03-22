@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.2.0...v0.3.0) (2021-03-19)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/claims:** alias sjcl-complete ([74230c5](https://github.com/energywebfoundation/ew-did-registry/commit/74230c54870882bf447f0aa81a62a6ca64b87324))
+* **@ew-did-registry/did-resolver-interface:** add undef to optional props ([b6d8d2b](https://github.com/energywebfoundation/ew-did-registry/commit/b6d8d2b6cd5d2bfbdc6ba8d69986a0f40f7c8829))
+* **@ew-did-registry/jwt:** add jsonwebtoken types ([9698864](https://github.com/energywebfoundation/ew-did-registry/commit/969886441910705a2bf9ccead6bf31dbfe8f12dc))
+
+
+### Features
+
+* **@ew-did-registry/did-ethr-resolver:** compile in strict mode ([4315227](https://github.com/energywebfoundation/ew-did-registry/commit/4315227d704364211ed66864eac3bc6a84262681))
+
+
+
+
+
 # 0.2.0 (2021-03-19)
 
 
