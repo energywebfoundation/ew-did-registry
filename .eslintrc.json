@@ -44,8 +44,9 @@
     "no-param-reassign": 0,
     "space-before-function-paren": 0,
     "no-unused-expressions": 0,
-    "import/no-extraneous-dependencies": "error",
-    "chai-friendly/no-unused-expressions": 2
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "chai-friendly/no-unused-expressions": 2,
+    "func-names": "off"
   },
   "settings": {
     "import/resolver": {

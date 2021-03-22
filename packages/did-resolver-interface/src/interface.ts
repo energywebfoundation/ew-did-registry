@@ -115,5 +115,9 @@ export interface IOperator extends IResolver {
 
   revokeDelegate(did: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
 
-  revokeAttribute(did: string, attributeType: DIDAttribute, updateData: IUpdateData): Promise<boolean>;
+  revokeAttribute(
+    did: string,
+    attributeType: DIDAttribute,
+    updateData: IUpdateData
+  ): Promise<boolean>;
 }

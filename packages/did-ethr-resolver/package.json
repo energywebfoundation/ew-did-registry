@@ -30,7 +30,10 @@
     "@ew-did-registry/did": "0.3.0",
     "@ew-did-registry/did-resolver-interface": "0.3.0",
     "@ew-did-registry/keys": "0.3.0",
-    "@ew-did-registry/proxyidentity": "0.3.0",
     "ethers": "4.0.45"
+  },
+  "devDependencies": {
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.9.1"
   }
 }
