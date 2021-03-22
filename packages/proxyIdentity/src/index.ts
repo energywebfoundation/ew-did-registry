@@ -1,5 +1,5 @@
-import * as proxyBuild from '../build/contracts/OfferableIdentity.json';
-import * as erc1056Build from '../constants/ERC1056.json';
+import * as offerableIdentity from '../build/contracts/OfferableIdentity.json';
+import * as identityManager from '../build/contracts/IdentityManager.json';
 
-export { proxyBuild, erc1056Build };
+export { offerableIdentity, identityManager };
 export { OfferableIdenitytOperator as ProxyOperator } from './offerableIdentityOperator';
