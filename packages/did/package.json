@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/did",
-  "version": "1.0.0",
+  "version": "0.4.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The interface of a Decentralised Identity",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,7 +23,5 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-  }
+  "license": "GPL-3.0-or-later"
 }

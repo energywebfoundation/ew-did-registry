@@ -1,6 +1,9 @@
 {
   "name": "@ew-did-registry/keys",
-  "version": "1.0.0",
+  "version": "0.4.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "The package provides basic key management functionality, such as generation of key pairs, signing, and verification",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,7 +27,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "bn.js": "5.2.0",
     "eciesjs": "^0.3.4",
-    "elliptic": "^6.5.2"
+    "elliptic": "^6.5.2",
+    "ethers": "4.0.45"
   }
 }

@@ -1,19 +1,27 @@
 language: node_js
-node_js: 10.18.1
+node_js: 11.15.0
+before_deploy:
+  - git config --global user.email ${GITHUB_EMAIL}
+  - git config --global user.name ${GITHUB_USER}
+  - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
+  - git fetch origin master:master
+  - git fetch origin development:development
+  - git reset --hard
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 install:
   - npm install
   - npm run setup
   - npm run build
-  - npm run browserTest:build
 script:
   - npm run test-rpc
-  - npm run browserTest:run
 deploy:
-  provider: npm
-  email: '$NPM_EMAIL'
-  api_token: '$NPM_API_TOKEN'
-  ffile_glob: true
-  file: build/*
-  skip_cleanup: true
-  on:
-    branch: development
+  - provider: script
+    script: "git checkout development && npm run publish:canary"
+    skip_cleanup: true
+    on:
+      branch: development
+  - provider: script
+    script: "git checkout master && npm run publish:release && git checkout development && git merge origin/master && git push origin development"
+    skip_cleanup: true
+    on:
+      branch: master

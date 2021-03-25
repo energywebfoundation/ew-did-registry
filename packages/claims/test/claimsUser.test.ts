@@ -1,47 +1,62 @@
+import { decrypt } from 'eciesjs';
 import chai from 'chai';
-import {Keys} from '@ew-did-registry/keys';
-import {Operator, Resolver} from '../../did-ethr-resolver';
-import {IOperator, IResolver,} from '../../did-resolver-interface';
-import {Methods} from '../../did';
-import {decrypt} from 'eciesjs';
-import {ClaimsUser} from '../src/claimsUser';
-import {IPrivateClaim, IProofClaim} from '../src/models';
-import {getSettings} from '../../../tests/init-ganache';
-import {IClaimsUser} from '../src';
+import { Keys } from '@ew-did-registry/keys';
+import { Methods } from '@ew-did-registry/did';
+import {
+  Operator, signerFromKeys, walletPubKey, getProvider, withKey, withProvider,
+} from '@ew-did-registry/did-ethr-resolver';
+import { DidStore } from '@ew-did-registry/did-ipfs-store';
+import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import {
+  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
+} from '../src';
+import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.should();
 
+const claimData = {
+  name: 'John',
+};
+
 describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   this.timeout(0);
-  const user = new Keys({
-    privateKey: '42f9eb48de908412da91f0e7b6d8f987db91cbf7bf2639c53394b746d91d2382',
-    publicKey: '0391feb03b9fadd2dfb9dfe7d3c53cd4a64094bd7ffd19beb8c46efbeaf2724f32',
-  });
-  const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
+  const userKeys = new Keys();
+  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
+  const userAddress = userKeys.getAddress();
   const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
-  const issuer = new Keys({
-    privateKey: '945d90baf66123693be97edff663d5c54f5d517d40928a9c0caa37dba3a0b042',
-    publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
-  });
-  const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B';
+
+  const issuerKeys = new Keys();
+  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
+  const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
-  let userOperator: IOperator;
-  let issuerOperator: IOperator;
-  let resolver: IResolver;
   let userClaims: IClaimsUser;
 
   before(async () => {
-    const resolverSettings = await getSettings([issuerAddress, userAddress]);
-    console.log(`registry: ${resolverSettings.address}`);
+    const registry = await deployRegistry([issuerAddress, userAddress]);
+    console.log(`registry: ${registry}`);
 
-    userOperator = new Operator(user, resolverSettings);
-    issuerOperator = new Operator(issuer, resolverSettings);
-    resolver = new Resolver(resolverSettings);
-    userClaims = new ClaimsUser(user, resolver);
+    const store = new DidStore(await spawnIpfsDaemon());
+    const userDoc = new DIDDocumentFull(
+      userDdid,
+      new Operator(
+        user,
+        { address: registry },
+      ),
+    );
+    userClaims = new ClaimsUser(user, userDoc, store);
 
-    await userOperator.create();
-    await issuerOperator.create();
+    const issuerDoc = new DIDDocumentFull(
+      issuerDid,
+      new Operator(issuer, { address: registry }),
+    );
+
+    await userDoc.create();
+    await issuerDoc.create();
+  });
+
+  after(async () => {
+    await shutDownIpfsDaemon();
   });
 
   it('createPublicClaim should create token with claim data', async () => {
@@ -49,7 +64,10 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true });
+    (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
+    const claim = await userClaims.jwt.verify(
+      token, userClaims.keys.publicKey, { noTimestamp: true },
+    );
     claim.should.deep.include({
       did: userDdid,
       signer: userDdid,
@@ -57,13 +75,27 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     });
   });
 
+  it('creates and verifies 100 claims', async () => {
+    const claims: { token: string; data: object }[] = [];
+    for (let i = 0; i < 100; i++) {
+      const data = { name: 'John', lastName: 'Doe', index: i };
+      // eslint-disable-next-line no-await-in-loop
+      claims.push({ token: (await userClaims.createPublicClaim(data)), data });
+    }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { token, data } of claims) {
+      // eslint-disable-next-line no-await-in-loop
+      (await userClaims.verifyPublicClaim(token, data)).should.be.true;
+    }
+  });
+
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
     const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
-    const claim: IPrivateClaim = await userClaims.jwt.decode(token, { algorithm: 'ES256', noTimestamp: true }) as IPrivateClaim;
+    const claim = userClaims.jwt.decode(token, { noTimestamp: true }) as IPrivateClaim;
     const decrypted = decrypt(
-      issuer.privateKey,
-      Buffer.from(claim.claimData.secret, 'hex'),
+      issuerKeys.privateKey,
+      Buffer.from(claim.claimData.secret as string, 'hex'),
     );
     decrypted.toString().should.equal(saltedFields.secret);
   });
@@ -72,9 +104,17 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const claimUrl = 'http://test.com';
     const proofData = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, proofData);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { algorithm: 'ES256', noTimestamp: true }) as IProofClaim;
+    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { noTimestamp: true }) as IProofClaim;
     claim.should.include({ did: userDdid, signer: userDdid, claimUrl });
     claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
     claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
+  });
+
+  it('self signed claim should be verified', async () => {
+    const claim = await userClaims.createPublicClaim(claimData);
+
+    const url = await userClaims.publishPublicClaim(claim, claimData);
+
+    return userClaims.verify(url).should.be.fulfilled;
   });
 });

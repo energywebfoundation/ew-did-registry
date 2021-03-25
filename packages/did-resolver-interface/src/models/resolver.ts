@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { utils, Signer } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -15,7 +15,7 @@ export enum ProviderTypes {
  * Hence, 'ethers' documentation is a good point to check the available options,
  * if one wants to extend the library.
  */
-export interface IProvider {
+export interface ProviderSettings {
   type: ProviderTypes;
   uriOrInfo?: string | utils.ConnectionInfo;
   path?: string;
@@ -26,11 +26,21 @@ export interface IProvider {
  * Resolver requires provider, as well as application binary interface and
  * address of the smart contract representing DID Registry
  */
-export interface IResolverSettings {
-  provider?: IProvider;
+export interface RegistrySettings {
+  address: string;
   abi?: Array<string | utils.ParamType>;
-  address?: string;
-  method: Methods;
+  method?: Methods;
+}
+
+export interface IServiceEndpoint {
+  id: string;
+  type: string;
+  serviceEndpoint: string;
+  description?: string;
+  validity: utils.BigNumber;
+  block: number;
+  hash?: string; // hash of the content located at service endpoint
+  [key: string]: string | utils.BigNumber | number | undefined;
 }
 
 /**
@@ -45,20 +55,10 @@ export interface IDIDDocument {
   publicKey: IPublicKey[];
   authentication: Array<IAuthentication | string>;
   delegates?: string[];
-  service?: IServiceEndpoint[];
+  service: IServiceEndpoint[];
   created?: string;
   updated?: string;
   proof?: ILinkedDataProof;
-}
-
-export interface IServiceEndpoint {
-  id: string;
-  type: string;
-  serviceEndpoint: string;
-  description?: string;
-  validity?: utils.BigNumber;
-  block?: number;
-  [key: string]: string | utils.BigNumber | number;
 }
 
 export interface IPublicKey {
@@ -72,17 +72,17 @@ export interface IPublicKey {
   publicKeyPem?: string;
   publicKeyJwk?: string;
   publicKeyMultibase?: string;
-  validity?: utils.BigNumber;
-  block?: number;
-  [key: string]: string | number | utils.BigNumber;
+  validity: utils.BigNumber;
+  block: number;
+  [key: string]: string | number | utils.BigNumber | undefined;
 }
 
 export interface IAuthentication {
   type: string;
   publicKey: string;
-  validity?: utils.BigNumber;
+  validity: utils.BigNumber;
   block?: number;
-  [key: string]: string | utils.BigNumber | number;
+  [key: string]: string | utils.BigNumber | number | undefined;
 }
 
 export interface ILinkedDataProof {
@@ -92,23 +92,41 @@ export interface ILinkedDataProof {
   signatureValue: string;
 }
 
+export enum DidEventNames {
+  AttributeChanged = 'DIDAttributeChanged',
+  DelegateChanged = 'DIDDelegateChanged'
+}
+
 /**
  * This interface represents the structure of event emitted by ERC1056 compliant smart contract.
  */
 export interface ISmartContractEvent {
-  name: string;
+  name: DidEventNames;
   signature: string;
   topic: string;
+  value?: string;
+}
+
+export interface AttributeChangedEvent extends ISmartContractEvent {
+  name: DidEventNames.AttributeChanged;
+  values: {
+    identity: string;
+    name: string;
+    value: string;
+    validTo: utils.BigNumber;
+    previousChange: utils.BigNumber;
+  };
+}
+
+export interface DelegateChangedEvent extends ISmartContractEvent {
+  name: DidEventNames.DelegateChanged;
   values: {
     identity: string;
     delegateType: string;
     delegate: string;
     validTo: utils.BigNumber;
-    previousChange: object;
-    name?: string;
-    value?: string;
+    previousChange: utils.BigNumber;
   };
-  value?: string;
 }
 
 /**
@@ -124,23 +142,11 @@ export interface IDIDLogData {
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];
-  serviceEndpoints?: { [key: string]: IServiceEndpoint };
+  service: { [key: string]: IServiceEndpoint };
   created?: string;
   updated?: string;
   proof?: ILinkedDataProof;
-  attributes?: Map<string, { [key: string]: string | number | object }>;
-}
-
-/**
- * This interface simply specifies the handler functions for different event types
- * in order to parse the data from the events in the blockchain.
- */
-export interface IHandlers {
-  [key: string]: (event: ISmartContractEvent,
-    etherAddress: string,
-    document: IDIDLogData,
-    validTo: utils.BigNumber,
-    block: number) => IDIDLogData;
+  attributes: Map<string, { [key: string]: string | number | unknown }>;
 }
 
 /**
@@ -151,3 +157,14 @@ export enum DelegateTypes {
   authentication = 'sigAuth',
   verification = 'veriKey',
 }
+
+export interface IdentityOwner extends Signer {
+  publicKey: string;
+  privateKey?: string;
+}
+
+export type DocumentSelector = Partial<{
+  publicKey: Partial<IPublicKey>;
+  service: Partial<IServiceEndpoint>;
+  authentication: Partial<IAuthentication>;
+}>

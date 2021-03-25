@@ -1,22 +1,15 @@
+/* eslint-disable no-restricted-syntax */
 import * as jwt from 'jsonwebtoken';
-import KeyEncoder from 'key-encoder';
+import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
-
-const keyEncoder = new KeyEncoder('secp256k1');
+import {
+  createSignWithEthersSigner, createSignWithKeys, JwtOptions, JwtPayload,
+} from './sign';
+import { verificationMethods } from './verify';
 
 class JWT implements IJWT {
-  private readonly _keys: IKeys;
-
-  /**
-   * Key pair has to be passed on construction to JWT
-   * @param {Keys} keys
-   */
-  constructor(keys: IKeys) {
-    this._keys = keys;
-  }
-
   /**
    * Sign payload and return JWT
    *
@@ -37,26 +30,26 @@ class JWT implements IJWT {
    *   console.log(e);
    * }
    * ```
-   *
    * @param {object} payload
    * @param {object} options
    * @returns {Promise<string>}
    */
-  async sign(
-    payload: string | { [key: string]: string | object},
-    options?: object,
-  ): Promise<string> {
-    return new Promise(
-      (resolve, reject) => {
-        const pemPrivateKey = keyEncoder.encodePrivate(this._keys.privateKey, 'raw', 'pem');
+  public sign: (
+    payload: string | JwtPayload,
+    options?: JwtOptions) => Promise<string>;
 
-        jwt.sign(payload, pemPrivateKey, options, (error: Error, token: string) => {
-          if (error) reject(error);
-
-          resolve(token);
-        });
-      },
-    );
+  /**
+   * Key pair has to be passed on construction to JWT
+   * @param {Keys} keys
+   */
+  constructor(signerMethod: IKeys | Signer) {
+    const keys = signerMethod as IKeys;
+    const signer = signerMethod as Signer;
+    if (keys.privateKey && keys.sign && keys.verify) {
+      this.sign = createSignWithKeys(keys);
+    } else {
+      this.sign = createSignWithEthersSigner(signer);
+    }
   }
 
   /**
@@ -90,17 +83,24 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns {Promise<object>}
    */
-  async verify(token: string, publicKey: string, options?: object): Promise<object> {
-    return new Promise(
-      (resolve, reject) => {
-        const pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');
-        jwt.verify(token, pemPublicKey, options, (error: Error, payload: object) => {
-          if (error) reject(error);
-
-          resolve(payload);
-        });
-      },
-    );
+  async verify(
+    token: string,
+    publicKey: string,
+    options?: Record<string, unknown>,
+  ): Promise<object> {
+    const verifications = [];
+    for (const verifyMethod of verificationMethods) {
+      verifications.push(verifyMethod(token, publicKey, options));
+    }
+    const results = await Promise.all(Array.from(verifications, (item) => item
+      .then((value) => ({ ...value }))
+      .catch((reason) => ({ success: false, payload: reason }))));
+    for (const result of results) {
+      if (result.success) {
+        return result.payload;
+      }
+    }
+    throw new Error('invalid signature');
   }
 
   /**
@@ -128,8 +128,10 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns string | { [key: string]: any }
    */
-  decode(token: string, options?: object): string | { [key: string]: string | object } {
-    return jwt.decode(token, options);
+  decode(token: string, options?: object): string | {
+    [key: string]: string | object;
+  } {
+    return jwt.decode(token, options) || '';
   }
 }
 

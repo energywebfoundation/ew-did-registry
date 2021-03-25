@@ -1,29 +1,41 @@
-import { Contract } from 'ethers';
-import { IKeys } from '@ew-did-registry/keys';
-import { IResolver } from '@ew-did-registry/did-resolver-interface';
-import { IDID, Methods } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentFactory, IDIDDocumentLite } from '@ew-did-registry/did-document';
+import { IKeys, Keys } from '@ew-did-registry/keys';
+import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
+import { IDID, Methods, DID } from '@ew-did-registry/did';
+import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
+import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
 
+/**
+ * @class {DIDRegistry}
+ */
 class DIDRegistry implements IDIDRegistry {
-  did: IDID;
+  did: IDID = new DID();
 
-  keys: Map<Methods | string, IKeys>;
+  keyStore: Map<string, IKeys>;
 
-  documentFactory: IDIDDocumentFactory;
+  document: IDIDDocumentFull;
 
   claims: IClaimsFactory;
 
-  resolver: IResolver;
+  jwt: IJWT;
 
-  constructor(keys: IKeys, did: string, resolver: IResolver) {
+  constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, method] = did.split(':');
-    this.keys = new Map<Methods | string, IKeys>();
-    this.keys.set(method, keys);
-    this.documentFactory = new DIDDocumentFactory(did);
-    this.claims = new ClaimsFactory(keys, resolver);
-    this.resolver = resolver;
+    this.did.set(did);
+
+    if (!Object.values(Methods).includes(method as Methods)) {
+      throw new Error('Unknown Method!');
+    }
+
+    this.keyStore = new Map<string, IKeys>();
+    this.keyStore.set(KeyTags.OWNER, keys);
+
+    this.jwt = new JWT(keys);
+    this.document = new DIDDocumentFactory(did).createFull(operator);
+    this.claims = new ClaimsFactory(keys, this.document, store);
+    this.operator = operator;
   }
 
   /**
@@ -41,11 +53,45 @@ class DIDRegistry implements IDIDRegistry {
    * @param { Methods } method
    * @returns { Promise<void> }
    */
-  changeResolver(resolver: IResolver, method: Methods | string): void {
-    const relevantKeys = this.keys.get(method);
-    this.documentFactory = new DIDDocumentFactory(this.did.get(method));
-    this.claims = new ClaimsFactory(relevantKeys, resolver);
-    this.resolver = resolver;
+  changeOperator(operator: IOperator, method: Methods | string): void {
+    const keys = this.keyStore.get(KeyTags.OWNER);
+    if (!keys) {
+      return;
+    }
+    const did = this.did.get(method);
+    if (!did) {
+      return;
+    }
+    this.document = new DIDDocumentFactory(did).createFull(operator);
+    this.claims = new ClaimsFactory(keys, this.document, this.store);
+    this.operator = operator;
+  }
+
+  /**
+   *
+   * Update keyStore from user's didDocument
+   */
+  async updateKeyStore(): Promise<boolean> {
+    const doc = await this.document.read();
+
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const key in doc.publicKey) {
+      const pubKey = doc.publicKey[key];
+      const publicKeyTag = pubKey.id.split('#')[1];
+
+      const encoding = Object.values(Encoding).find((e) => {
+        const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
+        return pubKey[`publicKey${suffix}`];
+      });
+
+      if (!encoding) {
+        throw new Error('Unknown encoding');
+      }
+      const value = pubKey[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
+
+      this.keyStore.set(publicKeyTag, new Keys({ publicKey: value.slice(2) }));
+    }
+    return true;
   }
 
   /**
@@ -61,39 +107,11 @@ class DIDRegistry implements IDIDRegistry {
    * @param { string } did
    * @returns { Promsise<DIDDocumentLite> }
    */
-  async read(did: string): Promise<IDIDDocumentLite> {
+  async read(did: string): Promise<IDIDDocumentFull> {
     const temporaryFactory = new DIDDocumentFactory(did);
-    const didDocumentLite = temporaryFactory.createLite(this.resolver, did);
+    const didDocumentLite = temporaryFactory.createFull(this.operator, did);
     await didDocumentLite.read(did);
     return didDocumentLite;
-  }
-
-
-  /**
-     * Creates a Proxy Identity
-     *
-     * @example
-     * ```typescript
-     * import DIDRegistry from '@ew-did-registry/did-registry';
-     *
-     * const proxy = await DiDRegistry.createProxy();
-     * ```
-     *
-     * @param { string } contractAddress
-     * @param { JsonRpcSigner } deployer
-     * @param { number } value
-     * @returns { Promsise<string> }
-     */
-
-  static async createProxy(proxyFactory: Contract): Promise<string> {
-    const tx = await proxyFactory.create();
-    await tx.wait();
-    return new Promise<string>(((resolve) => {
-      proxyFactory.on('ProxyCreated', (proxy) => {
-        proxyFactory.removeAllListeners('ProxyCreated');
-        resolve(proxy);
-      });
-    }));
   }
 }
 

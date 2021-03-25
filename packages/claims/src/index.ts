@@ -5,3 +5,4 @@ export * from './claimsUser';
 export * from './claimsIssuer';
 export * from './claimsVerifier';
 export * from './claimsFactory';
+export * from './utils';

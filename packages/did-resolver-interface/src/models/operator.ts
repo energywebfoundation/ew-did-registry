@@ -16,7 +16,7 @@ export enum PubKeyType {
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem', BASE58 = 'base58'
+  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
 }
 
 /**
@@ -27,6 +27,26 @@ export enum Algorithms {
 }
 
 /**
+ * KeyTags specifies the tags associated with different purposes of the keys
+ */
+export enum KeyTags {
+  OWNER = 'key-owner'
+}
+
+/** This interface represents the attribute payload
+ * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
+*/
+export interface IAttributePayload {
+  id?: string;
+  type?: string;
+  publicKey?: string;
+  serviceEndpoint?: string;
+  tag?: string;
+  hash?: string;
+  hashAlg?: string;
+}
+
+/**
  * Data used to update DID Document. To update the public key you need to set its value in value
  * field, and to set authentication method, the delegate's Ethereum address must be set in the
  * delegate field
@@ -34,7 +54,11 @@ export enum Algorithms {
 export interface IUpdateData {
   encoding?: Encoding;
   algo?: Algorithms;
-  type: PubKeyType;
-  value?: string;
+  type: PubKeyType | DIDAttribute;
+  value?: IAttributePayload ;
   delegate?: string;
 }
+
+export type UpdateAttributeData = Required<Omit<IUpdateData, 'delegate'>>;
+
+export type UpdateDelegateData = Required<Omit<IUpdateData, 'value'>>;

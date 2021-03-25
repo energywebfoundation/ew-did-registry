@@ -1,17 +1,35 @@
 {
   "name": "@ew-did-registry/proxyidentity",
-  "version": "1.0.0",
+  "version": "0.4.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Implementation of contract representing ERC1056 identity",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "compile": "../../node_modules/.bin/tsc",
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "test-rpc": "../../node_modules/.bin/run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" "
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test-ganache\" ",
+    "test-ganache": "mocha -r ts-node/register test/*test.ts",
+    "compile:contracts": "../../node_modules/.bin/truffle compile"
   },
-  "author": "dmitry.fesenko@482.solutions",
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
   "license": "ISC",
   "dependencies": {
-    "ethers": "^4.0.45",
-    "web3": "^1.2.6"
+    "@ew-did-registry/did-ethr-resolver": "0.4.0",
+    "@ew-did-registry/did-resolver-interface": "0.4.0",
+    "@ew-did-registry/keys": "0.4.0",
+    "ethers": "4.0.45"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^2.5.0",
+    "chai": "4.2.0",
+    "chai-arrays": "2.2.0",
+    "chai-as-promised": "7.1.1",
+    "multi-token-standard": "^0.8.13",
+    "run-with-testrpc": "0.3.1",
+    "ganache-cli": "6.9.1"
   }
 }

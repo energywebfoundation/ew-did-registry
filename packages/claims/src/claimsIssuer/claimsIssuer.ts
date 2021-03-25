@@ -3,12 +3,11 @@ import { decrypt } from 'eciesjs';
 import crypto from 'crypto';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
-import sjcl from 'sjcl-complete';
+import { bn, ecc } from 'sjcl';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
-import { IPublicClaim, IPrivateClaim } from '../models';
+import { IPrivateClaim, IPublicClaim } from '../models';
 
-const { bn } = sjcl;
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
   /**
    * Verifies user signature on token and issue new token signed by issuer./
@@ -28,11 +27,17 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    */
   async issuePublicClaim(token: string): Promise<string> {
     const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    if (!(await this.verifySignature(token, claim.iss as string))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
-    const signedToken = await this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    delete claim.iss;
+    const signedToken = await this.jwt.sign(
+      claim,
+      {
+        algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+      },
+    );
     return signedToken;
   }
 
@@ -54,24 +59,29 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * @returns { Promise<string> } issued token
    */
   async issuePrivateClaim(token: string): Promise<string> {
-    const curve: sjcl.SjclEllipticalCurve = sjcl.ecc.curves.k256;
+    if (!this.keys.privateKey) {
+      throw new Error('Private claim not supported');
+    }
+    const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.signer))) {
+    if (!(await this.verifySignature(token, claim.iss as string))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
     Object.entries(claim.claimData).forEach(([key, value]) => {
       const decryptedField = decrypt(
-        this.keys.privateKey,
-        Buffer.from(value, 'hex'),
-        // Buffer.from((value as { data: Array<number> }).data),
+        this.keys.privateKey as string,
+        Buffer.from(value as string, 'hex'),
       );
       const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
       const PK = g.mult(new bn(fieldHash));
-      claim.claimData[key] = PK.toBits();
+      claim.claimData[key] = PK.toBits() as [];
     });
-    return this.jwt.sign(claim, { algorithm: 'ES256', noTimestamp: true });
+    delete claim.iss;
+    return this.jwt.sign(claim, {
+      algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+    });
   }
 }
 

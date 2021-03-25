@@ -1,13 +1,12 @@
 node_modules
 .idea
-**/package-lock.json
-package-lock.json
 **/*.map
 docs
 build
 !packages/proxyIdentity/build
 dist
 *.d.ts
+!typings/**/*.d.ts
 .npmrc
 .log
 packages/proxyIdentity/index.js

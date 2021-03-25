@@ -1,6 +1,4 @@
-import {
-  IClaims, IProofData, ISaltedFields,
-} from './models';
+import { IClaims, IProofData, IPublicClaim, ISaltedFields, } from './models';
 
 /**
  * IClaims interface is a factory to create Public, Private, and Proof Claims
@@ -18,6 +16,8 @@ export interface IClaimsUser extends IClaims {
   createProofClaim(claimUrl: string, saltedFields: IProofData): Promise<string>;
   verifyPublicClaim(token: string, verifyData: object): Promise<boolean>;
   verifyPrivateClaim(privateToken: string, saltedFields: ISaltedFields): Promise<boolean>;
+  publishPublicClaim(issued: string, verifyData: object, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string>;
+  publishPrivateClaim(issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string>;
 }
 
 export interface IClaimsIssuer extends IClaims {
@@ -26,6 +26,6 @@ export interface IClaimsIssuer extends IClaims {
 }
 
 export interface IClaimsVerifier extends IClaims {
-  verifyPublicProof(token: string): Promise<void>;
-  verifyPrivateProof(proofToken: string, privateToken: string): Promise<void>;
+  verifyPublicProof(claimUrl: string): Promise<IPublicClaim>;
+  verifyPrivateProof(proofToken: string): Promise<void>;
 }

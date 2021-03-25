@@ -1,0 +1,26 @@
+{
+  "name": "@ew-did-registry/did-store-interface",
+  "version": "0.4.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "The package describes CRUD operations on claims",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "EnergyWeb",
+    "claims",
+    "store",
+    "decentralized"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "ISC"
+}

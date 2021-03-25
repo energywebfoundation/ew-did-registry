@@ -1,8 +1,6 @@
 import { ec as EC } from 'elliptic';
 import BN from 'bn.js';
-// @ts-ignore
-import {encrypt, decrypt} from 'eciesjs';
-
+import { encrypt, decrypt } from 'eciesjs';
 import { Wallet } from 'ethers';
 import { IKeys } from './interface';
 import { KeyPair } from './models';
@@ -28,23 +26,17 @@ class Keys implements IKeys {
    * @param {string} publicKey
    */
   constructor({ privateKey, publicKey }: KeyPair = {}) {
-    if (privateKey && publicKey) {
+    if (privateKey) {
       this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
       this.privateKey = privateKey;
-      this.publicKey = publicKey;
-    } else if (privateKey) {
-      this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
-      this.privateKey = privateKey;
-      this.publicKey = this._keyPair.getPublic(true, 'hex').padStart(66, '0');
     } else if (publicKey) {
       this._keyPair = ec.keyFromPublic(publicKey, 'hex');
-      this.publicKey = publicKey;
+      this.privateKey = '';
     } else {
-      ({ privateKey, publicKey } = Keys.generateKeyPair());
-      this._keyPair = ec.keyFromPrivate(privateKey, 'hex');
-      this.privateKey = privateKey;
-      this.publicKey = publicKey;
+      this._keyPair = ec.genKeyPair();
+      this.privateKey = this._keyPair.getPrivate('hex').padStart(64, '0');
     }
+    this.publicKey = this._keyPair.getPublic(true, 'hex').padStart(66, '0');
   }
 
   getAddress(): string {
@@ -134,7 +126,6 @@ class Keys implements IKeys {
       canonical: true,
       pers: true,
     });
-
     return signature.r.toString(16, 64) + signature.s.toString(16, 64);
   }
 
@@ -162,8 +153,8 @@ class Keys implements IKeys {
       keyPair = ec.keyFromPublic(publicKey, 'hex');
     }
 
-    const r = new BN(signature.slice(0, 64), 16);
-    const s = new BN(signature.slice(64, 128), 16);
+    const r = new BN(signature.slice(0, 64), 16).toString('hex');
+    const s = new BN(signature.slice(64, 128), 16).toString('hex');
 
     const hash = sha256(data);
     return keyPair.verify(hash, { r, s });
