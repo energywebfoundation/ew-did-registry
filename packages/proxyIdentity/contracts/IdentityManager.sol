@@ -2,11 +2,11 @@ pragma solidity 0.8.0;
 
 
 contract IdentityManager {
-  event IdentityCreated(address identity, address owner, uint256 at);
-  event IdentityOffered(address identity, address offeredTo, uint256 at);
-  event IdentityTransferred(address identity, address owner, uint256 at);
-  event IdentityOfferRejected(address identity, address offeredTo, uint256 at);
-  event IdentityOfferCanceled(address identity, address oferedto, uint256 at);
+  event IdentityCreated(address indexed identity, address indexed owner, uint256 indexed at);
+  event IdentityOffered(address indexed identity, address indexed offeredTo, uint256 indexed at);
+  event IdentityTransferred(address indexed identity, address indexed owner, uint256 indexed at);
+  event IdentityOfferRejected(address indexed identity, address indexed offeredTo, uint256 indexed at);
+  event IdentityOfferCanceled(address indexed identity, address indexed oferedto, uint256 indexed at);
 
   modifier isIdentity(address sender, address identity) {
     require(
