@@ -9,7 +9,7 @@ contract OfferableIdentity {
 
   address public offeredTo;
 
-  event TransactionSent(bytes data, address to, uint256 value);
+  event TransactionSent(bytes indexed data, address indexed to, uint256 indexed value);
 
   constructor(address _owner, address _manager) {
     owner = _owner;
