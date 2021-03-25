@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-registry",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publishConfig": {
     "access": "public"
   },
@@ -37,6 +37,6 @@
     "@ew-did-registry/did-store-interface": "0.4.0",
     "@ew-did-registry/jwt": "0.4.0",
     "@ew-did-registry/keys": "0.4.0",
-    "@ew-did-registry/proxyidentity": "0.4.0"
+    "@ew-did-registry/proxyidentity": "0.4.1"
   }
 }
