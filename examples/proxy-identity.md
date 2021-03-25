@@ -1,60 +1,78 @@
-# Ownership management with proxy identities
+# Ownership management with proxy identity
 
-1. Organization creates proxy identity thus becoming its owner
+1. Creating identity and assigning its owner
 
 ``` typescript
-  import {createProxy} from '@ew-did-registiry/proxyidentity';
+  /** Manager allows to track state of all identities without having to subscribe to the events of each identity */
+  const identityManagerFactory = new ContractFactory(IdentityManagerAbi, IdentityManagerBytecode, deployer);
+  const manager = await identityManagerFactory.deploy();
   
-  const proxyFactoryCreator = new ContractFactory(proxyFactoryAbi, proxyFactoryBytecode, bebat);
-  const proxyFactory = await proxyFactoryCreator.deploy(erc1056.address, erc1155.address);
+  const identityFactory = new ContractFactory(identityAbi, identityBytecode, deployer);
+  const identity = await identityFactory.deploy(ownerAddr, manager.address);
   
-  const device = await createProxy(proxyFactory, uid);
-  expect(await device.owner()).equal(await bebat.getAddress());
-  expect(parseInt(await erc1155.balanceOf(await bebat.getAddress(), uid), 16)).equal(1);
+  expect(await identity.owner()).equal(ownerAddr);
 ```
 
-2. Organization transfers ownership to OEM
+2. Transferring identity
+
+Identity cannot be transferred without the consent of the recipient
+
+  + Offering
 
 ``` typescript
-  await erc1155.connect(bebat).safeTransferFrom(await bebat.getAddress(), await oem.getAddress(), uid, 1, '0x0');
-  expect(await device.owner()).equal(await oem.getAddress());
-  expect(parseInt(await erc1155.balanceOf(await oem.getAddress(), uid), 16)).equal(1);
-```
-
-3. OEM updates battery metadata
-
-``` typescript
-  expect(await erc1155.uri(uid)).equal('');
+  const event = new Promise((resolve) => {
+    manager.on('IdentityOffered', (offered, offeredTo) => {
+      manager.removeAllListeners('IdentityOffered');
+      resolve({ offered, offeredTo });
+    });
+  });
   
-  const uri = 'ipfs://ipfs/123abc';
-  await erc1155.connect(oem).updateUri(uid, uri);
-
-  expect(await erc1155.uri(uid)).equal(uri);
+  await identity.connect(owner).functions.offer(receiverAddr);
+  
+  expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });  
 ```
 
-4. OEM as the owner adds Installer to approved agents
+  + Acception (or rejection)
 
 ``` typescript
-  await erc1155.connect(oem).setApprovalForAll(await installer.getAddress(), true);
-  expect(await erc1155.isApprovedForAll(await oem.getAddress(), await installer.getAddress())).true;
+  const event = new Promise((resolve) => {
+    manager.on('IdentityTransferred', (offered, offeredTo) => {
+      manager.removeAllListeners('IdentityTransferred');
+      resolve({ offered, offeredTo });
+    });
+  });
+
+  await identity.connect(receiver).acceptOffer();
+  
+  expect(await identity.owner()).equal(receiverAddr);
+  expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });  
 ```
 
-5. Installer publishes self-issued claim
+3. An identity having DID can be operated by its variation of Operator
 
 ``` typescript
-  const claim = await installerClaims.createPublicClaim(claimData);
-
-  const claimUrl = await installerClaims.publishPublicClaim(claim, claimData);
-
-  expect(await store.get(claimUrl)).equal(claim);
+  const operator = new OfferableIdenitytOperator(
+      owner,
+      { address: erc1056.address },
+      identity.address,
+    );
 ```
 
-6. Installer transfers ownership from OEM to asset owner
+This allows the idenity owner to control the identity document
+
+4. Owner can add service endpoint in identity document
 
 ``` typescript
-  expect(await device.owner()).equal(await oem.getAddress());
-
-  await erc1155.connect(installer).safeTransferFrom(await oem.getAddress(), await owner.getAddress(), uid, 1, '0x0');
-
-  expect(await device.owner()).equal(await owner.getAddress());
+  const attribute = DIDAttribute.ServicePoint;
+    const endpoint = 'https://test.algo.com';
+    const serviceId = 'UserClaimURL3';
+    const updateData = {
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
+    };
+  await operator.update(did, attribute, updateData, validity);
 ```

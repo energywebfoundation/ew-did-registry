@@ -1,6 +1,6 @@
 import { providers, ContractFactory } from 'ethers';
 import { abi as IMAbi, bytecode as IMBytecode } from '../build/contracts/IdentityManager.json';
-import { abi as proxyAbi, bytecode as proxyBytecode } from '../build/contracts/OfferableIdentity.json';
+import { abi as identityAbi, bytecode as identityBytecode } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi, bytecode as erc1056Bytecode } from '../constants/ERC1056.json';
 import { identityTestSuite } from './offerable.identity.testSuite';
 import { offerableIdentityOperatorTestSuite } from './offerable.identity-operator.testSuite';
@@ -21,7 +21,7 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
     const erc1056Factory = new ContractFactory(erc1056Abi, erc1056Bytecode, deployer);
     const erc1056 = await erc1056Factory.deploy();
 
-    const identityFactory = new ContractFactory(proxyAbi, proxyBytecode, deployer);
+    const identityFactory = new ContractFactory(identityAbi, identityBytecode, deployer);
 
     Object.assign(this, {
       manager, provider, identityFactory, owner, erc1056,
@@ -29,5 +29,5 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
   });
 
   describe('OFFERABLE IDENTITY TESTS', identityTestSuite);
-  describe('PROXY OPERATOR TESTS', offerableIdentityOperatorTestSuite);
+  describe('OFFERABLE OPERATOR TESTS', offerableIdentityOperatorTestSuite);
 });
