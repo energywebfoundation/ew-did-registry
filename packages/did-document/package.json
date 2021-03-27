@@ -35,7 +35,7 @@
     "ethers": "4.0.45"
   },
   "devDependencies": {
-    "eslint": "6.6.0",
+    "eslint": "6.8.0",
     "ganache-cli": "6.9.1",
     "mocha": "7.1.0",
     "run-with-testrpc": "0.3.1",
