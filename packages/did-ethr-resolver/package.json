@@ -33,7 +33,7 @@
     "ethers": "4.0.45"
   },
   "devDependencies": {
-    "ganache-cli": "6.9.1",
+    "ganache-cli": "6.12.2",
     "run-with-testrpc": "0.3.1"
   }
 }

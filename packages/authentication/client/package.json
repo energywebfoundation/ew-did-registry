@@ -22,7 +22,7 @@
     "redux-thunk": "2.3.0"
   },
   "devDependencies": {
-    "ganache-cli": "6.9.1"
+    "ganache-cli": "6.12.2"
   },
   "scripts": {
     "start": "react-scripts start",
