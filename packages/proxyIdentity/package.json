@@ -24,12 +24,12 @@
     "ethers": "4.0.45"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^2.5.0",
+    "@openzeppelin/contracts": "2.5.1",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",
     "ganache-cli": "6.9.1",
-    "multi-token-standard": "^0.8.13",
+    "multi-token-standard": "0.8.13",
     "run-with-testrpc": "0.3.1"
   }
 }
