@@ -71,7 +71,7 @@
     "gulp-uglify": "3.0.2",
     "husky": "3.1.0",
     "i": "0.3.6",
-    "ipfs": "0.42.0",
+    "ipfs": "0.54.4",
     "ipfsd-ctl": "3.0.0",
     "karma": "4.4.1",
     "karma-babel-preprocessor": "8.0.1",
