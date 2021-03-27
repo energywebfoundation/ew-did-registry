@@ -32,9 +32,9 @@
   },
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@babel/core": "7.7.2",
-    "@babel/polyfill": "7.7.0",
-    "@babel/preset-env": "7.7.1",
+    "@babel/core": "7.13.13",
+    "@babel/polyfill": "7.12.1",
+    "@babel/preset-env": "7.13.12",
     "@types/bl": "2.1.0",
     "@types/chai": "4.2.4",
     "@types/chai-arrays": "1.0.3",
