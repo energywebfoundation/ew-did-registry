@@ -57,7 +57,7 @@
     "eslint": "6.6.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-import-resolver-typescript": "2.0.0",
-    "eslint-plugin-chai-friendly": "0.5.0",
+    "eslint-plugin-chai-friendly": "0.6.0",
     "eslint-plugin-import": "^2.22.0",
     "ethers": "4.0.45",
     "ganache-cli": "6.9.1",
