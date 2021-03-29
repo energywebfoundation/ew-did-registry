@@ -63,13 +63,17 @@ export function identityTestSuite(): void {
 
     it('Manager should be notified when identity offered', async () => {
       const event = await new Promise((resolve) => {
-        manager.on('IdentityOffered', (offered, offeredTo) => {
+        manager.on('IdentityOffered', (offered, _owner, offeredTo) => {
           manager.removeAllListeners('IdentityOffered');
-          resolve({ offered, offeredTo });
+          resolve({ offered, _owner, offeredTo });
         });
       });
 
-      expect(event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
+      expect(event).to.deep.equal({
+        offered: identity.address,
+        _owner: await identity.owner(),
+        offeredTo: receiverAddr,
+      });
     });
 
     it('Accepting offer should change identity owner', async () => {
@@ -88,15 +92,19 @@ export function identityTestSuite(): void {
 
     it('Rejecting offer should remain identity owner', async () => {
       const event = new Promise((resolve) => {
-        manager.on('IdentityOfferRejected', (offered, offeredTo) => {
+        manager.on('IdentityOfferRejected', (offered, _owner, offeredTo) => {
           manager.removeAllListeners('IdentityOfferRejected');
-          resolve({ offered, offeredTo });
+          resolve({ offered, _owner, offeredTo });
         });
       });
 
       await identity.connect(receiver).rejectOffer();
 
-      expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
+      expect(await event).to.deep.equal({
+        offered: identity.address,
+        _owner: await identity.owner(),
+        offeredTo: receiverAddr,
+      });
       expect(await identity.owner()).equal(ownerAddr);
     });
 
