@@ -18,10 +18,12 @@ import {
   RegistrySettings,
   IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
+import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
+import { encodedPubKeyName } from '../utils';
 
 const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
 const { BigNumber } = utils;
@@ -175,8 +177,9 @@ export class Operator extends Resolver implements IOperator {
         (e: Event) => (e.event === 'DIDDelegateChanged'),
       );
       if (!event) return false;
-    } catch (error) {
-      throw new Error(error);
+    } catch (err) {
+      console.error('Delegate not revoked:', err.message);
+      throw new Error(err);
     }
     return true;
   }
@@ -210,8 +213,9 @@ export class Operator extends Resolver implements IOperator {
         (e: Event) => (e.event === 'DIDAttributeChanged'),
       );
       if (!event) return false;
-    } catch (error) {
-      throw new Error(error);
+    } catch (e) {
+      console.error('Attribute not revoked', e.message);
+      throw new Error(e);
     }
     return true;
   }
@@ -265,17 +269,13 @@ export class Operator extends Resolver implements IOperator {
   */
   async deactivate(did: string): Promise<void> {
     const document = await this.read(did);
-    try {
-      await this._revokeAuthentications(
-        did,
-        document.authentication as IAuthentication[],
-        document.publicKey,
-      );
-      await this._revokePublicKeys(did, document.publicKey);
-      await this._revokeServices(did, document.service);
-    } catch (e) {
-      throw new Error(e.message);
-    }
+    await this._revokeAuthentications(
+      did,
+      document.authentication as IAuthentication[],
+      document.publicKey,
+    );
+    await this._revokePublicKeys(did, document.publicKey);
+    await this._revokeServices(did, document.service);
   }
 
   /**
@@ -291,33 +291,15 @@ export class Operator extends Resolver implements IOperator {
     auths: IAuthentication[],
     publicKeys: IPublicKey[],
   ): Promise<void> {
-    const sender = await this.getAddress();
-    let nonce = await this._didRegistry.provider.getTransactionCount(sender);
-    // eslint-disable-next-line no-restricted-syntax
-    const method = this._didRegistry.revokeDelegate;
-    for (const pk of publicKeys) {
+    for await (const pk of publicKeys) {
       const match = pk.id.match(delegatePubKeyIdPattern);
-      // eslint-disable-next-line no-continue
-      if (!match) continue;
-      const didAttribute = Authenticate;
-      const delegateAddress = pk.ethereumAddress;
-      const updateData: IUpdateData = {
-        algo: Algorithms.ED25519,
-        type: auths.find(
+      if (match) {
+        const type = auths.find(
           (auth) => auth.publicKey === match[0],
         ) ? PubKeyType.SignatureAuthentication2018
-          : PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        delegate: delegateAddress,
-      };
-      try {
-        await this._sendTransaction(
-          method, did, didAttribute, updateData, undefined, { nonce },
-        );
-      } catch (e) {
-        throw new Error(`Can't revoke delegate: ${e.message}`);
+          : PubKeyType.VerificationKey2018;
+        await this.revokeDelegate(did, type, `did:${Methods.Erc1056}:${pk.ethereumAddress}`);
       }
-      nonce += 1;
     }
   }
 
@@ -329,45 +311,24 @@ export class Operator extends Resolver implements IOperator {
  * @private
  */
   protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<void> {
-    const sender = await this.getAddress();
-    let nonce = await this._didRegistry.provider.getTransactionCount(sender);
-    for (const pk of publicKeys) {
+    for await (const pk of publicKeys) {
       const match = pk.id.match(pubKeyIdPattern);
-      // eslint-disable-next-line no-continue
-      if (!match) continue;
-      const didAttribute = DIDAttribute.PublicKey;
-      const encodings = Object.values(Encoding);
-      const encoding = encodings.find((e) => {
-        const suffix = `${e[0].toUpperCase()}${e.slice(1)}`;
-        return pk[`publicKey${suffix}`];
-      });
-
-      if (!encoding) {
-        throw new Error('Unknown encoding');
-      }
-      // Reconstruct the publicKey value as it is
-      const value = pk[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
-      const publicKeyTag = pk.id.split('#')[1];
-
-      const keyValue: IAttributePayload = {
-        publicKey: value,
-        tag: publicKeyTag,
-      };
-      const updateData: IUpdateData = {
-        algo: match[1] as Algorithms,
-        type: match[2] as PubKeyType,
-        encoding,
-        value: keyValue,
-      };
-      const method = this._didRegistry.revokeAttribute;
-      try {
-        await this._sendTransaction(
-          method, did, didAttribute, updateData, undefined, { nonce },
+      if (match) {
+        const encoding = Object.values(Encoding)
+          .find((enc) => pk[encodedPubKeyName(enc)]) as Encoding;
+        await this.revokeAttribute(
+          did,
+          DIDAttribute.PublicKey,
+          {
+            type: DIDAttribute.PublicKey,
+            value: {
+              id: pk.id,
+              publicKey: pk[encodedPubKeyName(encoding)] as string,
+              tag: pk.id.split('#')[1],
+            },
+          },
         );
-      } catch (e) {
-        throw new Error(`Can't revoke public key: ${e.message}`);
       }
-      nonce += 1;
     }
   }
 
@@ -379,29 +340,19 @@ export class Operator extends Resolver implements IOperator {
  * @private
  */
   protected async _revokeServices(did: string, services: IServiceEndpoint[]): Promise<void> {
-    const sender = await this.getAddress();
-    let nonce = await this._didRegistry.provider.getTransactionCount(sender);
-    for (const service of services) {
-      try {
-        await this._sendTransaction(
-          this._didRegistry.revokeAttribute,
-          did,
-          DIDAttribute.ServicePoint,
-          {
-            type: DIDAttribute.ServicePoint,
-            value: {
-              id: service.id,
-              type: service.type,
-              serviceEndpoint: service.serviceEndpoint,
-            },
+    for await (const service of services) {
+      await this.revokeAttribute(
+        did,
+        DIDAttribute.ServicePoint,
+        {
+          type: DIDAttribute.ServicePoint,
+          value: {
+            id: service.id,
+            type: service.type,
+            serviceEndpoint: service.serviceEndpoint,
           },
-          undefined,
-          { nonce },
-        );
-      } catch (e) {
-        throw new Error(`Can't revoke service: ${e.message}`);
-      }
-      nonce += 1;
+        },
+      );
     }
   }
 
