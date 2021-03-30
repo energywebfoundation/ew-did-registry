@@ -12,6 +12,7 @@ import {
 import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
+import { TransactionResponse } from 'ethers/providers';
 
 const { BigNumber, Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
@@ -109,12 +110,11 @@ export class OfferableIdenitytOperator extends Operator {
       methodName = 'addDelegate';
     }
     const data = new Interface(erc1056Abi).functions[methodName].encode(params);
-    let event: Event;
     try {
       const tx = await this.identity.sendTransaction(data, this.settings.address, 0);
       const receipt = await tx.wait();
-      event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
-      return new BigNumber(event.blockNumber as number);
+      const block = (receipt.logs as providers.Log [])[0].blockNumber;
+      return new BigNumber(block as number);
     } catch (e) {
       throw new Error(e);
     }

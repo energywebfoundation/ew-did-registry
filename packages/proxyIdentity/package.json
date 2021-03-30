@@ -24,7 +24,7 @@
     "ethers": "4.0.45"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^2.5.0",
+    "@openzeppelin/contracts": "4.0.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",

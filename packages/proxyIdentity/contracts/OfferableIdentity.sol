@@ -1,0 +1,102 @@
+pragma solidity 0.8.0;
+
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "./IdentityManager.sol";
+
+
+contract OfferableIdentity is ERC165 {
+  address public owner;
+  address manager;
+  address ethrRegistry;
+
+  bytes4 constant ERC165ID = bytes4(keccak256("supportsInterface(bytes4)"));
+  bytes4 constant offerID = bytes4(keccak256("offer(address)"));
+  bytes4 constant acceptOfferID = bytes4(keccak256("acceptOffer()"));
+  bytes4 constant rejectOfferID = bytes4(keccak256("rejectOffer()"));
+  bytes4 constant cancelOfferID = bytes4(keccak256("cancelOffer()"));
+  bytes4 constant sendTxID = bytes4(
+    keccak256("sendTransaction(bytes,address,uin256)")
+  );
+  bytes4 constant offerableID = offerID ^
+    acceptOfferID ^
+    rejectOfferID ^
+    cancelOfferID ^
+    sendTxID;
+
+  address public offeredTo;
+
+  event TransactionSent(
+    bytes indexed data,
+    address indexed to,
+    uint256 indexed value
+  );
+
+  function init(address _owner, address _ethrRegistry) external {
+    require(manager == address(0), "Identity can be initialize only once");
+    owner = _owner;
+    manager = msg.sender;
+    ethrRegistry = _ethrRegistry;
+    IdentityManager(manager).identityCreated(owner);
+  }
+
+  modifier isOwner() {
+    require(msg.sender == owner, "Only owner allowed");
+    _;
+  }
+
+  modifier isOfferedTo() {
+    require(offeredTo != address(0), "Proxy is not offered");
+    require(msg.sender == offeredTo, "Proxy offered to other account");
+    _;
+  }
+
+  function offer(address _offeredTo) external isOwner {
+    offeredTo = _offeredTo;
+    IdentityManager(manager).identityOffered(offeredTo);
+  }
+
+  function acceptOffer() external isOfferedTo {
+    owner = offeredTo;
+    IdentityManager(manager).identityAccepted(offeredTo);
+    closeOffer();
+  }
+
+  function rejectOffer() external isOfferedTo {
+    IdentityManager(manager).identityRejected(offeredTo);
+    closeOffer();
+  }
+
+  function cancelOffer() external isOwner {
+    closeOffer();
+
+    IdentityManager(manager).identityOfferCanceled(offeredTo);
+  }
+
+  function closeOffer() internal {
+    offeredTo = address(0);
+  }
+
+  function sendTransaction(bytes memory _data, address to, uint256 value)
+    public
+    isOwner
+    returns (bool success)
+  {
+    bytes memory data = _data;
+    uint256 len = data.length;
+    // solium-disable-next-line security/no-inline-assembly
+    assembly {
+      success := call(gas(), to, value, add(data, 0x20), len, 0, 0)
+    }
+    emit TransactionSent(_data, to, value);
+  }
+
+  function supportsInterface(bytes4 interfaceID)
+    public
+    virtual
+    view
+    override
+    returns (bool)
+  {
+    return interfaceID == ERC165ID || interfaceID == offerableID;
+  }
+}
