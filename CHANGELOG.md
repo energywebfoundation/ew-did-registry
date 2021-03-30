@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.4.2...v0.5.0) (2021-03-30)
+
+
+### Features
+
+* **@ew-did-registry/did-ethr-resolver:** reuse highlevel funcs ([e5d8ed3](https://github.com/energywebfoundation/ew-did-registry/commit/e5d8ed3b670ddc56ee002b2901722acc820a1446))
+
+
+
+
+
 ## [0.4.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.4.1...v0.4.2) (2021-03-25)
 
 **Note:** Version bump only for package ew-did-registry
