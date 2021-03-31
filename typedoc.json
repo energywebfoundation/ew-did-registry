@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["packages/claims/src/index.ts", "packages/did/src/index.ts", "packages/did-document/src/index.ts", "packages/did-ethr-resolver/src/index.ts", "packages/did-ipfs-store/src/index.ts", "packages/did-registry/src/index.ts", "packages/did-resolver-interface/src/index.ts", "packages/did-store-interface/src/index.ts", "packages/jwt/src/index.ts", "packages/keys/src/index.ts", "packages/proxyIdentity/src/index.ts"],
+  "out": "docs",
+  "exclude": "**/*+(.spec|.e2e|.test).ts",
+  "readme": "none"
+}
