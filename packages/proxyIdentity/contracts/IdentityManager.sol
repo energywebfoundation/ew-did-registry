@@ -23,9 +23,10 @@ contract IdentityManager {
     cancelOfferID ^
     sendTxID;
   
-  mapping(address => bool) public created;
+  mapping(address => bool) created;
   mapping(address => bool) public verified;  
   mapping(address => bool) public compliant;
+  mapping(address => bool) offered;
   
   mapping(address => address) public owners;
 
@@ -40,7 +41,7 @@ contract IdentityManager {
   }
 
   modifier isOwner() {
-    require(msg.sender == owner, "Only Identity Manager allowed");
+    require(msg.sender == owner, "IdentityManager: Only Manager owner allowed");
     _;
   }
   
@@ -51,6 +52,10 @@ contract IdentityManager {
       "Only Offerable Identity allowed"
     );
     _;
+  }
+  
+  modifier isOffered() {
+    require(offered[msg.sender], "IdentityManager: Identity is not offered");
   }
 
   function setLibraryAddress(address _libraryAddress) external isOwner {
@@ -79,7 +84,7 @@ contract IdentityManager {
     else {
       compliant[msg.sender] = true;
     }
-    require(owners[msg.sender] == address(0), "Identity already has been registered");
+    require(owners[msg.sender] == address(0), "IdentityManager: Identity already has been registered");
     owners[msg.sender] = _owner;
     emit IdentityCreated(msg.sender, _owner, block.timestamp);
   }
@@ -87,24 +92,32 @@ contract IdentityManager {
   function identityOffered(address _offeredTo)
     external
   {
+    require(verified[msg.sender] || compliant[msg.sender], "IdentityManager: Not compliant identity can't be offered");
+    offered[msg.sender] = true;
     emit IdentityOffered(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
   }
 
   function identityAccepted(address _owner)
-    external
+    external 
+    isOffered
   {
+    offered[msg.sender] = false;
     emit IdentityTransferred(msg.sender, _owner, block.timestamp);
   }
 
   function identityRejected(address _offeredTo)
     external
+    isOffered
   {
+    offered[msg.sender] = false;
     emit IdentityOfferRejected(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
   }
 
   function identityOfferCanceled(address _offeredTo)
     external
+    isOffered
   {
+    offered[msg.sender] = false;
     emit IdentityOfferCanceled(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
   }
 }

@@ -32,7 +32,7 @@ contract OfferableIdentity is ERC165 {
   );
 
   function init(address _owner, address _ethrRegistry) external {
-    require(manager == address(0), "Identity can be initialize only once");
+    require(manager == address(0), "OfferableIdentity: Identity can be initialize only once");
     owner = _owner;
     manager = msg.sender;
     ethrRegistry = _ethrRegistry;
@@ -40,13 +40,13 @@ contract OfferableIdentity is ERC165 {
   }
 
   modifier isOwner() {
-    require(msg.sender == owner, "Only owner allowed");
+    require(msg.sender == owner, "OfferableIdentity: Only owner allowed");
     _;
   }
 
   modifier isOfferedTo() {
-    require(offeredTo != address(0), "Proxy is not offered");
-    require(msg.sender == offeredTo, "Proxy offered to other account");
+    require(offeredTo != address(0), "OfferableIdentity: Proxy is not offered");
+    require(msg.sender == offeredTo, "OfferableIdentity: Proxy offered to other account");
     _;
   }
 
@@ -67,9 +67,8 @@ contract OfferableIdentity is ERC165 {
   }
 
   function cancelOffer() external isOwner {
-    closeOffer();
-
     IdentityManager(manager).identityOfferCanceled(offeredTo);
+    closeOffer();
   }
 
   function closeOffer() internal {
