@@ -56,6 +56,7 @@ contract IdentityManager {
   
   modifier isOffered() {
     require(offered[msg.sender], "IdentityManager: Identity is not offered");
+    _;
   }
 
   function setLibraryAddress(address _libraryAddress) external isOwner {

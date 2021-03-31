@@ -78,7 +78,7 @@ export class OfferableIdenitytOperator extends Operator {
     try {
       const data = new Interface(erc1056Abi).functions.revokeAttribute.encode(params);
       await this.identity
-        .sendTransaction(data, this.settings.address, 0)
+        .update(data, 0)
         .then((tx: providers.TransactionResponse) => tx.wait());
     } catch (error) {
       throw new Error(error);
@@ -111,7 +111,7 @@ export class OfferableIdenitytOperator extends Operator {
     }
     const data = new Interface(erc1056Abi).functions[methodName].encode(params);
     try {
-      const tx = await this.identity.sendTransaction(data, this.settings.address, 0);
+      const tx = await this.identity.update(data, 0);
       const receipt = await tx.wait();
       const block = (receipt.logs as providers.Log [])[0].blockNumber;
       return new BigNumber(block as number);

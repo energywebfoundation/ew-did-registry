@@ -27,7 +27,6 @@ contract OfferableIdentity is ERC165 {
 
   event TransactionSent(
     bytes indexed data,
-    address indexed to,
     uint256 indexed value
   );
 
@@ -75,18 +74,19 @@ contract OfferableIdentity is ERC165 {
     offeredTo = address(0);
   }
 
-  function sendTransaction(bytes memory _data, address to, uint256 value)
+  function update(bytes memory _data, uint256 value)
     public
     isOwner
     returns (bool success)
   {
     bytes memory data = _data;
     uint256 len = data.length;
+    address _ethrRegistry = ethrRegistry; 
     // solium-disable-next-line security/no-inline-assembly
     assembly {
-      success := call(gas(), to, value, add(data, 0x20), len, 0, 0)
+      success := call(gas(), _ethrRegistry, value, add(data, 0x20), len, 0, 0)
     }
-    emit TransactionSent(_data, to, value);
+    emit TransactionSent(_data, value);
   }
 
   function supportsInterface(bytes4 interfaceID)
