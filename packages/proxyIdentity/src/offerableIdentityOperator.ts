@@ -1,5 +1,5 @@
 import {
-  Contract, Event, utils, providers,
+  Contract, Event, utils,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -9,7 +9,7 @@ import {
   IUpdateAttributeData,
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
@@ -70,7 +70,7 @@ export class OfferableIdenitytOperator extends Operator {
     updateData: IUpdateData,
     validity?: number,
   ): Promise<utils.BigNumber> {
-    const identity = this._parseDid(did);
+    const identity = addressOf(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = hexify(

@@ -1,5 +1,4 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-await-in-loop,no-restricted-syntax */
+/* eslint-disable no-restricted-syntax */
 import {
   Contract, ethers, Event, utils, providers,
 } from 'ethers';
@@ -22,9 +21,9 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
 import {
-  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
+  delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName, hexify } from '../utils';
+import { encodedPubKeyName, hexify, addressOf } from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 const { BigNumber, formatBytes32String } = utils;
@@ -64,7 +63,10 @@ export class Operator extends Resolver implements IOperator {
   }
 
   protected async getAddress(): Promise<string> {
-    return this.address || (this.address = await this._owner.getAddress());
+    if (!this.address) {
+      this.address = await this._owner.getAddress();
+    }
+    return this.address as string;
   }
 
   private async did(): Promise<string> {
@@ -169,7 +171,7 @@ export class Operator extends Resolver implements IOperator {
       DIDAttribute.Authenticate,
       {
         type: delegateType,
-        delegate: delegateDID.split(':')[2],
+        delegate: addressOf(delegateDID),
       },
     );
     return true;
@@ -202,21 +204,18 @@ export class Operator extends Resolver implements IOperator {
   * Changes the owner of particular decentralised identity
   * Returns true on success
   *
-  * @param { string } identityDID - did of current identity owner
-  * @param { string } newOwnerDid - did of new owner that will be set on success
+  * @param { string } did - did of current identity owner
+  * @param { string } newOwner - did of new owner that will be set on success
   * @returns Promise<boolean>
   */
   async changeOwner(
-    identityDID: string,
-    newOwnerDid: string,
+    did: string,
+    newOwner: string,
   ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = newOwnerDid.split(':');
-
     try {
       const tx = await this._didRegistry.changeOwner(
-        identityAddress,
-        delegateAddress,
+        addressOf(did),
+        addressOf(newOwner),
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -355,7 +354,7 @@ export class Operator extends Resolver implements IOperator {
       nonce?: number;
     },
   ): Promise<utils.BigNumber> {
-    const identity = this._parseDid(did);
+    const identity = addressOf(did);
     const name = formatBytes32String(
       this._composeAttributeName(didAttribute, updateData),
     );
@@ -410,19 +409,5 @@ export class Operator extends Resolver implements IOperator {
       default:
         throw new Error('Unknown attribute name');
     }
-  }
-
-  /**
- * Checks if did is valid, and returns the address if it is
- *
- * @param did
- * @private
- */
-  protected _parseDid(did: string): string {
-    if (!did.match(DIDPattern)) {
-      throw new Error('Invalid DID');
-    }
-    const [, , id] = did.split(':');
-    return id;
   }
 }
