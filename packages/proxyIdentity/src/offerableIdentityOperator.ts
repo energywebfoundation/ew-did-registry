@@ -63,28 +63,6 @@ export class OfferableIdenitytOperator extends Operator {
     return true;
   }
 
-  async revokeAttribute(
-    identityDID: string,
-    attributeType: DIDAttribute,
-    updateData: IUpdateAttributeData,
-  ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const attribute = this._composeAttributeName(attributeType, updateData);
-    const bytesType = formatBytes32String(attribute);
-    const bytesValue = hexify(updateData.value);
-    const params = [identityAddress, bytesType, bytesValue];
-
-    try {
-      const data = new Interface(erc1056Abi).functions.revokeAttribute.encode(params);
-      await this.identity
-        .sendTransaction(data, this.settings.address, 0)
-        .then((tx: providers.TransactionResponse) => tx.wait());
-    } catch (error) {
-      throw new Error(error);
-    }
-    return true;
-  }
-
   protected async _sendTransaction(
     method: (...args: (string | number | Record<string, unknown>)[]) => Promise<void>,
     did: string,

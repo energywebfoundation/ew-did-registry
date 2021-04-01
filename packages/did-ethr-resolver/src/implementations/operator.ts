@@ -189,35 +189,22 @@ export class Operator extends Resolver implements IOperator {
   * Revokes attribute from DID Document
   * Returns true on success
   *
-  * @param { string } identityDID - did of identity of interest
+  * @param { string } did - did of identity of interest
   * @param { DIDAttribute } attributeType - type of attribute to revoke
   * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
   * @returns Promise<boolean>
   */
   async revokeAttribute(
-    identityDID: string,
+    did: string,
     attributeType: DIDAttribute,
     updateData: IUpdateAttributeData,
   ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const attribute = this._composeAttributeName(attributeType, updateData);
-    const bytesType = ethers.utils.formatBytes32String(attribute);
-    // const bytesValue = this._hexify(updateData.value as IAttributePayload);
-    try {
-      const tx = await this._didRegistry.revokeAttribute(
-        identityAddress,
-        bytesType,
-        hexify(updateData.value),
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDAttributeChanged'),
-      );
-      if (!event) return false;
-    } catch (e) {
-      console.error('Attribute not revoked', e.message);
-      throw new Error(e);
-    }
+    await this._sendTransaction(
+      this._didRegistry.revokeAttribute,
+      did,
+      attributeType,
+      updateData,
+    );
     return true;
   }
 
