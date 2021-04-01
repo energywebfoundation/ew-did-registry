@@ -4,24 +4,13 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
 import "./OfferableIdentity.sol";
+import "./IOfferable.sol";
 
 
 contract IdentityManager {
   address libraryAddress;
   address ethrRegistry;
   address owner;
-  
-  bytes4 constant ERC165ID = bytes4(keccak256("supportsInterface(bytes4)"));
-  bytes4 constant offerID = bytes4(keccak256("offer(address)"));
-  bytes4 constant acceptOfferID = bytes4(keccak256("acceptOffer()"));
-  bytes4 constant rejectOfferID = bytes4(keccak256("rejectOffer()"));
-  bytes4 constant cancelOfferID = bytes4(keccak256("cancelOffer()"));
-  bytes4 constant sendTxID = bytes4(keccak256("sendTransaction(bytes,address,uin256)"));
-  bytes4 constant offerableID = offerID ^
-    acceptOfferID ^
-    rejectOfferID ^
-    cancelOfferID ^
-    sendTxID;
   
   mapping(address => bool) created;
   mapping(address => bool) public verified;  
@@ -48,7 +37,8 @@ contract IdentityManager {
   modifier isOfferable() {
     require(
       ERC165Checker.supportsInterface(
-        msg.sender, offerableID),
+        msg.sender, type(IOfferable).interfaceId
+      ),
       "Only Offerable Identity allowed"
     );
     _;
