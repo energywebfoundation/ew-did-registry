@@ -153,35 +153,25 @@ export class Operator extends Resolver implements IOperator {
   * Revokes the delegate from DID Document
   * Returns true on success
   *
-  * @param { string } identityDID - did of identity of interest
+  * @param { string } did - did of identity of interest
   * @param { PubKeyType } delegateType - type of delegate of interest
-  * @param { string } delegateDID - did of delegate of interest
+  * @param { string } delegate - did of delegate of interest
   * @returns Promise<boolean>
   */
   async revokeDelegate(
-    identityDID: string,
+    did: string,
     delegateType: PubKeyType,
     delegateDID: string,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(delegateType);
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = delegateDID.split(':');
-
-    try {
-      const tx = await this._didRegistry.revokeDelegate(
-        identityAddress,
-        bytesType,
-        delegateAddress,
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDDelegateChanged'),
-      );
-      if (!event) return false;
-    } catch (err) {
-      console.error('Delegate not revoked:', err.message);
-      throw new Error(err);
-    }
+    await this._sendTransaction(
+      this._didRegistry.revokeDelegate,
+      did,
+      DIDAttribute.Authenticate,
+      {
+        type: delegateType,
+        delegate: delegateDID.split(':')[2],
+      },
+    );
     return true;
   }
 
