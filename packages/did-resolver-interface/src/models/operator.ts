@@ -55,10 +55,10 @@ export interface IUpdateData {
   encoding?: Encoding;
   algo?: Algorithms;
   type: PubKeyType | DIDAttribute;
-  value?: IAttributePayload ;
+  value?: IAttributePayload;
   delegate?: string;
 }
 
-export type UpdateAttributeData = Required<Omit<IUpdateData, 'delegate'>>;
+export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & { value: IAttributePayload };
 
-export type UpdateDelegateData = Required<Omit<IUpdateData, 'value'>>;
+export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & { delegate: string };

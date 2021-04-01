@@ -31,3 +31,13 @@ export function encodedPubKeyName(encoding: Encoding): keyof IPublicKey {
       return 'publicKeyHex';
   }
 }
+
+export function hexify(value: string | object): string {
+  if (typeof value === 'string' && value.startsWith('0x')) {
+    return value;
+  }
+  return `0x${Buffer.from(typeof value === 'string'
+    ? value
+    : JSON.stringify(value))
+    .toString('hex')}`;
+}

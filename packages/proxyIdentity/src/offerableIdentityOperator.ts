@@ -6,10 +6,10 @@ import {
   IUpdateData,
   RegistrySettings,
   IdentityOwner,
-  UpdateAttributeData,
-  UpdateDelegateData,
+  IUpdateAttributeData,
+  IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, hexify } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
@@ -66,12 +66,12 @@ export class OfferableIdenitytOperator extends Operator {
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
-    updateData: UpdateAttributeData,
+    updateData: IUpdateAttributeData,
   ): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value);
+    const bytesValue = hexify(updateData.value);
     const params = [identityAddress, bytesType, bytesValue];
 
     try {
@@ -95,10 +95,10 @@ export class OfferableIdenitytOperator extends Operator {
     const identity = this._parseDid(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(
+    const bytesOfValue = hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
-        ? (updateData as UpdateAttributeData).value
-        : (updateData as UpdateDelegateData).delegate,
+        ? (updateData as IUpdateAttributeData).value
+        : (updateData as IUpdateDelegateData).delegate,
     );
     const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];

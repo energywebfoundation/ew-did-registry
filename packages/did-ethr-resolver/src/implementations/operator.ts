@@ -17,16 +17,17 @@ import {
   KeyTags,
   RegistrySettings,
   IdentityOwner,
+  IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName } from '../utils';
+import { encodedPubKeyName, hexify } from '../utils';
 
-const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
-const { BigNumber } = utils;
+const { PublicKey, ServicePoint } = DIDAttribute;
+const { BigNumber, formatBytes32String } = utils;
 
 /**
  * To support/extend this Class, one just has to work with this file.
@@ -185,7 +186,7 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
-  * Revokes the attribute from DID Document
+  * Revokes attribute from DID Document
   * Returns true on success
   *
   * @param { string } identityDID - did of identity of interest
@@ -196,17 +197,17 @@ export class Operator extends Resolver implements IOperator {
   async revokeAttribute(
     identityDID: string,
     attributeType: DIDAttribute,
-    updateData: IUpdateData,
+    updateData: IUpdateAttributeData,
   ): Promise<boolean> {
     const [, , identityAddress] = identityDID.split(':');
     const attribute = this._composeAttributeName(attributeType, updateData);
     const bytesType = ethers.utils.formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value as IAttributePayload);
+    // const bytesValue = this._hexify(updateData.value as IAttributePayload);
     try {
       const tx = await this._didRegistry.revokeAttribute(
         identityAddress,
         bytesType,
-        bytesValue,
+        hexify(updateData.value),
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -378,17 +379,18 @@ export class Operator extends Resolver implements IOperator {
     },
   ): Promise<utils.BigNumber> {
     const identity = this._parseDid(did);
-    const attributeName = this._composeAttributeName(didAttribute, updateData);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(
+    const name = formatBytes32String(
+      this._composeAttributeName(didAttribute, updateData),
+    );
+    const value = hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value as IAttributePayload
         : updateData.delegate as string,
     );
     const params: (string | number | Record<string, unknown>)[] = [
       identity,
-      bytesOfAttribute,
-      bytesOfValue,
+      name,
+      value,
     ];
     if (validity !== undefined) {
       params.push(validity);
@@ -431,16 +433,6 @@ export class Operator extends Resolver implements IOperator {
       default:
         throw new Error('Unknown attribute name');
     }
-  }
-
-  protected _hexify(value: string | object): string {
-    if (typeof value === 'string' && value.startsWith('0x')) {
-      return value;
-    }
-    return `0x${Buffer.from(typeof value === 'string'
-      ? value
-      : JSON.stringify(value))
-      .toString('hex')}`;
   }
 
   /**
