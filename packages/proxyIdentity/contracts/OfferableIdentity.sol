@@ -1,4 +1,4 @@
-pragma solidity 0.8.0;
+pragma solidity 0.8.3;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "./IdentityManager.sol";
@@ -39,23 +39,23 @@ contract OfferableIdentity is IOfferable, ERC165 {
     _;
   }
 
-  function offer(address _offeredTo) external isOwner {
+  function offer(address _offeredTo) external override isOwner {
     offeredTo = _offeredTo;
     IdentityManager(manager).identityOffered(offeredTo);
   }
 
-  function acceptOffer() external isOfferedTo {
+  function acceptOffer() external override isOfferedTo {
     owner = offeredTo;
     IdentityManager(manager).identityAccepted(offeredTo);
     closeOffer();
   }
 
-  function rejectOffer() external isOfferedTo {
+  function rejectOffer() external override isOfferedTo {
     IdentityManager(manager).identityRejected(offeredTo);
     closeOffer();
   }
 
-  function cancelOffer() external isOwner {
+  function cancelOffer() external override isOwner {
     IdentityManager(manager).identityOfferCanceled(offeredTo);
     closeOffer();
   }
@@ -67,6 +67,7 @@ contract OfferableIdentity is IOfferable, ERC165 {
   function update(bytes memory _data, uint256 value)
     external
     isOwner
+    override
     returns (bool success)
   {
     bytes memory data = _data;
@@ -83,6 +84,7 @@ contract OfferableIdentity is IOfferable, ERC165 {
     public
     virtual
     view
+    override
     returns (bool)
   {
     return
