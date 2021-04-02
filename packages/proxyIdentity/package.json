@@ -10,7 +10,8 @@
     "compile": "../../node_modules/.bin/tsc",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test-ganache\" ",
     "test-ganache": "mocha -r ts-node/register test/*test.ts",
-    "compile:contracts": "../../node_modules/.bin/truffle compile"
+    "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
+    "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\""
   },
   "author": {
     "name": "EnergyWeb",
@@ -31,6 +32,7 @@
     "ganache-cli": "6.9.1",
     "mocha": "7.1.0",
     "multi-token-standard": "^0.8.13",
-    "run-with-testrpc": "0.3.1"
+    "run-with-testrpc": "0.3.1",
+    "solhint": "3.3.4"
   }
 }
