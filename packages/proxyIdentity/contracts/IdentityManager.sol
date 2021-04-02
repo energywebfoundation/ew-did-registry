@@ -12,6 +12,8 @@ contract IdentityManager {
   address ethrRegistry;
   address owner;
   
+  bytes4 private constant INIT_SELECTOR = bytes4(keccak256(bytes('init(address,address)')));
+  
   mapping(address => bool) created;
   mapping(address => bool) public verified;  
   mapping(address => bool) public compliant;
@@ -61,7 +63,7 @@ contract IdentityManager {
     address identity = Clones.clone(libraryAddress);
     created[identity] = true;
     
-    bytes memory initData = abi.encodeWithSignature("init(address,address)", _owner, ethrRegistry);    
+    bytes memory initData = abi.encodeWithSelector(INIT_SELECTOR, _owner, ethrRegistry);    
     Address.functionCall(identity, initData, "IdentityManager: Can't initialize cloned identity");
   }
   
