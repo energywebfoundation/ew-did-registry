@@ -86,7 +86,6 @@ export class Operator extends Resolver implements IOperator {
  * @param context
  * @returns Promise<boolean>
  */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(): Promise<boolean> {
     const did = await this.did();
     if (await this.readOwnerPubKey(did)) {
@@ -99,8 +98,7 @@ export class Operator extends Resolver implements IOperator {
       encoding: Encoding.HEX,
       value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
-    const validity = 10 * 60 * 1000;
-    await this.update(did, attribute, updateData, validity);
+    await this.update(did, attribute, updateData);
     return true;
   }
 
