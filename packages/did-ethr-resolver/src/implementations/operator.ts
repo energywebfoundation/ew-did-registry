@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, providers,
+  utils, providers,
 } from 'ethers';
 import {
   Algorithms,
@@ -17,6 +17,7 @@ import {
   RegistrySettings,
   IdentityOwner,
   IUpdateAttributeData,
+  IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
@@ -24,6 +25,8 @@ import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
 import { encodedPubKeyName, hexify, addressOf } from '../utils';
+import { EthrRegistry__factory as RegistryFactory } from '../../contractTypes/factories/EthrRegistry__factory';
+import { EthrRegistry } from '../../contractTypes/EthrRegistry';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 const { BigNumber, formatBytes32String } = utils;
@@ -38,7 +41,7 @@ export class Operator extends Resolver implements IOperator {
   /**
    * ERC-1056 compliant ethereum smart-contract
    */
-  private _didRegistry: Contract;
+  private _registry: EthrRegistry;
 
   private readonly _keys = {
     privateKey: '',
@@ -49,16 +52,18 @@ export class Operator extends Resolver implements IOperator {
 
   protected readonly _owner: IdentityOwner;
 
+  public static defaultValidity = Number.MAX_SAFE_INTEGER;
+
   /**
  * @param { IdentityOwner } owner - entity which controls document updatable by this operator
  */
   constructor(owner: IdentityOwner, settings: RegistrySettings) {
     super(owner.provider as providers.Provider, settings);
     const {
-      address, abi,
+      address,
     } = this.settings;
     this._owner = owner;
-    this._didRegistry = new ethers.Contract(address, abi, this._owner);
+    this._registry = new RegistryFactory(this._owner).attach(address);
     this._keys.publicKey = owner.publicKey;
   }
 
@@ -128,27 +133,77 @@ export class Operator extends Resolver implements IOperator {
   * ```
   *
   * @param { string } did - did associated with DID document
-  * @param { DIDAttribute } didAttribute - specifies updated section in DID document. Must be 31
+  * @param { DIDAttribute } attribute - specifies updated section in DID document. Must be 31
   * bytes or shorter
-  * @param { IUpdateData } updateData
-  * @param { number } validity - time in milliseconds during which
+  * @param { IUpdateData } data
+  * @param { number } validity - time in seconds during which
   *                              attribute will be valid
   * @returns Promise<number>
   */
   async update(
     did: string,
-    didAttribute: DIDAttribute,
-    updateData: IUpdateData,
-    validity: number = Number.MAX_SAFE_INTEGER,
+    attribute: DIDAttribute,
+    data: IUpdateData,
+    validity?: number,
   ): Promise<utils.BigNumber> {
-    const registry = this._didRegistry;
-    const method = didAttribute === PublicKey || didAttribute === ServicePoint
-      ? registry.setAttribute
-      : registry.addDelegate;
-    if (validity < 0) {
+    if (validity && validity < 0) {
       throw new Error('Validity must be non negative value');
     }
-    return this._sendTransaction(method, did, didAttribute, updateData, validity);
+    return attribute === PublicKey || attribute === ServicePoint
+      ? this._updateAttribute({
+        did, attribute, data: data as IUpdateAttributeData, validity,
+      })
+      : this._updateDelegate({ did, data: data as IUpdateDelegateData, validity });
+  }
+
+  protected async _updateAttribute(
+    {
+      did,
+      attribute,
+      data,
+      validity = Operator.defaultValidity,
+      revoke = false,
+    }: {
+      did: string;
+      attribute: DIDAttribute;
+      data: IUpdateAttributeData;
+      validity?: number;
+      revoke?: boolean;
+    },
+  ): Promise<utils.BigNumber> {
+    const params: [string, string, string] = [
+      addressOf(did),
+      formatBytes32String(this._composeAttributeName(attribute, data)),
+      hexify(data.value),
+    ];
+    const tx = revoke
+      ? this._registry.interface.functions.revokeAttribute.encode(params)
+      : this._registry.interface.functions.setAttribute.encode([...params, validity]);
+    return this._send(tx);
+  }
+
+  protected async _updateDelegate(
+    {
+      did,
+      data,
+      validity = Operator.defaultValidity,
+      revoke = false,
+    }: {
+      did: string;
+      data: IUpdateDelegateData;
+      validity?: number;
+      revoke?: boolean;
+    },
+  ): Promise<utils.BigNumber> {
+    const params: [string, string, string] = [
+      addressOf(did),
+      formatBytes32String(this._composeAttributeName(DIDAttribute.Authenticate, data)),
+      hexify(data.delegate),
+    ];
+    const tx = revoke
+      ? this._registry.interface.functions.revokeDelegate.encode(params)
+      : this._registry.interface.functions.addDelegate.encode([...params, validity]);
+    return this._send(tx);
   }
 
   /**
@@ -165,15 +220,14 @@ export class Operator extends Resolver implements IOperator {
     delegateType: PubKeyType,
     delegateDID: string,
   ): Promise<boolean> {
-    await this._sendTransaction(
-      this._didRegistry.revokeDelegate,
+    await this._updateDelegate({
       did,
-      DIDAttribute.Authenticate,
-      {
+      data: {
         type: delegateType,
         delegate: addressOf(delegateDID),
       },
-    );
+      revoke: true,
+    });
     return true;
   }
 
@@ -182,21 +236,21 @@ export class Operator extends Resolver implements IOperator {
   * Returns true on success
   *
   * @param { string } did - did of identity of interest
-  * @param { DIDAttribute } attributeType - type of attribute to revoke
-  * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
+  * @param { DIDAttribute } attribute - type of attribute to revoke
+  * @param { IUpdateData } data - data required to identify the correct attribute to revoke
   * @returns Promise<boolean>
   */
   async revokeAttribute(
     did: string,
-    attributeType: DIDAttribute,
-    updateData: IUpdateAttributeData,
+    attribute: DIDAttribute,
+    data: IUpdateAttributeData,
   ): Promise<boolean> {
-    await this._sendTransaction(
-      this._didRegistry.revokeAttribute,
+    await this._updateAttribute({
       did,
-      attributeType,
-      updateData,
-    );
+      attribute,
+      data,
+      revoke: true,
+    });
     return true;
   }
 
@@ -212,19 +266,11 @@ export class Operator extends Resolver implements IOperator {
     did: string,
     newOwner: string,
   ): Promise<boolean> {
-    try {
-      const tx = await this._didRegistry.changeOwner(
-        addressOf(did),
-        addressOf(newOwner),
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDOwnerChanged'),
-      );
-      if (!event) return false;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const tx = this._registry.interface.functions.changeOwner.encode([
+      addressOf(did),
+      addressOf(newOwner),
+    ]);
+    await this._send(tx);
     return true;
   }
 
@@ -333,6 +379,7 @@ export class Operator extends Resolver implements IOperator {
     }
   }
 
+
   /**
  * Private function to send transactions
  *
@@ -344,45 +391,16 @@ export class Operator extends Resolver implements IOperator {
  * @param overrides
  * @private
  */
-  protected async _sendTransaction(
-    method: Function,
-    did: string,
-    didAttribute: DIDAttribute,
-    updateData: IUpdateData,
-    validity?: number,
-    overrides?: {
-      nonce?: number;
-    },
+  protected async _send(
+    data: string,
   ): Promise<utils.BigNumber> {
-    const identity = addressOf(did);
-    const name = formatBytes32String(
-      this._composeAttributeName(didAttribute, updateData),
-    );
-    const value = hexify(
-      didAttribute === PublicKey || didAttribute === ServicePoint
-        ? updateData.value as IAttributePayload
-        : updateData.delegate as string,
-    );
-    const params: (string | number | Record<string, unknown>)[] = [
-      identity,
-      name,
-      value,
-    ];
-    if (validity !== undefined) {
-      params.push(validity);
-    }
-    if (overrides) {
-      params.push(overrides);
-    }
     try {
-      const tx = await method(...params);
+      const tx = await this._owner.sendTransaction({
+        data,
+        to: this._registry.address,
+      });
       const receipt = await tx.wait();
-      const event: Event = receipt.events.find(
-        (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
-          || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
-          || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
-      );
-      return new BigNumber(event.blockNumber as number);
+      return new BigNumber(receipt.blockNumber as number);
     } catch (e) {
       throw new Error(e.message);
     }

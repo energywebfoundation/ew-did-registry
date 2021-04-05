@@ -11,7 +11,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
-import { abi as erc1056Abi } from '../constants/ERC1056.json';
+import { abi as erc1056Abi } from '../../../constants/EthrRegistry.json';
 
 const { BigNumber, Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
