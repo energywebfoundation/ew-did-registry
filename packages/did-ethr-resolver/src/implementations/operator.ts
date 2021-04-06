@@ -1,5 +1,4 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-await-in-loop,no-restricted-syntax */
+/* eslint-disable no-restricted-syntax */
 import {
   Contract, ethers, Event, utils, providers,
 } from 'ethers';
@@ -17,16 +16,17 @@ import {
   KeyTags,
   RegistrySettings,
   IdentityOwner,
+  IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
 import {
-  delegatePubKeyIdPattern, DIDPattern, pubKeyIdPattern,
+  delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName } from '../utils';
+import { encodedPubKeyName, hexify, addressOf } from '../utils';
 
-const { Authenticate, PublicKey, ServicePoint } = DIDAttribute;
-const { BigNumber } = utils;
+const { PublicKey, ServicePoint } = DIDAttribute;
+const { BigNumber, formatBytes32String } = utils;
 
 /**
  * To support/extend this Class, one just has to work with this file.
@@ -63,7 +63,10 @@ export class Operator extends Resolver implements IOperator {
   }
 
   protected async getAddress(): Promise<string> {
-    return this.address || (this.address = await this._owner.getAddress());
+    if (!this.address) {
+      this.address = await this._owner.getAddress();
+    }
+    return this.address as string;
   }
 
   private async did(): Promise<string> {
@@ -83,7 +86,6 @@ export class Operator extends Resolver implements IOperator {
  * @param context
  * @returns Promise<boolean>
  */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(): Promise<boolean> {
     const did = await this.did();
     if (await this.readOwnerPubKey(did)) {
@@ -96,8 +98,7 @@ export class Operator extends Resolver implements IOperator {
       encoding: Encoding.HEX,
       value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
-    const validity = 10 * 60 * 1000;
-    await this.update(did, attribute, updateData, validity);
+    await this.update(did, attribute, updateData);
     return true;
   }
 
@@ -152,71 +153,48 @@ export class Operator extends Resolver implements IOperator {
   * Revokes the delegate from DID Document
   * Returns true on success
   *
-  * @param { string } identityDID - did of identity of interest
+  * @param { string } did - did of identity of interest
   * @param { PubKeyType } delegateType - type of delegate of interest
-  * @param { string } delegateDID - did of delegate of interest
+  * @param { string } delegate - did of delegate of interest
   * @returns Promise<boolean>
   */
   async revokeDelegate(
-    identityDID: string,
+    did: string,
     delegateType: PubKeyType,
     delegateDID: string,
   ): Promise<boolean> {
-    const bytesType = ethers.utils.formatBytes32String(delegateType);
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = delegateDID.split(':');
-
-    try {
-      const tx = await this._didRegistry.revokeDelegate(
-        identityAddress,
-        bytesType,
-        delegateAddress,
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDDelegateChanged'),
-      );
-      if (!event) return false;
-    } catch (err) {
-      console.error('Delegate not revoked:', err.message);
-      throw new Error(err);
-    }
+    await this._sendTransaction(
+      this._didRegistry.revokeDelegate,
+      did,
+      DIDAttribute.Authenticate,
+      {
+        type: delegateType,
+        delegate: addressOf(delegateDID),
+      },
+    );
     return true;
   }
 
   /**
-  * Revokes the attribute from DID Document
+  * Revokes attribute from DID Document
   * Returns true on success
   *
-  * @param { string } identityDID - did of identity of interest
+  * @param { string } did - did of identity of interest
   * @param { DIDAttribute } attributeType - type of attribute to revoke
   * @param { IUpdateData } updateData - data required to identify the correct attribute to revoke
   * @returns Promise<boolean>
   */
   async revokeAttribute(
-    identityDID: string,
+    did: string,
     attributeType: DIDAttribute,
-    updateData: IUpdateData,
+    updateData: IUpdateAttributeData,
   ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const attribute = this._composeAttributeName(attributeType, updateData);
-    const bytesType = ethers.utils.formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value as IAttributePayload);
-    try {
-      const tx = await this._didRegistry.revokeAttribute(
-        identityAddress,
-        bytesType,
-        bytesValue,
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDAttributeChanged'),
-      );
-      if (!event) return false;
-    } catch (e) {
-      console.error('Attribute not revoked', e.message);
-      throw new Error(e);
-    }
+    await this._sendTransaction(
+      this._didRegistry.revokeAttribute,
+      did,
+      attributeType,
+      updateData,
+    );
     return true;
   }
 
@@ -224,21 +202,18 @@ export class Operator extends Resolver implements IOperator {
   * Changes the owner of particular decentralised identity
   * Returns true on success
   *
-  * @param { string } identityDID - did of current identity owner
-  * @param { string } newOwnerDid - did of new owner that will be set on success
+  * @param { string } did - did of current identity owner
+  * @param { string } newOwner - did of new owner that will be set on success
   * @returns Promise<boolean>
   */
   async changeOwner(
-    identityDID: string,
-    newOwnerDid: string,
+    did: string,
+    newOwner: string,
   ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = newOwnerDid.split(':');
-
     try {
       const tx = await this._didRegistry.changeOwner(
-        identityAddress,
-        delegateAddress,
+        addressOf(did),
+        addressOf(newOwner),
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -377,18 +352,19 @@ export class Operator extends Resolver implements IOperator {
       nonce?: number;
     },
   ): Promise<utils.BigNumber> {
-    const identity = this._parseDid(did);
-    const attributeName = this._composeAttributeName(didAttribute, updateData);
-    const bytesOfAttribute = ethers.utils.formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(
+    const identity = addressOf(did);
+    const name = formatBytes32String(
+      this._composeAttributeName(didAttribute, updateData),
+    );
+    const value = hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? updateData.value as IAttributePayload
         : updateData.delegate as string,
     );
     const params: (string | number | Record<string, unknown>)[] = [
       identity,
-      bytesOfAttribute,
-      bytesOfValue,
+      name,
+      value,
     ];
     if (validity !== undefined) {
       params.push(validity);
@@ -431,29 +407,5 @@ export class Operator extends Resolver implements IOperator {
       default:
         throw new Error('Unknown attribute name');
     }
-  }
-
-  protected _hexify(value: string | object): string {
-    if (typeof value === 'string' && value.startsWith('0x')) {
-      return value;
-    }
-    return `0x${Buffer.from(typeof value === 'string'
-      ? value
-      : JSON.stringify(value))
-      .toString('hex')}`;
-  }
-
-  /**
- * Checks if did is valid, and returns the address if it is
- *
- * @param did
- * @private
- */
-  protected _parseDid(did: string): string {
-    if (!did.match(DIDPattern)) {
-      throw new Error('Invalid DID');
-    }
-    const [, , id] = did.split(':');
-    return id;
   }
 }

@@ -1,5 +1,5 @@
-import {IDID} from './interface';
-import {DID_SCHEME_PATTERNS, Methods} from './models';
+import { IDID } from './interface';
+import { DID_SCHEME_PATTERNS, Methods } from './models';
 
 /* eslint-disable no-underscore-dangle */
 class DID implements IDID {

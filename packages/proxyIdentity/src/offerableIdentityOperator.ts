@@ -1,15 +1,15 @@
 import {
-  Contract, Event, utils, providers,
+  Contract, Event, utils,
 } from 'ethers';
 import {
   DIDAttribute,
   IUpdateData,
   RegistrySettings,
   IdentityOwner,
-  UpdateAttributeData,
-  UpdateDelegateData,
+  IUpdateAttributeData,
+  IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
@@ -63,28 +63,6 @@ export class OfferableIdenitytOperator extends Operator {
     return true;
   }
 
-  async revokeAttribute(
-    identityDID: string,
-    attributeType: DIDAttribute,
-    updateData: UpdateAttributeData,
-  ): Promise<boolean> {
-    const [, , identityAddress] = identityDID.split(':');
-    const attribute = this._composeAttributeName(attributeType, updateData);
-    const bytesType = formatBytes32String(attribute);
-    const bytesValue = this._hexify(updateData.value);
-    const params = [identityAddress, bytesType, bytesValue];
-
-    try {
-      const data = new Interface(erc1056Abi).functions.revokeAttribute.encode(params);
-      await this.identity
-        .sendTransaction(data, this.settings.address, 0)
-        .then((tx: providers.TransactionResponse) => tx.wait());
-    } catch (error) {
-      throw new Error(error);
-    }
-    return true;
-  }
-
   protected async _sendTransaction(
     method: (...args: (string | number | Record<string, unknown>)[]) => Promise<void>,
     did: string,
@@ -92,13 +70,13 @@ export class OfferableIdenitytOperator extends Operator {
     updateData: IUpdateData,
     validity?: number,
   ): Promise<utils.BigNumber> {
-    const identity = this._parseDid(did);
+    const identity = addressOf(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
-    const bytesOfValue = this._hexify(
+    const bytesOfValue = hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
-        ? (updateData as UpdateAttributeData).value
-        : (updateData as UpdateDelegateData).delegate,
+        ? (updateData as IUpdateAttributeData).value
+        : (updateData as IUpdateDelegateData).delegate,
     );
     const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
