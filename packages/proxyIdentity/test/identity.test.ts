@@ -15,15 +15,14 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
   before(async function () {
     const owner = provider.getSigner(1);
 
+    const identityFactory = new ContractFactory(identityAbi, identityBytecode, deployer);
+    const library = await identityFactory.deploy();
+
     const identityManagerFactory = new ContractFactory(IMAbi, IMBytecode, deployer);
-    const manager = await identityManagerFactory.deploy();
+    const manager = await identityManagerFactory.deploy(library.address);
 
     const erc1056Factory = new ContractFactory(erc1056Abi, erc1056Bytecode, deployer);
     const erc1056 = await erc1056Factory.deploy();
-
-    const identityFactory = new ContractFactory(identityAbi, identityBytecode, deployer);
-    const library = await identityFactory.deploy();
-    await manager.setLibraryAddress(library.address);
 
     Object.assign(this, {
       manager, provider, identityFactory, owner, erc1056, deployer,

@@ -9,7 +9,6 @@ import "./IOfferable.sol";
 
 contract IdentityManager {
   address libraryAddress;
-  address owner;
   
   bytes4 private constant INIT_SELECTOR = bytes4(keccak256(bytes('init(address)')));
   
@@ -29,13 +28,8 @@ contract IdentityManager {
   event IdentityOfferRejected(address indexed identity, address owner, address indexed offeredTo, uint256 indexed at);
   event IdentityOfferCanceled(address indexed identity, address indexed owner, address oferedto, uint256 indexed at);
   
-  constructor() {
-    owner = msg.sender;
-  }
-
-  modifier isOwner() {
-    require(msg.sender == owner, "IdentityManager: Only Manager owner allowed");
-    _;
+  constructor(address _libraryAddress) {
+    libraryAddress = _libraryAddress;
   }
   
   modifier isOfferable() {
@@ -71,10 +65,6 @@ contract IdentityManager {
   
   function identityOwner(address identity) public view returns (address) {
     return identities[identity].owner;
-  }
-
-  function setLibraryAddress(address _libraryAddress) external isOwner {
-    libraryAddress = _libraryAddress;
   }
 
   function createIdentity(address _owner) external {
