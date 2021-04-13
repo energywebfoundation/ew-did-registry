@@ -10,7 +10,7 @@ interface IOfferable {
 
   function cancelOffer() external;
 
-  function update(bytes memory _data, uint256 value)
+  function sendTransaction(address to, bytes memory data, uint256 value)
     external
     returns (bool success);
 }

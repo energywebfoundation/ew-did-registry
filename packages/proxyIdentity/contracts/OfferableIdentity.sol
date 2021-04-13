@@ -8,25 +8,28 @@ import "./IOfferable.sol";
 contract OfferableIdentity is IOfferable, ERC165 {
   address public owner;
   address manager;
-  address ethrRegistry;
 
   address public offeredTo;
 
   event TransactionSent(bytes indexed data, uint256 indexed value);
 
-  function init(address _owner, address _ethrRegistry) external {
+  function init(address _owner) external {
     require(
       manager == address(0),
       "OfferableIdentity: Identity can be initialize only once"
     );
     owner = _owner;
     manager = msg.sender;
-    ethrRegistry = _ethrRegistry;
     IdentityManager(manager).identityCreated(owner);
   }
 
   modifier isOwner() {
     require(msg.sender == owner, "OfferableIdentity: Only owner allowed");
+    _;
+  }
+  
+  modifier isManager() {
+    require(msg.sender == manager, "OfferableIdentity: Only manager allowed");
     _;
   }
 
@@ -64,20 +67,15 @@ contract OfferableIdentity is IOfferable, ERC165 {
     offeredTo = address(0);
   }
 
-  function update(bytes memory _data, uint256 value)
+  function sendTransaction(address to, bytes memory data, uint256 value)
     external
     isOwner
     override
     returns (bool success)
   {
-    bytes memory data = _data;
-    uint256 len = data.length;
-    address _ethrRegistry = ethrRegistry;
-    // solium-disable-next-line security/no-inline-assembly
-    assembly {
-      success := call(gas(), _ethrRegistry, value, add(data, 0x20), len, 0, 0)
-    }
-    emit TransactionSent(_data, value);
+    (success, ) = to.call{ gas: gasleft() - 5000, value: value}(data);
+    require(success, "OfferableIdentity: Error calling other contract");
+    emit TransactionSent(data, value);
   }
 
   function supportsInterface(bytes4 interfaceId)

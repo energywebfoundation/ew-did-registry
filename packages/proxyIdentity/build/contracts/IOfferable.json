@@ -38,8 +38,13 @@
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         },
         {
@@ -48,7 +53,7 @@
           "type": "uint256"
         }
       ],
-      "name": "update",
+      "name": "sendTransaction",
       "outputs": [
         {
           "internalType": "bool",
@@ -60,7 +65,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"acceptOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cancelOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_offeredTo\",\"type\":\"address\"}],\"name\":\"offer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rejectOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"update\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":\"IOfferable\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":{\"keccak256\":\"0xa59b025d637634fb877641e1247bf5203b5245d6f5b80e363f684e7dbffdbb46\",\"urls\":[\"bzz-raw://3a03ab1acc46aefbef2435436f5dd37578afb5c2644f0d837b1bcac7cd535c0f\",\"dweb:/ipfs/QmTHzZcmd85QJsTsM88aehbfdf1G5fcbNvzsrYdoA2vE8g\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"acceptOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cancelOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_offeredTo\",\"type\":\"address\"}],\"name\":\"offer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rejectOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"sendTransaction\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":\"IOfferable\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":{\"keccak256\":\"0x68b38b8d2acd697d5f7677860e4e50f08fa25de2efa927fb87235a862bca5347\",\"urls\":[\"bzz-raw://b03e920e03f84384f521541fd700c8a00a73bd1423a1caffeb26151460c3b08d\",\"dweb:/ipfs/QmPhfkcjMtsxaVFgQCdg3bGUN4ew22J4CdAw26Yg7ExN33\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -68,16 +73,16 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.8.3;\n\n\ninterface IOfferable {\n  function offer(address _offeredTo) external;\n\n  function acceptOffer() external;\n\n  function rejectOffer() external;\n\n  function cancelOffer() external;\n\n  function update(bytes memory _data, uint256 value)\n    external\n    returns (bool success);\n}\n",
+  "source": "pragma solidity 0.8.3;\n\n\ninterface IOfferable {\n  function offer(address _offeredTo) external;\n\n  function acceptOffer() external;\n\n  function rejectOffer() external;\n\n  function cancelOffer() external;\n\n  function sendTransaction(address to, bytes memory data, uint256 value)\n    external\n    returns (bool success);\n}\n",
   "sourcePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
   "ast": {
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
     "exportedSymbols": {
       "IOfferable": [
-        25
+        27
       ]
     },
-    "id": 26,
+    "id": 28,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -96,9 +101,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 25,
+        "id": 27,
         "linearizedBaseContracts": [
-          25
+          27
         ],
         "name": "IOfferable",
         "nameLocation": "35:10:0",
@@ -154,7 +159,7 @@
               "parameters": [],
               "src": "93:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "50:44:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -181,7 +186,7 @@
               "parameters": [],
               "src": "129:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "98:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -208,7 +213,7 @@
               "parameters": [],
               "src": "165:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "134:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -235,34 +240,62 @@
               "parameters": [],
               "src": "201:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "170:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "functionSelector": "c3b45234",
-            "id": 24,
+            "functionSelector": "8afb4913",
+            "id": 26,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "update",
-            "nameLocation": "215:6:0",
+            "name": "sendTransaction",
+            "nameLocation": "215:15:0",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 20,
+              "id": 22,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
                   "id": 17,
                   "mutability": "mutable",
-                  "name": "_data",
-                  "nameLocation": "235:5:0",
+                  "name": "to",
+                  "nameLocation": "239:2:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "222:18:0",
+                  "scope": 26,
+                  "src": "231:10:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 16,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "231:7:0",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 19,
+                  "mutability": "mutable",
+                  "name": "data",
+                  "nameLocation": "256:4:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 26,
+                  "src": "243:17:0",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -270,10 +303,10 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 16,
+                    "id": 18,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "222:5:0",
+                    "src": "243:5:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes_storage_ptr",
                       "typeString": "bytes"
@@ -283,13 +316,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 19,
+                  "id": 21,
                   "mutability": "mutable",
                   "name": "value",
-                  "nameLocation": "250:5:0",
+                  "nameLocation": "270:5:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "242:13:0",
+                  "scope": 26,
+                  "src": "262:13:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -297,10 +330,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 18,
+                    "id": 20,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "242:7:0",
+                    "src": "262:7:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -309,21 +342,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "221:35:0"
+              "src": "230:46:0"
             },
             "returnParameters": {
-              "id": 23,
+              "id": 25,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 22,
+                  "id": 24,
                   "mutability": "mutable",
                   "name": "success",
-                  "nameLocation": "288:7:0",
+                  "nameLocation": "308:7:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "283:12:0",
+                  "scope": 26,
+                  "src": "303:12:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -331,10 +364,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 21,
+                    "id": 23,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "283:4:0",
+                    "src": "303:4:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -343,29 +376,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "282:14:0"
+              "src": "302:14:0"
             },
-            "scope": 25,
-            "src": "206:91:0",
+            "scope": 27,
+            "src": "206:111:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 26,
-        "src": "25:274:0"
+        "scope": 28,
+        "src": "25:294:0"
       }
     ],
-    "src": "0:300:0"
+    "src": "0:320:0"
   },
   "legacyAST": {
     "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
     "exportedSymbols": {
       "IOfferable": [
-        25
+        27
       ]
     },
-    "id": 26,
+    "id": 28,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -384,9 +417,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 25,
+        "id": 27,
         "linearizedBaseContracts": [
-          25
+          27
         ],
         "name": "IOfferable",
         "nameLocation": "35:10:0",
@@ -442,7 +475,7 @@
               "parameters": [],
               "src": "93:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "50:44:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -469,7 +502,7 @@
               "parameters": [],
               "src": "129:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "98:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -496,7 +529,7 @@
               "parameters": [],
               "src": "165:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "134:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -523,34 +556,62 @@
               "parameters": [],
               "src": "201:0:0"
             },
-            "scope": 25,
+            "scope": 27,
             "src": "170:32:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "functionSelector": "c3b45234",
-            "id": 24,
+            "functionSelector": "8afb4913",
+            "id": 26,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "update",
-            "nameLocation": "215:6:0",
+            "name": "sendTransaction",
+            "nameLocation": "215:15:0",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 20,
+              "id": 22,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
                   "id": 17,
                   "mutability": "mutable",
-                  "name": "_data",
-                  "nameLocation": "235:5:0",
+                  "name": "to",
+                  "nameLocation": "239:2:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "222:18:0",
+                  "scope": 26,
+                  "src": "231:10:0",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 16,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "231:7:0",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 19,
+                  "mutability": "mutable",
+                  "name": "data",
+                  "nameLocation": "256:4:0",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 26,
+                  "src": "243:17:0",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -558,10 +619,10 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 16,
+                    "id": 18,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "222:5:0",
+                    "src": "243:5:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes_storage_ptr",
                       "typeString": "bytes"
@@ -571,13 +632,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 19,
+                  "id": 21,
                   "mutability": "mutable",
                   "name": "value",
-                  "nameLocation": "250:5:0",
+                  "nameLocation": "270:5:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "242:13:0",
+                  "scope": 26,
+                  "src": "262:13:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -585,10 +646,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 18,
+                    "id": 20,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "242:7:0",
+                    "src": "262:7:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -597,21 +658,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "221:35:0"
+              "src": "230:46:0"
             },
             "returnParameters": {
-              "id": 23,
+              "id": 25,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 22,
+                  "id": 24,
                   "mutability": "mutable",
                   "name": "success",
-                  "nameLocation": "288:7:0",
+                  "nameLocation": "308:7:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 24,
-                  "src": "283:12:0",
+                  "scope": 26,
+                  "src": "303:12:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -619,10 +680,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 21,
+                    "id": 23,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "283:4:0",
+                    "src": "303:4:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -631,20 +692,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "282:14:0"
+              "src": "302:14:0"
             },
-            "scope": 25,
-            "src": "206:91:0",
+            "scope": 27,
+            "src": "206:111:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 26,
-        "src": "25:274:0"
+        "scope": 28,
+        "src": "25:294:0"
       }
     ],
-    "src": "0:300:0"
+    "src": "0:320:0"
   },
   "compiler": {
     "name": "solc",
@@ -652,7 +713,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-13T07:41:02.786Z",
+  "updatedAt": "2021-04-13T08:45:18.338Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
