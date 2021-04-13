@@ -24,7 +24,6 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
     const identityFactory = new ContractFactory(identityAbi, identityBytecode, deployer);
     const library = await identityFactory.deploy();
     await manager.setLibraryAddress(library.address);
-    await manager.setEthrRegistry(erc1056.address);
 
     Object.assign(this, {
       manager, provider, identityFactory, owner, erc1056, deployer,

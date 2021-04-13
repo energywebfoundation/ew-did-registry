@@ -9,17 +9,19 @@ import "./IOfferable.sol";
 
 contract IdentityManager {
   address libraryAddress;
-  address ethrRegistry;
   address owner;
   
   bytes4 private constant INIT_SELECTOR = bytes4(keccak256(bytes('init(address)')));
   
-  mapping(address => bool) created;
-  mapping(address => bool) public verified;  
-  mapping(address => bool) public compliant;
-  mapping(address => bool) offered;
+  struct Identity {
+    bool created;
+    bool verified;
+    bool compliant;
+    bool offered;
+    address owner;
+  }
   
-  mapping(address => address) public owners;
+  mapping(address => Identity) identities;
 
   event IdentityCreated(address indexed identity, address indexed owner, uint256 indexed at);
   event IdentityOffered(address indexed identity, address indexed owner, address offeredTo, uint256 indexed at);
@@ -47,21 +49,37 @@ contract IdentityManager {
   }
   
   modifier isOffered() {
-    require(offered[msg.sender], "IdentityManager: Identity is not offered");
+    require(identities[msg.sender].offered, "IdentityManager: Identity is not offered");
     _;
+  }
+  
+  function verified(address identity) public view returns (bool) {
+    return identities[identity].verified;
+  }
+
+  function compliant(address identity) public view returns (bool) {
+    return identities[identity].compliant;
+  }
+  
+  function created(address identity) internal view returns (bool) {
+    return identities[identity].created;
+  }
+  
+  function offered(address identity) internal view returns (bool) {
+    return identities[identity].offered;
+  }
+  
+  function identityOwner(address identity) public view returns (address) {
+    return identities[identity].owner;
   }
 
   function setLibraryAddress(address _libraryAddress) external isOwner {
     libraryAddress = _libraryAddress;
   }
-  
-  function setEthrRegistry(address _ethrRegistry) external isOwner {
-    ethrRegistry = _ethrRegistry; 
-  }
 
   function createIdentity(address _owner) external {
     address identity = Clones.clone(libraryAddress);
-    created[identity] = true;
+    identities[identity].created = true;
     
     bytes memory initData = abi.encodeWithSelector(INIT_SELECTOR, _owner);    
     Address.functionCall(identity, initData, "IdentityManager: Can't initialize cloned identity");
@@ -71,30 +89,30 @@ contract IdentityManager {
     external
     isOfferable
   {
-    if (created[msg.sender]) {
-      verified[msg.sender] = true;      
+    if (created(msg.sender)) {
+      identities[msg.sender].verified = true;      
     }
     else {
-      compliant[msg.sender] = true;
+      identities[msg.sender].compliant = true;
     }
-    require(owners[msg.sender] == address(0), "IdentityManager: Identity already has been registered");
-    owners[msg.sender] = _owner;
+    require(identityOwner(msg.sender) == address(0), "IdentityManager: Identity already has been registered");
+    identities[msg.sender].owner = _owner;
     emit IdentityCreated(msg.sender, _owner, block.timestamp);
   }
 
   function identityOffered(address _offeredTo)
     external
   {
-    require(verified[msg.sender] || compliant[msg.sender], "IdentityManager: Not compliant identity can't be offered");
-    offered[msg.sender] = true;
-    emit IdentityOffered(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
+    require(verified(msg.sender) || compliant(msg.sender), "IdentityManager: Not compliant identity can't be offered");
+    identities[msg.sender].offered = true;
+    emit IdentityOffered(msg.sender, identityOwner(msg.sender), _offeredTo, block.timestamp);
   }
 
   function identityAccepted(address _owner)
     external 
     isOffered
   {
-    offered[msg.sender] = false;
+    identities[msg.sender].offered = false;
     emit IdentityTransferred(msg.sender, _owner, block.timestamp);
   }
 
@@ -102,15 +120,15 @@ contract IdentityManager {
     external
     isOffered
   {
-    offered[msg.sender] = false;
-    emit IdentityOfferRejected(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
+    identities[msg.sender].offered = false;
+    emit IdentityOfferRejected(msg.sender, identityOwner(msg.sender), _offeredTo, block.timestamp);
   }
 
   function identityOfferCanceled(address _offeredTo)
     external
     isOffered
   {
-    offered[msg.sender] = false;
-    emit IdentityOfferCanceled(msg.sender, owners[msg.sender], _offeredTo, block.timestamp);
+    identities[msg.sender].offered = false;
+    emit IdentityOfferCanceled(msg.sender, identityOwner(msg.sender), _offeredTo, block.timestamp);
   }
 }
