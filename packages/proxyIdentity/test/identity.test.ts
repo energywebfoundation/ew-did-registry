@@ -18,7 +18,6 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
     const identityManagerFactory = new ContractFactory(IMAbi, IMBytecode, deployer);
     const manager = await identityManagerFactory.deploy();
 
-
     const erc1056Factory = new ContractFactory(erc1056Abi, erc1056Bytecode, deployer);
     const erc1056 = await erc1056Factory.deploy();
 
