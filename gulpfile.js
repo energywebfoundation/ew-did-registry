@@ -2,13 +2,12 @@
 const path = require('path');
 const fs = require('fs');
 
-const { series, src, dest } = require('gulp');
+const { series, dest } = require('gulp');
 const rename = require('gulp-rename');
 const streamify = require('gulp-streamify');
 const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
-const typedoc = require('gulp-typedoc');
 
 const del = require('del');
 const browserify = require('browserify');
@@ -89,34 +88,7 @@ function generateDependabotConfig(done) {
   done();
 }
 
-function buildDocs() {
-  return src(['packages/**/*.ts', '!./packages/**/node_modules/**/*.ts', '!./packages/**/*.d.ts'])
-    .pipe(typedoc({
-      module: 'commonjs',
-      target: 'es5',
-      includeDeclarations: false,
-      lib: ['lib.esnext.full.d.ts'],
-      out: './docs',
-      exclude: '**/*+(e2e|spec).ts',
-      excludeExternals: true,
-      excludePrivate: true,
-      excludeProtected: true,
-      ignoreCompilerErrors: true,
-      moduleResolution: 'node',
-      preserveConstEnums: true,
-      skipLibCheck: true,
-      stripInternal: true,
-      suppressExcessPropertyErrors: true,
-      suppressImplicitAnyIndexErrors: true,
-      esModuleInterop: true,
-      allowSyntheticDefaultImports: true,
-      mode: 'file',
-      plugins: ['typedoc-plugin-markdown'],
-    }));
-}
-
 exports.clean = clean;
 exports.bundleAll = bundleAll;
 exports.generateDependabotConfig = generateDependabotConfig;
-exports.buildDocs = buildDocs;
-exports.default = series(clean, bundleAll, buildDocs);
+exports.default = series(clean, bundleAll);

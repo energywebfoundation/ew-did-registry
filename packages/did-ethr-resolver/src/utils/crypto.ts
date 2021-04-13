@@ -1,6 +1,7 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
 import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
+import { DIDPattern } from '../constants';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
@@ -30,4 +31,28 @@ export function encodedPubKeyName(encoding: Encoding): keyof IPublicKey {
     default:
       return 'publicKeyHex';
   }
+}
+
+export function hexify(value: string | object): string {
+  if (typeof value === 'string' && value.startsWith('0x')) {
+    return value;
+  }
+  return `0x${Buffer.from(typeof value === 'string'
+    ? value
+    : JSON.stringify(value))
+    .toString('hex')}`;
+}
+
+/**
+* Checks if did is valid, and returns the address if it is
+*
+* @param did
+* @private
+*/
+export function addressOf(did: string): string {
+  const match = did.match(DIDPattern);
+  if (!match) {
+    throw new Error('Invalid DID');
+  }
+  return match[1];
 }
