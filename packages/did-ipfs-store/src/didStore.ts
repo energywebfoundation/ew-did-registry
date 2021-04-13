@@ -37,6 +37,7 @@ export class DidStore implements IDidStore {
     return claim;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async delete(uri: string): Promise<boolean> {
     throw new Error('Not supported by IPFS');
   }
