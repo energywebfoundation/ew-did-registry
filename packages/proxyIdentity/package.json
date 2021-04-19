@@ -7,10 +7,13 @@
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "dist/src/index.js",
   "scripts": {
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "npm run compile:contracts && ../../node_modules/.bin/tsc",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test-ganache\" ",
     "test-ganache": "mocha -r ts-node/register test/*test.ts",
-    "compile:contracts": "../../node_modules/.bin/truffle compile"
+    "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
+    "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
   "author": {
     "name": "EnergyWeb",
@@ -24,13 +27,14 @@
     "ethers": "4.0.45"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "^2.5.0",
+    "@openzeppelin/contracts": "4.0.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",
     "ganache-cli": "6.9.1",
     "mocha": "7.1.0",
     "multi-token-standard": "^0.8.13",
-    "run-with-testrpc": "0.3.1"
+    "run-with-testrpc": "0.3.1",
+    "solhint": "3.3.4"
   }
 }

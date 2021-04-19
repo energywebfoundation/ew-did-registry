@@ -46,7 +46,9 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     owner = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
     ownerAddr = await owner.getAddress();
 
-    identity = await identityFactory.deploy(ownerAddr, manager.address);
+    const txReceipt = await manager.createIdentity(ownerAddr);
+    const identityAddr = (await txReceipt.wait()).events[0].args.identity;
+    identity = identityFactory.attach(identityAddr);
     did = `did:${Methods.Erc1056}:${identity.address}`;
 
     await provider.getSigner(0).sendTransaction({

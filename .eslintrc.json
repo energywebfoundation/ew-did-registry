@@ -46,7 +46,9 @@
     "no-unused-expressions": 0,
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "chai-friendly/no-unused-expressions": 2,
-    "func-names": "off"
+    "func-names": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"]
   },
   "settings": {
     "import/resolver": {

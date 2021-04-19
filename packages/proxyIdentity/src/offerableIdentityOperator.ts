@@ -1,5 +1,5 @@
 import {
-  Contract, Event, utils,
+  Contract, utils,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -87,12 +87,10 @@ export class OfferableIdenitytOperator extends Operator {
       methodName = 'addDelegate';
     }
     const data = new Interface(erc1056Abi).functions[methodName].encode(params);
-    let event: Event;
     try {
-      const tx = await this.identity.sendTransaction(data, this.settings.address, 0);
+      const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
       const receipt = await tx.wait();
-      event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
-      return new BigNumber(event.blockNumber as number);
+      return new BigNumber(receipt.blockNumber);
     } catch (e) {
       throw new Error(e);
     }
