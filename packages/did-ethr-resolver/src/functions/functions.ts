@@ -15,8 +15,8 @@ import {
   DelegateChangedEvent,
   DidEventNames,
 } from '@ew-did-registry/did-resolver-interface';
-
-import { attributeNamePattern, DIDPattern } from '../constants';
+import { DIDPattern } from '@ew-did-registry/did';
+import { attributeNamePattern } from '../constants';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'

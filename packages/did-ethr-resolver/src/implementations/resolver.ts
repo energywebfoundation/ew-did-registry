@@ -13,8 +13,8 @@ import {
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
-import { DIDPattern, ethrReg } from '../constants';
+import { Methods, DIDPattern } from '@ew-did-registry/did';
+import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
 const { formatBytes32String } = utils;
