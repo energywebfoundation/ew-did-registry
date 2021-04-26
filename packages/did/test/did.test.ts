@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {expect} from 'chai';
-import {DID, IDID, Methods} from '../src';
+import { expect } from 'chai';
+import { DID, IDID, Methods } from '../src';
 
 describe('[DID PACKAGE]', () => {
   let instance: IDID;
