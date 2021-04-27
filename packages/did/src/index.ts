@@ -96,3 +96,5 @@ export {
   DID,
   Methods,
 };
+
+export * from './utils/validation';
