@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from 'chai';
 import { DID, IDID, Methods } from '../src';
+import { erc1056tests } from './erc1056.testSuit';
 
 describe('[DID PACKAGE]', () => {
   let instance: IDID;
@@ -72,4 +73,6 @@ describe('[DID PACKAGE]', () => {
         .equals(`did:${Methods.Erc1056}:id_in_EnergyWeb`);
     },
   );
+
+  describe('Erc1056 tests', erc1056tests);
 });

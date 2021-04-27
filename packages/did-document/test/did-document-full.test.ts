@@ -16,6 +16,7 @@ import {
   IUpdateData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
+import { Methods } from '@ew-did-registry/did';
 import { Wallet, utils } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
@@ -31,7 +32,7 @@ chai.use(deepEqualInAnyOrder);
 describe('[DID DOCUMENT FULL PACKAGE]', function () {
   this.timeout(0);
   const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
-  const did = `did:ewc:${ownerAddress}`;
+  const did = `did:${Methods.Erc1056}:${ownerAddress}`;
   const keys = new Keys({
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
@@ -91,7 +92,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       controller: did,
       ethereumAddress: updateData.delegate,
     });
-    const delegateDid = `did:ewc:${delegate.address}`;
+    const delegateDid = `did:${Methods.Erc1056}:${delegate.address}`;
     const revoked = await fullDoc.revokeDelegate(PubKeyType.VerificationKey2018, delegateDid);
     expect(revoked).to.be.true;
     document = await operator.read(did);
