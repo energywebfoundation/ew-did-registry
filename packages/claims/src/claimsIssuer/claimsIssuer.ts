@@ -23,7 +23,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * const issuedToken = await claims.issuePublicClaim(token);
    * ```
    * @param { string | IPublicClaim } claim - claim to issue. Can be
-   * specified as signed or unsinged claim
+   * specified as signed or unsigned claim
    * @returns { Promise<string> } issued token
    */
   async issuePublicClaim(claim: string | IPublicClaim): Promise<string> {
