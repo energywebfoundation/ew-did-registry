@@ -25,8 +25,10 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * @params { string } token to verify
    * @returns { Promise<string> } issued token
    */
-  async issuePublicClaim(token: string): Promise<string> {
-    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
+  async issuePublicClaim(claim: string | IPublicClaim): Promise<string> {
+    if (typeof claim === 'string') {
+      claim = this.jwt.decode(claim) as IPublicClaim;
+    }
     claim.signer = this.did;
     delete claim.iss;
     const signedToken = await this.jwt.sign(
