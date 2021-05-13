@@ -27,9 +27,6 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    */
   async issuePublicClaim(token: string): Promise<string> {
     const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.iss as string))) {
-      throw new Error('User signature not valid');
-    }
     claim.signer = this.did;
     delete claim.iss;
     const signedToken = await this.jwt.sign(
