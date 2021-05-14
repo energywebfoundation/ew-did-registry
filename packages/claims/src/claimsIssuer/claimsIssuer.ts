@@ -30,12 +30,11 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     if (typeof claim === 'string') {
       claim = this.jwt.decode(claim) as IPublicClaim;
     }
-    claim.signer = this.did;
-    delete claim.iss;
+    const { claimData, did } = claim;
     const signedToken = await this.jwt.sign(
-      claim,
+      { claimData, did, signer: this.did },
       {
-        algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+        algorithm: 'ES256', issuer: this.did, subject: claim.did, noTimestamp: true,
       },
     );
     return signedToken;

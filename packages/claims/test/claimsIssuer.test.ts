@@ -10,7 +10,6 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { JWT } from '@ew-did-registry/jwt';
 import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
@@ -60,9 +59,19 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     await shutDownIpfsDaemon();
   });
 
-  it('if issuer receives correct token, he must issue token signed by him', async () => {
-    const token = await claimsUser.createPublicClaim({});
-    return claimsIssuer.issuePublicClaim(token).should.be.fulfilled;
+  it('both signed and unsigned claims can be issued', async () => {
+    const signedClaim = await claimsUser.createPublicClaim({ name: 'John' });
+    const unsignedClaim = {
+      claimData: { name: 'John' },
+      did: claimsUser.did,
+      signer: claimsUser.did,
+    };
+    expect(
+      await claimsIssuer.issuePublicClaim(signedClaim),
+    )
+      .eq(
+        await claimsIssuer.issuePublicClaim(unsignedClaim),
+      );
   });
 
   it('claim issued by delegate should be verified', async () => {
