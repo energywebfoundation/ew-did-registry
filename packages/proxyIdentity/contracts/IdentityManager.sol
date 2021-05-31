@@ -102,6 +102,7 @@ contract IdentityManager {
     external 
     isOffered
   {
+    identities[msg.sender].owner = _owner;
     identities[msg.sender].offered = false;
     emit IdentityTransferred(msg.sender, _owner, block.timestamp);
   }
