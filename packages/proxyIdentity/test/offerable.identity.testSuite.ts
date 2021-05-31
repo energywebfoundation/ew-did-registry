@@ -113,5 +113,20 @@ export function identityTestSuite(): void {
 
       expect(await identity.offeredTo()).equal(emptyAddress);
     });
+
+    it('Identity can be transferred several times', async () => {
+      await identity.connect(receiver).acceptOffer();
+
+      expect(await identity.owner()).equal(receiverAddr);
+      expect(await manager.identityOwner(identity.address)).equal(receiverAddr);
+
+      const receiver2 = provider.getSigner(3);
+      const receiver2Addr = await receiver2.getAddress();
+      await identity.connect(receiver).offer(receiver2Addr);
+      await identity.connect(receiver2).acceptOffer();
+
+      expect(await identity.owner()).equal(receiver2Addr);
+      expect(await manager.identityOwner(identity.address)).equal(receiver2Addr);
+    });
   });
 }
