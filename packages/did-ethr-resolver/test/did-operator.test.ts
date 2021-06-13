@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { Wallet, utils } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -11,12 +11,16 @@ import {
   IUpdateData,
   PubKeyType,
   IdentityOwner,
+  IPublicKey,
+  IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey,
+  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey, Resolver,
 } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
+
+const { BigNumber } = utils;
 
 const { fail } = assert;
 
@@ -33,6 +37,13 @@ const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
 let owner: IdentityOwner;
+
+const keys2 = new Keys({
+  privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
+});
+const did2 = `did:ethr:${keys2.getAddress()}`;
+let operator2: Operator;
+let owner2: IdentityOwner;
 
 const testSuite = (): void => {
   it('operator public key should be equal to public key of signer', () => {
@@ -95,6 +106,55 @@ const testSuite = (): void => {
         controller: did,
         ethereumAddress: updateData.delegate,
       });
+    });
+
+  it('resolver should support reading in parallel',
+    async () => {
+      const updateOperator = async (op: Operator, _did: string): Promise<void> => {
+        const attribute = DIDAttribute.Authenticate;
+        const delegate = new Wallet(new Keys().privateKey);
+        const updateData = {
+          algo: Algorithms.ED25519,
+          type: PubKeyType.VerificationKey2018,
+          encoding: Encoding.HEX,
+          delegate: delegate.address,
+        };
+        await op.update(_did, attribute, updateData, validity);
+        const document = await operator.read(_did);
+        expect(document.id).equal(_did);
+        const authMethod = document.publicKey.find(
+          (pk: { id: string }) => pk.id === `${_did}#delegate-${updateData.type}-${updateData.delegate}`,
+        );
+        expect(authMethod).include({
+          type: 'Secp256k1VerificationKey2018',
+          controller: _did,
+          ethereumAddress: updateData.delegate,
+        });
+      };
+      await updateOperator(operator, did);
+
+      await updateOperator(operator2, did2);
+
+      const checkThatLogEntriesMatchDid = (logData: IDIDLogData, _did: string): void => {
+        Object.values(logData.publicKey).forEach((pubKey: IPublicKey) => {
+          expect(_did).to.contain(pubKey.controller);
+        });
+      };
+
+      // Reading in sequence
+      const resolver = new Resolver(getProvider(), { address: registry });
+      const sequenceLogs1 = await resolver.readFromBlock(did, new BigNumber(0));
+      const sequenceLogs2 = await resolver.readFromBlock(did2, new BigNumber(0));
+      checkThatLogEntriesMatchDid(sequenceLogs1, did);
+      checkThatLogEntriesMatchDid(sequenceLogs2, did2);
+
+      // Reading in parallel
+      const resolver2 = new Resolver(getProvider(), { address: registry });
+      const logs1 = resolver2.readFromBlock(did, new BigNumber(0));
+      const logs2 = resolver2.readFromBlock(did2, new BigNumber(0));
+      const results = await Promise.all([logs1, logs2]);
+      checkThatLogEntriesMatchDid(results[0], did);
+      checkThatLogEntriesMatchDid(results[1], did2);
     });
 
   it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
@@ -342,12 +402,20 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
+
     owner = withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey);
     operator = new Operator(
       owner,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
     );
     await operator.create();
+
+    owner2 = withKey(withProvider(signerFromKeys(keys2), getProvider()), walletPubKey);
+    operator2 = new Operator(
+      owner2,
+      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+    );
+    await operator2.create();
   });
 
   testSuite();

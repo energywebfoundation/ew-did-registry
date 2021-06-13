@@ -46,11 +46,6 @@ class Resolver implements IResolver {
   protected _contract: Contract;
 
   /**
-   * Caches the blockchain data for further reads
-   */
-  private _document?: IDIDLogData;
-
-  /**
    * Constructor
    *
    * Settings have to be passed to construct resolver
@@ -87,30 +82,28 @@ class Resolver implements IResolver {
     }
     const address = match[1];
 
-    if (!this._document || this._document.owner !== address) {
-      this._document = {
-        owner: address,
-        topBlock: new utils.BigNumber(0),
-        authentication: {},
-        publicKey: {},
-        service: {},
-        attributes: new Map(),
-      };
-    }
+    const _document = {
+      owner: address,
+      topBlock: new utils.BigNumber(0),
+      authentication: {},
+      publicKey: {},
+      service: {},
+      attributes: new Map(),
+    };
     try {
       await fetchDataFromEvents(
         did,
-        this._document,
+        _document,
         this.settings,
         this._contract,
         this._provider,
         selector,
       );
-      const document = wrapDidDocument(did, this._document);
+      const document = wrapDidDocument(did, _document);
       return document;
     } catch (error) {
       if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-        const didDocument = wrapDidDocument(did, this._document);
+        const didDocument = wrapDidDocument(did, _document);
         return didDocument;
       }
       throw error;
@@ -190,18 +183,16 @@ class Resolver implements IResolver {
     topBlock: utils.BigNumber,
   ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
-    if (this._document === undefined || this._document.owner !== address) {
-      this._document = {
-        owner: address,
-        topBlock,
-        authentication: {},
-        publicKey: {},
-        service: {},
-        attributes: new Map(),
-      };
-    }
-    await fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider);
-    return { ...this._document };
+    const _document = {
+      owner: address,
+      topBlock,
+      authentication: {},
+      publicKey: {},
+      service: {},
+      attributes: new Map(),
+    };
+    await fetchDataFromEvents(did, _document, this.settings, this._contract, this._provider);
+    return { ..._document };
   }
 
   async lastBlock(did: string): Promise<utils.BigNumber> {
