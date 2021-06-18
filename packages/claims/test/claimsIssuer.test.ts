@@ -1,12 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey,
-  withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
@@ -23,12 +18,12 @@ const claimData = {
 
 describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   this.timeout(0);
-  const user = new Keys();
-  const userAddress = user.getAddress();
+  const userKeys = new Keys();
+  const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
-  const issuer = new Keys();
-  const issuerAddress = issuer.getAddress();
+  const issuerKeys = new Keys();
+  const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   let userDoc: IDIDDocumentFull;
@@ -43,16 +38,17 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(withKey(withProvider(signerFromKeys(user), getProvider()), walletPubKey), { address: registry }),
+      new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'),
     );
     issuerDoc = new DIDDocumentFull(
-      issuerDid, new Operator(withKey(withProvider(signerFromKeys(issuer), getProvider()), walletPubKey), { address: registry }),
+      issuerDid,
+      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
     );
     await userDoc.create();
     await issuerDoc.create();
 
-    claimsUser = new ClaimsFactory(user, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuer, issuerDoc, store).createClaimsIssuer();
+    claimsUser = new ClaimsFactory(userKeys, userDoc, store).createClaimsUser();
+    claimsIssuer = new ClaimsFactory(issuerKeys, issuerDoc, store).createClaimsIssuer();
   });
 
   after(async () => {

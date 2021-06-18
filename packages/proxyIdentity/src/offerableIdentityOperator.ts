@@ -1,5 +1,5 @@
 import {
-  Contract, utils,
+  Contract, utils, BigNumber,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -13,7 +13,7 @@ import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver'
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
-const { BigNumber, Interface, formatBytes32String } = utils;
+const { Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
 
 export class OfferableIdenitytOperator extends Operator {
@@ -56,7 +56,8 @@ export class OfferableIdenitytOperator extends Operator {
 
   async offer(offerTo: string): Promise<boolean> {
     await this.identity.offer(
-      new Interface(identityAbi).functions.offer.encode([offerTo]),
+      // new Interface(identityAbi).functions.offer.encode([offerTo]),
+      new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
       0,
     );
@@ -69,7 +70,7 @@ export class OfferableIdenitytOperator extends Operator {
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity?: number,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const identity = addressOf(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
@@ -86,11 +87,11 @@ export class OfferableIdenitytOperator extends Operator {
     } else {
       methodName = 'addDelegate';
     }
-    const data = new Interface(erc1056Abi).functions[methodName].encode(params);
+    const data = new Interface(erc1056Abi).encodeFunctionData(methodName, [params]);
     try {
       const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
       const receipt = await tx.wait();
-      return new BigNumber(receipt.blockNumber);
+      return BigNumber.from(receipt.blockNumber);
     } catch (e) {
       throw new Error(e);
     }

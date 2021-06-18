@@ -3,11 +3,7 @@ import { expect } from 'chai';
 import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
-import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
@@ -25,8 +21,9 @@ describe('[DID DOCUMENT FACTORY]', () => {
     const registry = await deployRegistry([]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      keys.privateKey,
       { address: registry },
+      'http://localhost:8544'
     );
   });
 

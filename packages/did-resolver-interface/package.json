@@ -26,6 +26,6 @@
   "license": "ISC",
   "dependencies": {
     "@ew-did-registry/did": "0.5.1",
-    "ethers": "4.0.45"
+    "ethers": "5.3.1"
   }
 }

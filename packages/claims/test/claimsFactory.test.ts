@@ -2,10 +2,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey,
-  withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -20,17 +17,14 @@ chai.should();
 describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
-  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   const verifierKeys = new Keys();
-  const verifier = withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey);
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
 
@@ -42,9 +36,9 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(user, { address: registry }));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, { address: registry }));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifier, { address: registry }));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'));
+    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifierKeys.privateKey, { address: registry }, 'http://localhost:8544'));
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();
@@ -97,7 +91,6 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     } catch (e) {
       console.error('error verifing claims:', e);
     }
-    // return claimsVerifier.verifyPrivateProof(proofToken).should.be.fulfilled;
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {
