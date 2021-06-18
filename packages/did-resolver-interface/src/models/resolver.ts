@@ -1,5 +1,5 @@
 import {
-  utils, Signer, BigNumber, ethers,
+  utils, Signer, BigNumber, providers
 } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
@@ -21,7 +21,7 @@ export interface ProviderSettings {
   type: ProviderTypes;
   uriOrInfo?: string | utils.ConnectionInfo;
   path?: string;
-  network?: ethers.providers.Networkish;
+  network?: providers.Networkish;
 }
 
 /**
