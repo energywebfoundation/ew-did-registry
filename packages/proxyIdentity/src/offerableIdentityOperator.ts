@@ -1,5 +1,5 @@
 import {
-  Contract, utils, BigNumber
+  Contract, utils, BigNumber,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -13,7 +13,7 @@ import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver'
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
-const {Interface, formatBytes32String } = utils;
+const { Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
 
 export class OfferableIdenitytOperator extends Operator {
@@ -57,7 +57,7 @@ export class OfferableIdenitytOperator extends Operator {
   async offer(offerTo: string): Promise<boolean> {
     await this.identity.offer(
       // new Interface(identityAbi).functions.offer.encode([offerTo]),
-      new Interface(identityAbi).encodeFunctionData("offer", [offerTo]),
+      new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
       0,
     );
