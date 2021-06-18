@@ -1,4 +1,4 @@
-import { utils, Signer } from 'ethers';
+import { utils, Signer, BigNumber } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -37,10 +37,10 @@ export interface IServiceEndpoint {
   type: string;
   serviceEndpoint: string;
   description?: string;
-  validity: utils.BigNumber;
+  validity: BigNumber;
   block: number;
   hash?: string; // hash of the content located at service endpoint
-  [key: string]: string | utils.BigNumber | number | undefined;
+  [key: string]: string | BigNumber | number | undefined;
 }
 
 /**
@@ -72,17 +72,17 @@ export interface IPublicKey {
   publicKeyPem?: string;
   publicKeyJwk?: string;
   publicKeyMultibase?: string;
-  validity: utils.BigNumber;
+  validity: BigNumber;
   block: number;
-  [key: string]: string | number | utils.BigNumber | undefined;
+  [key: string]: string | number | BigNumber | undefined;
 }
 
 export interface IAuthentication {
   type: string;
   publicKey: string;
-  validity: utils.BigNumber;
+  validity: BigNumber;
   block?: number;
-  [key: string]: string | utils.BigNumber | number | undefined;
+  [key: string]: string | BigNumber | number | undefined;
 }
 
 export interface ILinkedDataProof {
@@ -113,8 +113,8 @@ export interface AttributeChangedEvent extends ISmartContractEvent {
     identity: string;
     name: string;
     value: string;
-    validTo: utils.BigNumber;
-    previousChange: utils.BigNumber;
+    validTo: BigNumber;
+    previousChange: BigNumber;
   };
 }
 
@@ -124,8 +124,8 @@ export interface DelegateChangedEvent extends ISmartContractEvent {
     identity: string;
     delegateType: string;
     delegate: string;
-    validTo: utils.BigNumber;
-    previousChange: utils.BigNumber;
+    validTo: BigNumber;
+    previousChange: BigNumber;
   };
 }
 
@@ -138,7 +138,7 @@ export interface DelegateChangedEvent extends ISmartContractEvent {
  */
 export interface IDIDLogData {
   owner: string;
-  topBlock: utils.BigNumber;
+  topBlock: BigNumber;
   publicKey: { [key: string]: IPublicKey };
   authentication: { [key: string]: IAuthentication };
   delegates?: string[];

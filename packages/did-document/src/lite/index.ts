@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import {
   IDIDDocument,
   IResolver,
@@ -76,11 +76,11 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.readOwnerPubKey(did);
   }
 
-  async lastBlock(did: string): Promise<utils.BigNumber> {
+  async lastBlock(did: string): Promise<BigNumber> {
     return this.resolver.lastBlock(did);
   }
 
-  async readFromBlock(did: string, from: utils.BigNumber): Promise<IDIDLogData> {
+  async readFromBlock(did: string, from: BigNumber): Promise<IDIDLogData> {
     return this.resolver.readFromBlock(did, from);
   }
 

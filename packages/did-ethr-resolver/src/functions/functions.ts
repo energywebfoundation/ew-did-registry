@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, providers, utils,
+  Contract, ethers, providers, utils, BigNumber,
 } from 'ethers';
 
 import {
@@ -31,7 +31,7 @@ const handleDelegateChange = (
   event: DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
@@ -77,7 +77,7 @@ const handleAttributeChange = (
   event: AttributeChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   let match = did.match(DIDPattern);
@@ -211,7 +211,7 @@ const updateDocument = (
  * @param address
  */
 const getEventsFromBlock = (
-  block: ethers.utils.BigNumber,
+  block: ethers.BigNumber,
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.Provider,
@@ -322,7 +322,7 @@ export const wrapDidDocument = (
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
-  const now = new utils.BigNumber(Math.floor(new Date().getTime() / 1000));
+  const now = BigNumber.from(Math.floor(new Date().getTime() / 1000));
 
   const publicKey: IPublicKey[] = [
   ];
@@ -331,7 +331,7 @@ export const wrapDidDocument = (
     {
       type: 'owner',
       publicKey: `${did}#owner`,
-      validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
+      validity: BigNumber.from(Number.MAX_SAFE_INTEGER),
     },
   ];
 
