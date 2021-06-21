@@ -1,5 +1,5 @@
 import {
-  utils, Signer, BigNumber, providers
+  utils, Signer, BigNumber, providers,
 } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
