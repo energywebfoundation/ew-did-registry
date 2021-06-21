@@ -17,13 +17,11 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { Wallet, utils } from 'ethers';
+import { Wallet, BigNumber } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
-
-const { BigNumber } = utils;
 
 should();
 chai.use(chaiAsPromised);
@@ -207,7 +205,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
 
     updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' };
     const from = await fullDoc.update(DIDAttribute.PublicKey, updateData);
@@ -229,7 +227,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData);
 
-    const log1 = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const log1 = await fullDoc.readFromBlock(did, BigNumber.from(0));
 
     const block2 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } });
     await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-2' } });
@@ -262,7 +260,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
     const initialDoc = fullDoc.fromLogs([logsUpToFirstUpdate]);
 
     expect(initialDoc.publicKey.find(({ id }) => id === keyId)).not.undefined;

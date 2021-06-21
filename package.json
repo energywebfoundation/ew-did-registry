@@ -59,7 +59,7 @@
     "eslint-import-resolver-typescript": "2.0.0",
     "eslint-plugin-chai-friendly": "0.5.0",
     "eslint-plugin-import": "^2.22.0",
-    "ethers": "4.0.45",
+    "ethers": "^5.3.1",
     "ganache-cli": "6.9.1",
     "gulp": "4.0.2",
     "gulp-babel": "8.0.0",
@@ -92,5 +92,11 @@
     "hooks": {
       "pre-commit": "npm run fix && npm run compile"
     }
+  },
+  "dependencies": {
+    "@ew-did-registry/authentication-client": "file:packages/authentication/client",
+    "@ew-did-registry/authentication-server": "file:packages/authentication/server",
+    "@ew-did-registry/did": "file:packages/did",
+    "@ew-did-registry/did-ethr-resolver": "file:packages/did-ethr-resolver"
   }
 }
