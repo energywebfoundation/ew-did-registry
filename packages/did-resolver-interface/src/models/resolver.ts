@@ -2,7 +2,7 @@ import {
   utils,
   Signer,
   BigNumber,
-  providers
+  providers,
 } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 

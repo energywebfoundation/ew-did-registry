@@ -3,7 +3,7 @@ import {
   Wallet,
   providers,
   utils,
-  BigNumber
+  BigNumber,
 } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
 
