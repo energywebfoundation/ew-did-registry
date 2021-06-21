@@ -1,5 +1,9 @@
 import {
-  ContractFactory, Wallet, providers, utils, BigNumber
+  ContractFactory,
+  Wallet,
+  providers,
+  utils,
+  BigNumber
 } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
 
