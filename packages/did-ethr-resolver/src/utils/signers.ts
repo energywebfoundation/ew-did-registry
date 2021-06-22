@@ -1,11 +1,13 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { IKeys } from '@ew-did-registry/keys';
-import { ethers, Signer, providers } from 'ethers';
+import {
+  Signer, providers, Wallet,
+} from 'ethers';
 
-export const signerFromKeys = (keys: IKeys): Signer => new ethers.Wallet(keys.privateKey);
+export const signerFromKeys = (keys: IKeys): Signer => new Wallet(keys.privateKey);
 
-export class ConnectedSigner extends ethers.Signer {
+export class ConnectedSigner extends Signer {
   readonly provider: providers.Provider;
 
   constructor(private signer: Signer, provider: providers.Provider) {
@@ -40,5 +42,13 @@ export class ConnectedSigner extends ethers.Signer {
 
   signMessage(msg: string): Promise<string> {
     return this.signer.signMessage.bind(this)(msg);
+  }
+
+  signTransaction(tx: providers.TransactionRequest): Promise<string> {
+    return this.signer.signTransaction.bind(this)(tx);
+  }
+
+  connect(provider: providers.Provider): Signer {
+    throw new Error('Method not implemented.');
   }
 }
