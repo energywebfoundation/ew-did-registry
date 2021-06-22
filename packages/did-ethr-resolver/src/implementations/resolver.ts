@@ -1,5 +1,5 @@
 import {
-  Contract, providers, utils,
+  Contract, providers, utils, BigNumber,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -54,7 +54,7 @@ class Resolver implements IResolver {
    * Constructor
    *
    * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
+   * @param {RegistrySettings} settings
    */
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
@@ -90,7 +90,7 @@ class Resolver implements IResolver {
     if (!this._document || this._document.owner !== address) {
       this._document = {
         owner: address,
-        topBlock: new utils.BigNumber(0),
+        topBlock: BigNumber.from(0),
         authentication: {},
         publicKey: {},
         service: {},
@@ -187,7 +187,7 @@ class Resolver implements IResolver {
 
   async readFromBlock(
     did: string,
-    topBlock: utils.BigNumber,
+    topBlock: BigNumber,
   ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
     if (this._document === undefined || this._document.owner !== address) {
@@ -204,7 +204,7 @@ class Resolver implements IResolver {
     return { ...this._document };
   }
 
-  async lastBlock(did: string): Promise<utils.BigNumber> {
+  async lastBlock(did: string): Promise<BigNumber> {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
   }

@@ -336,7 +336,7 @@ export const wrapDidDocument = (
     {
       type: 'owner',
       publicKey: `${did}#owner`,
-      validity: BigNumber.from(Number.MAX_SAFE_INTEGER),
+      validity: BigNumber.from(Number.MAX_SAFE_INTEGER - 1),
     },
   ];
 
