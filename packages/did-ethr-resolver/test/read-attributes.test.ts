@@ -11,7 +11,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
+  Operator, signerFromKeys, getProvider, walletPubKey, withKey,
 } from '../src';
 
 import { deployRegistry } from '../../../tests/init-ganache';
@@ -32,7 +32,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   before(async () => {
     registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey),
       { address: registry },
     );
   });
