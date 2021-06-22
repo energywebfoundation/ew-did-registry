@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, providers,
+  Contract, ethers, Event, utils, providers, BigNumber,
 } from 'ethers';
 import {
   Algorithms,
@@ -26,7 +26,7 @@ import {
 import { encodedPubKeyName, hexify, addressOf } from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
-const { BigNumber, formatBytes32String } = utils;
+const { formatBytes32String } = utils;
 
 /**
  * To support/extend this Class, one just has to work with this file.
@@ -138,7 +138,7 @@ export class Operator extends Resolver implements IOperator {
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity: number = Number.MAX_SAFE_INTEGER,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const registry = this._didRegistry;
     const method = didAttribute === PublicKey || didAttribute === ServicePoint
       ? registry.setAttribute
@@ -351,7 +351,7 @@ export class Operator extends Resolver implements IOperator {
     overrides?: {
       nonce?: number;
     },
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const identity = addressOf(did);
     const name = formatBytes32String(
       this._composeAttributeName(didAttribute, updateData),
@@ -380,7 +380,7 @@ export class Operator extends Resolver implements IOperator {
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
-      return new BigNumber(event.blockNumber as number);
+      return BigNumber.from(event.blockNumber as number);
     } catch (e) {
       throw new Error(e.message);
     }
