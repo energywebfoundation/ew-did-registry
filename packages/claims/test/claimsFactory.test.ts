@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey,
-  withKey, withProvider,
+  withKey,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
@@ -20,17 +20,17 @@ chai.should();
 describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
+  const user = withKey(signerFromKeys(userKeys).connect(getProvider()), walletPubKey);
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
-  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
+  const issuer = withKey(signerFromKeys(issuerKeys).connect(getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   const verifierKeys = new Keys();
-  const verifier = withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey);
+  const verifier = withKey(signerFromKeys(verifierKeys).connect(getProvider()), walletPubKey);
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
 

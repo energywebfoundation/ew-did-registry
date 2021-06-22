@@ -5,7 +5,7 @@ import chaiAsPromised from 'chai-as-promised';
 import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
-  withKey, withProvider,
+  withKey,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
@@ -45,7 +45,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey),
       { address: registry },
     );
     fullDoc = new DIDDocumentFull(did, operator);
@@ -189,7 +189,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const doc = new DIDDocumentFull(
       did,
       new Operator(
-        withKey(withProvider(signerFromKeys(keys1), getProvider()), walletPubKey),
+        withKey(signerFromKeys(keys1).connect(getProvider()), walletPubKey),
         { address: registry },
       ),
     );

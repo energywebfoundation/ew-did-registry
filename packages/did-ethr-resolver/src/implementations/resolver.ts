@@ -14,7 +14,7 @@ import {
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods, DIDPattern } from '@ew-did-registry/did';
-import { ethrReg } from '../constants';
+import ethrReg from '../constants/EthereumDIDRegistry.json';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
 const { formatBytes32String } = utils;
@@ -54,7 +54,7 @@ class Resolver implements IResolver {
    * Constructor
    *
    * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
+   * @param {RegistrySettings} settings
    */
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;

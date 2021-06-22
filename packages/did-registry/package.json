@@ -38,5 +38,9 @@
     "@ew-did-registry/jwt": "0.5.0",
     "@ew-did-registry/keys": "0.5.0",
     "@ew-did-registry/proxyidentity": "0.5.1"
+  },
+  "devDependencies": {
+    "ganache-cli": "6.9.1",
+    "run-with-testrpc": "0.3.1"
   }
 }
