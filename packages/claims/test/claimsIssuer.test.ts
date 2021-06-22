@@ -42,10 +42,17 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(withKey(signerFromKeys(user).connect(getProvider()), walletPubKey), { address: registry }),
+      new Operator(
+        withKey(signerFromKeys(user).connect(getProvider()), walletPubKey),
+        { address: registry }
+      ),
     );
     issuerDoc = new DIDDocumentFull(
-      issuerDid, new Operator(withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey), { address: registry }),
+      issuerDid,
+      new Operator(
+        withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey),
+        { address: registry }
+      ),
     );
     await userDoc.create();
     await issuerDoc.create();
