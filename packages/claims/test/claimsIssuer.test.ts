@@ -5,7 +5,6 @@ import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
   withKey,
-  withProvider,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
@@ -43,10 +42,10 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(withKey(withProvider(signerFromKeys(user), getProvider()), walletPubKey), { address: registry }),
+      new Operator(withKey(signerFromKeys(user).connect(getProvider()), walletPubKey), { address: registry }),
     );
     issuerDoc = new DIDDocumentFull(
-      issuerDid, new Operator(withKey(withProvider(signerFromKeys(issuer), getProvider()), walletPubKey), { address: registry }),
+      issuerDid, new Operator(withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey), { address: registry }),
     );
     await userDoc.create();
     await issuerDoc.create();

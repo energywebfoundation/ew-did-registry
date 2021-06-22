@@ -9,7 +9,7 @@ import {
   walletPubKey,
 } from '@ew-did-registry/did-ethr-resolver';
 
-import { withKey, withProvider } from '@ew-did-registry/did-ethr-resolver/src';
+import { withKey } from '@ew-did-registry/did-ethr-resolver/src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
@@ -23,7 +23,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey),
       { address: registry },
     );
     docLite = new DIDDocumentLite(did, operator);
