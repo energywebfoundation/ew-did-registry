@@ -40,19 +40,15 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
+    const userId = withKey(signerFromKeys(user).connect(getProvider()), walletPubKey);
+    const issuerId = withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey);
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(
-        withKey(signerFromKeys(user).connect(getProvider()), walletPubKey),
-        { address: registry }
-      ),
+      new Operator(userId, { address: registry }),
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(
-        withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey),
-        { address: registry }
-      ),
+      new Operator(issuerId, { address: registry }),
     );
     await userDoc.create();
     await issuerDoc.create();
