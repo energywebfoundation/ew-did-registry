@@ -60,7 +60,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * const didAttribute = DIDAttribute.PublicKey;
    * const validity = 5 * 60 * 1000;
    * await document.update(
-   *  DIDAttribute.PublicKey,
+   *  didAttribute,
    *  {
    *    type: PubKeyType.VerificationKey2018,
    *    value: new Keys().publicKey,
