@@ -18,7 +18,8 @@ describe('[RESOLVER PACKAGE]', function () {
   });
 
   beforeEach(() => {
-    resolver = new Resolver(getProvider(), { address: registry });
+    // resolver = new Resolver(getProvider(), { address: registry });
+    resolver = new Resolver(new Keys().privateKey, { address: registry });
   });
 
   it('read document of invalid did should throw error', async () => {

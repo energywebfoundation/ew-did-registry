@@ -291,10 +291,11 @@ const testSuite = (): void => {
 
   it('owner change should lead to expected result', async () => {
     const provider = getProvider();
-    const newOwnerOperator = new Operator(
-      withKey(signerFromKeys(newOwnerKeys).connect(provider), walletPubKey),
-      { address: registry },
-    );
+    const newOwnerOperator = new Operator(newOwnerKeys.privateKey, {address: registry})
+    // const newOwnerOperator = new Operator(
+    //   withKey(signerFromKeys(newOwnerKeys).connect(provider), walletPubKey),
+    //   { address: registry },
+    // );
 
     await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
     expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
@@ -344,12 +345,22 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
     owner = withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey);
-    operator = new Operator(
-      owner,
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
-    );
-    await operator.create();
+  //     owner,
+  //     { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+  //   );
+  //   await operator.create();
+  // });
+  operator = new Operator(
+    keys.privateKey,
+    { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+    'http://localhost:8544'
+  );
+  await operator.create();
   });
+
+  console.log("first test:  operator ==> ", operator)
+  console.log("key pubkey ==> ", keys.publicKey)
+  console.log("Owner operator ==> ", owner)
 
   testSuite();
 });

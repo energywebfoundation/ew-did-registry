@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, providers, BigNumber,
+  Contract, ethers, Event, utils, BigNumber, Wallet, getDefaultProvider,
 } from 'ethers';
 import {
   Algorithms,
@@ -47,19 +47,23 @@ export class Operator extends Resolver implements IOperator {
 
   private address?: string;
 
-  protected readonly _owner: IdentityOwner;
+  // protected readonly _owner: IdentityOwner;
+  private _owner: IdentityOwner;
 
   /**
  * @param { IdentityOwner } owner - entity which controls document updatable by this operator
  */
-  constructor(owner: IdentityOwner, settings: RegistrySettings) {
-    super(owner.provider as providers.Provider, settings);
+  //  constructor(owner: IdentityOwner, settings: RegistrySettings) {
+  constructor(privateKey: string, settings: RegistrySettings, providerUrl?: string) {
+    // super(owner.provider as providers.Provider, settings);
+    super(privateKey, settings, providerUrl);
+
     const {
       address, abi,
     } = this.settings;
-    this._owner = owner;
+    this._owner = this.setOwner(privateKey, providerUrl);
     this._didRegistry = new ethers.Contract(address, abi, this._owner);
-    this._keys.publicKey = owner.publicKey;
+    this._keys.publicKey = this._owner.publicKey;
   }
 
   protected async getAddress(): Promise<string> {
@@ -75,6 +79,14 @@ export class Operator extends Resolver implements IOperator {
 
   public getPublicKey(): string {
     return this._keys.publicKey;
+  }
+
+  private setOwner(privateKey: string, providerUrl?: string): IdentityOwner {
+    if (providerUrl) {
+      const provider = getDefaultProvider(providerUrl);
+      return new Wallet(privateKey, provider);
+    }
+    return new Wallet(privateKey);
   }
 
   /**

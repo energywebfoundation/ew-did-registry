@@ -1,5 +1,5 @@
 import {
-  Contract, providers, utils, BigNumber,
+  Contract, providers, utils, BigNumber, getDefaultProvider,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -56,8 +56,10 @@ class Resolver implements IResolver {
    * Settings have to be passed to construct resolver
    * @param {RegistrySettings} settings
    */
-  constructor(provider: providers.Provider, settings: RegistrySettings) {
-    this._provider = provider;
+  
+  // constructor(provider: providers.Provider, settings: RegistrySettings) {
+  constructor(privateKey: string, settings: RegistrySettings, providerUrl?: string) {
+    this._provider = getDefaultProvider(providerUrl);
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
 
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);

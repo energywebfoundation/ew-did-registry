@@ -1,5 +1,5 @@
 import {
-  Contract, utils, BigNumber,
+  Contract, utils, BigNumber, Wallet,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -25,8 +25,10 @@ export class OfferableIdenitytOperator extends Operator {
    * @param settings - Settings to connect to Ethr registry
    * @param identityAddr {string} - address of controlled offerable identity
    */
-  constructor(owner: IdentityOwner, settings: RegistrySettings, identityAddr: string) {
-    super(owner, settings);
+  constructor(privateKey: string, settings: RegistrySettings, identityAddr: string) {
+    // constructor(owner: IdentityOwner, settings: RegistrySettings, identityAddr: string) {
+    super(privateKey, settings);
+    const owner: IdentityOwner = new Wallet(privateKey);
     this.identity = new Contract(identityAddr, identityAbi, owner);
   }
 
@@ -56,7 +58,6 @@ export class OfferableIdenitytOperator extends Operator {
 
   async offer(offerTo: string): Promise<boolean> {
     await this.identity.offer(
-      // new Interface(identityAbi).functions.offer.encode([offerTo]),
       new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
       0,
