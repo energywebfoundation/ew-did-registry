@@ -22,12 +22,12 @@ const claimData = {
 
 describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   this.timeout(0);
-  const user = new Keys();
-  const userAddress = user.getAddress();
+  const userKeys = new Keys();
+  const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
 
-  const issuer = new Keys();
-  const issuerAddress = issuer.getAddress();
+  const issuerKeys = new Keys();
+  const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
   let userDoc: IDIDDocumentFull;
@@ -40,15 +40,15 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userId = withKey(signerFromKeys(user).connect(getProvider()), walletPubKey);
-    const issuerId = withKey(signerFromKeys(issuer).connect(getProvider()), walletPubKey);
+    const user = withKey(signerFromKeys(userKeys).connect(getProvider()), walletPubKey);
+    const issuer = withKey(signerFromKeys(issuerKeys).connect(getProvider()), walletPubKey);
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(userId, { address: registry }),
+      new Operator(user, { address: registry }),
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuerId, { address: registry }),
+      new Operator(issuer, { address: registry }),
     );
     await userDoc.create();
     await issuerDoc.create();
