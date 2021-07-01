@@ -10,12 +10,9 @@ import {
   IDIDDocument,
   IUpdateData,
   PubKeyType,
-  IdentityOwner,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey, withKey,
-} from '../src';
+import { Operator } from '../src';
 import ethrReg from '../src/constants/EthereumDIDRegistry.json';
 import { deployRegistry } from '../../../tests/init-ganache';
 
@@ -33,7 +30,6 @@ const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
-let owner: IdentityOwner;
 
 const testSuite = (): void => {
   it('operator public key should be equal to public key of signer', () => {
@@ -290,12 +286,7 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const provider = getProvider();
-    const newOwnerOperator = new Operator(newOwnerKeys.privateKey, {address: registry})
-    // const newOwnerOperator = new Operator(
-    //   withKey(signerFromKeys(newOwnerKeys).connect(provider), walletPubKey),
-    //   { address: registry },
-    // );
+    const newOwnerOperator = new Operator(newOwnerKeys.privateKey, {address: registry}, 'http://localhost:8544')
 
     await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
     expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
@@ -344,23 +335,13 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    owner = withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey);
-  //     owner,
-  //     { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
-  //   );
-  //   await operator.create();
-  // });
-  operator = new Operator(
-    keys.privateKey,
-    { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
-    'http://localhost:8544'
-  );
-  await operator.create();
+    operator = new Operator(
+      keys.privateKey,
+      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+      'http://localhost:8544'
+    );
+    await operator.create();
   });
-
-  console.log("first test:  operator ==> ", operator)
-  console.log("key pubkey ==> ", keys.publicKey)
-  console.log("Owner operator ==> ", owner)
 
   testSuite();
 });

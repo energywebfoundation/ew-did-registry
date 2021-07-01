@@ -19,11 +19,14 @@ import {
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
+import { IKeys, Keys } from '@ew-did-registry/keys';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName, hexify, addressOf } from '../utils';
+import {
+  encodedPubKeyName, hexify, addressOf,
+} from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 const { formatBytes32String } = utils;
@@ -47,23 +50,24 @@ export class Operator extends Resolver implements IOperator {
 
   private address?: string;
 
-  // protected readonly _owner: IdentityOwner;
-  private _owner: IdentityOwner;
+  protected readonly _owner: IdentityOwner;
 
   /**
- * @param { IdentityOwner } owner - entity which controls document updatable by this operator
- */
-  //  constructor(owner: IdentityOwner, settings: RegistrySettings) {
-  constructor(privateKey: string, settings: RegistrySettings, providerUrl?: string) {
-    // super(owner.provider as providers.Provider, settings);
-    super(privateKey, settings, providerUrl);
+  * @param settings - Settings to connect to Ethr registry
+  * @param { string } providerUrl - Connection link to the blockchain
+  * @param { string } privateKey - privateKey of the entity which controls document
+  */
+  constructor(privateKey: string, settings: RegistrySettings, providerUrl: string) {
+    super(settings, providerUrl);
+
+    const keys: IKeys = new Keys({ privateKey });
 
     const {
       address, abi,
     } = this.settings;
-    this._owner = this.setOwner(privateKey, providerUrl);
+    this._owner = new Wallet(privateKey, getDefaultProvider(providerUrl));
     this._didRegistry = new ethers.Contract(address, abi, this._owner);
-    this._keys.publicKey = this._owner.publicKey;
+    this._keys.publicKey = keys.publicKey;
   }
 
   protected async getAddress(): Promise<string> {
@@ -81,14 +85,6 @@ export class Operator extends Resolver implements IOperator {
     return this._keys.publicKey;
   }
 
-  private setOwner(privateKey: string, providerUrl?: string): IdentityOwner {
-    if (providerUrl) {
-      const provider = getDefaultProvider(providerUrl);
-      return new Wallet(privateKey, provider);
-    }
-    return new Wallet(privateKey);
-  }
-
   /**
  * Relevant did should have positive cryptocurrency balance to perform
  * the transaction. Create method saves the public key in smart contract's
@@ -100,7 +96,8 @@ export class Operator extends Resolver implements IOperator {
  */
   async create(): Promise<boolean> {
     const did = await this.did();
-    if (await this.readOwnerPubKey(did)) {
+    const readPubKey = await this.readOwnerPubKey(did);
+    if (readPubKey) {
       return true;
     }
     const attribute = DIDAttribute.PublicKey;

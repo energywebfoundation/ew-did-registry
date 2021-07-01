@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import { DelegateTypes, IResolver } from '@ew-did-registry/did-resolver-interface';
-import { Resolver, getProvider } from '../src';
+import { Resolver } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
 chai.should();
@@ -18,8 +18,7 @@ describe('[RESOLVER PACKAGE]', function () {
   });
 
   beforeEach(() => {
-    // resolver = new Resolver(getProvider(), { address: registry });
-    resolver = new Resolver(new Keys().privateKey, { address: registry });
+    resolver = new Resolver({ address: registry }, 'http://localhost:8544');
   });
 
   it('read document of invalid did should throw error', async () => {

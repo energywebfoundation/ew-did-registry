@@ -53,15 +53,13 @@ class Resolver implements IResolver {
   /**
    * Constructor
    *
-   * Settings have to be passed to construct resolver
-   * @param {RegistrySettings} settings
+   * @param {RegistrySettings} settings - Settings to connect to Ethr registry
+   * @param {string} providerUrl- {string} - Connection link to the blockchain
    */
-  
-  // constructor(provider: providers.Provider, settings: RegistrySettings) {
-  constructor(privateKey: string, settings: RegistrySettings, providerUrl?: string) {
+
+  constructor(settings: RegistrySettings, providerUrl: string) {
     this._provider = getDefaultProvider(providerUrl);
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
-
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
 
