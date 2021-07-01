@@ -26,7 +26,6 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
 
   const issuerKeys = new Keys();
-  const issuer = withKey(signerFromKeys(issuerKeys).connect(getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
 
@@ -40,15 +39,16 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const userDoc = new DIDDocumentFull(
       userDdid,
       new Operator(
-        user,
+        userKeys.privateKey,
         { address: registry },
+        'http://localhost:8544'
       ),
     );
     userClaims = new ClaimsUser(user, userDoc, store);
 
     const issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuer, { address: registry }),
+      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
     );
 
     await userDoc.create();

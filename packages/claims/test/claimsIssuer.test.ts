@@ -1,11 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
@@ -40,21 +36,19 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const user = withKey(signerFromKeys(userKeys).connect(getProvider()), walletPubKey);
-    const issuer = withKey(signerFromKeys(issuerKeys).connect(getProvider()), walletPubKey);
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(user, { address: registry }),
+      new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'),
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuer, { address: registry }),
+      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
     );
     await userDoc.create();
     await issuerDoc.create();
 
-    claimsUser = new ClaimsFactory(user, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuer, issuerDoc, store).createClaimsIssuer();
+    claimsUser = new ClaimsFactory(userKeys, userDoc, store).createClaimsUser();
+    claimsIssuer = new ClaimsFactory(issuerKeys, issuerDoc, store).createClaimsIssuer();
   });
 
   after(async () => {

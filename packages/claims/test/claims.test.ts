@@ -27,10 +27,12 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
     const registry = await deployRegistry([userAddress]);
     const store = new DidStore(await spawnIpfsDaemon());
     const owner = withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey);
-    const userDoc = new DIDDocumentFull(
-      userDdid,
-      new Operator(owner, { address: registry }),
-    );
+    const operator =  new Operator(
+      keys.privateKey, 
+      { address: registry },
+      'http://localhost:8544'
+    )
+    const userDoc = new DIDDocumentFull(userDdid, operator);
     claims = new Claims(owner, userDoc, store);
 
     await userDoc.create();
