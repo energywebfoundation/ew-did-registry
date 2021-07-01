@@ -45,8 +45,9 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      withKey(signerFromKeys(keys).connect(getProvider()), walletPubKey),
+      keys.privateKey,
       { address: registry },
+      'http://localhost:8544'
     );
     fullDoc = new DIDDocumentFull(did, operator);
     const created = await fullDoc.create();
@@ -189,8 +190,9 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const doc = new DIDDocumentFull(
       did,
       new Operator(
-        withKey(signerFromKeys(keys1).connect(getProvider()), walletPubKey),
+        keys1.privateKey,
         { address: registry },
+        'http://localhost:8544'
       ),
     );
     return doc.deactivate().should.be.rejected;

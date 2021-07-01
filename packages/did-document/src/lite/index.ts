@@ -15,8 +15,8 @@ import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
   /**
-* @param {string} did
-* @param {IResolver} resolver
+* @param {string} did - entity identifier, which is associated with DID Document
+* @param {IResolver} resolver - resolver exposing read functionality of DID Document
 */
   // eslint-disable-next-line no-useless-constructor
   constructor(public did: string, private resolver: IResolver) { }
