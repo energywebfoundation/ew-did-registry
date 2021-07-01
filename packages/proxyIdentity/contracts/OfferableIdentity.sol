@@ -3,10 +3,11 @@ pragma solidity 0.8.3;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "./IdentityManager.sol";
 import "./IOfferable.sol";
+import "./IOwned.sol";
 
 
-contract OfferableIdentity is IOfferable, ERC165 {
-  address public owner;
+contract OfferableIdentity is IOfferable, IOwned, ERC165 {
+  address public override owner;
   address manager;
 
   address public offeredTo;
@@ -87,6 +88,7 @@ contract OfferableIdentity is IOfferable, ERC165 {
   {
     return
       interfaceId == type(IOfferable).interfaceId ||
+      interfaceId == type(IOwned).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 }
