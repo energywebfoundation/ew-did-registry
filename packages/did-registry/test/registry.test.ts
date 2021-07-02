@@ -61,7 +61,7 @@ describe('[REGISTRY PACKAGE]', function () {
 
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
     issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store);
-    verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, store);   
+    verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, store);  
     userClaims = user.claims.createClaimsUser();
     issuerClaims = issuer.claims.createClaimsIssuer();
     await user.document.create();
