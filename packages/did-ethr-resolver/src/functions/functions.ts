@@ -226,7 +226,12 @@ const getEventsFromBlock = (
     toBlock: block.toNumber(),
     topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
+    const {
+      name, args, signature, topic,
+    } = contractInterface.parseLog(log[0]);
+    const event = {
+      name, values: args, signature, topic,
+    } as unknown as AttributeChangedEvent |
       DelegateChangedEvent;
     updateDocument(event, did, document, block.toNumber());
 
@@ -284,7 +289,7 @@ export const fetchDataFromEvents = async (
     document.owner = identity;
   }
 
-  const contractInterface = new ethers.utils.Interface(registrySettings.abi);
+  const contractInterface = new ethers.utils.Interface(JSON.stringify(registrySettings.abi));
   const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
@@ -331,7 +336,8 @@ export const wrapDidDocument = (
     {
       type: 'owner',
       publicKey: `${did}#owner`,
-      validity: BigNumber.from(Number.MAX_SAFE_INTEGER),
+      // -1 is preventing BigNumber.from overflow error https://github.com/ethers-io/ethers.js/discussions/1582
+      validity: BigNumber.from(Number.MAX_SAFE_INTEGER - 1),
     },
   ];
 

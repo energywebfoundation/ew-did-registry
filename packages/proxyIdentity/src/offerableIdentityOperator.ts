@@ -5,11 +5,12 @@ import {
   DIDAttribute,
   IUpdateData,
   RegistrySettings,
-  IdentityOwner,
   IUpdateAttributeData,
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, IdentityOwner, hexify, addressOf,
+} from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
@@ -21,11 +22,15 @@ export class OfferableIdenitytOperator extends Operator {
 
   /**
    *
-   * @param owner - Owner of the idenity
+   * @param owner - Owner of the identity
    * @param settings - Settings to connect to Ethr registry
-   * @param identityAddr {string} - address of controlled offerable identity
+   * @param identityAddr - Address of controlled offerable identity
    */
-  constructor(owner: IdentityOwner, settings: RegistrySettings, identityAddr: string) {
+  constructor(
+    owner: IdentityOwner,
+    settings: RegistrySettings,
+    identityAddr: string,
+  ) {
     super(owner, settings);
     this.identity = new Contract(identityAddr, identityAbi, owner);
   }
@@ -56,7 +61,6 @@ export class OfferableIdenitytOperator extends Operator {
 
   async offer(offerTo: string): Promise<boolean> {
     await this.identity.offer(
-      // new Interface(identityAbi).functions.offer.encode([offerTo]),
       new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
       0,

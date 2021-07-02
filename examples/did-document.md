@@ -3,13 +3,24 @@
 ## 1. Seting up DID document attribute
 
 ```typescript
-const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
+  const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
   const did = `did:ewc:${ownerAddress}`;
   const keys = new Keys({
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
-  const operator = new Operator(keys);
+  const registrySettings = { 
+    method: Methods.Erc1056,
+    abi: ethrReg.abi,
+    address: registry
+  };
+  const providerSettings = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'http://volta-rpc.energyweb.org',
+  };
+  const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
+  const owner = IdentityOwner.fromPrivateKeySigner(signer);
+  const operator = new Operator(owner, registrySettings);
 ```
 DIDDocumentFull provide full CRUD functionality
 ```typescript

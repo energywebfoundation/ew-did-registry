@@ -1,16 +1,31 @@
 import { expect } from 'chai';
 import {
-  DIDAttribute, PubKeyType, Algorithms, Encoding,
+  DIDAttribute,
+  PubKeyType,
+  Algorithms,
+  Encoding,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import {
+  EwPrivateKeySigner,
+  IdentityOwner,
+  Operator,
+} from '@ew-did-registry/did-ethr-resolver';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
   this.timeout(0);
   const keys = new Keys();
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+  const owner = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(keys.privateKey, providerSettings),
+  );
   const did = `did:${Methods.Erc1056}:${keys.getAddress()}`;
   let operator: Operator;
   let docLite: IDIDDocumentLite;
@@ -18,9 +33,8 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      keys.privateKey,
+      owner,
       { address: registry },
-      'http://localhost:8544'
     );
     docLite = new DIDDocumentLite(did, operator);
   });

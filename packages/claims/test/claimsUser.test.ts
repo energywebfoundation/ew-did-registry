@@ -3,7 +3,7 @@ import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, walletPubKey, getProvider, withKey,
+  Operator, EwPrivateKeySigner, IdentityOwner,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -11,23 +11,32 @@ import {
   ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
 } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
-
+import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 chai.should();
 
 const claimData = {
   name: 'John',
 };
 
+const providerSettings: ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
+
 describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = withKey(signerFromKeys(userKeys).connect(getProvider()), walletPubKey);
   const userAddress = userKeys.getAddress();
   const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
+  );
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
+  );
 
   let userClaims: IClaimsUser;
 
@@ -39,16 +48,18 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const userDoc = new DIDDocumentFull(
       userDdid,
       new Operator(
-        userKeys.privateKey,
+        user,
         { address: registry },
-        'http://localhost:8544'
       ),
     );
     userClaims = new ClaimsUser(user, userDoc, store);
 
     const issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(
+        issuer,
+        { address: registry },
+      ),
     );
 
     await userDoc.create();

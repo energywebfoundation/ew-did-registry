@@ -11,7 +11,7 @@ const userKeys = new Keys({
 const userDid = 'did:ethr:0x7551eD4be4eFd75E602189E9d59af448A564AB3a';
 
 //initialise the DIDRegistry with keys and a configured Resolver instance
-const didReg = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+const didReg = new DIDRegistry(userKeys, userDid, provider, resolverSettings), new DidStore(ipfsUrl), providerSettings);
 
 // create a claimsCreator for User
 const userClaims = didReg.claims.createClaimsUser();

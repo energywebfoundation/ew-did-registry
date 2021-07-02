@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, providers, BigNumber,
+  Contract, ethers, Event, utils, BigNumber, providers,
 } from 'ethers';
 import {
   Algorithms,
@@ -15,7 +15,6 @@ import {
   PubKeyType,
   KeyTags,
   RegistrySettings,
-  IdentityOwner,
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
@@ -23,7 +22,10 @@ import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName, hexify, addressOf } from '../utils';
+import {
+  encodedPubKeyName, hexify, addressOf, getProvider,
+} from '../utils';
+import { IdentityOwner } from './identityOwner';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 const { formatBytes32String } = utils;
@@ -40,6 +42,10 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
+  private _owner: IdentityOwner;
+
+  private _owner: IdentityOwner;
+
   private readonly _keys = {
     privateKey: '',
     publicKey: '',
@@ -47,19 +53,22 @@ export class Operator extends Resolver implements IOperator {
 
   private address?: string;
 
-  protected readonly _owner: IdentityOwner;
-
   /**
- * @param { IdentityOwner } owner - entity which controls document updatable by this operator
- */
-  constructor(owner: IdentityOwner, settings: RegistrySettings) {
-    super(owner.provider as providers.Provider, settings);
+  * @param owner - Entity which controls document
+  * @param settings - Settings to connect to Ethr registry
+  */
+  constructor(
+    owner: IdentityOwner,
+    settings: RegistrySettings,
+  ) {
+    super(getProvider() as providers.Provider, settings);
+
     const {
       address, abi,
     } = this.settings;
     this._owner = owner;
-    this._didRegistry = new ethers.Contract(address, abi, this._owner);
     this._keys.publicKey = owner.publicKey;
+    this._didRegistry = new ethers.Contract(address, abi, owner);
   }
 
   protected async getAddress(): Promise<string> {
@@ -88,7 +97,8 @@ export class Operator extends Resolver implements IOperator {
  */
   async create(): Promise<boolean> {
     const did = await this.did();
-    if (await this.readOwnerPubKey(did)) {
+    const readPubKey = await this.readOwnerPubKey(did);
+    if (readPubKey) {
       return true;
     }
     const attribute = DIDAttribute.PublicKey;
@@ -96,7 +106,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
+      value: { publicKey: this.getPublicKey(), tag: KeyTags.OWNER },
     };
     await this.update(did, attribute, updateData);
     return true;
@@ -111,9 +121,18 @@ export class Operator extends Resolver implements IOperator {
   * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
   *  } from '@ew-did-registry/did-resolver';
   * import { Keys } from '@ew-did-registry/keys';
-  *
+  * const providerSettings = {
+  *   type: ProviderTypes.HTTP,
+  *   uriOrInfo: 'https://volta-rpc.energyweb.org',
+  * }
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys);
+  * const owner = IdentityOwner.fromPrivateKeySigner(
+  *   new EwPrivateKeySigner(ownerKeys.privateKey, providerSettings),
+  * )
+  * const operator = new Operator(
+  *     owner,
+  *     resolverSettings,
+  *    );
   * const pKey = DIDAttribute.PublicKey;
   * const updateData = {
   *     algo: Algorithms.ED25519,
@@ -137,7 +156,7 @@ export class Operator extends Resolver implements IOperator {
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
-    validity: number = Number.MAX_SAFE_INTEGER,
+    validity: number = Number.MAX_SAFE_INTEGER - 1, // preventing BigNumber.from overflow error
   ): Promise<BigNumber> {
     const registry = this._didRegistry;
     const method = didAttribute === PublicKey || didAttribute === ServicePoint
@@ -234,12 +253,22 @@ export class Operator extends Resolver implements IOperator {
   *import { Operator } from '@ew-did-registry/did-resolver';
   *import { Keys } from '@ew-did-registry/keys';
   *
+  * const providerSettings = {
+  *   type: ProviderTypes.HTTP,
+  *   uriOrInfo: 'https://volta-rpc.energyweb.org',
+  * }
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys);
+  * const owner = IdentityOwner.fromPrivateKeySigner(
+  *   new EwPrivateKeySigner(ownerKeys.privateKey, providerSettings),
+  * );
+  * const operator = new Operator(
+  *   owner,
+  *   resolverSettings,
+  *  );
   * const updated = await operator.deactivate(did);
   * ```
   *
-  * @param { string } did
+  * @param did
   * @returns Promise<boolean>
   */
   async deactivate(did: string): Promise<void> {

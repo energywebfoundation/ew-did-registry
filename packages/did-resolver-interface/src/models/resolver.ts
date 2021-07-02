@@ -3,6 +3,7 @@ import {
   Signer,
   BigNumber,
   providers,
+  ContractInterface,
 } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
@@ -33,7 +34,7 @@ export interface ProviderSettings {
  */
 export interface RegistrySettings {
   address: string;
-  abi?: Array<string | utils.ParamType>;
+  abi?: ContractInterface;
   method?: Methods;
 }
 

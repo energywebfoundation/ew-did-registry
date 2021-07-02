@@ -3,9 +3,9 @@ import chai, { expect, should } from 'chai';
 import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
 import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey,
+  EwPrivateKeySigner,
+  IdentityOwner,
+  Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
@@ -14,6 +14,8 @@ import {
   IOperator,
   PubKeyType,
   IUpdateData,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
@@ -35,6 +37,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+  const owner = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(keys.privateKey, providerSettings),
+  );
   const keys1 = new Keys();
   let fullDoc: IDIDDocumentFull;
   let operator: IOperator;
@@ -45,9 +53,8 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      keys.privateKey,
+      owner,
       { address: registry },
-      'http://localhost:8544'
     );
     fullDoc = new DIDDocumentFull(did, operator);
     const created = await fullDoc.create();
@@ -187,10 +194,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('document must not be updated by non-owning identity', async () => {
+    const nonOwner = IdentityOwner.fromPrivateKeySigner(
+      new EwPrivateKeySigner(keys1.privateKey, providerSettings),
+    );
     const nonOwnerOperator = new Operator(
-      keys1.privateKey,
+      nonOwner,
       { address: registry },
-      'http://localhost:8544',
     );
     const doc = new DIDDocumentFull(did, nonOwnerOperator);
     return doc.deactivate().should.be.rejected;

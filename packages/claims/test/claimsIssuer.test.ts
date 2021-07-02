@@ -1,11 +1,16 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute,
+  PubKeyType,
+  ProviderTypes,
+  ProviderSettings,
+} from '@ew-did-registry/did-resolver-interface';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -15,16 +20,25 @@ chai.should();
 const claimData = {
   name: 'John',
 };
+const providerSettings: ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
 
 describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
+  );
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
+  );
 
   let userDoc: IDIDDocumentFull;
   let issuerDoc: IDIDDocumentFull;
@@ -38,17 +52,28 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(user, { address: registry }),
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(issuer, { address: registry }),
     );
     await userDoc.create();
     await issuerDoc.create();
 
-    claimsUser = new ClaimsFactory(userKeys, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuerKeys, issuerDoc, store).createClaimsIssuer();
+    claimsUser = new ClaimsFactory(
+      userKeys,
+      userDoc,
+      store,
+      providerSettings,
+    ).createClaimsUser();
+
+    claimsIssuer = new ClaimsFactory(
+      issuerKeys,
+      issuerDoc,
+      store,
+      providerSettings,
+    ).createClaimsIssuer();
   });
 
   after(async () => {

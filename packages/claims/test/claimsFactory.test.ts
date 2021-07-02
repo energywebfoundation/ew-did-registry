@@ -2,7 +2,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -10,6 +10,7 @@ import {
   ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData,
 } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -17,16 +18,28 @@ chai.should();
 describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
+  );
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
+  );
 
   const verifierKeys = new Keys();
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
+  const verifier = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings),
+  );
 
   let claimsUser: IClaimsUser;
   let claimsIssuer: IClaimsIssuer;
@@ -36,9 +49,9 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifierKeys.privateKey, { address: registry }, 'http://localhost:8544'));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(user, { address: registry }));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, { address: registry }));
+    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifier, { address: registry }));
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();
