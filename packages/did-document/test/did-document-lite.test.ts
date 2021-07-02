@@ -20,7 +20,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
     operator = new Operator(
       keys.privateKey,
       { address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
     docLite = new DIDDocumentLite(did, operator);
   });

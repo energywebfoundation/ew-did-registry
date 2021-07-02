@@ -23,7 +23,7 @@ describe('[DID DOCUMENT FACTORY]', () => {
     operator = new Operator(
       keys.privateKey,
       { address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
   });
 

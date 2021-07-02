@@ -2,11 +2,7 @@
 import chai, { expect, should } from 'chai';
 import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
-import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
   DIDAttribute,
@@ -47,7 +43,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     operator = new Operator(
       keys.privateKey,
       { address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
     fullDoc = new DIDDocumentFull(did, operator);
     const created = await fullDoc.create();

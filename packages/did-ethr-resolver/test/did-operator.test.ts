@@ -286,7 +286,11 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const newOwnerOperator = new Operator(newOwnerKeys.privateKey, {address: registry}, 'http://localhost:8544')
+    const newOwnerOperator = new Operator(
+      newOwnerKeys.privateKey,
+      { address: registry },
+      'http://localhost:8544',
+    );
 
     await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
     expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
@@ -338,7 +342,7 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
     operator = new Operator(
       keys.privateKey,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
     await operator.create();
   });

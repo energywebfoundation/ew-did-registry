@@ -44,25 +44,25 @@ describe('[REGISTRY PACKAGE]', function () {
     userOperator = new Operator(
       userKeys.privateKey,
       { address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
 
     const issuerOperator = new Operator(
       issuerKeys.privateKey,
       { address: registry },
-      'http://localhost:8544'
+      'http://localhost:8544',
     );
 
     const verifierOperator = new Operator(
       verifierKeys.privateKey,
       { address: registry },
-      'http://localhost:8544'
-    )
+      'http://localhost:8544',
+    );
 
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
     issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store);
-    verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator , store);
-    
+    verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, store);
+     
     userClaims = user.claims.createClaimsUser();
     issuerClaims = issuer.claims.createClaimsIssuer();
     await user.document.create();

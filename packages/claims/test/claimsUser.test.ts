@@ -41,7 +41,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       new Operator(
         userKeys.privateKey,
         { address: registry },
-        'http://localhost:8544'
+        'http://localhost:8544',
       ),
     );
     userClaims = new ClaimsUser(user, userDoc, store);
