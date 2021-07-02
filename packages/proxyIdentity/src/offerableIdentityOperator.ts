@@ -21,13 +21,18 @@ export class OfferableIdenitytOperator extends Operator {
 
   /**
    *
-   * @param owner - Owner of the idenity
+   * @param privateKey {string} - Privatekey of the owner of the idenity
    * @param settings - Settings to connect to Ethr registry
-   * @param identityAddr {string} - address of controlled offerable identity
+   * @param identityAddr {string} - Address of controlled offerable identity
+   * @param providerUrl {string} - Connection link to the blockchain
    */
-  constructor(privateKey: string, settings: RegistrySettings, identityAddr: string) {
-    // constructor(owner: IdentityOwner, settings: RegistrySettings, identityAddr: string) {
-    super(privateKey, settings);
+  constructor(
+    privateKey: string,
+    settings: RegistrySettings,
+    identityAddr: string,
+    providerUrl = 'http://localhost:8544',
+  ) {
+    super(privateKey, settings, providerUrl);
     const owner: IdentityOwner = new Wallet(privateKey);
     this.identity = new Contract(identityAddr, identityAbi, owner);
   }

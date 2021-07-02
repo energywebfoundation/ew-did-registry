@@ -1,8 +1,6 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey, withKey,
-} from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
@@ -42,21 +40,31 @@ describe('[REGISTRY PACKAGE]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
     const store = new DidStore(ipfsApi);
+
     userOperator = new Operator(
-      withKey(signerFromKeys(userKeys).connect(getProvider()), walletPubKey),
+      userKeys.privateKey,
       { address: registry },
+      'http://localhost:8544'
     );
+
+    const issuerOperator = new Operator(
+      issuerKeys.privateKey,
+      { address: registry },
+      'http://localhost:8544'
+    );
+
+    const verifierOperator = new Operator(
+      verifierKeys.privateKey,
+      { address: registry },
+      'http://localhost:8544'
+    )
+
     user = new DIDRegistry(userKeys, userDid, userOperator, store);
+    issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store);
+    verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator , store);
+    
     userClaims = user.claims.createClaimsUser();
-    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(
-      withKey(signerFromKeys(issuerKeys).connect(getProvider()), walletPubKey),
-      { address: registry },
-    ), store);
     issuerClaims = issuer.claims.createClaimsIssuer();
-    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(
-      withKey(signerFromKeys(verifierKeys).connect(getProvider()), walletPubKey),
-      { address: registry },
-    ), store);
     await user.document.create();
     await issuer.document.create();
   });
