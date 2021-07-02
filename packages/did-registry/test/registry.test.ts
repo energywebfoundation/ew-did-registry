@@ -39,7 +39,7 @@ describe('[REGISTRY PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
-    const store = new DidStore(ipfsApi);
+    const store : DidStore = new DidStore(ipfsApi);
 
     userOperator = new Operator(
       userKeys.privateKey,
