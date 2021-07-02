@@ -183,14 +183,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('document must not be updated by non-owning identity', async () => {
-    const doc = new DIDDocumentFull(
-      did,
-      new Operator(
-        keys1.privateKey,
-        { address: registry },
-        'http://localhost:8544'
-      ),
+    const operator = new Operator(
+      keys1.privateKey,
+      { address: registry },
+      'http://localhost:8544',
     );
+    const doc = new DIDDocumentFull(did, operator);
     return doc.deactivate().should.be.rejected;
   });
 
