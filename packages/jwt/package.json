@@ -31,7 +31,7 @@
     "@types/promise.allsettled": "^1.0.3",
     "base64url": "^3.0.1",
     "ethereumjs-util": "^7.0.5",
-    "ethers": "5.3.1",
+    "ethers": "5.4.0",
     "jsonwebtoken": "^8.5.1",
     "key-encoder": "^2.0.3",
     "promise.allsettled": "^1.0.2"
