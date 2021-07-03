@@ -13,7 +13,7 @@ const keys = new Keys({
   });
 
 ///instantiate the operator with configured Resolver Settings
-const operator = new Operator(keys, resolverSettings);
+const operator = new Operator(keys.privateKey, resolverSettings, providerUrl);
 
 //create the DIDDocumentFull instance
 const document = new DIDDocumentFull(did, operator);
