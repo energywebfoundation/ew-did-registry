@@ -31,7 +31,7 @@ User is the claims subject
 ```  
 `Operator` - is an interface responsible for DID document updating
 ```typescript 
-  const userOperator = new Operator(userKeys, resolverSettings);
+  const userOperator = new Operator(userKeys.privateKey, resolverSettings, providerUrl);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its etherum address 
@@ -40,7 +40,7 @@ the document stores the user's public key associated with its etherum address
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -55,7 +55,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -66,7 +66,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings)); 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
 ```
 The time interval during which the corresponding record in the DID document will
 be valid
@@ -146,7 +146,7 @@ User is the claims subject
 ```
 ```Operator``` - an interface responsible for DID document updating
 ``` typescript
-  const userOperator = new Operator(userKeys);
+  const userOperator = new Operator(userKeys.privateKey, resolverSettings, providerUrl);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its Etherum address. 
@@ -157,7 +157,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -168,11 +168,11 @@ stored and verified
 ```typescript 
   const issuerKeys = new Keys({
     privateKey: '945d90baf66123693be97edff663d5c54f5d517d40928a9c0caa37dba3a0b042',
-    publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263,
+    publicKey: '0232c391f52ff6c63e1ffdfa6921822aee895d2a21bb28a71370404b05960c9263',
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -183,7 +183,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings));
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -234,7 +234,7 @@ An ```IDIDDocumetLite``` interface is used to read a document
 ```
 An ```IDIDDocumetFull``` interface is used to update a document
 ```typescript 
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
+  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys.privateKey, resolverSettings, providerUrl)); 
   expect(userFullDoc).instanceOf(DIDDocumentFull);
   await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
   await userLigthDoc.read(userDid);
