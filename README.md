@@ -599,7 +599,7 @@ cryptographycally matches it with proof token
   expect(verified).is.true;
 ```
 ## Keys Package
-The keys package provides a clean and simple interface for the client and expose cryptographic operations based on asymmetric cryptography for secp256k1 ECDSA.
+The keys package provides a clean and simple interface for the client and exposes cryptographic operations based on asymmetric cryptography for secp256k1 ECDSA.
 ```typescript
 // If you don't have a key pair you can generate new Key Pair
 const keys = Keys.generateKeyPair(); // builder
