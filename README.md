@@ -162,7 +162,7 @@ const keys = new Keys({
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
 
-///instantiate the operator with user's pivate key configured Resolve and Settings
+///instantiate the operator with user's pivate key, configured Resolve settings, and url of the provider
 const operator = new Operator(keys.privateKey, resolverSettings, providerUrl);
 
 //create the DIDDocumentFull instance
@@ -413,7 +413,7 @@ be valid
 ```
 * **Verification of issued claim and adding issuer to delegates**
 
-'verifyPublicClaim' check if the claim has the correct payload and
+'verifyPublicClaim' checks if the claim has the correct payload and
 also adds delegate to the smart contract
 ```typescript 
   const verified = await userClaims.verifyPublicClaim(issuedToken); 
