@@ -559,7 +559,11 @@ An ```IDIDDocumetLite``` interface is used to read a document
 ```
 An ```IDIDDocumetFull``` interface is used to update a document
 ```typescript 
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys.privateKey, registrySettings, providerUrl))
+    const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys.privateKey, resolverSettings, providerUrl)); 
+  expect(userFullDoc).instanceOf(DIDDocumentFull);
+  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
+  await userLigthDoc.read(userDid);
+  document = userLigthDoc.didDocument;
   const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
   expect(document.publicKey.find((pk) => pk.id === expectedPkId)).to.not.undefined;
 ```
