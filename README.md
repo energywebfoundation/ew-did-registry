@@ -162,7 +162,7 @@ const keys = new Keys({
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
 
-///instantiate the operator with configured Resolver Settings
+///instantiate the operator with user's pivate key configured Resolve and Settings
 const operator = new Operator(keys.privateKey, resolverSettings, providerUrl);
 
 //create the DIDDocumentFull instance
