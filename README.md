@@ -439,7 +439,7 @@ An ```IDIDDocumetLite``` interface is used to read a document
 
 An ```IDIDDocumetFull``` interface is used to update a document
 ```typscript
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
+  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys.key, resolverSettings, providerUrl)); 
   expect(userFullDoc).instanceOf(DIDDocumentFull);
   await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
 });
