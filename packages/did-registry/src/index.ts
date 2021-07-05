@@ -46,8 +46,8 @@ class DIDRegistry implements IDIDRegistry {
    * import DIDRegistry from '@ew-did-registry/did-regsitry';
    * import { Method } from '@ew-did-registry/did';
    *
-   * const reg = new DIDRegistry(keys, ethDid, ethResolver);
-   * reg.changeResolver(new Resolver(ewcSettings), Method.EnergyWeb);
+   * const reg = new DIDRegistry(keys, ethDid, ethResolver, didStore);
+   * reg.changeResolver(new Resolver(ewcSettings, providerUrl), Method.EnergyWeb);
    * ```
    * @param { IResolver } resolver
    * @param { Methods } method

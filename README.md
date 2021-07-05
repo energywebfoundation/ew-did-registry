@@ -91,7 +91,7 @@ const resolverSettings: IResolverSettings = {
 
 // perform a read only operation on given user did
 const userDid = 'did:ethr:0xD845B41AB4837E06Aa7335E31D98c9097a064891';
-const document = new DIDDocumentLite(userDid, new Resolver(resolverSettings));
+const document = new DIDDocumentLite(userDid, new Resolver(resolverSettings, provider.uriOrInfo));
 ```
 ## DID Document
 A DID can be resolved to a [DID document](https://w3c.github.io/did-core/#did-documents) with help of a resolver. The DID document is a [JSON-LD](https://json-ld.org/) object which can be constructed by retrieving the attributes that describes:
@@ -131,8 +131,10 @@ const userKeys = new Keys({
   
 const userDid = 'did:ethr:0x7551eD4be4eFd75E602189E9d59af448A564AB3a';
 
+const NETWORK_URL = 'https://volta-rpc.energyweb.org/';
+
 //initialise the DIDRegistry with keys and a configured Resolver instance
-const didReg = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+const didReg = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings, NETWORK_URL), new DidStore(ipfsUrl));
 
 // create a claimsCreator for User
 const userClaims = didReg.claims.createClaimsUser();
@@ -300,7 +302,7 @@ import { Resolver, DelegateTypes } from '@ew-did-registry/did-ethr-resolver';
 * **Reading the DID Document for particular id**
 
 ``` typescript  
-    const resolver = new Resolver(resolverSettings);
+    const resolver = new Resolver(resolverSettings, providerUrl);
     const did = 'did:ethr:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDocument = await resolver.read(did);
 ```
@@ -365,7 +367,7 @@ the document stores the user's public key associated with its etherum address
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -380,7 +382,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), new DidStoire(ipfsUrl)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), new DidStoire(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -391,7 +393,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl)); 
 ```
 The time interval during which the corresponding record in the DID document will
 be valid
@@ -432,7 +434,7 @@ whether the delegate is valid for the DID
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
@@ -471,7 +473,7 @@ User is the claims subject
 ```
 ```Operator``` - an interface responsible for DID document updating
 ``` typescript
-  const userOperator = new Operator(userKeys.privateKey, registrySettings, providerUrl);
+  const userOperator = new Operator(userKeys.privateKey, resolverSettings, providerUrl);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its Etherum address. 
@@ -482,7 +484,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrls));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -497,7 +499,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), DidStore(ipfsU)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -508,7 +510,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore());
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -553,7 +555,7 @@ Issuer encodes private user data and then hashes it
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```

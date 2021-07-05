@@ -122,7 +122,7 @@ export class Operator extends Resolver implements IOperator {
   * import { Keys } from '@ew-did-registry/keys';
   *
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys);
+  * const operator = new Operator(ownerKeys.privateKey, resolverSettings, providerUrl);
   * const pKey = DIDAttribute.PublicKey;
   * const updateData = {
   *     algo: Algorithms.ED25519,
@@ -244,7 +244,7 @@ export class Operator extends Resolver implements IOperator {
   *import { Keys } from '@ew-did-registry/keys';
   *
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys);
+  * const operator = new Operator(ownerKeys.privateKey, resolverSettings, providerUrl);
   * const updated = await operator.deactivate(did);
   * ```
   *

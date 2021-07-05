@@ -30,13 +30,13 @@ own implementation of the interface depending on the DID method. The library
 provides reference implementation based on ERC-1056
 
 ```typescript 
-  const userOperator = new Operator(userKeys, resolverSettings);
+  const userOperator = new Operator(userKeys, resolverSettings, providerUrl);
 ```
 
 ` DIDRegistry ` - main class for working with claims and DID documents
 
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, userOperator, store);
+  const user = new DIDRegistry(userKeys, userDid, userOperator, didStore);
 ```
 
 Before using DID document it needs to be initialized. During initialization, 
@@ -59,8 +59,8 @@ stored and verified
   const issuerKeys = new Keys(); 
   const issuerAddress = issuerKeys.getAddress(); 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuerOperator = new Operator(issuerKeys, resolverSettings); 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store); 
+  const issuerOperator = new Operator(issuerKeys, resolverSettings, providerUrl); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, didStore); 
   const issuerClaims = issuer.claims.createClaimsIssuer(); 
 ``` 
 Same flow for verifier
@@ -69,8 +69,8 @@ Same flow for verifier
   const verifierKeys = new Keys(); 
   const verifierAddress = verifierKeys.getAddress(); 
   const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}` ; 
-  const verifierOperator = new Operator(verifierKeys, resolverSettings); 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, store); 
+  const verifierOperator = new Operator(verifierKeys, resolverSettings, providerUrl); 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, didStore); 
   const verifierClaims = verifier.claims.createClaimsVerifier();
 
 ``` 

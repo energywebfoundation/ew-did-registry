@@ -9,7 +9,7 @@ const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
-  const operator = new Operator(keys);
+  const operator = new Operator(keys.privateKey, resolverSettings, providerUrl);
 ```
 DIDDocumentFull provide full CRUD functionality
 ```typescript

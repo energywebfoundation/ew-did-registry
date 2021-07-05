@@ -23,7 +23,7 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const operator = new Operator(keys);
+    const operator = new Operator(keys.privateKey; resolverSettings, providerUrl);
     const didDocument = await operator.read(did);
 ```
 
@@ -31,7 +31,7 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const operator = new Operator(keys);
+    const operator = new Operator(keys.privateKey; resolverSettings, providerUrl);
     const didDocument = await operator.create();
 ```
 
@@ -39,7 +39,7 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const operator = new Operator(keys);
+    const operator = new Operator(keys.privateKey; resolverSettings, providerUrl);
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
       algo: Algorithms.ED25519,

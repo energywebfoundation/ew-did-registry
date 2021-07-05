@@ -40,7 +40,7 @@ the document stores the user's public key associated with its etherum address
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -55,7 +55,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -66,7 +66,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl)); 
 ```
 The time interval during which the corresponding record in the DID document will
 be valid
@@ -107,14 +107,14 @@ whether the delegate is valid for the DID
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
 
 An ```IDIDDocumetFull``` interface is used to update a document
 ```typscript
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
+  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys.privateKey, resolverSettings, providerUrl)); 
   expect(userFullDoc).instanceOf(DIDDocumentFull);
   await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
 });
@@ -157,7 +157,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -172,7 +172,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings), new DidStore(ipfsUrl)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -183,7 +183,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings), new DidStore(ipfsUrl));
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -228,7 +228,7 @@ Issuer encodes private user data and then hashes it
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
+  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
   await userLigthDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
