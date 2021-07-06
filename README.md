@@ -432,7 +432,7 @@ whether the delegate is valid for the DID
   expect(verified).to.be.true;
 ```
 
-An ```IDIDDocumetLite``` interface is used to read a document
+An ```IDIDDocumentLite``` interface is used to read a document
 ```typescript 
   const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
   await userLigthDoc.read(userDid); 
