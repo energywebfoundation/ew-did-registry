@@ -382,7 +382,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), new DidStoire(ipfsUrl)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings, providerUrl), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
