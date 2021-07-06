@@ -434,8 +434,8 @@ whether the delegate is valid for the DID
 
 An ```IDIDDocumentLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
-  await userLigthDoc.read(userDid); 
+  const userLightDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings, providerUrl)); 
+  await userLightDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
 
