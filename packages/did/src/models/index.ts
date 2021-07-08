@@ -5,7 +5,9 @@ export interface IDidStore {
 export enum Methods {
     Erc725 = 'erc725',
     Erc1056 = 'ethr',
-    Jolocom = 'jolo'
+    Jolocom = 'jolo',
+    Nft = 'nft'
+
 }
 
 export const DID_SCHEME_PATTERNS = {

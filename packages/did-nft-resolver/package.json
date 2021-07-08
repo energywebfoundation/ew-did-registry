@@ -1,10 +1,10 @@
 {
-  "name": "@ew-did-registry/claims",
+  "name": "@ew-did-registry/did-nft-resolver",
   "version": "0.5.1",
   "publishConfig": {
     "access": "public"
   },
-  "description": "The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims",
+  "description": "The package resolve CRUD operations on DID Documents",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -18,9 +18,8 @@
     "Energy",
     "EnergyWeb",
     "EW",
-    "Claims",
-    "DID",
-    "DID Claims"
+    "Resolver",
+    "DID Resolver"
   ],
   "author": {
     "name": "EnergyWeb",
@@ -29,13 +28,10 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did": "0.5.1",
-    "@ew-did-registry/did-document": "0.5.1",
-    "@ew-did-registry/did-ethr-resolver": "0.5.1",
-    "@ew-did-registry/did-ipfs-store": "0.5.0",
     "@ew-did-registry/did-resolver-interface": "0.5.1",
-    "@ew-did-registry/did-store-interface": "0.5.0",
-    "@ew-did-registry/jwt": "0.5.0",
     "@ew-did-registry/keys": "0.5.0",
+    "@ew-did-registry/jwt": "0.5.0",
+    "ethers": "4.0.45",
     "@types/sjcl": "1.0.28",
     "eciesjs": "^0.3.4",
     "sjcl": "npm:sjcl-complete@1.0.0"

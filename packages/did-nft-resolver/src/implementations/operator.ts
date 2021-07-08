@@ -3,29 +3,32 @@ import {
   Contract, ethers, Event, utils, providers,
 } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
   IOperator,
-  IPublicKey,
+  IClaimsIssuer,
+  IVerificationMethod,
   IServiceEndpoint,
   IUpdateData,
   IAttributePayload,
-  PubKeyType,
+  VerificationMethodType,
   KeyTags,
   RegistrySettings,
   IdentityOwner,
   IUpdateAttributeData,
+  IPublicClaim,
+  ServiceEndpointType
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import Resolver from './resolver';
+import { JWT } from '@ew-did-registry/jwt';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName, hexify, addressOf } from '../utils';
+import { encodedPubKeyName, hexify, addressOf, addressAndIdOf, hashes } from '../utils';
 
-const { PublicKey, ServicePoint } = DIDAttribute;
+const { VerificationMethod, ServicePoint } = DIDAttribute;
 const { BigNumber, formatBytes32String } = utils;
 
 /**
@@ -62,15 +65,16 @@ export class Operator extends Resolver implements IOperator {
     this._keys.publicKey = owner.publicKey;
   }
 
+  protected async getOwnerDID(): Promise<string> {
+    const address = await this.getAddress();
+    return `did:${Methods.Erc1056}:${address}`
+  }
+
   protected async getAddress(): Promise<string> {
     if (!this.address) {
       this.address = await this._owner.getAddress();
     }
     return this.address as string;
-  }
-
-  private async did(): Promise<string> {
-    return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
   public getPublicKey(): string {
@@ -86,20 +90,11 @@ export class Operator extends Resolver implements IOperator {
  * @param context
  * @returns Promise<boolean>
  */
-  async create(): Promise<boolean> {
-    const did = await this.did();
-    if (await this.readOwnerPubKey(did)) {
+  async create(did: string): Promise<boolean> {
+    if (await this.identityOwner(did) != "") {
       return true;
     }
-    const attribute = DIDAttribute.PublicKey;
-    const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
-      type: PubKeyType.VerificationKey2018,
-      encoding: Encoding.HEX,
-      value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
-    };
-    await this.update(did, attribute, updateData);
-    return true;
+    return false;
   }
 
   /**
@@ -140,7 +135,7 @@ export class Operator extends Resolver implements IOperator {
     validity: number = Number.MAX_SAFE_INTEGER,
   ): Promise<utils.BigNumber> {
     const registry = this._didRegistry;
-    const method = didAttribute === PublicKey || didAttribute === ServicePoint
+    const method = didAttribute === VerificationMethod || didAttribute === ServicePoint
       ? registry.setAttribute
       : registry.addDelegate;
     if (validity < 0) {
@@ -160,7 +155,7 @@ export class Operator extends Resolver implements IOperator {
   */
   async revokeDelegate(
     did: string,
-    delegateType: PubKeyType,
+    delegateType: VerificationMethodType,
     delegateDID: string,
   ): Promise<boolean> {
     await this._sendTransaction(
@@ -199,34 +194,6 @@ export class Operator extends Resolver implements IOperator {
   }
 
   /**
-  * Changes the owner of particular decentralised identity
-  * Returns true on success
-  *
-  * @param { string } did - did of current identity owner
-  * @param { string } newOwner - did of new owner that will be set on success
-  * @returns Promise<boolean>
-  */
-  async changeOwner(
-    did: string,
-    newOwner: string,
-  ): Promise<boolean> {
-    try {
-      const tx = await this._didRegistry.changeOwner(
-        addressOf(did),
-        addressOf(newOwner),
-      );
-      const receipt = await tx.wait();
-      const event = receipt.events.find(
-        (e: Event) => (e.event === 'DIDOwnerChanged'),
-      );
-      if (!event) return false;
-    } catch (error) {
-      throw new Error(error);
-    }
-    return true;
-  }
-
-  /**
   * Revokes authentication methods, public keys and delegates from DID document
   *
   * @example
@@ -247,9 +214,9 @@ export class Operator extends Resolver implements IOperator {
     await this._revokeAuthentications(
       did,
       document.authentication as IAuthentication[],
-      document.publicKey,
+      document.verificationMethod,
     );
-    await this._revokePublicKeys(did, document.publicKey);
+    await this._revokePublicKeys(did, document.verificationMethod);
     await this._revokeServices(did, document.service);
   }
 
@@ -264,15 +231,15 @@ export class Operator extends Resolver implements IOperator {
   protected async _revokeAuthentications(
     did: string,
     auths: IAuthentication[],
-    publicKeys: IPublicKey[],
+    verificationMethods: IVerificationMethod[],
   ): Promise<void> {
-    for await (const pk of publicKeys) {
+    for await (const pk of verificationMethods) {
       const match = pk.id.match(delegatePubKeyIdPattern);
       if (match) {
         const type = auths.find(
-          (auth) => auth.publicKey === match[0],
-        ) ? PubKeyType.SignatureAuthentication2018
-          : PubKeyType.VerificationKey2018;
+          (auth) => (auth as IVerificationMethod).verificationMethod === match[0],
+        ) ? VerificationMethodType.EcdsaSecp256k1RecoveryMethod2020
+          : VerificationMethodType.EcdsaSecp256k1VerificationKey2019;
         await this.revokeDelegate(did, type, `did:${Methods.Erc1056}:${pk.ethereumAddress}`);
       }
     }
@@ -285,20 +252,20 @@ export class Operator extends Resolver implements IOperator {
  * @param publicKeys
  * @private
  */
-  protected async _revokePublicKeys(did: string, publicKeys: IPublicKey[]): Promise<void> {
-    for await (const pk of publicKeys) {
+  protected async _revokePublicKeys(did: string, verificationMethods: IVerificationMethod[]): Promise<void> {
+    for await (const pk of verificationMethods) {
       const match = pk.id.match(pubKeyIdPattern);
       if (match) {
         const encoding = Object.values(Encoding)
           .find((enc) => pk[encodedPubKeyName(enc)]) as Encoding;
         await this.revokeAttribute(
           did,
-          DIDAttribute.PublicKey,
+          DIDAttribute.VerificationMethod,
           {
-            type: DIDAttribute.PublicKey,
+            type: DIDAttribute.VerificationMethod,
             value: {
               id: pk.id,
-              publicKey: pk[encodedPubKeyName(encoding)] as string,
+              verificationMethod: pk[encodedPubKeyName(encoding)] as string,
               tag: pk.id.split('#')[1],
             },
           },
@@ -350,19 +317,20 @@ export class Operator extends Resolver implements IOperator {
     validity?: number,
     overrides?: {
       nonce?: number;
+      gasLimit?: number;
     },
   ): Promise<utils.BigNumber> {
-    const identity = addressOf(did);
+    const [ nft_address, nft_id ] = addressAndIdOf(did);
     const name = formatBytes32String(
       this._composeAttributeName(didAttribute, updateData),
     );
     const value = hexify(
-      didAttribute === PublicKey || didAttribute === ServicePoint
+      didAttribute === VerificationMethod || didAttribute === ServicePoint
         ? updateData.value as IAttributePayload
         : updateData.delegate as string,
     );
     const params: (string | number | Record<string, unknown>)[] = [
-      identity,
+      nft_address, nft_id,
       name,
       value,
     ];
@@ -371,12 +339,15 @@ export class Operator extends Resolver implements IOperator {
     }
     if (overrides) {
       params.push(overrides);
+    } else {
+      const overrides: {gasLimit: number} = {gasLimit: 80000}
+      params.push(overrides);
     }
     try {
       const tx = await method(...params);
       const receipt = await tx.wait();
       const event: Event = receipt.events.find(
-        (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')
+        (e: Event) => (didAttribute === DIDAttribute.VerificationMethod && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
@@ -395,17 +366,59 @@ export class Operator extends Resolver implements IOperator {
  */
   protected _composeAttributeName(attribute: DIDAttribute, updateData: IUpdateData): string {
     const {
-      algo, type, encoding,
+      type, encoding,
     } = updateData;
     switch (attribute) {
-      case DIDAttribute.PublicKey:
-        return `did/${DIDAttribute.PublicKey}/${algo}/${type}/${encoding}`;
+      case DIDAttribute.VerificationMethod:
+        return `did/${DIDAttribute.VerificationMethod}/${type}/${encoding}`;
       case DIDAttribute.Authenticate:
         return updateData.type;
       case DIDAttribute.ServicePoint:
-        return `did/${DIDAttribute.ServicePoint}/${(updateData.value as IAttributePayload).type}`;
+        return `did/${DIDAttribute.ServicePoint}/${updateData.type}`;
       default:
         throw new Error('Unknown attribute name');
     }
+  }
+
+  async createPublicClaim(publicData: object, did: string, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
+    jwtOptions.issuer = await this.getOwnerDID();
+    jwtOptions.subject = did;
+    const claim: IPublicClaim = {
+      subject: did,
+      issuer: await this.getOwnerDID(),
+      claimData: publicData,
+    };
+    return JWT.sign(
+      this._owner,
+      claim,
+      {
+        ...jwtOptions, algorithm: 'ES256',
+      },
+    )
+  }
+
+  async publishPublicClaim(
+    issued: string,
+    verifyData: object,
+    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: hashes.SHA256 }): Promise<string> {
+    const verified = await this.verifyPublicClaim(issued, verifyData);
+    if (!verified) {
+      return '';
+    }
+    const { hashAlg, createHash } = opts;
+    const claim = JWT.decode(issued) as IPublicClaim;
+
+    const hash = createHash(issued);
+    // TODO: correct URL storage
+    const url = "http://flashlabs.io/claims/"+hash;
+    await this.update(
+      claim.subject,
+      DIDAttribute.ServicePoint,
+      {
+        type: ServiceEndpointType.ClaimRepo,
+        value: { serviceEndpoint: url, hash: hash },
+      },
+    );
+    return url;
   }
 }

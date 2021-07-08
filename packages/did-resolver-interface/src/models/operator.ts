@@ -2,44 +2,65 @@
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
 export enum DIDAttribute {
-  PublicKey = 'pub', Authenticate = 'auth', ServicePoint = 'svc'
+  VerificationMethod = 'vm', Authenticate = 'auth', ServicePoint = 'svc'
 }
 
 /**
  * The two main types of public keys are, in turn, verification key and signature authentication key
  */
-export enum PubKeyType {
-  SignatureAuthentication2018 = 'sigAuth', VerificationKey2018 = 'veriKey'
+export enum VerificationMethodType {
+  JsonWebKey2020 = 'jwk',
+  Ed25519VerificationKey2018 = 'Ed25519VeriKey2018',
+  EcdsaSecp256k1VerificationKey2019 = 'EcdsaSecp2k1VeriKey',
+  SchnorrSecp256k1VerificationKey2019 = 'SchnoSecp2k1VeriKey',
+  Bls12381G1Key2020 = 'Bls12381G1Key',
+  Bls12381G2Key2020 = 'Bls12381G2Key',
+  GpgVerificationKey2020 = 'GpgVeriKey2020',
+  RsaVerificationKey2018 = 'RsaVeriKey2018',
+  X25519KeyAgreementKey2019 = 'X25519KeyAgrKey',
+  EcdsaSecp256k1RecoveryMethod2020 = 'EcdsaSecp2k1RecoMet'
+}
+
+export const VerificationMethodBackTypeMap: Map<string, string> = new Map([
+  ['jwk', 'JsonWebKey2020'],
+  ['Ed25519VeriKey2018', 'Ed25519VerificationKey2018'],
+  ['EcdsaSecp2k1VeriKey', 'EcdsaSecp256k1VerificationKey2019'],
+  ['SchnoSecp2k1VeriKey', 'SchnorrSecp256k1VerificationKey2019'],
+  ['Bls12381G1Key', 'Bls12381G1Key2020'],
+  ['Bls12381G2Key', 'Bls12381G2Key2020'],
+  ['GpgVeriKey2020', 'GpgVerificationKey2020'],
+  ['RsaVeriKey2018', 'RsaVerificationKey2018'],
+  ['X25519KeyAgrKey', 'X25519KeyAgreementKey2019'],
+  ['EcdsaSecp2k1RecoMet', 'EcdsaSecp256k1RecoveryMethod2020'],
+]);
+
+
+export enum ServiceEndpointType {
+  ClaimRepo = 'ClaimRepo'
 }
 
 /**
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
-}
-
-/**
- * Algorithms specifies, which algorithm has to be used with a particular public key
- */
-export enum Algorithms {
-  ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
+  HEX = 'hex', BASE64 = 'base64', PEM = 'pem', ETHADDR = 'addr'
 }
 
 /**
  * KeyTags specifies the tags associated with different purposes of the keys
  */
 export enum KeyTags {
-  OWNER = 'key-owner'
+  OWNER = 'key-owner',
+  STREAM = 'key-stream-authentication'
 }
 
 /** This interface represents the attribute payload
- * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
+ * TODO : avoid use of IAttributePayload, reuse IVerificationMethod and IServiceEndpoint
 */
 export interface IAttributePayload {
   id?: string;
   type?: string;
-  publicKey?: string;
+  verificationMethod?: string;
   serviceEndpoint?: string;
   tag?: string;
   hash?: string;
@@ -53,8 +74,7 @@ export interface IAttributePayload {
  */
 export interface IUpdateData {
   encoding?: Encoding;
-  algo?: Algorithms;
-  type: PubKeyType | DIDAttribute;
+  type: VerificationMethodType | DIDAttribute | ServiceEndpointType;
   value?: IAttributePayload;
   delegate?: string;
 }

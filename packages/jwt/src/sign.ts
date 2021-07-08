@@ -8,8 +8,9 @@ const keyEncoder = new KeyEncoder('secp256k1');
 
 const { keccak256, arrayify } = utils;
 
-export function createSignWithKeys(keys: IKeys) {
+export function createSignWithKeys() {
   return async (
+    keys: IKeys,
     payload: string | JwtPayload,
     options?: JwtOptions,
   ): Promise<string> => new Promise(
@@ -31,8 +32,9 @@ export type JwtOptions = {
 export type JwtPayload =
   { [key: string]: string | object } & { iss?: string; sub?: string; iat?: number };
 
-export function createSignWithEthersSigner(signer: Signer) {
+export function createSignWithEthersSigner() {
   return async (
+    signer: Signer,
     payload: string | JwtPayload,
     options?: JwtOptions,
   ): Promise<string> => {
@@ -45,8 +47,10 @@ export function createSignWithEthersSigner(signer: Signer) {
       payload = JSON.parse(payload);
     }
     payload = payload as JwtPayload;
-    payload.iss = options?.issuer || '';
-    payload.sub = options?.subject || '';
+    if (!payload.issuer)
+        payload.issuer = options?.issuer || '';
+    if (!payload.subject)
+        payload.subject = options?.subject || '';
     if (!options?.noTimestamp) {
       payload.iat = new Date().getTime();
     }

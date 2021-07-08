@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey, withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+} from '@ew-did-registry/did-nft-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {

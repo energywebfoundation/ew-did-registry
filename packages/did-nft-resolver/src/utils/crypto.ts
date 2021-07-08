@@ -1,7 +1,8 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
-import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
+import { Encoding, IVerificationMethod } from '@ew-did-registry/did-resolver-interface';
+import { DIDPattern, DIDEthrPattern } from '@ew-did-registry/did';
+import crypto from 'crypto';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
@@ -20,7 +21,7 @@ export async function signerPubKey(signer: Signer): Promise<string> {
   return computePublicKey(recoverPublicKey(digest, signature), true).slice(2);
 }
 
-export function encodedPubKeyName(encoding: Encoding): keyof IPublicKey {
+export function encodedPubKeyName(encoding: Encoding): keyof IVerificationMethod {
   switch (encoding) {
     case Encoding.HEX:
       return 'publicKeyHex';
@@ -28,6 +29,8 @@ export function encodedPubKeyName(encoding: Encoding): keyof IPublicKey {
       return 'publicKeyBase64';
     case Encoding.PEM:
       return 'publicKeyPem';
+    case Encoding.ETHADDR:
+      return 'ethereumAddress'
     default:
       return 'publicKeyHex';
   }
@@ -49,10 +52,23 @@ export function hexify(value: string | object): string {
 * @param did
 * @private
 */
-export function addressOf(did: string): string {
+export function addressAndIdOf(did: string): [string, string] {
   const match = did.match(DIDPattern);
+  if (!match) {
+    throw new Error('Invalid DID');
+  }
+  return [match[1], match[2]];
+}
+
+export function addressOf(did: string): string {
+  const match = did.match(DIDEthrPattern);
   if (!match) {
     throw new Error('Invalid DID');
   }
   return match[1];
 }
+
+
+export const hashes: { [hashAlg: string]: (data: string) => string } = {
+  SHA256: (data: string): string => crypto.createHash('sha256').update(data).digest('hex'),
+};

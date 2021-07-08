@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Resolver, defaultResolverSettings } = require('@ew-did-registry/did-ethr-resolver');
+const { Resolver, defaultResolverSettings } = require('@ew-did-registry/did-nft-resolver');
 const { DelegateTypes } = require('@ew-did-registry/did-resolver-interface');
 const { Keys } = require('@ew-did-registry/keys');
 const { Claims } = require('@ew-did-registry/claims');

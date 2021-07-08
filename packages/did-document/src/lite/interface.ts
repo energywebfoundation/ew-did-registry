@@ -1,7 +1,7 @@
 import {
   IDIDDocument,
   DelegateTypes,
-  IPublicKey,
+  IVerificationMethod,
   IServiceEndpoint,
   IAuthentication,
   DocumentSelector,
@@ -60,14 +60,14 @@ export interface IDIDDocumentLite {
    */
   readAttribute(
     selector: DocumentSelector, did?: string,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
+  ): Promise<IVerificationMethod | IServiceEndpoint | IAuthentication | undefined>;
 
   /**
    * Document owner public key
    *
    * @param {string} did
    */
-  ownerPubKey(did?: string): Promise<string | undefined>;
+  ownerEthAddress(did?: string): Promise<string | undefined>;
 
   lastBlock(did?: string): Promise<utils.BigNumber>;
 
@@ -76,5 +76,5 @@ export interface IDIDDocumentLite {
     from: utils.BigNumber,
   ): Promise<IDIDLogData>;
 
-  fromLogs(logs: IDIDLogData[], did?: string): IDIDDocument;
+  fromLogs(logs: IDIDLogData[], did?: string): Promise<IDIDDocument>;
 }

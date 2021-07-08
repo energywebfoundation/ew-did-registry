@@ -6,7 +6,7 @@ import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
   withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+} from '@ew-did-registry/did-nft-resolver';
 import {
   Algorithms,
   DIDAttribute,
@@ -18,7 +18,7 @@ import {
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { Wallet, utils } from 'ethers';
-import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
+import { mergeLogs } from '@ew-did-registry/did-nft-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';

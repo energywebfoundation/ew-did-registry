@@ -2,8 +2,7 @@ import { IKeys, Keys } from '@ew-did-registry/keys';
 import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods, DID } from '@ew-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
-import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
 
@@ -17,9 +16,6 @@ class DIDRegistry implements IDIDRegistry {
 
   document: IDIDDocumentFull;
 
-  claims: IClaimsFactory;
-
-  jwt: IJWT;
 
   constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
     const [, method] = did.split(':');
@@ -32,9 +28,7 @@ class DIDRegistry implements IDIDRegistry {
     this.keyStore = new Map<string, IKeys>();
     this.keyStore.set(KeyTags.OWNER, keys);
 
-    this.jwt = new JWT(keys);
     this.document = new DIDDocumentFactory(did).createFull(operator);
-    this.claims = new ClaimsFactory(keys, this.document, store);
     this.operator = operator;
   }
 
@@ -63,7 +57,6 @@ class DIDRegistry implements IDIDRegistry {
       return;
     }
     this.document = new DIDDocumentFactory(did).createFull(operator);
-    this.claims = new ClaimsFactory(keys, this.document, this.store);
     this.operator = operator;
   }
 
@@ -75,8 +68,8 @@ class DIDRegistry implements IDIDRegistry {
     const doc = await this.document.read();
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (const key in doc.publicKey) {
-      const pubKey = doc.publicKey[key];
+    for (const key in doc.verificationMethod) {
+      const pubKey = doc.verificationMethod[key];
       const publicKeyTag = pubKey.id.split('#')[1];
 
       const encoding = Object.values(Encoding).find((e) => {

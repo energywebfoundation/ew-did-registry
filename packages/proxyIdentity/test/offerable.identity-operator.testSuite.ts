@@ -13,7 +13,7 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import {
   signerFromKeys, walletPubKey, withProvider, withKey,
-} from '@ew-did-registry/did-ethr-resolver';
+} from '@ew-did-registry/did-nft-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';

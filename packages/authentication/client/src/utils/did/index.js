@@ -1,6 +1,6 @@
 import { ClaimsUser } from '@ew-did-registry/claims';
 import { Keys } from '@ew-did-registry/keys';
-import { Operator } from '@ew-did-registry/did-ethr-resolver';
+import { Operator } from '@ew-did-registry/did-nft-resolver';
 import { getSettings } from '../init-ganache';
 
 export const defaultKeys = new Keys();

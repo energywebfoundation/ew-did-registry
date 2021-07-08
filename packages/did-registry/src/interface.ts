@@ -1,6 +1,5 @@
 import { IDID, Methods } from '@ew-did-registry/did';
 import { IDIDDocumentFull, IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { IClaimsFactory } from '@ew-did-registry/claims';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';
 
@@ -17,10 +16,6 @@ export interface IDIDRegistry {
    * IDIDDocument exposes methods to operate with DID Documents
    */
   document: IDIDDocumentFull;
-  /**
-   * IClaims exposes functionality needed to manage Private and Public claims
-   */
-  claims: IClaimsFactory;
   /**
    * IKey is responsible for key management, signing, as well as verification of signature
    */

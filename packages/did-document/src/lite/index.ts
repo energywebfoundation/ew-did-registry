@@ -3,14 +3,14 @@ import {
   IDIDDocument,
   IResolver,
   DelegateTypes,
-  IPublicKey,
+  IVerificationMethod,
   IServiceEndpoint,
   IAuthentication,
   DocumentSelector,
   IDIDLogData,
 } from '@ew-did-registry/did-resolver-interface';
-import { documentFromLogs } from '@ew-did-registry/did-ethr-resolver';
-
+import { documentFromLogs } from '@ew-did-registry/did-nft-resolver';
+import { Methods } from '@ew-did-registry/did';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
@@ -29,7 +29,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @returns {Promise<string>}
    */
   async getController(did = this.did): Promise<string> {
-    return this.resolver.identityOwner(did);
+    return `did:${Methods.Erc1056}:${await this.resolver.identityOwner(did)}`;
   }
 
   /**
@@ -59,7 +59,7 @@ class DIDDocumentLite implements IDIDDocumentLite {
    */
   async readAttribute(
     selector: DocumentSelector, did = this.did,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
+  ): Promise<IVerificationMethod | IServiceEndpoint | IAuthentication | undefined> {
     return this.resolver.readAttribute(did, selector);
   }
 
@@ -72,8 +72,8 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.read(did);
   }
 
-  async ownerPubKey(did = this.did): Promise<string | undefined> {
-    return this.resolver.readOwnerPubKey(did);
+  async ownerEthAddress(did = this.did): Promise<string | undefined> {
+    return this.resolver.identityOwner(did);
   }
 
   async lastBlock(did: string): Promise<utils.BigNumber> {
@@ -84,8 +84,8 @@ class DIDDocumentLite implements IDIDDocumentLite {
     return this.resolver.readFromBlock(did, from);
   }
 
-  fromLogs(logs: IDIDLogData[], did = this.did): IDIDDocument {
-    return documentFromLogs(did, logs);
+  async fromLogs(logs: IDIDLogData[], did = this.did): Promise<IDIDDocument> {
+    return documentFromLogs(did, await this.getController(), logs);
   }
 }
 

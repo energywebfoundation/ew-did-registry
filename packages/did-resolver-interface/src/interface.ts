@@ -4,10 +4,10 @@ import {
   DIDAttribute,
   IUpdateData,
   DelegateTypes,
-  IPublicKey,
+  IVerificationMethod,
   IServiceEndpoint,
   IAuthentication,
-  PubKeyType,
+  VerificationMethodType,
   DocumentSelector,
   IDIDLogData,
 } from './models';
@@ -59,9 +59,7 @@ export interface IResolver {
   readAttribute(
     did: string,
     selector: DocumentSelector,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
-
-  readOwnerPubKey(did: string): Promise<string | undefined>;
+  ): Promise<IVerificationMethod | IServiceEndpoint | IAuthentication | undefined>;
 
   /**
    * Reads events starting from specified block
@@ -85,7 +83,7 @@ export interface IOperator extends IResolver {
    * @param {string} context
    * @returns {boolean}
    */
-  create(): Promise<boolean>;
+  create(did: string): Promise<boolean>;
 
   /**
    * Updates relevant attribute of the DID Document.
@@ -113,11 +111,21 @@ export interface IOperator extends IResolver {
    */
   deactivate(did: string): Promise<void>;
 
-  revokeDelegate(did: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+  revokeDelegate(did: string, delegateType: VerificationMethodType, delegateDID: string): Promise<boolean>;
 
   revokeAttribute(
     did: string,
     attributeType: DIDAttribute,
     updateData: IUpdateData
   ): Promise<boolean>;
+}
+
+export interface IClaimsVerifier {
+  verifyPublishedClaim(token: string, signer: string): Promise<boolean>;
+  verifyPublicClaim(token: string, verifyData: object): Promise<boolean>;
+}
+
+export interface IClaimsIssuer extends IClaimsVerifier{
+  createPublicClaim(publicData: object, did: string): Promise<string>;
+  PublishPublicClaim(issued: string, verifyData: object, opts: { hashAlg: string; createHash: (data: string) => string }): Promise<string>;
 }

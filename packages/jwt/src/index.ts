@@ -3,13 +3,21 @@ import * as jwt from 'jsonwebtoken';
 import { Signer } from 'ethers';
 
 import { IKeys } from '@ew-did-registry/keys';
-import { IJWT } from './interface';
 import {
   createSignWithEthersSigner, createSignWithKeys, JwtOptions, JwtPayload,
 } from './sign';
 import { verificationMethods } from './verify';
 
-class JWT implements IJWT {
+class JWT {
+
+
+  /**
+   * Key pair has to be passed on construction to JWT
+   * @param {Keys} keys
+   */
+  constructor() {
+  }
+
   /**
    * Sign payload and return JWT
    *
@@ -34,21 +42,13 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns {Promise<string>}
    */
-  public sign: (
-    payload: string | JwtPayload,
-    options?: JwtOptions) => Promise<string>;
-
-  /**
-   * Key pair has to be passed on construction to JWT
-   * @param {Keys} keys
-   */
-  constructor(signerMethod: IKeys | Signer) {
-    const keys = signerMethod as IKeys;
-    const signer = signerMethod as Signer;
-    if (keys.privateKey && keys.sign && keys.verify) {
-      this.sign = createSignWithKeys(keys);
+  static async sign(keys: IKeys | Signer, payload: string | JwtPayload, options?: JwtOptions,): Promise<string> {
+    const _keys = keys as IKeys;
+    const _signer = keys as Signer;
+    if (_keys.privateKey && _keys.sign && _keys.verify) {
+      return createSignWithKeys()(_keys, payload, options);
     } else {
-      this.sign = createSignWithEthersSigner(signer);
+      return createSignWithEthersSigner()(_signer, payload, options);
     }
   }
 
@@ -83,7 +83,7 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns {Promise<object>}
    */
-  async verify(
+  static async verify(
     token: string,
     publicKey: string,
     options?: Record<string, unknown>,
@@ -128,7 +128,7 @@ class JWT implements IJWT {
    * @param {object} options
    * @returns string | { [key: string]: any }
    */
-  decode(token: string, options?: object): string | {
+  static decode(token: string, options?: object): string | {
     [key: string]: string | object;
   } {
     return jwt.decode(token, options) || '';
@@ -137,5 +137,4 @@ class JWT implements IJWT {
 
 export {
   JWT,
-  IJWT,
 };

@@ -5,7 +5,7 @@ import {
 import {
   IDIDDocument,
   IDIDLogData,
-  IPublicKey,
+  IVerificationMethod,
   IAttributePayload,
   IServiceEndpoint,
   RegistrySettings,
@@ -14,6 +14,7 @@ import {
   AttributeChangedEvent,
   DelegateChangedEvent,
   DidEventNames,
+  VerificationMethodBackTypeMap
 } from '@ew-did-registry/did-resolver-interface';
 import { DIDPattern } from '@ew-did-registry/did';
 import { attributeNamePattern } from '../constants';
@@ -36,22 +37,24 @@ const handleDelegateChange = (
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
   const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
-  if (document.publicKey[publicKeyID] === undefined
-    || document.publicKey[publicKeyID].block < block) {
+  if (document.verificationMethod[publicKeyID] === undefined
+    || document.verificationMethod[publicKeyID].block < block) {
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
-          type: 'sigAuth',
-          publicKey: publicKeyID,
+          id: publicKeyID,
+          controller: '',
+          type: 'Secp256k1VerificationKey2018',
+          publicKeyHex: event.values.delegate,
           validity: validTo,
           block,
         };
       // eslint-disable-next-line no-fallthrough
       case 'veriKey':
-        document.publicKey[publicKeyID] = {
+        document.verificationMethod[publicKeyID] = {
           id: publicKeyID,
+          controller: '',
           type: 'Secp256k1VerificationKey2018',
-          controller: did,
           ethereumAddress: event.values.delegate,
           validity: validTo,
           block,
@@ -90,10 +93,9 @@ const handleAttributeChange = (
   match = stringAttributeType.match(attributeNamePattern);
   if (match) {
     const section = match[1];
-    const algo = match[2];
-    const type = match[4];
-    const encoding = match[6];
-    if (section === 'pub') {
+    const type = match[2] || '';
+    const encoding = match[4] || '';
+    if (section === 'vm') {
       let publicKeysPayload: IAttributePayload;
       try {
         const parsed = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
@@ -105,37 +107,39 @@ const handleAttributeChange = (
       } catch (e) {
         return document;
       }
-      const pk: IPublicKey = {
+      const vm: IVerificationMethod = {
         id: `${did}#${publicKeysPayload.tag}`,
-        type: `${algo}${type}`,
-        controller: identity,
+        type: `${VerificationMethodBackTypeMap.get(type)}`,
+        controller: "",
         validity: validTo,
         block,
       };
-      if ((document.publicKey[pk.id] === undefined
-        || document.publicKey[pk.id].block < block)) {
+      if ((document.verificationMethod[vm.id] === undefined
+        || document.verificationMethod[vm.id].block < block)) {
         switch (encoding) {
           case null:
           case undefined:
           case 'hex':
-            pk.publicKeyHex = publicKeysPayload.publicKey;
+            vm.publicKeyHex = publicKeysPayload.verificationMethod;
             break;
           case 'base64':
-            pk.publicKeyBase64 = Buffer.from(
+            vm.publicKeyBase64 = Buffer.from(
               event.values.value.slice(2),
               'hex',
             ).toString('base64');
             break;
           case 'pem':
-            pk.publicKeyPem = Buffer.from(
+            vm.publicKeyPem = Buffer.from(
               event.values.value.slice(2),
               'hex',
             ).toString();
             break;
+          case 'addr':
+            vm.ethereumAddress = publicKeysPayload.verificationMethod;
           default:
             break;
         }
-        document.publicKey[pk.id] = pk;
+        document.verificationMethod[vm.id] = vm;
       }
       return document;
     }
@@ -145,7 +149,10 @@ const handleAttributeChange = (
         'hex',
       ).toString());
 
+      console.log(servicePoint);
+      servicePoint.id = `${did}#${type}_${servicePoint.hash}`;
       servicePoint.validity = validTo;
+      delete servicePoint.hash;
       servicePoint.block = block;
 
       if ((document.service[servicePoint.id] === undefined
@@ -199,6 +206,7 @@ const updateDocument = (
   return document;
 };
 
+
 /**
  * Given a certain block from the chain, this function returns the events
  * associated with the did within the block
@@ -218,13 +226,14 @@ const getEventsFromBlock = (
   contractInterface: utils.Interface,
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
-  const [, , identity] = did.split(':');
+  const [, , network_id, nft_address, nft_id] = did.split(':');
 
   provider.getLogs({
     address,
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
-    topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
+    topics: [null, `0x000000000000000000000000${nft_address.slice(2).toLowerCase()}`,
+        `0x` + ("0000000000000000000000000000000000000000000000000000000000000000" + nft_id).slice(-64)] as string[],
   }).then((log) => {
     const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
       DelegateChangedEvent;
@@ -238,7 +247,7 @@ const getEventsFromBlock = (
 
 export const query = (
   document: IDIDDocument, selector: DocumentSelector,
-): IPublicKey | IServiceEndpoint | IAuthentication | undefined => {
+): IVerificationMethod | IServiceEndpoint | IAuthentication | undefined => {
   const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
   const attributes = Object.values(document[attrName]);
   if (attributes.length === 0) {
@@ -246,7 +255,7 @@ export const query = (
   }
   const filter = Object.entries(
     selector[attrName] as
-    Partial<IPublicKey> | Partial<IAuthentication> | Partial<IServiceEndpoint>,
+    Partial<IVerificationMethod> | Partial<IAuthentication> | Partial<IServiceEndpoint>,
   );
   return attributes.find((a) => filter.every(([prop, val]) => a[prop] && a[prop] === val));
 };
@@ -268,22 +277,26 @@ export const fetchDataFromEvents = async (
   provider: providers.Provider,
   selector?: DocumentSelector,
 ): Promise<void> => {
-  const [, , identity] = did.split(':');
+  const [, , network_id, nft_address, nft_id] = did.split(':');
+
   let nextBlock;
   let topBlock;
   try {
-    nextBlock = await contract.changed(identity);
+    nextBlock = await contract.changed(nft_address, nft_id);
     topBlock = nextBlock;
-  } catch (error) {
+  } catch (e) {
     throw new Error('Blockchain address did not interact with smart contract');
   }
 
-  if (nextBlock) {
-    document.owner = await contract.owners(identity);
-  } else {
-    document.owner = identity;
+  try {
+    document.owner = await contract.identityOwner(nft_address, nft_id);
+  } catch (e) {
+    throw new Error('Invalid NFT');
   }
 
+  if (!document.owner) {
+    throw new Error('Invalid NFT');
+  }
   const contractInterface = new ethers.utils.Interface(registrySettings.abi);
   const { address } = registrySettings;
   while (
@@ -319,38 +332,52 @@ export const fetchDataFromEvents = async (
  */
 export const wrapDidDocument = (
   did: string,
+  controller_did: string,
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
   const now = new utils.BigNumber(Math.floor(new Date().getTime() / 1000));
 
-  const publicKey: IPublicKey[] = [
+  const verificationMethod: IVerificationMethod[] = [
   ];
 
-  const authentication = [
-    {
-      type: 'owner',
-      publicKey: `${did}#owner`,
-      validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
-    },
+  const authentication: IAuthentication[] = [
   ];
+
+  // controller of the NFT DID is always the owner of the NFT
+  let defaultAuthentication = {
+    id: `${did}#controller`,
+    type: 'EcdsaSecp256k1RecoveryMethod2020',
+    controller: controller_did,
+    ethereumAddress: `${did}`,
+    validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
+    block: 0
+  };
 
   const didDocument: IDIDDocument = {
     '@context': context,
     id: did,
-    publicKey,
+    verificationMethod,
     authentication,
     service: [],
   };
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
-  for (const key in document.publicKey) {
-    const pubKey = document.publicKey[key];
+  {
+    delete defaultAuthentication.block;
+    delete defaultAuthentication.validity;
+    didDocument.authentication.push(defaultAuthentication);
+  }
+
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const key in document.verificationMethod) {
+    const pubKey = document.verificationMethod[key];
     if (pubKey.validity.gt(now)) {
       const pubKeyCopy = { ...pubKey };
       delete pubKeyCopy.validity;
       delete pubKeyCopy.block;
-      didDocument.publicKey.push(pubKeyCopy);
+      pubKeyCopy.controller = controller_did;
+      didDocument.verificationMethod.push(pubKeyCopy);
     }
   }
 
@@ -372,6 +399,7 @@ export const wrapDidDocument = (
       const serviceEndpointCopy = { ...serviceEndpoint };
       delete serviceEndpointCopy.validity;
       delete serviceEndpointCopy.block;
+      serviceEndpointCopy.controller = controller_did;
       didDocument.service.push(serviceEndpointCopy);
     }
   }
@@ -390,7 +418,7 @@ export const mergeLogs = (logs: IDIDLogData[]): IDIDLogData => {
     (doc, log) => {
       doc.service = { ...doc.service, ...log.service };
 
-      doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+      doc.verificationMethod = { ...doc.verificationMethod, ...log.verificationMethod };
 
       doc.authentication = { ...doc.authentication, ...log.authentication };
 
@@ -400,8 +428,8 @@ export const mergeLogs = (logs: IDIDLogData[]): IDIDLogData => {
   );
 };
 
-export const documentFromLogs = (did: string, logs: IDIDLogData[]): IDIDDocument => {
+export const documentFromLogs = (did: string, did_controller: string, logs: IDIDLogData[]): IDIDDocument => {
   const mergedLogs: IDIDLogData = mergeLogs(logs);
 
-  return wrapDidDocument(did, mergedLogs);
+  return wrapDidDocument(did, did_controller, mergedLogs);
 };

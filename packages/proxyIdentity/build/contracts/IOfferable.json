@@ -65,7 +65,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"acceptOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cancelOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_offeredTo\",\"type\":\"address\"}],\"name\":\"offer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rejectOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"sendTransaction\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":\"IOfferable\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":{\"keccak256\":\"0x68b38b8d2acd697d5f7677860e4e50f08fa25de2efa927fb87235a862bca5347\",\"urls\":[\"bzz-raw://b03e920e03f84384f521541fd700c8a00a73bd1423a1caffeb26151460c3b08d\",\"dweb:/ipfs/QmPhfkcjMtsxaVFgQCdg3bGUN4ew22J4CdAw26Yg7ExN33\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"acceptOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cancelOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_offeredTo\",\"type\":\"address\"}],\"name\":\"offer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rejectOffer\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"sendTransaction\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/ejossev/working/did_nfc/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":\"IOfferable\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/ejossev/working/did_nfc/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol\":{\"keccak256\":\"0x68b38b8d2acd697d5f7677860e4e50f08fa25de2efa927fb87235a862bca5347\",\"urls\":[\"bzz-raw://b03e920e03f84384f521541fd700c8a00a73bd1423a1caffeb26151460c3b08d\",\"dweb:/ipfs/QmPhfkcjMtsxaVFgQCdg3bGUN4ew22J4CdAw26Yg7ExN33\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -74,9 +74,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.8.3;\n\n\ninterface IOfferable {\n  function offer(address _offeredTo) external;\n\n  function acceptOffer() external;\n\n  function rejectOffer() external;\n\n  function cancelOffer() external;\n\n  function sendTransaction(address to, bytes memory data, uint256 value)\n    external\n    returns (bool success);\n}\n",
-  "sourcePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
+  "sourcePath": "/Users/ejossev/working/did_nfc/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
   "ast": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
+    "absolutePath": "/Users/ejossev/working/did_nfc/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
     "exportedSymbols": {
       "IOfferable": [
         27
@@ -392,7 +392,7 @@
     "src": "0:320:0"
   },
   "legacyAST": {
-    "absolutePath": "/home/dima/Development/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
+    "absolutePath": "/Users/ejossev/working/did_nfc/ew-did-registry/packages/proxyIdentity/contracts/IOfferable.sol",
     "exportedSymbols": {
       "IOfferable": [
         27
@@ -713,7 +713,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-13T08:45:18.338Z",
+  "updatedAt": "2021-06-29T11:48:38.484Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

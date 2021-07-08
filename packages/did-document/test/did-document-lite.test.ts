@@ -7,9 +7,9 @@ import { Keys } from '@ew-did-registry/keys';
 import {
   getProvider, signerFromKeys, Operator,
   walletPubKey,
-} from '@ew-did-registry/did-ethr-resolver';
+} from '@ew-did-registry/did-nft-resolver';
 
-import { withKey, withProvider } from '@ew-did-registry/did-ethr-resolver/src';
+import { withKey, withProvider } from '@ew-did-registry/did-nft-resolver/src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 

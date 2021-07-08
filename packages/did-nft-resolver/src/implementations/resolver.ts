@@ -6,16 +6,21 @@ import {
   IAuthentication,
   IDIDDocument,
   IDIDLogData,
-  IPublicKey,
+  IVerificationMethod,
   IResolver,
+  IClaimsVerifier,
   IServiceEndpoint,
   RegistrySettings,
   KeyTags,
   DocumentSelector,
+  IPublicClaim,
 } from '@ew-did-registry/did-resolver-interface';
+import { JWT } from '@ew-did-registry/jwt';
 import { Methods, DIDPattern } from '@ew-did-registry/did';
-import { ethrReg } from '../constants';
+import { nftReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
+import { hashes } from "../utils";
+import assert from 'assert';
 
 const { formatBytes32String } = utils;
 
@@ -29,7 +34,7 @@ const { formatBytes32String } = utils;
  * starting point.
  * All the functionality supporting document resolution is stored in 'functions' folder.
  */
-class Resolver implements IResolver {
+class Resolver implements IResolver, IClaimsVerifier {
   /**
    * Stores resolver settings, such as abi, contract address, and IProvider
    */
@@ -53,7 +58,7 @@ class Resolver implements IResolver {
    */
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
-    this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
+    this.settings = { abi: nftReg.abi, method: Methods.Nft, ...settings };
 
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
@@ -80,13 +85,14 @@ class Resolver implements IResolver {
     if (!match) {
       throw new Error('Invalid did provided');
     }
+    const controller_did = `did:${Methods.Erc1056}:${await this.identityOwner(did)}`
     const address = match[1];
 
     const _document = {
       owner: address,
       topBlock: new utils.BigNumber(0),
       authentication: {},
-      publicKey: {},
+      verificationMethod: {},
       service: {},
       attributes: new Map(),
     };
@@ -99,11 +105,13 @@ class Resolver implements IResolver {
         this._provider,
         selector,
       );
-      const document = wrapDidDocument(did, _document);
+      console.log(`_read(): _document=`); console.log(_document);
+
+      const document = wrapDidDocument(did, controller_did, _document);
       return document;
     } catch (error) {
       if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-        const didDocument = wrapDidDocument(did, _document);
+        const didDocument = wrapDidDocument(did, controller_did, _document);
         return didDocument;
       }
       throw error;
@@ -117,7 +125,7 @@ class Resolver implements IResolver {
   async readAttribute(
     did: string,
     selector: DocumentSelector,
-  ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
+  ): Promise<IVerificationMethod | IServiceEndpoint | IAuthentication | undefined> {
     const doc = await this._read(did, selector);
     return query(doc, selector);
   }
@@ -129,10 +137,10 @@ class Resolver implements IResolver {
    * @returns Promise<string>
    */
   async identityOwner(did: string): Promise<string> {
-    const [, , id] = did.split(':');
+    const [, , , address, id] = did.split(':');
     let owner;
     try {
-      owner = await this._contract.identityOwner(id);
+      owner = await this._contract.identityOwner(address, id);
     } catch (error) {
       throw new Error(error);
     }
@@ -167,17 +175,6 @@ class Resolver implements IResolver {
     return valid;
   }
 
-  async readOwnerPubKey(did: string): Promise<string | undefined> {
-    const selector = {
-      publicKey: { id: `${did}#${KeyTags.OWNER}` },
-    };
-    const pk = await this.readAttribute(
-      did,
-      selector,
-    );
-    return pk ? ((pk as IPublicKey).publicKeyHex as string).slice(2) : undefined;
-  }
-
   async readFromBlock(
     did: string,
     topBlock: utils.BigNumber,
@@ -187,7 +184,7 @@ class Resolver implements IResolver {
       owner: address,
       topBlock,
       authentication: {},
-      publicKey: {},
+      verificationMethod: {},
       service: {},
       attributes: new Map(),
     };
@@ -199,6 +196,47 @@ class Resolver implements IResolver {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
   }
+
+  async verifyPublishedClaim(token: string, claimUrl: string): Promise<boolean> {
+    const claim = JWT.decode(token) as IPublicClaim;
+    var document = await this.read(claim.subject);
+    const doc_owner = await this.identityOwner(claim.subject);
+    console.log("verifyPublicProof - owner = " + doc_owner)
+    if (!(await this.verifySignature(token, doc_owner))) {
+      return false;
+    }
+
+    const service = await this.readAttribute( claim.subject, { service: { serviceEndpoint: claimUrl } }) as IServiceEndpoint;
+    const { hash, hashAlg } = service;
+    const createHash = hashes[hashAlg as string];
+    if (hash !== createHash(token)) {
+      return false;
+    }
+    return true;
+  }
+
+  async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
+    const claim = JWT.decode(token) as IPublicClaim;
+    const issuer_did = claim.issuer as string;
+    const [, , issuer_address] = issuer_did.split(':');
+    const owner = await this.identityOwner(claim.subject)
+
+    if (!(await this.verifySignature(token, issuer_address))) {
+      throw new Error('Incorrect signature');
+    }
+    assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
+    return owner === issuer_address;
+  }
+
+  async verifySignature(token: string, signerAddr: string): Promise<boolean> {
+    try {
+      await JWT.verify(token, signerAddr as string);
+    } catch (error) {
+      return false;
+    }
+    return true;
+  }
+
 }
 
 export default Resolver;

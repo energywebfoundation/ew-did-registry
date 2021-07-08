@@ -47,13 +47,13 @@ export interface IServiceEndpoint {
  * The interface of DID Document is compliant with W3C specification.
  * https://w3c.github.io/did-core/
  * The link above will be the best point of reference for the interface below, including
- * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
+ * IServiceEndpoint, IVerificationMethod, ILinkedDataProof
  */
 export interface IDIDDocument {
   '@context': string;
   id: string;
-  publicKey: IPublicKey[];
-  authentication: Array<IAuthentication | string>;
+  verificationMethod: IVerificationMethod[];
+  authentication: IAuthentication[];
   delegates?: string[];
   service: IServiceEndpoint[];
   created?: string;
@@ -61,7 +61,7 @@ export interface IDIDDocument {
   proof?: ILinkedDataProof;
 }
 
-export interface IPublicKey {
+export interface IVerificationMethod {
   id: string;
   type: string;
   controller: string;
@@ -77,13 +77,7 @@ export interface IPublicKey {
   [key: string]: string | number | utils.BigNumber | undefined;
 }
 
-export interface IAuthentication {
-  type: string;
-  publicKey: string;
-  validity: utils.BigNumber;
-  block?: number;
-  [key: string]: string | utils.BigNumber | number | undefined;
-}
+export type IAuthentication = IVerificationMethod | string;
 
 export interface ILinkedDataProof {
   type: string;
@@ -139,8 +133,8 @@ export interface DelegateChangedEvent extends ISmartContractEvent {
 export interface IDIDLogData {
   owner: string;
   topBlock: utils.BigNumber;
-  publicKey: { [key: string]: IPublicKey };
-  authentication: { [key: string]: IAuthentication };
+  verificationMethod: { [key: string]: IVerificationMethod };
+  authentication: { [key: string]: IVerificationMethod };
   delegates?: string[];
   service: { [key: string]: IServiceEndpoint };
   created?: string;
@@ -164,7 +158,14 @@ export interface IdentityOwner extends Signer {
 }
 
 export type DocumentSelector = Partial<{
-  publicKey: Partial<IPublicKey>;
+  verificationMethod: Partial<IVerificationMethod>;
   service: Partial<IServiceEndpoint>;
-  authentication: Partial<IAuthentication>;
+  authentication: Partial<IVerificationMethod>;
 }>
+
+export interface IPublicClaim {
+  subject: string;
+  issuer: string;
+  claimData: object;
+  [key: string]: string | object;
+}

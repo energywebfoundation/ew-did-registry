@@ -9,12 +9,12 @@ import {
   IUpdateAttributeData,
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, hexify, addressOf } from '@ew-did-registry/did-nft-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
 const { BigNumber, Interface, formatBytes32String } = utils;
-const { PublicKey, ServicePoint } = DIDAttribute;
+const { VerificationMethod, ServicePoint } = DIDAttribute;
 
 export class OfferableIdenitytOperator extends Operator {
   private identity: Contract;
@@ -74,14 +74,14 @@ export class OfferableIdenitytOperator extends Operator {
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = hexify(
-      didAttribute === PublicKey || didAttribute === ServicePoint
+      didAttribute === VerificationMethod || didAttribute === ServicePoint
         ? (updateData as IUpdateAttributeData).value
         : (updateData as IUpdateDelegateData).delegate,
     );
     const validityValue = validity !== undefined ? validity.toString() : '';
     const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
     let methodName: string;
-    if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
+    if (didAttribute === DIDAttribute.VerificationMethod || didAttribute === DIDAttribute.ServicePoint) {
       methodName = 'setAttribute';
     } else {
       methodName = 'addDelegate';

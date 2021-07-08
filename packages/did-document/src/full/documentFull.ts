@@ -1,5 +1,5 @@
 import {
-  DIDAttribute, IOperator, IUpdateData, PubKeyType,
+  DIDAttribute, IOperator, IUpdateData, VerificationMethodType,
 } from '@ew-did-registry/did-resolver-interface';
 import { utils } from 'ethers';
 import { IDIDDocumentFull } from './interface';
@@ -26,7 +26,8 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * @return { boolean }
    */
   async create(): Promise<boolean> {
-    return this._operator.create();
+    const rv = this._operator.create(this.did);
+    return rv;
   }
 
   /**
@@ -83,7 +84,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
   }
 
   async revokeDelegate(
-    delegateType: PubKeyType,
+    delegateType: VerificationMethodType,
     delegateDID: string,
   ): Promise<boolean> {
     return this._operator.revokeDelegate(this.did, delegateType, delegateDID);

@@ -7,7 +7,7 @@ import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
   withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+} from '@ew-did-registry/did-nft-resolver';
 
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
