@@ -1,5 +1,5 @@
 import {
-  Contract, utils, BigNumber, Wallet,
+  Contract, utils, BigNumber, Wallet, Signer,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -9,7 +9,7 @@ import {
   IUpdateAttributeData,
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, hexify, addressOf, Web3Signer } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
@@ -27,13 +27,14 @@ export class OfferableIdenitytOperator extends Operator {
    * @param providerUrl {string} - Connection link to the blockchain
    */
   constructor(
-    privateKey: string,
+    web3Signer: Web3Signer,
+    publicKey: string,
     settings: RegistrySettings,
     identityAddr: string,
     providerUrl = 'http://localhost:8544',
   ) {
-    super(privateKey, settings, providerUrl);
-    const owner: IdentityOwner = new Wallet(privateKey);
+    super(web3Signer, publicKey, settings, providerUrl);
+    const owner : Signer = web3Signer;
     this.identity = new Contract(identityAddr, identityAbi, owner);
   }
 

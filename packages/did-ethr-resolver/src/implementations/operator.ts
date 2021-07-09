@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, BigNumber, Wallet, getDefaultProvider,
+  Contract, ethers, Event, utils, BigNumber, Wallet, getDefaultProvider, Signer,
 } from 'ethers';
 import {
   Algorithms,
@@ -15,17 +15,16 @@ import {
   PubKeyType,
   KeyTags,
   RegistrySettings,
-  IdentityOwner,
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { IKeys, Keys } from '@ew-did-registry/keys';
 import Resolver from './resolver';
+import { Web3Signer } from './ewWeb3Signer';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
 import {
-  encodedPubKeyName, hexify, addressOf,
+  encodedPubKeyName, hexify, addressOf, signerPubKey
 } from '../utils';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
@@ -43,31 +42,27 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
-  private readonly _keys = {
-    privateKey: '',
-    publicKey: '',
-  };
+  private readonly _publicKey: string;
 
   private address?: string;
 
-  protected readonly _owner: IdentityOwner;
+  protected readonly _owner: Web3Signer;
 
   /**
   * @param settings - Settings to connect to Ethr registry
   * @param { string } providerUrl - Connection link to the blockchain
-  * @param { string } privateKey - privateKey of the entity which controls document
+  * @param { Web3Signer } web3Signer - Signer being in control of document
   */
-  constructor(privateKey: string, settings: RegistrySettings, providerUrl: string) {
+  constructor(web3Signer: Web3Signer, publicKey: string, settings: RegistrySettings, providerUrl: string, web3Provider?: string) {
     super(settings, providerUrl);
-
-    const keys: IKeys = new Keys({ privateKey });
-
+    if (!this.verifyPubkey(web3Signer, publicKey))
+      throw Error("The provided publickey is not linked to the Signer")
     const {
       address, abi,
     } = this.settings;
-    this._owner = new Wallet(privateKey, getDefaultProvider(providerUrl));
+    this._owner = web3Signer;
+    this._publicKey = publicKey;
     this._didRegistry = new ethers.Contract(address, abi, this._owner);
-    this._keys.publicKey = keys.publicKey;
   }
 
   protected async getAddress(): Promise<string> {
@@ -77,12 +72,18 @@ export class Operator extends Resolver implements IOperator {
     return this.address as string;
   }
 
+  private  verifyPubkey = async (owner: Signer, publickey: string) => {
+    const computedKey = await signerPubKey(owner);
+    
+    return computedKey === publickey;
+  }
+
   private async did(): Promise<string> {
     return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
   public getPublicKey(): string {
-    return this._keys.publicKey;
+    return this._publicKey;
   }
 
   /**

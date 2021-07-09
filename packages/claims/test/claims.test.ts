@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, signerFromKeys, getProvider, walletPubKey,
+  Operator, signerFromKeys, getProvider, walletPubKey, Web3Signer,
   withKey,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
@@ -11,6 +11,7 @@ import {
   Claims,
   IClaims,
 } from '../src';
+import {} from '../src/'
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 chai.should();
