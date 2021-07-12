@@ -18,7 +18,6 @@ import {
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { IKeys, Keys } from '@ew-did-registry/keys';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
@@ -60,7 +59,7 @@ export class Operator extends Resolver implements IOperator {
   * @param { string } publicKey - publicKey of the entity which controls document
   * @param { string } providerUrl - Connection link to the blockchain
   */
- constructor(privKeyOrprovider: string | providers.Web3Provider , settings: RegistrySettings, publicKey: string, providerUrl?: string) {
+  constructor(privKeyOrprovider: string | providers.Web3Provider, settings: RegistrySettings, publicKey: string, providerUrl?: string) {
     super(settings, providerUrl);
 
     const {
@@ -81,8 +80,8 @@ export class Operator extends Resolver implements IOperator {
     return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
-  private setOwner(provider: string | providers.Web3Provider, providerUrl?:string, publicKey?:string) : IdentityOwner {
-    if (providerUrl && typeof(provider) === 'string') {
+  private setOwner(provider: string | providers.Web3Provider, providerUrl?: string, publicKey?: string): IdentityOwner {
+    if (providerUrl && typeof (provider) === 'string') {
       const signer: EwPrivateKeySigner = new EwPrivateKeySigner(provider, providerUrl);
       this._keys.publicKey = publicKey as string;
 
@@ -90,7 +89,7 @@ export class Operator extends Resolver implements IOperator {
     }
     if (!publicKey)
       throw new Error("[Operator - setOwner]: The owner's publicKey need to be provided");
-      
+
     const signer: EwJsonRpcSigner = new EwJsonRpcSigner(provider);
     this._keys.publicKey = publicKey;
     return IdentityOwner.fromJsonRpcSigner(signer, publicKey);
