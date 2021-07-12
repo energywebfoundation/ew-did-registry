@@ -30,6 +30,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
     const operator = new Operator(
       keys.privateKey,
       { address: registry },
+      keys.publicKey,
       'http://localhost:8544',
     );
     const userDoc = new DIDDocumentFull(userDdid, operator);

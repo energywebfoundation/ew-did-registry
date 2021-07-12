@@ -36,9 +36,9 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifierKeys.privateKey, { address: registry }, 'http://localhost:8544'));
+    const userDoc = new DIDDocumentFull(userDid, new Operator(userKeys.privateKey, { address: registry }, userKeys.publicKey, 'http://localhost:8544'));
+    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuerKeys.privateKey, { address: registry }, issuerKeys.publicKey, 'http://localhost:8544'));
+    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifierKeys.privateKey, { address: registry }, verifierKeys.publicKey, 'http://localhost:8544'));
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();

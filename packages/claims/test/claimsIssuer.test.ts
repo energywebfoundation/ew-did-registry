@@ -38,11 +38,11 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(userKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(userKeys.privateKey, { address: registry }, userKeys.publicKey, 'http://localhost:8544'),
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(issuerKeys.privateKey, { address: registry }, issuerKeys.publicKey, 'http://localhost:8544'),
     );
     await userDoc.create();
     await issuerDoc.create();

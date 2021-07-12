@@ -57,7 +57,7 @@ class Resolver implements IResolver {
    * @param {string} providerUrl- {string} - Connection link to the blockchain
    */
 
-  constructor(settings: RegistrySettings, providerUrl: string) {
+  constructor(settings: RegistrySettings, providerUrl?: string) {
     this._provider = getDefaultProvider(providerUrl);
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);

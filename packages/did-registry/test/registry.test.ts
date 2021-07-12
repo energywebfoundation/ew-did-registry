@@ -44,18 +44,21 @@ describe('[REGISTRY PACKAGE]', function () {
     userOperator = new Operator(
       userKeys.privateKey,
       { address: registry },
+      userKeys.publicKey,
       'http://localhost:8544',
     );
 
     const issuerOperator = new Operator(
       issuerKeys.privateKey,
       { address: registry },
+      issuerKeys.publicKey,
       'http://localhost:8544',
     );
 
     const verifierOperator = new Operator(
       verifierKeys.privateKey,
       { address: registry },
+      verifierKeys.publicKey,
       'http://localhost:8544',
     );
 

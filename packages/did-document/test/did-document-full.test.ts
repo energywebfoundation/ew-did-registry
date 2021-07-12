@@ -43,6 +43,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     operator = new Operator(
       keys.privateKey,
       { address: registry },
+      keys.publicKey,
       'http://localhost:8544',
     );
     fullDoc = new DIDDocumentFull(did, operator);
@@ -186,6 +187,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const nonOwnerOperator = new Operator(
       keys1.privateKey,
       { address: registry },
+      keys1.publicKey,
       'http://localhost:8544',
     );
     const doc = new DIDDocumentFull(did, nonOwnerOperator);

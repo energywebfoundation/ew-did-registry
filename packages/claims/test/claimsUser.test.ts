@@ -41,6 +41,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       new Operator(
         userKeys.privateKey,
         { address: registry },
+        userKeys.publicKey,
         'http://localhost:8544',
       ),
     );
@@ -48,7 +49,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
 
     const issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuerKeys.privateKey, { address: registry }, 'http://localhost:8544'),
+      new Operator(issuerKeys.privateKey, { address: registry }, issuerKeys.publicKey, 'http://localhost:8544'),
     );
 
     await userDoc.create();

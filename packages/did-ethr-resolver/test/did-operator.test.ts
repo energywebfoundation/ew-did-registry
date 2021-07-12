@@ -289,6 +289,7 @@ const testSuite = (): void => {
     const newOwnerOperator = new Operator(
       newOwnerKeys.privateKey,
       { address: registry },
+      newOwnerKeys.publicKey,
       'http://localhost:8544',
     );
 
@@ -342,6 +343,7 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
     operator = new Operator(
       keys.privateKey,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+      keys.publicKey,
       'http://localhost:8544',
     );
     await operator.create();
