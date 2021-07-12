@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, BigNumber, Wallet, getDefaultProvider, providers,
+  Contract, ethers, Event, utils, BigNumber, providers,
 } from 'ethers';
 import {
   Algorithms,
@@ -54,12 +54,18 @@ export class Operator extends Resolver implements IOperator {
   protected readonly _owner: IdentityOwner;
 
   /**
-   * @param { string | providers.Web3Provider } privKeyOrprovider - privateKey or Web3provider instance of the entity which controls document
+  * @param { string | providers.Web3Provider } privKeyOrprovider - privateKey or Web3provider instance 
+  *                                                                of the entity which controls document
   * @param settings - Settings to connect to Ethr registry
   * @param { string } publicKey - publicKey of the entity which controls document
   * @param { string } providerUrl - Connection link to the blockchain
   */
-  constructor(privKeyOrprovider: string | providers.Web3Provider, settings: RegistrySettings, publicKey: string, providerUrl?: string) {
+  constructor(
+    privKeyOrprovider: string | providers.Web3Provider,
+    settings: RegistrySettings,
+    publicKey: string,
+    providerUrl?: string
+  ) {
     super(settings, providerUrl);
 
     const {
@@ -80,15 +86,20 @@ export class Operator extends Resolver implements IOperator {
     return `did:${this.settings.method}:${await this.getAddress()}`;
   }
 
-  private setOwner(provider: string | providers.Web3Provider, providerUrl?: string, publicKey?: string): IdentityOwner {
+  private setOwner(
+    provider: string | providers.Web3Provider,
+    providerUrl?: string,
+    publicKey?: string
+  ): IdentityOwner {
     if (providerUrl && typeof (provider) === 'string') {
       const signer: EwPrivateKeySigner = new EwPrivateKeySigner(provider, providerUrl);
       this._keys.publicKey = publicKey as string;
 
       return IdentityOwner.fromPrivateKeySigner(signer);
     }
-    if (!publicKey)
-      throw new Error("[Operator - setOwner]: The owner's publicKey need to be provided");
+    if (!publicKey){
+      throw new Error("[Operator - setOwner]: The owner's publicKey needs to be provided");
+    }
 
     const signer: EwJsonRpcSigner = new EwJsonRpcSigner(provider);
     this._keys.publicKey = publicKey;
@@ -136,7 +147,12 @@ export class Operator extends Resolver implements IOperator {
   * import { Keys } from '@ew-did-registry/keys';
   *
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys.privateKey, resolverSettings, ownerKeys.publicKey, providerUrl);
+  * const operator = new Operator(
+  *     ownerKeys.privateKey,
+  *     resolverSettings,
+  *     ownerKeys.publicKey,
+  *     providerUrl
+  *    );
   * const pKey = DIDAttribute.PublicKey;
   * const updateData = {
   *     algo: Algorithms.ED25519,
