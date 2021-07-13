@@ -1,14 +1,10 @@
 ### Summary
+
 |             |   |
 |-------------|---|
-| Description |   |
-| Jira issue  |   |
+| Description | Migreate to GH Actions  |
+| Jira issue  | DevOps - DOI-887  |
 
 #### Type of request
 <!--- Please delete options that are not relevant. -->
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-
-### List of Features
-- feature #1
-- feature #2
+- [x] New feature (non-breaking change which adds functionality)
