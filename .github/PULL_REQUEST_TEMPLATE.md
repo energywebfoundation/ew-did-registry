@@ -7,4 +7,5 @@
 
 #### Type of request
 <!--- Please delete options that are not relevant. -->
-- [x] New feature (non-breaking change which adds functionality)
+- [x] Migrated to GH Actions (non-breaking change which adds functionality)
+- [x] Removed Travis CI (non-breaking change which adds functionality)
