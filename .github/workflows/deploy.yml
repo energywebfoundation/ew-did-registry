@@ -4,7 +4,7 @@ on:
   push:
     branches: [ 'development', 'master' ]
   pull_request:
-    branches: [ 'development' ]
+    branches: [ 'development', 'master' ]
 
 jobs:
   cancel-previous:
@@ -60,7 +60,7 @@ jobs:
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
         run: |
-          git checkout maste
+          git checkout master
           npm run publish:release
           git checkout development
           git merge origin/master
