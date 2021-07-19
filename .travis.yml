@@ -13,6 +13,7 @@ install:
   - npm run setup
   - npm run build
 script:
+  - npm run lint
   - npm run test-rpc
 deploy:
   - provider: script
