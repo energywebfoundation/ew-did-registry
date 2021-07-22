@@ -4,6 +4,7 @@ import { ConnectedSigner } from './signers';
 
 export function withKey(
   signer: Signer,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: (signer: any) => string,
 ): IdentityOwner {
   const publicKey = fn(signer);
