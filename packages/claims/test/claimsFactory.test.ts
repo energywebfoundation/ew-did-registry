@@ -49,9 +49,26 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     await issuerDoc.create();
     await verifierDoc.create();
 
-    claimsUser = new ClaimsFactory(userKeys, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuerKeys, issuerDoc, store).createClaimsIssuer();
-    claimsVerifier = new ClaimsFactory(verifierKeys, verifierDoc, store).createClaimsVerifier();
+    claimsUser = new ClaimsFactory(
+      userKeys,
+      userDoc,
+      store,
+      providerSettings,
+    ).createClaimsUser();
+
+    claimsIssuer = new ClaimsFactory(
+      issuerKeys,
+      issuerDoc,
+      store,
+      providerSettings,
+    ).createClaimsIssuer();
+
+    claimsVerifier = new ClaimsFactory(
+      verifierKeys,
+      verifierDoc,
+      store,
+      providerSettings,
+    ).createClaimsVerifier();
   });
 
   after(async () => {
