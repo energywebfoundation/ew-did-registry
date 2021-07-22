@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/energywebfoundation/ew-did-registry/actions/workflows/deploy.yml/badge.svg" />
+</p>
+
 # EW DID Library v0.1
 ## Disclaimer
 > The EW-DID library is not ready for production grade applications.
@@ -706,3 +710,4 @@ class Operator extends Resolver implements IOperator {
 ### Publishing 
 Push to `development` will trigger canary publishing. To publish latest stable version merge PR from `development` to `master`
 To bump version commit message must conform to conventional commits specification
+
