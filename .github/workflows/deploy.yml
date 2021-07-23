@@ -58,7 +58,7 @@ jobs:
         if: github.ref == 'refs/heads/development'
         run: |
           git checkout development
-          lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.${{ github.run_id }} --exact --yes --no-verify-access --no-git-tag-version
+          npm run publish:canary
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
