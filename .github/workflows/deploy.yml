@@ -34,8 +34,8 @@ jobs:
           git config --global user.name ${{ secrets.GH_USER }}
           git remote set-url origin "https://${{ github.token }}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
           git reset --hard
-          git fetch origin master:master
-          git fetch origin development:development
+          git fetch -u origin master:master
+          git fetch -u origin development:development
 
       - name: Set npm credentials
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> $HOME/.npmrc
@@ -58,7 +58,7 @@ jobs:
         if: github.ref == 'refs/heads/development'
         run: |
           git checkout development
-          npm run publish:canary
+          lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.${{ github.run_id }} --exact --yes --no-verify-access --no-git-tag-version
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
