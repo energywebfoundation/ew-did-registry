@@ -35,7 +35,7 @@ jobs:
           git remote set-url origin "https://${{ github.token }}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
           git reset --hard
           git fetch origin master:master
-          git fetch -u origin development:development
+          git fetch origin development:development
 
       - name: Set npm credentials
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> $HOME/.npmrc
