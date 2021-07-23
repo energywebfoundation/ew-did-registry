@@ -19,6 +19,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: cancel-previous
+    env:
+      RUN_ID: ${{ github.run_id }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -52,9 +54,7 @@ jobs:
         run: npm run test-rpc
 
       - name: Output Run ID
-        run: |
-          echo ${{ github.run_id }}
-          export RUN_ID=${{ github.run_id }}
+        run: echo ${{ github.run_id }}
 
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
