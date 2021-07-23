@@ -51,6 +51,9 @@ jobs:
       - name: Test
         run: npm run test-rpc
 
+      - name: Output Run ID
+        run: echo ${{ github.run_id }}
+
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
         run: |

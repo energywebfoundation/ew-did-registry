@@ -13,7 +13,7 @@
     "build:docs": "typedoc",
     "lint": "lerna run lint --parallel --stream -- -- --ignore-path=../../.eslintignore",
     "fix": "lerna run fix --parallel --stream",
-    "publish:canary": "lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.${{github.run_id}} --exact --yes --no-verify-access --no-git-tag-version",
+    "publish:canary": "lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.${{ github.run_id }} --exact --yes --no-verify-access --no-git-tag-version",
     "publish:release": "lerna version --conventional-commits --exact --yes && lerna publish from-git --yes --no-verify-access",
     "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/build packages/*/package-lock.json"
   },
