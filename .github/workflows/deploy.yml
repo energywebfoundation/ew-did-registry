@@ -52,10 +52,12 @@ jobs:
         run: npm run test-rpc
 
       - name: Output Run ID
-        run: echo ${{ GITHUB_RUN_ID }}
+        run: |
+          echo ${{ github.run_id }}
+          export RUN_ID=${{ github.run_id }}
 
       - name: Deploy on development branch
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/development'
         run: |
           git checkout development
           npm run publish:canary
