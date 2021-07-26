@@ -3,9 +3,9 @@ import chai, { expect, should } from 'chai';
 import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
 import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey, withProvider,
+  EwPrivateKeySigner,
+  IdentityOwner,
+  Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
   Algorithms,
@@ -14,16 +14,16 @@ import {
   IOperator,
   PubKeyType,
   IUpdateData,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { Wallet, utils } from 'ethers';
+import { Wallet, BigNumber } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
-
-const { BigNumber } = utils;
 
 should();
 chai.use(chaiAsPromised);
@@ -37,6 +37,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+  const owner = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(keys.privateKey, providerSettings),
+  );
   const keys1 = new Keys();
   let fullDoc: IDIDDocumentFull;
   let operator: IOperator;
@@ -47,7 +53,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      owner,
       { address: registry },
     );
     fullDoc = new DIDDocumentFull(did, operator);
@@ -188,13 +194,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('document must not be updated by non-owning identity', async () => {
-    const doc = new DIDDocumentFull(
-      did,
-      new Operator(
-        withKey(withProvider(signerFromKeys(keys1), getProvider()), walletPubKey),
-        { address: registry },
-      ),
+    const nonOwner = IdentityOwner.fromPrivateKeySigner(
+      new EwPrivateKeySigner(keys1.privateKey, providerSettings),
     );
+    const nonOwnerOperator = new Operator(
+      nonOwner,
+      { address: registry },
+    );
+    const doc = new DIDDocumentFull(did, nonOwnerOperator);
     return doc.deactivate().should.be.rejected;
   });
 
@@ -207,7 +214,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
 
     updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' };
     const from = await fullDoc.update(DIDAttribute.PublicKey, updateData);
@@ -229,7 +236,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData);
 
-    const log1 = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const log1 = await fullDoc.readFromBlock(did, BigNumber.from(0));
 
     const block2 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } });
     await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-2' } });
@@ -262,7 +269,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, new BigNumber(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
     const initialDoc = fullDoc.fromLogs([logsUpToFirstUpdate]);
 
     expect(initialDoc.publicKey.find(({ id }) => id === keyId)).not.undefined;

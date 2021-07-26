@@ -1,15 +1,18 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey, withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
   IClaimsIssuer, IClaimsUser, IProofData, IPublicClaim,
 } from '@ew-did-registry/claims/';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
-import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute,
+  PubKeyType,
+  ProviderTypes,
+  ProviderSettings,
+} from '@ew-did-registry/did-resolver-interface';
 import DIDRegistry from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -18,47 +21,87 @@ chai.should();
 
 describe('[REGISTRY PACKAGE]', function () {
   this.timeout(0);
+
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
+  );
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
+  );
 
   const verifierKeys = new Keys();
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
+  const verifier = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings),
+  );
 
-  let user: DIDRegistry;
+  let userReg: DIDRegistry;
   let userClaims: IClaimsUser;
-  let issuer: DIDRegistry;
+  let issuerReg: DIDRegistry;
   let issuerClaims: IClaimsIssuer;
-  let verifier: DIDRegistry;
+  let verifierReg: DIDRegistry;
 
   let userOperator: Operator;
 
   before(async () => {
     const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
     const ipfsApi = await spawnIpfsDaemon();
-    const store = new DidStore(ipfsApi);
+    const store : DidStore = new DidStore(ipfsApi);
+
     userOperator = new Operator(
-      withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey),
+      user,
       { address: registry },
     );
-    user = new DIDRegistry(userKeys, userDid, userOperator, store);
-    userClaims = user.claims.createClaimsUser();
-    issuer = new DIDRegistry(issuerKeys, issuerDid, new Operator(
-      withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey),
+
+    const issuerOperator = new Operator(
+      issuer,
       { address: registry },
-    ), store);
-    issuerClaims = issuer.claims.createClaimsIssuer();
-    verifier = new DIDRegistry(verifierKeys, verifierDid, new Operator(
-      withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey),
+    );
+
+    const verifierOperator = new Operator(
+      verifier,
       { address: registry },
-    ), store);
-    await user.document.create();
-    await issuer.document.create();
+    );
+
+    userReg = new DIDRegistry(
+      userKeys,
+      userDid,
+      userOperator,
+      store,
+      providerSettings,
+    );
+
+    issuerReg = new DIDRegistry(
+      issuerKeys,
+      issuerDid,
+      issuerOperator,
+      store,
+      providerSettings,
+    );
+
+    verifierReg = new DIDRegistry(
+      verifierKeys,
+      verifierDid,
+      verifierOperator,
+      store,
+      providerSettings,
+    );
+    userClaims = userReg.claims.createClaimsUser();
+    issuerClaims = issuerReg.claims.createClaimsIssuer();
+    await userReg.document.create();
+    await issuerReg.document.create();
   });
 
   after(async () => {
@@ -83,7 +126,7 @@ describe('[REGISTRY PACKAGE]', function () {
     // send token to Issuer
     const issuedToken = await issuerClaims.issuePublicClaim(token);
     // send to User
-    const claim: IPublicClaim = user.jwt.decode(issuedToken) as IPublicClaim;
+    const claim: IPublicClaim = userReg.jwt.decode(issuedToken) as IPublicClaim;
     expect(claim.did).equal(userDid);
     expect(claim.signer).equal(issuerDid);
     expect(claim.claimData).deep.equal(publicData);
@@ -107,7 +150,7 @@ describe('[REGISTRY PACKAGE]', function () {
       notSecret: { value: saltedFields.notSecret, encrypted: false },
     };
     const proof = await userClaims.createProofClaim(claimUrl, encryptedSaltedFields);
-    const verified = verifier.claims.createClaimsVerifier().verifyPrivateProof(proof);
+    const verified = verifierReg.claims.createClaimsVerifier().verifyPrivateProof(proof);
     return verified.should.be.fulfilled;
   });
 });

@@ -1,16 +1,16 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey,
-  withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { DIDAttribute, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute,
+  PubKeyType,
+  ProviderTypes,
+  ProviderSettings,
+} from '@ew-did-registry/did-resolver-interface';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -20,16 +20,25 @@ chai.should();
 const claimData = {
   name: 'John',
 };
+const providerSettings: ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
 
 describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   this.timeout(0);
-  const user = new Keys();
-  const userAddress = user.getAddress();
+  const userKeys = new Keys();
+  const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
+  );
 
-  const issuer = new Keys();
-  const issuerAddress = issuer.getAddress();
+  const issuerKeys = new Keys();
+  const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
+  );
 
   let userDoc: IDIDDocumentFull;
   let issuerDoc: IDIDDocumentFull;
@@ -43,16 +52,28 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(withKey(withProvider(signerFromKeys(user), getProvider()), walletPubKey), { address: registry }),
+      new Operator(user, { address: registry }),
     );
     issuerDoc = new DIDDocumentFull(
-      issuerDid, new Operator(withKey(withProvider(signerFromKeys(issuer), getProvider()), walletPubKey), { address: registry }),
+      issuerDid,
+      new Operator(issuer, { address: registry }),
     );
     await userDoc.create();
     await issuerDoc.create();
 
-    claimsUser = new ClaimsFactory(user, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuer, issuerDoc, store).createClaimsIssuer();
+    claimsUser = new ClaimsFactory(
+      userKeys,
+      userDoc,
+      store,
+      providerSettings,
+    ).createClaimsUser();
+
+    claimsIssuer = new ClaimsFactory(
+      issuerKeys,
+      issuerDoc,
+      store,
+      providerSettings,
+    ).createClaimsIssuer();
   });
 
   after(async () => {

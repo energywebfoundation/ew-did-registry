@@ -223,7 +223,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     if (!(await this.verifySignature(token, issuer))) {
       throw new Error('Incorrect signature');
     }
-    assert.deepEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
+    assert.deepStrictEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
     const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, issuer);
     const owner = `did:${Methods.Erc1056}:${await this.document.getController()}`;
     return issIsDelegate || owner === issuer;

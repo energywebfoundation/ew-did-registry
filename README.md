@@ -95,7 +95,7 @@ const resolverSettings: IResolverSettings = {
 
 // perform a read only operation on given user did
 const userDid = 'did:ethr:0xD845B41AB4837E06Aa7335E31D98c9097a064891';
-const document = new DIDDocumentLite(userDid, new Resolver(resolverSettings));
+const document = new DIDDocumentLite(userDid, new Resolver(provider, resolverSettings));
 ```
 ## DID Document
 A DID can be resolved to a [DID document](https://w3c.github.io/did-core/#did-documents) with help of a resolver. The DID document is a [JSON-LD](https://json-ld.org/) object which can be constructed by retrieving the attributes that describes:
@@ -135,8 +135,15 @@ const userKeys = new Keys({
   
 const userDid = 'did:ethr:0x7551eD4be4eFd75E602189E9d59af448A564AB3a';
 
-//initialise the DIDRegistry with keys and a configured Resolver instance
-const didReg = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+const NETWORK_URL = 'https://volta-rpc.energyweb.org/';
+
+const provider = {
+  uriOrInfo: ${NETWORK_URL},
+  type: ProviderTypes.HTTP,
+};
+
+// initialise the DIDRegistry with keys, a configured Resolver instance and a DidStore
+const didReg = new DIDRegistry(userKeys, userDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl));
 
 // create a claimsCreator for User
 const userClaims = didReg.claims.createClaimsUser();
@@ -166,8 +173,22 @@ const keys = new Keys({
     publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
 
-///instantiate the operator with configured Resolver Settings
-const operator = new Operator(keys, resolverSettings);
+const registrySettings = { 
+  method: Methods.Erc1056,
+  abi: ethrReg.abi,
+  address: registry
+};
+
+const providerSettings = {
+  type: ProviderTypes.HTTP,
+  uriOrInfo: 'https://volta-rpc.energyweb.org',
+};
+
+// instantiate the operator with the identityOwner and configured Resolver settings
+const owner = IdentityOwner.fromPrivateKeySigner(
+  new EwPrivateKeySigner(keys.privateKey, providerSettings),
+);
+const operator = new Operator(owner, registrySettings);
 
 //create the DIDDocumentFull instance
 const document = new DIDDocumentFull(did, operator);
@@ -303,8 +324,13 @@ import { Resolver, DelegateTypes } from '@ew-did-registry/did-ethr-resolver';
 
 * **Reading the DID Document for particular id**
 
-``` typescript  
-    const resolver = new Resolver(resolverSettings);
+``` typescript 
+    const NETWORK_URL = 'https://volta-rpc.energyweb.org/';
+    const provider = {
+      uriOrInfo: ${NETWORK_URL},
+      type: ProviderTypes.HTTP,
+    };
+    const resolver = new Resolver(provider, resolverSettings);
     const did = 'did:ethr:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';
     const didDocument = await resolver.read(did);
 ```
@@ -359,8 +385,14 @@ User is the claims subject
   const userDid = `did:${Methods.Erc1056}:${userAddress}` ;
 ```  
 `Operator` - is an interface responsible for DID document updating
-```typescript 
-  const userOperator = new Operator(userKeys, resolverSettings);
+```typescript
+  const providerSettings = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'https://volta-rpc.energyweb.org/',
+  }
+  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
+  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer)
+  const userOperator = new OperuserOator(identityOwner, resolverSettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its etherum address 
@@ -369,7 +401,7 @@ the document stores the user's public key associated with its etherum address
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -384,7 +416,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -395,7 +427,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings)); 
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl)); 
 ```
 The time interval during which the corresponding record in the DID document will
 be valid
@@ -417,7 +449,7 @@ be valid
 ```
 * **Verification of issued claim and adding issuer to delegates**
 
-'verifyPublicClaim' check if the claim has the correct payload and
+'verifyPublicClaim' checks if the claim has the correct payload and
 also adds delegate to the smart contract
 ```typescript 
   const verified = await userClaims.verifyPublicClaim(issuedToken); 
@@ -434,18 +466,26 @@ whether the delegate is valid for the DID
   expect(verified).to.be.true;
 ```
 
-An ```IDIDDocumetLite``` interface is used to read a document
+An ```IDIDDocumentLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
-  await userLigthDoc.read(userDid); 
+  const userLightDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(provider, resolverSettings)); 
+  await userLightDoc.read(userDid); 
   let document = userLigthDoc.didDocument;
 ```
 
-An ```IDIDDocumetFull``` interface is used to update a document
+An ```IDIDDocumentFull``` interface is used to update a document
 ```typscript
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
+  const providerSettings = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'https://volta-rpc.energyweb.org',
+  };
+  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
+  const identityOwner = IdentitOwner.fromPrivateKeySigner(signer);
+  const DIDOperator = new Operator(identityOwner, registrySettings);
+
+  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(DIDOperator);
   expect(userFullDoc).instanceOf(DIDDocumentFull);
-  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
+  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity);
 });
 ```
 ### Private Claims
@@ -475,7 +515,13 @@ User is the claims subject
 ```
 ```Operator``` - an interface responsible for DID document updating
 ``` typescript
-  const userOperator = new Operator(userKeys);
+  const providerSettings = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'https://volta-rpc.energyweb.org',
+  };
+  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
+  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
+  const userOperator = new Operator(identityOwner, registrySettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its Etherum address. 
@@ -486,7 +532,7 @@ funds on the account
 ```
 ```DIDRegistry``` - main interface for working with claims and DID documents
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, new Resolver(resolverSettings));
+  const user = new DIDRegistry(userKeys, userDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl));
 ```
 Claims creator is represented by ```IClaimsUser```
 ```typescript 
@@ -501,7 +547,7 @@ stored and verified
   }); 
   const issuerAddress = '0xddCe879DE01391176a8527681f63A7D3FCA2901B'; 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(resolverSettings)); 
+  const issuer = new DIDRegistry(issuerKeys, issuerDid, new Resolver(provider, resolverSettings), DidStore(ipfsUrl)); 
   const issuerClaims = issuer.claims.createClaimsIssuer();
 ```
 Same flow for verifier
@@ -512,7 +558,7 @@ Same flow for verifier
   }); 
   const verifierAddress = '0x6C30b191A96EeE014Eb06227D50e9FB3CeAbeafd'; 
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}` ; 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(resolverSettings));
+  const verifier = new DIDRegistry(verifierKeys, verifierDid, new Resolver(provider, resolverSettings), new DidStore(ipfsUrl));
 ```
 The time interval during which the corresponding record in the DID document will
 be valid. Validity is stored in milliseconds, hence 5 minutes are represented in 
@@ -557,15 +603,25 @@ Issuer encodes private user data and then hashes it
 
 An ```IDIDDocumetLite``` interface is used to read a document
 ```typescript 
-  const userLigthDoc: IDIDDocument = user.documentFactory.createLite(new Resolver(resolverSettings)); 
-  await userLigthDoc.read(userDid); 
-  let document = userLigthDoc.didDocument;
+  const userLightDoc: IDIDDocumentLite = user.documentFactory.createLite(new Resolver(provider, resolverSettings)); 
+  await userLightDoc.read(userDid); 
+  let document = userLightDoc.didDocument;
 ```
-An ```IDIDDocumetFull``` interface is used to update a document
-```typescript 
-  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(new Operator(userKeys)); 
+An ```IDIDDocumentFull``` interface is used to update a document
+```typescript
+  // Instantiate the DIDOperator
+  const providerSettings = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'https://volta-rpc.energyweb.org',
+  };
+  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
+  const identityOwner = IdentitOwner.fromPrivateKeySigner(signer);
+  const DIDOperator = new Operator(identityOwner, registrySettings);
+
+  // Use DIDOperator to enable creation and update of the document
+  const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(DIDOperator);
   expect(userFullDoc).instanceOf(DIDDocumentFull);
-  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity); 
+  await userFullDoc.update(DIDAttribute.Authenticate, updateData, validity);
   await userLigthDoc.read(userDid);
   document = userLigthDoc.didDocument;
   const expectedPkId = `${userDid}#delegate-${PubKeyType.VerificationKey2018}-${issuerAddress}`;
@@ -603,7 +659,7 @@ cryptographycally matches it with proof token
   expect(verified).is.true;
 ```
 ## Keys Package
-The keys package provides a clean and simple interface for the client and expose cryptographic operations based on asymmetric cryptography for secp256k1 ECDSA.
+The keys package provides a clean and simple interface for the client and exposes cryptographic operations based on asymmetric cryptography for secp256k1 ECDSA.
 ```typescript
 // If you don't have a key pair you can generate new Key Pair
 const keys = Keys.generateKeyPair(); // builder

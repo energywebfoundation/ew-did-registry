@@ -33,14 +33,14 @@ class DIDDocumentFactory implements IDIDDocumentFactory {
   }
 
   /**
-   * Creates an instance of DIDDocumentFull
+   * Creates an instance of DIDDocumentLite
    *
    * @example
    * ```typescript
    * import { DIDDocumentFactory, DIDDocumentLite } from '@ew-did-registry/did-document';
    *
    * const factory = new DIDDocumentFactory(did);
-   * const DIDDocumentFull = factory.createLite(resolver);
+   * const DIDDocumentLite = factory.createLite(resolver);
    * ```
    * @param { IResolver } operator
    * @param { string } did

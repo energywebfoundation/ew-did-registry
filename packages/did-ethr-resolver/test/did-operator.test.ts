@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet, utils } from 'ethers';
+import { Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -10,44 +10,43 @@ import {
   IDIDDocument,
   IUpdateData,
   PubKeyType,
-  IdentityOwner,
-  IPublicKey,
-  IDIDLogData,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import {
-  Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey, Resolver,
-} from '../src';
+import { Operator } from '../src';
+import ethrReg from '../src/constants/EthereumDIDRegistry.json';
 import { deployRegistry } from '../../../tests/init-ganache';
-
-const { BigNumber } = utils;
+import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
 
 const { fail } = assert;
 
 const keys = new Keys({
   privateKey: '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
 });
+const providerSettings: ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
+const owner = IdentityOwner.fromPrivateKeySigner(
+  new EwPrivateKeySigner(keys.privateKey, providerSettings),
+);
 const newOwnerKeys = new Keys({
   privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
   publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
 });
+const newOwner = IdentityOwner.fromPrivateKeySigner(
+  new EwPrivateKeySigner(newOwnerKeys.privateKey, providerSettings),
+);
+
 const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
-let owner: IdentityOwner;
-
-const keys2 = new Keys({
-  privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
-});
-const did2 = `did:ethr:${keys2.getAddress()}`;
-let operator2: Operator;
-let owner2: IdentityOwner;
 
 const testSuite = (): void => {
   it('operator public key should be equal to public key of signer', () => {
-    expect(operator.getPublicKey().slice(2)).equal(keys.publicKey.slice(2));
+    expect(operator.getPublicKey()).equal(keys.publicKey);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -79,6 +78,7 @@ const testSuite = (): void => {
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
+
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.publicKey,
     );
@@ -106,55 +106,6 @@ const testSuite = (): void => {
         controller: did,
         ethereumAddress: updateData.delegate,
       });
-    });
-
-  it('resolver should support reading in parallel',
-    async () => {
-      const updateOperator = async (op: Operator, _did: string): Promise<void> => {
-        const attribute = DIDAttribute.Authenticate;
-        const delegate = new Wallet(new Keys().privateKey);
-        const updateData = {
-          algo: Algorithms.ED25519,
-          type: PubKeyType.VerificationKey2018,
-          encoding: Encoding.HEX,
-          delegate: delegate.address,
-        };
-        await op.update(_did, attribute, updateData, validity);
-        const document = await operator.read(_did);
-        expect(document.id).equal(_did);
-        const authMethod = document.publicKey.find(
-          (pk: { id: string }) => pk.id === `${_did}#delegate-${updateData.type}-${updateData.delegate}`,
-        );
-        expect(authMethod).include({
-          type: 'Secp256k1VerificationKey2018',
-          controller: _did,
-          ethereumAddress: updateData.delegate,
-        });
-      };
-      await updateOperator(operator, did);
-
-      await updateOperator(operator2, did2);
-
-      const checkThatLogEntriesMatchDid = (logData: IDIDLogData, _did: string): void => {
-        Object.values(logData.publicKey).forEach((pubKey: IPublicKey) => {
-          expect(_did).to.contain(pubKey.controller);
-        });
-      };
-
-      // Reading in sequence
-      const resolver = new Resolver(getProvider(), { address: registry });
-      const sequenceLogs1 = await resolver.readFromBlock(did, new BigNumber(0));
-      const sequenceLogs2 = await resolver.readFromBlock(did2, new BigNumber(0));
-      checkThatLogEntriesMatchDid(sequenceLogs1, did);
-      checkThatLogEntriesMatchDid(sequenceLogs2, did2);
-
-      // Reading in parallel
-      const resolver2 = new Resolver(getProvider(), { address: registry });
-      const logs1 = resolver2.readFromBlock(did, new BigNumber(0));
-      const logs2 = resolver2.readFromBlock(did2, new BigNumber(0));
-      const results = await Promise.all([logs1, logs2]);
-      checkThatLogEntriesMatchDid(results[0], did);
-      checkThatLogEntriesMatchDid(results[1], did2);
     });
 
   it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
@@ -349,9 +300,8 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const provider = getProvider();
     const newOwnerOperator = new Operator(
-      withKey(withProvider(signerFromKeys(newOwnerKeys), provider), walletPubKey),
+      newOwner,
       { address: registry },
     );
 
@@ -402,20 +352,11 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-
-    owner = withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey);
     operator = new Operator(
       owner,
       { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
     );
     await operator.create();
-
-    owner2 = withKey(withProvider(signerFromKeys(keys2), getProvider()), walletPubKey);
-    operator2 = new Operator(
-      owner2,
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
-    );
-    await operator2.create();
   });
 
   testSuite();
