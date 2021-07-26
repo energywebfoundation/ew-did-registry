@@ -30,8 +30,6 @@ export class EwPrivateKeySigner extends EwSigner {
 
   private readonly _privateKey: string;
 
-  private _provider: providers.Provider;
-
   constructor(privateKey: string, providerSettings: ProviderSettings) {
     const provider = getProvider(providerSettings);
     const wallet = new Wallet(privateKey, provider);

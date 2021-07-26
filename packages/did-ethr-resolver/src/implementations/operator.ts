@@ -44,8 +44,6 @@ export class Operator extends Resolver implements IOperator {
 
   private _owner: IdentityOwner;
 
-  private _owner: IdentityOwner;
-
   private readonly _keys = {
     privateKey: '',
     publicKey: '',
