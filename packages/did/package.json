@@ -2,7 +2,8 @@
   "name": "@ew-did-registry/did",
   "version": "0.5.1",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "description": "The interface of a Decentralised Identity",
   "main": "./dist/index.js",
@@ -26,5 +27,13 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@ew-did-registry/keys": "^0.5.0"
+  },
+  "homepage": "https://github.com/energywebfoundation/ew-did-registry/#readme",
+  "bugs": {
+    "url": "https://github.com/energywebfoundation/ew-did-registry/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/energywebfoundation/ew-did-registry.git"
   }
 }
