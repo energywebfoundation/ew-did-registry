@@ -57,9 +57,10 @@ jobs:
 
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
         run: |
           git checkout development
-          export RUN_NUMBER=${{ github.run_number }}
           npm run publish:canary
 
       - name: Deploy on master branch
