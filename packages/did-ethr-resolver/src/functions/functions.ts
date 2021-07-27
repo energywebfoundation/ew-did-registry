@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, providers, utils,
+  Contract, ethers, providers, utils, BigNumber,
 } from 'ethers';
 
 import {
@@ -31,7 +31,7 @@ const handleDelegateChange = (
   event: DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
@@ -77,7 +77,7 @@ const handleAttributeChange = (
   event: AttributeChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   let match = did.match(DIDPattern);
@@ -211,7 +211,7 @@ const updateDocument = (
  * @param address
  */
 const getEventsFromBlock = (
-  block: ethers.utils.BigNumber,
+  block: ethers.BigNumber,
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.Provider,
@@ -226,7 +226,12 @@ const getEventsFromBlock = (
     toBlock: block.toNumber(),
     topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
+    const {
+      name, args, signature, topic,
+    } = contractInterface.parseLog(log[0]);
+    const event = {
+      name, values: args, signature, topic,
+    } as unknown as AttributeChangedEvent |
       DelegateChangedEvent;
     updateDocument(event, did, document, block.toNumber());
 
@@ -284,7 +289,7 @@ export const fetchDataFromEvents = async (
     document.owner = identity;
   }
 
-  const contractInterface = new ethers.utils.Interface(registrySettings.abi);
+  const contractInterface = new ethers.utils.Interface(JSON.stringify(registrySettings.abi));
   const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
@@ -322,7 +327,7 @@ export const wrapDidDocument = (
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
-  const now = new utils.BigNumber(Math.floor(new Date().getTime() / 1000));
+  const now = BigNumber.from(Math.floor(new Date().getTime() / 1000));
 
   const publicKey: IPublicKey[] = [
   ];
@@ -331,7 +336,8 @@ export const wrapDidDocument = (
     {
       type: 'owner',
       publicKey: `${did}#owner`,
-      validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
+      // -1 is preventing BigNumber.from overflow error https://github.com/ethers-io/ethers.js/discussions/1582
+      validity: BigNumber.from(Number.MAX_SAFE_INTEGER - 1),
     },
   ];
 

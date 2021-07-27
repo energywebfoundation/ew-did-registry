@@ -1,29 +1,39 @@
 import { expect } from 'chai';
 import {
-  DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator,
+  DIDAttribute,
+  PubKeyType,
+  Algorithms,
+  Encoding,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  getProvider, signerFromKeys, Operator,
-  walletPubKey,
+  EwPrivateKeySigner,
+  IdentityOwner,
+  Operator,
 } from '@ew-did-registry/did-ethr-resolver';
-
-import { withKey, withProvider } from '@ew-did-registry/did-ethr-resolver/src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
   this.timeout(0);
   const keys = new Keys();
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+  const owner = IdentityOwner.fromPrivateKeySigner(
+    new EwPrivateKeySigner(keys.privateKey, providerSettings),
+  );
   const did = `did:${Methods.Erc1056}:${keys.getAddress()}`;
-  let operator: IOperator;
+  let operator: Operator;
   let docLite: IDIDDocumentLite;
 
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      owner,
       { address: registry },
     );
     docLite = new DIDDocumentLite(did, operator);

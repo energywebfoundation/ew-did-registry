@@ -1,5 +1,5 @@
 import {
-  Contract, providers, utils,
+  Contract, providers, utils, BigNumber,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -14,7 +14,7 @@ import {
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods, DIDPattern } from '@ew-did-registry/did';
-import { ethrReg } from '../constants';
+import ethrReg from '../constants/EthereumDIDRegistry.json';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 
 const { formatBytes32String } = utils;
@@ -48,13 +48,13 @@ class Resolver implements IResolver {
   /**
    * Constructor
    *
-   * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
+   * @param settings - Settings to connect to Ethr registry
+   * @param provider - Ethers provider. Can be obtained from getProvider(providerSettings)
    */
+
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
-
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
 
@@ -65,11 +65,11 @@ class Resolver implements IResolver {
    * ```typescript
    * import { Resolver } from '@ew-did-registry/did-resolver';
    *
-   * const resolver = new Resolver(resolverSettings);
+   * const resolver = new Resolver(provider, resolverSettings);
    * const didDocument = await resolver.read(did);
    * ```
    *
-   * @param {string} did - entity identifier, which is associated with DID Document
+   * @param did - entity identifier, which is associated with DID Document
    * @returns {Promise<IDIDDocument>}
    */
   private async _read(
@@ -84,7 +84,7 @@ class Resolver implements IResolver {
 
     const _document = {
       owner: address,
-      topBlock: new utils.BigNumber(0),
+      topBlock: BigNumber.from(0),
       authentication: {},
       publicKey: {},
       service: {},
@@ -175,12 +175,12 @@ class Resolver implements IResolver {
       did,
       selector,
     );
-    return pk ? ((pk as IPublicKey).publicKeyHex as string).slice(2) : undefined;
+    return pk ? ((pk as IPublicKey).publicKeyHex as string) : undefined;
   }
 
   async readFromBlock(
     did: string,
-    topBlock: utils.BigNumber,
+    topBlock: BigNumber,
   ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
     const _document = {
@@ -195,7 +195,7 @@ class Resolver implements IResolver {
     return { ..._document };
   }
 
-  async lastBlock(did: string): Promise<utils.BigNumber> {
+  async lastBlock(did: string): Promise<BigNumber> {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
   }

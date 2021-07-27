@@ -29,14 +29,16 @@ import { DidStore } from '@ew-did-registry/did-ipfs-store';
 own implementation of the interface depending on the DID method. The library 
 provides reference implementation based on ERC-1056
 
-```typescript 
-  const userOperator = new Operator(userKeys, resolverSettings);
+```typescript
+  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
+  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
+  const userOperator = new Operator(identityOwner, registrySettings);
 ```
 
 ` DIDRegistry ` - main class for working with claims and DID documents
 
 ``` typescript
-  const user = new DIDRegistry(userKeys, userDid, userOperator, store);
+  const user = new DIDRegistry(userKeys, userDid, userOperator, didStore);
 ```
 
 Before using DID document it needs to be initialized. During initialization, 
@@ -58,10 +60,12 @@ stored and verified
 ```typescript 
   const issuerKeys = new Keys(); 
   const issuerAddress = issuerKeys.getAddress(); 
-  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ; 
-  const issuerOperator = new Operator(issuerKeys, resolverSettings); 
-  const issuer = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, store); 
-  const issuerClaims = issuer.claims.createClaimsIssuer(); 
+  const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ;
+  const signer = new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings);
+  const issuer = IdentityOwner.fromPrivateKeySigner(signer);
+  const issuerOperator = new Operator(issuer, registrySettings); 
+  const issuerReg = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, didStore, providerSettings); 
+  const issuerClaims = issuerReg.claims.createClaimsIssuer(); 
 ``` 
 
 Same flow for verifier
@@ -69,10 +73,12 @@ Same flow for verifier
 ```typescript 
   const verifierKeys = new Keys(); 
   const verifierAddress = verifierKeys.getAddress(); 
-  const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}` ; 
-  const verifierOperator = new Operator(verifierKeys, resolverSettings); 
-  const verifier = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, store); 
-  const verifierClaims = verifier.claims.createClaimsVerifier();
+  const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}`;
+  const verifSigner = new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings);
+  const verifier = IdentityOwner.fromPrivateKeySigner(verifSigner);
+  const verifierOperator = new Operator(verifier, registrySettings); 
+  const verifierReg = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, didStore, providerSettings); 
+  const verifierClaims = verifierReg.claims.createClaimsVerifier();
 
 ``` 
 

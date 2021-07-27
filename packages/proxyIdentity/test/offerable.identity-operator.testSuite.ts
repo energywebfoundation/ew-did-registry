@@ -8,11 +8,12 @@ import {
   DIDAttribute,
   Encoding,
   PubKeyType,
-  IdentityOwner,
   IOperator,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  signerFromKeys, walletPubKey, withProvider, withKey,
+  EwPrivateKeySigner, IdentityOwner,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
@@ -42,8 +43,12 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     ({
       identityFactory, manager, provider, erc1056,
     } = this);
-
-    owner = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+    const providerSettings: ProviderSettings = {
+      type: ProviderTypes.HTTP,
+    };
+    const keys = new Keys();
+    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
+    owner = IdentityOwner.fromPrivateKeySigner(signer);
     ownerAddr = await owner.getAddress();
 
     const txReceipt = await manager.createIdentity(ownerAddr);

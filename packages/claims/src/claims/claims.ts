@@ -1,7 +1,8 @@
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { DelegateTypes, IdentityOwner, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import { DelegateTypes, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import { IdentityOwner } from '@ew-did-registry/did-ethr-resolver';
 import { IClaims, IPublicClaim, IPrivateClaim } from '../models';
 import { hashes } from '../utils';
 

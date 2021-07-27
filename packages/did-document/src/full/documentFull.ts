@@ -1,7 +1,7 @@
 import {
   DIDAttribute, IOperator, IUpdateData, PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
 
@@ -60,7 +60,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    * const didAttribute = DIDAttribute.PublicKey;
    * const validity = 5 * 60 * 1000;
    * await document.update(
-   *  DIDAttribute.PublicKey,
+   *  didAttribute,
    *  {
    *    type: PubKeyType.VerificationKey2018,
    *    value: new Keys().publicKey,
@@ -78,7 +78,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
     attribute: DIDAttribute,
     data: IUpdateData,
     validity?: number,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     return this._operator.update(this.did, attribute, data, validity);
   }
 
