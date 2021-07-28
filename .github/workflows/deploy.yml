@@ -38,7 +38,7 @@ jobs:
           git fetch -u origin development:development
 
       - name: Set npm credentials
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
 
       - name: Install package
         run: |
@@ -46,11 +46,9 @@ jobs:
           npm run setup
 
       - name: Build package
-        if: github.ref == 'refs/heads/master'
         run: npm run build
 
       - name: Npm run test
-        if: github.ref == 'refs/heads/master'
         run: npm run test-rpc
 
       - name: Output Run number
@@ -61,8 +59,6 @@ jobs:
         env:
           RUN_NUMBER: ${{ github.run_number }}
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          cat ~/.npmrc
           npm run publish:canary
 
       - name: Deploy on master branch
