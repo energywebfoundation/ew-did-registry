@@ -38,7 +38,7 @@ jobs:
           git fetch -u origin development:development
 
       - name: Set npm credentials
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> $HOME/.npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Install package
         run: |
@@ -59,6 +59,8 @@ jobs:
         env:
           RUN_NUMBER: ${{ github.run_number }}
         run: |
+          echo ${{ secrets.NPM_TOKEN }}
+          echo ~/.npmrc
           npm run publish:canary
 
       - name: Deploy on master branch
