@@ -61,7 +61,7 @@ jobs:
         env:
           RUN_NUMBER: ${{ github.run_number }}
         run: |
-          echo ${{ secrets.NPM_TOKEN }}
+          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
           cat ~/.npmrc
           npm run publish:canary
 
