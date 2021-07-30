@@ -1,6 +1,5 @@
 import {
   utils,
-  Signer,
   BigNumber,
   providers,
   ContractInterface,
@@ -162,11 +161,6 @@ export interface IDIDLogData {
 export enum DelegateTypes {
   authentication = 'sigAuth',
   verification = 'veriKey',
-}
-
-export interface IdentityOwner extends Signer {
-  publicKey: string;
-  privateKey?: string;
 }
 
 export type DocumentSelector = Partial<{
