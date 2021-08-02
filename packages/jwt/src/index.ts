@@ -2,7 +2,7 @@
 import * as jwt from 'jsonwebtoken';
 import { Signer } from 'ethers';
 
-import { IKeys } from '@ew-did-registry/keys';
+import { IKeys } from '@fl-did-registry/keys';
 import {
   createSignWithEthersSigner, createSignWithKeys, JwtOptions, JwtPayload,
 } from './sign';
@@ -23,8 +23,8 @@ class JWT {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { JWT } from '@ew-did-registry/jwt';
+   * import { Keys } from '@fl-did-registry/keys';
+   * import { JWT } from '@fl-did-registry/jwt';
    *
    * const keyPair = new Keys();
    * const jwt = new JWT(keyPair);
@@ -57,8 +57,8 @@ class JWT {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { JWT } from '@ew-did-registry/jwt';
+   * import { Keys } from '@fl-did-registry/keys';
+   * import { JWT } from '@fl-did-registry/jwt';
    *
    * const AliceKeyPair = new Keys();
    * const BobKeyPair = new Keys();
@@ -108,8 +108,8 @@ class JWT {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { JWT } from '@ew-did-registry/jwt';
+   * import { Keys } from '@fl-did-registry/keys';
+   * import { JWT } from '@fl-did-registry/jwt';
    *
    * const AliceKeyPair = new Keys();
    * const BobKeyPair = new Keys();

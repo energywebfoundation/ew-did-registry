@@ -1,4 +1,4 @@
-import { IKeys } from '@ew-did-registry/keys';
+import { IKeys } from '@fl-did-registry/keys';
 import KeyEncoder from 'key-encoder';
 import * as jwt from 'jsonwebtoken';
 import { Signer, utils } from 'ethers';

@@ -15,8 +15,8 @@ import {
   DelegateChangedEvent,
   DidEventNames,
   VerificationMethodBackTypeMap
-} from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { DIDPattern } from '@fl-did-registry/did';
 import { attributeNamePattern } from '../constants';
 
 /**

@@ -1,9 +1,9 @@
-import { IKeys, Keys } from '@ew-did-registry/keys';
-import { IOperator, KeyTags, Encoding } from '@ew-did-registry/did-resolver-interface';
-import { IDID, Methods, DID } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { JWT } from '@ew-did-registry/jwt';
-import { IDidStore } from '@ew-did-registry/did-store-interface';
+import { IKeys, Keys } from '@fl-did-registry/keys';
+import { IOperator, KeyTags, Encoding } from '@fl-did-registry/did-resolver-interface';
+import { IDID, Methods, DID } from '@fl-did-registry/did';
+import { DIDDocumentFactory, IDIDDocumentFull } from '@fl-did-registry/did-document';
+import { JWT } from '@fl-did-registry/jwt';
+import { IDidStore } from '@fl-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
 
 /**
@@ -37,8 +37,8 @@ class DIDRegistry implements IDIDRegistry {
    *
    * @example
    * ```typescript
-   * import DIDRegistry from '@ew-did-registry/did-regsitry';
-   * import { Method } from '@ew-did-registry/did';
+   * import DIDRegistry from '@fl-did-registry/did-regsitry';
+   * import { Method } from '@fl-did-registry/did';
    *
    * const reg = new DIDRegistry(keys, ethDid, ethResolver);
    * reg.changeResolver(new Resolver(ewcSettings), Method.EnergyWeb);
@@ -92,7 +92,7 @@ class DIDRegistry implements IDIDRegistry {
    *
    * @example
    * ```typescript
-   * import DIDRegistry from '@ew-did-registry/did-registry';
+   * import DIDRegistry from '@fl-did-registry/did-registry';
    *
    * const document = await reg.read(did);
    * ```

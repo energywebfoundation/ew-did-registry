@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import { Methods, isValidErc1056 } from '../src';
 
 export function erc1056tests(): void {

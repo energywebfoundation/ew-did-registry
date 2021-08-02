@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import ipfsClient from 'ipfs-http-client';
 import BufferList from 'bl';
-import { IDidStore } from '@ew-did-registry/did-store-interface';
+import { IDidStore } from '@fl-did-registry/did-store-interface';
 
 export class DidStore implements IDidStore {
   private ipfs: any;

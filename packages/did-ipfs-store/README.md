@@ -1,4 +1,4 @@
-# @ew-did-registry/did-ipfs-store
+# @fl-did-registry/did-ipfs-store
 
 This package provides IPFS-based implementation of the IDidStore
 

@@ -1,13 +1,13 @@
 /* eslint-disable no-shadow */
 import { expect } from 'chai';
 import { ethers } from 'ethers';
-import { Keys } from '@ew-did-registry/keys';
-import { IOperator } from '@ew-did-registry/did-resolver-interface';
+import { Keys } from '@fl-did-registry/keys';
+import { IOperator } from '@fl-did-registry/did-resolver-interface';
 import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
   withKey, withProvider,
-} from '@ew-did-registry/did-nft-resolver';
+} from '@fl-did-registry/did-nft-resolver';
 
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';

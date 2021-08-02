@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Wallet } from 'ethers';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import { JWT } from '../src';
 
 const { expect, should } = chai;

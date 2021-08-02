@@ -14,9 +14,9 @@ import {
   KeyTags,
   DocumentSelector,
   IPublicClaim,
-} from '@ew-did-registry/did-resolver-interface';
-import { JWT } from '@ew-did-registry/jwt';
-import { Methods, DIDPattern } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { JWT } from '@fl-did-registry/jwt';
+import { Methods, DIDPattern } from '@fl-did-registry/did';
 import { nftReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { hashes } from "../utils";
@@ -68,7 +68,7 @@ class Resolver implements IResolver, IClaimsVerifier {
    *
    * @example
    * ```typescript
-   * import { Resolver } from '@ew-did-registry/did-resolver';
+   * import { Resolver } from '@fl-did-registry/did-resolver';
    *
    * const resolver = new Resolver(resolverSettings);
    * const didDocument = await resolver.read(did);

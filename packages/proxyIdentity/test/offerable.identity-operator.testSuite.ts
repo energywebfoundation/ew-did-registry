@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import {
   Contract, ContractFactory, providers, utils,
 } from 'ethers';
@@ -10,11 +10,11 @@ import {
   PubKeyType,
   IdentityOwner,
   IOperator,
-} from '@ew-did-registry/did-resolver-interface';
+} from '@fl-did-registry/did-resolver-interface';
 import {
   signerFromKeys, walletPubKey, withProvider, withKey,
-} from '@ew-did-registry/did-nft-resolver';
-import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
+} from '@fl-did-registry/did-nft-resolver';
+import { Methods } from '@fl-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
 

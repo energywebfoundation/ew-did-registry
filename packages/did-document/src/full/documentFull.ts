@@ -1,6 +1,6 @@
 import {
   DIDAttribute, IOperator, IUpdateData, VerificationMethodType,
-} from '@ew-did-registry/did-resolver-interface';
+} from '@fl-did-registry/did-resolver-interface';
 import { utils } from 'ethers';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
@@ -18,7 +18,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    *
    * @example
    * ```typescript
-   *  import { DIDDocumentFull } from '@ew-did-registry/did-document';
+   *  import { DIDDocumentFull } from '@fl-did-registry/did-document';
    *
    *  const document = new DIDDocumentFull(did, operator);
    *  await document.create();
@@ -35,7 +35,7 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    *
    * @example
    * ```typescript
-   * import { DIDDocumentFull } from '@ew-did-registry/did-document';
+   * import { DIDDocumentFull } from '@fl-did-registry/did-document';
    *
    * const document = new DIDDocumentFull(did, operator);
    * await document.create();
@@ -53,8 +53,8 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
    *
    * @example
    * ```typescript
-   * import { DIDDocumentFull } from '@ew-did-registry/did-document';
-   * import { DIDAttribute, Algorithms, PubKeyTypes } from '@ew-did-registry/did-document';
+   * import { DIDDocumentFull } from '@fl-did-registry/did-document';
+   * import { DIDAttribute, Algorithms, PubKeyTypes } from '@fl-did-registry/did-document';
    *
    * const document = new DIDDocumentFull(did, operator);
    * await document.create();

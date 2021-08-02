@@ -1,6 +1,6 @@
 {
-  "name": "@ew-did-registry/did-nft-resolver",
-  "version": "0.5.1",
+  "name": "@fl-did-registry/did-nft-resolver",
+  "version": "0.5.2",
   "publishConfig": {
     "access": "public"
   },
@@ -27,13 +27,13 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did": "0.5.1",
-    "@ew-did-registry/did-resolver-interface": "0.5.1",
-    "@ew-did-registry/keys": "0.5.0",
-    "@ew-did-registry/jwt": "0.5.0",
-    "ethers": "4.0.45",
+    "@fl-did-registry/did": "0.5.1",
+    "@fl-did-registry/did-resolver-interface": "0.5.1",
+    "@fl-did-registry/jwt": "0.5.0",
+    "@fl-did-registry/keys": "0.5.0",
     "@types/sjcl": "1.0.28",
     "eciesjs": "^0.3.4",
+    "ethers": "^4.0.49",
     "sjcl": "npm:sjcl-complete@1.0.0"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-# @ew-did-registry/did-store-interface
+# @fl-did-registry/did-store-interface
 
 This package specifies the interface of the all claims store implementations
 

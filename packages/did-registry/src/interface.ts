@@ -1,7 +1,7 @@
-import { IDID, Methods } from '@ew-did-registry/did';
-import { IDIDDocumentFull, IDIDDocumentLite } from '@ew-did-registry/did-document';
-import { IOperator } from '@ew-did-registry/did-resolver-interface';
-import { IKeys } from '@ew-did-registry/keys';
+import { IDID, Methods } from '@fl-did-registry/did';
+import { IDIDDocumentFull, IDIDDocumentLite } from '@fl-did-registry/did-document';
+import { IOperator } from '@fl-did-registry/did-resolver-interface';
+import { IKeys } from '@fl-did-registry/keys';
 
 /**
  * @interface {IDIDRegistry}

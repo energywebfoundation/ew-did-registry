@@ -1,4 +1,4 @@
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import { expect } from 'chai';
 import {
   Algorithms,
@@ -8,8 +8,8 @@ import {
   IServiceEndpoint,
   IUpdateData,
   PubKeyType,
-} from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { Methods } from '@fl-did-registry/did';
 import {
   Operator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
 } from '../src';

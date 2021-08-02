@@ -1,5 +1,5 @@
 {
-  "name": "ew-did-registry",
+  "name": "fl-did-registry",
   "version": "0.1.0",
   "description": "The javascript library client that can be used to manage decentralised identities on energy web chains",
   "main": "index.js",
@@ -94,5 +94,8 @@
     "hooks": {
       "pre-commit": "npm run fix && npm run compile"
     }
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }

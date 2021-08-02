@@ -48,7 +48,7 @@ class Keys implements IKeys {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
+   * import { Keys } from '@fl-did-registry/keys';
    *
    * const keysAlice = new Keys();
    * const keysBob = new Keys();
@@ -74,7 +74,7 @@ class Keys implements IKeys {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
+   * import { Keys } from '@fl-did-registry/keys';
    *
    * const keysAlice = new Keys();
    * const keysBob = new Keys();
@@ -102,7 +102,7 @@ class Keys implements IKeys {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
+   * import { Keys } from '@fl-did-registry/keys';
    *
    * const keys = new Keys();
    * const data = 'test';
@@ -134,7 +134,7 @@ class Keys implements IKeys {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
+   * import { Keys } from '@fl-did-registry/keys';
    *
    * const keys = new Keys();
    * const data = 'test';
@@ -165,7 +165,7 @@ class Keys implements IKeys {
    *
    * @example
    * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
+   * import { Keys } from '@fl-did-registry/keys';
    *
    * const keyPair = Keys.generateKeyPair();
    * console.log(keyPair.privateKey) // 64 hex symbols string

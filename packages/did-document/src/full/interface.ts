@@ -1,4 +1,4 @@
-import { DIDAttribute, IUpdateData, VerificationMethodType } from '@ew-did-registry/did-resolver-interface';
+import { DIDAttribute, IUpdateData, VerificationMethodType } from '@fl-did-registry/did-resolver-interface';
 import { utils } from 'ethers';
 import { IDIDDocumentLite } from '../lite';
 

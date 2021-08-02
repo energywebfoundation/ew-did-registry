@@ -1,6 +1,6 @@
 ## DID-DOCUMENT Package
 The did-document package functionality is in line with did-reg package. The Interfaces provides the client with a factory to create DID Document objects, which in turn expose DID CRUD operations in the full version, as well as read operations for lite version. Interfaces are created by conforming to [W3C DIDs v1.0](https://w3c.github.io/did-core/) standard.
-The goal of the [Resolver](https://github.com/energywebfoundation/ew-did-registry/blob/development/packages/did-resolver-interface/src/interface.ts) interface is to provide flexibility to the user to define his own implementation of the Resolver for the required DID method on Energy Web chain. Currently the 1056 [Operator](https://github.com/energywebfoundation/ew-did-registry/blob/development/packages/did-ethr-resolver/src/implementations/operator.ts) implements the CRUD behaviour required for `ethr` DID method which is based on ERC1056 standard.
+The goal of the [Resolver](https://github.com/energywebfoundation/fl-did-registry/blob/development/packages/did-resolver-interface/src/interface.ts) interface is to provide flexibility to the user to define his own implementation of the Resolver for the required DID method on Energy Web chain. Currently the 1056 [Operator](https://github.com/energywebfoundation/ew-did-registry/blob/development/packages/did-ethr-resolver/src/implementations/operator.ts) implements the CRUD behaviour required for `ethr` DID method which is based on ERC1056 standard.
 ### Create
 To create a DID,
 ```typescript
@@ -25,7 +25,7 @@ const created = await document.create();
 Using the EW DID resolver we can read the whole DID document. You can read specific attribute using the DIDDocument instance.
 #### Fetching the whole DID Document 
 ```typescript
-import { Resolver } from '@ew-did-registry/did-ethr-resolver';
+import { Resolver } from '@fl-did-registry/did-ethr-resolver';
 
 // did of the user
 const did = 'did:ewc:0xe2e457aB987BEd9AbdEE9410FC985E46e28a3947';

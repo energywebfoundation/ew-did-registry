@@ -6,7 +6,7 @@ import {
   Operator, signerFromKeys, getProvider,
   walletPubKey,
   withKey, withProvider,
-} from '@ew-did-registry/did-nft-resolver';
+} from '@fl-did-registry/did-nft-resolver';
 import {
   Algorithms,
   DIDAttribute,
@@ -14,11 +14,11 @@ import {
   IOperator,
   PubKeyType,
   IUpdateData,
-} from '@ew-did-registry/did-resolver-interface';
-import { Keys } from '@ew-did-registry/keys';
-import { Methods } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { Keys } from '@fl-did-registry/keys';
+import { Methods } from '@fl-did-registry/did';
 import { Wallet, utils } from 'ethers';
-import { mergeLogs } from '@ew-did-registry/did-nft-resolver/src';
+import { mergeLogs } from '@fl-did-registry/did-nft-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';

@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import { Wallet, utils } from 'ethers';
 import {
   Algorithms,
@@ -13,8 +13,8 @@ import {
   IdentityOwner,
   IPublicKey,
   IDIDLogData,
-} from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { Methods } from '@fl-did-registry/did';
 import {
   Operator, signerFromKeys, ethrReg, getProvider, walletPubKey, withProvider, withKey, Resolver,
 } from '../src';

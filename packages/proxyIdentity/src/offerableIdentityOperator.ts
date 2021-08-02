@@ -8,8 +8,8 @@ import {
   IdentityOwner,
   IUpdateAttributeData,
   IUpdateDelegateData,
-} from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify, addressOf } from '@ew-did-registry/did-nft-resolver';
+} from '@fl-did-registry/did-resolver-interface';
+import { Operator, hexify, addressOf } from '@fl-did-registry/did-nft-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 

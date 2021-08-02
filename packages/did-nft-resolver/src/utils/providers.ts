@@ -1,4 +1,4 @@
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import { ProviderSettings, ProviderTypes } from '@fl-did-registry/did-resolver-interface';
 import { providers } from 'ethers';
 
 const { JsonRpcProvider, IpcProvider } = providers;

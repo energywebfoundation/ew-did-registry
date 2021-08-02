@@ -1,5 +1,5 @@
 import { utils, Signer } from 'ethers';
-import { Methods } from '@ew-did-registry/did';
+import { Methods } from '@fl-did-registry/did';
 
 /**
  * Specifies currently supported provider types. New types can be added in the future.

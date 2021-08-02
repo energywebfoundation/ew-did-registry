@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import { login } from '../../state-management';
-import { Methods } from '@ew-did-registry/did';
+import { Methods } from '@fl-did-registry/did';
 import { defaultKeys, sendAuthClaim } from '../../utils/did';
 import './style.css';
 

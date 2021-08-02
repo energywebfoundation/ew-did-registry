@@ -7,7 +7,7 @@ significantly faster.
 * **Importing required modules**
 
 ``` typescript
-import { Resolver, DelegateTypes } from '@ew-did-registry/did-ethr-resolver';
+import { Resolver, DelegateTypes } from '@fl-did-registry/did-ethr-resolver';
 ```
 
 * **Reading the DID Document for particular id**

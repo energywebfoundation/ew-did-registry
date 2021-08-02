@@ -1,7 +1,7 @@
-import { Keys } from '@ew-did-registry/keys';
+import { Keys } from '@fl-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
-import { Encoding, IVerificationMethod } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern, DIDEthrPattern } from '@ew-did-registry/did';
+import { Encoding, IVerificationMethod } from '@fl-did-registry/did-resolver-interface';
+import { DIDPattern, DIDEthrPattern } from '@fl-did-registry/did';
 import crypto from 'crypto';
 
 const {

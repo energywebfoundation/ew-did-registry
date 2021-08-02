@@ -1,4 +1,4 @@
-import { IOperator, IResolver } from '@ew-did-registry/did-resolver-interface';
+import { IOperator, IResolver } from '@fl-did-registry/did-resolver-interface';
 import { IDIDDocumentFactory } from '../interface';
 import { DIDDocumentFull, IDIDDocumentFull } from '../full';
 import { DIDDocumentLite, IDIDDocumentLite } from '../lite';
@@ -18,7 +18,7 @@ class DIDDocumentFactory implements IDIDDocumentFactory {
    *
    * @example
    * ```typescript
-   * import { DIDDocumentFactory, DIDDocumentFull } from '@ew-did-registry/did-document';
+   * import { DIDDocumentFactory, DIDDocumentFull } from '@fl-did-registry/did-document';
    *
    * const factory = new DIDDocumentFactory(did);
    * const DIDDocumentFull = factory.createFull(operator);
@@ -37,7 +37,7 @@ class DIDDocumentFactory implements IDIDDocumentFactory {
    *
    * @example
    * ```typescript
-   * import { DIDDocumentFactory, DIDDocumentLite } from '@ew-did-registry/did-document';
+   * import { DIDDocumentFactory, DIDDocumentLite } from '@fl-did-registry/did-document';
    *
    * const factory = new DIDDocumentFactory(did);
    * const DIDDocumentFull = factory.createLite(resolver);

@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Resolver, defaultResolverSettings } = require('@ew-did-registry/did-nft-resolver');
-const { DelegateTypes } = require('@ew-did-registry/did-resolver-interface');
-const { Keys } = require('@ew-did-registry/keys');
-const { Claims } = require('@ew-did-registry/claims');
-const { JWT } = require('@ew-did-registry/jwt');
-const { Methods } = require('@ew-did-registry/did');
+const { Resolver, defaultResolverSettings } = require('@fl-did-registry/did-nft-resolver');
+const { DelegateTypes } = require('@fl-did-registry/did-resolver-interface');
+const { Keys } = require('@fl-did-registry/keys');
+const { Claims } = require('@fl-did-registry/claims');
+const { JWT } = require('@fl-did-registry/jwt');
+const { Methods } = require('@fl-did-registry/did');
 
 const secret = '123abc';
 

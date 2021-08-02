@@ -1,5 +1,5 @@
 {
-  "name": "@ew-did-registry/did-store-interface",
+  "name": "@fl-did-registry/did-store-interface",
   "version": "0.5.0",
   "publishConfig": {
     "access": "public"

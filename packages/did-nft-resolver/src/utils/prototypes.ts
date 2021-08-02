@@ -1,5 +1,5 @@
 import { Signer, providers } from 'ethers';
-import { IdentityOwner } from '@ew-did-registry/did-resolver-interface';
+import { IdentityOwner } from '@fl-did-registry/did-resolver-interface';
 import { ConnectedSigner } from './signers';
 
 export function withKey(

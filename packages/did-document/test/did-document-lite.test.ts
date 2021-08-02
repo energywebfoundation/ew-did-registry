@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 import {
   DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator,
-} from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
-import { Keys } from '@ew-did-registry/keys';
+} from '@fl-did-registry/did-resolver-interface';
+import { Methods } from '@fl-did-registry/did';
+import { Keys } from '@fl-did-registry/keys';
 import {
   getProvider, signerFromKeys, Operator,
   walletPubKey,
-} from '@ew-did-registry/did-nft-resolver';
+} from '@fl-did-registry/did-nft-resolver';
 
-import { withKey, withProvider } from '@ew-did-registry/did-nft-resolver/src';
+import { withKey, withProvider } from '@fl-did-registry/did-nft-resolver/src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 

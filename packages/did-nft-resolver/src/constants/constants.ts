@@ -1,5 +1,5 @@
-import { ProviderTypes } from '@ew-did-registry/did-resolver-interface';
-import { ethAddrPattern } from '@ew-did-registry/did';
+import { ProviderTypes } from '@fl-did-registry/did-resolver-interface';
+import { ethAddrPattern } from '@fl-did-registry/did';
 
 // Address of ERC1056 smart contract on Volta
 export const VoltaAddress1056 = '0xc15d5a57a8eb0e1dcbe5d88b8f9a82017e5cc4af';

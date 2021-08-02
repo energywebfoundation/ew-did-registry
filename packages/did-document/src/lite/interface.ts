@@ -6,7 +6,7 @@ import {
   IAuthentication,
   DocumentSelector,
   IDIDLogData,
-} from '@ew-did-registry/did-resolver-interface';
+} from '@fl-did-registry/did-resolver-interface';
 import { utils } from 'ethers';
 
 /**

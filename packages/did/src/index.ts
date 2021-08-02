@@ -13,7 +13,7 @@ class DID implements IDID {
    *
    * @example
    * ```typescript
-   * import { DID, Network } from '@ew-did-registry/did';
+   * import { DID, Network } from '@fl-did-registry/did';
    *
    * const did = new DID();
    * did.set('bitcoin', 'method_specific_id');
@@ -37,7 +37,7 @@ class DID implements IDID {
    *
    * @example
    * ```typescript
-   * import { DID } from '@ew-did-registry/did';
+   * import { DID } from '@fl-did-registry/did';
    *
    * const did = new DID();
    * did.set('did:eth:method_specific_id');
@@ -55,7 +55,7 @@ class DID implements IDID {
    *
    * @example
    * ```typescript
-   * import { DID } from '@ew-did-registry/did';
+   * import { DID } from '@fl-did-registry/did';
    *
    * const did = new DID();
    * did.set('eth', 'method_specific_id');

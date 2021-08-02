@@ -8,9 +8,9 @@ import {
   IAuthentication,
   DocumentSelector,
   IDIDLogData,
-} from '@ew-did-registry/did-resolver-interface';
-import { documentFromLogs } from '@ew-did-registry/did-nft-resolver';
-import { Methods } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { documentFromLogs } from '@fl-did-registry/did-nft-resolver';
+import { Methods } from '@fl-did-registry/did';
 import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {

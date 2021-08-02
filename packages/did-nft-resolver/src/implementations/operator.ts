@@ -19,10 +19,10 @@ import {
   IUpdateAttributeData,
   IPublicClaim,
   ServiceEndpointType
-} from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
+} from '@fl-did-registry/did-resolver-interface';
+import { Methods } from '@fl-did-registry/did';
 import Resolver from './resolver';
-import { JWT } from '@ew-did-registry/jwt';
+import { JWT } from '@fl-did-registry/jwt';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
@@ -104,8 +104,8 @@ export class Operator extends Resolver implements IOperator {
   *```typescript
   * import {
   * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
-  *  } from '@ew-did-registry/did-resolver';
-  * import { Keys } from '@ew-did-registry/keys';
+  *  } from '@fl-did-registry/did-resolver';
+  * import { Keys } from '@fl-did-registry/keys';
   *
   * const ownerKeys = new Keys();
   * const operator = new Operator(ownerKeys);
@@ -198,8 +198,8 @@ export class Operator extends Resolver implements IOperator {
   *
   * @example
   * ```typescript
-  *import { Operator } from '@ew-did-registry/did-resolver';
-  *import { Keys } from '@ew-did-registry/keys';
+  *import { Operator } from '@fl-did-registry/did-resolver';
+  *import { Keys } from '@fl-did-registry/keys';
   *
   * const ownerKeys = new Keys();
   * const operator = new Operator(ownerKeys);
