@@ -91,7 +91,7 @@ export class OfferableIdenitytOperator extends Operator {
     } else {
       methodName = 'addDelegate';
     }
-    const data = new Interface(erc1056Abi).encodeFunctionData(methodName, [params]);
+    const data = new Interface(erc1056Abi).encodeFunctionData(methodName, params);
     try {
       const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
       const receipt = await tx.wait();
