@@ -156,10 +156,9 @@ export class Operator extends Resolver implements IOperator {
     updateData: IUpdateData,
     validity: number = Number.MAX_SAFE_INTEGER - 1, // preventing BigNumber.from overflow error
   ): Promise<BigNumber> {
-    const registry = this._didRegistry;
     const method = didAttribute === PublicKey || didAttribute === ServicePoint
-      ? registry.setAttribute
-      : registry.addDelegate;
+      ? 'setAttribute'
+      : 'addDelegate';
     if (validity < 0) {
       throw new Error('Validity must be non negative value');
     }
@@ -181,7 +180,7 @@ export class Operator extends Resolver implements IOperator {
     delegateDID: string,
   ): Promise<boolean> {
     await this._sendTransaction(
-      this._didRegistry.revokeDelegate,
+      'revokeDelegate',
       did,
       DIDAttribute.Authenticate,
       {
@@ -207,7 +206,7 @@ export class Operator extends Resolver implements IOperator {
     updateData: IUpdateAttributeData,
   ): Promise<boolean> {
     await this._sendTransaction(
-      this._didRegistry.revokeAttribute,
+      'revokeAttribute',
       did,
       attributeType,
       updateData,
@@ -370,7 +369,7 @@ export class Operator extends Resolver implements IOperator {
  * @private
  */
   protected async _sendTransaction(
-    method: Function,
+    method: string,
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
@@ -400,7 +399,7 @@ export class Operator extends Resolver implements IOperator {
       params.push(overrides);
     }
     try {
-      const tx = await method(...params);
+      const tx = await this._didRegistry[method](...params);
       const receipt = await tx.wait();
       const event: Event = receipt.events.find(
         (e: Event) => (didAttribute === DIDAttribute.PublicKey && e.event === 'DIDAttributeChanged')

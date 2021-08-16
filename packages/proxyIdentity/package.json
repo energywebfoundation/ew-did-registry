@@ -8,8 +8,8 @@
   "main": "dist/src/index.js",
   "scripts": {
     "compile": "npm run compile:contracts && ../../node_modules/.bin/tsc",
-    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test-ganache\" ",
-    "test-ganache": "mocha -r ts-node/register test/*test.ts",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test\" ",
+    "test": "mocha -r ts-node/register test/*test.ts",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
     "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",

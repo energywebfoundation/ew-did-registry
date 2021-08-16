@@ -69,7 +69,7 @@ export class OfferableIdenitytOperator extends Operator {
   }
 
   protected async _sendTransaction(
-    method: (...args: (string | number | Record<string, unknown>)[]) => Promise<void>,
+    method: string,
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
@@ -83,15 +83,11 @@ export class OfferableIdenitytOperator extends Operator {
         ? (updateData as IUpdateAttributeData).value
         : (updateData as IUpdateDelegateData).delegate,
     );
-    const validityValue = validity !== undefined ? validity.toString() : '';
-    const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
-    let methodName: string;
-    if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
-      methodName = 'setAttribute';
-    } else {
-      methodName = 'addDelegate';
+    const params = [identity, bytesOfAttribute, bytesOfValue];
+    if (validity && validity > 0) {
+      params.push(validity.toString());
     }
-    const data = new Interface(erc1056Abi).encodeFunctionData(methodName, [params]);
+    const data = new Interface(erc1056Abi).encodeFunctionData(method, params);
     try {
       const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
       const receipt = await tx.wait();
