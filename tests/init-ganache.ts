@@ -5,7 +5,7 @@ import {
   utils,
   BigNumber,
 } from 'ethers';
-import ethrReg from '../packages/did-ethr-resolver/src/constants/EthereumDIDRegistry.json';
+import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
 
 const { hexlify } = utils;
 

@@ -14,8 +14,7 @@ import {
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { Operator } from '../src';
-import ethrReg from '../src/constants/EthereumDIDRegistry.json';
+import { Operator, ethrReg } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
 
