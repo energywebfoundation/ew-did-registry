@@ -3,7 +3,6 @@ node_modules
 **/*.map
 docs
 build
-!packages/proxyIdentity/build
 dist
 *.d.ts
 !typings/**/*.d.ts
