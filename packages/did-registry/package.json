@@ -40,7 +40,7 @@
     "@ew-did-registry/proxyidentity": "0.5.1"
   },
   "devDependencies": {
-    "ganache-cli": "6.9.1",
+    "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1"
   }
 }

@@ -41,7 +41,7 @@
     "sjcl": "npm:sjcl-complete@1.0.0"
   },
   "devDependencies": {
-    "ganache-cli": "6.9.1",
+    "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1"
   }
 }
