@@ -8,6 +8,7 @@ import { Methods } from '@ew-did-registry/did';
 import { utils, Wallet, providers } from 'ethers';
 import { Operator, ethrReg, VoltaAddress1056 } from '../src';
 import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
+import { expect } from 'chai';
 
 /**
  * This test takes a long time and has external depency on Volta RPC and a funded account.
@@ -45,6 +46,7 @@ describe.skip('[RESOLVER PACKAGE]: DID-OPERATOR VOLTA', function didOperatorTest
   });
 
   it('operator should be able to create did doc', async () => {
-    await operator.create();
+    const isSuccess = await operator.create();
+    expect(isSuccess).to.be.true;
   });
 });
