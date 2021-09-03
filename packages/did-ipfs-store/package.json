@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^15.12.3",
-    "ganache-cli": "6.9.1",
+    "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1"
   }
 }
