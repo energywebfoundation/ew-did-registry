@@ -30,7 +30,7 @@
     "@ew-did-registry/did": "0.5.1",
     "@ew-did-registry/did-resolver-interface": "0.5.1",
     "@ew-did-registry/keys": "0.5.0",
-    "ethers": "5.4.0"
+    "ethers": "^5.4.6"
   },
   "devDependencies": {
     "ganache-cli": "6.9.1",
