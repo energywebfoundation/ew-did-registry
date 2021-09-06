@@ -2,6 +2,7 @@ import { Signer, providers, utils } from 'ethers';
 
 /**
  * A base signer class that encapsulates the ethers Signer.
+ * The purpose of this encapsulation is to allow consumers more flexiblity in ethers version.
  */
 export abstract class EwSigner extends Signer {
   constructor(
