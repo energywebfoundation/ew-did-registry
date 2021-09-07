@@ -1,7 +1,7 @@
 import { providers } from 'ethers';
 import { EwSigner } from './ewSigner';
 
-type Web3ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFunc;
+type EIP1193ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFunc;
 
 /**
  * An encapsulation of an ethers JsonRpcSigner.
@@ -10,7 +10,8 @@ type Web3ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFunc;
 export class EwJsonRpcSigner extends EwSigner {
   /**
    * Allows the creation of EwJsonRpcSigner using an ethers Provider.
-   * This is convenient if a suitable ethers provider is available
+   * This is convenient if a suitable ethers provider is available.
+   * If instead an EIP1993 provider is available, see {@linkcode fromEIP1193}
    * @param provider an ethers JsonPrcProvider or Web3Provider, with an associated signer
    */
   constructor(provider: providers.JsonRpcProvider | providers.Web3Provider) {
@@ -34,10 +35,10 @@ export class EwJsonRpcSigner extends EwSigner {
   *
   * const operator = new Operator(web3IdentityOwner, registrySettings);
   * ```
-  * @param web3Provider an EIP1193 provider (https://docs.ethers.io/v5/api/providers/other/#Web3Provider)
+  * @param eip1993Provider an EIP1193 provider (https://docs.ethers.io/v5/api/providers/other/#Web3Provider)
   */
-  public static fromWeb3Provider(web3Provider: Web3ProviderType): EwJsonRpcSigner {
-    const provider = new providers.Web3Provider(web3Provider);
+  public static fromEIP1193(eip1993Provider: EIP1193ProviderType): EwJsonRpcSigner {
+    const provider = new providers.Web3Provider(eip1993Provider);
     return new EwJsonRpcSigner(provider);
   }
 }
