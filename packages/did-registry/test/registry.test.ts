@@ -1,6 +1,6 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
@@ -29,23 +29,17 @@ describe('[REGISTRY PACKAGE]', function () {
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
-  const user = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
-  );
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
-  );
+  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
 
   const verifierKeys = new Keys();
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
-  const verifier = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings),
-  );
+  const verifier = EwSigner.fromPrivateKey(verifierKeys.privateKey, providerSettings);
 
   let userReg: DIDRegistry;
   let userClaims: IClaimsUser;

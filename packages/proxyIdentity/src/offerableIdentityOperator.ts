@@ -9,7 +9,7 @@ import {
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  Operator, IdentityOwner, hexify, addressOf,
+  Operator, EwSigner, hexify, addressOf,
 } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
@@ -27,7 +27,7 @@ export class OfferableIdenitytOperator extends Operator {
    * @param identityAddr - Address of controlled offerable identity
    */
   constructor(
-    owner: IdentityOwner,
+    owner: EwSigner,
     settings: RegistrySettings,
     identityAddr: string,
   ) {

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
-import { Operator, IdentityOwner, EwPrivateKeySigner } from '@ew-did-registry/did-ethr-resolver';
+import { Operator, EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
@@ -27,14 +27,13 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
   before(async () => {
     const registry = await deployRegistry([userAddress]);
     const store = new DidStore(await spawnIpfsDaemon());
-    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-    const owner = IdentityOwner.fromPrivateKeySigner(signer);
+    const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     const operator = new Operator(
-      owner,
+      signer,
       { address: registry },
     );
     const userDoc = new DIDDocumentFull(userDid, operator);
-    claims = new Claims(owner, userDoc, store);
+    claims = new Claims(signer, userDoc, store);
 
     await userDoc.create();
   });

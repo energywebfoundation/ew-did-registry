@@ -25,7 +25,7 @@ import {
 import {
   encodedPubKeyName, hexify, addressOf, getProvider,
 } from '../utils';
-import { IdentityOwner } from './identityOwner';
+import { EwSigner } from './ewSigner';
 
 const { PublicKey, ServicePoint } = DIDAttribute;
 const { formatBytes32String } = utils;
@@ -42,7 +42,7 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
-  private _owner: IdentityOwner;
+  private _owner: EwSigner;
 
   private readonly _keys = {
     privateKey: '',
@@ -56,7 +56,7 @@ export class Operator extends Resolver implements IOperator {
   * @param settings - Settings to connect to Ethr registry
   */
   constructor(
-    owner: IdentityOwner,
+    owner: EwSigner,
     settings: RegistrySettings,
   ) {
     super(getProvider() as providers.Provider, settings);
@@ -124,9 +124,7 @@ export class Operator extends Resolver implements IOperator {
   *   uriOrInfo: 'https://volta-rpc.energyweb.org',
   * }
   * const ownerKeys = new Keys();
-  * const owner = IdentityOwner.fromPrivateKeySigner(
-  *   new EwPrivateKeySigner(ownerKeys.privateKey, providerSettings),
-  * )
+  * const owner = EwSigner.fromPrivateKey(ownerKeys.privateKey, providerSettings);
   * const operator = new Operator(
   *     owner,
   *     resolverSettings,
@@ -255,9 +253,7 @@ export class Operator extends Resolver implements IOperator {
   *   uriOrInfo: 'https://volta-rpc.energyweb.org',
   * }
   * const ownerKeys = new Keys();
-  * const owner = IdentityOwner.fromPrivateKeySigner(
-  *   new EwPrivateKeySigner(ownerKeys.privateKey, providerSettings),
-  * );
+  * const owner = EwSigner.fromPrivateKey(ownerKeys.privateKey, providerSettings);
   * const operator = new Operator(
   *   owner,
   *   resolverSettings,

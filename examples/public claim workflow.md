@@ -31,9 +31,7 @@ provides reference implementation based on ERC-1056
 
 ```typescript
   const userKeys = new Keys();
-  const user = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings)
-  );
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
   const userOperator = new Operator(user, registrySettings);
 ```
 
@@ -63,9 +61,7 @@ stored and verified
   const issuerKeys = new Keys(); 
   const issuerAddress = issuerKeys.getAddress(); 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ;
-  const issuer = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings);
-  );
+  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
   const issuerOperator = new Operator(issuer, resolverSettings); 
   const issuerReg = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, didStore, providerSettings); 
   const issuerClaims = issuerReg.claims.createClaimsIssuer(); 
@@ -76,9 +72,7 @@ Same flow for verifier
   const verifierKeys = new Keys(); 
   const verifierAddress = verifierKeys.getAddress(); 
   const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}`;
-  const verifier = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings);
-  );
+  const verifier = EwSigner.fromPrivateKey(verifierKeys.privateKey, providerSettings);
   const verifierOperator = new Operator(verifier, resolverSettings); 
   const verifierReg = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, didStore, providerSettings); 
   const verifierClaims = verifierReg.claims.createClaimsVerifier();

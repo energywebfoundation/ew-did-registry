@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import { EwPrivateKeySigner, IdentityOwner, Operator } from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
@@ -29,16 +29,12 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
-  const user = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
-  );
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
-  );
+  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
 
   let userDoc: IDIDDocumentFull;
   let issuerDoc: IDIDDocumentFull;

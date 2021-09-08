@@ -184,10 +184,8 @@ const providerSettings = {
   uriOrInfo: 'https://volta-rpc.energyweb.org',
 };
 
-// instantiate the operator with the identityOwner and configured Resolver settings
-const owner = IdentityOwner.fromPrivateKeySigner(
-  new EwPrivateKeySigner(keys.privateKey, providerSettings),
-);
+// instantiate the operator with the signer and configured Resolver settings
+const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 const operator = new Operator(owner, registrySettings);
 
 //create the DIDDocumentFull instance
@@ -390,9 +388,8 @@ User is the claims subject
     type: ProviderTypes.HTTP,
     uriOrInfo: 'https://volta-rpc.energyweb.org/',
   }
-  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer)
-  const userOperator = new OperuserOator(identityOwner, resolverSettings);
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  const userOperator = new OperuserOator(signer, resolverSettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its etherum address 
@@ -479,9 +476,9 @@ An ```IDIDDocumentFull``` interface is used to update a document
     type: ProviderTypes.HTTP,
     uriOrInfo: 'https://volta-rpc.energyweb.org',
   };
-  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  const identityOwner = IdentitOwner.fromPrivateKeySigner(signer);
-  const DIDOperator = new Operator(identityOwner, registrySettings);
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  const signer = IdentitOwner.fromPrivateKeySigner(signer);
+  const DIDOperator = new Operator(signer, registrySettings);
 
   const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(DIDOperator);
   expect(userFullDoc).instanceOf(DIDDocumentFull);
@@ -519,9 +516,8 @@ User is the claims subject
     type: ProviderTypes.HTTP,
     uriOrInfo: 'https://volta-rpc.energyweb.org',
   };
-  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
-  const userOperator = new Operator(identityOwner, registrySettings);
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  const userOperator = new Operator(signer, registrySettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
 the document stores the user's public key associated with its Etherum address. 
@@ -614,9 +610,9 @@ An ```IDIDDocumentFull``` interface is used to update a document
     type: ProviderTypes.HTTP,
     uriOrInfo: 'https://volta-rpc.energyweb.org',
   };
-  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  const identityOwner = IdentitOwner.fromPrivateKeySigner(signer);
-  const DIDOperator = new Operator(identityOwner, registrySettings);
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  const signer = IdentitOwner.fromPrivateKeySigner(signer);
+  const DIDOperator = new Operator(signer, registrySettings);
 
   // Use DIDOperator to enable creation and update of the document
   const userFullDoc: IDIDDocumentFull = user.documentFactory.createFull(DIDOperator);

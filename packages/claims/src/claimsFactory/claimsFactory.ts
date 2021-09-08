@@ -1,6 +1,6 @@
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { EwPrivateKeySigner, IdentityOwner } from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { IKeys } from '@ew-did-registry/keys';
 import { ProviderSettings } from '@ew-did-registry/did-resolver-interface';
 import {
@@ -15,7 +15,7 @@ import { ClaimsVerifier } from '../claimsVerifier';
  * @class
  */
 export class ClaimsFactory implements IClaimsFactory {
-  private owner: IdentityOwner;
+  private owner: EwSigner;
 
   // eslint-disable-next-line no-useless-constructor
   constructor(
@@ -24,9 +24,7 @@ export class ClaimsFactory implements IClaimsFactory {
     private store: IDidStore,
     private providerSettings: ProviderSettings,
   ) {
-    this.owner = IdentityOwner.fromPrivateKeySigner(
-      new EwPrivateKeySigner(keys.privateKey, providerSettings),
-    );
+    this.owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   }
 
   /**

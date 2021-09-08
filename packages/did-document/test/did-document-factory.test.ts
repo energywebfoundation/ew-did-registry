@@ -7,8 +7,7 @@ import {
   ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  EwPrivateKeySigner,
-  IdentityOwner,
+  EwSigner,
   Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DIDDocumentFactory } from '../src/factory';
@@ -22,9 +21,7 @@ const providerSettings : ProviderSettings = {
 
 describe('[DID DOCUMENT FACTORY]', async () => {
   const keys = new Keys();
-  const owner = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(keys.privateKey, providerSettings),
-  );
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   const address = await owner.getAddress();
   const did = `did:ewc:${address}`;
   let operator: IOperator;
