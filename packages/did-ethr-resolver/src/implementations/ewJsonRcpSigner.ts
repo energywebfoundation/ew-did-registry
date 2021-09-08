@@ -11,7 +11,7 @@ export class EwJsonRpcSigner extends EwSigner {
   /**
    * A private constructor as this class uses factory method for instantiation API.
    */
-  private constructor(provider: providers.JsonRpcProvider | providers.Web3Provider) {
+  private constructor(provider: providers.JsonRpcProvider) {
     const signer = provider.getSigner();
     super(signer);
   }
@@ -22,8 +22,7 @@ export class EwJsonRpcSigner extends EwSigner {
    * If instead an EIP1993 provider is available, see {@linkcode fromEIP1193}
    * @param provider an ethers JsonPrcProvider or Web3Provider, with an associated signer
    */
-  // eslint-disable-next-line max-len
-  public static fromEthersProvider(provider: providers.JsonRpcProvider | providers.Web3Provider): EwJsonRpcSigner {
+  public static fromEthersProvider(provider: providers.JsonRpcProvider): EwJsonRpcSigner {
     return new EwJsonRpcSigner(provider);
   }
 
