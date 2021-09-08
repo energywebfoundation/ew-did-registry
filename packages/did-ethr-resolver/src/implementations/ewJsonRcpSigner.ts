@@ -9,14 +9,22 @@ type EIP1193ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFu
  */
 export class EwJsonRpcSigner extends EwSigner {
   /**
-   * Allows the creation of EwJsonRpcSigner using an ethers Provider.
+   * A private constructor as this class uses factory method for instantiation API.
+   */
+  private constructor(provider: providers.JsonRpcProvider | providers.Web3Provider) {
+    const signer = provider.getSigner();
+    super(signer);
+  }
+
+  /**
+   * Allows the creation of EwJsonRpcSigner using an ethers library Provider.
    * This is convenient if a suitable ethers provider is available.
    * If instead an EIP1993 provider is available, see {@linkcode fromEIP1193}
    * @param provider an ethers JsonPrcProvider or Web3Provider, with an associated signer
    */
-  constructor(provider: providers.JsonRpcProvider | providers.Web3Provider) {
-    const signer = provider.getSigner();
-    super(signer);
+  // eslint-disable-next-line max-len
+  public static fromEthersProvider(provider: providers.JsonRpcProvider | providers.Web3Provider): EwJsonRpcSigner {
+    return new EwJsonRpcSigner(provider);
   }
 
   /**
@@ -30,7 +38,7 @@ export class EwJsonRpcSigner extends EwSigner {
   * import detectMetamask from "@metamask/detect-provider";
   *
   * const web3Provider = await detectMetamask();
-  * const web3Signer = EwJsonRpcSigner.fromWeb3Provider(web3Provider);
+  * const web3Signer = EwJsonRpcSigner.fromEIP1193(web3Provider);
   * const web3IdentityOwner = IdentityOwner.fromJsonRpcSigner(web3Signer, publicKey);
   *
   * const operator = new Operator(web3IdentityOwner, registrySettings);
