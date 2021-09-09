@@ -3,8 +3,7 @@ import chai, { expect, should } from 'chai';
 import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
 import {
-  EwPrivateKeySigner,
-  IdentityOwner,
+  EwSigner,
   Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
@@ -40,9 +39,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
   };
-  const owner = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(keys.privateKey, providerSettings),
-  );
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   const keys1 = new Keys();
   let fullDoc: IDIDDocumentFull;
   let operator: IOperator;
@@ -194,9 +191,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   });
 
   it('document must not be updated by non-owning identity', async () => {
-    const nonOwner = IdentityOwner.fromPrivateKeySigner(
-      new EwPrivateKeySigner(keys1.privateKey, providerSettings),
-    );
+    const nonOwner = EwSigner.fromPrivateKey(keys1.privateKey, providerSettings);
     const nonOwnerOperator = new Operator(
       nonOwner,
       { address: registry },

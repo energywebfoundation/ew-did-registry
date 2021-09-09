@@ -10,8 +10,7 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { Keys } from '@ew-did-registry/keys';
 import {
-  EwPrivateKeySigner,
-  IdentityOwner,
+  EwSigner,
   Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import { deployRegistry } from '../../../tests/init-ganache';
@@ -23,9 +22,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
   };
-  const owner = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(keys.privateKey, providerSettings),
-  );
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   const did = `did:${Methods.Erc1056}:${keys.getAddress()}`;
   let operator: Operator;
   let docLite: IDIDDocumentLite;

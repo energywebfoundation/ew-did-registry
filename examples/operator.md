@@ -23,9 +23,8 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-    const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
-    const operator = new Operator(identityOwner, registrySettings);
+    const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+    const operator = new Operator(signer, registrySettings);
     const didDocument = await operator.read(did);
 ```
 
@@ -33,9 +32,8 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-    const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
-    const operator = new Operator(identityOwner, registrySettings);
+    const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+    const operator = new Operator(signer, registrySettings);
     const didDocument = await operator.create();
 ```
 
@@ -43,9 +41,8 @@ import {
 
 ``` typescript
     const keys = new Keys();
-    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-    const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
-    const operator = new Operator(identityOwner, registrySettings);
+    const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+    const operator = new Operator(signer, registrySettings);
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
       algo: Algorithms.ED25519,

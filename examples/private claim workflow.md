@@ -30,9 +30,8 @@ own implementation of the interface depending on the DID method. The library
 provides reference implementation based on ERC-1056
 
 ```typescript
-  const signer = new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  const identityOwner = IdentityOwner.fromPrivateKeySigner(signer);
-  const userOperator = new Operator(identityOwner, registrySettings);
+  const signer = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  const userOperator = new Operator(signer, registrySettings);
 ```
 
 ` DIDRegistry ` - main class for working with claims and DID documents
@@ -61,9 +60,8 @@ stored and verified
   const issuerKeys = new Keys(); 
   const issuerAddress = issuerKeys.getAddress(); 
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}` ;
-  const signer = new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings);
-  const issuer = IdentityOwner.fromPrivateKeySigner(signer);
-  const issuerOperator = new Operator(issuer, registrySettings); 
+  const signer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
+  const issuerOperator = new Operator(signer, registrySettings); 
   const issuerReg = new DIDRegistry(issuerKeys, issuerDid, issuerOperator, didStore, providerSettings); 
   const issuerClaims = issuerReg.claims.createClaimsIssuer(); 
 ``` 
@@ -74,9 +72,8 @@ Same flow for verifier
   const verifierKeys = new Keys(); 
   const verifierAddress = verifierKeys.getAddress(); 
   const verifierDid = `did:${Methods.EnergyWeb}:${verifierAddress}`;
-  const verifSigner = new EwPrivateKeySigner(verifierKeys.privateKey, providerSettings);
-  const verifier = IdentityOwner.fromPrivateKeySigner(verifSigner);
-  const verifierOperator = new Operator(verifier, registrySettings); 
+  const verifSigner = EwSigner.fromPrivateKey(verifierKeys.privateKey, providerSettings);
+  const verifierOperator = new Operator(verifSigner, registrySettings); 
   const verifierReg = new DIDRegistry(verifierKeys, verifierDid, verifierOperator, didStore, providerSettings); 
   const verifierClaims = verifierReg.claims.createClaimsVerifier();
 

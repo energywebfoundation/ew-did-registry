@@ -15,7 +15,7 @@ import { Methods } from '@ew-did-registry/did';
 import { Operator } from '../src';
 
 import { deployRegistry } from '../../../tests/init-ganache';
-import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
+import { EwSigner } from '../src/implementations';
 
 const keys = new Keys({
   privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
@@ -26,9 +26,7 @@ const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
 
-const owner = IdentityOwner.fromPrivateKeySigner(
-  new EwPrivateKeySigner(keys.privateKey, providerSettings),
-);
+const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
 describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);

@@ -13,7 +13,7 @@ import {
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  EwPrivateKeySigner, IdentityOwner,
+  EwSigner,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
@@ -34,7 +34,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let identityFactory: ContractFactory;
   let identity: Contract;
   let manager: Contract;
-  let owner: IdentityOwner;
+  let owner: EwSigner;
   let ownerAddr: string;
   let provider: providers.JsonRpcProvider;
   let erc1056: Contract;
@@ -47,8 +47,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
       type: ProviderTypes.HTTP,
     };
     const keys = new Keys();
-    const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-    owner = IdentityOwner.fromPrivateKeySigner(signer);
+    owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     ownerAddr = await owner.getAddress();
 
     const txReceipt = await manager.createIdentity(ownerAddr);

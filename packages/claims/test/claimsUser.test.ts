@@ -3,7 +3,7 @@ import chai from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, EwPrivateKeySigner, IdentityOwner,
+  Operator, EwSigner,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -27,16 +27,12 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   const userKeys = new Keys();
   const userAddress = userKeys.getAddress();
   const userDdid = `did:${Methods.Erc1056}:${userAddress}`;
-  const user = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings),
-  );
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(issuerKeys.privateKey, providerSettings),
-  );
+  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
 
   let userClaims: IClaimsUser;
 

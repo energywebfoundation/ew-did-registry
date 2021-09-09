@@ -18,9 +18,8 @@
     type: ProviderTypes.HTTP,
     uriOrInfo: 'http://volta-rpc.energyweb.org',
   };
-  const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-  const owner = IdentityOwner.fromPrivateKeySigner(signer);
-  const operator = new Operator(owner, registrySettings);
+  const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+  const operator = new Operator(signer, registrySettings);
 ```
 DIDDocumentFull provide full CRUD functionality
 ```typescript

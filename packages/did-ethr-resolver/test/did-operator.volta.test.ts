@@ -7,7 +7,7 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { utils, Wallet, providers } from 'ethers';
 import { Operator, ethrReg, VoltaAddress1056 } from '../src';
-import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
+import { EwSigner } from '../src/implementations';
 import { expect } from 'chai';
 
 /**
@@ -26,9 +26,7 @@ describe.skip('[RESOLVER PACKAGE]: DID-OPERATOR VOLTA', function didOperatorTest
     type: ProviderTypes.HTTP,
     uriOrInfo: rpcUrl,
   };
-  const owner = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(keys.privateKey, providerSettings),
-  );
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   const operator = new Operator(
     owner,
     { method: Methods.Erc1056, abi: ethrReg.abi, address: VoltaAddress1056 },

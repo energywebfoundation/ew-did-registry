@@ -16,7 +16,7 @@ import {
 import { Methods } from '@ew-did-registry/did';
 import { Operator, ethrReg } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
-import { EwPrivateKeySigner, IdentityOwner } from '../src/implementations';
+import { EwSigner } from '../src/implementations';
 
 const { fail } = assert;
 
@@ -26,16 +26,12 @@ const keys = new Keys({
 const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
-const owner = IdentityOwner.fromPrivateKeySigner(
-  new EwPrivateKeySigner(keys.privateKey, providerSettings),
-);
+const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 const newOwnerKeys = new Keys({
   privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
   publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
 });
-const newOwner = IdentityOwner.fromPrivateKeySigner(
-  new EwPrivateKeySigner(newOwnerKeys.privateKey, providerSettings),
-);
+const newOwner = EwSigner.fromPrivateKey(newOwnerKeys.privateKey, providerSettings);
 
 const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;

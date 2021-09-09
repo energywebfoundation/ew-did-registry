@@ -2,7 +2,7 @@ import { IDIDDocumentFull } from '@ew-did-registry/did-document';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import { DelegateTypes, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
-import { IdentityOwner } from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { IClaims, IPublicClaim, IPrivateClaim } from '../models';
 import { hashes } from '../utils';
 
@@ -28,7 +28,7 @@ export class Claims implements IClaims {
    * @param store
    */
   constructor(
-    owner: IdentityOwner,
+    owner: EwSigner,
     protected document: IDIDDocumentFull,
     protected store: IDidStore,
   ) {

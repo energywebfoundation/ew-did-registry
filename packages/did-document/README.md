@@ -16,11 +16,10 @@ const keys = new Keys({
   privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
   publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
 });
-const signer = new EwPrivateKeySigner(keys.privateKey, providerSettings);
-const owner = IdentityOwner.fromPrivateKeySigner(signer)
+const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
 ///instantiate the operator with configured Resolver Settings
-const operator = new Operator(owner, resolverSettings);
+const operator = new Operator(signer, resolverSettings);
 
 //create the DIDDocumentFull instance
 const document = new DIDDocumentFull(did, operator);

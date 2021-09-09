@@ -28,9 +28,7 @@ User is the claims subject
   });
   const userAddress = '0xE7804Cf7c346E76D3BA88da639F3c15c2b2AE4a5';
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
-  const user = IdentityOwner.fromPrivateKeySigner(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  );
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
 ```  
 `Operator` - is an interface responsible for DID document updating
 ```typescript
@@ -149,9 +147,7 @@ User is the claims subject
 ```
 ```Operator``` - an interface responsible for DID document updating
 ``` typescript
-  const user = IdentityOwner.fromPrivateKeySettings(
-    new EwPrivateKeySigner(userKeys.privateKey, providerSettings);
-  );
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
   const userOperator = new Operator(user, resolverSettings);
 ```
 Before using DID document it needs to be initialized. During initialization, 
