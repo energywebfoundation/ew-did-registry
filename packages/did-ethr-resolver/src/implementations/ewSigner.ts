@@ -12,6 +12,8 @@ type EIP1193ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFu
  * The purpose of the ethers encapsulation is to allow consumers more flexiblity in ethers version.
  */
 export class EwSigner extends Signer {
+  public readonly provider: providers.Provider
+
   /**
    * A private constructor as this class uses factory method for instantiation API.
    */
@@ -21,6 +23,10 @@ export class EwSigner extends Signer {
     public readonly privateKey?: string,
   ) {
     super();
+    if (!signer.provider) {
+      throw new Error('provider must be defined');
+    }
+    this.provider = signer.provider;
   }
 
   getAddress(): Promise<string> {
@@ -43,6 +49,10 @@ export class EwSigner extends Signer {
 
   connect(provider: providers.Provider): Signer {
     return this.signer.connect(provider);
+  }
+
+  getChainId(): Promise<number> {
+    return this.signer.getChainId();
   }
 
   /**

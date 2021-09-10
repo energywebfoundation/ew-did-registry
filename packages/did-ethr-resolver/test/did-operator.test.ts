@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Wallet } from 'ethers';
+import { providers, Wallet } from 'ethers';
 import {
   Algorithms,
   DIDAttribute,
@@ -12,6 +12,7 @@ import {
   PubKeyType,
   ProviderTypes,
   ProviderSettings,
+  RegistrySettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { Operator, ethrReg } from '../src';
@@ -38,10 +39,30 @@ const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
+let registrySettings: RegistrySettings;
 
 const testSuite = (): void => {
   it('operator public key should be equal to public key of signer', () => {
     expect(operator.getPublicKey()).equal(keys.publicKey);
+  });
+
+  it('operator should use provider from signer', async () => {
+    const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+    // Add an extra listener to this signer to "mark" it
+    signer.provider.on('block', () => { 'pass Codacity check'; });
+    const markedOperator = new Operator(signer, registrySettings);
+
+    // Provider is a private property and so cast to <any> in order to access.
+    // This makes it more difficult to refactor (e.g. as cannot rename).
+    // This is worth it to have a test IMO.
+    // Besides, if renaming, test will just break and can fix manually.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const markedOperatorProvider = (markedOperator as any)._provider as providers.Provider;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const operatorProvider = (operator as any)._provider as providers.Provider;
+
+    // As we added an extra listener, markedOperator's provider should have 1 more than usual
+    expect(markedOperatorProvider.listenerCount('block')).to.equal(operatorProvider.listenerCount('block') + 1);
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -347,9 +368,10 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
+    registrySettings = { method: Methods.Erc1056, abi: ethrReg.abi, address: registry };
     operator = new Operator(
       owner,
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+      registrySettings,
     );
     await operator.create();
   });
