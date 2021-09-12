@@ -51,10 +51,6 @@ export class EwSigner extends Signer {
     return this.signer.connect(provider);
   }
 
-  getChainId(): Promise<number> {
-    return this.signer.getChainId();
-  }
-
   /**
    * A factory method to create an EwSigner from a private key.
     * ```typescript
