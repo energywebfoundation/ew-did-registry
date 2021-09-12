@@ -24,7 +24,7 @@ export class EwSigner extends Signer {
   ) {
     super();
     if (!signer.provider) {
-      throw new Error('provider must be defined');
+      throw new Error('Signer is not connected to chain. Provider must be defined');
     }
     this.provider = signer.provider;
   }
