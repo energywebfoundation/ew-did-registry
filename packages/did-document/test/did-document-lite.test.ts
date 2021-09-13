@@ -1,21 +1,29 @@
 import { expect } from 'chai';
 import {
-  DIDAttribute, PubKeyType, Algorithms, Encoding, IOperator,
+  DIDAttribute,
+  PubKeyType,
+  Algorithms,
+  Encoding,
+  IOperator,
+  ProviderTypes,
+  ProviderSettings,
 } from '@fl-did-registry/did-resolver-interface';
 import { Methods } from '@fl-did-registry/did';
 import { Keys } from '@fl-did-registry/keys';
 import {
-  getProvider, signerFromKeys, Operator,
-  walletPubKey,
+  EwSigner,
+  Operator,
 } from '@fl-did-registry/did-nft-resolver';
-
-import { withKey, withProvider } from '@fl-did-registry/did-nft-resolver/src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
   this.timeout(0);
   const keys = new Keys();
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   const did = `did:${Methods.Erc1056}:${keys.getAddress()}`;
   let operator: IOperator;
   let docLite: IDIDDocumentLite;
@@ -23,7 +31,7 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
   before(async () => {
     const registry = await deployRegistry([keys.getAddress()]);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      owner,
       { address: registry },
     );
     docLite = new DIDDocumentLite(did, operator);

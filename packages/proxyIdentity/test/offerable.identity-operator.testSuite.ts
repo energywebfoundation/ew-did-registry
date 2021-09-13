@@ -8,12 +8,11 @@ import {
   DIDAttribute,
   Encoding,
   PubKeyType,
-  IdentityOwner,
   IOperator,
+  ProviderTypes,
+  ProviderSettings,
 } from '@fl-did-registry/did-resolver-interface';
-import {
-  signerFromKeys, walletPubKey, withProvider, withKey,
-} from '@fl-did-registry/did-nft-resolver';
+import { EwSigner } from '@fl-did-registry/did-nft-resolver';
 import { Methods } from '@fl-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
@@ -33,7 +32,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let identityFactory: ContractFactory;
   let identity: Contract;
   let manager: Contract;
-  let owner: IdentityOwner;
+  let owner: EwSigner;
   let ownerAddr: string;
   let provider: providers.JsonRpcProvider;
   let erc1056: Contract;
@@ -42,8 +41,11 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     ({
       identityFactory, manager, provider, erc1056,
     } = this);
-
-    owner = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+    const providerSettings: ProviderSettings = {
+      type: ProviderTypes.HTTP,
+    };
+    const keys = new Keys();
+    owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     ownerAddr = await owner.getAddress();
 
     const txReceipt = await manager.createIdentity(ownerAddr);

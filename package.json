@@ -13,7 +13,7 @@
     "build:docs": "typedoc",
     "lint": "lerna run lint --parallel --stream -- -- --ignore-path=../../.eslintignore",
     "fix": "lerna run fix --parallel --stream",
-    "publish:canary": "lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.$TRAVIS_BUILD_NUMBER --exact --yes --no-verify-access --no-git-tag-version",
+    "publish:canary": "lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.$RUN_NUMBER --exact --yes --no-verify-access --no-git-tag-version",
     "publish:release": "lerna version --conventional-commits --exact --yes && lerna publish from-git --yes --no-verify-access",
     "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/build packages/*/package-lock.json"
   },
@@ -61,8 +61,7 @@
     "eslint-import-resolver-typescript": "2.0.0",
     "eslint-plugin-chai-friendly": "0.5.0",
     "eslint-plugin-import": "^2.22.0",
-    "ethers": "4.0.45",
-    "ganache-cli": "6.9.1",
+    "ganache-cli": "^6.12.2",
     "gulp": "4.0.2",
     "gulp-babel": "8.0.0",
     "gulp-rename": "1.4.0",
@@ -73,7 +72,7 @@
     "gulp-uglify": "3.0.2",
     "husky": "3.1.0",
     "i": "0.3.6",
-    "ipfs": "0.42.0",
+    "ipfs": "^0.58.3",
     "ipfsd-ctl": "3.0.0",
     "lerna": "3.20.2",
     "mocha": "7.1.0",
@@ -94,8 +93,5 @@
     "hooks": {
       "pre-commit": "npm run fix && npm run compile"
     }
-  },
-  "dependencies": {
-    "express": "^4.17.1"
   }
 }

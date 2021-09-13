@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, providers,
+  Contract, ethers, Event, utils, BigNumber, providers,
 } from 'ethers';
 import {
   DIDAttribute,
@@ -15,7 +15,6 @@ import {
   VerificationMethodType,
   KeyTags,
   RegistrySettings,
-  IdentityOwner,
   IUpdateAttributeData,
   IPublicClaim,
   ServiceEndpointType
@@ -26,10 +25,12 @@ import { JWT } from '@fl-did-registry/jwt';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
-import { encodedPubKeyName, hexify, addressOf, addressAndIdOf, hashes } from '../utils';
+import { encodedPubKeyName, hexify, addressOf, addressAndIdOf, hashes, getProvider
+} from '../utils';
+import { EwSigner } from './ewSigner';
 
 const { VerificationMethod, ServicePoint } = DIDAttribute;
-const { BigNumber, formatBytes32String } = utils;
+const { formatBytes32String } = utils;
 
 /**
  * To support/extend this Class, one just has to work with this file.
@@ -43,6 +44,8 @@ export class Operator extends Resolver implements IOperator {
    */
   private _didRegistry: Contract;
 
+  private _owner: EwSigner;
+
   private readonly _keys = {
     privateKey: '',
     publicKey: '',
@@ -50,19 +53,18 @@ export class Operator extends Resolver implements IOperator {
 
   private address?: string;
 
-  protected readonly _owner: IdentityOwner;
-
   /**
- * @param { IdentityOwner } owner - entity which controls document updatable by this operator
- */
-  constructor(owner: IdentityOwner, settings: RegistrySettings) {
-    super(owner.provider as providers.Provider, settings);
+  * @param owner - Entity which controls document
+  * @param settings - Settings to connect to Ethr registry
+  */
+  constructor(owner: EwSigner, settings: RegistrySettings) {
+    super(owner.provider, settings);
     const {
       address, abi,
     } = this.settings;
     this._owner = owner;
-    this._didRegistry = new ethers.Contract(address, abi, this._owner);
     this._keys.publicKey = owner.publicKey;
+    this._didRegistry = new ethers.Contract(address, abi, owner);
   }
 
   protected async getOwnerDID(): Promise<string> {
@@ -106,7 +108,10 @@ export class Operator extends Resolver implements IOperator {
   * Operator, DIDAttribute, Algorithms, PubKeyType, Encoding
   *  } from '@fl-did-registry/did-resolver';
   * import { Keys } from '@fl-did-registry/keys';
-  *
+  * const providerSettings = {
+  *   type: ProviderTypes.HTTP,
+  *   uriOrInfo: 'https://volta-rpc.energyweb.org',
+  * }
   * const ownerKeys = new Keys();
   * const operator = new Operator(ownerKeys);
   * const pKey = DIDAttribute.PublicKey;
@@ -133,7 +138,7 @@ export class Operator extends Resolver implements IOperator {
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity: number = Number.MAX_SAFE_INTEGER,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const registry = this._didRegistry;
     const method = didAttribute === VerificationMethod || didAttribute === ServicePoint
       ? registry.setAttribute
@@ -201,12 +206,20 @@ export class Operator extends Resolver implements IOperator {
   *import { Operator } from '@fl-did-registry/did-resolver';
   *import { Keys } from '@fl-did-registry/keys';
   *
+  * const providerSettings = {
+  *   type: ProviderTypes.HTTP,
+  *   uriOrInfo: 'https://volta-rpc.energyweb.org',
+  * }
   * const ownerKeys = new Keys();
-  * const operator = new Operator(ownerKeys);
+  * const owner = EwSigner.fromPrivateKey(ownerKeys.privateKey, providerSettings);
+  * const operator = new Operator(
+  *   owner,
+  *   resolverSettings,
+  *  );
   * const updated = await operator.deactivate(did);
   * ```
   *
-  * @param { string } did
+  * @param did
   * @returns Promise<boolean>
   */
   async deactivate(did: string): Promise<void> {
@@ -319,7 +332,7 @@ export class Operator extends Resolver implements IOperator {
       nonce?: number;
       gasLimit?: number;
     },
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const [ nft_address, nft_id ] = addressAndIdOf(did);
     const name = formatBytes32String(
       this._composeAttributeName(didAttribute, updateData),
@@ -351,7 +364,7 @@ export class Operator extends Resolver implements IOperator {
           || (didAttribute === DIDAttribute.ServicePoint && e.event === 'DIDAttributeChanged')
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
-      return new BigNumber(event.blockNumber as number);
+      return BigNumber.from(event.blockNumber as number);
     } catch (e) {
       throw new Error(e.message);
     }

@@ -7,7 +7,7 @@ import {
   DocumentSelector,
   IDIDLogData,
 } from '@fl-did-registry/did-resolver-interface';
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 
 /**
  * Interface describes the lite version of DID Document with only read functionality
@@ -69,11 +69,11 @@ export interface IDIDDocumentLite {
    */
   ownerEthAddress(did?: string): Promise<string | undefined>;
 
-  lastBlock(did?: string): Promise<utils.BigNumber>;
+  lastBlock(did?: string): Promise<BigNumber>;
 
   readFromBlock(
     did: string,
-    from: utils.BigNumber,
+    from: BigNumber,
   ): Promise<IDIDLogData>;
 
   fromLogs(logs: IDIDLogData[], did?: string): Promise<IDIDDocument>;

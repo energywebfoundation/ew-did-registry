@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import {
   IDIDDocument,
   DIDAttribute,
@@ -69,10 +69,10 @@ export interface IResolver {
    * @returns - part of document along with last read block
    */
   readFromBlock(did: string,
-    topBlock: utils.BigNumber,
+    topBlock: BigNumber,
   ): Promise<IDIDLogData>;
 
-  lastBlock(did: string): Promise<utils.BigNumber>;
+  lastBlock(did: string): Promise<BigNumber>;
 }
 
 export interface IOperator extends IResolver {
@@ -98,8 +98,8 @@ export interface IOperator extends IResolver {
     did: string,
     attribute: DIDAttribute,
     value: IUpdateData,
-    validity?: number | utils.BigNumber
-  ): Promise<utils.BigNumber>;
+    validity?: number | BigNumber
+  ): Promise<BigNumber>;
 
   /**
    * Attempts to deactivate the DID Document for a given DID.

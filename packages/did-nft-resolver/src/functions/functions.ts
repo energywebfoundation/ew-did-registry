@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, providers, utils,
+  Contract, ethers, providers, utils, BigNumber,
 } from 'ethers';
 
 import {
@@ -32,7 +32,7 @@ const handleDelegateChange = (
   event: DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
@@ -80,7 +80,7 @@ const handleAttributeChange = (
   event: AttributeChangedEvent,
   did: string,
   document: IDIDLogData,
-  validTo: utils.BigNumber,
+  validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
   let match = did.match(DIDPattern);
@@ -149,7 +149,6 @@ const handleAttributeChange = (
         'hex',
       ).toString());
 
-      console.log(servicePoint);
       servicePoint.id = `${did}#${type}_${servicePoint.hash}`;
       servicePoint.validity = validTo;
       delete servicePoint.hash;
@@ -206,7 +205,6 @@ const updateDocument = (
   return document;
 };
 
-
 /**
  * Given a certain block from the chain, this function returns the events
  * associated with the did within the block
@@ -219,7 +217,7 @@ const updateDocument = (
  * @param address
  */
 const getEventsFromBlock = (
-  block: ethers.utils.BigNumber,
+  block: ethers.BigNumber,
   did: string,
   document: IDIDLogData,
   provider: ethers.providers.Provider,
@@ -235,11 +233,16 @@ const getEventsFromBlock = (
     topics: [null, `0x000000000000000000000000${nft_address.slice(2).toLowerCase()}`,
         `0x` + ("0000000000000000000000000000000000000000000000000000000000000000" + nft_id).slice(-64)] as string[],
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
+    const {
+      name, args, signature, topic,
+    } = contractInterface.parseLog(log[0]);
+    const event = {
+      name, values: args, signature, topic,
+    } as unknown as AttributeChangedEvent |
       DelegateChangedEvent;
     updateDocument(event, did, document, block.toNumber());
 
-    resolve(event.values.previousChange);
+     resolve(event.values.previousChange);
   }).catch((error) => {
     reject(error);
   });
@@ -297,7 +300,7 @@ export const fetchDataFromEvents = async (
   if (!document.owner) {
     throw new Error('Invalid NFT');
   }
-  const contractInterface = new ethers.utils.Interface(registrySettings.abi);
+  const contractInterface = new ethers.utils.Interface(JSON.stringify(registrySettings.abi));
   const { address } = registrySettings;
   while (
     nextBlock.toNumber() !== 0
@@ -336,7 +339,7 @@ export const wrapDidDocument = (
   document: IDIDLogData,
   context = 'https://www.w3.org/ns/did/v1',
 ): IDIDDocument => {
-  const now = new utils.BigNumber(Math.floor(new Date().getTime() / 1000));
+  const now = BigNumber.from(Math.floor(new Date().getTime() / 1000));
 
   const verificationMethod: IVerificationMethod[] = [
   ];
@@ -350,7 +353,7 @@ export const wrapDidDocument = (
     type: 'EcdsaSecp256k1RecoveryMethod2020',
     controller: controller_did,
     ethereumAddress: `${did}`,
-    validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
+    validity: BigNumber.from(Number.MAX_SAFE_INTEGER -1),
     block: 0
   };
 

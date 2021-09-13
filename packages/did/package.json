@@ -1,8 +1,9 @@
 {
   "name": "@fl-did-registry/did",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "description": "The interface of a Decentralised Identity",
   "main": "./dist/index.js",
@@ -14,17 +15,24 @@
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
   "keywords": [
-    "Energy",
+    "FlashLabs",
     "EnergyWeb",
-    "EW",
     "DID"
   ],
   "author": {
-    "name": "EnergyWeb",
-    "url": "https://www.energyweb.org/"
+    "name": "FlashLabs",
+    "url": "https://www.flashlabs.io/"
   },
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@fl-did-registry/keys": "^0.5.0"
+    "@fl-did-registry/keys": "^0.5.1"
+  },
+  "homepage": "https://github.com/energywebfoundation/ew-did-registry/#readme",
+  "bugs": {
+    "url": "https://github.com/energywebfoundation/ew-did-registry/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/energywebfoundation/ew-did-registry.git"
   }
 }
