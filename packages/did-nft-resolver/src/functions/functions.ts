@@ -233,11 +233,16 @@ const getEventsFromBlock = (
     topics: [null, `0x000000000000000000000000${nft_address.slice(2).toLowerCase()}`,
         `0x` + ("0000000000000000000000000000000000000000000000000000000000000000" + nft_id).slice(-64)] as string[],
   }).then((log) => {
-    const event = contractInterface.parseLog(log[0]) as AttributeChangedEvent |
+    const {
+      name, args, signature, topic,
+    } = contractInterface.parseLog(log[0]);
+    const event = {
+      name, values: args, signature, topic,
+    } as unknown as AttributeChangedEvent |
       DelegateChangedEvent;
     updateDocument(event, did, document, block.toNumber());
 
-    resolve(event.values.previousChange);
+     resolve(event.values.previousChange);
   }).catch((error) => {
     reject(error);
   });
@@ -348,7 +353,7 @@ export const wrapDidDocument = (
     type: 'EcdsaSecp256k1RecoveryMethod2020',
     controller: controller_did,
     ethereumAddress: `${did}`,
-    validity: new utils.BigNumber(Number.MAX_SAFE_INTEGER),
+    validity: BigNumber.from(Number.MAX_SAFE_INTEGER -1),
     block: 0
   };
 

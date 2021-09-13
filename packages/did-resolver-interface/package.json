@@ -1,6 +1,6 @@
 {
   "name": "@fl-did-registry/did-resolver-interface",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "publishConfig": {
     "access": "public"
   },
@@ -13,19 +13,18 @@
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
   "keywords": [
-    "Energy",
+    "FlashLabs",
     "EnergyWeb",
-    "EW",
     "Resolver",
     "DID Resolver"
   ],
   "author": {
-    "name": "EnergyWeb",
-    "url": "https://www.energyweb.org/"
+    "name": "FlashLabs",
+    "url": "https://www.flashlabs.io/"
   },
   "license": "ISC",
   "dependencies": {
-    "@fl-did-registry/did": "0.5.1",
+    "@fl-did-registry/did": "0.5.3",
     "ethers": "^5.4.6"
   }
 }

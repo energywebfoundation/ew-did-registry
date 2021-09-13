@@ -138,7 +138,7 @@ export class Operator extends Resolver implements IOperator {
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity: number = Number.MAX_SAFE_INTEGER,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const registry = this._didRegistry;
     const method = didAttribute === VerificationMethod || didAttribute === ServicePoint
       ? registry.setAttribute
