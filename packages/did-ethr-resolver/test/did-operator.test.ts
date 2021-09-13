@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { assert, expect } from 'chai';
+import { assert, expect, use } from 'chai';
+import sinonChai from 'sinon-chai';
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
 import {
@@ -12,11 +13,15 @@ import {
   PubKeyType,
   ProviderTypes,
   ProviderSettings,
+  RegistrySettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
+import { createSandbox } from 'sinon';
 import { Operator, ethrReg } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { EwSigner } from '../src/implementations';
+
+use(sinonChai);
 
 const { fail } = assert;
 
@@ -27,6 +32,7 @@ const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
 const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+
 const newOwnerKeys = new Keys({
   privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
   publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
@@ -38,10 +44,24 @@ const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
 let operator: Operator;
 let registry: string;
+let registrySettings: RegistrySettings;
+
+const sandbox = createSandbox();
 
 const testSuite = (): void => {
   it('operator public key should be equal to public key of signer', () => {
     expect(operator.getPublicKey()).equal(keys.publicKey);
+  });
+
+  /**
+   * Spy on a method call from resolver (i.e. identityOwner())
+   * This is to ensure the provider from signer is used.
+   * In other words, checking that resolver using a different provider.
+   */
+  it("operator's resolver should use provider from signer", async () => {
+    sandbox.spy(owner.provider);
+    await operator.identityOwner(`did:ethr:${Wallet.createRandom().address}`);
+    expect(owner.provider.getNetwork).calledOnce;
   });
 
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
@@ -347,11 +367,16 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
+    registrySettings = { method: Methods.Erc1056, abi: ethrReg.abi, address: registry };
     operator = new Operator(
       owner,
-      { method: Methods.Erc1056, abi: ethrReg.abi, address: registry },
+      registrySettings,
     );
     await operator.create();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   testSuite();

@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Contract, ethers, Event, utils, BigNumber, providers,
+  Contract, ethers, Event, utils, BigNumber,
 } from 'ethers';
 import {
   Algorithms,
@@ -23,7 +23,7 @@ import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
 import {
-  encodedPubKeyName, hexify, addressOf, getProvider,
+  encodedPubKeyName, hexify, addressOf,
 } from '../utils';
 import { EwSigner } from './ewSigner';
 
@@ -59,7 +59,7 @@ export class Operator extends Resolver implements IOperator {
     owner: EwSigner,
     settings: RegistrySettings,
   ) {
-    super(getProvider() as providers.Provider, settings);
+    super(owner.provider, settings);
 
     const {
       address, abi,
