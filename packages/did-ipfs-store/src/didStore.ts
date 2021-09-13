@@ -4,6 +4,7 @@ import BufferList from 'bl';
 import { IDidStore } from '@fl-did-registry/did-store-interface';
 
 export class DidStore implements IDidStore {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ipfs: any;
 
   /**
@@ -15,6 +16,7 @@ export class DidStore implements IDidStore {
 
   async save(claim: string): Promise<string> {
     const asyncChunks = await this.ipfs.add(claim);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let cid: any;
     for await (const chunk of asyncChunks) {
       cid = chunk.cid; // return cid from last (and only one) chunk

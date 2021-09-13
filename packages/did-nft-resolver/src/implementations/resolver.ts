@@ -1,5 +1,5 @@
 import {
-  Contract, providers, utils,
+  Contract, providers, utils, BigNumber,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -53,8 +53,8 @@ class Resolver implements IResolver, IClaimsVerifier {
   /**
    * Constructor
    *
-   * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
+   * @param settings - Settings to connect to Ethr registry
+   * @param provider - Ethers provider. Can be obtained from getProvider(providerSettings)
    */
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
@@ -70,11 +70,11 @@ class Resolver implements IResolver, IClaimsVerifier {
    * ```typescript
    * import { Resolver } from '@fl-did-registry/did-resolver';
    *
-   * const resolver = new Resolver(resolverSettings);
+   * const resolver = new Resolver(provider, resolverSettings);
    * const didDocument = await resolver.read(did);
    * ```
    *
-   * @param {string} did - entity identifier, which is associated with DID Document
+   * @param did - entity identifier, which is associated with DID Document
    * @returns {Promise<IDIDDocument>}
    */
   private async _read(
@@ -90,7 +90,7 @@ class Resolver implements IResolver, IClaimsVerifier {
 
     const _document = {
       owner: address,
-      topBlock: new utils.BigNumber(0),
+      topBlock: BigNumber.from(0),
       authentication: {},
       verificationMethod: {},
       service: {},
@@ -105,8 +105,6 @@ class Resolver implements IResolver, IClaimsVerifier {
         this._provider,
         selector,
       );
-      console.log(`_read(): _document=`); console.log(_document);
-
       const document = wrapDidDocument(did, controller_did, _document);
       return document;
     } catch (error) {
@@ -177,7 +175,7 @@ class Resolver implements IResolver, IClaimsVerifier {
 
   async readFromBlock(
     did: string,
-    topBlock: utils.BigNumber,
+    topBlock: BigNumber,
   ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
     const _document = {
@@ -192,7 +190,7 @@ class Resolver implements IResolver, IClaimsVerifier {
     return { ..._document };
   }
 
-  async lastBlock(did: string): Promise<utils.BigNumber> {
+  async lastBlock(did: string): Promise<BigNumber> {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
   }

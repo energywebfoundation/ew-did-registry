@@ -1,8 +1,8 @@
 import { IKeys, Keys } from '@fl-did-registry/keys';
-import { IOperator, KeyTags, Encoding } from '@fl-did-registry/did-resolver-interface';
+import { IOperator, KeyTags, Encoding, ProviderSettings,} from '@fl-did-registry/did-resolver-interface';
 import { IDID, Methods, DID } from '@fl-did-registry/did';
 import { DIDDocumentFactory, IDIDDocumentFull } from '@fl-did-registry/did-document';
-import { JWT } from '@fl-did-registry/jwt';
+import { IJWT, JWT } from '@fl-did-registry/jwt';
 import { IDidStore } from '@fl-did-registry/did-store-interface';
 import { IDIDRegistry } from './interface';
 
@@ -17,7 +17,13 @@ class DIDRegistry implements IDIDRegistry {
   document: IDIDDocumentFull;
 
 
-  constructor(keys: IKeys, did: string, private operator: IOperator, public store: IDidStore) {
+  constructor(
+    keys: IKeys,
+    did: string,
+    private operator: IOperator,
+    public store: IDidStore,
+    providerSettings: ProviderSettings,
+  ) {
     const [, method] = did.split(':');
     this.did.set(did);
 
@@ -30,6 +36,7 @@ class DIDRegistry implements IDIDRegistry {
 
     this.document = new DIDDocumentFactory(did).createFull(operator);
     this.operator = operator;
+    this.providerSettings = _providerSettings;
   }
 
   /**
@@ -40,8 +47,12 @@ class DIDRegistry implements IDIDRegistry {
    * import DIDRegistry from '@fl-did-registry/did-regsitry';
    * import { Method } from '@fl-did-registry/did';
    *
-   * const reg = new DIDRegistry(keys, ethDid, ethResolver);
-   * reg.changeResolver(new Resolver(ewcSettings), Method.EnergyWeb);
+   * const providerSettings = {
+   *  type: ProviderTypes.HTTP,
+   *  uriOrInfo: https://volta-rpc.energyweb.org,
+   * }
+   * const reg = new DIDRegistry(keys, ethDid, ethResolver, didStore, providerSettings);
+   * reg.changeResolver(new Resolver(ewcSettings, providerUrl), Method.EnergyWeb);
    * ```
    * @param { IResolver } resolver
    * @param { Methods } method

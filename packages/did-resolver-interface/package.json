@@ -26,6 +26,6 @@
   "license": "ISC",
   "dependencies": {
     "@fl-did-registry/did": "0.5.1",
-    "ethers": "^4.0.49"
+    "ethers": "^5.4.6"
   }
 }
