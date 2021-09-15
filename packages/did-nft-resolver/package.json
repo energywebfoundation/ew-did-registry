@@ -1,6 +1,6 @@
 {
   "name": "@fl-did-registry/did-nft-resolver",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "publishConfig": {
     "access": "public"
   },
