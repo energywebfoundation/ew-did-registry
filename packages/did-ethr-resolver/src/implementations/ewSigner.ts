@@ -79,7 +79,7 @@ export class EwSigner extends Signer {
    * A factory method to create an EwSigner using an ethers library Signer.
    * This is convenient if a suitable ethers signer is available.
    * If instead an EIP1993 provider is available, see {@linkcode fromEIP1193}
-   * @param signer an ethers JsonPrcProvider or Web3Provider, with an associated signer
+   * @param signer an ethers Signer connected to chain
    * @param publicKey the publicKey of the signer associated with the provider
    */
   public static fromEthersSigner(signer: Signer, publicKey: string): EwSigner {
