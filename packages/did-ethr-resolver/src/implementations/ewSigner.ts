@@ -76,15 +76,14 @@ export class EwSigner extends Signer {
   }
 
   /**
-   * A factory method to create an EwSigner using an ethers library Provider.
-   * This is convenient if a suitable ethers provider is available.
+   * A factory method to create an EwSigner using an ethers library Signer.
+   * This is convenient if a suitable ethers signer is available.
    * If instead an EIP1993 provider is available, see {@linkcode fromEIP1193}
-   * @param provider an ethers JsonPrcProvider or Web3Provider, with an associated signer
+   * @param signer an ethers JsonPrcProvider or Web3Provider, with an associated signer
    * @param publicKey the publicKey of the signer associated with the provider
    */
-  // eslint-disable-next-line max-len
-  public static fromEthersProvider(provider: providers.JsonRpcProvider, publicKey: string): EwSigner {
-    return new EwSigner(provider.getSigner(), publicKey);
+  public static fromEthersSigner(signer: Signer, publicKey: string): EwSigner {
+    return new EwSigner(signer, publicKey);
   }
 
   /**
@@ -104,8 +103,19 @@ export class EwSigner extends Signer {
   * @param eip1993Provider an EIP1193 provider (https://docs.ethers.io/v5/api/providers/other/#Web3Provider)
   * @param publicKey the publicKey of the signer associated with the provider
   */
-  public static fromEIP1193(eip1993Provider: EIP1193ProviderType, publicKey: string): EwSigner {
+  // eslint-disable-next-line max-len
+  public static async fromEIP1193(eip1993Provider: EIP1193ProviderType, publicKey: string): Promise<EwSigner> {
     const provider = new providers.Web3Provider(eip1993Provider);
-    return new EwSigner(provider.getSigner(), publicKey);
+    const signer = provider.getSigner();
+    try {
+      // Call getAddress() to check that signer has address
+      // Signer could be returned by not actually have an address
+      // Best to check now and "fail fast"
+      await signer.getAddress();
+    } catch (err) {
+      err.message = `Error instantiating EwSigner from ethers Provider. Provider must have signer with address. ${err.message}`;
+      throw err;
+    }
+    return new EwSigner(signer, publicKey);
   }
 }
