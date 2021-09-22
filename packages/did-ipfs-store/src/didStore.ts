@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import ipfsClient from 'ipfs-http-client';
+import { create } from 'ipfs-http-client';
 import BufferList from 'bl';
 import { IDidStore } from '@fl-did-registry/did-store-interface';
 
@@ -11,16 +11,11 @@ export class DidStore implements IDidStore {
    * @param uri {string} - IPFS API server uri
    */
   constructor(uri: string | object) {
-    this.ipfs = ipfsClient(uri);
+    this.ipfs = create(uri);
   }
 
   async save(claim: string): Promise<string> {
-    const asyncChunks = await this.ipfs.add(claim);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let cid: any;
-    for await (const chunk of asyncChunks) {
-      cid = chunk.cid; // return cid from last (and only one) chunk
-    }
+    const {cid} = await this.ipfs.add(claim);
     return cid.toString();
   }
 
@@ -29,11 +24,7 @@ export class DidStore implements IDidStore {
    */
   async get(uri: string): Promise<string> {
     let claim = '';
-    for await (const file of this.ipfs.get(`/ipfs/${uri}`)) {
-      const content = new BufferList();
-      for await (const chunk of file.content) {
-        content.append(chunk);
-      }
+    for await (const content of this.ipfs.cat(`/ipfs/${uri}`)) {
       claim += content.toString();
     }
     return claim;
