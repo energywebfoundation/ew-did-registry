@@ -231,7 +231,7 @@ const getEventsFromBlock = (
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
     topics: [null, `0x000000000000000000000000${nft_address.slice(2).toLowerCase()}`,
-        `0x` + ("0000000000000000000000000000000000000000000000000000000000000000" + nft_id).slice(-64)] as string[],
+        `0x` + ("0000000000000000000000000000000000000000000000000000000000000000" + nft_id.slice(2)).slice(-64)] as string[],
   }).then((log) => {
     const {
       name, args, signature, topic,

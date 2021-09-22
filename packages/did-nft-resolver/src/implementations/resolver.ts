@@ -17,6 +17,7 @@ import {
 } from '@fl-did-registry/did-resolver-interface';
 import { JWT } from '@fl-did-registry/jwt';
 import { Methods, DIDPattern } from '@fl-did-registry/did';
+import { IDidStore } from "@fl-did-registry/did-store-interface"
 import { nftReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { hashes } from "../utils";
@@ -50,14 +51,17 @@ class Resolver implements IResolver, IClaimsVerifier {
    */
   protected _contract: Contract;
 
+  protected _claimStorage: IDidStore;
+
   /**
    * Constructor
    *
    * @param settings - Settings to connect to Ethr registry
    * @param provider - Ethers provider. Can be obtained from getProvider(providerSettings)
    */
-  constructor(provider: providers.Provider, settings: RegistrySettings) {
+  constructor(provider: providers.Provider, storage: IDidStore, settings: RegistrySettings) {
     this._provider = provider;
+    this._claimStorage = storage;
     this.settings = { abi: nftReg.abi, method: Methods.Nft, ...settings };
 
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);
@@ -198,6 +202,7 @@ class Resolver implements IResolver, IClaimsVerifier {
   async verifyPublishedClaim(token: string, claimUrl: string): Promise<boolean> {
     const claim = JWT.decode(token) as IPublicClaim;
     var document = await this.read(claim.subject);
+    const claim_content = JSON.parse(await this._claimStorage.get(claimUrl))
     const doc_owner = await this.identityOwner(claim.subject);
     console.log("verifyPublicProof - owner = " + doc_owner)
     if (!(await this.verifySignature(token, doc_owner))) {
@@ -208,6 +213,9 @@ class Resolver implements IResolver, IClaimsVerifier {
     const { hash, hashAlg } = service;
     const createHash = hashes[hashAlg as string];
     if (hash !== createHash(token)) {
+      return false;
+    }
+    if (claim !== claim_content) {
       return false;
     }
     return true;

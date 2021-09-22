@@ -22,6 +22,7 @@ import {
 import { Methods } from '@fl-did-registry/did';
 import Resolver from './resolver';
 import { JWT } from '@fl-did-registry/jwt';
+import { IDidStore } from "@fl-did-registry/did-store-interface"
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
 } from '../constants';
@@ -46,6 +47,8 @@ export class Operator extends Resolver implements IOperator {
 
   private _owner: EwSigner;
 
+  
+
   private readonly _keys = {
     privateKey: '',
     publicKey: '',
@@ -57,8 +60,8 @@ export class Operator extends Resolver implements IOperator {
   * @param owner - Entity which controls document
   * @param settings - Settings to connect to Ethr registry
   */
-  constructor(owner: EwSigner, settings: RegistrySettings) {
-    super(owner.provider, settings);
+  constructor(owner: EwSigner, storage: IDidStore, settings: RegistrySettings) {
+    super(owner.provider, storage, settings);
     const {
       address, abi,
     } = this.settings;
@@ -422,8 +425,7 @@ export class Operator extends Resolver implements IOperator {
     const claim = JWT.decode(issued) as IPublicClaim;
 
     const hash = createHash(issued);
-    // TODO: correct URL storage
-    const url = "http://flashlabs.io/claims/"+hash;
+    const url = await this._claimStorage.save(JSON.stringify(claim));
     await this.update(
       claim.subject,
       DIDAttribute.ServicePoint,

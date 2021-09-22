@@ -1,6 +1,6 @@
 {
   "name": "@fl-did-registry/did-nft-resolver",
-  "version": "0.5.4",
+  "version": "0.5.6",
   "publishConfig": {
     "access": "public"
   },
@@ -26,8 +26,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@fl-did-registry/did": "0.5.3",
-    "@fl-did-registry/did-resolver-interface": "0.5.3",
+    "@fl-did-registry/did": "0.5.4",
+    "@fl-did-registry/did-resolver-interface": "0.5.4",
+    "@fl-did-registry/did-store-interface": "0.5.0",
     "@fl-did-registry/jwt": "0.5.2",
     "@fl-did-registry/keys": "0.5.1",
     "ethers": "^5.4.6"
