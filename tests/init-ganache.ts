@@ -6,6 +6,7 @@ import {
   BigNumber,
 } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
+import { abi as RevocationRegistryOffChainAbi, bytecode as RevocationRegistryOffChainByteCode } from '../packages/revocation/src/constants/RevocationRegistryOffChain.json';
 
 const { hexlify } = utils;
 
@@ -26,3 +27,18 @@ export const deployRegistry = async (fillAccounts: Array<string>): Promise<strin
   // @TODO: deploy proxy factory
   return registry.address;
 };
+
+export const deployRevocationRegistry = async (fillAccounts: Array<string>): Promise<string> => {
+  const faucet = provider.getSigner(3);
+
+  await Promise.all(fillAccounts.map((acc) => faucet.sendTransaction({
+    to: acc,
+    value: hexlify(BigNumber.from('100000000000000000')),
+  })));
+
+  const registryFactory = new ContractFactory(RevocationRegistryOffChainAbi, RevocationRegistryOffChainByteCode,
+    new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
+  const revocationRegistry = await( await registryFactory.deploy()).deployed();
+  return revocationRegistry.address;
+};
+
