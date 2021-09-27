@@ -1,0 +1,43 @@
+{
+  "name": "@ew-did-registry/revocation",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "The package provides revocation features for claims",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
+    "compile": "../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "Revocation"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@ew-did-registry/did": "0.5.1",
+    "@ew-did-registry/did-resolver-interface": "0.5.1",
+    "@ew-did-registry/keys": "0.5.0",
+    "@ew-did-registry/did-ethr-resolver": "0.5.1",
+    "ethers": "^5.4.6"
+  },
+  "devDependencies": {
+    "@types/sinon": "^10.0.2",
+    "@types/sinon-chai": "^3.2.5",
+    "ganache-cli": "^6.12.2",
+    "run-with-testrpc": "0.3.1",
+    "sinon": "^11.1.2",
+    "sinon-chai": "^3.7.0"
+  }
+}
