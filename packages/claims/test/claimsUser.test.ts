@@ -4,11 +4,20 @@ import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, EwSigner,
+  Operator, EwSigner, compressedSecp256k1KeyLength,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import {
+  Algorithms,
+  DIDAttribute,
+  Encoding,
+  IUpdateData,
+  KeyTags,
+  ProviderSettings,
+  ProviderTypes,
+  PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
 import {
   ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
 } from '../src';
@@ -37,12 +46,15 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
   const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
 
+  const hexPrefixKeys = new Keys();
+  const hexPrefixAddress = hexPrefixKeys.getAddress();
+
   let userClaims: IClaimsUser;
   let store: DidStore;
   let registry: string;
 
   before(async () => {
-    registry = await deployRegistry([issuerAddress, userAddress]);
+    registry = await deployRegistry([issuerAddress, userAddress, hexPrefixAddress]);
     console.log(`registry: ${registry}`);
 
     store = new DidStore(await spawnIpfsDaemon());
@@ -136,29 +148,34 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
    * Therefore, the verification should be able to handle both.
    * https://w3c-ccg.github.io/security-vocab/#publicKeyHex
    * https://w3c-ccg.github.io/lds-ecdsa-secp256k1-2019/
+   * https://github.com/decentralized-identity/ethr-did-resolver/issues/140
    */
   it('verifies claim of user with secp256k1 key with 0x prefix', async () => {
-    const keys = new Keys();
-    const address = keys.getAddress();
-    const did = `did:${Methods.Erc1056}:${address}`;
-    const signerWithHexPrefixKey = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
-    const compressedSecp256k1KeyLength = 66; // Expected that key is compressed without hex prefix
-    signerWithHexPrefixKey.publicKey.length.should.equal(compressedSecp256k1KeyLength);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    signerWithHexPrefixKey.publicKey = `0x${signerWithHexPrefixKey.publicKey}`;
-
+    const did = `did:${Methods.Erc1056}:${hexPrefixAddress}`;
+    const signer = EwSigner.fromPrivateKey(hexPrefixKeys.privateKey, providerSettings);
     const doc = new DIDDocumentFull(
       did,
       new Operator(
-        signerWithHexPrefixKey,
+        signer,
         { address: registry },
       ),
     );
-    const userWithHexPrefixKey = new ClaimsUser(signerWithHexPrefixKey, doc, store);
 
+    // Manually doing "create" as need to add hex prefix
+    const pubKey = signer.publicKey;
+    pubKey.length.should.equal(compressedSecp256k1KeyLength);
+    const updateData: IUpdateData = {
+      algo: Algorithms.Secp256k1,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      // Adding hex prefix to simulate an owner key with a hex prefix
+      value: { publicKey: `0x${signer.publicKey}`, tag: KeyTags.OWNER },
+    };
+    await doc.update(DIDAttribute.PublicKey, updateData);
+
+    const userWithHexPrefixKey = new ClaimsUser(signer, doc, store);
     const claim = await userWithHexPrefixKey.createPublicClaim(claimData);
-    const url = await userClaims.publishPublicClaim(claim, claimData);
-    return userClaims.verify(url).should.be.fulfilled;
+    const url = await userWithHexPrefixKey.publishPublicClaim(claim, claimData);
+    return userWithHexPrefixKey.verify(url).should.be.fulfilled;
   });
 });
