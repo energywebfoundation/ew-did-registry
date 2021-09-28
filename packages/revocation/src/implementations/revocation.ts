@@ -10,8 +10,6 @@ export class Revocation {
 
   private _revocationRegistryOffChain: Contract;
 
-  private _owner: EwSigner;
-
   /**
   * @param owner - Entity which controls document
   * @param settings - Settings to connect to Ethr registry
@@ -21,7 +19,6 @@ export class Revocation {
     addressOnchain: string,
     addressOffChain: string,
   ) {
-    this._owner = owner;
     this._revocationRegistryOnChain = new ethers.Contract(
       addressOnchain,
       RevocationOnChainAbi,
