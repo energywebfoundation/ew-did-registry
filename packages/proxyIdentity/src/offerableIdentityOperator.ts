@@ -1,19 +1,20 @@
 import {
-  Contract, Event, utils,
+  Contract, utils, BigNumber,
 } from 'ethers';
 import {
   DIDAttribute,
   IUpdateData,
   RegistrySettings,
-  IdentityOwner,
   IUpdateAttributeData,
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
-import { Operator, hexify, addressOf } from '@ew-did-registry/did-ethr-resolver';
+import {
+  Operator, EwSigner, hexify, addressOf,
+} from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
 
-const { BigNumber, Interface, formatBytes32String } = utils;
+const { Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
 
 export class OfferableIdenitytOperator extends Operator {
@@ -21,11 +22,15 @@ export class OfferableIdenitytOperator extends Operator {
 
   /**
    *
-   * @param owner - Owner of the idenity
+   * @param owner - Owner of the identity
    * @param settings - Settings to connect to Ethr registry
-   * @param identityAddr {string} - address of controlled offerable identity
+   * @param identityAddr - Address of controlled offerable identity
    */
-  constructor(owner: IdentityOwner, settings: RegistrySettings, identityAddr: string) {
+  constructor(
+    owner: EwSigner,
+    settings: RegistrySettings,
+    identityAddr: string,
+  ) {
     super(owner, settings);
     this.identity = new Contract(identityAddr, identityAbi, owner);
   }
@@ -56,7 +61,7 @@ export class OfferableIdenitytOperator extends Operator {
 
   async offer(offerTo: string): Promise<boolean> {
     await this.identity.offer(
-      new Interface(identityAbi).functions.offer.encode([offerTo]),
+      new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
       0,
     );
@@ -64,12 +69,12 @@ export class OfferableIdenitytOperator extends Operator {
   }
 
   protected async _sendTransaction(
-    method: (...args: (string | number | Record<string, unknown>)[]) => Promise<void>,
+    method: string,
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
     validity?: number,
-  ): Promise<utils.BigNumber> {
+  ): Promise<BigNumber> {
     const identity = addressOf(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
@@ -78,21 +83,15 @@ export class OfferableIdenitytOperator extends Operator {
         ? (updateData as IUpdateAttributeData).value
         : (updateData as IUpdateDelegateData).delegate,
     );
-    const validityValue = validity !== undefined ? validity.toString() : '';
-    const params = [identity, bytesOfAttribute, bytesOfValue, validityValue];
-    let methodName: string;
-    if (didAttribute === DIDAttribute.PublicKey || didAttribute === DIDAttribute.ServicePoint) {
-      methodName = 'setAttribute';
-    } else {
-      methodName = 'addDelegate';
+    const params = [identity, bytesOfAttribute, bytesOfValue];
+    if (validity && validity > 0) {
+      params.push(validity.toString());
     }
-    const data = new Interface(erc1056Abi).functions[methodName].encode(params);
-    let event: Event;
+    const data = new Interface(erc1056Abi).encodeFunctionData(method, params);
     try {
-      const tx = await this.identity.sendTransaction(data, this.settings.address, 0);
+      const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
       const receipt = await tx.wait();
-      event = receipt.events.find((e: Event) => e.event === 'TransactionSent');
-      return new BigNumber(event.blockNumber as number);
+      return BigNumber.from(receipt.blockNumber);
     } catch (e) {
       throw new Error(e);
     }

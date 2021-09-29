@@ -2,10 +2,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey,
-  withKey, withProvider,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
@@ -13,6 +10,7 @@ import {
   ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData,
 } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -20,19 +18,22 @@ chai.should();
 describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   this.timeout(0);
   const userKeys = new Keys();
-  const user = withKey(withProvider(signerFromKeys(userKeys), getProvider()), walletPubKey);
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
+  const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
 
   const issuerKeys = new Keys();
-  const issuer = withKey(withProvider(signerFromKeys(issuerKeys), getProvider()), walletPubKey);
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
+  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
 
   const verifierKeys = new Keys();
-  const verifier = withKey(withProvider(signerFromKeys(verifierKeys), getProvider()), walletPubKey);
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
+  const verifier = EwSigner.fromPrivateKey(verifierKeys.privateKey, providerSettings);
 
   let claimsUser: IClaimsUser;
   let claimsIssuer: IClaimsIssuer;
@@ -49,9 +50,26 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     await issuerDoc.create();
     await verifierDoc.create();
 
-    claimsUser = new ClaimsFactory(userKeys, userDoc, store).createClaimsUser();
-    claimsIssuer = new ClaimsFactory(issuerKeys, issuerDoc, store).createClaimsIssuer();
-    claimsVerifier = new ClaimsFactory(verifierKeys, verifierDoc, store).createClaimsVerifier();
+    claimsUser = new ClaimsFactory(
+      userKeys,
+      userDoc,
+      store,
+      providerSettings,
+    ).createClaimsUser();
+
+    claimsIssuer = new ClaimsFactory(
+      issuerKeys,
+      issuerDoc,
+      store,
+      providerSettings,
+    ).createClaimsIssuer();
+
+    claimsVerifier = new ClaimsFactory(
+      verifierKeys,
+      verifierDoc,
+      store,
+      providerSettings,
+    ).createClaimsVerifier();
   });
 
   after(async () => {
@@ -80,7 +98,6 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     } catch (e) {
       console.error('error verifing claims:', e);
     }
-    // return claimsVerifier.verifyPrivateProof(proofToken).should.be.fulfilled;
   });
 
   it('workflow of public claim generation, issuance and presentation should pass', async () => {

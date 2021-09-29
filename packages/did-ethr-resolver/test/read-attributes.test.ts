@@ -8,18 +8,25 @@ import {
   IServiceEndpoint,
   IUpdateData,
   PubKeyType,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import {
-  Operator, signerFromKeys, getProvider, walletPubKey, withProvider, withKey,
-} from '../src';
+import { Operator } from '../src';
 
 import { deployRegistry } from '../../../tests/init-ganache';
+import { EwSigner } from '../src/implementations';
 
 const keys = new Keys({
   privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
   publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
 });
+
+const providerSettings: ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
+
+const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
 describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   this.timeout(0);
@@ -32,7 +39,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   before(async () => {
     registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      owner,
       { address: registry },
     );
   });

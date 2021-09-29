@@ -7,13 +7,19 @@ To create a DID,
 const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
 const did = `did:ethr:${ownerAddress}`;
 
+const providerSettings = {
+  type: ProviderTypes.HTTP,
+  uriOrInfo: 'https://volta-rpc.energyweb.org',
+}
+
 const keys = new Keys({
-    privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
-    publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
-  });
+  privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
+  publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
+});
+const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
 ///instantiate the operator with configured Resolver Settings
-const operator = new Operator(keys, resolverSettings);
+const operator = new Operator(signer, resolverSettings);
 
 //create the DIDDocumentFull instance
 const document = new DIDDocumentFull(did, operator);

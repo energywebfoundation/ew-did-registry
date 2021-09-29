@@ -8,11 +8,12 @@ import {
   DIDAttribute,
   Encoding,
   PubKeyType,
-  IdentityOwner,
   IOperator,
+  ProviderTypes,
+  ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  signerFromKeys, walletPubKey, withProvider, withKey,
+  EwSigner,
 } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
@@ -33,7 +34,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let identityFactory: ContractFactory;
   let identity: Contract;
   let manager: Contract;
-  let owner: IdentityOwner;
+  let owner: EwSigner;
   let ownerAddr: string;
   let provider: providers.JsonRpcProvider;
   let erc1056: Contract;
@@ -42,11 +43,16 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     ({
       identityFactory, manager, provider, erc1056,
     } = this);
-
-    owner = withKey(withProvider(signerFromKeys(new Keys()), provider), walletPubKey);
+    const providerSettings: ProviderSettings = {
+      type: ProviderTypes.HTTP,
+    };
+    const keys = new Keys();
+    owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     ownerAddr = await owner.getAddress();
 
-    identity = await identityFactory.deploy(ownerAddr, manager.address);
+    const txReceipt = await manager.createIdentity(ownerAddr);
+    const identityAddr = (await txReceipt.wait()).events[0].args.identity;
+    identity = identityFactory.attach(identityAddr);
     did = `did:${Methods.Erc1056}:${identity.address}`;
 
     await provider.getSigner(0).sendTransaction({

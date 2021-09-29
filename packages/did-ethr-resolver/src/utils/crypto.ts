@@ -1,11 +1,13 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
 import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '../constants';
+import { DIDPattern } from '@ew-did-registry/did';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
 } = utils;
+
+export const compressedSecp256k1KeyLength = 66;
 
 export const walletPubKey = (
   { privateKey }: Wallet,

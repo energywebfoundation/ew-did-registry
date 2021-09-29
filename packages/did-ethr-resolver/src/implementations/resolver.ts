@@ -1,5 +1,5 @@
 import {
-  Contract, providers, utils,
+  Contract, providers, utils, BigNumber,
 } from 'ethers';
 import {
   DelegateTypes,
@@ -13,9 +13,10 @@ import {
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
-import { DIDPattern, ethrReg } from '../constants';
+import { Methods, DIDPattern } from '@ew-did-registry/did';
+import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
+import { compressedSecp256k1KeyLength } from '..';
 
 const { formatBytes32String } = utils;
 
@@ -46,20 +47,15 @@ class Resolver implements IResolver {
   protected _contract: Contract;
 
   /**
-   * Caches the blockchain data for further reads
-   */
-  private _document?: IDIDLogData;
-
-  /**
    * Constructor
    *
-   * Settings have to be passed to construct resolver
-   * @param {IResolverSettings} settings
+   * @param settings - Settings to connect to Ethr registry
+   * @param provider - Ethers provider. Can be obtained from getProvider(providerSettings)
    */
+
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
-
     this._contract = new Contract(settings.address, this.settings.abi, this._provider);
   }
 
@@ -70,11 +66,11 @@ class Resolver implements IResolver {
    * ```typescript
    * import { Resolver } from '@ew-did-registry/did-resolver';
    *
-   * const resolver = new Resolver(resolverSettings);
+   * const resolver = new Resolver(provider, resolverSettings);
    * const didDocument = await resolver.read(did);
    * ```
    *
-   * @param {string} did - entity identifier, which is associated with DID Document
+   * @param did - entity identifier, which is associated with DID Document
    * @returns {Promise<IDIDDocument>}
    */
   private async _read(
@@ -87,30 +83,28 @@ class Resolver implements IResolver {
     }
     const address = match[1];
 
-    if (!this._document || this._document.owner !== address) {
-      this._document = {
-        owner: address,
-        topBlock: new utils.BigNumber(0),
-        authentication: {},
-        publicKey: {},
-        service: {},
-        attributes: new Map(),
-      };
-    }
+    const _document = {
+      owner: address,
+      topBlock: BigNumber.from(0),
+      authentication: {},
+      publicKey: {},
+      service: {},
+      attributes: new Map(),
+    };
     try {
       await fetchDataFromEvents(
         did,
-        this._document,
+        _document,
         this.settings,
         this._contract,
         this._provider,
         selector,
       );
-      const document = wrapDidDocument(did, this._document);
+      const document = wrapDidDocument(did, _document);
       return document;
     } catch (error) {
       if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
-        const didDocument = wrapDidDocument(did, this._document);
+        const didDocument = wrapDidDocument(did, _document);
         return didDocument;
       }
       throw error;
@@ -182,29 +176,37 @@ class Resolver implements IResolver {
       did,
       selector,
     );
-    return pk ? ((pk as IPublicKey).publicKeyHex as string).slice(2) : undefined;
+    const publicKeyHex = pk ? ((pk as IPublicKey).publicKeyHex as string) : undefined;
+    if (!publicKeyHex) {
+      return undefined;
+    }
+    if (publicKeyHex.length === compressedSecp256k1KeyLength + 2 && publicKeyHex.substring(0, 2) === '0x') {
+      return publicKeyHex.substring(2);
+    }
+    if (publicKeyHex.length === compressedSecp256k1KeyLength) {
+      return publicKeyHex;
+    }
+    return undefined;
   }
 
   async readFromBlock(
     did: string,
-    topBlock: utils.BigNumber,
+    topBlock: BigNumber,
   ): Promise<IDIDLogData> {
     const [, , address] = did.split(':');
-    if (this._document === undefined || this._document.owner !== address) {
-      this._document = {
-        owner: address,
-        topBlock,
-        authentication: {},
-        publicKey: {},
-        service: {},
-        attributes: new Map(),
-      };
-    }
-    await fetchDataFromEvents(did, this._document, this.settings, this._contract, this._provider);
-    return { ...this._document };
+    const _document = {
+      owner: address,
+      topBlock,
+      authentication: {},
+      publicKey: {},
+      service: {},
+      attributes: new Map(),
+    };
+    await fetchDataFromEvents(did, _document, this.settings, this._contract, this._provider);
+    return { ..._document };
   }
 
-  async lastBlock(did: string): Promise<utils.BigNumber> {
+  async lastBlock(did: string): Promise<BigNumber> {
     const [, , address] = did.split(':');
     return this._contract.changed(address);
   }

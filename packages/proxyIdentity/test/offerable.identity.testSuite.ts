@@ -4,6 +4,7 @@ import {
 } from 'ethers';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import { deploymentByManagerTests } from './deploymentTests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -25,25 +26,8 @@ export function identityTestSuite(): void {
     ownerAddr = await owner.getAddress();
   });
 
-  describe('[Identity Creation]', async () => {
-    before(async () => {
-      identity = await identityFactory.deploy(ownerAddr, manager.address);
-    });
-
-    it('Identity should notify manager when created', async () => {
-      const event = new Promise((resolve) => {
-        manager.on('IdentityCreated', (created) => {
-          manager.removeAllListeners('IdentityCreated');
-          resolve(created);
-        });
-      });
-
-      expect(await event).equal(identity.address);
-    });
-
-    it('identity creator should be identity owner', async () => {
-      expect(await identity.owner()).equal(ownerAddr);
-    });
+  describe('[Identity Creation]', function () {
+    describe('[Deployment by Manager]', deploymentByManagerTests);
   });
 
   describe('[Identity Transfer]', async () => {
@@ -56,7 +40,9 @@ export function identityTestSuite(): void {
     });
 
     beforeEach(async () => {
-      identity = await identityFactory.deploy(ownerAddr, manager.address);
+      const txReceipt = await manager.createIdentity(ownerAddr);
+      const identityAddr = (await txReceipt.wait()).events[0].args.identity;
+      identity = identityFactory.attach(identityAddr);
 
       await identity.connect(owner).functions.offer(receiverAddr);
     });
@@ -71,7 +57,7 @@ export function identityTestSuite(): void {
 
       expect(event).to.deep.equal({
         offered: identity.address,
-        _owner: await identity.owner(),
+        _owner: ownerAddr,
         offeredTo: receiverAddr,
       });
     });
@@ -102,7 +88,7 @@ export function identityTestSuite(): void {
 
       expect(await event).to.deep.equal({
         offered: identity.address,
-        _owner: await identity.owner(),
+        _owner: ownerAddr,
         offeredTo: receiverAddr,
       });
       expect(await identity.owner()).equal(ownerAddr);
@@ -126,6 +112,21 @@ export function identityTestSuite(): void {
       await identity.connect(owner).cancelOffer();
 
       expect(await identity.offeredTo()).equal(emptyAddress);
+    });
+
+    it('Identity can be transferred several times', async () => {
+      await identity.connect(receiver).acceptOffer();
+
+      expect(await identity.owner()).equal(receiverAddr);
+      expect(await manager.identityOwner(identity.address)).equal(receiverAddr);
+
+      const receiver2 = provider.getSigner(3);
+      const receiver2Addr = await receiver2.getAddress();
+      await identity.connect(receiver).offer(receiver2Addr);
+      await identity.connect(receiver2).acceptOffer();
+
+      expect(await identity.owner()).equal(receiver2Addr);
+      expect(await manager.identityOwner(identity.address)).equal(receiver2Addr);
     });
   });
 }

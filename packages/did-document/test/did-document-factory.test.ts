@@ -1,31 +1,36 @@
 /* eslint-disable no-shadow */
 import { expect } from 'chai';
-import { ethers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
-import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import {
-  Operator, signerFromKeys, getProvider,
-  walletPubKey,
-  withKey, withProvider,
+  IOperator,
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
+import {
+  EwSigner,
+  Operator,
 } from '@ew-did-registry/did-ethr-resolver';
-
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';
 import { deployRegistry } from '../../../tests/init-ganache';
 
-describe('[DID DOCUMENT FACTORY]', () => {
-  const keys = new Keys();
-  const { address } = new ethers.Wallet(keys.privateKey);
-  const did = `did:ewc:${address}`;
+const providerSettings : ProviderSettings = {
+  type: ProviderTypes.HTTP,
+};
 
+describe('[DID DOCUMENT FACTORY]', async () => {
+  const keys = new Keys();
+  const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
+  const address = await owner.getAddress();
+  const did = `did:ewc:${address}`;
   let operator: IOperator;
 
   before(async () => {
     const registry = await deployRegistry([]);
     console.log(`registry: ${registry}`);
     operator = new Operator(
-      withKey(withProvider(signerFromKeys(keys), getProvider()), walletPubKey),
+      owner,
       { address: registry },
     );
   });

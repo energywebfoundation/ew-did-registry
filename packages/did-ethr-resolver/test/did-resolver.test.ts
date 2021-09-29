@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
 import { DelegateTypes, IResolver } from '@ew-did-registry/did-resolver-interface';
-import { Resolver, getProvider } from '../src';
+import { getProvider, Resolver } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 
 chai.should();

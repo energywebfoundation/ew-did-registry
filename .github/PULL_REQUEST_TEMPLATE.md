@@ -1,4 +1,5 @@
 ### Summary
+
 |             |   |
 |-------------|---|
 | Description |   |
@@ -10,5 +11,6 @@
 - [ ] New feature (non-breaking change which adds functionality)
 
 ### List of Features
+
 - feature #1
 - feature #2

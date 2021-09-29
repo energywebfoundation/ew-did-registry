@@ -22,20 +22,19 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * claims = new ClaimsIssuer(issuer);
    * const issuedToken = await claims.issuePublicClaim(token);
    * ```
-   * @params { string } token to verify
+   * @param { string | IPublicClaim } claim - claim to issue. Can be
+   * specified as signed or unsigned claim
    * @returns { Promise<string> } issued token
    */
-  async issuePublicClaim(token: string): Promise<string> {
-    const claim: IPublicClaim = this.jwt.decode(token) as IPublicClaim;
-    if (!(await this.verifySignature(token, claim.iss as string))) {
-      throw new Error('User signature not valid');
+  async issuePublicClaim(claim: string | IPublicClaim): Promise<string> {
+    if (typeof claim === 'string') {
+      claim = this.jwt.decode(claim) as IPublicClaim;
     }
-    claim.signer = this.did;
-    delete claim.iss;
+    const { claimData, did } = claim;
     const signedToken = await this.jwt.sign(
-      claim,
+      { claimData, did, signer: this.did },
       {
-        algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
+        algorithm: 'ES256', issuer: this.did, subject: claim.did, noTimestamp: true,
       },
     );
     return signedToken;
