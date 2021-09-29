@@ -15,11 +15,16 @@ The FL-DID library implementation confirms to the requirements specified in the 
 | [`@fl-did-registry/did-document`](/packages/did-document)           | exposes CRUD operations for DID Documents that are based on DID W3C Specification. Main class is an abstract factory that allows to work with lite or full implementations of CRUD.                             |
 | [`@fl-did-registry/did-nft-resolver`](/packages/did-nft-resolver) | connects did-document’s CRUD methods with a particular blockchain implementation of DID specification.                                                                                                        |
 | [`@fl-did-registry/did-interface-resolver`](/packages/did-resolver-interface) | provides an interface to implement DID method.                                                                                                        |
-| [`@energyweb/ew-did-registry/claims`](/packages/claims)                       | manages Public, Private and Proof claims.                 |
-| [`@energyweb/ew-did-registry/keys`](/packages/keys)                           | provides key management and asymmetric cryptography. Obsolete with Ethers 5, will be removed |
-| [`@energyweb/ew-did-registry/jwt`](/packages/jwt)                             | exposes methods to sign, verify, encode, and decode JWTs. |
+| [`@fl-did-registry/claims`](/packages/claims)                       | manages Public, Private and Proof claims.                 |
+| [`@fl-did-registry/keys`](/packages/keys)                           | provides key management and asymmetric cryptography. Obsolete with Ethers 5, will be removed |
+| [`@fl-did-registry/jwt`](/packages/jwt)                             | exposes methods to sign, verify, encode, and decode JWTs. |
 
-# The documentation needs updating from this point.
+# The documentation needs updating from this point - don't rely on it
+
+
+
+
+
 ## Using FL DID
 ### Setup
 #### Install root dependencies
