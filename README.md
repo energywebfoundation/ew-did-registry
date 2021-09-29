@@ -1,32 +1,26 @@
-<p align="center">
-  <img src="https://github.com/energywebfoundation/ew-did-registry/actions/workflows/deploy.yml/badge.svg" />
-</p>
 
-# EW DID Library v0.1
+
+# FL DID Library v0.5
 ## Disclaimer
-> The EW-DID library is not ready for production grade applications.
+> The FL-DID library is not ready for production grade applications,  however, works great for demos etc.
 ## Introduction
-The EW-DID library implementation confirms to the requirements specified in the [DID Specification](https://w3c.github.io/did-core/) published by the W3C Credential Community Group. The aim of the library is to : 
-- provide an abstraction layer to manage and interact with DIDs and Verifiable Claims on Energy Web Chain
-- enable EW Member organisation to adopt or/and implement different DID methods
+The FL-DID library implementation confirms to the requirements specified in the [DID Specification](https://w3c.github.io/did-core/) published by the W3C Credential Community Group. The aim of the library is to provide an abstraction layer to manage and interact with DIDs and Verifiable Claims related to NFTs
 
-## EW DID Packages
+## FL DID Packages
 ### Description
 
 | Package                                                                       | Description                                               |
 |:---                                                                           |:---                                                       | 
-| [`@energyweb/ew-did-registry/did-registry`](/packages/did-registry)           | entry-point package for end-users.                        |
-| [`@energyweb/ew-did-registry/did-document`](/packages/did-document)           | exposes CRUD operations for DID Documents that are based on DID W3C Specification. Main class is an abstract factory that allows to work with lite or full implementations of CRUD.                             |
-| [`@energyweb/ew-did-registry/did-ethr-resolver`](/packages/did-ethr-resolver) | connects did-document’s CRUD methods with a particular blockchain implementation of DID specification.                                                                                                        |
-| [`@energyweb/ew-did-registry/did-interface-resolver`](/packages/did-resolver-interface) | provides an interface to implement DID method.                                                                                                        |
+| [`@fl-did-registry/did-registry`](/packages/did-registry)           | entry-point package for end-users. Not maintained, will be probably removed.                    |
+| [`@fl-did-registry/did-document`](/packages/did-document)           | exposes CRUD operations for DID Documents that are based on DID W3C Specification. Main class is an abstract factory that allows to work with lite or full implementations of CRUD.                             |
+| [`@fl-did-registry/did-nft-resolver`](/packages/did-nft-resolver) | connects did-document’s CRUD methods with a particular blockchain implementation of DID specification.                                                                                                        |
+| [`@fl-did-registry/did-interface-resolver`](/packages/did-resolver-interface) | provides an interface to implement DID method.                                                                                                        |
 | [`@energyweb/ew-did-registry/claims`](/packages/claims)                       | manages Public, Private and Proof claims.                 |
-| [`@energyweb/ew-did-registry/keys`](/packages/keys)                           | provides key management and asymmetric cryptography.      |
+| [`@energyweb/ew-did-registry/keys`](/packages/keys)                           | provides key management and asymmetric cryptography. Obsolete with Ethers 5, will be removed |
 | [`@energyweb/ew-did-registry/jwt`](/packages/jwt)                             | exposes methods to sign, verify, encode, and decode JWTs. |
 
-### Package Diagram
-![](https://i.imgur.com/8oKqao9.jpg)
-
-## Using EW DID
+# The documentation needs updating from this point.
+## Using FL DID
 ### Setup
 #### Install root dependencies
 ```shell
