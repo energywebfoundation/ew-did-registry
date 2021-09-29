@@ -7,6 +7,8 @@ const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
 } = utils;
 
+export const compressedSecp256k1KeyLength = 66;
+
 export const walletPubKey = (
   { privateKey }: Wallet,
 ): string => new Keys({ privateKey: privateKey.slice(2) }).publicKey;
