@@ -42,7 +42,7 @@ jobs:
 
       - name: Install package
         run: |
-          npm install
+          npm ci
           npm run setup
 
       - name: Build package
