@@ -26,8 +26,9 @@ contract RevocationRegistry {
         }
     }
 
-    function getRevoker(bytes32 role, address subject) public view returns (address) { 
-        return revokedClaims[role][subject].revoker;
+    function getRevocationDetail(bytes32 role, address subject) public view returns (address, uint) { 
+        return (revokedClaims[role][subject].revoker, revokedClaims[role][subject].revokedTimestamp);
     }
+
     event Revoked(address revoker, bytes32 role, address subject);
 }

@@ -48,7 +48,7 @@ export class Revocation {
       const tx = await this._revocationRegistryOnChain.revokeClaim(
         roleHash,
         subjectAddress,
-        revokerAddress
+        revokerAddress,
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -82,7 +82,6 @@ export class Revocation {
       );
       if (!event) return false;
     } catch (error) {
-      console.log(error)
       throw new Error(error);
     }
     return true;
@@ -108,7 +107,7 @@ export class Revocation {
       const tx = await this._revocationRegistryOnChain.revokerClaimsInList(
         roleHash,
         revocationSubjects,
-        revokerAddress
+        revokerAddress,
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -156,7 +155,11 @@ export class Revocation {
   * @param { boolean } isOnChainRole - bool value to tell if a role is on chain
   * @returns Promise<string>
   */
-  async getRevocationDetail(role: string, subject: string, isOnChainRole: boolean): Promise<string[]> {
+  async getRevocationDetail(
+    role: string,
+    subject: string,
+    isOnChainRole: boolean,
+  ): Promise<string[]> {
     const subjectAddress = addressOf(subject);
     let result;
     if (isOnChainRole) {
@@ -170,7 +173,7 @@ export class Revocation {
         subjectAddress,
       );
     }
-    const {0: revoker, 1: revokedTimeStamp} = result;
+    const { 0: revoker, 1: revokedTimeStamp } = result;
     return ([revoker, revokedTimeStamp]);
   }
 }
