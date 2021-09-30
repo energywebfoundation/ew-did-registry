@@ -1,14 +1,11 @@
-import chai, { expect , assert, should} from 'chai';
-import {
-  Contract, ContractFactory, providers, ethers,
-} from 'ethers';
+import chai, { expect , assert } from 'chai';
+import { providers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { deployRevocationRegistry } from '../../../tests';
 import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
-import { Operator, EwSigner } from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { Revocation } from '../src/implementations/revocation';
-chai.should();
 const { fail } = assert;
 const { JsonRpcProvider } = providers;
 
@@ -19,6 +16,7 @@ describe('[REVOCATION CLAIMS]', function () {
   let registryOffChain : string;
   const user = provider.getSigner(7);
   const userRole = "user";
+  let userAddress : string;
   const revokerKeys = new Keys({
     privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3'
   });
@@ -30,7 +28,7 @@ describe('[REVOCATION CLAIMS]', function () {
   
 
   before(async () => {
-    const userAddress =await user.getAddress();
+    userAddress =await user.getAddress();
     userDid = `did:${Methods.Erc1056}:${userAddress}`;
   });
 
@@ -54,18 +52,14 @@ describe('[REVOCATION CLAIMS]', function () {
       expect(await revocationRegistry.isRoleRevoked(userRole, userDid, false)).false;
     });
 
-    it('Revoker address can be fetched for a revoked role', async () => {
+    it('Revoker details can be fetched for a revoked off chain role', async () => {
       
       await revocationRegistry.revokeOffChainRole(userRole, userDid );
       expect(await revocationRegistry.isRoleRevoked(userRole, userDid, false)).true;
-      expect(await revocationRegistry.getRevoker(userRole, userDid)).equal(revokerAddress);
-    });
-
-    // it('A role cannot be revoked again', async () => {
       
-    //   await revocationRegistry.revokeOffChainRole(userRole, userDid );
-    //   expect(await revocationRegistry.isRoleRevoked(userRole, userDid, false)).true;
-    //   expect(await revocationRegistry.revokeOffChainRole(userRole, userDid)).rejectedWith("The claim is already revoked");
-    // });
-  
+      const result = await revocationRegistry.getRevocationDetail(userRole, userDid, false);
+      expect(result.length).to.equal(2);
+      expect(result[0]).equal(revokerAddress);
+
+    });
 });
