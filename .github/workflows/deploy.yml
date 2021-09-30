@@ -71,6 +71,9 @@ jobs:
         
       - name: Commit to develop branch and merge to master branch
         if: github.ref == 'refs/heads/master'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git checkout development
           git merge origin/master
