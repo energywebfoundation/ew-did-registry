@@ -11,8 +11,7 @@ export class Revocation {
   private _revocationRegistryOffChain: Contract;
 
   /**
-  * @param owner - Entity which controls document
-  * @param settings - Settings to connect to Ethr registry
+  * @param owner - Entity which controls revocation
   */
   constructor(
     owner: EwSigner,
@@ -32,7 +31,7 @@ export class Revocation {
   }
 
   /**
-  * Revokes the on chain role from DID Document
+  * Revokes the on chain role
   * Returns true on success
   *
   * @param { string } role - on chain role to be revoked
@@ -40,17 +39,16 @@ export class Revocation {
   * @param { string } revokerRole - did of the revoker
   * @returns Promise<boolean>
   */
-  async revokeOnChainRole(role: string, subject: string, revoker: string, revokerRole: string):
+  async revokeOnChainRole(role: string, subject: string, revoker: string):
   Promise<boolean> {
     const roleHash = utils.namehash(role);
     const subjectAddress = addressOf(subject);
     const revokerAddress = addressOf(revoker);
     try {
       const tx = await this._revocationRegistryOnChain.revokeClaim(
-        utils.namehash(role + subjectAddress),
         roleHash,
-        revokerAddress,
-        utils.namehash(revokerRole + revokerAddress),
+        subjectAddress,
+        revokerAddress
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -64,7 +62,7 @@ export class Revocation {
   }
 
   /**
-  * Revokes the off chain role from DID Document
+  * Revokes the off chain role
   * Returns true on success
   *
   * @param { string } role - off chain role to be revoked
@@ -75,7 +73,8 @@ export class Revocation {
     const subjectAddress = addressOf(subject);
     try {
       const tx = await this._revocationRegistryOffChain.revokeClaim(
-        utils.namehash(role + subjectAddress),
+        utils.namehash(role),
+        subjectAddress,
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -83,6 +82,7 @@ export class Revocation {
       );
       if (!event) return false;
     } catch (error) {
+      console.log(error)
       throw new Error(error);
     }
     return true;
@@ -94,23 +94,21 @@ export class Revocation {
   *
   * @param { string[] } dids - dids for which the roles are being revoked
   * @param { string } role - role to be revoked for the DIDs
-  * @param { string } revokerRole - Role of the revoker
   * @returns Promise<boolean>
   */
-  async revokeListOfRoles(dids: string [], role: string, revoker: string, revokerRole: string):
+  async revokeListOfRoles(role: string, subjects: string [], revoker: string):
   Promise<boolean> {
     const roleHash = utils.namehash(role);
     const revokerAddress = addressOf(revoker);
-    const claimDigestList = [];
-    for (let _i = 0; _i < dids.length; _i++) {
-      claimDigestList[_i] = utils.namehash(role + addressOf(dids[_i]));
+    const revocationSubjects = [];
+    for (let _i = 0; _i < subjects.length; _i++) {
+      revocationSubjects[_i] = addressOf(subjects[_i]);
     }
     try {
       const tx = await this._revocationRegistryOnChain.revokerClaimsInList(
-        claimDigestList,
         roleHash,
-        revokerAddress,
-        utils.namehash(revokerRole),
+        revocationSubjects,
+        revokerAddress
       );
       const receipt = await tx.wait();
       const event = receipt.events.find(
@@ -134,28 +132,45 @@ export class Revocation {
   */
   async isRoleRevoked(role: string, subject: string, isOnChainRole: boolean): Promise<boolean> {
     const subjectAddress = addressOf(subject);
-    const claimDigest = utils.namehash(role + subjectAddress);
     let revokedStatus;
     if (isOnChainRole) {
-      revokedStatus = await this._revocationRegistryOnChain.isRevoked(claimDigest);
+      revokedStatus = await this._revocationRegistryOnChain.isRevoked(
+        utils.namehash(role),
+        subjectAddress,
+      );
     } else {
-      revokedStatus = await this._revocationRegistryOffChain.isRevoked(claimDigest);
+      revokedStatus = await this._revocationRegistryOffChain.isRevoked(
+        utils.namehash(role),
+        subjectAddress,
+      );
     }
     return revokedStatus;
   }
 
   /**
-  * checks the revoker of a role
-  * Returns the revoker of the role
+  * checks the revocation details for a subject's role
+  * Returns the revoker and revocationTimeStamp for the revocation
   *
   * @param { string } role - role for which the status is to be checked
   * @param { string } subject - DID for which the status is to be checked
+  * @param { boolean } isOnChainRole - bool value to tell if a role is on chain
   * @returns Promise<string>
   */
-  async getRevoker(role: string, subject: string): Promise<string> {
+  async getRevocationDetail(role: string, subject: string, isOnChainRole: boolean): Promise<string[]> {
     const subjectAddress = addressOf(subject);
-    const claimDigest = utils.namehash(role + subjectAddress);
-    const revoker = await this._revocationRegistryOffChain.getRevoker(claimDigest);
-    return revoker;
+    let result;
+    if (isOnChainRole) {
+      result = await this._revocationRegistryOnChain.getRevocationDetail(
+        utils.namehash(role),
+        subjectAddress,
+      );
+    } else {
+      result = await this._revocationRegistryOffChain.getRevocationDetail(
+        utils.namehash(role),
+        subjectAddress,
+      );
+    }
+    const {0: revoker, 1: revokedTimeStamp} = result;
+    return ([revoker, revokedTimeStamp]);
   }
 }
