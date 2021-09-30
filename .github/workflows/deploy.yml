@@ -66,6 +66,7 @@ jobs:
         uses: codfish/semantic-release-action@v1
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
       - name: Commit to develop branch and merge to master branch
         run: |
