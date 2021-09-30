@@ -63,7 +63,8 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-         env:
+        uses: codfish/semantic-release-action@v1
+        env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git checkout master
