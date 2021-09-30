@@ -68,17 +68,11 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        
-      - name: Prepare Syncing with develop branch
-        if: github.ref == 'refs/heads/master'
-        uses: actions/checkout@v2
-        with:
-          ref: development
-          token: ${{ secrets.GH_TOKEN_CI }}
-          fetch-depth: 0
-          clean: false
           
       - name: Commit to develop branch and merge to master branch
+        if: github.ref == 'refs/heads/master'
         run: |
+          git remote set-url origin "https://${{ secrets.GH_TOKEN_CI }}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
+          git checkout development
           git merge origin/master
           git push
