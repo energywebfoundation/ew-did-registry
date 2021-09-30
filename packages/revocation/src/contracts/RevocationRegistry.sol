@@ -8,17 +8,17 @@ contract RevocationRegistry {
         address revoker;
         uint revokedTimestamp;
     }
-    mapping (bytes32 => RevokedClaim) revokedClaims;
+    mapping (bytes32 => mapping(address => RevokedClaim)) revokedClaims;
  
-    function revokeClaim(bytes32 claimDigest) public  { 
-        require(revokedClaims[claimDigest].revokedTimestamp == 0, "The claim is already revoked");
-        revokedClaims[claimDigest].revoker = msg.sender;
-        revokedClaims[claimDigest].revokedTimestamp = block.number;
-        emit Revoked(msg.sender, claimDigest);
+    function revokeClaim(bytes32 role, address subject) public  { 
+        require(revokedClaims[role][subject].revokedTimestamp == 0, "The claim is already revoked");
+        revokedClaims[role][subject].revoker = msg.sender;
+        revokedClaims[role][subject].revokedTimestamp = block.number;
+        emit Revoked(msg.sender, role, subject);
     }
  
-    function isRevoked(bytes32 claimDigest) public view returns (bool) { 
-        if (revokedClaims[claimDigest].revokedTimestamp == 0) { 
+    function isRevoked(bytes32 role, address subject) public view returns (bool) { 
+        if (revokedClaims[role][subject].revokedTimestamp == 0) { 
             return false;
         }
         else { 
@@ -26,8 +26,8 @@ contract RevocationRegistry {
         }
     }
 
-    function getRevoker(bytes32 claimDigest) public view returns (address) { 
-        return revokedClaims[claimDigest].revoker;
+    function getRevoker(bytes32 role, address subject) public view returns (address) { 
+        return revokedClaims[role][subject].revoker;
     }
-    event Revoked(address revoker, bytes32 claimDigest);
+    event Revoked(address revoker, bytes32 role, address subject);
 }
