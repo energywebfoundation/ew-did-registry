@@ -69,12 +69,14 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
-      - name: Prepare Syning with develop branch
+      - name: Prepare Syncing with develop branch
         if: github.ref == 'refs/heads/master'
         uses: actions/checkout@v2
         with:
           ref: development
           token: ${{ secrets.GH_TOKEN_CI }}
+          fetch-depth: 0
+          clean: false
           
       - name: Commit to develop branch and merge to master branch
         run: |
