@@ -69,11 +69,14 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
-      - name: Commit to develop branch and merge to master branch
+      - name: Prepare Syning with develop branch
         if: github.ref == 'refs/heads/master'
+        uses: actions/checkout@v2
+        with:
+          ref: development
+          token: ${{ secrets.GH_TOKEN_CI }}
+          
+      - name: Commit to develop branch and merge to master branch
         run: |
-          git checkout development
           git merge origin/master
-          git push origin development
-          env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+          git push
