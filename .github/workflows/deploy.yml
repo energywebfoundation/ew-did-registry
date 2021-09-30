@@ -70,6 +70,7 @@ jobs:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         
       - name: Commit to develop branch and merge to master branch
+        if: github.ref == 'refs/heads/master'
         run: |
           git checkout development
           git merge origin/master
