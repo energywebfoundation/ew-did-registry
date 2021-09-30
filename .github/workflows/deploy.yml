@@ -63,8 +63,8 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git checkout master
           npm run publish:release
