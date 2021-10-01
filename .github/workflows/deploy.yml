@@ -82,3 +82,18 @@ jobs:
           git push origin development
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+            
+  Syncing_to_develop_branch :
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: development
+          token: ${{ secrets.GH_TOKEN_CI }}
+
+      - name: Commit to develop branch and merge to master branch
+        run: |
+          git merge origin/master
+          git push origin development
