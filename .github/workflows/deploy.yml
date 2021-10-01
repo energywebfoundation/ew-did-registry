@@ -68,20 +68,6 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
-      - name: Commit to develop branch and merge to master branch
-        if: github.ref == 'refs/heads/master'
-        run: |
-          git config http.sslVerify false
-          git config user.name ${{ secrets.GH_USER }}
-          git config user.email ${{ secrets.GH_EMAIL }}
-          git remote add upstream "https://${{ secrets.GH_USER }}:${{ secrets.GH_TOKEN_CI }}@github.com/${GITHUB_REPOSITORY}.git"
-          git branch --verbose
-          git checkout development
-          git merge origin/master
-          git push origin development
-        env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             
   Syncing_to_develop_branch :
     runs-on: ubuntu-latest
