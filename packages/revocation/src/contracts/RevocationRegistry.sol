@@ -1,34 +1,31 @@
-// SPDX-License-Identifier: GPL-3.0
-
 pragma solidity >=0.7.0 <0.9.0;
-    
+
+/**
+* A contract for tracking the revocations of off-chain Switchboard role claims.
+* For on-chain role revocations, see contract in iam-contracts repository.
+*/  
 contract RevocationRegistry {
     
     struct RevokedClaim {
         address revoker;
         uint revokedTimestamp;
     }
-    mapping (bytes32 => mapping(address => RevokedClaim)) revokedClaims;
+    mapping (bytes32 => RevokedClaim[]) revokedClaims;
  
-    function revokeClaim(bytes32 role, address subject) public  { 
-        require(revokedClaims[role][subject].revokedTimestamp == 0, "The claim is already revoked");
-        revokedClaims[role][subject].revoker = msg.sender;
-        revokedClaims[role][subject].revokedTimestamp = block.number;
-        emit Revoked(msg.sender, role, subject);
-    }
- 
-    function isRevoked(bytes32 role, address subject) public view returns (bool) { 
-        if (revokedClaims[role][subject].revokedTimestamp == 0) { 
-            return false;
-        }
-        else { 
-            return true; 
-        }
+    function revokeClaim(bytes32 credential) public  {
+        revokedClaims[credential].push( RevokedClaim(msg.sender, block.number));
+        emit Revoked(msg.sender, credential);
     }
 
-    function getRevocationDetail(bytes32 role, address subject) public view returns (address, uint) { 
-        return (revokedClaims[role][subject].revoker, revokedClaims[role][subject].revokedTimestamp);
+    function getRevocationDetail(bytes32 credential) public view returns (address[] memory, uint[] memory) { 
+        address[] memory revokers = new address[](revokedClaims[credential].length);
+        uint[] memory revokedTimestamp = new uint[](revokedClaims[credential].length);
+        for (uint i = 0; i < revokedClaims[credential].length; i++) {
+                revokers[i] = revokedClaims[credential][i].revoker;
+                revokedTimestamp[i] = revokedClaims[credential][i].revokedTimestamp;
+            }
+        return (revokers, revokedTimestamp);
     }
 
-    event Revoked(address revoker, bytes32 role, address subject);
+    event Revoked(address revoker, bytes32 role);
 }
