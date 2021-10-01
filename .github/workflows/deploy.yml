@@ -71,10 +71,10 @@ jobs:
           
       - name: Commit to develop branch and merge to master branch
         if: github.ref == 'refs/heads/master'
-        run: |
-          git checkout development
-          git remote set-url origin "https://${{ secrets.GH_TOKEN_CI }}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
-          git merge origin/master
-          git push --set-upstream origin development
-          env:
+        uses: colmose/push-bot@v1.0.0
+        with:
+          token: ${{ secrets.GH_TOKEN_CI }}
+          branch_name: 'development'
+          bot-name: ${{ secrets.GH_USER }}
+        env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
