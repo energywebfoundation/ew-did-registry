@@ -75,6 +75,6 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN_CI }}
           branch_name: 'development'
-          bot-name: ${{ secrets.GH_USER }}
+          bot_name: ${{ secrets.GH_USER }}
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
