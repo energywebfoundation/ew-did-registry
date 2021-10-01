@@ -56,7 +56,7 @@ jobs:
 
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
-        uses: codfish/semantic-release-action@v1
+        uses: codfish/semantic-release-action@v1 #ToDO: Check monorepo handeling
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
