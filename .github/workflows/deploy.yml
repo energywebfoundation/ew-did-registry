@@ -71,10 +71,14 @@ jobs:
           
       - name: Commit to develop branch and merge to master branch
         if: github.ref == 'refs/heads/master'
-        uses: colmose/push-bot@v1.0.0
-        with:
-          token: ${{ secrets.GH_TOKEN_CI }}
-          branch_name: 'development'
-          bot_name: ${{ secrets.GH_USER }}
+        run: |
+          git config http.sslVerify false
+          git config user.name ${{ secrets.GH_USER }}
+          git config user.email ${{ secrets.GH_EMAIL }}
+          git remote add upstream "https://${{ secrets.GH_USER }}:${{ secrets.GH_TOKEN_CI }}@github.com/${GITHUB_REPOSITORY}.git"
+          git branch --verbose
+          git checkout development
+          git merge origin/master
+          git push origin development
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
