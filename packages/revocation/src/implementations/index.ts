@@ -1,1 +1,2 @@
-export * from './revocation';
+export * from './revocationOffChain';
+export * from './revocationOnChain';
