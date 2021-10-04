@@ -8,9 +8,11 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "compile": "npm run compile:contracts && ../../node_modules/.bin/tsc",
     "test": "../../node_modules/.bin/mocha --timeout 10000 -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
-    "compile": "../../node_modules/.bin/tsc",
+    "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
+    "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -33,11 +35,14 @@
     "ethers": "^5.4.6"
   },
   "devDependencies": {
+    "@openzeppelin/contracts": "4.0.0",
+    "chai": "4.2.0",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
     "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1",
     "sinon": "^11.1.2",
-    "sinon-chai": "^3.7.0"
+    "sinon-chai": "^3.7.0",
+    "solhint": "3.3.4"
   }
 }
