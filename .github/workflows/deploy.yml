@@ -16,7 +16,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-  deploy:
+  Prepare_Deploy:
     runs-on: ubuntu-latest
     needs: cancel-previous
     steps:
@@ -65,14 +65,29 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-        uses: codfish/semantic-release-action@v1
+        uses: actions/checkout@v2
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-            
+        
+  Deploy_on_master_branch:
+    runs-on: ubuntu-latest
+    needs: Prepare_Deploy
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: master
+          token: ${{ secrets.GH_TOKEN_CI }}
+          
+      - name: Deploy on master branch
+        run: |
+          npm run publish:release
+
+  
   Syncing_to_develop_branch :
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: Prepare_Deploy
     steps:
       - uses: actions/checkout@v2
         with:
