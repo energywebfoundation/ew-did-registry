@@ -88,7 +88,7 @@ export class RevocationOnChain {
   }
 
   /**
-  * checks the revocation status of a role
+  * Checks the revocation status of a role
   * Returns the status of the role
   *
   * @param { string } role - role for which the status is to be checked

@@ -2,7 +2,7 @@ import {
   Contract, ethers, Event, utils,
 } from 'ethers';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { abi as RevocationOffChainAbi } from '../constants/RevocationRegistryOffChain.json';
+import { abi as RevocationOffChainAbi } from '../../build/contracts/RevocationRegistry.json';
 
 export class RevocationOffChain {
   private _revocationRegistryOffChain: Contract;

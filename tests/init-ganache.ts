@@ -6,7 +6,7 @@ import {
   BigNumber,
 } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
-import { abi as RevocationRegistryOffChainAbi, bytecode as RevocationRegistryOffChainByteCode } from '../packages/revocation/src/constants/RevocationRegistryOffChain.json';
+import { abi as RevocationRegistryOffChainAbi, bytecode as RevocationRegistryOffChainByteCode } from '../packages/revocation/build/contracts/RevocationRegistry.json';
 
 const { hexlify } = utils;
 
