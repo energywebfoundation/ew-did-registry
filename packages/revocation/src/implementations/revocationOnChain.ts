@@ -54,21 +54,21 @@ export class RevocationOnChain {
   }
 
   /**
-  * Revokes the roles for list of DIDs
+  * Revokes the role for list of DIDs
   * Returns true on success
   *
   * @param { string } role - role to be revoked for the DIDs
-  * @param { string[] } subjects - DIDs for which the roles are being revoked
+  * @param { string[] } subjects - DIDs for which the role is being revoked
   * @param { string } revoker - DID of the revoker
   * @returns Promise<boolean>
   */
-  async revokeListOfRoles(role: string, subjects: string [], revoker: string):
+  async revokeRoleforDIDs(role: string, subjects: string[], revoker: string):
   Promise<boolean> {
     const roleHash = utils.namehash(role);
     const revokerAddress = addressOf(revoker);
     const revocationSubjects = [];
-    for (let _i = 0; _i < subjects.length; _i++) {
-      revocationSubjects[_i] = addressOf(subjects[_i]);
+    for (let i = 0; i < subjects.length; i++) {
+      revocationSubjects[i] = addressOf(subjects[i]);
     }
     try {
       const tx = await this._revocationRegistryOnChain.revokeClaimsInList(
