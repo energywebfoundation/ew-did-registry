@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-ethr-resolver",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "publishConfig": {
     "access": "public"
   },
@@ -27,9 +27,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did": "0.5.2",
-    "@ew-did-registry/did-resolver-interface": "0.5.2",
-    "@ew-did-registry/keys": "0.5.2",
+    "@ew-did-registry/did": "0.5.3",
+    "@ew-did-registry/did-resolver-interface": "0.5.3",
+    "@ew-did-registry/keys": "0.5.3",
     "ethers": "^5.4.6"
   },
   "devDependencies": {
