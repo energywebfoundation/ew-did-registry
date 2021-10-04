@@ -65,11 +65,10 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
+        uses: codfish/semantic-release-action@v1
         env:
             GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm run publish:release
             
   Syncing_to_develop_branch :
     runs-on: ubuntu-latest
