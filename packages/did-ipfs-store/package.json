@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-ipfs-store",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "publishConfig": {
     "access": "public"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-resolver-interface",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "publishConfig": {
     "access": "public"
   },
@@ -25,7 +25,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did": "0.5.1",
+    "@ew-did-registry/did": "0.5.2",
     "ethers": "^5.4.6"
   }
 }
