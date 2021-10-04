@@ -36,7 +36,7 @@ describe('[REVOCATION CLAIMS]', function () {
 
   it('Revoker for a credential can be fetched', async () => {
     expect(await revocationRegistry.revokeRole(credential)).true;
-    const result = await revocationRegistry.getRevocationDetail(credential);
+    const result = await revocationRegistry.getRevocations(credential);
     expect(result.length).to.equal(2);
     expect(result[0][0]).equal(revokerAddress);
   });
@@ -44,7 +44,7 @@ describe('[REVOCATION CLAIMS]', function () {
   it('Revokers can be fetched for a credential revoked multiple times', async () => {
       expect(await revocationRegistry.revokeRole(credential)).true;
       expect(await revocationRegistry.revokeRole(credential)).true;
-      const result = await revocationRegistry.getRevocationDetail(credential);
+      const result = await revocationRegistry.getRevocations(credential);
       expect(result.length).to.equal(2);
       expect(result[0][0]).equal(revokerAddress);
       expect(result[0][1]).equal(revokerAddress);

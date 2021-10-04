@@ -30,8 +30,9 @@ export class RevocationOffChain {
   * @returns Promise<boolean>
   */
   async revokeRole(credential: string): Promise<boolean> {
+    const credentialHash = utils.keccak256(utils.toUtf8Bytes(credential));
     try {
-      const tx = await this._revocationRegistryOffChain.revokeClaim(utils.namehash(credential));
+      const tx = await this._revocationRegistryOffChain.revokeClaim(credentialHash);
       const receipt = await tx.wait();
       const event = receipt.events.find(
         (e: Event) => (e.event === 'Revoked'),
@@ -48,11 +49,12 @@ export class RevocationOffChain {
   * Returns the revokers and revocationTimeStamp for the revocations
   *
   * @param { string } credential - credential for which the status is to be checked
-  * @returns Promise<string>
+  * @returns Promise<Array<string[]>>
   */
-  async getRevocationDetail(credential: string): Promise<string[]> {
-    const result = await this._revocationRegistryOffChain.getRevocationDetail(
-      utils.namehash(credential),
+  async getRevocations(credential: string): Promise<Array<string[]>> {
+    const credentialHash = utils.keccak256(utils.toUtf8Bytes(credential));
+    const result = await this._revocationRegistryOffChain.getRevocations(
+      credentialHash,
     );
     const { 0: revokers, 1: revokedTimeStamp } = result;
     return ([revokers, revokedTimeStamp]);
