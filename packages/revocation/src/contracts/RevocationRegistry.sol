@@ -1,7 +1,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 /**
-* A contract for tracking the revocations of off-chain Switchboard role claims.
+* A contract for tracking the revocations of off-chain verifiable credentials.
 * For on-chain role revocations, see contract in iam-contracts repository.
 */  
 contract RevocationRegistry {
@@ -17,7 +17,7 @@ contract RevocationRegistry {
         emit Revoked(msg.sender, credential);
     }
 
-    function getRevocationDetail(bytes32 credential) public view returns (address[] memory, uint[] memory) { 
+    function getRevocations(bytes32 credential) public view returns (address[] memory, uint[] memory) { 
         address[] memory revokers = new address[](revokedClaims[credential].length);
         uint[] memory revokedTimestamp = new uint[](revokedClaims[credential].length);
         for (uint i = 0; i < revokedClaims[credential].length; i++) {
