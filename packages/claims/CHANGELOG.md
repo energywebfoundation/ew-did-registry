@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.1...v0.6.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/claims:** skip verify claim requester ([db9d414](https://github.com/energywebfoundation/ew-did-registry/commit/db9d414a730dd78a568c6c286f84a5fc9508ad58))
+* **resolver:** readOnwerPubKey() handle key with 0x ([b337a8b](https://github.com/energywebfoundation/ew-did-registry/commit/b337a8ba27f150eb0c19ae5cb623ff942819d809))
+
+
+
+
+
 ## [0.5.3](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.3) (2021-10-04)
 
 **Note:** Version bump only for package @ew-did-registry/claims
