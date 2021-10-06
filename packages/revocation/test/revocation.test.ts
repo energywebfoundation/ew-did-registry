@@ -1,13 +1,12 @@
 import { expect } from 'chai';
-import { providers } from 'ethers';
 import { Keys } from '@ew-did-registry/keys';
 import { deployRevocationRegistry } from '../../../tests';
 import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { RevocationOffChain } from '../src/implementations/revocationOffChain';
-const { JsonRpcProvider } = providers;
+import { RevocationRegOffChainAddr as revocationRegistryAddress} from '../src/constants/constants'
 
-describe('[REVOCATION CLAIMS]', function () {
+describe('[CREDENTIAL REVOCATION]', function () {
   let revocationRegistry: RevocationOffChain;
   let registryAddress : string;
   const credential = "This is a test credential which states nothing";
@@ -18,11 +17,18 @@ describe('[REVOCATION CLAIMS]', function () {
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
   };
-  const revoker = EwSigner.fromPrivateKey(revokerKeys.privateKey, providerSettings);
 
+  // To test with VOLTA, use the below providerSettings for EwSigner
+  const providerSettingsForVolta = {
+    type: ProviderTypes.HTTP,
+    uriOrInfo: 'https://volta-rpc.energyweb.org',
+  };
+  const revoker = EwSigner.fromPrivateKey(revokerKeys.privateKey, providerSettings);
+  
   beforeEach(async () => {
     registryAddress = await deployRevocationRegistry();
-    revocationRegistry = new RevocationOffChain(revoker, registryAddress);
+    // use 'revocationRegistryAddress' while testing with volta
+    revocationRegistry = new RevocationOffChain(revoker, registryAddress); 
   });
 
   it('Revoker can revoke a credential', async () => {
