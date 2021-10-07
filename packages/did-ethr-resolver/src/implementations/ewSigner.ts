@@ -33,7 +33,7 @@ export class EwSigner extends Signer {
       throw new Error('Public key should be a non-empty string');
     }
     const publicKeyWithoutHexPrefix = publicKey.slice(0, 2) === '0x' ? publicKey.slice(2) : publicKey;
-    this.publicKey = `0x${new Keys({ publicKey: publicKeyWithoutHexPrefix }).publicKey}`;
+    this.publicKey = new Keys({ publicKey: publicKeyWithoutHexPrefix }).publicKey;
     this.provider = signer.provider;
   }
 
