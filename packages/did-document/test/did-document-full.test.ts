@@ -58,6 +58,12 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     expect(created).to.be.true;
   });
 
+  it('create document public key should have 0x prefix', async () => {
+    const doc = await fullDoc.read(did);
+    expect(doc.publicKey).to.be.lengthOf(1);
+    expect(doc.publicKey[0]?.publicKeyHex?.slice(0, 2)).to.eql('0x');
+  });
+
   it('update document public key should return true', async () => {
     const updated = await fullDoc.update(
       DIDAttribute.PublicKey,

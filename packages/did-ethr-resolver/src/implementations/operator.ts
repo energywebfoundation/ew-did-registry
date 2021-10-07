@@ -104,7 +104,7 @@ export class Operator extends Resolver implements IOperator {
       algo: Algorithms.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
-      value: { publicKey: this.getPublicKey(), tag: KeyTags.OWNER },
+      value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },
     };
     await this.update(did, attribute, updateData);
     return true;
