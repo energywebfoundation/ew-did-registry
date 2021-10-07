@@ -64,7 +64,6 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     expect(doc.publicKey[0]?.publicKeyHex?.slice(0, 2)).to.eql('0x');
   });
 
-
   it('update document public key should return true', async () => {
     const updated = await fullDoc.update(
       DIDAttribute.PublicKey,
