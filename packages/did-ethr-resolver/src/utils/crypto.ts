@@ -4,7 +4,7 @@ import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
 import { DIDPattern } from '@ew-did-registry/did';
 
 const {
-  keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey,
+  keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey, hexlify,
 } = utils;
 
 export const compressedSecp256k1KeyLength = 66;
@@ -14,7 +14,7 @@ export const walletPubKey = (
 ): string => new Keys({ privateKey: privateKey.slice(2) }).publicKey;
 
 export async function signerPubKey(signer: Signer): Promise<string> {
-  const msg = 'Hello';
+  const msg = hexlify(123);
   const hash = keccak256(msg);
   const digest = hashMessage(arrayify(hash));
   const signature = await signer.signMessage(arrayify(digest));
