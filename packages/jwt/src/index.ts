@@ -100,7 +100,7 @@ class JWT {
         return result.payload;
       }
     }
-    throw new Error('invalid signature');
+    throw new Error(`Invalid signature: ${results[0]?.payload?.message}`)
   }
 
   /**

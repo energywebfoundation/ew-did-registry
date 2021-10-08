@@ -19,10 +19,10 @@ const verifyJwtSignature = () => async (
   publicKey: string,
   options?: Record<string, unknown>,
 ):
-  Promise<{ success: boolean; payload?: unknown }> => new Promise(
+  Promise<{ success: boolean; payload?: object | Error }> => new Promise(
   (resolve) => {
     const pemPublicKey = keyEncoder.encodePublic(publicKey, 'raw', 'pem');
-    jsonwebtoken.verify(token, pemPublicKey, options, (error, payload) => {
+    jsonwebtoken.verify(token, pemPublicKey, options, (error: Error, payload: object | Error) => {
       if (error) resolve({ success: false, payload: error });
 
       resolve({ success: true, payload });
@@ -49,7 +49,7 @@ const verifyEthersAddressSignature = () => async (token: string, address: string
       return { success: true, payload: JSON.parse(base64url.decode(encodedPayload)) };
     }
   }
-  return { success: false, payload: {} };
+  return { success: false, payload: new Error('Failed to verify ethers signature') };
 };
 
 export const verificationMethods = [verifyJwtSignature(), verifyEthersAddressSignature()];
