@@ -2,6 +2,7 @@ import {
   Signer, providers, utils, Wallet,
 } from 'ethers';
 import { ProviderSettings } from '@ew-did-registry/did-resolver-interface';
+import { Keys } from '@ew-did-registry/keys';
 import { getProvider } from '../utils';
 
 type EIP1193ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFunc;
@@ -12,20 +13,27 @@ type EIP1193ProviderType = providers.ExternalProvider | providers.JsonRpcFetchFu
  * The purpose of the ethers encapsulation is to allow consumers more flexiblity in ethers version.
  */
 export class EwSigner extends Signer {
-  public readonly provider: providers.Provider
+  public readonly provider: providers.Provider;
+
+  public readonly publicKey: string;
 
   /**
    * A private constructor as this class uses factory method for instantiation API.
    */
   private constructor(
     public readonly signer: Signer,
-    public readonly publicKey: string,
+    publicKey: string,
     public readonly privateKey?: string,
   ) {
     super();
     if (!signer.provider) {
       throw new Error('Signer is not connected to chain. Provider must be defined');
     }
+    if (!publicKey) {
+      throw new Error('Public key should be a non-empty string');
+    }
+    const publicKeyWithoutHexPrefix = publicKey.slice(0, 2) === '0x' ? publicKey.slice(2) : publicKey;
+    this.publicKey = new Keys({ publicKey: publicKeyWithoutHexPrefix }).publicKey;
     this.provider = signer.provider;
   }
 
@@ -72,7 +80,7 @@ export class EwSigner extends Signer {
     const provider = getProvider(providerSettings);
     const wallet = new Wallet(privateKey, provider);
     const compressedPubKey = utils.computePublicKey(wallet.publicKey, true);
-    return new EwSigner(wallet, compressedPubKey.slice(2), privateKey);
+    return new EwSigner(wallet, compressedPubKey, privateKey);
   }
 
   /**
