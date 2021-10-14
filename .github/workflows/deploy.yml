@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'development', 'master' ]
+    branches: [ 'development', 'master', 'test-workflow' ]
   pull_request:
     branches: [ 'development', 'master' ]
 
@@ -69,8 +69,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm run publish:release
+        if: ${{ env.PUBLISH_FLAG != False }} 
+        - uses: actions/checkout@v2
+          with:
+            PUBLISH_FLAG: False
+            fetch-depth: 0
+            token: ${{ secrets.GH_TOKEN_CI }}
+            run: |
+              npm run publish:release
         
   sync_master_to_development_branch :
     if: github.ref == 'refs/heads/master'
