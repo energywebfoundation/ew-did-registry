@@ -64,19 +64,22 @@ jobs:
         run: |
           npm run publish:canary
 
-      - name: Deploy on master branch
-        if: github.ref == 'refs/heads/master'
+      - name: Deploy on test branch
+        if: ${{ github.ref == 'refs/heads/test-workflow' && env.PUBLISH_FLAG != false }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: ${{ env.PUBLISH_FLAG != False }} 
-        - uses: actions/checkout@v2
-          with:
-            PUBLISH_FLAG: False
-            fetch-depth: 0
-            token: ${{ secrets.GH_TOKEN_CI }}
-            run: |
-              npm run publish:release
+
+      - uses: actions/checkout@v2
+        with:
+          PUBLISH_FLAG: False
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN_CI }}
+          run: |
+            echo "Should run lerna release whith publishing on branch"
+            git merge origin/master
+            git push origin test-workflow --force
+            echo "DONE"
         
   sync_master_to_development_branch :
     if: github.ref == 'refs/heads/master'
