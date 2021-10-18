@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.1...v0.6.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/proxyidenity:** sync change owner ([31fabdc](https://github.com/energywebfoundation/ew-did-registry/commit/31fabdc96cf0b69f06c8090590c861e5ab32029e))
+* **@ew-did-registry/proxyidentity:** include validity optionally ([e0bed7f](https://github.com/energywebfoundation/ew-did-registry/commit/e0bed7f52f51b7d1a8ef655130ff19736b16878c))
+* **@ew-did-registry/proxyidentity:** unify scripts names ([80fdf25](https://github.com/energywebfoundation/ew-did-registry/commit/80fdf259ded5b9706f0343bb24268a9ad038089a))
+* **ethers:** updated to ethers version ^5.4.6 ([8eb0648](https://github.com/energywebfoundation/ew-did-registry/commit/8eb06486040f76c36e543ded141bc3b5bb8ad0e8))
+* **offerableIdentityOperator:** params are not array ([a620a8a](https://github.com/energywebfoundation/ew-did-registry/commit/a620a8a97a477bdcd8814d26bb02a7bc4a3f60a4))
+* **proxyIdentity:** rename test-rpc script to test ([e990ac5](https://github.com/energywebfoundation/ew-did-registry/commit/e990ac5fb8008923b1f46075dc9b8f9b9dd2fe3d))
+* **proxyIdentity:** update openzeppelin to 4.3.1 ([ac2a724](https://github.com/energywebfoundation/ew-did-registry/commit/ac2a724f8d881d86cd2647e5b0307f84c7d0393c))
+
+
+### Features
+
+* **@energyweb/iam-contracts:** impl IOwned on offerable identity ([aa8551a](https://github.com/energywebfoundation/ew-did-registry/commit/aa8551a4cb819b7028905e43c942ec962bbe4ebd))
+* **@ew-did-registry/proxyidentity:** clone from openzeppelin ([717ab04](https://github.com/energywebfoundation/ew-did-registry/commit/717ab04cda609dd02f2bae151b13cfa13faa8cb8))
+* **@ew-did-registry/proxyidentity:** proxy call to any contract ([373e242](https://github.com/energywebfoundation/ew-did-registry/commit/373e242f762f3397ffefbbb75ca3f4710a0aa8e6))
+* **ethers packages:** Updating ethers from 5.3.1 to 5.4.0 ([cee0da7](https://github.com/energywebfoundation/ew-did-registry/commit/cee0da757f618f559245d30994fa59ca44b57767))
+
+
+
+
+
+## [0.5.3](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.3) (2021-10-04)
+
+**Note:** Version bump only for package @ew-did-registry/proxyidentity
+
+
+
+
+
+## [0.5.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.2) (2021-10-04)
+
+**Note:** Version bump only for package @ew-did-registry/proxyidentity
+
+
+
+
+
 ## [0.5.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.0...v0.5.1) (2021-04-06)
 
 **Note:** Version bump only for package @ew-did-registry/proxyidentity

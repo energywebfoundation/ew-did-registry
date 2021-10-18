@@ -53,6 +53,10 @@ const testSuite = (): void => {
     expect(operator.getPublicKey()).equal(keys.publicKey);
   });
 
+  it('readOwnerPubKey should give same publicKey', async () => {
+    expect(await operator.readOwnerPubKey(did)).equal(keys.publicKey);
+  });
+
   /**
    * Spy on a method call from resolver (i.e. identityOwner())
    * This is to ensure the provider from signer is used.

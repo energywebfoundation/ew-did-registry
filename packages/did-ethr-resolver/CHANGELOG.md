@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.1...v0.6.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/did-ethr-resolver:** identity tx by name ([79194f7](https://github.com/energywebfoundation/ew-did-registry/commit/79194f703612f037f29c5b2a694041bcb7036c49))
+* **did-ethr-resolver:** removing caching from resolver.ts ([c90168f](https://github.com/energywebfoundation/ew-did-registry/commit/c90168f407e089fe37bbcb39435b1c26b8e46ae8))
+* **ethers:** updated to ethers version ^5.4.6 ([8eb0648](https://github.com/energywebfoundation/ew-did-registry/commit/8eb06486040f76c36e543ded141bc3b5bb8ad0e8))
+* **Operator:** Resolver base class was always using default provider ([#327](https://github.com/energywebfoundation/ew-did-registry/issues/327)) ([4e01826](https://github.com/energywebfoundation/ew-did-registry/commit/4e0182687ab0e9b441898fc8162101c9648d2471))
+* **packages:** preparing merge ([4d3382c](https://github.com/energywebfoundation/ew-did-registry/commit/4d3382c40845841e791d999918403a2c512d0cbd))
+* **resolver:** readOnwerPubKey() handle key with 0x ([b337a8b](https://github.com/energywebfoundation/ew-did-registry/commit/b337a8ba27f150eb0c19ae5cb623ff942819d809))
+
+
+### Features
+
+* **eslint:** setting eslint ([0e77331](https://github.com/energywebfoundation/ew-did-registry/commit/0e773310ca665aac97d32adb5ac6bd453632bdde))
+* **eslint:** setting eslint ([f9626e0](https://github.com/energywebfoundation/ew-did-registry/commit/f9626e002a47f15df61a4d7290218026bdcf57cf))
+* **ethers packages:** Updating ethers from 5.3.1 to 5.4.0 ([cee0da7](https://github.com/energywebfoundation/ew-did-registry/commit/cee0da757f618f559245d30994fa59ca44b57767))
+* **EwJsonRpcSigner:** construct from ethers provider ([3705c4c](https://github.com/energywebfoundation/ew-did-registry/commit/3705c4cfcada283c0d5fe5c2521ad9c39be0d595))
+* **EwSigner:** add fromEthersSigner ([#328](https://github.com/energywebfoundation/ew-did-registry/issues/328)) ([921886b](https://github.com/energywebfoundation/ew-did-registry/commit/921886becbf8bd40e5181c269389b2e64e977903))
+
+
+
+
+
+## [0.5.3](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.3) (2021-10-04)
+
+**Note:** Version bump only for package @ew-did-registry/did-ethr-resolver
+
+
+
+
+
+## [0.5.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.2) (2021-10-04)
+
+**Note:** Version bump only for package @ew-did-registry/did-ethr-resolver
+
+
+
+
+
 ## [0.5.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.0...v0.5.1) (2021-04-06)
 
 **Note:** Version bump only for package @ew-did-registry/did-ethr-resolver

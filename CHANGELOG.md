@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.1...v0.6.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/claims:** skip verify claim requester ([db9d414](https://github.com/energywebfoundation/ew-did-registry/commit/db9d414a730dd78a568c6c286f84a5fc9508ad58))
+* **@ew-did-registry/did-ethr-resolver:** identity tx by name ([79194f7](https://github.com/energywebfoundation/ew-did-registry/commit/79194f703612f037f29c5b2a694041bcb7036c49))
+* **@ew-did-registry/proxyidenity:** sync change owner ([31fabdc](https://github.com/energywebfoundation/ew-did-registry/commit/31fabdc96cf0b69f06c8090590c861e5ab32029e))
+* **@ew-did-registry/proxyidentity:** include validity optionally ([e0bed7f](https://github.com/energywebfoundation/ew-did-registry/commit/e0bed7f52f51b7d1a8ef655130ff19736b16878c))
+* **@ew-did-registry/proxyidentity:** unify scripts names ([80fdf25](https://github.com/energywebfoundation/ew-did-registry/commit/80fdf259ded5b9706f0343bb24268a9ad038089a))
+* **deploy.yml:** fix deployment order ([60c0a32](https://github.com/energywebfoundation/ew-did-registry/commit/60c0a32fce06104184d358a4083fc99365802462))
+* **deploy.yml:** fix indentation ([acd98d4](https://github.com/energywebfoundation/ew-did-registry/commit/acd98d4ac33f86f442a498d5b8c1e442893e551c))
+* **did-ethr-resolver:** removing caching from resolver.ts ([c90168f](https://github.com/energywebfoundation/ew-did-registry/commit/c90168f407e089fe37bbcb39435b1c26b8e46ae8))
+* **ethers:** updated to ethers version ^5.4.6 ([8eb0648](https://github.com/energywebfoundation/ew-did-registry/commit/8eb06486040f76c36e543ded141bc3b5bb8ad0e8))
+* **github action:** update token name ([204ede8](https://github.com/energywebfoundation/ew-did-registry/commit/204ede8ccad200d88e3c95dd04fe29e7908b1af7))
+* **interfaces:** remove the duplicated IdentityOwner from interfaces ([#318](https://github.com/energywebfoundation/ew-did-registry/issues/318)) ([bcba5f5](https://github.com/energywebfoundation/ew-did-registry/commit/bcba5f5344eddf8b05dc5f500c026f20f14c860c))
+* **offerableIdentityOperator:** params are not array ([a620a8a](https://github.com/energywebfoundation/ew-did-registry/commit/a620a8a97a477bdcd8814d26bb02a7bc4a3f60a4))
+* **Operator:** Resolver base class was always using default provider ([#327](https://github.com/energywebfoundation/ew-did-registry/issues/327)) ([4e01826](https://github.com/energywebfoundation/ew-did-registry/commit/4e0182687ab0e9b441898fc8162101c9648d2471))
+* **packages:** restoring package-lock ([bb66c8b](https://github.com/energywebfoundation/ew-did-registry/commit/bb66c8b8b6d37f1b9631271758dadcfde363e30b))
+* **proxyIdentity:** rename test-rpc script to test ([e990ac5](https://github.com/energywebfoundation/ew-did-registry/commit/e990ac5fb8008923b1f46075dc9b8f9b9dd2fe3d))
+* **proxyIdentity:** update openzeppelin to 4.3.1 ([ac2a724](https://github.com/energywebfoundation/ew-did-registry/commit/ac2a724f8d881d86cd2647e5b0307f84c7d0393c))
+* **resolver:** readOnwerPubKey() handle key with 0x ([b337a8b](https://github.com/energywebfoundation/ew-did-registry/commit/b337a8ba27f150eb0c19ae5cb623ff942819d809))
+* compile to es6 ([8d85582](https://github.com/energywebfoundation/ew-did-registry/commit/8d85582c6c9342b1bd6564a437d78ef0c4cb3977))
+
+
+### Features
+
+* **@energyweb/iam-contracts:** impl IOwned on offerable identity ([aa8551a](https://github.com/energywebfoundation/ew-did-registry/commit/aa8551a4cb819b7028905e43c942ec962bbe4ebd))
+* **@ew-did-registry/proxyidentity:** clone from openzeppelin ([717ab04](https://github.com/energywebfoundation/ew-did-registry/commit/717ab04cda609dd02f2bae151b13cfa13faa8cb8))
+* **@ew-did-registry/proxyidentity:** proxy call to any contract ([373e242](https://github.com/energywebfoundation/ew-did-registry/commit/373e242f762f3397ffefbbb75ca3f4710a0aa8e6))
+* **eslint:** setting eslint ([0e77331](https://github.com/energywebfoundation/ew-did-registry/commit/0e773310ca665aac97d32adb5ac6bd453632bdde))
+* **eslint:** setting eslint ([f9626e0](https://github.com/energywebfoundation/ew-did-registry/commit/f9626e002a47f15df61a4d7290218026bdcf57cf))
+* **ethers packages:** Updating ethers from 5.3.1 to 5.4.0 ([cee0da7](https://github.com/energywebfoundation/ew-did-registry/commit/cee0da757f618f559245d30994fa59ca44b57767))
+* **EwJsonRpcSigner:** construct from ethers provider ([3705c4c](https://github.com/energywebfoundation/ew-did-registry/commit/3705c4cfcada283c0d5fe5c2521ad9c39be0d595))
+* **EwSigner:** add fromEthersSigner ([#328](https://github.com/energywebfoundation/ew-did-registry/issues/328)) ([921886b](https://github.com/energywebfoundation/ew-did-registry/commit/921886becbf8bd40e5181c269389b2e64e977903))
+* **GHA ctions:** setting semantic release to use ([f685f2d](https://github.com/energywebfoundation/ew-did-registry/commit/f685f2da2d96d7399dcb413049ce4cb991992c9c))
+
+
+
+
+
+## [0.5.3](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.3) (2021-10-04)
+
+**Note:** Version bump only for package ew-did-registry
+
+
+
+
+
+## [0.5.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.5.2) (2021-10-04)
+
+**Note:** Version bump only for package ew-did-registry
+
+
+
+
+
 ## [0.5.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.0...v0.5.1) (2021-04-06)
 
 **Note:** Version bump only for package ew-did-registry

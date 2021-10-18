@@ -16,6 +16,7 @@ import {
 import { Methods, DIDPattern } from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
+import { compressedSecp256k1KeyLength } from '..';
 
 const { formatBytes32String } = utils;
 
@@ -175,7 +176,17 @@ class Resolver implements IResolver {
       did,
       selector,
     );
-    return pk ? ((pk as IPublicKey).publicKeyHex as string) : undefined;
+    const publicKeyHex = pk ? ((pk as IPublicKey).publicKeyHex as string) : undefined;
+    if (!publicKeyHex) {
+      return undefined;
+    }
+    if (publicKeyHex.length === compressedSecp256k1KeyLength + 2 && publicKeyHex.substring(0, 2) === '0x') {
+      return publicKeyHex.substring(2);
+    }
+    if (publicKeyHex.length === compressedSecp256k1KeyLength) {
+      return publicKeyHex;
+    }
+    return undefined;
   }
 
   async readFromBlock(
