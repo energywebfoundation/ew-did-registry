@@ -26,6 +26,11 @@ jobs:
       actions: write
       repository-projects: write
       checks: write
+      pull-requests: write
+      security-events: write
+      discussions: write
+      issues: write
+      statuses: write
     steps:
       - uses: actions/checkout@v2
         with:
