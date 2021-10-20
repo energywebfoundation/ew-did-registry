@@ -23,12 +23,14 @@ jobs:
       contents: write
       deployments: write
       packages: write
+      actions: write
+      repository-projects: write
+      checks: write
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          persist-credentials: false
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14.17.6'
