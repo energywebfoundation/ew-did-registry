@@ -1,5 +1,5 @@
 import {
-  Contract, ethers, Event, utils,
+  Contract, ethers, Event, utils, Signer,
 } from 'ethers';
 import { EwSigner, addressOf } from '@ew-did-registry/did-ethr-resolver';
 import { abi as RevocationOnChainAbi } from '../constants/RevocationRegistryOnChain.json';
@@ -18,7 +18,7 @@ export class RevocationOnChain {
     this._revocationRegistryOnChain = new ethers.Contract(
       addressOnChain,
       RevocationOnChainAbi,
-      owner,
+      owner as Signer,
     );
   }
 
