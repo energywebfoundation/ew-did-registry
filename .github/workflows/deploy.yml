@@ -28,6 +28,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14.17.6'
