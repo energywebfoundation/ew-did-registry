@@ -1,4 +1,3 @@
-
 // Address of smart contracts on Volta
 export const RevocationRegOffChainAddr = '0x3A859706c2491993Cf07760bf68F40B10946fAc5';
 export const RevocationRegOnChainAddr = '0xb155d0ff939de83a5f26676fEcEd7f208C39055C';

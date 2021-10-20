@@ -30,10 +30,11 @@ export const deployRegistry = async (fillAccounts: Array<string>): Promise<strin
 };
 
 export const deployRevocationRegistry = async (): Promise<string> => {
-
-  const registryFactory = new ContractFactory(RevocationRegistryOffChainAbi, RevocationRegistryOffChainByteCode,
-    deployer);
+  const registryFactory = new ContractFactory(
+    RevocationRegistryOffChainAbi,
+    RevocationRegistryOffChainByteCode,
+    deployer
+    );
   const revocationRegistry = await registryFactory.deploy();
   return revocationRegistry.address;
 };
-
