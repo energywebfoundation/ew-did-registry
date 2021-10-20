@@ -6,11 +6,13 @@ import {
   BigNumber,
 } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
+import { abi as RevocationRegistryOffChainAbi, bytecode as RevocationRegistryOffChainByteCode } from '../packages/revocation/build/contracts/RevocationRegistry.json';
 
 const { hexlify } = utils;
 
 const GANACHE_PORT = 8544;
 const provider = new providers.JsonRpcProvider(`http://localhost:${GANACHE_PORT}`);
+const deployer = provider.getSigner(2);
 
 export const deployRegistry = async (fillAccounts: Array<string>): Promise<string> => {
   const faucet = provider.getSigner(2);
@@ -21,8 +23,18 @@ export const deployRegistry = async (fillAccounts: Array<string>): Promise<strin
   })));
 
   const registryFactory = new ContractFactory(ethrReg.abi, ethrReg.bytecode,
-    new Wallet('0x49b2e2b48cfc25fda1d1cbdb2197b83902142c6da502dcf1871c628ea524f11b', provider));
+    deployer);
   const registry = await registryFactory.deploy();
   // @TODO: deploy proxy factory
   return registry.address;
+};
+
+export const deployRevocationRegistry = async (): Promise<string> => {
+  const registryFactory = new ContractFactory(
+    RevocationRegistryOffChainAbi,
+    RevocationRegistryOffChainByteCode,
+    deployer
+    );
+  const revocationRegistry = await registryFactory.deploy();
+  return revocationRegistry.address;
 };
