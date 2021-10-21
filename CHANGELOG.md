@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.1...v0.6.2) (2021-10-21)
+
+
+### Bug Fixes
+
+* **deploy.yml:** removing useless rights and resetting Token on merging ([9f73032](https://github.com/energywebfoundation/ew-did-registry/commit/9f73032d63afbc68615ac49bdc70a494a95e8c8e))
+
+
+
+
+
 ## [0.6.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.6.1) (2021-10-08)
 
 **Note:** Version bump only for package ew-did-registry
