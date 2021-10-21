@@ -68,18 +68,10 @@ jobs:
         run: |
           npm run publish:canary
 
-      - name: Prepare master branch
-        if: github.ref == 'refs/heads/master'
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: master
-          token: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm run publish:release
