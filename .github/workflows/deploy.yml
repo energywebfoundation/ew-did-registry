@@ -3,9 +3,6 @@ name: Deploy
 on:
   push:
     branches: [ 'development', 'master' ]
-    paths-ignore:
-      - 'package.json'
-      - 'CHANGELOG.md'
   pull_request:
     branches: [ 'development', 'master' ]
 
@@ -88,5 +85,7 @@ jobs:
 
       - name: Commit to develop branch and merge to master branch
         run: |
+          git config --global user.email ${{ secrets.GH_EMAIL }}
+          git config --global user.name ${{ secrets.GH_USER }}
           git merge origin/master
           git push origin development
