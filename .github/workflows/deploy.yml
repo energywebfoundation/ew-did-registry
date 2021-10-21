@@ -70,11 +70,6 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: master
-          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
