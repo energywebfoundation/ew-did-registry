@@ -71,10 +71,10 @@ jobs:
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npm run publish:release
+          lerna version --conventional-commits --exact --yes && lerna publish from-git --yes
         
   sync_master_to_development_branch :
     if: github.ref == 'refs/heads/master'
