@@ -23,14 +23,6 @@ jobs:
       contents: write
       deployments: write
       packages: write
-      actions: write
-      repository-projects: write
-      checks: write
-      pull-requests: write
-      security-events: write
-      discussions: write
-      issues: write
-      statuses: write
     steps:
       - uses: actions/checkout@v2
         with:
@@ -78,6 +70,11 @@ jobs:
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
