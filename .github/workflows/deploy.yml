@@ -70,8 +70,8 @@ jobs:
 
       - name: Prepare master branch
         if: github.ref == 'refs/heads/master'
-      - uses: actions/checkout@v2
-        with: 
+        uses: actions/checkout@v2
+        with:
           fetch-depth: 0
           ref: master
           token: ${{ secrets.GITHUB_TOKEN }}
