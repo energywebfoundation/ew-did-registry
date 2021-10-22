@@ -17,6 +17,7 @@ jobs:
           access_token: ${{ github.token }}
 
   deploy:
+    if: "!contains(github.event.head_commit.author.name, 'GITHUB_ACTION')"
     runs-on: ubuntu-latest
     needs: cancel-previous
     steps:
@@ -70,6 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          git config user.name "GITHUB_ACTION"
           npm run publish:release
         
   sync_master_to_development_branch :
