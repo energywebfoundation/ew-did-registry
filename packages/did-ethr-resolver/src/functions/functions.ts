@@ -36,8 +36,9 @@ const handleDelegateChange = (
 ): IDIDLogData => {
   const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
   const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
+  const publicKeyBlock = document.publicKey[publicKeyID]?.block;
   if (document.publicKey[publicKeyID] === undefined
-    || document.publicKey[publicKeyID].block < block) {
+    || (publicKeyBlock !== undefined && publicKeyBlock < block)) {
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
@@ -112,8 +113,9 @@ const handleAttributeChange = (
         validity: validTo,
         block,
       };
-      if ((document.publicKey[pk.id] === undefined
-        || document.publicKey[pk.id].block < block)) {
+      const publicKeyBlock = document.publicKey[pk.id]?.block;
+      if (document.publicKey[pk.id] === undefined
+        || (publicKeyBlock !== undefined && publicKeyBlock < block)) {
         switch (encoding) {
           case null:
           case undefined:
@@ -148,8 +150,9 @@ const handleAttributeChange = (
       servicePoint.validity = validTo;
       servicePoint.block = block;
 
-      if ((document.service[servicePoint.id] === undefined
-        || document.service[servicePoint.id].block < block)) {
+      const serviceEndpointBlock = document.service[servicePoint.id]?.block;
+      if (document.publicKey[servicePoint.id] === undefined
+        || (serviceEndpointBlock !== undefined && serviceEndpointBlock < block)) {
         document.service[servicePoint.id] = servicePoint;
       }
       return document;
@@ -352,7 +355,8 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.publicKey) {
     const pubKey = document.publicKey[key];
-    if (pubKey.validity.gt(now)) {
+    const pubKeyValidity = pubKey.validity?.gt(now);
+    if (pubKeyValidity) {
       const pubKeyCopy = { ...pubKey };
       delete pubKeyCopy.validity;
       delete pubKeyCopy.block;
@@ -363,7 +367,8 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.authentication) {
     const authenticator = document.authentication[key];
-    if (authenticator.validity.gt(now)) {
+    const authenticatorValidity = authenticator.validity?.gt(now);
+    if (authenticatorValidity) {
       const authenticatorCopy = { ...authenticator };
       delete authenticatorCopy.validity;
       delete authenticatorCopy.block;
@@ -374,7 +379,8 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.service) {
     const serviceEndpoint = document.service[key];
-    if (serviceEndpoint.validity.gt(now)) {
+    const serviceEndpointValidity = serviceEndpoint.validity?.gt(now);
+    if (serviceEndpointValidity) {
       const serviceEndpointCopy = { ...serviceEndpoint };
       delete serviceEndpointCopy.validity;
       delete serviceEndpointCopy.block;

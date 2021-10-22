@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import {
   utils,
   BigNumber,
@@ -42,28 +43,10 @@ export interface IServiceEndpoint {
   type: string;
   serviceEndpoint: string;
   description?: string;
-  validity: BigNumber;
-  block: number;
+  validity?: BigNumber;
+  block?: number;
   hash?: string; // hash of the content located at service endpoint
   [key: string]: string | BigNumber | number | undefined;
-}
-
-/**
- * The interface of DID Document is compliant with W3C specification.
- * https://w3c.github.io/did-core/
- * The link above will be the best point of reference for the interface below, including
- * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
- */
-export interface IDIDDocument {
-  '@context': string;
-  id: string;
-  publicKey: IPublicKey[];
-  authentication: Array<IAuthentication | string>;
-  delegates?: string[];
-  service: IServiceEndpoint[];
-  created?: string;
-  updated?: string;
-  proof?: ILinkedDataProof;
 }
 
 export interface IPublicKey {
@@ -77,15 +60,15 @@ export interface IPublicKey {
   publicKeyPem?: string;
   publicKeyJwk?: string;
   publicKeyMultibase?: string;
-  validity: BigNumber;
-  block: number;
+  validity?: BigNumber;
+  block?: number;
   [key: string]: string | number | BigNumber | undefined;
 }
 
 export interface IAuthentication {
   type: string;
   publicKey: string;
-  validity: BigNumber;
+  validity?: BigNumber;
   block?: number;
   [key: string]: string | BigNumber | number | undefined;
 }
@@ -168,3 +151,21 @@ export type DocumentSelector = Partial<{
   service: Partial<IServiceEndpoint>;
   authentication: Partial<IAuthentication>;
 }>
+
+/**
+ * The interface of DID Document is compliant with W3C specification.
+ * https://w3c.github.io/did-core/
+ * The link above will be the best point of reference for the interface below, including
+ * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
+ */
+export interface IDIDDocument {
+  '@context': string;
+  id: string;
+  publicKey: IPublicKey[];
+  authentication: Array<IAuthentication | string>;
+  delegates?: string[];
+  service: IServiceEndpoint[];
+  created?: string;
+  updated?: string;
+  proof?: ILinkedDataProof;
+}

@@ -39,13 +39,15 @@ export class RevocationOffChain {
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
 
   /**
-  * checks the revocation details for a credential
+  * Checks the revocation details for a credential
   * Returns the revokers and revocationTimeStamp for the revocations
   *
   * @param { string } credential - credential for which the status is to be checked

@@ -88,12 +88,15 @@ export class OfferableIdenitytOperator extends Operator {
       params.push(validity.toString());
     }
     const data = new Interface(erc1056Abi).encodeFunctionData(method, params);
+    let receipt;
     try {
       const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
-      const receipt = await tx.wait();
-      return BigNumber.from(receipt.blockNumber);
-    } catch (e) {
-      throw new Error(e);
+      receipt = await tx.wait();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
+    return BigNumber.from(receipt.blockNumber);
   }
 }

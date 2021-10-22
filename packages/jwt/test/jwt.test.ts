@@ -42,8 +42,8 @@ const testSuite = (): void => {
 
     try {
       await jwtBob.verify(token, BobKeyPair.publicKey);
-    } catch (e) {
-      expect(e.message).is.equal('invalid signature');
+    } catch (error : any) {
+      expect(error.message).is.equal('invalid signature');
     }
   });
 

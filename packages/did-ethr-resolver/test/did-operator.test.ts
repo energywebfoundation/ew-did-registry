@@ -187,8 +187,8 @@ const testSuite = (): void => {
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
       fail('Error was not thrown');
-    } catch (e) {
-      expect(e.message).to.equal('Invalid DID');
+    } catch (error : any) {
+      expect(error.message).to.equal('Invalid DID');
     }
   });
 
@@ -205,8 +205,8 @@ const testSuite = (): void => {
       fail(
         'Error was not thrown',
       );
-    } catch (e) {
-      expect(e.message).to.equal('Validity must be non negative value');
+    } catch (error : any) {
+      expect(error.message).to.equal('Validity must be non negative value');
     }
   });
 

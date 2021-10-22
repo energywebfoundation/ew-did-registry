@@ -235,7 +235,9 @@ export class Operator extends Resolver implements IOperator {
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
@@ -403,9 +405,12 @@ export class Operator extends Resolver implements IOperator {
           || (didAttribute === DIDAttribute.Authenticate && e.event === 'DIDDelegateChanged'),
       );
       return BigNumber.from(event.blockNumber as number);
-    } catch (e) {
-      throw new Error(e.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
+    return BigNumber.from(0);
   }
 
   /**

@@ -8,6 +8,12 @@ const keyEncoder = new KeyEncoder('secp256k1');
 
 const { keccak256, arrayify } = utils;
 
+export type JwtOptions = {
+  issuer?: string; subject?: string; noTimestamp?: boolean; algorithm?: jwt.Algorithm;
+};
+export type JwtPayload =
+  { [key: string]: string | object } & { iss?: string; sub?: string; iat?: number };
+
 export function createSignWithKeys(keys: IKeys) {
   return async (
     payload: string | JwtPayload,
@@ -19,17 +25,11 @@ export function createSignWithKeys(keys: IKeys) {
       jwt.sign(payload, pemPrivateKey, options || {}, (error, token) => {
         if (error) reject(error);
 
-        resolve(token);
+        if (token !== undefined) resolve(token);
       });
     },
   );
 }
-
-export type JwtOptions = {
-  issuer?: string; subject?: string; noTimestamp?: boolean; algorithm?: jwt.Algorithm;
-};
-export type JwtPayload =
-  { [key: string]: string | object } & { iss?: string; sub?: string; iat?: number };
 
 export function createSignWithEthersSigner(signer: Signer) {
   return async (

@@ -27,6 +27,7 @@
     "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/ban-ts-comment": "off",
     "import/extensions": "off",
     "space-infix-ops": [
       "error",

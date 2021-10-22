@@ -43,12 +43,14 @@ export class RevocationOnChain {
         revokerAddress,
       );
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event = receipt.events?.find(
         (e: Event) => (e.event === 'Revoked'),
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
@@ -77,12 +79,14 @@ export class RevocationOnChain {
         revokerAddress,
       );
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event = receipt.events?.find(
         (e: Event) => (e.event === 'Revoked'),
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
@@ -105,7 +109,7 @@ export class RevocationOnChain {
   }
 
   /**
-  * checks the revocation details for a subject's role
+  * Checks the revocation details for a subject's role
   * Returns the revoker and revocationTimeStamp for the revocation
   *
   * @param { string } role - role for which the status is to be checked
@@ -122,6 +126,6 @@ export class RevocationOnChain {
       subjectAddress,
     );
     const { 0: revoker, 1: revokedTimeStamp } = result;
-    return ([revoker, revokedTimeStamp]);
+    return ([revoker, revokedTimeStamp.toString()]);
   }
 }

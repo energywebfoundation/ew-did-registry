@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
