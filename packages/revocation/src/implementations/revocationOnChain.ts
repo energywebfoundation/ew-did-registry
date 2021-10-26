@@ -1,11 +1,16 @@
 import {
-  Contract, ethers, Event, utils, Signer,
+  Event,
+  utils,
+  Signer,
 } from 'ethers';
 import { EwSigner, addressOf } from '@ew-did-registry/did-ethr-resolver';
-import { abi as RevocationOnChainAbi } from '../constants/RevocationRegistryOnChain.json';
+import {
+  RevocationRegistryOnChain,
+  RevocationRegistryOnChain__factory,
+} from '@energyweb/iam-contracts/dist/ethers';
 
 export class RevocationOnChain {
-  private _revocationRegistryOnChain: Contract;
+  private _revocationRegistryOnChain: RevocationRegistryOnChain;
 
   /**
   * @param owner - Entity which controls revocation
@@ -15,9 +20,8 @@ export class RevocationOnChain {
     owner: EwSigner,
     addressOnChain: string,
   ) {
-    this._revocationRegistryOnChain = new ethers.Contract(
+    this._revocationRegistryOnChain = RevocationRegistryOnChain__factory.connect(
       addressOnChain,
-      RevocationOnChainAbi,
       owner as Signer,
     );
   }
