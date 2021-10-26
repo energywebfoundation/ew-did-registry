@@ -9,3 +9,4 @@ dist
 .npmrc
 .log
 packages/proxyIdentity/index.js
+ethers

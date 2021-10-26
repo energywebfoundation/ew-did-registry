@@ -8,13 +8,15 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "build" : "npm run build:typechain:revocationRegistryOffChain",
     "compile": "npm run compile:contracts && ../../node_modules/.bin/tsc",
     "test": "../../node_modules/.bin/mocha --timeout 0 -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
     "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
-    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix",
+    "build:typechain:revocationRegistryOffChain": "typechain --target ethers-v5 --out-dir ethers './build/contracts/RevocationRegistry.json'"
   },
   "keywords": [
     "Energy",
@@ -40,10 +42,12 @@
     "chai": "4.2.0",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
+    "@typechain/ethers-v5": "^7.0.1",
     "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
-    "solhint": "3.3.4"
+    "solhint": "3.3.4",
+    "typechain": "^5.0.0"
   }
 }
