@@ -60,7 +60,7 @@ export class RevocationOffChain {
     const { 0: revokers, 1: timeStamps } = result;
     const revokedTimeStamp = [];
     for (let i = 0; i <= timeStamps.length; i++) {
-      revokedTimeStamp[i] = timeStamps[i].toString();
+      revokedTimeStamp[i] = (Number(timeStamps[i]?._hex), 10).toString();
     }
     return ([revokers, revokedTimeStamp]);
   }
