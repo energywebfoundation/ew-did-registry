@@ -29,6 +29,7 @@
     "@typescript-eslint/interface-name-prefix": 0,
     "@typescript-eslint/ban-ts-comment": "off",
     "import/extensions": "off",
+    "camelcase": ["error", {"allow": ["RevocationRegistry__factory", "RevocationRegistryOnChain__factory"]}],
     "space-infix-ops": [
       "error",
       {
