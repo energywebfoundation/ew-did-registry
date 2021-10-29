@@ -151,7 +151,7 @@ const handleAttributeChange = (
       servicePoint.block = block;
 
       const serviceEndpointBlock = document.service[servicePoint.id]?.block;
-      if (document.publicKey[servicePoint.id] === undefined
+      if (document.service[servicePoint.id] === undefined
         || (serviceEndpointBlock !== undefined && serviceEndpointBlock < block)) {
         document.service[servicePoint.id] = servicePoint;
       }
