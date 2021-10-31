@@ -2,13 +2,12 @@ import { expect } from 'chai';
 import {
   DIDAttribute,
   PubKeyType,
-  Algorithms,
   Encoding,
   ProviderTypes,
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, Algorithms } from '@ew-did-registry/keys';
 import {
   EwSigner,
   Operator,

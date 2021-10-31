@@ -7,7 +7,6 @@ import {
   Operator,
 } from '@ew-did-registry/did-ethr-resolver';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IOperator,
@@ -16,7 +15,7 @@ import {
   ProviderTypes,
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, Algorithms } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { Wallet, BigNumber } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';

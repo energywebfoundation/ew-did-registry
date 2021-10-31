@@ -7,7 +7,6 @@ import {
 } from 'sjcl';
 import assert from 'assert';
 import {
-  Algorithms,
   DelegateTypes,
   DIDAttribute,
   Encoding,
@@ -16,6 +15,7 @@ import {
   IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
+import { Algorithms } from '@ew-did-registry/keys';
 import {
   IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
 } from '../models';

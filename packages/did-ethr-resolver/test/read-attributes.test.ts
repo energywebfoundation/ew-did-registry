@@ -1,7 +1,6 @@
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, Algorithms } from '@ew-did-registry/keys';
 import { expect } from 'chai';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,

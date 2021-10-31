@@ -3,7 +3,6 @@ import {
   Contract, ethers, Event, utils, BigNumber,
 } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
@@ -18,6 +17,7 @@ import {
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
+import { Algorithms } from '@ew-did-registry/keys';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,

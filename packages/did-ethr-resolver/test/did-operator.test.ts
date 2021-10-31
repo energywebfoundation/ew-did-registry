@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect, use } from 'chai';
 import sinonChai from 'sinon-chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, Algorithms } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
