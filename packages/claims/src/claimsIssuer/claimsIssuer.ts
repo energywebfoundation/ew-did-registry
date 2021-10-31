@@ -4,6 +4,7 @@ import crypto from 'crypto';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { bn, ecc } from 'sjcl';
+import { Algorithms } from '@ew-did-registry/jwt';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
 import { IPrivateClaim, IPublicClaim } from '../models';
@@ -34,7 +35,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const signedToken = await this.jwt.sign(
       { claimData, did, signer: this.did },
       {
-        algorithm: 'ES256', issuer: this.did, subject: claim.did, noTimestamp: true,
+        algorithm: Algorithms.ES256, issuer: this.did, subject: claim.did, noTimestamp: true,
       },
     );
     return signedToken;
@@ -78,9 +79,15 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
       claim.claimData[key] = PK.toBits() as [];
     });
     delete claim.iss;
-    return this.jwt.sign(claim, {
-      algorithm: 'ES256', issuer: this.did, subject: claim.sub as string, noTimestamp: true,
-    });
+    return this.jwt.sign(
+      claim,
+      {
+        algorithm: Algorithms.ES256,
+        issuer: this.did,
+        subject: claim.sub as string,
+        noTimestamp: true,
+      },
+    );
   }
 }
 

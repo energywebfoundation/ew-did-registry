@@ -1,7 +1,7 @@
 import { decrypt } from 'eciesjs';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Keys, Algorithms } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
   Operator, EwSigner, compressedSecp256k1KeyLength,
@@ -88,7 +88,10 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     };
     const token = await userClaims.createPublicClaim(publicData);
     (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey);
+    const claim = await userClaims.jwt.verify(
+      token,
+      userClaims.keys.publicKey,
+    ) as Record<string, unknown>;
     claim.should.deep.include({
       did: userDid,
       signer: userDid,
@@ -113,7 +116,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
     const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
-    const claim = userClaims.jwt.decode(token, { noTimestamp: true }) as IPrivateClaim;
+    const claim = userClaims.jwt.decode(token) as IPrivateClaim;
     const decrypted = decrypt(
       issuerKeys.privateKey,
       Buffer.from(claim.claimData.secret as string, 'hex'),
@@ -162,7 +165,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const pubKey = signer.publicKey;
     pubKey.length.should.equal(compressedSecp256k1KeyLength);
     const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       // Adding hex prefix to simulate an owner key with a hex prefix

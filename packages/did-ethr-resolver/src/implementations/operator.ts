@@ -17,7 +17,7 @@ import {
   IUpdateAttributeData,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { Algorithms } from '@ew-did-registry/keys';
+import { KeyType } from '@ew-did-registry/keys';
 import Resolver from './resolver';
 import {
   delegatePubKeyIdPattern, pubKeyIdPattern,
@@ -101,7 +101,7 @@ export class Operator extends Resolver implements IOperator {
     }
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${this.getPublicKey()}`, tag: KeyTags.OWNER },

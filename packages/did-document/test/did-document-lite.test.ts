@@ -7,7 +7,7 @@ import {
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
-import { Keys, Algorithms } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import {
   EwSigner,
   Operator,
@@ -48,12 +48,12 @@ describe('[DID DOCUMENT LITE PACKAGE]', function () {
 
   it('public key should be read by its type', async () => {
     await operator.update(did, DIDAttribute.PublicKey, {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     });
-    const publicKey = await docLite.readAttribute({ publicKey: { type: `${Algorithms.ED25519}${PubKeyType.VerificationKey2018}` } });
+    const publicKey = await docLite.readAttribute({ publicKey: { type: `${KeyType.ED25519}${PubKeyType.VerificationKey2018}` } });
     expect(publicKey).to.be.not.undefined;
   });
 

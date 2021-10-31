@@ -55,7 +55,15 @@
     "chai-friendly/no-unused-expressions": 2,
     "func-names": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"]
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ],
+    "no-empty": [
+      "error",
+      {
+        "allowEmptyCatch": true
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

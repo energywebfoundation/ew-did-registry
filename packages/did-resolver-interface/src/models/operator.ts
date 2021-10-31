@@ -1,4 +1,4 @@
-import { Algorithms } from '@ew-did-registry/keys';
+import { KeyType } from '@ew-did-registry/keys';
 
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
@@ -48,7 +48,7 @@ export interface IAttributePayload {
  */
 export interface IUpdateData {
   encoding?: Encoding;
-  algo?: Algorithms;
+  algo?: KeyType;
   type: PubKeyType | DIDAttribute;
   value?: IAttributePayload;
   delegate?: string;

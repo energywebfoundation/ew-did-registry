@@ -15,7 +15,7 @@ import {
   ProviderTypes,
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
-import { Keys, Algorithms } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import { Wallet, BigNumber } from 'ethers';
 import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
@@ -68,7 +68,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       DIDAttribute.PublicKey,
       {
         type: PubKeyType.VerificationKey2018,
-        algo: Algorithms.ED25519,
+        algo: KeyType.ED25519,
         encoding: Encoding.HEX,
         value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
       },
@@ -84,7 +84,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const keysDelegate = new Keys();
     const delegate = new Wallet(keysDelegate.privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -114,7 +114,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const keysAttribute = new Keys();
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${keysAttribute.publicKey}`, tag: 'key-2' },
@@ -144,7 +144,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         DIDAttribute.PublicKey,
         {
           type: PubKeyType.VerificationKey2018,
-          algo: Algorithms.ED25519,
+          algo: KeyType.ED25519,
           encoding: Encoding.HEX,
           value: { publicKey: `0x${new Keys().publicKey}`, tag },
         },
@@ -163,7 +163,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       DIDAttribute.PublicKey,
       {
         type: PubKeyType.VerificationKey2018,
-        algo: Algorithms.ED25519,
+        algo: KeyType.ED25519,
         encoding: Encoding.HEX,
         value: { publicKey: `0x${new Keys().publicKey}`, tag: 'test' },
       },
@@ -179,7 +179,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -207,7 +207,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
 
   it('separate read of two logs should restore full document', async () => {
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' },
@@ -229,7 +229,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
 
   it('logs order should not influence restored document', async () => {
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' },
@@ -262,7 +262,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const tag = 'key-0';
     const keyId = `${did}#${tag}`;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag },
@@ -289,7 +289,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     const from = await fullDoc.lastBlock(did);
 
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },

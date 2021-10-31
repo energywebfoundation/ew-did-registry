@@ -1,4 +1,4 @@
-import { Keys, Algorithms } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { expect } from 'chai';
 import {
   DIDAttribute,
@@ -47,7 +47,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const attribute = DIDAttribute.PublicKey;
     const k = new Keys();
     const updateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${k.publicKey}`, tag: 'key-1' },
@@ -87,7 +87,7 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Keys();
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.getAddress(),
