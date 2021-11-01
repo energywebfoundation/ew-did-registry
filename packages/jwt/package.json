@@ -30,10 +30,10 @@
     "@types/jsonwebtoken": "8.5.0",
     "@types/promise.allsettled": "^1.0.3",
     "base64url": "^3.0.1",
+    "ec-key": "0.0.4",
     "ethereumjs-util": "^7.0.5",
     "ethers": "^5.4.6",
     "jsonwebtoken": "^8.5.1",
-    "key-encoder": "^2.0.3",
     "promise.allsettled": "^1.0.2"
   }
 }

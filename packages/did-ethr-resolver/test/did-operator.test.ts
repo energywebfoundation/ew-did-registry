@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect, use } from 'chai';
 import sinonChai from 'sinon-chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
@@ -71,7 +70,7 @@ const testSuite = (): void => {
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
@@ -89,7 +88,7 @@ const testSuite = (): void => {
   it('setting public key attribute should update public keys of DID document', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-2' },
@@ -109,7 +108,7 @@ const testSuite = (): void => {
       const attribute = DIDAttribute.Authenticate;
       const delegate = new Wallet(new Keys().privateKey);
       const updateData = {
-        algo: Algorithms.ED25519,
+        algo: KeyType.ED25519,
         type: PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
         delegate: delegate.address,
@@ -132,7 +131,7 @@ const testSuite = (): void => {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.SignatureAuthentication2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -179,7 +178,7 @@ const testSuite = (): void => {
     const invalidDid = `did:${identity}`;
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-3' },
@@ -195,7 +194,7 @@ const testSuite = (): void => {
   it('setting attribute with negative validity should throw an error', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
@@ -214,7 +213,7 @@ const testSuite = (): void => {
     // add public key
     let attribute = DIDAttribute.PublicKey;
     let updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-5' },
@@ -224,7 +223,7 @@ const testSuite = (): void => {
     attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.SignatureAuthentication2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -255,7 +254,7 @@ const testSuite = (): void => {
     const keysDelegate = new Keys();
     const delegate = new Wallet(keysDelegate.privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -286,7 +285,7 @@ const testSuite = (): void => {
     const keysAttribute = new Keys();
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: keysAttribute.publicKey, tag: 'key-6' },
@@ -309,7 +308,7 @@ const testSuite = (): void => {
 
   it('public key with invalid value should be ignored', async () => {
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: '0x123abc', tag: 'key-6' },
@@ -335,7 +334,7 @@ const testSuite = (): void => {
     const from = await operator.lastBlock(did);
 
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
@@ -352,7 +351,7 @@ const testSuite = (): void => {
     const tag = 'key-2';
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag },

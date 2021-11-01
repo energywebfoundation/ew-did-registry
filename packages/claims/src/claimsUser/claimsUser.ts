@@ -7,7 +7,6 @@ import {
 } from 'sjcl';
 import assert from 'assert';
 import {
-  Algorithms,
   DelegateTypes,
   DIDAttribute,
   Encoding,
@@ -16,6 +15,8 @@ import {
   IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
+import { KeyType } from '@ew-did-registry/keys';
+import { Algorithms } from '@ew-did-registry/jwt';
 import {
   IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
 } from '../models';
@@ -75,7 +76,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     return this.jwt.sign(
       claim,
       {
-        ...jwtOptions, algorithm: 'ES256',
+        ...jwtOptions, algorithm: Algorithms.ES256,
       },
     );
   }
@@ -131,7 +132,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, {
-      ...jwtOptions, algorithm: 'ES256',
+      ...jwtOptions, algorithm: Algorithms.ES256,
     });
     return { token, saltedFields };
   }
@@ -197,7 +198,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     });
     return this.jwt.sign(claim, {
-      ...jwtOptions, algorithm: 'ES256',
+      ...jwtOptions, algorithm: Algorithms.ES256,
     });
   }
 
@@ -266,7 +267,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
     await this.document.update(
       DIDAttribute.Authenticate,
       {
-        algo: Algorithms.ED25519,
+        algo: KeyType.ED25519,
         type: PubKeyType.VerificationKey2018,
         encoding: Encoding.HEX,
         delegate: issAddress,

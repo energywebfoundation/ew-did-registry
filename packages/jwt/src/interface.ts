@@ -1,4 +1,5 @@
-import { JwtPayload, JwtOptions } from './sign';
+import jsonwebtoken from 'jsonwebtoken';
+import { JwtPayload, JwtSignOptions, Algorithms } from './types';
 
 /**
  * The JWT exposes methods to create/sign, verify, and decode JSON web tokens
@@ -10,7 +11,7 @@ export interface IJWT {
    * @param {object} options
    * @returns {Promise<string>}
    */
-  sign(payload: string | JwtPayload, options?: JwtOptions): Promise<string>;
+  sign(payload: string | JwtPayload, options?: JwtSignOptions): Promise<string>;
 
   /**
    * Method accepts the token, publicKey of signing entity, as well as options
@@ -21,7 +22,7 @@ export interface IJWT {
    * @param {object} options
    * @returns {Promise<object>}
    */
-  verify(token: string, publicKey: string, options?: object): Promise<object>;
+  verify(token: string, publicKey: string, options?: { algorithms?: [Algorithms] }): unknown;
 
   /**
    * Method decodes JWT without checking the signature. This can be useful in cases,
@@ -31,5 +32,8 @@ export interface IJWT {
    * @param {object} options
    * @returns {object}
    */
-  decode(token: string, options?: object): string | { [key: string]: string | object };
+  decode(
+    token: string,
+    options?: jsonwebtoken.DecodeOptions
+  ): unknown;
 }

@@ -1,3 +1,5 @@
+import { KeyType } from '@ew-did-registry/keys';
+
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
@@ -17,13 +19,6 @@ export enum PubKeyType {
  */
 export enum Encoding {
   HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
-}
-
-/**
- * Algorithms specifies, which algorithm has to be used with a particular public key
- */
-export enum Algorithms {
-  ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
 }
 
 /**
@@ -53,7 +48,7 @@ export interface IAttributePayload {
  */
 export interface IUpdateData {
   encoding?: Encoding;
-  algo?: Algorithms;
+  algo?: KeyType;
   type: PubKeyType | DIDAttribute;
   value?: IAttributePayload;
   delegate?: string;

@@ -3,10 +3,14 @@ import BN from 'bn.js';
 import { encrypt, decrypt } from 'eciesjs';
 import { Wallet } from 'ethers';
 import { IKeys } from './interface';
-import { KeyPair } from './models';
 import { sha256 } from './functions';
 
 const ec = new EC('secp256k1');
+
+interface KeyPair {
+  privateKey?: string;
+  publicKey?: string;
+}
 
 class Keys implements IKeys {
   private readonly _keyPair: EC.KeyPair;
@@ -187,3 +191,6 @@ export {
   Keys,
   IKeys,
 };
+
+export * from './models';
+export { toPem as pubToPem, privToPem } from './functions';
