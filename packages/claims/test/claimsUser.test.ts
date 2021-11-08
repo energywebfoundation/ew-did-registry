@@ -1,7 +1,7 @@
 import { decrypt } from 'eciesjs';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
   Operator, EwSigner, compressedSecp256k1KeyLength,
@@ -9,7 +9,6 @@ import {
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IUpdateData,
@@ -90,8 +89,9 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const token = await userClaims.createPublicClaim(publicData);
     (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
     const claim = await userClaims.jwt.verify(
-      token, userClaims.keys.publicKey, { noTimestamp: true },
-    );
+      token,
+      userClaims.keys.publicKey,
+    ) as Record<string, unknown>;
     claim.should.deep.include({
       did: userDid,
       signer: userDid,
@@ -116,7 +116,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
     const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
-    const claim = userClaims.jwt.decode(token, { noTimestamp: true }) as IPrivateClaim;
+    const claim = userClaims.jwt.decode(token) as IPrivateClaim;
     const decrypted = decrypt(
       issuerKeys.privateKey,
       Buffer.from(claim.claimData.secret as string, 'hex'),
@@ -128,7 +128,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const claimUrl = 'http://test.com';
     const proofData = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, proofData);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { noTimestamp: true }) as IProofClaim;
+    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey) as IProofClaim;
     claim.should.include({ did: userDid, signer: userDid, claimUrl });
     claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
     claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
@@ -165,7 +165,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const pubKey = signer.publicKey;
     pubKey.length.should.equal(compressedSecp256k1KeyLength);
     const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       // Adding hex prefix to simulate an owner key with a hex prefix

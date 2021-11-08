@@ -17,6 +17,7 @@ jobs:
           access_token: ${{ github.token }}
 
   deploy:
+    if: "!contains(github.event.head_commit.author.name, 'GITHUB_ACTION')"
     runs-on: ubuntu-latest
     needs: cancel-previous
     permissions:
@@ -74,6 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          git config user.name "GITHUB_ACTION"
           npm run publish:release
         
   sync_master_to_development_branch :
@@ -93,5 +95,7 @@ jobs:
 
       - name: Commit to develop branch and merge to master branch
         run: |
+          git config --global user.email ${{ secrets.GH_EMAIL }}
+          git config --global user.name ${{ secrets.GH_USER }}
           git merge origin/master
           git push origin development

@@ -1,10 +1,9 @@
 import { expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import {
   Contract, ContractFactory, providers, utils,
 } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   PubKeyType,
@@ -22,7 +21,7 @@ import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
 const { parseEther } = utils;
 
 const { PublicKey } = DIDAttribute;
-const { Secp256k1, ED25519 } = Algorithms;
+const { Secp256k1, ED25519 } = KeyType;
 const { VerificationKey2018 } = PubKeyType;
 const { HEX } = Encoding;
 
