@@ -357,7 +357,7 @@ export const wrapDidDocument = (
     const pubKey = document.publicKey[key];
     const pubKeyValidity = pubKey.validity?.gt(now);
     if (pubKeyValidity) {
-      const {validity, block, ...pubKeyCopy} = {...pubKey};
+      const { validity, block, ...pubKeyCopy } = { ...pubKey };
       didDocument.publicKey.push(pubKeyCopy as IPublicKey);
     }
   }
@@ -367,7 +367,7 @@ export const wrapDidDocument = (
     const authenticator = document.authentication[key];
     const authenticatorValidity = authenticator.validity?.gt(now);
     if (authenticatorValidity) {
-      const {validity, block, ...authenticatorCopy} = { ...authenticator };
+      const { validity, block, ...authenticatorCopy } = { ...authenticator };
       didDocument.authentication.push(authenticatorCopy as IAuthentication);
     }
   }
@@ -377,7 +377,7 @@ export const wrapDidDocument = (
     const serviceEndpoint = document.service[key];
     const serviceEndpointValidity = serviceEndpoint.validity?.gt(now);
     if (serviceEndpointValidity) {
-      const {validity, block, ...serviceEndpointCopy} = { ...serviceEndpoint };
+      const { validity, block, ...serviceEndpointCopy } = { ...serviceEndpoint };
       didDocument.service.push(serviceEndpointCopy as IServiceEndpoint);
     }
   }
