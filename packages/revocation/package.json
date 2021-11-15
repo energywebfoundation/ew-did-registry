@@ -9,7 +9,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build" : "npm run build:typechain:revocationRegistryOffChain && ../../node_modules/.bin/tsc",
-    "compile": "npm run compile:contracts",
+    "compile": "npm run compile:contracts && npm run build",
     "test": "../../node_modules/.bin/mocha --timeout 0 -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
