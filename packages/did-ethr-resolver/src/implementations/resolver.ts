@@ -103,7 +103,7 @@ class Resolver implements IResolver {
       const document = wrapDidDocument(did, _document);
       return document;
     } catch (error) {
-      if (error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+      if (error instanceof Error && error.toString() === 'Error: Blockchain address did not interact with smart contract') {
         const didDocument = wrapDidDocument(did, _document);
         return didDocument;
       }
@@ -135,7 +135,9 @@ class Resolver implements IResolver {
     try {
       owner = await this._contract.identityOwner(id);
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return owner;
   }
@@ -162,7 +164,9 @@ class Resolver implements IResolver {
     try {
       valid = await this._contract.validDelegate(identityAddress, bytesType, delegateAddress);
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
 
     return valid;

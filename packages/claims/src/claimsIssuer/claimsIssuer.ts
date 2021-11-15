@@ -1,8 +1,6 @@
 /* eslint-disable new-cap */
 import { decrypt } from 'eciesjs';
 import crypto from 'crypto';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import { bn, ecc } from 'sjcl';
 import { Algorithms } from '@ew-did-registry/jwt';
 import { IClaimsIssuer } from '../interface';

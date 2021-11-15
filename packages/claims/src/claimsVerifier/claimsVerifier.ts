@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 import {
   bn, hash, ecc, bitArray,
 } from 'sjcl';
@@ -75,7 +73,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
       const field = proofData[key];
       if (field.encrypted) {
         const PK = curve.fromBits(value as []);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         let { h, s } = field.value;
         h = curve.fromBits(h);

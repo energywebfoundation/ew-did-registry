@@ -14,6 +14,13 @@ export interface IPrivateClaim {
   [key: string]: string | object;
 }
 
+export interface IProofData {
+  [key: string]: {
+    value: string | object; // string - for non-encrypted, {h,s} - for encrypted
+    encrypted: boolean;
+  };
+}
+
 export interface IProofClaim {
   did: string;
   signer: string;
@@ -24,13 +31,6 @@ export interface IProofClaim {
 
 export interface ISaltedFields {
   [key: string]: string;
-}
-
-export interface IProofData {
-  [key: string]: {
-    value: string | object; // string - for non-encrypted, {h,s} - for encrypted
-    encrypted: boolean;
-  };
 }
 
 export interface IClaims {

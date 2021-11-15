@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 export interface IDidStore {
     [key: string]: string;
 }

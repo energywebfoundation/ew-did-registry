@@ -120,9 +120,11 @@ export class EwSigner extends Signer {
       // Signer could be returned by not actually have an address
       // Best to check now and "fail fast"
       await signer.getAddress();
-    } catch (err) {
-      err.message = `Error instantiating EwSigner from ethers Provider. Provider must have signer with address. ${err.message}`;
-      throw err;
+    } catch (error) {
+      if (error instanceof Error) {
+        error.message = `Error instantiating EwSigner from ethers Provider. Provider must have signer with address. ${error.message}`;
+        throw new Error(error.message);
+      }
     }
     return new EwSigner(signer, publicKey);
   }

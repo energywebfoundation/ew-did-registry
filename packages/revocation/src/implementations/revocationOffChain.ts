@@ -1,11 +1,11 @@
 import {
-  Contract, ethers, Event, utils, Signer,
+  Event, utils, Signer,
 } from 'ethers';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { abi as RevocationOffChainAbi } from '../../build/contracts/RevocationRegistry.json';
+import { RevocationRegistry, RevocationRegistry__factory } from '../../ethers';
 
 export class RevocationOffChain {
-  private _revocationRegistryOffChain: Contract;
+  private _revocationRegistryOffChain: RevocationRegistry;
 
   /**
   * @param revoker - Entity which perform revocation
@@ -15,9 +15,8 @@ export class RevocationOffChain {
     revoker: EwSigner,
     addressOffChain: string,
   ) {
-    this._revocationRegistryOffChain = new ethers.Contract(
+    this._revocationRegistryOffChain = RevocationRegistry__factory.connect(
       addressOffChain,
-      RevocationOffChainAbi,
       revoker as Signer,
     );
   }
@@ -34,18 +33,20 @@ export class RevocationOffChain {
     try {
       const tx = await this._revocationRegistryOffChain.revokeClaim(credentialHash);
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event = receipt.events?.find(
         (e: Event) => (e.event === 'Revoked'),
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
 
   /**
-  * checks the revocation details for a credential
+  * Checks the revocation details for a credential
   * Returns the revokers and revocationTimeStamp for the revocations
   *
   * @param { string } credential - credential for which the status is to be checked
@@ -56,7 +57,11 @@ export class RevocationOffChain {
     const result = await this._revocationRegistryOffChain.getRevocations(
       credentialHash,
     );
-    const { 0: revokers, 1: revokedTimeStamp } = result;
+    const { 0: revokers, 1: timeStamps } = result;
+    const revokedTimeStamp = [];
+    for (let i = 0; i <= timeStamps.length; i++) {
+      revokedTimeStamp[i] = (Number(timeStamps[i]?._hex), 10).toString();
+    }
     return ([revokers, revokedTimeStamp]);
   }
 }

@@ -1,11 +1,16 @@
 import {
-  Contract, ethers, Event, utils, Signer,
+  Event,
+  utils,
+  Signer,
 } from 'ethers';
 import { EwSigner, addressOf } from '@ew-did-registry/did-ethr-resolver';
-import { abi as RevocationOnChainAbi } from '../constants/RevocationRegistryOnChain.json';
+import {
+  RevocationRegistryOnChain,
+  RevocationRegistryOnChain__factory,
+} from '@energyweb/iam-contracts/dist/ethers';
 
 export class RevocationOnChain {
-  private _revocationRegistryOnChain: Contract;
+  private _revocationRegistryOnChain: RevocationRegistryOnChain;
 
   /**
   * @param owner - Entity which controls revocation
@@ -15,9 +20,8 @@ export class RevocationOnChain {
     owner: EwSigner,
     addressOnChain: string,
   ) {
-    this._revocationRegistryOnChain = new ethers.Contract(
+    this._revocationRegistryOnChain = RevocationRegistryOnChain__factory.connect(
       addressOnChain,
-      RevocationOnChainAbi,
       owner as Signer,
     );
   }
@@ -43,12 +47,14 @@ export class RevocationOnChain {
         revokerAddress,
       );
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event = receipt.events?.find(
         (e: Event) => (e.event === 'Revoked'),
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
@@ -77,12 +83,14 @@ export class RevocationOnChain {
         revokerAddress,
       );
       const receipt = await tx.wait();
-      const event = receipt.events.find(
+      const event = receipt.events?.find(
         (e: Event) => (e.event === 'Revoked'),
       );
       if (!event) return false;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
     return true;
   }
@@ -105,7 +113,7 @@ export class RevocationOnChain {
   }
 
   /**
-  * checks the revocation details for a subject's role
+  * Checks the revocation details for a subject's role
   * Returns the revoker and revocationTimeStamp for the revocation
   *
   * @param { string } role - role for which the status is to be checked
@@ -122,6 +130,6 @@ export class RevocationOnChain {
       subjectAddress,
     );
     const { 0: revoker, 1: revokedTimeStamp } = result;
-    return ([revoker, revokedTimeStamp]);
+    return ([revoker, revokedTimeStamp.toString()]);
   }
 }
