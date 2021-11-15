@@ -43,8 +43,8 @@ export interface IServiceEndpoint {
   type: string;
   serviceEndpoint: string;
   description?: string;
-  validity?: BigNumber;
-  block?: number;
+  validity: BigNumber;
+  block: number;
   hash?: string; // hash of the content located at service endpoint
   [key: string]: string | BigNumber | number | undefined;
 }
@@ -60,15 +60,15 @@ export interface IPublicKey {
   publicKeyPem?: string;
   publicKeyJwk?: string;
   publicKeyMultibase?: string;
-  validity?: BigNumber;
-  block?: number;
+  validity: BigNumber;
+  block: number;
   [key: string]: string | number | BigNumber | undefined;
 }
 
 export interface IAuthentication {
   type: string;
   publicKey: string;
-  validity?: BigNumber;
+  validity: BigNumber;
   block?: number;
   [key: string]: string | BigNumber | number | undefined;
 }
