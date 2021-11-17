@@ -13,18 +13,18 @@ import {
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-// temporary changes just for testing, will import dependency once merged
-// import { RegistrySettings } from '../../../did-resolver-interface/src';
-import { 
+import {
   Methods,
   DIDPattern,
-  DIDPatternEWC,
-  DIDPatternVOLTA,
-  Chain } from '../../../did/src';
+  ethAddrPattern
+} from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { compressedSecp256k1KeyLength } from '..';
 
+// temporary declaration, will use as imported dependency from new release
+export const DIDPatternEWC = `^did:${Methods.Erc1056}:ewc:(${ethAddrPattern})$`;
+export const DIDPatternVOLTA = `^did:${Methods.Erc1056}:volta:(${ethAddrPattern})$`;
 const { formatBytes32String } = utils;
 
 /**

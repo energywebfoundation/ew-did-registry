@@ -2,7 +2,7 @@
 import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
 import { expect } from 'chai';
 import { providers, Wallet } from 'ethers';
-import { signerPubKey } from '../dist/did-ethr-resolver/src/utils';
+import { signerPubKey } from '../dist';
 import { EwSigner } from '../src/implementations';
 
 const SECP256K1_COMRESSED_KEY_LENGTH = 66;
