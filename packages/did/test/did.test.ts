@@ -1,6 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from 'chai';
-import { DID, IDID, Methods, Chain } from '../src';
+import {
+  DID,
+  IDID,
+  Methods,
+  Chain
+} from '../src';
 import { erc1056tests } from './erc1056.testSuit';
 
 describe('[DID PACKAGE]', () => {

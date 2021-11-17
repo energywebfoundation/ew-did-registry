@@ -1,6 +1,11 @@
 import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
-import { Methods, isValidErc1056, Chain, isValidErc1056EWC } from '../src';
+import {
+  Methods,
+  isValidErc1056,
+  Chain,
+  isValidErc1056EWC
+} from '../src';
 
 export function erc1056tests(): void {
   it('Well-formed did should be validated', () => {

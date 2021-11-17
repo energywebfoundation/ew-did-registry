@@ -9,12 +9,18 @@ import {
   IPublicKey,
   IResolver,
   IServiceEndpoint,
+  RegistrySettings,
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-//temporary changes just for testing, will import dependency once merged
-import { RegistrySettings } from '../../../did-resolver-interface/src'
-import { Methods, DIDPattern, DIDPatternEWC, DIDPatternVOLTA, Chain } from '../../../did/src';
+// temporary changes just for testing, will import dependency once merged
+// import { RegistrySettings } from '../../../did-resolver-interface/src';
+import { 
+  Methods,
+  DIDPattern,
+  DIDPatternEWC,
+  DIDPatternVOLTA,
+  Chain } from '../../../did/src';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { compressedSecp256k1KeyLength } from '..';
@@ -79,13 +85,12 @@ class Resolver implements IResolver {
     selector?: DocumentSelector,
   ): Promise<IDIDDocument> {
     let match;
-    let address;
-    if(did.split(':').length>3) {
-      if(did.includes('ewc')) {
-        match = did.match(DIDPatternEWC); 
+    if (did.split(':').length > 3) {
+      if (did.includes('ewc')) {
+        match = did.match(DIDPatternEWC);
       }
-      else if(did.includes('volta')) {
-        match = did.match(DIDPatternVOLTA); 
+      else if (did.includes('volta')) {
+        match = did.match(DIDPatternVOLTA);
       }
     }
     else {
@@ -94,7 +99,7 @@ class Resolver implements IResolver {
     if (!match) {
       throw new Error('Invalid did provided');
     }
-    address = match[1];
+    const address = match[1];
 
     const _document = {
       owner: address,
@@ -143,8 +148,7 @@ class Resolver implements IResolver {
    * @returns Promise<string>
    */
   async identityOwner(did: string): Promise<string> {
-    var id = did.split(':').pop();
-    //const [, id] = did.split(':');
+    const id = did.split(':').pop();
     let owner;
     try {
       owner = await this._contract.identityOwner(id);
