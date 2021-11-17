@@ -9,11 +9,12 @@ import {
   IPublicKey,
   IResolver,
   IServiceEndpoint,
-  RegistrySettings,
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import { Methods, DIDPattern } from '@ew-did-registry/did';
+//temporary changes just for testing, will import dependency once merged
+import { RegistrySettings } from '../../../did-resolver-interface/src'
+import { Methods, DIDPattern, DIDPatternEWC, DIDPatternVOLTA, Chain } from '../../../did/src';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { compressedSecp256k1KeyLength } from '..';
@@ -77,11 +78,23 @@ class Resolver implements IResolver {
     did: string,
     selector?: DocumentSelector,
   ): Promise<IDIDDocument> {
-    const match = did.match(DIDPattern);
+    let match;
+    let address;
+    if(did.split(':').length>3) {
+      if(did.includes('ewc')) {
+        match = did.match(DIDPatternEWC); 
+      }
+      else if(did.includes('volta')) {
+        match = did.match(DIDPatternVOLTA); 
+      }
+    }
+    else {
+      match = did.match(DIDPattern);
+    }
     if (!match) {
       throw new Error('Invalid did provided');
     }
-    const address = match[1];
+    address = match[1];
 
     const _document = {
       owner: address,
@@ -130,7 +143,8 @@ class Resolver implements IResolver {
    * @returns Promise<string>
    */
   async identityOwner(did: string): Promise<string> {
-    const [, , id] = did.split(':');
+    var id = did.split(':').pop();
+    //const [, id] = did.split(':');
     let owner;
     try {
       owner = await this._contract.identityOwner(id);
@@ -157,8 +171,8 @@ class Resolver implements IResolver {
     delegateDID: string,
   ): Promise<boolean> {
     const bytesType = formatBytes32String(delegateType);
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = delegateDID.split(':');
+    const identityAddress = identityDID.split(':').pop();
+    const delegateAddress = delegateDID.split(':').pop();
 
     let valid;
     try {
@@ -197,9 +211,9 @@ class Resolver implements IResolver {
     did: string,
     topBlock: BigNumber,
   ): Promise<IDIDLogData> {
-    const [, , address] = did.split(':');
+    const address = did.split(':').pop();
     const _document = {
-      owner: address,
+      owner: address!,
       topBlock,
       authentication: {},
       publicKey: {},
@@ -211,7 +225,7 @@ class Resolver implements IResolver {
   }
 
   async lastBlock(did: string): Promise<BigNumber> {
-    const [, , address] = did.split(':');
+    const address = did.split(':').pop();
     return this._contract.changed(address);
   }
 }
