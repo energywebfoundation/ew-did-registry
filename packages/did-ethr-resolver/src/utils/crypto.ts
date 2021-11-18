@@ -1,11 +1,16 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
 import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
+// importing Methods and ethAddrPattern temporarily to be used in did patterns
+import { DIDPattern, ethAddrPattern, Methods } from '@ew-did-registry/did';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey, hexlify,
 } = utils;
+
+// temporary declaration, to be imported from @ew-did-registry/did after new publish
+export const DIDPatternEWC = `^did:${Methods.Erc1056}:ewc:(${ethAddrPattern})$`;
+export const DIDPatternVOLTA = `^did:${Methods.Erc1056}:volta:(${ethAddrPattern})$`;
 
 export const compressedSecp256k1KeyLength = 66;
 
@@ -52,7 +57,18 @@ export function hexify(value: string | object): string {
 * @private
 */
 export function addressOf(did: string): string {
-  const match = did.match(DIDPattern);
+  let match;
+  if (did.split(':').length > 3) {
+    if (did.includes('ewc')) {
+      match = did.match(DIDPatternEWC);
+    }
+    else if (did.includes('volta')) {
+      match = did.match(DIDPatternVOLTA);
+    }
+  }
+  else {
+    match = did.match(DIDPattern);
+  }
   if (!match) {
     throw new Error('Invalid DID');
   }
