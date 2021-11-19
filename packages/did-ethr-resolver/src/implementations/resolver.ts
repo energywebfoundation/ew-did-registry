@@ -15,16 +15,11 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import {
   Methods,
-  DIDPattern,
-  ethAddrPattern
 } from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
-import { compressedSecp256k1KeyLength } from '..';
+import { addressOf, compressedSecp256k1KeyLength, matchDIDPattern } from '..';
 
-// temporary declaration, will use as imported dependency from new release
-export const DIDPatternEWC = `^did:${Methods.Erc1056}:ewc:(${ethAddrPattern})$`;
-export const DIDPatternVOLTA = `^did:${Methods.Erc1056}:volta:(${ethAddrPattern})$`;
 const { formatBytes32String } = utils;
 
 /**
@@ -84,21 +79,7 @@ class Resolver implements IResolver {
     did: string,
     selector?: DocumentSelector,
   ): Promise<IDIDDocument> {
-    let match;
-    if (did.split(':').length > 3) {
-      if (did.includes('ewc')) {
-        match = did.match(DIDPatternEWC);
-      }
-      else if (did.includes('volta')) {
-        match = did.match(DIDPatternVOLTA);
-      }
-    }
-    else {
-      match = did.match(DIDPattern);
-    }
-    if (!match) {
-      throw new Error('Invalid did provided');
-    }
+    const match = matchDIDPattern(did);
     const address = match[1];
 
     const _document = {
@@ -148,7 +129,7 @@ class Resolver implements IResolver {
    * @returns Promise<string>
    */
   async identityOwner(did: string): Promise<string> {
-    const id = did.split(':').pop();
+    const id = addressOf(did);
     let owner;
     try {
       owner = await this._contract.identityOwner(id);
@@ -175,8 +156,8 @@ class Resolver implements IResolver {
     delegateDID: string,
   ): Promise<boolean> {
     const bytesType = formatBytes32String(delegateType);
-    const identityAddress = identityDID.split(':').pop();
-    const delegateAddress = delegateDID.split(':').pop();
+    const identityAddress = addressOf(identityDID);
+    const delegateAddress = addressOf(delegateDID);
 
     let valid;
     try {
@@ -215,9 +196,9 @@ class Resolver implements IResolver {
     did: string,
     topBlock: BigNumber,
   ): Promise<IDIDLogData> {
-    const address = did.split(':').pop();
+    const address = addressOf(did);
     const _document = {
-      owner: address!,
+      owner: address,
       topBlock,
       authentication: {},
       publicKey: {},
@@ -229,7 +210,7 @@ class Resolver implements IResolver {
   }
 
   async lastBlock(did: string): Promise<BigNumber> {
-    const address = did.split(':').pop();
+    const address = addressOf(did);
     return this._contract.changed(address);
   }
 }
