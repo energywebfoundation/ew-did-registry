@@ -74,3 +74,28 @@ export function addressOf(did: string): string {
   }
   return match[1];
 }
+
+/**
+* Checks if did has a valid pattern, and returns the matched pattern array if it is
+*
+* @param did
+* @private
+*/
+export function matchDIDPattern(did: string): RegExpMatchArray {
+  let match;
+  if (did.split(':').length > 3) {
+    if (did.includes('ewc')) {
+      match = did.match(DIDPatternEWC);
+    }
+    else if (did.includes('volta')) {
+      match = did.match(DIDPatternVOLTA);
+    }
+  }
+  else {
+    match = did.match(DIDPattern);
+  }
+  if (!match) {
+    throw new Error('Invalid DID');
+  }
+  return match;
+}
