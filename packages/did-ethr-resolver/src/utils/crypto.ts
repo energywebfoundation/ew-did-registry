@@ -1,17 +1,12 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
 import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
-// importing Methods and ethAddrPattern temporarily to be used in did patterns
-import { DIDPattern, ethAddrPattern, Methods } from '@ew-did-registry/did';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey, hexlify,
 } = utils;
 
-// temporary declaration, to be imported from @ew-did-registry/did after new publish
-export const DIDPatternEWC = `^did:${Methods.Erc1056}:ewc:(${ethAddrPattern})$`;
-export const DIDPatternVOLTA = `^did:${Methods.Erc1056}:volta:(${ethAddrPattern})$`;
-
+const didPattern = `^did:[a-z0-9]+?:?[a-z0-9]+?:(0x[A-Fa-f0-9]{40})$`;
 export const compressedSecp256k1KeyLength = 66;
 
 export const walletPubKey = (
@@ -57,18 +52,7 @@ export function hexify(value: string | object): string {
 * @private
 */
 export function addressOf(did: string): string {
-  let match;
-  if (did.split(':').length > 3) {
-    if (did.includes('ewc')) {
-      match = did.match(DIDPatternEWC);
-    }
-    else if (did.includes('volta')) {
-      match = did.match(DIDPatternVOLTA);
-    }
-  }
-  else {
-    match = did.match(DIDPattern);
-  }
+  const match = did.match(didPattern);
   if (!match) {
     throw new Error('Invalid DID');
   }
@@ -82,18 +66,7 @@ export function addressOf(did: string): string {
 * @private
 */
 export function matchDIDPattern(did: string): RegExpMatchArray {
-  let match;
-  if (did.split(':').length > 3) {
-    if (did.includes('ewc')) {
-      match = did.match(DIDPatternEWC);
-    }
-    else if (did.includes('volta')) {
-      match = did.match(DIDPatternVOLTA);
-    }
-  }
-  else {
-    match = did.match(DIDPattern);
-  }
+  const match = did.match(didPattern);
   if (!match) {
     throw new Error('Invalid DID');
   }
