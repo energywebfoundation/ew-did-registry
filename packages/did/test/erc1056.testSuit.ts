@@ -4,7 +4,9 @@ import {
   Methods,
   isValidErc1056,
   Chain,
-  isValidErc1056EWC
+  isValidErc1056EWC,
+  getDIDChain,
+  getDIDMethod,
 } from '../src';
 
 export function erc1056tests(): void {
@@ -20,5 +22,25 @@ export function erc1056tests(): void {
 
   it('Method-specific id should be 40 digit hexadecimal value', () => {
     expect(isValidErc1056(`did:${Methods.Erc1056}:0x${'a'.repeat(41)}`)).throws;
+  });
+
+  it('DID method can be retrieved for well formed did', () => {
+    const did = `did:${Methods.Erc1056}:${new Keys().getAddress()}`;
+    expect(getDIDMethod(did)).equals(Methods.Erc1056);
+  });
+
+  it('DID method can be retrieved for well formed did with chain name', () => {
+    const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
+    expect(getDIDMethod(did)).equals(Methods.Erc1056);
+  });
+
+  it('Chain name can be retrieved for well formed did', () => {
+    const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
+    expect(getDIDChain(did)).equals(Chain.EWC);
+  });
+
+  it('Chain name cannot be retrieved for did without chain info', () => {
+    const did = `did:${Methods.Erc1056}:${new Keys().getAddress()}`;
+    expect(getDIDChain(did)).equals("No chain info");
   });
 }
