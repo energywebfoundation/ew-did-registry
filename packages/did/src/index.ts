@@ -119,3 +119,4 @@ export {
 };
 
 export * from './utils/validation';
+export * from './utils/parser';
