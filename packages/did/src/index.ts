@@ -80,24 +80,34 @@ class DID implements IDID {
   }
 
   private _setDid(did: string): IDID {
-    const [, method, chain, id] = did.split(':');
-    if (chain === undefined) {
-      throw new Error('DID must consist of three parts separated by a colon');
+    if (did.split(':').length > 3) {
+      const[, method, chain, id] = did.split(':');
+      if (id === undefined) {
+        throw new Error('Identity cannot be undefined');
+      }
+      if (!DID_SCHEME_PATTERNS.NETWORK.test(`${method}:${chain}`)) {
+        throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
+      }
+      if (id !== undefined && !DID_SCHEME_PATTERNS.ID.test(id)) {
+        throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
+      }
+      this._dids.set(method, did);
+      return this;
     }
-    if (id === undefined && !DID_SCHEME_PATTERNS.NETWORK.test(method)) {
-      throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
+    else {
+      const [, method, id] = did.split(':');
+      if (id === undefined) {
+        throw new Error('DID must consist of three parts separated by a colon');
+      }
+      if (!DID_SCHEME_PATTERNS.NETWORK.test(method)) {
+        throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
+      }
+      if (!DID_SCHEME_PATTERNS.ID.test(id)) {
+        throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
+      }
+      this._dids.set(method, did);
+      return this;
     }
-    if (id !== undefined && !DID_SCHEME_PATTERNS.NETWORK.test(`${method}:${chain}`)) {
-      throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
-    }
-    if (id !== undefined && !DID_SCHEME_PATTERNS.ID.test(id)) {
-      throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
-    }
-    if (id === undefined && !DID_SCHEME_PATTERNS.ID.test(chain)) {
-      throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
-    }
-    this._dids.set(method, did);
-    return this;
   }
 }
 
