@@ -218,13 +218,13 @@ const getEventsFromBlock = (
   contractInterface: utils.Interface,
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
-  var identity = addressOf(did);
+  const identity = addressOf(did);
 
   provider.getLogs({
     address,
     fromBlock: block.toNumber(),
     toBlock: block.toNumber(),
-    topics: [null, `0x000000000000000000000000${identity?.slice(2).toLowerCase()}`] as string[],
+    topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
   }).then((log) => {
     const {
       name, args, signature, topic,
@@ -273,7 +273,7 @@ export const fetchDataFromEvents = async (
   provider: providers.Provider,
   selector?: DocumentSelector,
 ): Promise<void> => {
-  var identity = addressOf(did);
+  const identity = addressOf(did);
   let nextBlock;
   let topBlock;
   try {
