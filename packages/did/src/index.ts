@@ -81,7 +81,7 @@ class DID implements IDID {
 
   private _setDid(did: string): IDID {
     if (did.split(':').length > 3) {
-      const[, method, chain, id] = did.split(':');
+      const [, method, chain, id] = did.split(':');
       if (id === undefined) {
         throw new Error('Identity cannot be undefined');
       }
@@ -115,7 +115,7 @@ export {
   IDID,
   DID,
   Methods,
-  Chain
+  Chain,
 };
 
 export * from './utils/validation';

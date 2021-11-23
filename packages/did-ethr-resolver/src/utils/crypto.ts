@@ -49,7 +49,6 @@ export function hexify(value: string | object): string {
 * Checks if did is valid, and returns the address if it is
 *
 * @param did
-* @private
 */
 export function addressOf(did: string): string {
   const match = did.match(didPattern);
@@ -63,7 +62,6 @@ export function addressOf(did: string): string {
 * Checks if did has a valid pattern, and returns the matched pattern array if it is
 *
 * @param did
-* @private
 */
 export function matchDIDPattern(did: string): RegExpMatchArray {
   const match = did.match(didPattern);
