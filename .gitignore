@@ -10,3 +10,4 @@ dist
 .log
 packages/proxyIdentity/index.js
 ethers
+.openzeppelin
