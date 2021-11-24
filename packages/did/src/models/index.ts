@@ -25,3 +25,8 @@ export const DID_SCHEME_PATTERNS = {
      */
   ID: /^[\w.-]*(:[\w.-]*)*$/,
 };
+
+export type ChainInfo = {
+  foundChainInfo : boolean,
+  chainInfo : string | undefined
+}
