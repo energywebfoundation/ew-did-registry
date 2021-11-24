@@ -1,17 +1,22 @@
 /* eslint-disable no-shadow */
 export interface IDidStore {
-    [key: string]: string;
+  [key: string]: string;
 }
 
 export enum Methods {
-    Erc725 = 'erc725',
-    Erc1056 = 'ethr',
-    Jolocom = 'jolo'
+  Erc725 = 'erc725',
+  Erc1056 = 'ethr',
+  Jolocom = 'jolo'
+}
+
+export enum Chain {
+  EWC = 'ewc',
+  VOLTA = 'volta'
 }
 
 export const DID_SCHEME_PATTERNS = {
 
-  NETWORK: /^[a-z0-9]+$/,
+  NETWORK: /^[a-z0-9]+?(:)?[a-z0-9]+?$/,
   /**
      * DID specification rule for method-specific-id
    * DID specification rule for method-name
@@ -20,3 +25,8 @@ export const DID_SCHEME_PATTERNS = {
      */
   ID: /^[\w.-]*(:[\w.-]*)*$/,
 };
+
+export type ChainInfo = {
+  foundChainInfo : boolean,
+  chainInfo : string | undefined
+}
