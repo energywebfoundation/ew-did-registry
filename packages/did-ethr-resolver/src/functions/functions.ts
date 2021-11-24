@@ -15,8 +15,8 @@ import {
   DelegateChangedEvent,
   DidEventNames,
 } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
 import { attributeNamePattern } from '../constants';
+import { addressOf, matchDIDPattern } from '../utils';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -81,14 +81,11 @@ const handleAttributeChange = (
   validTo: BigNumber,
   block: number,
 ): IDIDLogData => {
-  let match = did.match(DIDPattern);
-  if (!match) {
-    throw new Error('Invalid DID');
-  }
-  const identity = match[1];
+  const matchDID = matchDIDPattern(did);
+  const identity = matchDID[1];
   const attributeType = event.values.name;
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
-  match = stringAttributeType.match(attributeNamePattern);
+  const match = stringAttributeType.match(attributeNamePattern);
   if (match) {
     const section = match[1];
     const algo = match[2];
@@ -221,7 +218,7 @@ const getEventsFromBlock = (
   contractInterface: utils.Interface,
   address: string,
 ): Promise<unknown> => new Promise((resolve, reject) => {
-  const [, , identity] = did.split(':');
+  const identity = addressOf(did);
 
   provider.getLogs({
     address,
@@ -276,7 +273,7 @@ export const fetchDataFromEvents = async (
   provider: providers.Provider,
   selector?: DocumentSelector,
 ): Promise<void> => {
-  const [, , identity] = did.split(':');
+  const identity = addressOf(did);
   let nextBlock;
   let topBlock;
   try {
@@ -288,7 +285,7 @@ export const fetchDataFromEvents = async (
 
   if (nextBlock) {
     document.owner = await contract.owners(identity);
-  } else {
+  } else if (identity) {
     document.owner = identity;
   }
 

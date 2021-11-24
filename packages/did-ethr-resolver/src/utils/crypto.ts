@@ -1,12 +1,12 @@
 import { Keys } from '@ew-did-registry/keys';
 import { Wallet, Signer, utils } from 'ethers';
 import { Encoding, IPublicKey } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
 
 const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey, hexlify,
 } = utils;
 
+const didPattern = `^did:[a-z0-9]+?:?[a-z0-9]+?:(0x[A-Fa-f0-9]{40})$`;
 export const compressedSecp256k1KeyLength = 66;
 
 export const walletPubKey = (
@@ -49,12 +49,24 @@ export function hexify(value: string | object): string {
 * Checks if did is valid, and returns the address if it is
 *
 * @param did
-* @private
 */
 export function addressOf(did: string): string {
-  const match = did.match(DIDPattern);
+  const match = did.match(didPattern);
   if (!match) {
     throw new Error('Invalid DID');
   }
   return match[1];
+}
+
+/**
+* Checks if did has a valid pattern, and returns the matched pattern array if it is
+*
+* @param did
+*/
+export function matchDIDPattern(did: string): RegExpMatchArray {
+  const match = did.match(didPattern);
+  if (!match) {
+    throw new Error('Invalid DID');
+  }
+  return match;
 }

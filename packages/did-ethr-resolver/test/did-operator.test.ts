@@ -41,6 +41,7 @@ const newOwner = EwSigner.fromPrivateKey(newOwnerKeys.privateKey, providerSettin
 const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
+const ewcDID = `did:ethr:ewc:${identity}`;
 let operator: Operator;
 let registry: string;
 let registrySettings: RegistrySettings;
@@ -54,6 +55,10 @@ const testSuite = (): void => {
 
   it('readOwnerPubKey should give same publicKey', async () => {
     expect(await operator.readOwnerPubKey(did)).equal(keys.publicKey);
+  });
+
+  it('readOwnerPubKey should give same publicKey for ewc did', async () => {
+    expect(await operator.readOwnerPubKey(ewcDID)).equal(keys.publicKey);
   });
 
   /**
@@ -96,6 +101,24 @@ const testSuite = (): void => {
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
+
+    const publicKey = document.publicKey.find(
+      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+    );
+    expect(publicKey).is.not.undefined;
+  });
+
+  it('setting public key attribute should update public keys of DID document of ewc did', async () => {
+    const attribute = DIDAttribute.PublicKey;
+    const updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-2' },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    const document = await operator.read(ewcDID);
+    expect(document.id).equal(ewcDID);
 
     const publicKey = document.publicKey.find(
       (pk) => pk.publicKeyHex === updateData.value.publicKey,
@@ -248,6 +271,46 @@ const testSuite = (): void => {
     await operator.update(did, attribute, updateData, validity);
     await operator.deactivate(did);
     const document = await operator.read(did);
+    expect(document.service).to.be.empty;
+    expect(document.publicKey).to.be.empty;
+    expect(document.authentication.length).equal(1);
+  });
+
+  it('deactivating of document should revoke all of its attributes for ewc did', async () => {
+    // add public key
+    let attribute = DIDAttribute.PublicKey;
+    let updateData: IUpdateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-5' },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    // add authentication method
+    attribute = DIDAttribute.Authenticate;
+    const delegate = new Wallet(new Keys().privateKey);
+    updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.SignatureAuthentication2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    // add service endpoint
+    attribute = DIDAttribute.ServicePoint;
+    const endpoint = 'https://example.com';
+    const serviceId = 'AssetClaimURL2';
+    updateData = {
+      type: attribute,
+      value: {
+        id: `${ewcDID}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    await operator.deactivate(ewcDID);
+    const document = await operator.read(ewcDID);
     expect(document.service).to.be.empty;
     expect(document.publicKey).to.be.empty;
     expect(document.authentication.length).equal(1);

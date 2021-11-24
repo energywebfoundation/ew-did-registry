@@ -13,10 +13,12 @@ import {
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import { Methods, DIDPattern } from '@ew-did-registry/did';
+import {
+  Methods,
+} from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
-import { compressedSecp256k1KeyLength } from '..';
+import { addressOf, compressedSecp256k1KeyLength, matchDIDPattern } from '..';
 
 const { formatBytes32String } = utils;
 
@@ -77,10 +79,7 @@ class Resolver implements IResolver {
     did: string,
     selector?: DocumentSelector,
   ): Promise<IDIDDocument> {
-    const match = did.match(DIDPattern);
-    if (!match) {
-      throw new Error('Invalid did provided');
-    }
+    const match = matchDIDPattern(did);
     const address = match[1];
 
     const _document = {
@@ -130,7 +129,7 @@ class Resolver implements IResolver {
    * @returns Promise<string>
    */
   async identityOwner(did: string): Promise<string> {
-    const [, , id] = did.split(':');
+    const id = addressOf(did);
     let owner;
     try {
       owner = await this._contract.identityOwner(id);
@@ -157,8 +156,8 @@ class Resolver implements IResolver {
     delegateDID: string,
   ): Promise<boolean> {
     const bytesType = formatBytes32String(delegateType);
-    const [, , identityAddress] = identityDID.split(':');
-    const [, , delegateAddress] = delegateDID.split(':');
+    const identityAddress = addressOf(identityDID);
+    const delegateAddress = addressOf(delegateDID);
 
     let valid;
     try {
@@ -197,7 +196,7 @@ class Resolver implements IResolver {
     did: string,
     topBlock: BigNumber,
   ): Promise<IDIDLogData> {
-    const [, , address] = did.split(':');
+    const address = addressOf(did);
     const _document = {
       owner: address,
       topBlock,
@@ -211,7 +210,7 @@ class Resolver implements IResolver {
   }
 
   async lastBlock(did: string): Promise<BigNumber> {
-    const [, , address] = did.split(':');
+    const address = addressOf(did);
     return this._contract.changed(address);
   }
 }
