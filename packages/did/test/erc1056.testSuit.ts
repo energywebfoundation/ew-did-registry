@@ -36,11 +36,11 @@ export function erc1056tests(): void {
 
   it('Chain name can be retrieved for well formed did', () => {
     const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
-    expect(getDIDChain(did)).equals(Chain.EWC);
+    expect(getDIDChain(did)).deep.equal({foundChainInfo : true, chainInfo : Chain.EWC});
   });
 
   it('Chain name cannot be retrieved for did without chain info', () => {
     const did = `did:${Methods.Erc1056}:${new Keys().getAddress()}`;
-    expect(getDIDChain(did)).equals("No chain info");
+    expect(getDIDChain(did)).deep.equal({foundChainInfo : false, chainInfo : undefined});
   });
 }
