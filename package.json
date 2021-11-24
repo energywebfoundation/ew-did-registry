@@ -17,6 +17,13 @@
     "publish:release": "lerna version --conventional-commits --exact --yes && lerna publish from-git --yes --no-verify-access",
     "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/build packages/*/package-lock.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:energywebfoundation/ew-did-registry.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [
     "Energy",
     "EnergyWeb",
