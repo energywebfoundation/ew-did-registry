@@ -1,13 +1,16 @@
 pragma solidity 0.8.3;
 
-import "@openzeppelin/contracts/proxy/Clones.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/ClonesUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./OfferableIdentity.sol";
 import "./IOfferable.sol";
 
 
-contract IdentityManager {
+contract IdentityManager is Initializable, UUPSUpgradeable, OwnableUpgradeable{
   address libraryAddress;
   
   bytes4 private constant INIT_SELECTOR = bytes4(keccak256(bytes('init(address)')));
@@ -28,13 +31,14 @@ contract IdentityManager {
   event IdentityOfferRejected(address indexed identity, address owner, address indexed offeredTo, uint256 indexed at);
   event IdentityOfferCanceled(address indexed identity, address indexed owner, address oferedto, uint256 indexed at);
   
-  constructor(address _libraryAddress) {
+  function initialize(address _libraryAddress) public initializer{
     libraryAddress = _libraryAddress;
+    __Ownable_init();
   }
   
   modifier isOfferable() {
     require(
-      ERC165Checker.supportsInterface(
+      ERC165CheckerUpgradeable.supportsInterface(
         msg.sender, type(IOfferable).interfaceId
       ),
       "Only Offerable Identity allowed"
@@ -68,11 +72,11 @@ contract IdentityManager {
   }
 
   function createIdentity(address _owner) external {
-    address identity = Clones.clone(libraryAddress);
+    address identity = ClonesUpgradeable.clone(libraryAddress);
     identities[identity].created = true;
     
     bytes memory initData = abi.encodeWithSelector(INIT_SELECTOR, _owner);    
-    Address.functionCall(identity, initData, "IdentityManager: Can't initialize cloned identity");
+    AddressUpgradeable.functionCall(identity, initData, "IdentityManager: Can't initialize cloned identity");
   }
   
   function identityCreated(address _owner)
@@ -121,5 +125,13 @@ contract IdentityManager {
   {
     identities[msg.sender].offered = false;
     emit IdentityOfferCanceled(msg.sender, identityOwner(msg.sender), _offeredTo, block.timestamp);
+  }
+
+  function version() external pure returns (string memory) {
+      return "v0.1";
+  }
+
+  function _authorizeUpgrade(address) internal override onlyOwner {
+    // Allow only owner to authorize a smart contract upgrade
   }
 }

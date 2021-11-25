@@ -13,7 +13,8 @@
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
     "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
-    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix",
+    "truffle": "rm -rf build/contracts && ts-node test/truffle/upgradeContract.ts && truffle test test/truffle/IdentityManager.upgrade.test.ts && rm -rf contracts/IdentityManagerUpgradeTest.sol"
   },
   "author": {
     "name": "EnergyWeb",
@@ -28,6 +29,8 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.3.3",
+    "@openzeppelin/contracts-upgradeable": "4.3.2",
+    "@openzeppelin/truffle-upgrades": "1.10.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",
