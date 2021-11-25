@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.3.3",
-    "@openzeppelin/contracts-upgradeable": "4.3.2",
+    "@openzeppelin/contracts-upgradeable": "4.3.3",
     "@openzeppelin/truffle-upgrades": "1.10.0",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
