@@ -65,7 +65,10 @@
       {
         "allowEmptyCatch": true
       }
-    ]
+    ],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "implicit-arrow-linebreak": "off"
   },
   "settings": {
     "import/resolver": {

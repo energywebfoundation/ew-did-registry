@@ -1,3 +1,3 @@
-export { JWT } from './JWT256K';
+export { JWT } from './JWTEIP191';
 export * from './interface';
 export * from './types';

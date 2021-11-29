@@ -65,7 +65,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(publicData: object, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
+  async createPublicClaim(publicData: Record<string, unknown>, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
     const claim: IPublicClaim = {
@@ -218,13 +218,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<string>}
    * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string, verifyData: object): Promise<boolean> {
+  async verifyPublicClaim(token: string, verifyData: Record<string, unknown>): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPublicClaim;
     const issuer = claim.iss as string;
     if (!(await this.verifySignature(token, issuer))) {
       throw new Error('Incorrect signature');
     }
-    assert.deepStrictEqual(claim.claimData, verifyData, 'Token payload doesn\'t match user data');
+    assert.deepStrictEqual(claim.claimData, verifyData, "Token payload doesn't match user data");
     const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, issuer);
     const owner = `did:${Methods.Erc1056}:${await this.document.getController()}`;
     return issIsDelegate || owner === issuer;
@@ -256,7 +256,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       const fieldHash = crypto.createHash('sha256').update(value).digest('hex');
       const PK = this.g.mult(new bn(fieldHash));
       if (!bitArray.equal(claim.claimData[key] as [], PK.toBits())) {
-        throw new Error('Issued claim data doesn\'t match user data');
+        throw new Error("Issued claim data doesn't match user data");
       }
     }
     const [, , issAddress] = (claim.iss as string).split(':');
@@ -284,9 +284,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
      *
      * @returns {string} url of the saved claim
      */
-  async publishPublicClaim(
-    issued: string, verifyData: object, opts?: { hashAlg: string; createHash: (data: string) => string },
-  ): Promise<string> {
+  async publishPublicClaim(issued: string, verifyData: Record<string, unknown>, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
     const verified = await this.verifyPublicClaim(issued, verifyData);
     if (verified) {
       return this.addClaimToServiceEndpoints(issued, opts);
@@ -302,9 +300,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns {string} url of the saved claim
    */
-  async publishPrivateClaim(
-    issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string },
-  ): Promise<string> {
+  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
     const verified = await this.verifyPrivateClaim(issued, saltedFields);
     if (verified) {
       return this.addClaimToServiceEndpoints(issued, opts);

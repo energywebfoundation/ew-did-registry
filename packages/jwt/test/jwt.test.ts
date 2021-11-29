@@ -4,7 +4,7 @@ import { Wallet } from 'ethers';
 import jsonwebtoken from 'jsonwebtoken';
 import ECKey from 'ec-key';
 import { Keys } from '@ew-did-registry/keys';
-import { JWT } from '../src/JWT256K';
+import { JWT } from '../src/JWTEIP191';
 import { Algorithms } from '../src/types';
 
 const { expect, should } = chai;

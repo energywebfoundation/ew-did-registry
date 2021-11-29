@@ -1,10 +1,19 @@
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { IJWT, JWT, JwtPayload } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { DelegateTypes, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import {
+  IDIDDocument,
+  IServiceEndpoint,
+} from '@ew-did-registry/did-resolver-interface';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { IClaims, IPublicClaim, IPrivateClaim } from '../models';
+import {
+  IClaims,
+  IPublicClaim,
+  IPrivateClaim,
+  VerificationPurpose,
+} from '../models';
 import { hashes } from '../utils';
+import { ProofVerifier } from '../claimsVerifier/proofVerifier';
 
 /**
  * @class
@@ -63,32 +72,86 @@ export class Claims implements IClaims {
   }
 
   /**
-   * Verifies integrity of the claim, the claim is issued by the user
-   *  delegate and the authenticity of the issuer's signature
+   * Verifies issuance and publishing of claim at `claimUrl`.
+   * On successful verification returns claim
    *
    * @param claimUrl {string}
    * @param hashFns {{ [alg: string]: (data: string) => string }}
+   *
    */
   async verify(
-    claimUrl: string, hashFns?: { [alg: string]: (data: string) => string },
+    claimUrl: string,
+    {
+      hashFns,
+      issuerDoc,
+      holderDoc,
+      verificationPurpose = VerificationPurpose.Authentication,
+    }: {
+      hashFns?: { [alg: string]: (data: string) => string };
+      issuerDoc?: IDIDDocument;
+      holderDoc?: IDIDDocument;
+      verificationPurpose?: VerificationPurpose;
+    } = {},
   ): Promise<IPublicClaim | IPrivateClaim> {
     const token = await this.store.get(claimUrl);
-    const claim = this.jwt.decode(token) as
-      (IPublicClaim | IPrivateClaim) & { iss: string; sub: string };
-    if (!(await this.verifySignature(token, claim.iss))) {
-      throw new Error('Invalid signature');
+    const claim = this.jwt.decode(token) as (IPublicClaim | IPrivateClaim) &
+      JwtPayload;
+    if (!issuerDoc) {
+      issuerDoc = await this.document.read(claim.iss);
     }
-    if (!this.document.isValidDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
-      throw new Error('Issuer isn\'t a use\'r delegate');
+    if (!holderDoc) {
+      holderDoc = await this.document.read(claim.sub);
     }
-    const service = await this.document.readAttribute(
-      { service: { serviceEndpoint: claimUrl } }, (claim).sub,
+    await this.validateServiceEndpointToken(claimUrl, {
+      hashFns,
+      holderDoc,
+    });
+
+    const tokenVerifier = new ProofVerifier(issuerDoc);
+    switch (verificationPurpose) {
+      case VerificationPurpose.Authentication:
+        if (await tokenVerifier.authenticate(token)) {
+          return claim;
+        }
+        break;
+      case VerificationPurpose.Verification:
+        if (await tokenVerifier.verify(token)) {
+          return claim;
+        }
+        break;
+      default:
+        break;
+    }
+    throw new Error('Token is not verified');
+  }
+
+  /**
+   * @description Verifies that token stored at `claimUrl` represents service
+   * endpoint of `holderDoc`
+   * @param claimUrl
+   * @param param1
+   */
+  async validateServiceEndpointToken(
+    claimUrl: string,
+    {
+      hashFns,
+      holderDoc,
+    }: {
+      hashFns?: { [alg: string]: (data: string) => string };
+      holderDoc: IDIDDocument;
+    },
+  ) {
+    const token = await this.store.get(claimUrl);
+    const service = holderDoc.service.find(
+      (s) => s.serviceEndpoint === claimUrl,
     ) as IServiceEndpoint;
+    if (!service) {
+      throw new Error(`No claim at ${claimUrl}`);
+    }
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];
     if (hash !== createHash(token)) {
-      throw new Error('Claim was changed');
+      throw new Error(`Claim at ${claimUrl} was changed`);
     }
-    return claim;
   }
 }

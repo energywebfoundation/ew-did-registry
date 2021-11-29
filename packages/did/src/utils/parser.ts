@@ -13,7 +13,7 @@ export function getDIDMethod(did : string): string {
   if (!match) {
     throw new Error('Invalid DID');
   }
-  const [, method, ...param] = did.split(':');
+  const [, method] = did.split(':');
   return method;
 }
 
@@ -29,7 +29,7 @@ export function getDIDChain(did : string) : ChainInfo {
     throw new Error('Invalid DID');
   }
   if (did.split(':').length > 3) {
-    const [, , chain, ...param] = did.split(':');
+    const [, , chain] = did.split(':');
     return { foundChainInfo: true, chainInfo: chain };
   }
   return { foundChainInfo: false, chainInfo: undefined };
