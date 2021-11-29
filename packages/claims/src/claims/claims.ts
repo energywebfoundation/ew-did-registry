@@ -146,7 +146,7 @@ export class Claims implements IClaims {
       (s) => s.serviceEndpoint === claimUrl,
     ) as IServiceEndpoint;
     if (!service) {
-      throw new Error(`No claim at ${claimUrl}`);
+      throw new Error(`No service endpoint found for ${claimUrl} in holder DID document`);
     }
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];
