@@ -48,5 +48,5 @@ export interface IClaims {
 
 export enum VerificationPurpose {
   Authentication = 'Authentication',
-  Verification = 'Verification',
+  Assertion = 'Assertion',
 }

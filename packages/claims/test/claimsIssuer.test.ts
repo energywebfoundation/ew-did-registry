@@ -108,18 +108,4 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
 
     return claimsUser.verify(url).should.be.fulfilled;
   });
-
-  it('claim issued by non-delegate should not be verified', async () => {
-    await userDoc.revokeDelegate(
-      PubKeyType.VerificationKey2018,
-      issuerDid,
-    );
-
-    let claim = await claimsUser.createPublicClaim(claimData);
-
-    claim = await claimsIssuer.issuePublicClaim(claim);
-
-    const url = await claimsUser.publishPublicClaim(claim, claimData);
-    expect(url).empty;
-  });
 });

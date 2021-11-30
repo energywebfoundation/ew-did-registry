@@ -63,7 +63,7 @@ describe('AuthTokenVerifier', () => {
         withOwnerKey: false,
       });
       verifier = new ProofVerifier(document);
-      const did = await verifier.authenticate(claim);
+      const did = await verifier.verifyAuthenticationProof(claim);
 
       assert.strictEqual(did, document.id);
     });
@@ -74,7 +74,7 @@ describe('AuthTokenVerifier', () => {
         withOwnerKey: false,
       });
       verifier = new ProofVerifier(document);
-      const did = await verifier.authenticate(claim);
+      const did = await verifier.verifyAuthenticationProof(claim);
 
       assert.strictEqual(did, null);
     });
@@ -94,7 +94,7 @@ describe('AuthTokenVerifier', () => {
           } as IPublicKey);
           verifier = new ProofVerifier(document);
           claim = await createClaim(delegate as (Wallet | Keys) & delegateType);
-          const did = await verifier.authenticate(claim);
+          const did = await verifier.verifyAuthenticationProof(claim);
 
           assert.strictEqual(did, document.id);
         }
@@ -116,7 +116,7 @@ describe('AuthTokenVerifier', () => {
         } as IAuthentication);
         verifier = new ProofVerifier(document);
         claim = await createClaim(delegate as (Wallet | Keys) & delegateType);
-        const did = await verifier.authenticate(claim);
+        const did = await verifier.verifyAuthenticationProof(claim);
 
         assert.strictEqual(did, document.id);
       });
@@ -125,7 +125,7 @@ describe('AuthTokenVerifier', () => {
         const document = mockDocument(identity);
         verifier = new ProofVerifier(document);
         claim = await createClaim(delegate as (Wallet | Keys) & delegateType);
-        const did = await verifier.authenticate(claim);
+        const did = await verifier.verifyAssertionProof(claim);
 
         assert.strictEqual(did, null);
       });

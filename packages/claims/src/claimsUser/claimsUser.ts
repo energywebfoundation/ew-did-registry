@@ -14,7 +14,6 @@ import {
   KeyTags,
   IPublicKey,
 } from '@ew-did-registry/did-resolver-interface';
-import { Methods } from '@ew-did-registry/did';
 import { KeyType } from '@ew-did-registry/keys';
 import { Algorithms } from '@ew-did-registry/jwt';
 import {
@@ -23,6 +22,7 @@ import {
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
 import { hashes } from '../utils';
+import { ProofVerifier } from '..';
 
 declare module 'sjcl' {
   interface SjclEllipticalCurve {
@@ -218,16 +218,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<string>}
    * @throws if the proof failed
    */
-  async verifyPublicClaim(token: string, verifyData: Record<string, unknown>): Promise<boolean> {
+  async verifyClaimContent(token: string, verifyData: Record<string, unknown>): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPublicClaim;
-    const issuer = claim.iss as string;
-    if (!(await this.verifySignature(token, issuer))) {
-      throw new Error('Incorrect signature');
-    }
     assert.deepStrictEqual(claim.claimData, verifyData, "Token payload doesn't match user data");
-    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, issuer);
-    const owner = `did:${Methods.Erc1056}:${await this.document.getController()}`;
-    return issIsDelegate || owner === issuer;
+    return true;
   }
 
   /**
@@ -248,7 +242,9 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    */
   async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.iss as string))) {
+    const issuer = claim.iss as string;
+    const proofVerifier = new ProofVerifier(await this.document.read(issuer));
+    if (!(await proofVerifier.verifyAssertionProof(token))) {
       throw new Error('Invalid signature');
     }
     // eslint-disable-next-line no-restricted-syntax
@@ -285,11 +281,13 @@ export class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {string} url of the saved claim
      */
   async publishPublicClaim(issued: string, verifyData: Record<string, unknown>, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
-    const verified = await this.verifyPublicClaim(issued, verifyData);
-    if (verified) {
-      return this.addClaimToServiceEndpoints(issued, opts);
+    await this.verifyClaimContent(issued, verifyData);
+    const { signer } = this.jwt.decode(issued) as IPublicClaim;
+    const proofVerifier = new ProofVerifier(await this.document.read(signer));
+    if (!(await proofVerifier.verifyAssertionProof(issued))) {
+      throw new Error('User signature not valid');
     }
-    return '';
+    return this.addClaimToServiceEndpoints(issued, opts);
   }
 
   /**

@@ -68,9 +68,6 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
     const proofClaim: IProofClaim = this.jwt.decode(proofToken) as IProofClaim;
-    if (!(await this.verifySignature(proofToken, proofClaim.signer))) {
-      throw new Error('Invalid signature');
-    }
     if (
       !this.document.isValidDelegate(
         DelegateTypes.verification,

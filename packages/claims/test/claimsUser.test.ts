@@ -1,5 +1,5 @@
 import { decrypt } from 'eciesjs';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
@@ -18,7 +18,7 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
+  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim, ProofVerifier,
 } from '../src';
 import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
@@ -39,6 +39,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
   const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  let userDoc: DIDDocumentFull;
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
@@ -57,7 +58,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     console.log(`registry: ${registry}`);
 
     store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(
+    userDoc = new DIDDocumentFull(
       userDid,
       new Operator(
         user,
@@ -87,7 +88,8 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
-    (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
+    const proofVerifier = new ProofVerifier(await userDoc.read());
+    expect(await proofVerifier.verifyAssertionProof(token)).not.null;
     const claim = await userClaims.jwt.verify(
       token,
       userClaims.keys.publicKey,
@@ -109,7 +111,9 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     // eslint-disable-next-line no-restricted-syntax
     for (const { token, data } of claims) {
       // eslint-disable-next-line no-await-in-loop
-      (await userClaims.verifyPublicClaim(token, data)).should.be.true;
+      userClaims.verifyClaimContent(token, data);
+      const proofVerifier = new ProofVerifier(await userDoc.read());
+      expect(await proofVerifier.verifyAssertionProof(token)).not.null;
     }
   });
 

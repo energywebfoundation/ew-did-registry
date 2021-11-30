@@ -9,7 +9,9 @@ import {
 import { utils } from 'ethers';
 import base64url from 'base64url';
 
-const { arrayify, recoverAddress, keccak256, hashMessage } = utils;
+const {
+  arrayify, recoverAddress, keccak256, hashMessage,
+} = utils;
 
 export class ProofVerifier {
   private _jwt = new JWT(new Keys());
@@ -28,10 +30,10 @@ export class ProofVerifier {
    *
    * @returns {string} DID of authenticated identity
    */
-  public async authenticate(token: string): Promise<string | null> {
+  public async verifyAuthenticationProof(token: string): Promise<string | null> {
     if (
-      (await this.isIdentity(token)) ||
-      (await this.isAuthenticationDelegate(token))
+      (await this.isIdentity(token))
+      || (await this.isAuthenticationDelegate(token))
     ) {
       return this._didDocument.id;
     }
@@ -44,7 +46,7 @@ export class ProofVerifier {
    * @param token
    * @returns
    */
-  public async verify(token: string): Promise<string | null> {
+  public async verifyAssertionProof(token: string): Promise<string | null> {
     if (await this.isVerificationDelegate(token)) {
       return this._didDocument.id;
     }
@@ -59,7 +61,7 @@ export class ProofVerifier {
   private async isIdentity(token: string) {
     const [encodedHeader, encodedPayload, encodedSignature] = token.split('.');
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(
-      'hex'
+      'hex',
     )}`;
     const signature = base64url.decode(encodedSignature);
     const hash = arrayify(keccak256(msg));
@@ -81,7 +83,7 @@ export class ProofVerifier {
   private async isAuthenticationDelegate(token: string) {
     const validKeys = await this.verifySignature(
       this.authenticationKeys(),
-      token
+      token,
     );
     return validKeys.length !== 0;
   }
@@ -89,7 +91,7 @@ export class ProofVerifier {
   private async isVerificationDelegate(token: string) {
     const validKeys = await this.verifySignature(
       this.verificationKeys(),
-      token
+      token,
     );
     return validKeys.length !== 0;
   }
@@ -112,8 +114,8 @@ export class ProofVerifier {
           } catch (error) {
             return false;
           }
-        }
-      )
+        },
+      ),
     );
 
     return keys.filter((_key, index) => results[index]);
@@ -126,12 +128,12 @@ export class ProofVerifier {
     }
     return didPubKeys.filter(
       (key) =>
-        this.isSigAuth(key.type) ||
-        this._didDocument.authentication.some(
+        this.isSigAuth(key.type)
+        || this._didDocument.authentication.some(
           (auth) =>
-            (auth as IAuthentication).publicKey &&
-            this.areLinked((auth as IAuthentication).publicKey, key.id)
-        )
+            (auth as IAuthentication).publicKey
+            && this.areLinked((auth as IAuthentication).publicKey, key.id),
+        ),
     );
   }
 

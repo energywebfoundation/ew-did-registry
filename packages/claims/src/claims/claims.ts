@@ -47,31 +47,6 @@ export class Claims implements IClaims {
   }
 
   /**
-   * Verifies signers signature on received token
-   * @example
-   * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { Claims } from '@ew-did-registry/claims';
-   *
-   * const user = new Keys();
-   * const claims = new Claims(user);
-   * const verified = claims.verifySignature(token, userDid);
-   * ```
-   *
-   * @param { string } token token signature on which you want to check
-   * @param { string } signer did of the signer
-   */
-  async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerPubKey = await this.document.ownerPubKey(signer);
-    try {
-      await this.jwt.verify(token, signerPubKey as string);
-    } catch (error) {
-      return false;
-    }
-    return true;
-  }
-
-  /**
    * Verifies issuance and publishing of claim at `claimUrl`.
    * On successful verification returns claim
    *
@@ -115,7 +90,7 @@ export class Claims implements IClaims {
         }
         break;
       case VerificationPurpose.Assertion:
-        if (await tokenVerifier.verifyAssertionProof(token)) {
+        if (await proofVerifier.verifyAssertionProof(token)) {
           return claim;
         }
         break;
