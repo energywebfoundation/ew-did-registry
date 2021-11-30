@@ -107,15 +107,15 @@ export class Claims implements IClaims {
       holderDoc,
     });
 
-    const tokenVerifier = new ProofVerifier(issuerDoc);
+    const proofVerifier = new ProofVerifier(issuerDoc);
     switch (verificationPurpose) {
       case VerificationPurpose.Authentication:
-        if (await tokenVerifier.authenticate(token)) {
+        if (await proofVerifier.verifyAuthenticationProof(token)) {
           return claim;
         }
         break;
-      case VerificationPurpose.Verification:
-        if (await tokenVerifier.verify(token)) {
+      case VerificationPurpose.Assertion:
+        if (await tokenVerifier.verifyAssertionProof(token)) {
           return claim;
         }
         break;
