@@ -6,7 +6,7 @@ const {
   keccak256, hashMessage, arrayify, computePublicKey, recoverPublicKey, hexlify,
 } = utils;
 
-const didPattern = `^did:[a-z0-9]+?:?[a-z0-9]+?:(0x[A-Fa-f0-9]{40})$`;
+const didPattern = '^did:[a-z0-9]+?:?[a-z0-9]+?:(0x[A-Fa-f0-9]{40})$';
 export const compressedSecp256k1KeyLength = 66;
 
 export const walletPubKey = (

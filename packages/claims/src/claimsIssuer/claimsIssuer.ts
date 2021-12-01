@@ -6,6 +6,7 @@ import { Algorithms } from '@ew-did-registry/jwt';
 import { IClaimsIssuer } from '../interface';
 import { Claims } from '../claims';
 import { IPrivateClaim, IPublicClaim } from '../models';
+import { ProofVerifier } from '..';
 
 export class ClaimsIssuer extends Claims implements IClaimsIssuer {
   /**
@@ -63,7 +64,8 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    if (!(await this.verifySignature(token, claim.iss as string))) {
+    const proofVerifier = new ProofVerifier(await this.document.read(claim.signer));
+    if (!(await proofVerifier.verifyAssertionProof(token))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;

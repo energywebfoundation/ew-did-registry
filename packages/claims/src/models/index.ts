@@ -41,6 +41,12 @@ export interface IClaims {
   };
   jwt: IJWT;
   verify(
-    claimUrl: string, hashFns?: { [hashAlg: string]: (data: string) => string },
+    claimUrl: string,
+    hashFns?: { [hashAlg: string]: (data: string) => string }
   ): Promise<IPublicClaim | IPrivateClaim>;
+}
+
+export enum VerificationPurpose {
+  Authentication = 'Authentication',
+  Assertion = 'Assertion',
 }

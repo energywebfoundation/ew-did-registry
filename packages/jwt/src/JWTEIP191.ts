@@ -1,30 +1,24 @@
 /* eslint-disable no-restricted-syntax */
 import { Signer, utils, Wallet } from 'ethers';
 import base64url from 'base64url';
-import {
-  IKeys, Keys,
-} from '@ew-did-registry/keys';
+import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';
-import {
-  JwtSignOptions, JwtPayload,
-} from './types';
+import { JwtSignOptions, JwtPayload } from './types';
 import { JwtBase } from './JwtBase';
 
-const {
-  arrayify, keccak256,
-} = utils;
+const { arrayify, keccak256 } = utils;
 
 export class JWT extends JwtBase implements IJWT {
   private _signer: Signer;
 
   constructor(signer: IKeys | Signer) {
     super();
-    if (signer instanceof Keys) {
-      this._signer = new Wallet(signer.privateKey);
-    } else if (signer instanceof Signer) {
+    if ((signer as IKeys).privateKey) {
+      this._signer = new Wallet((signer as IKeys).privateKey);
+    } else if (Signer.isSigner(signer)) {
       this._signer = signer;
     } else {
-      throw new Error('Unsupported ES256K signer');
+      throw new Error('Unsupported EIP191 signer');
     }
   }
 
@@ -75,7 +69,9 @@ export class JWT extends JwtBase implements IJWT {
       payload.iat = new Date().getTime();
     }
     const encodedPayload = base64url(JSON.stringify(payload));
-    const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString('hex')}`;
+    const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(
+      'hex',
+    )}`;
     const signature = await this._signer.signMessage(arrayify(keccak256(msg)));
     const encodedSignature = base64url(signature);
     return `${encodedHeader}.${encodedPayload}.${encodedSignature}`;

@@ -1,10 +1,19 @@
 import { IDIDDocumentFull } from '@ew-did-registry/did-document';
-import { IJWT, JWT } from '@ew-did-registry/jwt';
+import { IJWT, JWT, JwtPayload } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
-import { DelegateTypes, IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import {
+  IDIDDocument,
+  IServiceEndpoint,
+} from '@ew-did-registry/did-resolver-interface';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { IClaims, IPublicClaim, IPrivateClaim } from '../models';
+import {
+  IClaims,
+  IPublicClaim,
+  IPrivateClaim,
+  VerificationPurpose,
+} from '../models';
 import { hashes } from '../utils';
+import { ProofVerifier } from '../claimsVerifier/proofVerifier';
 
 /**
  * @class
@@ -38,57 +47,101 @@ export class Claims implements IClaims {
   }
 
   /**
-   * Verifies signers signature on received token
-   * @example
-   * ```typescript
-   * import { Keys } from '@ew-did-registry/keys';
-   * import { Claims } from '@ew-did-registry/claims';
+   * Verifies issuance and publishing of claim at `claimUrl`.
+   * On success returns claim.
+   * Verification takes into account purpose on which claim was issued.
    *
-   * const user = new Keys();
-   * const claims = new Claims(user);
-   * const verified = claims.verifySignature(token, userDid);
-   * ```
+   * @param claimUrl: Url of claim to be verified. This method will retrieve
+   * the claim using the didStore configured for the class
+   * @param params.hashFns: The function used to determine the of hash of the claim
+   * token used in the DID document. Used to verify that the DID document service endpoint
+   * matches the retrieved claim.
+   * @param params.issuerDoc: Document with verification methods to verify claim issuance with
+   * @param params.holderDoc: Document with service endpoints to verify claim publishing with
+   * @param params.verificationPurpose: Specifies which verification methods to use.
+   * `VerificationPurpose.Authenticate` is used to verify claim issued to authenticate identity
+   * `VerificationPurpose.Assertion` is used to assert issuer approval.
+   * By default verification asserts claim approval.
    *
-   * @param { string } token token signature on which you want to check
-   * @param { string } signer did of the signer
    */
-  async verifySignature(token: string, signer: string): Promise<boolean> {
-    const signerPubKey = await this.document.ownerPubKey(signer);
-    try {
-      await this.jwt.verify(token, signerPubKey as string);
-    } catch (error) {
-      return false;
+  async verify(
+    claimUrl: string,
+    {
+      hashFns,
+      issuerDoc,
+      holderDoc,
+      verificationPurpose = VerificationPurpose.Assertion,
+    }: {
+      hashFns?: { [alg: string]: (data: string) => string };
+      issuerDoc?: IDIDDocument;
+      holderDoc?: IDIDDocument;
+      verificationPurpose?: VerificationPurpose;
+    } = {},
+  ): Promise<IPublicClaim | IPrivateClaim> {
+    const token = await this.store.get(claimUrl);
+    const claim = this.jwt.decode(token) as (IPublicClaim | IPrivateClaim) &
+      JwtPayload;
+    if (!issuerDoc) {
+      issuerDoc = await this.document.read(claim.iss);
     }
-    return true;
+    if (!holderDoc) {
+      holderDoc = await this.document.read(claim.sub);
+    }
+    await this.validateServiceEndpointToken(claimUrl, {
+      hashFns,
+      holderDoc,
+    });
+
+    const proofVerifier = new ProofVerifier(issuerDoc);
+    switch (verificationPurpose) {
+      case VerificationPurpose.Authentication:
+        if (await proofVerifier.verifyAuthenticationProof(token)) {
+          return claim;
+        }
+        break;
+      case VerificationPurpose.Assertion:
+        if (await proofVerifier.verifyAssertionProof(token)) {
+          return claim;
+        }
+        break;
+      default:
+        break;
+    }
+    throw new Error('Token is not verified');
   }
 
   /**
-   * Verifies integrity of the claim, the claim is issued by the user
-   *  delegate and the authenticity of the issuer's signature
+   * @description Verifies that token stored at `claimUrl` is one of the services of `holderDoc`.
    *
-   * @param claimUrl {string}
-   * @param hashFns {{ [alg: string]: (data: string) => string }}
+   * @param claimUrl: url of the published claim
+   * @param params.hashFns: The function used to determine the of hash of the claim
+   * token used in the DID document. Used to verify that the DID document service endpoint
+   * matches the retrieved claim.
+   * @param params.holderDoc: Document in which to search for service endpoint.
    */
-  async verify(
-    claimUrl: string, hashFns?: { [alg: string]: (data: string) => string },
-  ): Promise<IPublicClaim | IPrivateClaim> {
+  async validateServiceEndpointToken(
+    claimUrl: string,
+    {
+      hashFns,
+      holderDoc,
+    }: {
+      hashFns?: { [alg: string]: (data: string) => string };
+      holderDoc: IDIDDocument;
+    },
+  ) {
     const token = await this.store.get(claimUrl);
-    const claim = this.jwt.decode(token) as
-      (IPublicClaim | IPrivateClaim) & { iss: string; sub: string };
-    if (!(await this.verifySignature(token, claim.iss))) {
-      throw new Error('Invalid signature');
-    }
-    if (!this.document.isValidDelegate(DelegateTypes.verification, claim.signer, claim.did)) {
-      throw new Error('Issuer isn\'t a use\'r delegate');
-    }
-    const service = await this.document.readAttribute(
-      { service: { serviceEndpoint: claimUrl } }, (claim).sub,
+    const service = holderDoc.service.find(
+      (s) => s.serviceEndpoint === claimUrl,
     ) as IServiceEndpoint;
+    if (!service) {
+      throw new Error(
+        `No service endpoint found for ${claimUrl} in holder DID document`,
+      );
+    }
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];
     if (hash !== createHash(token)) {
-      throw new Error('Claim was changed');
+      throw new Error(`Claim at ${claimUrl} was changed`);
     }
-    return claim;
   }
 }

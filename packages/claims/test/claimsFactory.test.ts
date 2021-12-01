@@ -5,12 +5,26 @@ import { Keys } from '@ew-did-registry/keys';
 import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
-import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
-  ClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier, IProofData,
+  DIDDocumentFull,
+  IDIDDocumentFull,
+} from '@ew-did-registry/did-document';
+import {
+  ClaimsFactory,
+  IClaimsIssuer,
+  IClaimsUser,
+  IClaimsVerifier,
+  IProofData,
 } from '../src';
-import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import {
+  deployRegistry,
+  shutDownIpfsDaemon,
+  spawnIpfsDaemon,
+} from '../../../tests';
+import {
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -28,24 +42,45 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
+  const issuer = EwSigner.fromPrivateKey(
+    issuerKeys.privateKey,
+    providerSettings
+  );
 
   const verifierKeys = new Keys();
   const verifierAddress = verifierKeys.getAddress();
   const verifierDid = `did:${Methods.Erc1056}:${verifierAddress}`;
-  const verifier = EwSigner.fromPrivateKey(verifierKeys.privateKey, providerSettings);
+  const verifier = EwSigner.fromPrivateKey(
+    verifierKeys.privateKey,
+    providerSettings
+  );
 
   let claimsUser: IClaimsUser;
   let claimsIssuer: IClaimsIssuer;
   let claimsVerifier: IClaimsVerifier;
 
+  let userDoc: IDIDDocumentFull;
+
   before(async () => {
-    const registry = await deployRegistry([userAddress, issuerAddress, verifierAddress]);
+    const registry = await deployRegistry([
+      userAddress,
+      issuerAddress,
+      verifierAddress,
+    ]);
     console.log(`registry: ${registry}`);
     const store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(userDid, new Operator(user, { address: registry }));
-    const issuerDoc = new DIDDocumentFull(issuerDid, new Operator(issuer, { address: registry }));
-    const verifierDoc = new DIDDocumentFull(verifierDid, new Operator(verifier, { address: registry }));
+    userDoc = new DIDDocumentFull(
+      userDid,
+      new Operator(user, { address: registry })
+    );
+    const issuerDoc = new DIDDocumentFull(
+      issuerDid,
+      new Operator(issuer, { address: registry })
+    );
+    const verifierDoc = new DIDDocumentFull(
+      verifierDid,
+      new Operator(verifier, { address: registry })
+    );
     await userDoc.create();
     await issuerDoc.create();
     await verifierDoc.create();
@@ -54,21 +89,21 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
       userKeys,
       userDoc,
       store,
-      providerSettings,
+      providerSettings
     ).createClaimsUser();
 
     claimsIssuer = new ClaimsFactory(
       issuerKeys,
       issuerDoc,
       store,
-      providerSettings,
+      providerSettings
     ).createClaimsIssuer();
 
     claimsVerifier = new ClaimsFactory(
       verifierKeys,
       verifierDoc,
       store,
-      providerSettings,
+      providerSettings
     ).createClaimsVerifier();
   });
 
@@ -86,12 +121,18 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side
-    const claimUrl = await claimsUser.publishPrivateClaim(issuedToken, saltedFields);
+    const claimUrl = await claimsUser.publishPrivateClaim(
+      issuedToken,
+      saltedFields
+    );
     const encryptedSaltedFields: IProofData = {
       private: { value: saltedFields.private, encrypted: true },
       public: { value: saltedFields.public, encrypted: false },
     };
-    const proofToken = await claimsUser.createProofClaim(claimUrl, encryptedSaltedFields);
+    const proofToken = await claimsUser.createProofClaim(
+      claimUrl,
+      encryptedSaltedFields
+    );
     // Verifier side
     try {
       await claimsVerifier.verifyPrivateProof(proofToken);
@@ -107,7 +148,10 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
     // Issuer side
     const issuedToken = await claimsIssuer.issuePublicClaim(token);
     // Application/User side
-    const claimUrl = await claimsUser.publishPublicClaim(issuedToken, publicData);
+    const claimUrl = await claimsUser.publishPublicClaim(
+      issuedToken,
+      publicData
+    );
     // Verifier side
     return claimsVerifier.verifyPublicProof(claimUrl).should.be.fulfilled;
   });
