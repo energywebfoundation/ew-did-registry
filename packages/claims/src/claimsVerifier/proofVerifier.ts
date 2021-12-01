@@ -30,7 +30,9 @@ export class ProofVerifier {
    *
    * @returns {string} DID of authenticated identity
    */
-  public async verifyAuthenticationProof(token: string): Promise<string | null> {
+  public async verifyAuthenticationProof(
+    token: string,
+  ): Promise<string | null> {
     if (
       (await this.isIdentity(token))
       || (await this.isAuthenticationDelegate(token))
@@ -47,7 +49,10 @@ export class ProofVerifier {
    * @returns
    */
   public async verifyAssertionProof(token: string): Promise<string | null> {
-    if (await this.isVerificationDelegate(token)) {
+    if (
+      (await this.isIdentity(token))
+      || (await this.isVerificationDelegate(token))
+    ) {
       return this._didDocument.id;
     }
     return null;
