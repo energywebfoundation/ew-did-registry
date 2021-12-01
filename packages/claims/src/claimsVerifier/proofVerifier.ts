@@ -28,7 +28,7 @@ export class ProofVerifier {
    *
    * @param token
    *
-   * @returns {string} DID of authenticated identity
+   * @returns: DID of authenticated identity on successful verification or null otherwise
    */
   public async verifyAuthenticationProof(
     token: string,
@@ -43,10 +43,10 @@ export class ProofVerifier {
   }
 
   /**
-   * @description checks that token is issued by identity verification delegate
+   * @description Checks that token is issued by identity verification delegate
    *
-   * @param token
-   * @returns
+   * @param token: JWT token to verify
+   * @returns: DID of the authenticated identity on successful verification or null otherwise
    */
   public async verifyAssertionProof(token: string): Promise<string | null> {
     if (

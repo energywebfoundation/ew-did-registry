@@ -65,7 +65,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
     const proofVerifier = new ProofVerifier(await this.document.read(claim.signer));
-    if (!(await proofVerifier.verifyAuthenticationProof(token))) {
+    if (!(await proofVerifier.verifyAssertionProof(token))) {
       throw new Error('User signature not valid');
     }
     claim.signer = this.did;
