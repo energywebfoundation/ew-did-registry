@@ -1,4 +1,5 @@
 import { Algorithms, JWT } from '@ew-did-registry/jwt';
+import { addressOf } from '@ew-did-registry/did-ethr-resolver';
 import { Keys } from '@ew-did-registry/keys';
 import {
   IAuthentication,
@@ -70,7 +71,7 @@ export class ProofVerifier {
     )}`;
     const signature = base64url.decode(encodedSignature);
     const hash = arrayify(keccak256(msg));
-    const claimedAddress = this._didDocument.id.split(':')[2];
+    const claimedAddress = addressOf(this._didDocument.id);
     try {
       if (claimedAddress === recoverAddress(hash, signature)) {
         return true;
