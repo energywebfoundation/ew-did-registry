@@ -117,7 +117,7 @@ export class Claims implements IClaims {
    * @param params.hashFns: The function used to determine the of hash of the claim
    * token used in the DID document. Used to verify that the DID document service endpoint
    * matches the retrieved claim.
-   * @param params.holderDod: Document in which to search for service endpoint.
+   * @param params.holderDoc: Document in which to search for service endpoint.
    */
   async validateServiceEndpointToken(
     claimUrl: string,
