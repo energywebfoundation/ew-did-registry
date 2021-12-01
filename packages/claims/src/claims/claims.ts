@@ -39,7 +39,7 @@ export class Claims implements IClaims {
   constructor(
     owner: EwSigner,
     protected document: IDIDDocumentFull,
-    protected store: IDidStore,
+    protected store: IDidStore
   ) {
     this.keys = { publicKey: owner.publicKey, privateKey: owner.privateKey };
     this.jwt = new JWT(owner);
@@ -48,10 +48,20 @@ export class Claims implements IClaims {
 
   /**
    * Verifies issuance and publishing of claim at `claimUrl`.
-   * On successful verification returns claim
+   * On success returns claim.
+   * Verification takes into account purpose on which claim was issued.
    *
-   * @param claimUrl {string}
-   * @param hashFns {{ [alg: string]: (data: string) => string }}
+   * @param claimUrl: Url of claim to be verified. This method will retrieve
+   * the claim using the didStore configured for the class
+   * @param params.hashFns: The function used to determine the of hash of the claim
+   * token used in the DID document. Used to verify that the DID document service endpoint
+   * matches the retrieved claim.
+   * @param params.issuerDoc: Document with verification methods to verify claim issuance with
+   * @param params.holderDoc: Document with service endpoints to verify claim publishing with
+   * @param params.verificationPurpose: Specifies which verification methods to use.
+   * `VerificationPurpose.Authenticate` is used to verify claim issued to authenticate identity
+   * `VerificationPurpose.Assertion` is used to assert issuer approval.
+   * By default verification asserts claim approval.
    *
    */
   async verify(
@@ -60,13 +70,13 @@ export class Claims implements IClaims {
       hashFns,
       issuerDoc,
       holderDoc,
-      verificationPurpose = VerificationPurpose.Authentication,
+      verificationPurpose = VerificationPurpose.Assertion,
     }: {
       hashFns?: { [alg: string]: (data: string) => string };
       issuerDoc?: IDIDDocument;
       holderDoc?: IDIDDocument;
       verificationPurpose?: VerificationPurpose;
-    } = {},
+    } = {}
   ): Promise<IPublicClaim | IPrivateClaim> {
     const token = await this.store.get(claimUrl);
     const claim = this.jwt.decode(token) as (IPublicClaim | IPrivateClaim) &
@@ -101,10 +111,13 @@ export class Claims implements IClaims {
   }
 
   /**
-   * @description Verifies that token stored at `claimUrl` represents service
-   * endpoint of `holderDoc`
-   * @param claimUrl
-   * @param param1
+   * @description Verifies that token stored at `claimUrl` is one of the services of `holderDoc`.
+   * 
+   * @param claimUrl: url of the published claim
+   * @param params.hashFns: The function used to determine the of hash of the claim
+   * token used in the DID document. Used to verify that the DID document service endpoint
+   * matches the retrieved claim.
+   * @param params.holderDod: Document in which to search for service endpoint.
    */
   async validateServiceEndpointToken(
     claimUrl: string,
@@ -114,14 +127,16 @@ export class Claims implements IClaims {
     }: {
       hashFns?: { [alg: string]: (data: string) => string };
       holderDoc: IDIDDocument;
-    },
+    }
   ) {
     const token = await this.store.get(claimUrl);
     const service = holderDoc.service.find(
-      (s) => s.serviceEndpoint === claimUrl,
+      (s) => s.serviceEndpoint === claimUrl
     ) as IServiceEndpoint;
     if (!service) {
-      throw new Error(`No service endpoint found for ${claimUrl} in holder DID document`);
+      throw new Error(
+        `No service endpoint found for ${claimUrl} in holder DID document`
+      );
     }
     const { hash, hashAlg } = service;
     const createHash = { ...hashes, ...hashFns }[hashAlg as string];

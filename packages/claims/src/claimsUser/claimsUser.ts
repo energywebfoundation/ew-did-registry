@@ -203,7 +203,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   }
 
   /**
-   * Verifies token received from issuer
+   * Verifies that content of issued and requested tokens is the same.
+   * This performed before issued token is published
    *
    * @example
    * ```typescript
@@ -212,16 +213,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * const user = new Keys();
    * const claims = new UserClaims(user);
-   * const verified = await claims.verifyPublicToken(issuedToken);
+   * const verified = await claims.verifyClaimContent(issuedToken);
    * ```
    * @param { string } token - issued token
-   * @returns {Promise<string>}
    * @throws if the proof failed
    */
-  async verifyClaimContent(token: string, verifyData: Record<string, unknown>): Promise<boolean> {
+  verifyClaimContent(token: string, verifyData: Record<string, unknown>) {
     const claim = this.jwt.decode(token) as IPublicClaim;
     assert.deepStrictEqual(claim.claimData, verifyData, "Token payload doesn't match user data");
-    return true;
   }
 
   /**
@@ -281,7 +280,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
      * @returns {string} url of the saved claim
      */
   async publishPublicClaim(issued: string, verifyData: Record<string, unknown>, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
-    await this.verifyClaimContent(issued, verifyData);
+    this.verifyClaimContent(issued, verifyData);
     const { signer } = this.jwt.decode(issued) as IPublicClaim;
     const proofVerifier = new ProofVerifier(await this.document.read(signer));
     if (!(await proofVerifier.verifyAssertionProof(issued))) {

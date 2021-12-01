@@ -63,7 +63,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
    * @throws if the proof failed
    */
   async verifyPrivateProof(proofToken: string): Promise<void> {
-    const { claimUrl } = this.jwt.decode(proofToken) as { claimUrl: string };
+    const { claimUrl } = this.jwt.decode(proofToken) as IProofClaim;
     const privateClaim = await this.verify(claimUrl);
     const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
