@@ -4,6 +4,12 @@ import { BigNumber } from 'ethers';
 import { documentFromLogs } from '../src';
 
 describe('documentFromLogs', () => {
+  /**
+   * This test is what the cache-server does for DID document caching.
+   * The cache-server reads logs once and wraps to return DID Doc.
+   * Then, when new logs arrive it appends them to the array and wraps again.
+   * So wrapping shouldn't modify the logs.
+   */
   it('obtaining document twice from same logs should return the same document', async () => {
     const logs: IDIDLogData[] = [{
       owner: '0x0000000000000000000000000000000000000000',
