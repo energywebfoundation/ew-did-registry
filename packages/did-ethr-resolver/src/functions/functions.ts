@@ -315,6 +315,34 @@ export const fetchDataFromEvents = async (
 };
 
 /**
+ * The logs from ERC1056 have a validity and a block number
+ */
+ interface ILogWithValidityAndBlock {
+  validity?: BigNumber
+  block?: number
+}
+
+/**
+ * Makes a copy of a log event and remove the validity and block
+ * The log is used to construct DID Document,
+ * but we don't want to include validity and block in DID Document.
+ * It ,akes a copy of the logs so as to not remove from the original log
+ * (as that log maybe need those properties elsewhere)
+ * @param log log event from ERC1056
+ * @returns copy of log without validity and block
+ */
+const copyAndRemoveValidityAndBlock = <T extends ILogWithValidityAndBlock>(log: T): Omit<T, 'validity' | 'block'> => {
+  const copy = { ...log };
+  if (log.block) {
+    delete copy.block;
+  }
+  if (log.validity) {
+    delete copy.validity;
+  }
+  return copy;
+};
+
+/**
  * Provided with the fetched data, the function parses it and returns the
  * DID Document associated with the relevant user
  *
@@ -354,9 +382,7 @@ export const wrapDidDocument = (
     const pubKey = document.publicKey[key];
     const pubKeyValidity = pubKey.validity?.gt(now);
     if (pubKeyValidity) {
-      const pubKeyCopy: Omit<IPublicKey, 'validity' | 'block'> = pubKey;
-      delete pubKeyCopy.validity;
-      delete pubKeyCopy.block;
+      const pubKeyCopy = copyAndRemoveValidityAndBlock(pubKey);
       didDocument.publicKey.push(pubKeyCopy as IPublicKey);
     }
   }
@@ -366,9 +392,7 @@ export const wrapDidDocument = (
     const authenticator = document.authentication[key];
     const authenticatorValidity = authenticator.validity?.gt(now);
     if (authenticatorValidity) {
-      const authenticatorCopy: Omit<IPublicKey, 'validity' | 'block'> = authenticator;
-      delete authenticatorCopy.validity;
-      delete authenticatorCopy.block;
+      const authenticatorCopy = copyAndRemoveValidityAndBlock(authenticator);
       didDocument.authentication.push(authenticatorCopy as IAuthentication);
     }
   }
@@ -378,9 +402,7 @@ export const wrapDidDocument = (
     const serviceEndpoint = document.service[key];
     const serviceEndpointValidity = serviceEndpoint.validity?.gt(now);
     if (serviceEndpointValidity) {
-      const serviceEndpointCopy: Omit<IPublicKey, 'validity' | 'block'> = serviceEndpoint;
-      delete serviceEndpointCopy.validity;
-      delete serviceEndpointCopy.block;
+      const serviceEndpointCopy = copyAndRemoveValidityAndBlock(serviceEndpoint);
       didDocument.service.push(serviceEndpointCopy as IServiceEndpoint);
     }
   }
