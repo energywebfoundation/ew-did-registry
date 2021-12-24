@@ -160,8 +160,8 @@ export class Operator extends Resolver implements IOperator {
     if (validity < 0) {
       throw new Error('Validity must be non negative value');
     }
-    if(didAttribute === ServicePoint && !updateData.value?.serviceEndpoint) {
-      throw new Error('Service Endpoint is required')
+    if (didAttribute === ServicePoint && !updateData.value?.serviceEndpoint) {
+      throw new Error('Service Endpoint is required');
     }
     return this._sendTransaction(method, did, didAttribute, updateData, validity);
   }
