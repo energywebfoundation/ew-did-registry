@@ -197,6 +197,26 @@ const testSuite = (): void => {
     )).not.undefined;
   });
 
+  it('It should not be possible to add service without service endpoint', async () => {
+    const attribute = DIDAttribute.ServicePoint;
+    const serviceId = 'UserClaimURL2';
+    const updateData: IUpdateData = {
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+      },
+    };
+    try {
+      await operator.update(did, attribute, updateData, validity);
+      fail('Error was not thrown');
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Service Endpoint is required');
+      }
+    }
+  });
+
   it('setting attribute on invalid did should throw an error', async () => {
     const invalidDid = `did:${identity}`;
     const attribute = DIDAttribute.PublicKey;
