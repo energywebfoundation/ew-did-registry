@@ -46,7 +46,7 @@
     "@types/chai-arrays": "1.0.3",
     "@types/chai-as-promised": "7.1.2",
     "@types/deep-equal-in-any-order": "1.0.1",
-    "@types/elliptic": "6.4.10",
+    "@types/elliptic": "6.4.14",
     "@types/jsonwebtoken": "8.5.0",
     "@types/mocha": "7.0.2",
     "@types/sjcl": "1.0.28",
