@@ -41,7 +41,7 @@
     "@openzeppelin/contracts": "4.4.1",
     "chai": "4.2.0",
     "@types/sinon": "^10.0.2",
-    "@types/sinon-chai": "^3.2.5",
+    "@types/sinon-chai": "3.2.8",
     "@typechain/ethers-v5": "^7.0.1",
     "ganache-cli": "^6.12.2",
     "run-with-testrpc": "0.3.1",
