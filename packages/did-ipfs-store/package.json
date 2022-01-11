@@ -30,8 +30,8 @@
     "ipfs-http-client": "^43.0.0"
   },
   "devDependencies": {
-    "@types/node": "^15.12.3",
-    "ganache-cli": "^6.12.2",
+    "@types/node": "15.14.9",
+    "ganache-cli": "6.12.2",
     "run-with-testrpc": "0.3.1"
   }
 }

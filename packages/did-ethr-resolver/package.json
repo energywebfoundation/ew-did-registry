@@ -33,11 +33,11 @@
     "ethers": "^5.4.6"
   },
   "devDependencies": {
-    "@types/sinon": "^10.0.2",
-    "@types/sinon-chai": "^3.2.5",
-    "ganache-cli": "^6.12.2",
+    "@types/sinon": "10.0.6",
+    "@types/sinon-chai": "3.2.5",
+    "ganache-cli": "6.12.2",
     "run-with-testrpc": "0.3.1",
-    "sinon": "^11.1.2",
-    "sinon-chai": "^3.7.0"
+    "sinon": "11.1.2",
+    "sinon-chai": "3.7.0"
   }
 }
