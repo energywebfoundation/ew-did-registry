@@ -28,7 +28,7 @@
     "ethers": "^5.4.6"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "4.4.1",
+    "@openzeppelin/contracts": "4.4.2",
     "@openzeppelin/contracts-upgradeable": "4.4.1",
     "@openzeppelin/truffle-upgrades": "1.10.0",
     "chai": "4.2.0",
