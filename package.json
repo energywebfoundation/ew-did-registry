@@ -94,7 +94,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run compile"
+      "pre-commit": "npm run fix && npm run compile"
     }
   }
 }

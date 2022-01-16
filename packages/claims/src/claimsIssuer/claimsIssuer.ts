@@ -34,8 +34,11 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const signedToken = await this.jwt.sign(
       { claimData, did, signer: this.did },
       {
-        algorithm: Algorithms.ES256, issuer: this.did, subject: claim.did, noTimestamp: true,
-      },
+        algorithm: Algorithms.ES256,
+        issuer: this.did,
+        subject: claim.did,
+        noTimestamp: true,
+      }
     );
     return signedToken;
   }
@@ -64,7 +67,9 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     const curve: sjcl.SjclEllipticalCurve = ecc.curves.k256;
     const g = curve.G;
     const claim: IPrivateClaim = this.jwt.decode(token) as IPrivateClaim;
-    const proofVerifier = new ProofVerifier(await this.document.read(claim.signer));
+    const proofVerifier = new ProofVerifier(
+      await this.document.read(claim.signer)
+    );
     if (!(await proofVerifier.verifyAssertionProof(token))) {
       throw new Error('User signature not valid');
     }
@@ -72,22 +77,22 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
     Object.entries(claim.claimData).forEach(([key, value]) => {
       const decryptedField = decrypt(
         this.keys.privateKey as string,
-        Buffer.from(value as string, 'hex'),
+        Buffer.from(value as string, 'hex')
       );
-      const fieldHash = crypto.createHash('sha256').update(decryptedField).digest('hex');
+      const fieldHash = crypto
+        .createHash('sha256')
+        .update(decryptedField)
+        .digest('hex');
       const PK = g.mult(new bn(fieldHash));
       claim.claimData[key] = PK.toBits() as [];
     });
     delete claim.iss;
-    return this.jwt.sign(
-      claim,
-      {
-        algorithm: Algorithms.ES256,
-        issuer: this.did,
-        subject: claim.sub as string,
-        noTimestamp: true,
-      },
-    );
+    return this.jwt.sign(claim, {
+      algorithm: Algorithms.ES256,
+      issuer: this.did,
+      subject: claim.sub as string,
+      noTimestamp: true,
+    });
   }
 }
 

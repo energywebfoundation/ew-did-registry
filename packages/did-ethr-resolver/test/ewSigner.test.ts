@@ -1,5 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import {
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
 import { expect } from 'chai';
 import { providers, Wallet } from 'ethers';
 import { signerPubKey } from '../dist';
@@ -13,7 +15,10 @@ describe('[RESOLVER PACKAGE]: EWSIGNER', () => {
     const providerSettings: ProviderSettings = {
       type: ProviderTypes.HTTP,
     };
-    const ewSignerPubKey = EwSigner.fromPrivateKey(signer.privateKey, providerSettings).publicKey;
+    const ewSignerPubKey = EwSigner.fromPrivateKey(
+      signer.privateKey,
+      providerSettings
+    ).publicKey;
     expect(ewSignerPubKey.slice(0, 2)).to.not.equal('0x');
     expect(ewSignerPubKey).to.be.lengthOf(SECP256K1_COMRESSED_KEY_LENGTH);
   });
@@ -34,7 +39,10 @@ describe('[RESOLVER PACKAGE]: EWSIGNER', () => {
     const pubKey = await signerPubKey(signer);
     expect(pubKey.slice(0, 2)).to.not.equal('0x');
     const prefixedKey = `0x${pubKey}`;
-    const ewSignerPubKey = EwSigner.fromEthersSigner(signer, prefixedKey).publicKey;
+    const ewSignerPubKey = EwSigner.fromEthersSigner(
+      signer,
+      prefixedKey
+    ).publicKey;
     expect(ewSignerPubKey).to.equal(pubKey);
     expect(ewSignerPubKey).to.be.lengthOf(SECP256K1_COMRESSED_KEY_LENGTH);
   });

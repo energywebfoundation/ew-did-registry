@@ -6,66 +6,68 @@ import { computePublicKey } from 'ethers/lib/utils';
 import { JwtVerifyOptions, Algorithms } from './types';
 import { JwtVerificationFailed } from './JwtVerificationFailed';
 
-const {
-  arrayify, keccak256, hashMessage, recoverPublicKey,
-} = utils;
+const { arrayify, keccak256, hashMessage, recoverPublicKey } = utils;
 
 /**
  * @description Any JWT implementation verifies any JWT
  */
 export class JwtBase {
   /**
-  * If the signature is correct, method returns decoded JWT payload
-  *
-  * @example
-  * ```typescript
-  * const issuerKeys = new Keys();
-  * const issuer = new JWT(issuerKeys);
-  * const verifier = new JWT(new Keys());
-  * const payload = {claim: 'test'};
-  *
-  * const token = await issuer.sign(payload); // signing algorithm is determined by issuer's signer
-  * expect(verifier.verify(token), issuerKeys.publicKey, ['ES256K']).to.eql(payload);
-  * ```
-  * @param {string} token
-  * @param {string} publicKey - public key in hexadecimal format in compressed or uncompressed form
-  */
+   * If the signature is correct, method returns decoded JWT payload
+   *
+   * @example
+   * ```typescript
+   * const issuerKeys = new Keys();
+   * const issuer = new JWT(issuerKeys);
+   * const verifier = new JWT(new Keys());
+   * const payload = {claim: 'test'};
+   *
+   * const token = await issuer.sign(payload); // signing algorithm is determined by issuer's signer
+   * expect(verifier.verify(token), issuerKeys.publicKey, ['ES256K']).to.eql(payload);
+   * ```
+   * @param {string} token
+   * @param {string} publicKey - public key in hexadecimal format in compressed or uncompressed form
+   */
   verify(
     token: string,
     publicKey: string,
-    { algorithms = [Algorithms.EIP191] }: JwtVerifyOptions = {},
+    { algorithms = [Algorithms.EIP191] }: JwtVerifyOptions = {}
   ): unknown {
     if (algorithms.includes(Algorithms.EIP191)) {
       try {
         return this.verifyEIP191(token, publicKey);
-      } catch { }
+      } catch {
+        // ignore catch
+      }
     }
     if (algorithms.includes(Algorithms.ES256)) {
       try {
         return this.verifyES256(token, publicKey);
-      } catch { }
+      } catch {
+        // ignore catch
+      }
     }
     throw new JwtVerificationFailed();
   }
 
   /**
-  * Return decoded JWT payload without verifying signature
-  *
-  * @example
-  * ```typescript
-  * const issuer = new JWT(new Keys());
-  * const verifier = new JWT(new Keys());
-  * const payload = {claim: 'test'};
-  *
-  * const token = await issuer.sign(payload, { algorithm: 'ES256K' });
-  *
-  * expect(verifier.decode(token, {complete: true}).payload).to.eql(payload);
-  * ```
-  *
-  * @param {string} token
-  * @param {object} options
-  * @returns string | { [key: string]: any }
-  */
+   * Return decoded JWT payload without verifying signature
+   *
+   * @example
+   * ```typescript
+   * const issuer = new JWT(new Keys());
+   * const verifier = new JWT(new Keys());
+   * const payload = {claim: 'test'};
+   *
+   * const token = await issuer.sign(payload, { algorithm: 'ES256K' });
+   *
+   * expect(verifier.decode(token, {complete: true}).payload).to.eql(payload);
+   * ```
+   *
+   * @param {string} token
+   * @param {object} options
+   * @returns string | { [key: string]: any }
+   */
   decode(token: string, options?: jsonwebtoken.DecodeOptions): unknown {
     return jsonwebtoken.decode(token, options) || '';
   }
@@ -81,14 +83,16 @@ export class JwtBase {
     }
     pubKey = computePublicKey(pubKey);
 
-    const possibleKeys = (message: string, signature: string): string[] => [
-      arrayify(keccak256(message)),
-      arrayify(hashMessage(arrayify(keccak256(message)))),
-    ]
-      .map((h) => recoverPublicKey(h, signature)); // uncompressed with 0x
+    const possibleKeys = (message: string, signature: string): string[] =>
+      [
+        arrayify(keccak256(message)),
+        arrayify(hashMessage(arrayify(keccak256(message)))),
+      ].map((h) => recoverPublicKey(h, signature)); // uncompressed with 0x
 
     const [encodedHeader, encodedPayload, encodedSignature] = token.split('.');
-    const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString('hex')}`;
+    const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(
+      'hex'
+    )}`;
     const signature = base64url.decode(encodedSignature);
     const verified = possibleKeys(msg, signature).find((key) => key === pubKey);
     if (verified) {

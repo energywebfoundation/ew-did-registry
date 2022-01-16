@@ -5,33 +5,38 @@ import { KeyType } from '@ew-did-registry/keys';
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
 export enum DIDAttribute {
-  PublicKey = 'pub', Authenticate = 'auth', ServicePoint = 'svc'
+  PublicKey = 'pub',
+  Authenticate = 'auth',
+  ServicePoint = 'svc',
 }
 
 /**
  * The two main types of public keys are, in turn, verification key and signature authentication key
  */
 export enum PubKeyType {
-  SignatureAuthentication2018 = 'sigAuth', VerificationKey2018 = 'veriKey'
+  SignatureAuthentication2018 = 'sigAuth',
+  VerificationKey2018 = 'veriKey',
 }
 
 /**
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
+  HEX = 'hex',
+  BASE64 = 'base64',
+  PEM = 'pem',
 }
 
 /**
  * KeyTags specifies the tags associated with different purposes of the keys
  */
 export enum KeyTags {
-  OWNER = 'key-owner'
+  OWNER = 'key-owner',
 }
 
 /** This interface represents the attribute payload
  * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
-*/
+ */
 export interface IAttributePayload {
   id?: string;
   type?: string;
@@ -55,6 +60,10 @@ export interface IUpdateData {
   delegate?: string;
 }
 
-export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & { value: IAttributePayload };
+export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & {
+  value: IAttributePayload;
+};
 
-export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & { delegate: string };
+export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & {
+  delegate: string;
+};

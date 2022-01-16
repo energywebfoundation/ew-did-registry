@@ -2,9 +2,7 @@
 /* eslint-disable max-len */
 import crypto from 'crypto';
 import { encrypt } from 'eciesjs';
-import {
-  bn, hash, bitArray, ecc,
-} from 'sjcl';
+import { bn, hash, bitArray, ecc } from 'sjcl';
 import assert from 'assert';
 import {
   DelegateTypes,
@@ -17,7 +15,11 @@ import {
 import { KeyType } from '@ew-did-registry/keys';
 import { Algorithms } from '@ew-did-registry/jwt';
 import {
-  IPrivateClaim, IProofClaim, IProofData, IPublicClaim, ISaltedFields,
+  IPrivateClaim,
+  IProofClaim,
+  IProofData,
+  IPublicClaim,
+  ISaltedFields,
 } from '../models';
 import { IClaimsUser } from '../interface';
 import { Claims } from '../claims';
@@ -65,7 +67,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns { Promise<string> }
    */
-  async createPublicClaim(publicData: Record<string, unknown>, jwtOptions = { subject: '', issuer: '' }): Promise<string> {
+  async createPublicClaim(
+    publicData: Record<string, unknown>,
+    jwtOptions = { subject: '', issuer: '' }
+  ): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
     const claim: IPublicClaim = {
@@ -73,12 +78,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: publicData,
     };
-    return this.jwt.sign(
-      claim,
-      {
-        ...jwtOptions, algorithm: Algorithms.ES256,
-      },
-    );
+    return this.jwt.sign(claim, {
+      ...jwtOptions,
+      algorithm: Algorithms.ES256,
+    });
   }
 
   /**
@@ -106,7 +109,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createPrivateClaim(
     privateData: { [key: string]: string },
     issuer: string,
-    jwtOptions = { subject: '', issuer: '' },
+    jwtOptions = { subject: '', issuer: '' }
   ): Promise<{ token: string; saltedFields: ISaltedFields }> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
@@ -116,14 +119,14 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       signer: this.did,
       claimData: privateData,
     };
-    const issuerPK = (await this.document.readAttribute(
-      {
-        publicKey:
-          { id: `${issuer}#${KeyTags.OWNER}` },
-
-      },
-      issuer,
-    ) as IPublicKey).publicKeyHex as string;
+    const issuerPK = (
+      (await this.document.readAttribute(
+        {
+          publicKey: { id: `${issuer}#${KeyTags.OWNER}` },
+        },
+        issuer
+      )) as IPublicKey
+    ).publicKeyHex as string;
     Object.entries(privateData).forEach(([key, value]) => {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
@@ -132,7 +135,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, {
-      ...jwtOptions, algorithm: Algorithms.ES256,
+      ...jwtOptions,
+      algorithm: Algorithms.ES256,
     });
     return { token, saltedFields };
   }
@@ -162,7 +166,7 @@ export class ClaimsUser extends Claims implements IClaimsUser {
   async createProofClaim(
     claimUrl: string,
     proofData: IProofData,
-    jwtOptions = { subject: '', issuer: '' },
+    jwtOptions = { subject: '', issuer: '' }
   ): Promise<string> {
     jwtOptions.subject = jwtOptions.subject || this.did;
     jwtOptions.issuer = this.did;
@@ -176,14 +180,17 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       if (field.encrypted) {
         const k = bn.random(this.q, this.paranoia);
         const h: sjcl.SjclEllipticalPoint = this.g.mult(k);
-        const hashedField = crypto.createHash('sha256').update(field.value as string).digest('hex');
+        const hashedField = crypto
+          .createHash('sha256')
+          .update(field.value as string)
+          .digest('hex');
         const a = new bn(hashedField);
         const PK = this.g.mult(a);
-        const c: sjcl.BigNumber = bn.fromBits(hash.sha256.hash(
-          this.g.x.toBits()
-            .concat(h.toBits())
-            .concat(PK.toBits()),
-        ));
+        const c: sjcl.BigNumber = bn.fromBits(
+          hash.sha256.hash(
+            this.g.x.toBits().concat(h.toBits()).concat(PK.toBits())
+          )
+        );
         const ca = c.mul(a).mod(this.q);
         const s = ca.add(k).mod(this.q);
         claim.proofData[key] = {
@@ -198,7 +205,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     });
     return this.jwt.sign(claim, {
-      ...jwtOptions, algorithm: Algorithms.ES256,
+      ...jwtOptions,
+      algorithm: Algorithms.ES256,
     });
   }
 
@@ -220,7 +228,11 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    */
   verifyClaimContent(token: string, verifyData: Record<string, unknown>) {
     const claim = this.jwt.decode(token) as IPublicClaim;
-    assert.deepStrictEqual(claim.claimData, verifyData, "Token payload doesn't match user data");
+    assert.deepStrictEqual(
+      claim.claimData,
+      verifyData,
+      "Token payload doesn't match user data"
+    );
   }
 
   /**
@@ -239,7 +251,10 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    * @returns {Promise<string>}
    * @throw if the proof failed
    */
-  async verifyPrivateClaim(token: string, saltedFields: ISaltedFields): Promise<boolean> {
+  async verifyPrivateClaim(
+    token: string,
+    saltedFields: ISaltedFields
+  ): Promise<boolean> {
     const claim = this.jwt.decode(token) as IPrivateClaim;
     const issuer = claim.iss as string;
     const proofVerifier = new ProofVerifier(await this.document.read(issuer));
@@ -255,31 +270,35 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       }
     }
     const [, , issAddress] = (claim.iss as string).split(':');
-    const issIsDelegate = await this.document.isValidDelegate(DelegateTypes.verification, claim.iss as string);
+    const issIsDelegate = await this.document.isValidDelegate(
+      DelegateTypes.verification,
+      claim.iss as string
+    );
     if (issIsDelegate) {
       return true;
     }
-    await this.document.update(
-      DIDAttribute.Authenticate,
-      {
-        algo: KeyType.ED25519,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        delegate: issAddress,
-      },
-    );
+    await this.document.update(DIDAttribute.Authenticate, {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      delegate: issAddress,
+    });
     return true;
   }
 
   /**
-     * Verifies content of the issued claim, issuer identity and adds claim to service endpoints
-     *
-     * @param issued {string} claim approved by the issuer
-     * @param verifyData {object} user data that should be contained in issued claim
-     *
-     * @returns {string} url of the saved claim
-     */
-  async publishPublicClaim(issued: string, verifyData: Record<string, unknown>, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
+   * Verifies content of the issued claim, issuer identity and adds claim to service endpoints
+   *
+   * @param issued {string} claim approved by the issuer
+   * @param verifyData {object} user data that should be contained in issued claim
+   *
+   * @returns {string} url of the saved claim
+   */
+  async publishPublicClaim(
+    issued: string,
+    verifyData: Record<string, unknown>,
+    opts?: { hashAlg: string; createHash: (data: string) => string }
+  ): Promise<string> {
     this.verifyClaimContent(issued, verifyData);
     const { signer } = this.jwt.decode(issued) as IPublicClaim;
     const proofVerifier = new ProofVerifier(await this.document.read(signer));
@@ -297,7 +316,11 @@ export class ClaimsUser extends Claims implements IClaimsUser {
    *
    * @returns {string} url of the saved claim
    */
-  async publishPrivateClaim(issued: string, saltedFields: ISaltedFields, opts?: { hashAlg: string; createHash: (data: string) => string }): Promise<string> {
+  async publishPrivateClaim(
+    issued: string,
+    saltedFields: ISaltedFields,
+    opts?: { hashAlg: string; createHash: (data: string) => string }
+  ): Promise<string> {
     const verified = await this.verifyPrivateClaim(issued, saltedFields);
     if (verified) {
       return this.addClaimToServiceEndpoints(issued, opts);
@@ -307,17 +330,17 @@ export class ClaimsUser extends Claims implements IClaimsUser {
 
   private async addClaimToServiceEndpoints(
     claim: string,
-    opts: { hashAlg: string; createHash: (data: string) => string } = { hashAlg: 'SHA256', createHash: hashes.SHA256 },
+    opts: { hashAlg: string; createHash: (data: string) => string } = {
+      hashAlg: 'SHA256',
+      createHash: hashes.SHA256,
+    }
   ): Promise<string> {
     const { hashAlg, createHash } = opts;
     const url = await this.store.save(claim);
-    await this.document.update(
-      DIDAttribute.ServicePoint,
-      {
-        type: PubKeyType.VerificationKey2018,
-        value: { serviceEndpoint: url, hash: createHash(claim), hashAlg },
-      },
-    );
+    await this.document.update(DIDAttribute.ServicePoint, {
+      type: PubKeyType.VerificationKey2018,
+      value: { serviceEndpoint: url, hash: createHash(claim), hashAlg },
+    });
     return url;
   }
 }

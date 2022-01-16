@@ -22,7 +22,11 @@ export interface IJWT {
    * @param {object} options
    * @returns {Promise<object>}
    */
-  verify(token: string, publicKey: string, options?: { algorithms?: [Algorithms] }): unknown;
+  verify(
+    token: string,
+    publicKey: string,
+    options?: { algorithms?: [Algorithms] }
+  ): unknown;
 
   /**
    * Method decodes JWT without checking the signature. This can be useful in cases,
@@ -32,8 +36,5 @@ export interface IJWT {
    * @param {object} options
    * @returns {object}
    */
-  decode(
-    token: string,
-    options?: jsonwebtoken.DecodeOptions
-  ): unknown;
+  decode(token: string, options?: jsonwebtoken.DecodeOptions): unknown;
 }

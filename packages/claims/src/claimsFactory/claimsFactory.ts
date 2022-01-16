@@ -4,7 +4,10 @@ import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { IKeys } from '@ew-did-registry/keys';
 import { ProviderSettings } from '@ew-did-registry/did-resolver-interface';
 import {
-  IClaimsFactory, IClaimsIssuer, IClaimsUser, IClaimsVerifier,
+  IClaimsFactory,
+  IClaimsIssuer,
+  IClaimsUser,
+  IClaimsVerifier,
 } from '../interface';
 import { ClaimsUser } from '../claimsUser';
 import { ClaimsIssuer } from '../claimsIssuer';
@@ -22,7 +25,7 @@ export class ClaimsFactory implements IClaimsFactory {
     private keys: IKeys,
     private document: IDIDDocumentFull,
     private store: IDidStore,
-    private providerSettings: ProviderSettings,
+    private providerSettings: ProviderSettings
   ) {
     this.owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
   }

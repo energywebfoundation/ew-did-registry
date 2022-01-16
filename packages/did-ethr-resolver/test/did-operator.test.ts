@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect, use } from 'chai';
 import sinonChai from 'sinon-chai';
 import { Keys, KeyType } from '@ew-did-registry/keys';
@@ -25,7 +24,8 @@ use(sinonChai);
 const { fail } = assert;
 
 const keys = new Keys({
-  privateKey: '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
+  privateKey:
+    '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
 });
 const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
@@ -33,10 +33,15 @@ const providerSettings: ProviderSettings = {
 const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
 const newOwnerKeys = new Keys({
-  privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-  publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
+  privateKey:
+    'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
+  publicKey:
+    '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
 });
-const newOwner = EwSigner.fromPrivateKey(newOwnerKeys.privateKey, providerSettings);
+const newOwner = EwSigner.fromPrivateKey(
+  newOwnerKeys.privateKey,
+  providerSettings
+);
 
 const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
@@ -81,11 +86,11 @@ const testSuite = (): void => {
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
     };
     await operator.update(did, attribute, updateData);
-    const document: IDIDDocument = await operator.read(did) as IDIDDocument;
+    const document: IDIDDocument = (await operator.read(did)) as IDIDDocument;
 
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
@@ -103,7 +108,7 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
 
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
@@ -121,33 +126,33 @@ const testSuite = (): void => {
     expect(document.id).equal(ewcDID);
 
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
 
-  it('adding a delegate with a delegation type of VerificationKey should add a public key',
-    async () => {
-      const attribute = DIDAttribute.Authenticate;
-      const delegate = new Wallet(new Keys().privateKey);
-      const updateData = {
-        algo: KeyType.ED25519,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        delegate: delegate.address,
-      };
-      await operator.update(did, attribute, updateData, validity);
-      const document = await operator.read(did);
-      expect(document.id).equal(did);
-      const authMethod = document.publicKey.find(
-        (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
-      );
-      expect(authMethod).include({
-        type: 'Secp256k1VerificationKey2018',
-        controller: did,
-        ethereumAddress: updateData.delegate,
-      });
+  it('adding a delegate with a delegation type of VerificationKey should add a public key', async () => {
+    const attribute = DIDAttribute.Authenticate;
+    const delegate = new Wallet(new Keys().privateKey);
+    const updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    await operator.update(did, attribute, updateData, validity);
+    const document = await operator.read(did);
+    expect(document.id).equal(did);
+    const authMethod = document.publicKey.find(
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
+    );
+    expect(authMethod).include({
+      type: 'Secp256k1VerificationKey2018',
+      controller: did,
+      ethereumAddress: updateData.delegate,
     });
+  });
 
   it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
        key and reference on it in authentication section of the DID document`, async () => {
@@ -164,11 +169,11 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
     const auth = document.authentication.find(
-      (a) => (a as IAuthentication).publicKey === publicKeyId,
+      (a) => (a as IAuthentication).publicKey === publicKeyId
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
-      (pk: { id: string }) => pk.id === publicKeyId,
+      (pk: { id: string }) => pk.id === publicKeyId
     );
     expect(publicKey).include({
       type: 'Secp256k1VerificationKey2018',
@@ -192,9 +197,11 @@ const testSuite = (): void => {
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
-    expect(document.service.find(
-      (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint,
-    )).not.undefined;
+    expect(
+      document.service.find(
+        (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint
+      )
+    ).not.undefined;
   });
 
   it('It should not be possible to add service without service endpoint', async () => {
@@ -246,9 +253,7 @@ const testSuite = (): void => {
     };
     try {
       await operator.update(did, attribute, updateData, -100);
-      fail(
-        'Error was not thrown',
-      );
+      fail('Error was not thrown');
     } catch (error) {
       if (error instanceof Error) {
         expect(error.message).to.equal('Validity must be non negative value');
@@ -350,7 +355,8 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
-      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).include({
       type: 'Secp256k1VerificationKey2018',
@@ -359,11 +365,16 @@ const testSuite = (): void => {
     });
 
     const delegateDid = `did:ethr:${delegate.address}`;
-    const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
+    const revoked = await operator.revokeDelegate(
+      did,
+      PubKeyType.VerificationKey2018,
+      delegateDid
+    );
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
-      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).to.be.undefined;
   });
@@ -381,14 +392,14 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.not.null;
     const revoked = await operator.revokeAttribute(did, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.undefined;
   });
@@ -405,16 +416,23 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const newOwnerOperator = new Operator(
-      newOwner,
-      { address: registry },
+    const newOwnerOperator = new Operator(newOwner, { address: registry });
+
+    await operator.changeOwner(
+      `did:ethr:${identity}`,
+      `did:ethr:${newOwnerKeys.getAddress()}`
+    );
+    expect(newOwnerKeys.getAddress()).to.be.eql(
+      await operator.identityOwner(`did:ethr:${identity}`)
     );
 
-    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
-    expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
-
-    await newOwnerOperator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
-    expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
+    await newOwnerOperator.changeOwner(
+      `did:ethr:${identity}`,
+      `did:ethr:${identity}`
+    );
+    expect(identity).to.be.eql(
+      await operator.identityOwner(`did:ethr:${identity}`)
+    );
   });
 
   it('each identity update should increment its last block', async () => {
@@ -446,7 +464,9 @@ const testSuite = (): void => {
 
     await operator.update(did, attribute, updateData, validity);
     await operator.update(did, attribute, updateData, 0);
-    const pubKey = await operator.readAttribute(did, { publicKey: { id: `${did}#${tag}` } });
+    const pubKey = await operator.readAttribute(did, {
+      publicKey: { id: `${did}#${tag}` },
+    });
 
     expect(pubKey).undefined;
   });
@@ -457,11 +477,12 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    registrySettings = { method: Methods.Erc1056, abi: ethrReg.abi, address: registry };
-    operator = new Operator(
-      owner,
-      registrySettings,
-    );
+    registrySettings = {
+      method: Methods.Erc1056,
+      abi: ethrReg.abi,
+      address: registry,
+    };
+    operator = new Operator(owner, registrySettings);
     await operator.create();
   });
 

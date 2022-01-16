@@ -1,6 +1,4 @@
-import {
-  Contract, providers, utils, BigNumber,
-} from 'ethers';
+import { Contract, providers, utils, BigNumber } from 'ethers';
 import {
   DelegateTypes,
   IAuthentication,
@@ -13,9 +11,7 @@ import {
   KeyTags,
   DocumentSelector,
 } from '@ew-did-registry/did-resolver-interface';
-import {
-  Methods,
-} from '@ew-did-registry/did';
+import { Methods } from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
 import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
 import { addressOf, compressedSecp256k1KeyLength, matchDIDPattern } from '..';
@@ -58,7 +54,11 @@ class Resolver implements IResolver {
   constructor(provider: providers.Provider, settings: RegistrySettings) {
     this._provider = provider;
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
-    this._contract = new Contract(settings.address, this.settings.abi, this._provider);
+    this._contract = new Contract(
+      settings.address,
+      this.settings.abi,
+      this._provider
+    );
   }
 
   /**
@@ -77,7 +77,7 @@ class Resolver implements IResolver {
    */
   private async _read(
     did: string,
-    selector?: DocumentSelector,
+    selector?: DocumentSelector
   ): Promise<IDIDDocument> {
     const match = matchDIDPattern(did);
     const address = match[1];
@@ -97,12 +97,16 @@ class Resolver implements IResolver {
         this.settings,
         this._contract,
         this._provider,
-        selector,
+        selector
       );
       const document = wrapDidDocument(did, _document);
       return document;
     } catch (error) {
-      if (error instanceof Error && error.toString() === 'Error: Blockchain address did not interact with smart contract') {
+      if (
+        error instanceof Error &&
+        error.toString() ===
+          'Error: Blockchain address did not interact with smart contract'
+      ) {
         const didDocument = wrapDidDocument(did, _document);
         return didDocument;
       }
@@ -116,7 +120,7 @@ class Resolver implements IResolver {
 
   async readAttribute(
     did: string,
-    selector: DocumentSelector,
+    selector: DocumentSelector
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
     const doc = await this._read(did, selector);
     return query(doc, selector);
@@ -153,7 +157,7 @@ class Resolver implements IResolver {
   async validDelegate(
     identityDID: string,
     delegateType: DelegateTypes,
-    delegateDID: string,
+    delegateDID: string
   ): Promise<boolean> {
     const bytesType = formatBytes32String(delegateType);
     const identityAddress = addressOf(identityDID);
@@ -161,7 +165,11 @@ class Resolver implements IResolver {
 
     let valid;
     try {
-      valid = await this._contract.validDelegate(identityAddress, bytesType, delegateAddress);
+      valid = await this._contract.validDelegate(
+        identityAddress,
+        bytesType,
+        delegateAddress
+      );
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message);
@@ -175,15 +183,17 @@ class Resolver implements IResolver {
     const selector = {
       publicKey: { id: `${did}#${KeyTags.OWNER}` },
     };
-    const pk = await this.readAttribute(
-      did,
-      selector,
-    );
-    const publicKeyHex = pk ? ((pk as IPublicKey).publicKeyHex as string) : undefined;
+    const pk = await this.readAttribute(did, selector);
+    const publicKeyHex = pk
+      ? ((pk as IPublicKey).publicKeyHex as string)
+      : undefined;
     if (!publicKeyHex) {
       return undefined;
     }
-    if (publicKeyHex.length === compressedSecp256k1KeyLength + 2 && publicKeyHex.substring(0, 2) === '0x') {
+    if (
+      publicKeyHex.length === compressedSecp256k1KeyLength + 2 &&
+      publicKeyHex.substring(0, 2) === '0x'
+    ) {
       return publicKeyHex.substring(2);
     }
     if (publicKeyHex.length === compressedSecp256k1KeyLength) {
@@ -192,10 +202,7 @@ class Resolver implements IResolver {
     return undefined;
   }
 
-  async readFromBlock(
-    did: string,
-    topBlock: BigNumber,
-  ): Promise<IDIDLogData> {
+  async readFromBlock(did: string, topBlock: BigNumber): Promise<IDIDLogData> {
     const address = addressOf(did);
     const _document = {
       owner: address,
@@ -205,7 +212,13 @@ class Resolver implements IResolver {
       service: {},
       attributes: new Map(),
     };
-    await fetchDataFromEvents(did, _document, this.settings, this._contract, this._provider);
+    await fetchDataFromEvents(
+      did,
+      _document,
+      this.settings,
+      this._contract,
+      this._provider
+    );
     return { ..._document };
   }
 

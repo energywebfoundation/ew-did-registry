@@ -2,10 +2,7 @@
 import chai, { expect, should } from 'chai';
 import deepEqualInAnyOrder from 'deep-equal-in-any-order';
 import chaiAsPromised from 'chai-as-promised';
-import {
-  EwSigner,
-  Operator,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import {
   DIDAttribute,
   Encoding,
@@ -32,8 +29,10 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   const ownerAddress = '0xed6011BBaB3B98cF955ff271F52B12B94BF9fD28';
   const did = `did:${Methods.Erc1056}:${ownerAddress}`;
   const keys = new Keys({
-    privateKey: '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
-    publicKey: '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
+    privateKey:
+      '0b4e103fe261142b716fc5c055edf1e70d4665080395dbe5992af03235f9e511',
+    publicKey:
+      '02963497c702612b675707c0757e82b93df912261cd06f6a51e6c5419ac1aa9bcc',
   });
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
@@ -48,10 +47,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
   before(async () => {
     registry = await deployRegistry([ownerAddress, keys1.getAddress()]);
     console.log(`registry: ${registry}`);
-    operator = new Operator(
-      owner,
-      { address: registry },
-    );
+    operator = new Operator(owner, { address: registry });
     fullDoc = new DIDDocumentFull(did, operator);
     const created = await fullDoc.create();
     expect(created).to.be.true;
@@ -72,12 +68,13 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         encoding: Encoding.HEX,
         value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
       },
-      validity,
+      validity
     );
     expect(updated.toNumber()).to.be.an('number');
   });
 
-  it('document can be deactivated', async () => fullDoc.deactivate().should.be.fulfilled);
+  it('document can be deactivated', async () =>
+    fullDoc.deactivate().should.be.fulfilled);
 
   it('revokeDelegate removes authentication method and corresponding public key', async () => {
     const attribute = DIDAttribute.Authenticate;
@@ -93,7 +90,8 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
-      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).include({
       type: 'Secp256k1VerificationKey2018',
@@ -101,11 +99,15 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       ethereumAddress: updateData.delegate,
     });
     const delegateDid = `did:${Methods.Erc1056}:${delegate.address}`;
-    const revoked = await fullDoc.revokeDelegate(PubKeyType.VerificationKey2018, delegateDid);
+    const revoked = await fullDoc.revokeDelegate(
+      PubKeyType.VerificationKey2018,
+      delegateDid
+    );
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
-      (pk) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).to.be.undefined;
   });
@@ -123,14 +125,14 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.not.null;
     const revoked = await fullDoc.revokeAttribute(attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.undefined;
   });
@@ -148,7 +150,7 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
           encoding: Encoding.HEX,
           value: { publicKey: `0x${new Keys().publicKey}`, tag },
         },
-        validity,
+        validity
       );
     }
     const keyAfter = (await fullDoc.read()).publicKey.length;
@@ -167,10 +169,10 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
         encoding: Encoding.HEX,
         value: { publicKey: `0x${new Keys().publicKey}`, tag: 'test' },
       },
-      shortValidity,
+      shortValidity
     );
     await new Promise((resolve) => {
-      setTimeout(resolve, (shortValidity * 1.1) * 1000);
+      setTimeout(resolve, shortValidity * 1.1 * 1000);
     });
     expect(await fullDoc.readAttribute({ publicKey: { id: keyId } })).undefined;
   });
@@ -189,18 +191,18 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     await fullDoc.update(
       attribute,
       { ...updateData, type: PubKeyType.SignatureAuthentication2018 },
-      validity,
+      validity
     );
     const keysAfter = (await fullDoc.read()).publicKey.length;
     expect(keysAfter).equal(keysBefore + 2);
   });
 
   it('document must not be updated by non-owning identity', async () => {
-    const nonOwner = EwSigner.fromPrivateKey(keys1.privateKey, providerSettings);
-    const nonOwnerOperator = new Operator(
-      nonOwner,
-      { address: registry },
+    const nonOwner = EwSigner.fromPrivateKey(
+      keys1.privateKey,
+      providerSettings
     );
+    const nonOwnerOperator = new Operator(nonOwner, { address: registry });
     const doc = new DIDDocumentFull(did, nonOwnerOperator);
     return doc.deactivate().should.be.rejected;
   });
@@ -214,17 +216,19 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(
+      did,
+      BigNumber.from(0)
+    );
 
     updateData.value = { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' };
     const from = await fullDoc.update(DIDAttribute.PublicKey, updateData);
 
-    const logs = [
-      logsUpToFirstUpdate,
-      await fullDoc.readFromBlock(did, from),
-    ];
+    const logs = [logsUpToFirstUpdate, await fullDoc.readFromBlock(did, from)];
 
-    expect(fullDoc.fromLogs(logs)).to.deep.equalInAnyOrder(await fullDoc.read(did));
+    expect(fullDoc.fromLogs(logs)).to.deep.equalInAnyOrder(
+      await fullDoc.read(did)
+    );
   });
 
   it('logs order should not influence restored document', async () => {
@@ -238,12 +242,25 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
 
     const log1 = await fullDoc.readFromBlock(did, BigNumber.from(0));
 
-    const block2 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } });
-    await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-2' } });
+    const block2 = await fullDoc.update(DIDAttribute.PublicKey, {
+      ...updateData,
+      value: { ...updateData.value, tag: 'key-1' },
+    });
+    await fullDoc.update(DIDAttribute.PublicKey, {
+      ...updateData,
+      value: { ...updateData.value, tag: 'key-2' },
+    });
     const log2 = await fullDoc.readFromBlock(did, block2);
 
-    const block4 = await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-3' } });
-    await fullDoc.update(DIDAttribute.PublicKey, { ...updateData, value: { ...updateData.value, tag: 'key-1' } }, 0);
+    const block4 = await fullDoc.update(DIDAttribute.PublicKey, {
+      ...updateData,
+      value: { ...updateData.value, tag: 'key-3' },
+    });
+    await fullDoc.update(
+      DIDAttribute.PublicKey,
+      { ...updateData, value: { ...updateData.value, tag: 'key-1' } },
+      0
+    );
     const log3 = await fullDoc.readFromBlock(did, block4);
 
     const doc = await fullDoc.read();
@@ -269,7 +286,10 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     };
     await fullDoc.update(DIDAttribute.PublicKey, updateData, validity);
 
-    const logsUpToFirstUpdate = await fullDoc.readFromBlock(did, BigNumber.from(0));
+    const logsUpToFirstUpdate = await fullDoc.readFromBlock(
+      did,
+      BigNumber.from(0)
+    );
     const initialDoc = fullDoc.fromLogs([logsUpToFirstUpdate]);
 
     expect(initialDoc.publicKey.find(({ id }) => id === keyId)).not.undefined;

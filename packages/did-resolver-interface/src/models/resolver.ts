@@ -1,10 +1,5 @@
 /* eslint-disable no-shadow */
-import {
-  utils,
-  BigNumber,
-  providers,
-  ContractInterface,
-} from 'ethers';
+import { utils, BigNumber, providers, ContractInterface } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -82,7 +77,7 @@ export interface ILinkedDataProof {
 
 export enum DidEventNames {
   AttributeChanged = 'DIDAttributeChanged',
-  DelegateChanged = 'DIDDelegateChanged'
+  DelegateChanged = 'DIDDelegateChanged',
 }
 
 /**
@@ -150,7 +145,7 @@ export type DocumentSelector = Partial<{
   publicKey: Partial<IPublicKey>;
   service: Partial<IServiceEndpoint>;
   authentication: Partial<IAuthentication>;
-}>
+}>;
 
 /**
  * The interface of DID Document is compliant with W3C specification.

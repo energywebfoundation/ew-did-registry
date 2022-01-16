@@ -58,7 +58,7 @@ export interface IResolver {
 
   readAttribute(
     did: string,
-    selector: DocumentSelector,
+    selector: DocumentSelector
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
 
   readOwnerPubKey(did: string): Promise<string | undefined>;
@@ -70,9 +70,7 @@ export interface IResolver {
    *
    * @returns - part of document along with last read block
    */
-  readFromBlock(did: string,
-    topBlock: BigNumber,
-  ): Promise<IDIDLogData>;
+  readFromBlock(did: string, topBlock: BigNumber): Promise<IDIDLogData>;
 
   lastBlock(did: string): Promise<BigNumber>;
 }
@@ -113,7 +111,11 @@ export interface IOperator extends IResolver {
    */
   deactivate(did: string): Promise<void>;
 
-  revokeDelegate(did: string, delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+  revokeDelegate(
+    did: string,
+    delegateType: PubKeyType,
+    delegateDID: string
+  ): Promise<boolean>;
 
   revokeAttribute(
     did: string,

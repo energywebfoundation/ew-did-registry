@@ -10,9 +10,7 @@ import {
 import { utils } from 'ethers';
 import base64url from 'base64url';
 
-const {
-  arrayify, recoverAddress, keccak256, hashMessage,
-} = utils;
+const { arrayify, recoverAddress, keccak256, hashMessage } = utils;
 
 export class ProofVerifier {
   private _jwt = new JWT(new Keys());
@@ -32,11 +30,11 @@ export class ProofVerifier {
    * @returns: DID of authenticated identity on successful verification or null otherwise
    */
   public async verifyAuthenticationProof(
-    token: string,
+    token: string
   ): Promise<string | null> {
     if (
-      (await this.isIdentity(token))
-      || (await this.isAuthenticationDelegate(token))
+      (await this.isIdentity(token)) ||
+      (await this.isAuthenticationDelegate(token))
     ) {
       return this._didDocument.id;
     }
@@ -51,8 +49,8 @@ export class ProofVerifier {
    */
   public async verifyAssertionProof(token: string): Promise<string | null> {
     if (
-      (await this.isIdentity(token))
-      || (await this.isVerificationDelegate(token))
+      (await this.isIdentity(token)) ||
+      (await this.isVerificationDelegate(token))
     ) {
       return this._didDocument.id;
     }
@@ -67,7 +65,7 @@ export class ProofVerifier {
   private async isIdentity(token: string) {
     const [encodedHeader, encodedPayload, encodedSignature] = token.split('.');
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(
-      'hex',
+      'hex'
     )}`;
     const signature = base64url.decode(encodedSignature);
     const hash = arrayify(keccak256(msg));
@@ -76,20 +74,24 @@ export class ProofVerifier {
       if (claimedAddress === recoverAddress(hash, signature)) {
         return true;
       }
-    } catch (_) {}
+    } catch {
+      // ignore catch
+    }
     const digest = arrayify(hashMessage(hash));
     try {
       if (claimedAddress === recoverAddress(digest, signature)) {
         return true;
       }
-    } catch (_) {}
+    } catch {
+      // ignore catch
+    }
     return false;
   }
 
   private async isAuthenticationDelegate(token: string) {
     const validKeys = await this.verifySignature(
       this.authenticationKeys(),
-      token,
+      token
     );
     return validKeys.length !== 0;
   }
@@ -97,31 +99,29 @@ export class ProofVerifier {
   private async isVerificationDelegate(token: string) {
     const validKeys = await this.verifySignature(
       this.verificationKeys(),
-      token,
+      token
     );
     return validKeys.length !== 0;
   }
 
   private verifySignature = async (keys: IPublicKey[], token: string) => {
     const results = await Promise.all(
-      keys.map(
-        async (pubKeyField: IPublicKey): Promise<boolean> => {
-          try {
-            if (pubKeyField.publicKeyHex) {
-              const parts = pubKeyField.publicKeyHex.split('x');
-              const publickey = parts.length === 2 ? parts[1] : parts[0];
-              const decodedClaim = await this._jwt.verify(token, publickey, {
-                algorithms: [Algorithms.ES256, Algorithms.EIP191],
-              });
+      keys.map(async (pubKeyField: IPublicKey): Promise<boolean> => {
+        try {
+          if (pubKeyField.publicKeyHex) {
+            const parts = pubKeyField.publicKeyHex.split('x');
+            const publickey = parts.length === 2 ? parts[1] : parts[0];
+            const decodedClaim = await this._jwt.verify(token, publickey, {
+              algorithms: [Algorithms.ES256, Algorithms.EIP191],
+            });
 
-              return decodedClaim !== undefined;
-            }
-            return false;
-          } catch (error) {
-            return false;
+            return decodedClaim !== undefined;
           }
-        },
-      ),
+          return false;
+        } catch (error) {
+          return false;
+        }
+      })
     );
 
     return keys.filter((_key, index) => results[index]);
@@ -134,12 +134,12 @@ export class ProofVerifier {
     }
     return didPubKeys.filter(
       (key) =>
-        this.isSigAuth(key.type)
-        || this._didDocument.authentication.some(
+        this.isSigAuth(key.type) ||
+        this._didDocument.authentication.some(
           (auth) =>
-            (auth as IAuthentication).publicKey
-            && this.areLinked((auth as IAuthentication).publicKey, key.id),
-        ),
+            (auth as IAuthentication).publicKey &&
+            this.areLinked((auth as IAuthentication).publicKey, key.id)
+        )
     );
   }
 

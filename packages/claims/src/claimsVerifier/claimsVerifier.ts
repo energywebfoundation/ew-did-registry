@@ -1,6 +1,4 @@
-import {
-  bn, hash, ecc, bitArray,
-} from 'sjcl';
+import { bn, hash, ecc, bitArray } from 'sjcl';
 import {
   DelegateTypes,
   IDIDDocument,
@@ -36,7 +34,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
     }: {
       holderDoc?: IDIDDocument;
       issuerDoc?: IDIDDocument;
-    } = {},
+    } = {}
   ): Promise<IPublicClaim> {
     return this.verify(claimUrl, {
       holderDoc,
@@ -72,7 +70,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
       !this.document.isValidDelegate(
         DelegateTypes.verification,
         privateClaim.signer,
-        privateClaim.did,
+        privateClaim.did
       )
     ) {
       throw new Error("Issuer isn't a user delegate");
@@ -90,13 +88,13 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
         h = curve.fromBits(h);
         s = bn.fromBits(s);
         const c = bn.fromBits(
-          hash.sha256.hash(g.x.toBits().concat(h.toBits()).concat(PK.toBits())),
+          hash.sha256.hash(g.x.toBits().concat(h.toBits()).concat(PK.toBits()))
         );
         const left = g.mult(s);
         const right = PK.mult(c).toJac().add(h).toAffine();
         if (!bitArray.equal(left.toBits(), right.toBits())) {
           throw new Error(
-            "User didn't prove the knowledge of the private data",
+            "User didn't prove the knowledge of the private data"
           );
         }
       } else {
@@ -110,7 +108,7 @@ export class ClaimsVerifier extends Claims implements IClaimsVerifier {
 
         if (!bitArray.equal(value as [], bitsPK)) {
           throw new Error(
-            'Disclosed field does not correspond to stored field',
+            'Disclosed field does not correspond to stored field'
           );
         }
       }

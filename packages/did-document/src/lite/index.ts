@@ -15,11 +15,11 @@ import { IDIDDocumentLite } from './interface';
 
 class DIDDocumentLite implements IDIDDocumentLite {
   /**
-* @param {string} did - entity identifier, which is associated with DID Document
-* @param {IResolver} resolver - resolver exposing read functionality of DID Document
-*/
+   * @param {string} did - entity identifier, which is associated with DID Document
+   * @param {IResolver} resolver - resolver exposing read functionality of DID Document
+   */
   // eslint-disable-next-line no-useless-constructor
-  constructor(public did: string, private resolver: IResolver) { }
+  constructor(public did: string, private resolver: IResolver) {}
 
   /**
    * Returns the current owner for certain DID.
@@ -41,7 +41,9 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @returns {Promise<boolean>}
    */
   async isValidDelegate(
-    delegateType: DelegateTypes, delegateDID: string, did = this.did,
+    delegateType: DelegateTypes,
+    delegateDID: string,
+    did = this.did
   ): Promise<boolean> {
     return this.resolver.validDelegate(did, delegateType, delegateDID);
   }
@@ -58,7 +60,8 @@ class DIDDocumentLite implements IDIDDocumentLite {
    * @returns {object | null}
    */
   async readAttribute(
-    selector: DocumentSelector, did = this.did,
+    selector: DocumentSelector,
+    did = this.did
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
     return this.resolver.readAttribute(did, selector);
   }

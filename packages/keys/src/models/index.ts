@@ -10,5 +10,8 @@ export const ECDSA_PATTERNS = {
  * Key type specifies, which algorithm has to be used with a particular public key
  */
 export enum KeyType {
-  ED25519 = 'Ed25519', RSA = 'Rsa', Secp256k1 = 'Secp256k1', Secp256r1 = 'Secp256r1'
+  ED25519 = 'Ed25519',
+  RSA = 'Rsa',
+  Secp256k1 = 'Secp256k1',
+  Secp256r1 = 'Secp256r1',
 }

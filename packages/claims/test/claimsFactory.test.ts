@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Keys } from '@ew-did-registry/keys';
@@ -114,10 +113,8 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   it('workflow of private claim generation, issuance and presentation should pass', async () => {
     // User(Subject) side
     const privateData = { private: '123', public: 'shhh' };
-    const {
-      token: privateToken,
-      saltedFields,
-    } = await claimsUser.createPrivateClaim(privateData, issuerDid);
+    const { token: privateToken, saltedFields } =
+      await claimsUser.createPrivateClaim(privateData, issuerDid);
     // Issuer side
     const issuedToken = await claimsIssuer.issuePrivateClaim(privateToken);
     // Application/User side

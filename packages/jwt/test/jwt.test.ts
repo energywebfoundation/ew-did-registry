@@ -27,15 +27,17 @@ describe('[JWT PACKAGE]', () => {
     });
 
     it('signed token should be verified', async () => {
-      expect(verifier.verify(token, signerPubKey, { algorithms: [algorithm] })).to.eql(payload);
+      expect(
+        verifier.verify(token, signerPubKey, { algorithms: [algorithm] })
+      ).to.eql(payload);
     });
 
     it('verification with wrong signature should throw error', async () => {
-      expect(
-        () => verifier.verify(token, new Keys().publicKey, { algorithms: [algorithm] }),
-      )
-        .to
-        .throw();
+      expect(() =>
+        verifier.verify(token, new Keys().publicKey, {
+          algorithms: [algorithm],
+        })
+      ).to.throw();
     });
 
     it('decoding without signature check return the payload', async () => {
@@ -49,7 +51,10 @@ describe('[JWT PACKAGE]', () => {
       verifier = new JWT(new Keys());
       const privKey = ECKey.createECKey('prime256v1');
       signerPubKey = privKey.publicCodePoint.toString('hex');
-      token = jsonwebtoken.sign(payload, privKey.toString('pem'), { algorithm: 'ES256', noTimestamp: true });
+      token = jsonwebtoken.sign(payload, privKey.toString('pem'), {
+        algorithm: 'ES256',
+        noTimestamp: true,
+      });
     });
     testSuite();
   });

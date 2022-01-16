@@ -66,6 +66,7 @@ class Keys implements IKeys {
    * @param {string} publicKey
    * @returns {Promise<string>}
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async decrypt(encrypted: string, publicKey?: string): Promise<string> {
     const encryptedBuffer = Buffer.from(encrypted, 'hex');
     const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
@@ -94,10 +95,7 @@ class Keys implements IKeys {
   async encrypt(data: string, publicKeyTo?: string): Promise<string> {
     const publicKeyToBuffer = Buffer.from(publicKeyTo || this.publicKey, 'hex');
     const dataBuffer = Buffer.from(data);
-    const encrypted = await encrypt(
-      publicKeyToBuffer,
-      dataBuffer,
-    );
+    const encrypted = await encrypt(publicKeyToBuffer, dataBuffer);
     return encrypted.toString('hex');
   }
 
@@ -187,10 +185,7 @@ class Keys implements IKeys {
   }
 }
 
-export {
-  Keys,
-  IKeys,
-};
+export { Keys, IKeys };
 
 export * from './models';
 export { toPem as pubToPem, privToPem } from './functions';
