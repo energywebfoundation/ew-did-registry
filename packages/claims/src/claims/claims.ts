@@ -39,7 +39,7 @@ export class Claims implements IClaims {
   constructor(
     owner: EwSigner,
     protected document: IDIDDocumentFull,
-    protected store: IDidStore,
+    protected store: IDidStore
   ) {
     this.keys = { publicKey: owner.publicKey, privateKey: owner.privateKey };
     this.jwt = new JWT(owner);
@@ -76,7 +76,7 @@ export class Claims implements IClaims {
       issuerDoc?: IDIDDocument;
       holderDoc?: IDIDDocument;
       verificationPurpose?: VerificationPurpose;
-    } = {},
+    } = {}
   ): Promise<IPublicClaim | IPrivateClaim> {
     const token = await this.store.get(claimUrl);
     const claim = this.jwt.decode(token) as (IPublicClaim | IPrivateClaim) &
@@ -127,15 +127,15 @@ export class Claims implements IClaims {
     }: {
       hashFns?: { [alg: string]: (data: string) => string };
       holderDoc: IDIDDocument;
-    },
+    }
   ) {
     const token = await this.store.get(claimUrl);
     const service = holderDoc.service.find(
-      (s) => s.serviceEndpoint === claimUrl,
+      (s) => s.serviceEndpoint === claimUrl
     ) as IServiceEndpoint;
     if (!service) {
       throw new Error(
-        `No service endpoint found for ${claimUrl} in holder DID document`,
+        `No service endpoint found for ${claimUrl} in holder DID document`
       );
     }
     const { hash, hashAlg } = service;

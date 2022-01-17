@@ -1,4 +1,8 @@
-import { DIDAttribute, IUpdateData, PubKeyType } from '@ew-did-registry/did-resolver-interface';
+import {
+  DIDAttribute,
+  IUpdateData,
+  PubKeyType,
+} from '@ew-did-registry/did-resolver-interface';
 import { BigNumber } from 'ethers';
 import { IDIDDocumentLite } from '../lite';
 
@@ -7,7 +11,6 @@ import { IDIDDocumentLite } from '../lite';
  * This interface extends lite DID Document interface
  */
 export interface IDIDDocumentFull extends IDIDDocumentLite {
-
   /**
    * New DID Document is registered on the Blockchain,
    * @returns {boolean}
@@ -21,7 +24,9 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
    * @returns {boolean}
    */
   update(
-    attribute: DIDAttribute, data: IUpdateData, validity?: number | BigNumber
+    attribute: DIDAttribute,
+    data: IUpdateData,
+    validity?: number | BigNumber
   ): Promise<BigNumber>;
 
   /**
@@ -30,7 +35,13 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
    */
   deactivate(): Promise<void>;
 
-  revokeDelegate(delegateType: PubKeyType, delegateDID: string): Promise<boolean>;
+  revokeDelegate(
+    delegateType: PubKeyType,
+    delegateDID: string
+  ): Promise<boolean>;
 
-  revokeAttribute(attributeType: DIDAttribute, updateData: IUpdateData): Promise<boolean>;
+  revokeAttribute(
+    attributeType: DIDAttribute,
+    updateData: IUpdateData
+  ): Promise<boolean>;
 }

@@ -6,16 +6,13 @@ import {
   ProviderSettings,
   ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
-import {
-  EwSigner,
-  Operator,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { DIDDocumentFactory } from '../src/factory';
 import { DIDDocumentLite } from '../src/lite';
 import { DIDDocumentFull } from '../src/full';
 import { deployRegistry } from '../../../tests/init-ganache';
 
-const providerSettings : ProviderSettings = {
+const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
 
@@ -29,10 +26,7 @@ describe('[DID DOCUMENT FACTORY]', async () => {
   before(async () => {
     const registry = await deployRegistry([]);
     console.log(`registry: ${registry}`);
-    operator = new Operator(
-      owner,
-      { address: registry },
-    );
+    operator = new Operator(owner, { address: registry });
   });
 
   it('createLite should return instance of DIDDocumentLite', () => {

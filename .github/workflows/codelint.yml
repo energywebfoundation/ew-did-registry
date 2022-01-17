@@ -1,0 +1,21 @@
+name: Lint source code
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run ESLint
+        run: npx eslint --output-file eslint_report.json --format json packages tests
+      - name: Annotate Code Linting Results
+        uses: ataylorme/eslint-annotate-action@1.0.4
+        if: always()
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          report-json: 'eslint_report.json'
+      - name: Run Prettier
+        run: npx prettier --check packages/**/*.*s tests/**/*.*s

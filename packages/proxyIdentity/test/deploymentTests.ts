@@ -26,9 +26,7 @@ function deploymentTests(): void {
 
 export function deploymentByManagerTests(): void {
   before(async function () {
-    ({
-      ownerAddr, manager, owner, identityFactory,
-    } = this);
+    ({ ownerAddr, manager, owner, identityFactory } = this);
     ownerAddr = await owner.getAddress();
 
     const txReceipt = await manager.createIdentity(ownerAddr);

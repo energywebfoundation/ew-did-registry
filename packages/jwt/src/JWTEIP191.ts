@@ -48,7 +48,7 @@ export class JWT extends JwtBase implements IJWT {
    */
   async sign(
     payload: string | JwtPayload,
-    { issuer, subject, noTimestamp }: JwtSignOptions = {},
+    { issuer, subject, noTimestamp }: JwtSignOptions = {}
   ): Promise<string> {
     const header = {
       alg: 'ES256K',
@@ -70,7 +70,7 @@ export class JWT extends JwtBase implements IJWT {
     }
     const encodedPayload = base64url(JSON.stringify(payload));
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(
-      'hex',
+      'hex'
     )}`;
     const signature = await this._signer.signMessage(arrayify(keccak256(msg)));
     const encodedSignature = base64url(signature);

@@ -16,7 +16,9 @@ export function erc1056tests(): void {
   });
 
   it('Well-formed did with chain name should be validated', () => {
-    const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
+    const did = `did:${Methods.Erc1056}:${
+      Chain.EWC
+    }:${new Keys().getAddress()}`;
     expect(isValidErc1056EWC(did)).true;
   });
 
@@ -30,17 +32,27 @@ export function erc1056tests(): void {
   });
 
   it('DID method can be retrieved for well formed did with chain name', () => {
-    const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
+    const did = `did:${Methods.Erc1056}:${
+      Chain.EWC
+    }:${new Keys().getAddress()}`;
     expect(getDIDMethod(did)).equals(Methods.Erc1056);
   });
 
   it('Chain name can be retrieved for well formed did', () => {
-    const did = `did:${Methods.Erc1056}:${Chain.EWC}:${new Keys().getAddress()}`;
-    expect(getDIDChain(did)).deep.equal({foundChainInfo : true, chainInfo : Chain.EWC});
+    const did = `did:${Methods.Erc1056}:${
+      Chain.EWC
+    }:${new Keys().getAddress()}`;
+    expect(getDIDChain(did)).deep.equal({
+      foundChainInfo: true,
+      chainInfo: Chain.EWC,
+    });
   });
 
   it('Chain name cannot be retrieved for did without chain info', () => {
     const did = `did:${Methods.Erc1056}:${new Keys().getAddress()}`;
-    expect(getDIDChain(did)).deep.equal({foundChainInfo : false, chainInfo : undefined});
+    expect(getDIDChain(did)).deep.equal({
+      foundChainInfo: false,
+      chainInfo: undefined,
+    });
   });
 }

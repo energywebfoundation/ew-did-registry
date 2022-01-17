@@ -1,14 +1,15 @@
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import {
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
 import { providers } from 'ethers';
 
 const { JsonRpcProvider, IpcProvider } = providers;
 
 export function getProvider(
-  settings: ProviderSettings = { type: ProviderTypes.HTTP },
+  settings: ProviderSettings = { type: ProviderTypes.HTTP }
 ): providers.Provider {
-  const {
-    type, uriOrInfo = 'http://localhost:8544', path, network,
-  } = settings;
+  const { type, uriOrInfo = 'http://localhost:8544', path, network } = settings;
   switch (type) {
     case ProviderTypes.HTTP:
       return new JsonRpcProvider(uriOrInfo, network);

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Keys } from '@ew-did-registry/keys';
 import {
   ProviderTypes,
@@ -20,17 +19,21 @@ describe.skip('[RESOLVER PACKAGE]: DID-OPERATOR VOLTA', function didOperatorTest
   this.timeout('25s'); // Long timeout is necessary because executing actual tx against Volta
 
   const rpcUrl = 'https://volta-rpc.energyweb.org';
-  const faucetWallet = new Wallet('f86ce072924c23598c3d93df4f9cef9deec6261e62c86f0405729655014092e6', new providers.JsonRpcProvider(rpcUrl)); // 0xc6e301182CEb796Eb598c9209E1852215434c9ad
+  const faucetWallet = new Wallet(
+    'f86ce072924c23598c3d93df4f9cef9deec6261e62c86f0405729655014092e6',
+    new providers.JsonRpcProvider(rpcUrl)
+  ); // 0xc6e301182CEb796Eb598c9209E1852215434c9ad
   const keys = new Keys(); // Creating a new account so that can test fresh addition of DID Doc
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
     uriOrInfo: rpcUrl,
   };
   const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
-  const operator = new Operator(
-    owner,
-    { method: Methods.Erc1056, abi: ethrReg.abi, address: VoltaAddress1056 },
-  );
+  const operator = new Operator(owner, {
+    method: Methods.Erc1056,
+    abi: ethrReg.abi,
+    address: VoltaAddress1056,
+  });
 
   beforeEach(async () => {
     // The new account must be funded with VT in order to execute transactions on Volta

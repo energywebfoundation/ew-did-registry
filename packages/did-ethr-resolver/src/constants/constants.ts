@@ -10,7 +10,8 @@ export const defaultProvider = {
 };
 
 const pubKeyPattern = '0x[A-Fa-f0-9]{66}';
-export const attributeNamePattern = '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
+export const attributeNamePattern =
+  '^did/(pub|auth|svc)/(\\w+)(/(\\w+))?(/(\\w+))?$';
 export const didPattern = `did:[a-z0-9]+?(:[a-z0-9]+)?:${ethAddrPattern}`;
 export const delegatePubKeyIdPattern = `^${didPattern}#delegate-(sigAuth|veriKey)-(${pubKeyPattern}|${ethAddrPattern})$`;
 export const pubKeyIdPattern = `^${didPattern}#key-([A-Za-z0-9]+)`;

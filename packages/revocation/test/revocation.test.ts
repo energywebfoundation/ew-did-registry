@@ -1,16 +1,20 @@
 import { expect } from 'chai';
 import { Keys } from '@ew-did-registry/keys';
 import { deployRevocationRegistry } from '../../../tests';
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+import {
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { RevocationOffChain } from '../src/implementations/revocationOffChain';
 
-describe('[CREDENTIAL REVOCATION]', function() {
+describe('[CREDENTIAL REVOCATION]', function () {
   let revocationRegistry: RevocationOffChain;
-  let registryAddress : string;
+  let registryAddress: string;
   const credential = 'This is a test credential which states nothing';
   const revokerKeys = new Keys({
-    privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
+    privateKey:
+      'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
   });
   const revokerAddress = revokerKeys.getAddress();
   const providerSettings: ProviderSettings = {
@@ -18,11 +22,14 @@ describe('[CREDENTIAL REVOCATION]', function() {
   };
 
   // To test with VOLTA, use the below providerSettings for EwSigner
-  const providerSettingsForVolta = {
-    type: ProviderTypes.HTTP,
-    uriOrInfo: 'https://volta-rpc.energyweb.org',
-  };
-  const revoker = EwSigner.fromPrivateKey(revokerKeys.privateKey, providerSettings);
+  // const providerSettingsForVolta = {
+  //   type: ProviderTypes.HTTP,
+  //   uriOrInfo: 'https://volta-rpc.energyweb.org',
+  // };
+  const revoker = EwSigner.fromPrivateKey(
+    revokerKeys.privateKey,
+    providerSettings
+  );
 
   beforeEach(async () => {
     registryAddress = await deployRevocationRegistry();

@@ -69,7 +69,7 @@ class DID implements IDID {
    * @returns {void}
    */
   // eslint-disable-next-line no-dupe-class-members
-  set(method: Methods | string, chain?:string, id?: string): IDID {
+  set(method: Methods | string, chain?: string, id?: string): IDID {
     if (method.startsWith('did:')) {
       return this._setDid(method);
     }
@@ -86,24 +86,31 @@ class DID implements IDID {
         throw new Error('Identity cannot be undefined');
       }
       if (!DID_SCHEME_PATTERNS.NETWORK.test(`${method}:${chain}`)) {
-        throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
+        throw new Error(
+          'Network must not be empty and consist only of lowcase alphanumerical characters'
+        );
       }
       if (id !== undefined && !DID_SCHEME_PATTERNS.ID.test(id)) {
-        throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
+        throw new Error(
+          'Id must consist only of alphanumerical characters, dots, minuses and underscores'
+        );
       }
       this._dids.set(method, did);
       return this;
-    }
-    else {
+    } else {
       const [, method, id] = did.split(':');
       if (id === undefined) {
         throw new Error('DID must consist of three parts separated by a colon');
       }
       if (!DID_SCHEME_PATTERNS.NETWORK.test(method)) {
-        throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
+        throw new Error(
+          'Network must not be empty and consist only of lowcase alphanumerical characters'
+        );
       }
       if (!DID_SCHEME_PATTERNS.ID.test(id)) {
-        throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
+        throw new Error(
+          'Id must consist only of alphanumerical characters, dots, minuses and underscores'
+        );
       }
       this._dids.set(method, did);
       return this;
@@ -111,12 +118,7 @@ class DID implements IDID {
   }
 }
 
-export {
-  IDID,
-  DID,
-  Methods,
-  Chain,
-};
+export { IDID, DID, Methods, Chain };
 
 export * from './utils/validation';
 export * from './utils/parser';

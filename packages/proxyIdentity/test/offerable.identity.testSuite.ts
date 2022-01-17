@@ -1,7 +1,5 @@
 /* eslint-disable prefer-arrow-callback */
-import {
-  Contract, ContractFactory, providers, ethers,
-} from 'ethers';
+import { Contract, ContractFactory, providers, ethers } from 'ethers';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { deploymentByManagerTests } from './deploymentTests';
@@ -20,9 +18,7 @@ export function identityTestSuite(): void {
   let provider: providers.JsonRpcProvider;
 
   before(async function () {
-    ({
-      identityFactory, ownerAddr, manager, owner, provider,
-    } = this);
+    ({ identityFactory, ownerAddr, manager, owner, provider } = this);
     ownerAddr = await owner.getAddress();
   });
 
@@ -72,7 +68,10 @@ export function identityTestSuite(): void {
 
       await identity.connect(receiver).acceptOffer();
 
-      expect(await event).to.deep.equal({ offered: identity.address, offeredTo: receiverAddr });
+      expect(await event).to.deep.equal({
+        offered: identity.address,
+        offeredTo: receiverAddr,
+      });
       expect(await identity.owner()).equal(receiverAddr);
     });
 
@@ -94,16 +93,16 @@ export function identityTestSuite(): void {
       expect(await identity.owner()).equal(ownerAddr);
     });
 
-    it('Can\'t accept identity offered to other', async () => {
+    it("Can't accept identity offered to other", async () => {
       const nonReceiver = provider.getSigner(3);
 
-      return (identity.connect(nonReceiver).acceptOffer()).should.be.rejected;
+      return identity.connect(nonReceiver).acceptOffer().should.be.rejected;
     });
 
-    it('Can\'t reject identity offered to other', async () => {
+    it("Can't reject identity offered to other", async () => {
       const nonReceiver = provider.getSigner(3);
 
-      return (identity.connect(nonReceiver).rejectOffer()).should.be.rejected;
+      return identity.connect(nonReceiver).rejectOffer().should.be.rejected;
     });
 
     it('Offer can be canceled', async () => {
@@ -126,7 +125,9 @@ export function identityTestSuite(): void {
       await identity.connect(receiver2).acceptOffer();
 
       expect(await identity.owner()).equal(receiver2Addr);
-      expect(await manager.identityOwner(identity.address)).equal(receiver2Addr);
+      expect(await manager.identityOwner(identity.address)).equal(
+        receiver2Addr
+      );
     });
   });
 }

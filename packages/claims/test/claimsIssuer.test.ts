@@ -4,7 +4,10 @@ import { Keys } from '@ew-did-registry/keys';
 import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
-import { DIDDocumentFull, IDIDDocumentFull } from '@ew-did-registry/did-document';
+import {
+  DIDDocumentFull,
+  IDIDDocumentFull,
+} from '@ew-did-registry/did-document';
 import {
   DIDAttribute,
   PubKeyType,
@@ -12,7 +15,11 @@ import {
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
-import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import {
+  deployRegistry,
+  shutDownIpfsDaemon,
+  spawnIpfsDaemon,
+} from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -34,7 +41,10 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
+  const issuer = EwSigner.fromPrivateKey(
+    issuerKeys.privateKey,
+    providerSettings
+  );
 
   let userDoc: IDIDDocumentFull;
   let issuerDoc: IDIDDocumentFull;
@@ -48,11 +58,11 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const store = new DidStore(await spawnIpfsDaemon());
     userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(user, { address: registry }),
+      new Operator(user, { address: registry })
     );
     issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(issuer, { address: registry }),
+      new Operator(issuer, { address: registry })
     );
     await userDoc.create();
     await issuerDoc.create();
@@ -61,14 +71,14 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
       userKeys,
       userDoc,
       store,
-      providerSettings,
+      providerSettings
     ).createClaimsUser();
 
     claimsIssuer = new ClaimsFactory(
       issuerKeys,
       issuerDoc,
       store,
-      providerSettings,
+      providerSettings
     ).createClaimsIssuer();
   });
 
@@ -83,22 +93,16 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
       did: claimsUser.did,
       signer: claimsUser.did,
     };
-    expect(
-      await claimsIssuer.issuePublicClaim(signedClaim),
-    )
-      .eq(
-        await claimsIssuer.issuePublicClaim(unsignedClaim),
-      );
+    expect(await claimsIssuer.issuePublicClaim(signedClaim)).eq(
+      await claimsIssuer.issuePublicClaim(unsignedClaim)
+    );
   });
 
   it('claim issued by delegate should be verified', async () => {
-    await userDoc.update(
-      DIDAttribute.Authenticate,
-      {
-        type: PubKeyType.VerificationKey2018,
-        delegate: issuerAddress,
-      },
-    );
+    await userDoc.update(DIDAttribute.Authenticate, {
+      type: PubKeyType.VerificationKey2018,
+      delegate: issuerAddress,
+    });
 
     let claim = await claimsUser.createPublicClaim(claimData);
 
