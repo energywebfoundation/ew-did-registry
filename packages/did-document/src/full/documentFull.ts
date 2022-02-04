@@ -3,10 +3,13 @@ import {
   IOperator,
   IUpdateData,
   PubKeyType,
+  PublicKeyEncoding,
 } from '@ew-did-registry/did-resolver-interface';
+import { KeyType } from '@ew-did-registry/keys';
 import { BigNumber } from 'ethers';
 import { IDIDDocumentFull } from './interface';
 import { DIDDocumentLite } from '../lite';
+
 
 class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
   private _operator: IOperator;
@@ -98,6 +101,51 @@ class DIDDocumentFull extends DIDDocumentLite implements IDIDDocumentFull {
   ): Promise<boolean> {
     return this._operator.revokeAttribute(this.did, attributeType, updateData);
   }
+
+  async updatePublicKey({
+    publicKey,
+    algo = KeyType.Secp256k1,
+    type = PubKeyType.SignatureAuthentication2018,
+    tag = "",
+    validity,
+  }: {
+    publicKey: string;
+    did?: string;
+    algo: KeyType;
+    type: PubKeyType;
+    tag: string;
+    validity?: number;
+  }): Promise<BigNumber> {
+    const data = {
+      algo,
+      encoding: PublicKeyEncoding.detect(publicKey),
+      type,
+      value: { tag, publicKey },
+    };
+    return this.update(DIDAttribute.PublicKey, data, validity);
+  }
+
+  async updateDelegate({
+    delegatePublicKey,
+    algo = KeyType.ED25519,
+    type = PubKeyType.SignatureAuthentication2018,
+    validity,
+  }: {
+    delegatePublicKey: string;
+    algo: KeyType;
+    type: PubKeyType;
+    validity?: number;
+  }): Promise<BigNumber> {
+    const data = {
+      algo,
+      encoding: PublicKeyEncoding.detect(delegatePublicKey),
+      type,
+      delegate: delegatePublicKey,
+    };
+    return this.update(DIDAttribute.Authenticate, data, validity);
+  }
 }
+
+
 
 export default DIDDocumentFull;
