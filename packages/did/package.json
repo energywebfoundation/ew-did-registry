@@ -7,10 +7,11 @@
   },
   "description": "The interface of a Decentralised Identity",
   "main": "./dist/index.js",
+  "browser": "./dist/index.web.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "webpack",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -26,7 +27,12 @@
   },
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@ew-did-registry/keys": "0.6.0"
+    "@ew-did-registry/keys": "0.6.0",
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   },
   "homepage": "https://github.com/energywebfoundation/ew-did-registry/#readme",
   "bugs": {

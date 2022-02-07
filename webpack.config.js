@@ -19,10 +19,14 @@ const baseConfig = {
   },
   resolve: {
     mainFiles: ['index.ts', 'index.js'],
+    extensions: ['.ts', '.js'],
+  },
+  externals: {
+    ethers: 'ethers',
   },
 };
 
-const nodeConfig = merge(baseConfig, { target: 'node' });
+const nodeConfig = merge(baseConfig, { target: 'node16' });
 const webConfig = merge(baseConfig, {
   target: 'web',
   plugins: [new NodePolyfillPlugin()],
