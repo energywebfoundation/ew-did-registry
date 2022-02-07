@@ -1,15 +1,20 @@
 const path = require('path');
-
 const { merge } = require('webpack-merge');
+const { webConfig, nodeConfig } = require('../../webpack.config.js');
 
-const baseConfig = require('../../webpack.config.js');
-
-const config = {
-  entry: './src/index.ts',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js'
-  },
-};
-
-module.exports = merge(baseConfig, config);;
+module.exports = [
+  merge(webConfig, {
+    entry: './src/index.ts',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.web.js',
+    },
+  }),
+  merge(nodeConfig, {
+    entry: './src/index.ts',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.js',
+    },
+  }),
+];

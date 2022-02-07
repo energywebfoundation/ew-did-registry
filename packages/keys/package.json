@@ -6,9 +6,10 @@
   },
   "description": "The package provides basic key management functionality, such as generation of key pairs, signing, and verification",
   "main": "./dist/index.js",
+  "browser": "./dist/index.web.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
     "compile": "webpack",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
