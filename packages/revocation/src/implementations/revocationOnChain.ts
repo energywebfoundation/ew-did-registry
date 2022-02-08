@@ -2,7 +2,7 @@ import { Event, utils, Signer } from 'ethers';
 import { EwSigner, addressOf } from '@ew-did-registry/did-ethr-resolver';
 import {
   RevocationRegistryOnChain,
-  RevocationRegistryOnChain__factory,
+  RevocationRegistryOnChain__factory, 
 } from '@energyweb/iam-contracts/dist/ethers';
 
 export class RevocationOnChain {

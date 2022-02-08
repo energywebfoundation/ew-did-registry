@@ -1,8 +1,10 @@
+const path = require('path');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const { merge } = require('webpack-merge');
 
 const baseConfig = {
   mode: 'production',
+  entry: './src/index.ts',
   output: {
     library: {
       type: 'commonjs',
@@ -22,13 +24,42 @@ const baseConfig = {
     extensions: ['.ts', '.js'],
   },
   externals: {
+    '@ew-did-registry/did': '@ew-did-registry/did',
+    '@ew-did-registry/keys': '@ew-did-registry/keys',
+    '@ew-did-registry/jwt': '@ew-did-registry/jwt',
+    '@ew-did-registry/did-ethr-resolver': '@ew-did-registry/did-ethr-resolver',
+    '@ew-did-registry/did-resolver-interface':
+      '@ew-did-registry/did-resolver-interface',
+    '@ew-did-registry/did-ipfs-store': '@ew-did-registry/did-ipfs-store',
+    '@ew-did-registry/did-store-interface':
+      '@ew-did-registry/did-store-interface',
+    '@ew-did-registry/did-document': '@ew-did-registry/did-document',
+    '@ew-did-registry/claims': '@ew-did-registry/claims',
+    '@ew-did-registry/proxyidentity': '@ew-did-registry/did-proxyidentity',
+    '@ew-did-registry/did-registry': '@ew-did-registry/did-registry',
+    '@ew-did-registry/revocation': '@ew-did-registry/revocation',
+    '@energyweb/iam-contracts': '@energyweb/iam-contracts',
     ethers: 'ethers',
   },
 };
 
-const nodeConfig = merge(baseConfig, { target: 'node16' });
+const nodeConfig = merge(baseConfig, {
+  target: 'node16',
+  output: {
+    filename: 'index.js',
+  },
+  externals: {
+    eciesjs: 'eciesjs',
+    base64url: 'base64url',
+    sjcl: 'sjcl',
+    'ipfs-http-client': 'ipfs-http-client',
+  },
+});
 const webConfig = merge(baseConfig, {
   target: 'web',
+  output: {
+    filename: 'index.esm.js',
+  },
   plugins: [new NodePolyfillPlugin()],
   resolve: {
     fallback: {
@@ -37,4 +68,4 @@ const webConfig = merge(baseConfig, {
   },
 });
 
-module.exports = { webConfig, nodeConfig };
+module.exports = [webConfig, nodeConfig];

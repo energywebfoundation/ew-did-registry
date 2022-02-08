@@ -6,12 +6,12 @@
   },
   "description": "The core component of the EW DID Registry library",
   "main": "./dist/index.js",
-  "browser": "./dist/index.web/js",
+  "browser": "./dist/index.esm/js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
-    "compile": "webpack",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },

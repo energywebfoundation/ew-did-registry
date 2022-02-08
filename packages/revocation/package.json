@@ -6,7 +6,6 @@
   },
   "description": "The package provides revocation features for claims",
   "main": "./dist/index.js",
-  "browser": "./dist/index.web.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "npm run build:typechain:revocationRegistryOffChain && ../../node_modules/.bin/tsc",
@@ -31,29 +30,24 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@energyweb/iam-contracts": "3.3.0",
     "@ew-did-registry/did": "0.6.0",
-    "@ew-did-registry/did-ethr-resolver": "0.6.0",
     "@ew-did-registry/did-resolver-interface": "0.6.0",
     "@ew-did-registry/keys": "0.6.0",
+    "@ew-did-registry/did-ethr-resolver": "0.6.0",
+    "@energyweb/iam-contracts": "3.3.0",
     "ethers": "^5.4.7"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.4.1",
-    "@typechain/ethers-v5": "^7.0.1",
+    "chai": "4.2.0",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
-    "chai": "4.2.0",
+    "@typechain/ethers-v5": "^7.0.1",
     "ganache-cli": "^6.12.2",
-    "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "solhint": "3.3.4",
-    "ts-loader": "^9.2.6",
-    "typechain": "^5.0.0",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-merge": "^5.8.0"
+    "typechain": "^5.0.0"
   }
 }

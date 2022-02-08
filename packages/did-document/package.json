@@ -6,12 +6,12 @@
   },
   "description": "The package provides the necessary functionality for the client to work with DID Documents",
   "main": "./dist/index.js",
-  "browser": "./dist/index.web.js",
+  "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "mocha --timeout 10000 -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \" ",
-    "compile": "webpack",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "eslint src/**/*.ts",
     "fix": "eslint src/**/*.ts --fix"
   },

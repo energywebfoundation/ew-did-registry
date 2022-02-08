@@ -6,10 +6,10 @@
   },
   "description": "Implementation of contract representing ERC1056 identity",
   "main": "dist/index.js",
-  "browser": "dist/index.web.js",
+  "browser": "dist/index.esm.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
-    "compile": "npm run compile:contracts && copyfiles build/contracts/*.json dist && webpack",
+    "compile": "npm run compile:contracts && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test\" ",
     "test": "mocha -r ts-node/register test/*test.ts",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
