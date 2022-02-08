@@ -157,6 +157,25 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
     expect(keyAfter).equal(keyBefore + count);
   });
 
+  it('should be possible to add 10 public keys via updatePublickey', async () => {
+    const count = 10;
+    const keyBefore = (await fullDoc.read()).publicKey.length;
+    const tags = new Array(count)
+      .fill(10)
+      .map((k, i) => (keyBefore + i).toString());
+    for await (const tag of tags) {
+      await fullDoc.updatePublicKey({
+        publicKey: `0x${new Keys().publicKey}`,
+        type: PubKeyType.VerificationKey2018,
+        algo: KeyType.ED25519,
+        tag,
+        validity,
+      });
+    }
+    const keyAfter = (await fullDoc.read()).publicKey.length;
+    expect(keyAfter).equal(keyBefore + count);
+  });
+
   it('public key with expired validity should be invalidated', async () => {
     const tag = 'test';
     const keyId = `${did}#${tag}`;
@@ -193,6 +212,24 @@ describe('[DID DOCUMENT FULL PACKAGE]', function () {
       { ...updateData, type: PubKeyType.SignatureAuthentication2018 },
       validity
     );
+    const keysAfter = (await fullDoc.read()).publicKey.length;
+    expect(keysAfter).equal(keysBefore + 2);
+  });
+
+  it('adding of one delegate with two different types should add two public keys via updateDelegate', async () => {
+    const delegate = new Wallet(new Keys().privateKey);
+    const updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      delegatePublicKey: delegate.address,
+      validity,
+    };
+    const keysBefore = (await fullDoc.read()).publicKey.length;
+    await fullDoc.updateDelegate(updateData);
+    await fullDoc.updateDelegate({
+      ...updateData,
+      type: PubKeyType.SignatureAuthentication2018,
+    });
     const keysAfter = (await fullDoc.read()).publicKey.length;
     expect(keysAfter).equal(keysBefore + 2);
   });

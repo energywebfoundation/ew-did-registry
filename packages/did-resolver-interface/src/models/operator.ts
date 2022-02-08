@@ -67,3 +67,12 @@ export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & {
 export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & {
   delegate: string;
 };
+
+export const PublicKeyEncoding = {
+  detect: (publicKey: string): Encoding | undefined => {
+    if (publicKey.match(/^0x[\da-f]+$/i)) return Encoding.HEX;
+    if (publicKey.match(/^-+BEGIN CERTIFICATE-+.*?-+END CERTIFICATE-+$/)) return Encoding.PEM;
+    if (publicKey.match(/^[a-zA-Z0-9+/]+={0,2}$/i)) return Encoding.BASE64;
+    return undefined;
+  }
+}
