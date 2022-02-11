@@ -3,6 +3,7 @@ import {
   IUpdateData,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import { KeyType } from '@ew-did-registry/keys';
 import { BigNumber } from 'ethers';
 import { IDIDDocumentLite } from '../lite';
 
@@ -44,4 +45,31 @@ export interface IDIDDocumentFull extends IDIDDocumentLite {
     attributeType: DIDAttribute,
     updateData: IUpdateData
   ): Promise<boolean>;
+
+  updatePublicKey({
+    publicKey,
+    algo,
+    type,
+    tag,
+    validity,
+  }: {
+    publicKey: string;
+    did?: string;
+    algo: KeyType;
+    type: PubKeyType;
+    tag: string;
+    validity?: number;
+  }): Promise<BigNumber>;
+
+  updateDelegate({
+    delegatePublicKey,
+    algo,
+    type,
+    validity,
+  }: {
+    delegatePublicKey: string;
+    algo: KeyType;
+    type: PubKeyType;
+    validity?: number;
+  }): Promise<BigNumber>;
 }
