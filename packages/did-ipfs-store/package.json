@@ -6,10 +6,11 @@
   },
   "description": "IPFS-based implementation of IDidStore",
   "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -32,6 +33,11 @@
   "devDependencies": {
     "@types/node": "^15.12.3",
     "ganache-cli": "^6.12.2",
-    "run-with-testrpc": "0.3.1"
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "run-with-testrpc": "0.3.1",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   }
 }
