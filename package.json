@@ -41,7 +41,7 @@
     "@babel/core": "7.7.2",
     "@babel/polyfill": "7.7.0",
     "@babel/preset-env": "7.7.1",
-    "@energyweb/eslint-config": "0.0.0",
+    "@energyweb/eslint-config": "^0.0.1",
     "@energyweb/prettier-config": "0.0.0",
     "@types/bl": "2.1.0",
     "@types/chai": "4.2.4",
