@@ -3,6 +3,7 @@ import { Keys } from '@ew-did-registry/keys';
 import {
   Methods,
   isValidErc1056,
+  isValidErc1056Mainnet,
   Chain,
   isValidErc1056EWC,
   getDIDChain,
@@ -13,6 +14,7 @@ export function erc1056tests(): void {
   it('Well-formed did should be validated', () => {
     const did = `did:${Methods.Erc1056}:${new Keys().getAddress()}`;
     expect(isValidErc1056(did)).true;
+    expect(isValidErc1056Mainnet(did)).true;
   });
 
   it('Well-formed did with chain name should be validated', () => {
@@ -20,6 +22,7 @@ export function erc1056tests(): void {
       Chain.EWC
     }:${new Keys().getAddress()}`;
     expect(isValidErc1056EWC(did)).true;
+    expect(isValidErc1056(did)).true;
   });
 
   it('Method-specific id should be 40 digit hexadecimal value', () => {
