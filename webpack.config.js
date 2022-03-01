@@ -53,6 +53,7 @@ const nodeConfig = merge(baseConfig, {
     eciesjs: 'eciesjs',
     base64url: 'base64url',
     sjcl: 'sjcl',
+    '@types/sjcl': '@types/sjcl',
     'ipfs-http-client': 'ipfs-http-client',
   },
 });

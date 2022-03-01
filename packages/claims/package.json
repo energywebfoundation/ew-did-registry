@@ -40,10 +40,10 @@
     "base64url": "^3.0.1",
     "eciesjs": "^0.3.4",
     "ethers": "^5.5.1",
-    "sjcl": "npm:sjcl-complete@1.0.0"
+    "sjcl": "npm:sjcl-complete@1.0.0",
+    "@types/sjcl": "1.0.28"
   },
   "devDependencies": {
-    "@types/sjcl": "1.0.28",
     "chai": "^4.3.4",
     "ganache-cli": "^6.12.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
