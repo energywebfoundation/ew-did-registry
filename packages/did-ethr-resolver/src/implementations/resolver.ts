@@ -1,4 +1,6 @@
-import { Contract, providers, utils, BigNumber } from 'ethers';
+import { utils, BigNumber } from 'ethers';
+import { Provider } from '@ethersproject/abstract-provider';
+import { Contract } from '@ethersproject/contracts';
 import {
   DelegateTypes,
   IAuthentication,
@@ -37,7 +39,7 @@ class Resolver implements IResolver {
   /**
    * Stores the provider to connect to blockchain
    */
-  protected readonly _provider: providers.Provider;
+  protected readonly _provider: Provider;
 
   /**
    * Stores the smart contract instance with read functionality available
@@ -51,7 +53,7 @@ class Resolver implements IResolver {
    * @param provider - Ethers provider. Can be obtained from getProvider(providerSettings)
    */
 
-  constructor(provider: providers.Provider, settings: RegistrySettings) {
+  constructor(provider: Provider, settings: RegistrySettings) {
     this._provider = provider;
     this.settings = { abi: ethrReg.abi, method: Methods.Erc1056, ...settings };
     this._contract = new Contract(

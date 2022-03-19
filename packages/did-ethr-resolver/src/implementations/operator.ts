@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import { Contract, ethers, Event, utils, BigNumber } from 'ethers';
+import { ethers, Event, utils, BigNumber } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
 import {
   DIDAttribute,
   Encoding,
@@ -55,7 +56,7 @@ export class Operator extends Resolver implements IOperator {
     const { address, abi } = this.settings;
     this._owner = owner;
     this._keys.publicKey = owner.publicKey;
-    this._didRegistry = new ethers.Contract(address, abi, owner);
+    this._didRegistry = new Contract(address, abi, owner);
   }
 
   protected async getAddress(): Promise<string> {

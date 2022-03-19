@@ -33,7 +33,7 @@
     "@ew-did-registry/did-ethr-resolver": "0.6.1",
     "@ew-did-registry/did-resolver-interface": "0.6.0",
     "@ew-did-registry/keys": "0.6.0",
-    "ethers": "^5.4.6"
+    "ethers": "^5.6.1"
   },
   "devDependencies": {
     "eslint": "^7.1.0",

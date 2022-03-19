@@ -1,5 +1,6 @@
-import { Contract, ethers, providers, utils, BigNumber } from 'ethers';
-
+import { ethers, utils, BigNumber } from 'ethers';
+import { Provider } from '@ethersproject/abstract-provider';
+import { Contract } from '@ethersproject/contracts';
 import {
   IDIDDocument,
   IDIDLogData,
@@ -222,7 +223,7 @@ const getEventsFromBlock = (
   block: ethers.BigNumber,
   did: string,
   document: IDIDLogData,
-  provider: ethers.providers.Provider,
+  provider: Provider,
   contractInterface: utils.Interface,
   address: string
 ): Promise<unknown> =>
@@ -292,7 +293,7 @@ export const fetchDataFromEvents = async (
   document: IDIDLogData,
   registrySettings: Required<RegistrySettings>,
   contract: Contract,
-  provider: providers.Provider,
+  provider: Provider,
   selector?: DocumentSelector
 ): Promise<void> => {
   const identity = addressOf(did);

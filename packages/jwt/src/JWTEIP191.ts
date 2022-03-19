@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import { Signer, utils, Wallet } from 'ethers';
+import { utils, Wallet } from 'ethers';
+import { Signer } from '@ethersproject/abstract-signer';
 import base64url from 'base64url';
 import { IKeys } from '@ew-did-registry/keys';
 import { IJWT } from './interface';

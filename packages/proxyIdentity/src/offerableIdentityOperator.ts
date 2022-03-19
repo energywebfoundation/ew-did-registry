@@ -1,4 +1,5 @@
-import { Contract, utils, BigNumber } from 'ethers';
+import { utils, BigNumber } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
 import {
   DIDAttribute,
   IUpdateData,

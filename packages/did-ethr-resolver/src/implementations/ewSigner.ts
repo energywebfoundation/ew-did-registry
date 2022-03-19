@@ -1,4 +1,8 @@
-import { Signer, providers, utils, Wallet } from 'ethers';
+import { providers, utils } from 'ethers';
+import { Wallet } from '@ethersproject/wallet';
+import { Signer } from '@ethersproject/abstract-signer';
+import { Provider } from '@ethersproject/abstract-provider';
+import { Web3Provider } from '@ethersproject/providers';
 import { ProviderSettings } from '@ew-did-registry/did-resolver-interface';
 import { Keys } from '@ew-did-registry/keys';
 import { getProvider } from '../utils';
@@ -13,7 +17,7 @@ type EIP1193ProviderType =
  * The purpose of the ethers encapsulation is to allow consumers more flexiblity in ethers version.
  */
 export class EwSigner extends Signer {
-  public readonly provider: providers.Provider;
+  public readonly provider: Provider;
 
   public readonly publicKey: string;
 
@@ -60,7 +64,7 @@ export class EwSigner extends Signer {
     return this.signer.signTransaction(transaction);
   }
 
-  connect(provider: providers.Provider): Signer {
+  connect(provider: Provider): Signer {
     return this.signer.connect(provider);
   }
 
@@ -124,7 +128,7 @@ export class EwSigner extends Signer {
     eip1993Provider: EIP1193ProviderType,
     publicKey: string
   ): Promise<EwSigner> {
-    const provider = new providers.Web3Provider(eip1993Provider);
+    const provider = new Web3Provider(eip1993Provider);
     const signer = provider.getSigner();
     try {
       // Call getAddress() to check that signer has address
