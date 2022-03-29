@@ -37,7 +37,7 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
       deployer
     );
     const manager = await identityManagerFactory.deploy();
-    manager.initialize(library.address);
+    await manager.initialize(library.address);
 
     const erc1056Factory = new ContractFactory(
       erc1056Abi,

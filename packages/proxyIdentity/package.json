@@ -11,7 +11,7 @@
   "scripts": {
     "compile": "npm run compile:contracts && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test\" ",
-    "test": "mocha -r ts-node/register test/*test.ts",
+    "test": "../../node_modules/.bin/mocha -r ts-node/register test/*test.ts",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
     "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
@@ -27,7 +27,7 @@
     "@ew-did-registry/did-ethr-resolver": "0.6.1",
     "@ew-did-registry/did-resolver-interface": "0.6.0",
     "@ew-did-registry/keys": "0.6.0",
-    "ethers": "^5.4.6"
+    "ethers": "^5.6.1"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.4.1",
