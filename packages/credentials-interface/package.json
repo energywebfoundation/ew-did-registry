@@ -1,0 +1,55 @@
+{
+  "name": "@ew-did-registry/credentials-interface",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "description": "The package provides interfaces for credentials.",
+  "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "compile": "webpack --config ../../webpack.config.js",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "VC",
+    "VP",
+    "Credential",
+    "Presentation",
+    "VerifiableCredential",
+    "VerifiablePresentation"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
+  },
+  "homepage": "https://github.com/energywebfoundation/ew-did-registry#readme",
+  "bugs": {
+    "url": "https://github.com/energywebfoundation/ew-did-registry/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/energywebfoundation/ew-did-registry.git"
+  },
+  "dependencies": {
+    "@ethersproject/abstract-signer": "5.6.0",
+    "@sphereon/pex": "^1.0.2",
+    "@types/lodash": "^4.14.181",
+    "lodash": "^4.17.21"
+  }
+}
