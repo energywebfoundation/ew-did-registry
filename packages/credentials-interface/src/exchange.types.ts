@@ -6,7 +6,7 @@ export type ExchangeInvitation = {
   url: string;
 };
 
-export const EWF_EXCHANGE_INVITATION =
+export const VC_API_EXCHANGE =
   'https://energyweb.org/out-of-band-invitation/vc-api-exchange';
 
 export type VpRequest = {
