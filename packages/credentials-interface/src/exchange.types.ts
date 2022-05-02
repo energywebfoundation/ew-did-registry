@@ -1,3 +1,8 @@
+import { SelectResults } from '@sphereon/pex';
+import { CredentialSubject, VerifiableCredential } from './credentials.types';
+import { PresentationDefinition } from './presentation-exchange.types';
+import { VerifiablePresentation } from './presentation.types';
+
 export type ExchangeInvitation = {
   type: string;
   /**
@@ -34,8 +39,16 @@ export type VpRequest = {
  */
 export type VpRequestQuery = {
   type: VpRequestQueryType;
-  credentialQuery: any;
+  credentialQuery: Array<
+    VpRequestPresentationDefinitionQuery | VpRequestDidAuthQuery
+  >;
 };
+
+export type VpRequestPresentationDefinitionQuery = {
+  presentationDefinition: PresentationDefinition;
+};
+
+export type VpRequestDidAuthQuery = Record<string, unknown>;
 
 export type VpRequestInteractService = {
   type: VpRequestInteractServiceType;
@@ -76,4 +89,38 @@ export enum VpRequestQueryType {
  */
 export type VpRequestInteractServiceDefinition = {
   type: VpRequestInteractServiceType;
+};
+
+/**
+ * Set of credentials to choose from to meet exchange query
+ */
+export type ContinueExchangeSelections = {
+  presentationDefinition: PresentationDefinition;
+  selectResults: SelectResults;
+}[];
+
+/**
+ * Credentials presented to continue exchange
+ */
+export type ContinueExchangeCredentials<T extends CredentialSubject> = {
+  vpRequest: VpRequest;
+  credentials: VerifiableCredential<T>[];
+};
+
+/**
+ * Describes the possible contents of response to a start/continue exchange request
+ */
+export type ExchangeResponse = {
+  errors: string[];
+  /**
+   * Verifiable Presentation Request.
+   * Should conform to VP-Request specification.
+   * Will be returned if a VP is required to obtain more information from requester
+   * May not be returned if no further information is required (for example, at the end of the workflow)
+   */
+  vpRequest?: VpRequest;
+  /**
+   * If it is an issuance response, then a vp may be provided
+   */
+  vp?: VerifiablePresentation;
 };
