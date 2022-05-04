@@ -1,1 +1,1 @@
-export * from './revocationOffChain';
+export * from './credential-revocation';

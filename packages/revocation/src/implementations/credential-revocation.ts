@@ -1,17 +1,17 @@
 import { Event, utils, Signer } from 'ethers';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { RevocationRegistry, RevocationRegistry__factory } from '../../ethers';
+import { CredentialRevocationRegistry, CredentialRevocationRegistry__factory } from '../../ethers';
 
-export class RevocationOffChain {
-  private _revocationRegistryOffChain: RevocationRegistry;
+export class CredentialRevocation {
+  private _revocationRegistry: CredentialRevocationRegistry;
 
   /**
    * @param revoker - Entity which perform revocation
-   * @param addressOffChain - Address of the off chain claim's RevocationRegistry
+   * @param credentialRevocationRegistryAddr - Address of credential RevocationRegistry
    */
-  constructor(revoker: EwSigner, addressOffChain: string) {
-    this._revocationRegistryOffChain = RevocationRegistry__factory.connect(
-      addressOffChain,
+  constructor(revoker: EwSigner, credentialRevocationRegistryAddr: string) {
+    this._revocationRegistry = CredentialRevocationRegistry__factory.connect(
+      credentialRevocationRegistryAddr,
       revoker as Signer
     );
   }
@@ -23,10 +23,10 @@ export class RevocationOffChain {
    * @param { string } credential - credential to be revoked
    * @returns Promise<boolean>
    */
-  async revokeRole(credential: string): Promise<boolean> {
+  async revokeCredential(credential: string): Promise<boolean> {
     const credentialHash = utils.keccak256(utils.toUtf8Bytes(credential));
     try {
-      const tx = await this._revocationRegistryOffChain.revokeClaim(
+      const tx = await this._revocationRegistry.revokeCredential(
         credentialHash
       );
       const receipt = await tx.wait();
@@ -49,7 +49,7 @@ export class RevocationOffChain {
    */
   async getRevocations(credential: string): Promise<Array<string[]>> {
     const credentialHash = utils.keccak256(utils.toUtf8Bytes(credential));
-    const result = await this._revocationRegistryOffChain.getRevocations(
+    const result = await this._revocationRegistry.getRevocations(
       credentialHash
     );
     const { 0: revokers, 1: timeStamps } = result;
