@@ -1,5 +1,5 @@
-import * as RevocationRegistry from '../build/contracts/RevocationRegistry.json';
-export { RevocationRegistry };
+import * as CredentialRevocationRegistry from '../build/contracts/CredentialRevocationRegistry.json';
+export { CredentialRevocationRegistry };
 
 export * from './implementations';
 export * from './constants';

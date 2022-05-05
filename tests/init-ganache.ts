@@ -1,9 +1,9 @@
 import { ContractFactory, providers, utils, BigNumber } from 'ethers';
 import { ethrReg } from '../packages/did-ethr-resolver/src/constants';
 import {
-  abi as RevocationRegistryOffChainAbi,
-  bytecode as RevocationRegistryOffChainByteCode,
-} from '../packages/revocation/build/contracts/RevocationRegistry.json';
+  abi as CredentialRevocationRegistryAbi,
+  bytecode as CredentialRevocationRegistryByteCode,
+} from '../packages/revocation/build/contracts/CredentialRevocationRegistry.json';
 
 const { hexlify } = utils;
 
@@ -39,8 +39,8 @@ export const deployRegistry = async (
 
 export const deployRevocationRegistry = async (): Promise<string> => {
   const registryFactory = new ContractFactory(
-    RevocationRegistryOffChainAbi,
-    RevocationRegistryOffChainByteCode,
+    CredentialRevocationRegistryAbi,
+    CredentialRevocationRegistryByteCode,
     deployer
   );
   const revocationRegistry = await registryFactory.deploy();

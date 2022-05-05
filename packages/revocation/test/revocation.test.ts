@@ -6,10 +6,10 @@ import {
   ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
 import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
-import { RevocationOffChain } from '../src/implementations/revocationOffChain';
+import { CredentialRevocation } from '../src/implementations/credential-revocation';
 
 describe('[CREDENTIAL REVOCATION]', function () {
-  let revocationRegistry: RevocationOffChain;
+  let revocationRegistry: CredentialRevocation;
   let registryAddress: string;
   const credential = 'This is a test credential which states nothing';
   const revokerKeys = new Keys({
@@ -34,28 +34,28 @@ describe('[CREDENTIAL REVOCATION]', function () {
   beforeEach(async () => {
     registryAddress = await deployRevocationRegistry();
     // use 'revocationRegistryAddress' while testing with volta
-    revocationRegistry = new RevocationOffChain(revoker, registryAddress);
+    revocationRegistry = new CredentialRevocation(revoker, registryAddress);
   });
 
   it('Revoker can revoke a credential', async () => {
-    expect(await revocationRegistry.revokeRole(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
   });
 
   it('A credential can be revoked multiple times', async () => {
-    expect(await revocationRegistry.revokeRole(credential)).true;
-    expect(await revocationRegistry.revokeRole(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
   });
 
   it('Revoker for a credential can be fetched', async () => {
-    expect(await revocationRegistry.revokeRole(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
     const result = await revocationRegistry.getRevocations(credential);
     expect(result.length).to.equal(2);
     expect(result[0][0]).equal(revokerAddress);
   });
 
   it('Revokers can be fetched for a credential revoked multiple times', async () => {
-    expect(await revocationRegistry.revokeRole(credential)).true;
-    expect(await revocationRegistry.revokeRole(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
     const result = await revocationRegistry.getRevocations(credential);
     expect(result.length).to.equal(2);
     expect(result[0][0]).equal(revokerAddress);
