@@ -36,12 +36,12 @@ export interface RegistrySettings {
 export interface IServiceEndpoint {
   id: string;
   type: string;
-  serviceEndpoint: string;
+  serviceEndpoint: string | { nodes: string[] };
   description?: string;
   validity: BigNumber;
   block: number;
   hash?: string; // hash of the content located at service endpoint
-  [key: string]: string | BigNumber | number | undefined;
+  [key: string]: string | BigNumber | number | undefined | { nodes: string[] };
 }
 
 export interface IPublicKey {
