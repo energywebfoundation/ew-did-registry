@@ -5,10 +5,11 @@
     "access": "public"
   },
   "description": "The package provides revocation features for claims",
-  "main": "./dist/index.js",
+  "main": "dist/src/index.js",
+  "browser": "dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npm run build:typechain:credentialRevocationRegistry && ../../node_modules/.bin/tsc",
+    "build": "npm run build:typechain:credentialRevocationRegistry && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
     "compile": "npm run compile:contracts && npm run build",
     "test": "../../node_modules/.bin/mocha --timeout 0 -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
