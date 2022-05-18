@@ -5,9 +5,9 @@
     "access": "public"
   },
   "description": "The package provides revocation features for claims",
-  "main": "dist/src/index.js",
-  "browser": "dist/index.esm.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build": "npm run build:typechain:credentialRevocationRegistry && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
     "compile": "npm run compile:contracts && npm run build",
