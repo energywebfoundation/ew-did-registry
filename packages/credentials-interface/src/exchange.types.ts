@@ -1,6 +1,5 @@
-import { SelectResults } from '@sphereon/pex';
+import { IPresentationDefinition, SelectResults } from '@sphereon/pex';
 import { CredentialSubject, VerifiableCredential } from './credentials.types';
-import { PresentationDefinition } from './presentation-exchange.types';
 import { VerifiablePresentation } from './presentation.types';
 
 export type ExchangeInvitation = {
@@ -45,7 +44,7 @@ export type VpRequestQuery = {
 };
 
 export type VpRequestPresentationDefinitionQuery = {
-  presentationDefinition: PresentationDefinition;
+  presentationDefinition: IPresentationDefinition;
 };
 
 export type VpRequestDidAuthQuery = Record<string, unknown>;
@@ -95,7 +94,7 @@ export type VpRequestInteractServiceDefinition = {
  * Set of credentials to choose from to meet exchange query
  */
 export type ContinueExchangeSelections = {
-  presentationDefinition: PresentationDefinition;
+  presentationDefinition: IPresentationDefinition;
   selectResults: SelectResults;
 }[];
 
