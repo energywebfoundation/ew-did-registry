@@ -36,7 +36,7 @@ export interface RegistrySettings {
 export interface IServiceEndpoint {
   id: string;
   type: string;
-  serviceEndpoint: string | { nodes: string[] };
+  serviceEndpoint: string;
   description?: string;
   validity: BigNumber;
   block: number;
