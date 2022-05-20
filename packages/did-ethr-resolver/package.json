@@ -28,21 +28,21 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did": "0.6.0",
-    "@ew-did-registry/did-resolver-interface": "0.6.0",
-    "@ew-did-registry/keys": "0.6.0",
-    "ethers": "^5.6.1"
+    "@ew-did-registry/did": "^0.6.0",
+    "@ew-did-registry/did-resolver-interface": "^0.6.0",
+    "@ew-did-registry/keys": "^0.6.0",
+    "ethers": "^5.6.6"
   },
   "devDependencies": {
-    "@types/sinon": "^10.0.2",
-    "@types/sinon-chai": "^3.2.5",
+    "@types/sinon": "^10.0.11",
+    "@types/sinon-chai": "^3.2.8",
     "ganache-cli": "^6.12.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.68.0",
+    "ts-loader": "^9.3.0",
+    "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
   }

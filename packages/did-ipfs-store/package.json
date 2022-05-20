@@ -26,7 +26,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did-store-interface": "0.6.0",
+    "@ew-did-registry/did-store-interface": "^0.6.0",
     "bl": "^4.0.2",
     "ipfs-http-client": "^43.0.0"
   },
@@ -35,8 +35,8 @@
     "ganache-cli": "^6.12.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.68.0",
+    "ts-loader": "^9.3.0",
+    "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
   }

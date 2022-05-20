@@ -24,10 +24,10 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did-ethr-resolver": "0.6.1",
-    "@ew-did-registry/did-resolver-interface": "0.6.0",
-    "@ew-did-registry/keys": "0.6.0",
-    "ethers": "^5.6.1"
+    "@ew-did-registry/did-ethr-resolver": "^0.6.1",
+    "@ew-did-registry/did-resolver-interface": "^0.6.0",
+    "@ew-did-registry/keys": "^0.6.0",
+    "ethers": "^5.6.6"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.4.1",
@@ -43,8 +43,8 @@
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
     "solhint": "3.3.4",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.68.0",
+    "ts-loader": "^9.3.0",
+    "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
   }

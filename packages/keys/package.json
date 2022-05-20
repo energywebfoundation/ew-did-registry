@@ -32,13 +32,13 @@
     "ec-key": "0.0.4",
     "eciesjs": "^0.3.4",
     "elliptic": "^6.5.2",
-    "ethers": "^5.6.1",
+    "ethers": "^5.6.6",
     "key-encoder": "^2.0.3"
   },
   "devDependencies": {
     "node-polyfill-webpack-plugin": "^1.1.4",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.68.0",
+    "ts-loader": "^9.3.0",
+    "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
   }
