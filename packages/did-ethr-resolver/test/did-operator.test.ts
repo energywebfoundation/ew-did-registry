@@ -199,8 +199,7 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
     expect(
       document.service.find(
-        (sv: { serviceEndpoint: string | { nodes: string[] } }) =>
-          sv.serviceEndpoint === endpoint
+        (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint
       )
     ).not.undefined;
   });

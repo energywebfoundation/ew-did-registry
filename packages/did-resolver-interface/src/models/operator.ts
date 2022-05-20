@@ -41,7 +41,7 @@ export interface IAttributePayload {
   id?: string;
   type?: string;
   publicKey?: string;
-  serviceEndpoint?: string | { nodes: string[] };
+  serviceEndpoint?: string;
   tag?: string;
   hash?: string;
   hashAlg?: string;
