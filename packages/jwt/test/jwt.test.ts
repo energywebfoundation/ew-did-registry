@@ -6,6 +6,7 @@ import ECKey from 'ec-key';
 import { Keys } from '@ew-did-registry/keys';
 import { JWT } from '../src/JWTEIP191';
 import { Algorithms } from '../src/types';
+import { JwtVerificationFailed } from '../src/JwtVerificationFailed';
 
 const { expect, should } = chai;
 
@@ -57,6 +58,22 @@ describe('[JWT PACKAGE]', () => {
       });
     });
     testSuite();
+
+    it('should throw an error when token is expired', async () => {
+      const privKey = ECKey.createECKey('prime256v1');
+      const expiredToken = await new JWT(new Keys()).sign(
+        { foo: 'bar' },
+        { expirationTimestamp: Date.now() + 1 }
+      );
+      await new Promise((resolve) => setTimeout(resolve, 2));
+
+      expect(() =>
+        new JWT(new Keys()).verify(
+          expiredToken,
+          privKey.publicCodePoint.toString('hex')
+        )
+      ).to.throw(JwtVerificationFailed);
+    });
   });
 
   describe('[EIP191]', () => {

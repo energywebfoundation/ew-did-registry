@@ -48,7 +48,7 @@ export class JWT extends JwtBase implements IJWT {
    */
   async sign(
     payload: string | JwtPayload,
-    { issuer, subject, noTimestamp }: JwtSignOptions = {}
+    { issuer, subject, noTimestamp, expirationTimestamp }: JwtSignOptions = {}
   ): Promise<string> {
     const header = {
       alg: 'ES256K',
@@ -67,6 +67,12 @@ export class JWT extends JwtBase implements IJWT {
     }
     if (!noTimestamp) {
       payload.iat = new Date().getTime();
+    }
+    if (expirationTimestamp) {
+      if (expirationTimestamp < Date.now()) {
+        throw new Error('Expiration timestamp is in the past');
+      }
+      payload.exp = expirationTimestamp / 1000;
     }
     const encodedPayload = base64url(JSON.stringify(payload));
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(

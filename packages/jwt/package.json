@@ -36,12 +36,13 @@
     "promise.allsettled": "^1.0.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/mocha": "^9.1.1",
+    "@types/promise.allsettled": "^1.0.3",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "ts-loader": "^9.2.6",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2",
-    "webpack-merge": "^5.8.0",
-    "@types/jsonwebtoken": "8.5.0",
-    "@types/promise.allsettled": "^1.0.3"
+    "webpack-merge": "^5.8.0"
   }
 }
