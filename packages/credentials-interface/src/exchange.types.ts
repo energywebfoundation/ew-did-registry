@@ -94,9 +94,12 @@ export type VpRequestInteractServiceDefinition = {
  * Set of credentials to choose from to meet exchange query
  */
 export type ContinueExchangeSelections = {
-  presentationDefinition: IPresentationDefinition;
-  selectResults: SelectResults;
-}[];
+  vpRequest: VpRequest;
+  selections: {
+    presentationDefinition: IPresentationDefinition;
+    selectResults: SelectResults;
+  }[];
+};
 
 /**
  * Credentials presented to continue exchange
