@@ -98,7 +98,7 @@ export type ContinueExchangeSelections = {
   selections: {
     presentationDefinition: IPresentationDefinition;
     selectResults: SelectResults;
-  };
+  }[];
 };
 
 /**
