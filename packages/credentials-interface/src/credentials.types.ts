@@ -1,7 +1,7 @@
 import {
   ICredentialStatus,
   ICredentialSubject,
-  IJsonLdCredential,
+  IVerifiableCredential,
   IProof,
 } from '@sphereon/pex';
 import { EIP712Proof } from './eip712proof.types';
@@ -9,7 +9,7 @@ import { EIP712Proof } from './eip712proof.types';
 export type CredentialSubject = ICredentialSubject;
 
 export interface Credential<T extends CredentialSubject>
-  extends IJsonLdCredential {
+  extends IVerifiableCredential {
   credentialSubject: T;
   credentialStatus?: StatusList2021Entry;
 }
