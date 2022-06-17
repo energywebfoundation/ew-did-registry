@@ -1,15 +1,10 @@
-import {
-  ICredentialStatus,
-  ICredentialSubject,
-  IVerifiableCredential,
-  IProof,
-} from '@sphereon/pex';
+import { ICredentialStatus, ICredentialSubject, IProof } from '@sphereon/pex';
+import { ICredential } from '@sphereon/pex/dist/main/lib/types/SSI.types';
 import { EIP712Proof } from './eip712proof.types';
 
 export type CredentialSubject = ICredentialSubject;
 
-export interface Credential<T extends CredentialSubject>
-  extends IVerifiableCredential {
+export interface Credential<T extends CredentialSubject> extends ICredential {
   credentialSubject: T;
   credentialStatus?: StatusList2021Entry;
 }
