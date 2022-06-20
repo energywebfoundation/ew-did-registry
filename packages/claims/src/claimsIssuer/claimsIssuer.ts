@@ -26,7 +26,10 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * specified as signed or unsigned claim
    * @returns { Promise<string> } issued token
    */
-  async issuePublicClaim(claim: string | IPublicClaim): Promise<string> {
+  async issuePublicClaim(
+    claim: string | IPublicClaim,
+    expirationTimestamp?: number
+  ): Promise<string> {
     if (typeof claim === 'string') {
       claim = this.jwt.decode(claim) as IPublicClaim;
     }
@@ -38,6 +41,7 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
         issuer: this.did,
         subject: claim.did,
         noTimestamp: true,
+        expirationTimestamp,
       }
     );
     return signedToken;
