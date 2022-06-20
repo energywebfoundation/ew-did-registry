@@ -98,6 +98,23 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     );
   });
 
+  it('should add expiration timestamp to issued claim', async () => {
+    const signedClaim = await claimsUser.createPublicClaim({ name: 'John' });
+    const expirationTimestamp = Date.now() + 1000;
+    const issuedToken = await claimsIssuer.issuePublicClaim(
+      signedClaim,
+      expirationTimestamp
+    );
+    expect(issuedToken).to.exist;
+
+    const { 1: payload } = issuedToken.split('.');
+    const decodedPayload = JSON.parse(
+      Buffer.from(payload, 'base64').toString('utf8')
+    );
+
+    expect(decodedPayload.exp).to.eq(Math.trunc(expirationTimestamp / 1000));
+  });
+
   it('claim issued by delegate should be verified', async () => {
     await userDoc.update(DIDAttribute.Authenticate, {
       type: PubKeyType.VerificationKey2018,

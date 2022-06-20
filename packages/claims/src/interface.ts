@@ -35,7 +35,10 @@ export interface IClaimsUser extends IClaims {
 }
 
 export interface IClaimsIssuer extends IClaims {
-  issuePublicClaim(token: string | IPublicClaim): Promise<string>;
+  issuePublicClaim(
+    token: string | IPublicClaim,
+    expirationTimestamp?: number
+  ): Promise<string>;
   issuePrivateClaim(token: string): Promise<string>;
 }
 
