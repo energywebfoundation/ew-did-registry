@@ -3,7 +3,7 @@ import { utils } from 'ethers';
 import base64url from 'base64url';
 import { pubToPem, KeyType } from '@ew-did-registry/keys';
 import { computePublicKey } from 'ethers/lib/utils';
-import { JwtVerifyOptions, Algorithms } from './types';
+import { JwtVerifyOptions, Algorithms, JwtPayload } from './types';
 import { JwtVerificationFailed } from './JwtVerificationFailed';
 
 const { arrayify, keccak256, hashMessage, recoverPublicKey } = utils;
@@ -94,7 +94,14 @@ export class JwtBase {
       'hex'
     )}`;
     const signature = base64url.decode(encodedSignature);
+    const payload: JwtPayload = JSON.parse(base64url.decode(encodedPayload));
     const verified = possibleKeys(msg, signature).find((key) => key === pubKey);
+
+    const now = new Date().getTime() / 1000;
+    if (payload.exp && payload.exp < now) {
+      throw new Error('JWT expired');
+    }
+
     if (verified) {
       return JSON.parse(base64url.decode(encodedPayload));
     }
