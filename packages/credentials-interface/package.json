@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@ethersproject/abstract-signer": "5.6.0",
-    "@sphereon/pex": "1.1.0",
+    "@sphereon/pex": "^1.1.0",
     "@types/lodash": "^4.14.181",
     "lodash": "^4.17.21"
   }

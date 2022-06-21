@@ -1,20 +1,14 @@
 import { ICredentialStatus, ICredentialSubject, IProof } from '@sphereon/pex';
-import { ICredential } from '@sphereon/pex/dist/main/lib/types/SSI.types';
+import { ICredential } from '@sphereon/pex/dist/main/lib/types';
+import { ICredentialContextType } from '@sphereon/pex/dist/main/lib/types/SSI.types';
 import { EIP712Proof } from './eip712proof.types';
 
 export type CredentialSubject = ICredentialSubject;
 
 export interface Credential<T extends CredentialSubject> extends ICredential {
+  '@context': ICredentialContextType[];
   credentialSubject: T;
   credentialStatus?: StatusList2021Entry;
-}
-
-export enum CredentialStatusType {
-  StatusList2021Entry = 'StatusList2021Entry',
-}
-
-export enum CredentialStatusPurpose {
-  REVOCATION = 'revocation',
 }
 
 export interface StatusList2021Entry extends ICredentialStatus {
@@ -22,6 +16,15 @@ export interface StatusList2021Entry extends ICredentialStatus {
   statusPurpose: CredentialStatusPurpose;
   statusListIndex: string;
   statusListCredential: string;
+}
+
+export enum CredentialStatusType {
+  StatusList2021 = 'StatusList2021',
+}
+
+export enum CredentialStatusPurpose {
+  REVOCATION = 'revocation',
+  SUSPENSION = 'suspension',
 }
 
 export interface VerifiableCredential<T extends CredentialSubject>
