@@ -13,10 +13,7 @@ export interface StatusList2021 {
   encodedList: string;
 }
 
-// This interface is not empty because it is distinct from its generic parent
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StatusList2021Credential
-  extends VerifiableCredential<StatusList2021> {}
+export type StatusList2021Credential = VerifiableCredential<StatusList2021>;
 
 export const StatusList2021Context = 'https://w3id.org/vc/status-list/2021/v1';
 

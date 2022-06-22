@@ -9,7 +9,6 @@ import {
   CredentialRevoked,
   InsecureStatusList,
   InvalidStatusList,
-  NoStatusList,
 } from '../errors';
 
 /**

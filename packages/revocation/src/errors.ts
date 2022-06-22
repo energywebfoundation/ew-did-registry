@@ -1,9 +1,3 @@
-export class NoStatusList extends Error {
-  constructor(statusListUrl: string) {
-    super(`StatusList2021 ${statusListUrl} does not exists`);
-  }
-}
-
 export class InvalidStatusList extends Error {
   constructor(errors: string[]) {
     super(`StatusList credential is invalid, error: ${errors.join(',')}`);
