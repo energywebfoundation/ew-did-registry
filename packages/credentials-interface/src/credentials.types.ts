@@ -5,10 +5,17 @@ import { EIP712Proof } from './eip712proof.types';
 
 export type CredentialSubject = ICredentialSubject;
 
+export enum CredentialType {
+  VerifiableCredential = 'VerifiableCredential',
+  StatusList2021Credential = 'StatusList2021Credential',
+  // @todo this probably should be in iam
+  EWFRole = 'EWFRole',
+}
 export interface Credential<T extends CredentialSubject> extends ICredential {
   '@context': ICredentialContextType[];
   credentialSubject: T;
   credentialStatus?: StatusList2021Entry;
+  type: CredentialType[];
 }
 
 export interface StatusList2021Entry extends ICredentialStatus {

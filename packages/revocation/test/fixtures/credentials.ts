@@ -4,6 +4,7 @@ import {
   StatusList2021Entry,
   StatusList2021Credential,
   StatusList2021Context,
+  CredentialType,
 } from '@ew-did-registry/credentials-interface';
 
 export const credentialStatus: StatusList2021Entry = {
@@ -16,12 +17,12 @@ export const credentialStatus: StatusList2021Entry = {
 };
 
 export const statusListWithRevokedStatus: StatusList2021Credential = {
-  '@context': [
-    'https://www.w3.org/2018/credentials/v1',
-    StatusList2021Context,
-  ],
+  '@context': ['https://www.w3.org/2018/credentials/v1', StatusList2021Context],
   id: 'http://isc.energyweb.org/api/v1/status-list/700e7ad4-5309-421c-bcf9-43acfa89c0e4',
-  type: ['VerifiableCredential', 'StatusList2021Credential'],
+  type: [
+    CredentialType.VerifiableCredential,
+    CredentialType.StatusList2021Credential,
+  ],
   credentialSubject: {
     id: 'urn:uuid:db72c30a-404c-4104-b787-a4c244035c61',
     encodedList: 'H4sIAAAAAAAAA2MEABvfBaUBAAAA',

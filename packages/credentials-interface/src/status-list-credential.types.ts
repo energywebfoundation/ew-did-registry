@@ -1,6 +1,7 @@
 import {
   CredentialStatusPurpose,
   CredentialStatusType,
+  CredentialType,
   StatusList2021Entry,
   VerifiableCredential,
 } from './credentials.types';
@@ -34,10 +35,15 @@ export const validateStatusListEntry = (
 };
 
 export const validateStatusList = (statusList: StatusList2021Credential) => {
+  if (!statusList.type.includes(CredentialType.StatusList2021Credential)) {
+    throw new Error('Not status list credential');
+  }
+
   if (!statusList['@context'].includes(StatusList2021Context)) {
     throw new Error('StatusList2021 context not found');
   }
 
+  // @todo credential validator
   if (!statusList?.issuer) {
     throw new Error('No issuer found for the credential');
   }
