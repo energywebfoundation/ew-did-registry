@@ -33,15 +33,6 @@ describe('[StatusList2021Entry verification]', function () {
   });
 
   it('Credential status with non revocation purpose should not be verified', async () => {
-    nock(credentialStatus.statusListCredential)
-      .get('')
-      .reply(200, {
-        ...statusListWithRevokedStatus,
-        credentialSubject: {
-          ...statusListWithRevokedStatus.credentialSubject,
-          credentialPurpose: '' as CredentialStatusPurpose,
-        },
-      });
     return expect(
       verification.verifyCredentialStatus({
         ...credentialStatus,
@@ -51,9 +42,7 @@ describe('[StatusList2021Entry verification]', function () {
   });
 
   it('Non revoked credential status must be verified', async () => {
-    nock(credentialStatus.statusListCredential)
-      .get('')
-      .reply(200, statusListWithNonRevokedStatus);
+    nock(credentialStatus.statusListCredential).get('').reply(204, undefined);
 
     return expect(verification.verifyCredentialStatus(credentialStatus))
       .fulfilled;

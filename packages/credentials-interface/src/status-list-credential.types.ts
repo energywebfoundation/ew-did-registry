@@ -18,8 +18,7 @@ export type StatusList2021Credential = VerifiableCredential<StatusList2021>;
 export const StatusList2021Context = 'https://w3id.org/vc/status-list/2021/v1';
 
 export const validateStatusListEntry = (
-  statusListEntry: StatusList2021Entry,
-  statusList: StatusList2021Credential
+  statusListEntry: StatusList2021Entry
 ) => {
   if (statusListEntry.type !== CredentialStatusType.StatusList2021) {
     throw new Error('Not a StatusList2021 type');
@@ -32,7 +31,9 @@ export const validateStatusListEntry = (
   ) {
     throw new Error('StatusList2021Entry does not have revocation purpose');
   }
+};
 
+export const validateStatusList = (statusList: StatusList2021Credential) => {
   if (!statusList['@context'].includes(StatusList2021Context)) {
     throw new Error('StatusList2021 context not found');
   }

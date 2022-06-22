@@ -2,6 +2,7 @@ import {
   StatusList2021Entry,
   StatusList2021Credential,
   validateStatusListEntry,
+  validateStatusList,
 } from '@ew-did-registry/credentials-interface';
 import { ungzip } from 'pako';
 import axios from 'axios';
@@ -12,20 +13,19 @@ import {
 } from '../errors';
 
 /**
- * A Class to verify the StatusList2021Entry
- * Validates statusPurpose, statusListcredential & proof, revoked status from encodedList for the given statusListEntry
+ * Verifies status of verifiable credential
  *
  * Sample usage for a Verifiable Credential with StatusList2021:
  *
  * ```typescript
  * const statusListEntry = verifiableCredential.statusListEntry;
- * const statusListEntryVerifier = new StatusListEntryVerification(vcProofVerificationCallBack);
+ * const statusListEntryVerifier = new StatusListEntryVerification(verifyProof);
  * await statusListEntryVerifier.verifyStatusListEntry(statusListEntry);
  * ```
  */
 export class StatusListEntryVerification {
   /**
-   * @param verifyProof function to verify proof of credential
+   * @param verifyProof function to verify proof of status list credential
    */
   constructor(
     private verifyProof: (vc: string, proofOptions: string) => Promise<unknown>
@@ -41,14 +41,15 @@ export class StatusListEntryVerification {
     credentialStatus: StatusList2021Entry,
     proofOptions = JSON.stringify({})
   ) {
+    validateStatusListEntry(credentialStatus);
+
     const statusListCredential = await this.fetchStatusListCredential(
       credentialStatus.statusListCredential
     );
     if (!statusListCredential) {
       return;
     }
-
-    validateStatusListEntry(credentialStatus, statusListCredential);
+    validateStatusList(statusListCredential);
 
     const verifyResults = JSON.parse(
       (await this.verifyProof(
@@ -83,7 +84,7 @@ export class StatusListEntryVerification {
   }
 
   /**
-   * Fetches the StatusListCredential
+   * Fetches status list credential
    * @param url URL of the status list
    * @return  StatusListCredential
    */
