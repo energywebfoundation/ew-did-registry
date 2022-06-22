@@ -29,7 +29,7 @@ export class StatusListEntryVerification {
    * @param verifyProof function to verify proof of credential
    */
   constructor(
-    private verifyProof: (vc: string, proof_options: string) => Promise<any>
+    private verifyProof: (vc: string, proofOptions: string) => Promise<unknown>
   ) {}
 
   /**
@@ -40,26 +40,29 @@ export class StatusListEntryVerification {
    */
   async verifyCredentialStatus(
     credentialStatus: StatusList2021Entry,
-    proof_options = JSON.stringify({})
+    proofOptions = JSON.stringify({})
   ) {
     const statusListCredential = await this.fetchStatusListCredential(
       credentialStatus.statusListCredential
     );
+    if (!statusListCredential) {
+      return;
+    }
 
     validateStatusListEntry(credentialStatus, statusListCredential);
 
     const verifyResults = JSON.parse(
-      await this.verifyProof(
+      (await this.verifyProof(
         JSON.stringify(statusListCredential),
-        proof_options
-      )
+        proofOptions
+      )) as string
     );
 
     if (verifyResults.errors.length) {
       throw new InvalidStatusList(verifyResults.error);
     }
 
-    if (this.isStatusRevoked(statusListCredential, credentialStatus)) {
+    if (this.isStatusSet(statusListCredential, credentialStatus)) {
       throw new CredentialRevoked();
     }
   }
@@ -70,7 +73,7 @@ export class StatusListEntryVerification {
    * @param status credential status
    * @returns true if the status is revoked
    */
-  private isStatusRevoked(
+  private isStatusSet(
     statusList: StatusList2021Credential,
     status: StatusList2021Entry
   ) {
@@ -87,21 +90,17 @@ export class StatusListEntryVerification {
    */
   private async fetchStatusListCredential(
     url: string
-  ): Promise<StatusList2021Credential> {
+  ): Promise<StatusList2021Credential | null> {
     this.verifyStatusListUrl(url);
-    const { data, status } = await axios.get<
-      StatusList2021Credential | undefined
-    >(url);
-    if (status !== 200 || !data) {
-      throw new NoStatusList(url);
-    }
-    return data;
+    const { data, status } = await axios.get<StatusList2021Credential | null>(
+      url
+    );
+    return status === 200 ? data : null;
   }
 
   /**
    * Validates the URL
    * @param url to be validated
-   * @returns true if URL is valid
    */
   private verifyStatusListUrl(url: string) {
     if (!url.startsWith('https:')) {

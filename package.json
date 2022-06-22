@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "lerna run test",
-    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"lerna run test\" ",
-    "setup": "lerna bootstrap --hoist --no-ci",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 -e 100000 \"lerna run test\" ",
+    "setup": "lerna bootstrap --hoist --ci",
     "build": "rm -rf build docs packages/*/dist && lerna run compile",
     "compile": "lerna run compile",
     "ganache": "ganache-cli -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000",
@@ -15,7 +15,7 @@
     "fix": "lerna run fix --parallel --stream",
     "publish:canary": "lerna publish --cd-version=prerelease --pre-dist-tag prerelease --preid=alpha.$RUN_NUMBER --exact --yes --no-verify-access --no-git-tag-version",
     "publish:release": "lerna version --conventional-commits --exact --yes && lerna publish from-git --yes --no-verify-access",
-    "reset": "rm -rf node_modules package-lock.json build docs packages/*/node_modules packages/*/dist packages/*/build packages/*/package-lock.json"
+    "reset": "rm -rf node_modules build docs packages/*/node_modules packages/*/dist packages/*/build"
   },
   "repository": {
     "type": "git",
@@ -64,6 +64,7 @@
     "del": "5.1.0",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
+    "ethers": "^5.6.1",
     "ganache-cli": "^6.12.2",
     "gulp": "4.0.2",
     "gulp-babel": "8.0.0",
@@ -76,7 +77,8 @@
     "husky": "3.1.0",
     "i": "^0.3.7",
     "ipfs": "^0.58.3",
-    "ipfsd-ctl": "3.0.0",
+    "ipfs-http-client": "^43.0.0",
+    "ipfsd-ctl": "^3.0.0",
     "lerna": "4.0.0",
     "mocha": "7.1.0",
     "npm": "^6.14.8",
