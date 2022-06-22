@@ -23,21 +23,13 @@ use(sinonChai);
 
 const { fail } = assert;
 
-const keys = new Keys({
-  privateKey:
-    '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
-});
+const keys = new Keys({});
 const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
 const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
-const newOwnerKeys = new Keys({
-  privateKey:
-    'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-  publicKey:
-    '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
-});
+const newOwnerKeys = new Keys({});
 const newOwner = EwSigner.fromPrivateKey(
   newOwnerKeys.privateKey,
   providerSettings

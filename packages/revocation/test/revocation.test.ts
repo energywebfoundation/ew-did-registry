@@ -12,10 +12,7 @@ describe('[CREDENTIAL REVOCATION]', function () {
   let revocationRegistry: CredentialRevocation;
   let registryAddress: string;
   const credential = 'This is a test credential which states nothing';
-  const revokerKeys = new Keys({
-    privateKey:
-      'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
-  });
+  const revokerKeys = new Keys({});
   const revokerAddress = revokerKeys.getAddress();
   const providerSettings: ProviderSettings = {
     type: ProviderTypes.HTTP,
@@ -32,7 +29,9 @@ describe('[CREDENTIAL REVOCATION]', function () {
   );
 
   beforeEach(async () => {
-    registryAddress = await deployRevocationRegistry();
+    registryAddress = await deployRevocationRegistry([
+      await revoker.getAddress(),
+    ]);
     // use 'revocationRegistryAddress' while testing with volta
     revocationRegistry = new CredentialRevocation(revoker, registryAddress);
   });

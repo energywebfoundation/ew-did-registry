@@ -1,10 +1,10 @@
-import { ICredentialSubject, IPresentation, IProof } from '@sphereon/pex';
-import { VerifiableCredential } from './credentials.types';
+import { IPresentation, IProof } from '@sphereon/pex';
+import { CredentialSubject, VerifiableCredential } from './credentials.types';
 import { EIP712Proof } from './eip712proof.types';
 
 export interface Presentation extends IPresentation {
   id: string;
-  verifiableCredential: VerifiableCredential<ICredentialSubject>[];
+  verifiableCredential: VerifiableCredential<CredentialSubject>[];
 }
 
 export interface VerifiablePresentation extends Presentation {

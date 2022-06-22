@@ -3,3 +3,4 @@ export { CredentialRevocationRegistry };
 
 export * from './implementations';
 export * from './constants';
+export * from './errors';
