@@ -35,7 +35,13 @@ export const validateStatusListEntry = (
 };
 
 export const validateStatusList = (statusList: StatusList2021Credential) => {
-  if (!statusList.type.includes(CredentialType.StatusList2021Credential)) {
+  if (
+    !statusList.type.includes(
+      CredentialType.StatusList2021Credential ||
+        statusList.credentialSubject.type !==
+          CredentialStatusType.StatusList2021
+    )
+  ) {
     throw new Error('Not status list credential');
   }
 
@@ -46,5 +52,14 @@ export const validateStatusList = (statusList: StatusList2021Credential) => {
   // @todo credential validator
   if (!statusList?.issuer) {
     throw new Error('No issuer found for the credential');
+  }
+
+  if (
+    ![
+      CredentialStatusPurpose.REVOCATION,
+      CredentialStatusPurpose.SUSPENSION,
+    ].includes(statusList.credentialSubject.statusPurpose)
+  ) {
+    throw new Error('StatusList2021 does not have revocation purpose');
   }
 };
