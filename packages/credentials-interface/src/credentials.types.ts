@@ -5,8 +5,13 @@ import { EIP712Proof } from './eip712proof.types';
 
 export type CredentialSubject = ICredentialSubject;
 
+export enum StatusListEntryType {
+  Entry2021 = 'StatusList2021Entry',
+}
+
 export enum CredentialType {
   VerifiableCredential = 'VerifiableCredential',
+  VerifiablePresentation = 'VerifiablePresentation',
   StatusList2021Credential = 'StatusList2021Credential',
   // @todo this probably should be in iam
   EWFRole = 'EWFRole',
@@ -19,7 +24,7 @@ export interface Credential<T extends CredentialSubject> extends ICredential {
 }
 
 export interface StatusList2021Entry extends ICredentialStatus {
-  type: CredentialStatusType;
+  type: StatusListEntryType;
   statusPurpose: CredentialStatusPurpose;
   statusListIndex: string;
   statusListCredential: string;

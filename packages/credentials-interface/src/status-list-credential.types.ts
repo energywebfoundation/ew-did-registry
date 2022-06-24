@@ -3,6 +3,7 @@ import {
   CredentialStatusType,
   CredentialType,
   StatusList2021Entry,
+  StatusListEntryType,
   VerifiableCredential,
 } from './credentials.types';
 
@@ -21,8 +22,8 @@ export const StatusList2021Context = 'https://w3id.org/vc/status-list/2021/v1';
 export const validateStatusListEntry = (
   statusListEntry: StatusList2021Entry
 ) => {
-  if (statusListEntry.type !== CredentialStatusType.StatusList2021) {
-    throw new Error('Not a StatusList2021 type');
+  if (statusListEntry.type !== StatusListEntryType.Entry2021) {
+    throw new Error('Not a StatusList2021 entry');
   }
   if (
     ![
