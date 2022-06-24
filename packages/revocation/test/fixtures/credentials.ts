@@ -5,11 +5,12 @@ import {
   StatusList2021Credential,
   StatusList2021Context,
   CredentialType,
+  StatusListEntryType,
 } from '@ew-did-registry/credentials-interface';
 
 export const credentialStatus: StatusList2021Entry = {
   id: 'string',
-  type: CredentialStatusType.StatusList2021,
+  type: StatusListEntryType.Entry2021,
   statusPurpose: CredentialStatusPurpose.REVOCATION,
   statusListIndex: '0',
   statusListCredential:
