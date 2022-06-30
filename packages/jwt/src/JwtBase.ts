@@ -2,11 +2,11 @@ import jsonwebtoken from 'jsonwebtoken';
 import { utils } from 'ethers';
 import base64url from 'base64url';
 import { pubToPem, KeyType } from '@ew-did-registry/keys';
-import { computePublicKey } from 'ethers/lib/utils';
 import { JwtVerifyOptions, Algorithms, JwtPayload } from './types';
 import { JwtVerificationFailed } from './JwtVerificationFailed';
 
-const { arrayify, keccak256, hashMessage, recoverPublicKey } = utils;
+const { arrayify, keccak256, hashMessage, recoverPublicKey, computePublicKey } =
+  utils;
 
 /**
  * @description Any JWT implementation verifies any JWT
