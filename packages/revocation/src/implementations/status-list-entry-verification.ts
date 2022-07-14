@@ -88,7 +88,7 @@ export class StatusListEntryVerification {
    * @param url URL of the status list
    * @return  StatusListCredential
    */
-  private async fetchStatusListCredential(
+  async fetchStatusListCredential(
     url: string
   ): Promise<StatusList2021Credential | null> {
     this.verifyStatusListUrl(url);
