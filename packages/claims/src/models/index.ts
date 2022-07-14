@@ -1,10 +1,12 @@
 import { IJWT } from '@ew-did-registry/jwt';
+import { StatusList2021Entry } from '@ew-did-registry/credentials-interface';
 
-export interface IPublicClaim {
+export interface IPublicClaim{
   did: string;
   signer: string;
   claimData: object;
-  [key: string]: string | object;
+  credentialStatus?: StatusList2021Entry;
+  [key: string]: string | object | undefined;
 }
 
 export interface IPrivateClaim {
