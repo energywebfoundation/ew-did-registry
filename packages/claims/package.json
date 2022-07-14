@@ -29,6 +29,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@ew-did-registry/credentials-interface": "0.1.0",
     "@ew-did-registry/did": "0.6.0",
     "@ew-did-registry/did-document": "0.6.1",
     "@ew-did-registry/did-ethr-resolver": "0.6.1",
