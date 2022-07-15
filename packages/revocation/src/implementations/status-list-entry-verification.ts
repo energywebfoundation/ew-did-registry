@@ -59,7 +59,7 @@ export class StatusListEntryVerification {
     );
 
     if (verifyResults.errors.length) {
-      throw new InvalidStatusList(verifyResults.error);
+      throw new InvalidStatusList(verifyResults.errors);
     }
 
     if (this.isStatusSet(statusListCredential, credentialStatus)) {
