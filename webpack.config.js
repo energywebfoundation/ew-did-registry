@@ -38,7 +38,6 @@ const baseConfig = {
     '@ew-did-registry/proxyidentity': '@ew-did-registry/did-proxyidentity',
     '@ew-did-registry/did-registry': '@ew-did-registry/did-registry',
     '@ew-did-registry/revocation': '@ew-did-registry/revocation',
-    '@energyweb/iam-contracts': '@energyweb/iam-contracts',
     ethers: 'ethers',
     'ethereumjs-util': 'ethereumjs-util',
   },
