@@ -4,4 +4,5 @@ export * from './status-list-credential.types';
 export * from './presentation.types';
 export * from './exchange.types';
 export * from './presentation-exchange.types';
-export * from './utils';
+export * from './credential.utils';
+export * from './exchange.utils';
