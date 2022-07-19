@@ -129,4 +129,23 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
 
     return claimsUser.verify(url).should.be.fulfilled;
   });
+  it('claim should tokenize credentialStatus if it is present', async () => {
+    const claim = {
+      claimData: { name: 'John' },
+      did: claimsUser.did,
+      signer: claimsUser.did,
+      credentialStatus:  {
+        id: 'https://energyweb.org/credential/0xc17c1273e0a0c8f3893d2a6a6f09929493b9ddd88ba0f69134c999a62dc3ba0f#list',
+        type: 'StatusList2021Entry',
+        statusListIndex: '1',
+        statusPurpose: 'revocation',
+        statusListCredential: 'https://identitycache.org/v1/status-list/urn:uuid:feab7fe0-c9ed-4c83-9f53-d16b882b0c75'
+      }
+    };
+    const token = await claimsIssuer.issuePublicClaim(claim);
+    console.log(token, "THE ISSUED TOKEN")
+    const resolvedToken = claimsIssuer.jwt.decode(token);
+    console.log(resolvedToken, "THE RESOLVED TOKEN")
+    expect(resolvedToken).to.have.own.property('credentialStatus');
+  });
 });
