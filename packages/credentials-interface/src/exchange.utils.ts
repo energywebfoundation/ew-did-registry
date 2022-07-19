@@ -13,7 +13,7 @@ import {
 import { isVerifiableCredential } from './credential.utils';
 
 const isValidObject = (obj: unknown, validator: Joi.ObjectSchema): boolean => {
-  return validator.validate(obj).error === null;
+  return !validator.validate(obj).error;
 };
 
 const JwtObjectSchema = Joi.object({
@@ -108,6 +108,10 @@ export function isPresentationDefinitionV1(
                     _enum: Joi.array()
                       .items(Joi.alternatives(Joi.string(), Joi.number()))
                       .optional(),
+                    const: NumberStringNullSchema.optional(),
+                    enum: Joi.array()
+                      .items(Joi.alternatives(Joi.string(), Joi.number()))
+                      .optional(),
                     exclusiveMinimum: NumberStringNullSchema.optional(),
                     exclusiveMaximum: NumberStringNullSchema.optional(),
                     format: Joi.string().optional(),
@@ -181,7 +185,11 @@ export function isPresentationDefinitionV2(
                   purpose: Joi.string().optional(),
                   filter: Joi.object({
                     _const: NumberStringNullSchema.optional(),
+                    const: NumberStringNullSchema.optional(),
                     _enum: Joi.array()
+                      .items(Joi.alternatives(Joi.string(), Joi.number()))
+                      .optional(),
+                    enum: Joi.array()
                       .items(Joi.alternatives(Joi.string(), Joi.number()))
                       .optional(),
                     exclusiveMinimum: NumberStringNullSchema.optional(),
@@ -231,7 +239,9 @@ export function isVpRequest(request: unknown): request is VpRequest {
     query: Joi.array()
       .items(
         Joi.object({
-          type: Joi.string().valid('DIDAuth', 'did_auth').required(),
+          type: Joi.string()
+            .valid('DIDAuth', 'PresentationDefinition')
+            .required(),
           credentialQuery: Joi.array()
             .items(
               Joi.object({

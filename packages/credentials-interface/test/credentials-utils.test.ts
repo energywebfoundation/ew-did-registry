@@ -5,11 +5,11 @@ import {
   isPresentation,
   isVerifiableCredential,
   isVerifiablePresentation,
-} from '../src/utils';
+} from '../src/credential.utils';
 
 use(sinonChai);
 
-describe('[CREDENTIALS INTERFACE PACKAGE]', () => {
+describe('[CREDENTIALS INTERFACE PACKAGE] Credentials utils', () => {
   it('should check valid credential', () => {
     const credential = {
       '@context': ['https://www.w3.org/2018/credentials/v1'],
