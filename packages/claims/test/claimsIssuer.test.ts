@@ -20,6 +20,7 @@ import {
   shutDownIpfsDaemon,
   spawnIpfsDaemon,
 } from '../../../tests';
+import { CredentialStatusType } from '@ew-did-registry/credentials-interface';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -136,7 +137,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
       signer: claimsUser.did,
       credentialStatus:  {
         id: 'https://energyweb.org/credential/0xc17c1273e0a0c8f3893d2a6a6f09929493b9ddd88ba0f69134c999a62dc3ba0f#list',
-        type: 'StatusList2021Entry',
+        type: CredentialStatusType.StatusList2021,
         statusListIndex: '1',
         statusPurpose: 'revocation',
         statusListCredential: 'https://identitycache.org/v1/status-list/urn:uuid:feab7fe0-c9ed-4c83-9f53-d16b882b0c75'
