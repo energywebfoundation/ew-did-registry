@@ -20,7 +20,10 @@ import {
   shutDownIpfsDaemon,
   spawnIpfsDaemon,
 } from '../../../tests';
-import { CredentialStatusType } from '@ew-did-registry/credentials-interface';
+import {
+  CredentialStatusPurpose,
+  StatusListEntryType,
+} from '@ew-did-registry/credentials-interface';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -135,18 +138,27 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
       claimData: { name: 'John' },
       did: claimsUser.did,
       signer: claimsUser.did,
-      credentialStatus:  {
+      credentialStatus: {
         id: 'https://energyweb.org/credential/0xc17c1273e0a0c8f3893d2a6a6f09929493b9ddd88ba0f69134c999a62dc3ba0f#list',
-        type: CredentialStatusType.StatusList2021,
+        type: StatusListEntryType.Entry2021,
         statusListIndex: '1',
-        statusPurpose: 'revocation',
-        statusListCredential: 'https://identitycache.org/v1/status-list/urn:uuid:feab7fe0-c9ed-4c83-9f53-d16b882b0c75'
-      }
+        statusPurpose: CredentialStatusPurpose.REVOCATION,
+        statusListCredential:
+          'https://identitycache.org/v1/status-list/urn:uuid:feab7fe0-c9ed-4c83-9f53-d16b882b0c75',
+      },
     };
     const token = await claimsIssuer.issuePublicClaim(claim);
-    console.log(token, "THE ISSUED TOKEN")
     const resolvedToken = claimsIssuer.jwt.decode(token);
-    console.log(resolvedToken, "THE RESOLVED TOKEN")
     expect(resolvedToken).to.have.own.property('credentialStatus');
+  });
+  it('tokenized claim should not have credentialStatus key if it is not present on claim', async () => {
+    const claim = {
+      claimData: { name: 'John' },
+      did: claimsUser.did,
+      signer: claimsUser.did,
+    };
+    const token = await claimsIssuer.issuePublicClaim(claim);
+    const resolvedToken = claimsIssuer.jwt.decode(token);
+    expect(resolvedToken).to.not.have.own.property('credentialStatus');
   });
 });

@@ -38,18 +38,15 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
       claimData,
       did,
       signer: this.did,
-      ...(!!credentialStatus && {credentialStatus})
-    }
-    const signedToken = await this.jwt.sign(
-      dataToSign,
-      {
-        algorithm: Algorithms.ES256,
-        issuer: this.did,
-        subject: claim.did,
-        noTimestamp: true,
-        expirationTimestamp,
-      }
-    );
+      ...(!!credentialStatus && { credentialStatus }),
+    };
+    const signedToken = await this.jwt.sign(dataToSign, {
+      algorithm: Algorithms.ES256,
+      issuer: this.did,
+      subject: claim.did,
+      noTimestamp: true,
+      expirationTimestamp,
+    });
     return signedToken;
   }
 
