@@ -38,7 +38,7 @@
     "chai-as-promised": "7.1.1",
     "copyfiles": "^2.4.1",
     "ganache-cli": "^6.12.2",
-    "mocha": "7.1.0",
+    "mocha": "^9.1.1",
     "multi-token-standard": "^0.8.13",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",

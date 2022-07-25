@@ -38,7 +38,7 @@
   "devDependencies": {
     "eslint": "^7.1.0",
     "ganache-cli": "^6.12.2",
-    "mocha": "7.1.0",
+    "mocha": "^9.1.1",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
     "ts-loader": "^9.2.6",
