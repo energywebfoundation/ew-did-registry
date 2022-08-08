@@ -1,0 +1,6 @@
+{
+  "extends": ["github>energywebfoundation/shared-configs"],
+  "assignees": ["nichonien", "JGiter"],
+  "reviewers": ["jrhender", "nichonien", "JGiter"]
+}
+

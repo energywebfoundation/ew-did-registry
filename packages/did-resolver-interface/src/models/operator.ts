@@ -1,41 +1,42 @@
+/* eslint-disable no-shadow */
+import { KeyType } from '@ew-did-registry/keys';
+
 /**
  * Currently, there are three types of DID Attributes, this can be potentially extended
  */
 export enum DIDAttribute {
-  PublicKey = 'pub', Authenticate = 'auth', ServicePoint = 'svc'
+  PublicKey = 'pub',
+  Authenticate = 'auth',
+  ServicePoint = 'svc',
 }
 
 /**
  * The two main types of public keys are, in turn, verification key and signature authentication key
  */
 export enum PubKeyType {
-  SignatureAuthentication2018 = 'sigAuth', VerificationKey2018 = 'veriKey'
+  SignatureAuthentication2018 = 'sigAuth',
+  VerificationKey2018 = 'veriKey',
 }
 
 /**
  * Encoding specifies the format in which the public key is store
  */
 export enum Encoding {
-  HEX = 'hex', BASE64 = 'base64', PEM = 'pem'
-}
-
-/**
- * Algorithms specifies, which algorithm has to be used with a particular public key
- */
-export enum Algorithms {
-  ED25519 = 'Ed25519', RSA = 'Rsa', ECDSA = 'ECDSA', Secp256k1 = 'Secp256k1'
+  HEX = 'hex',
+  BASE64 = 'base64',
+  PEM = 'pem',
 }
 
 /**
  * KeyTags specifies the tags associated with different purposes of the keys
  */
 export enum KeyTags {
-  OWNER = 'key-owner'
+  OWNER = 'key-owner',
 }
 
 /** This interface represents the attribute payload
  * TODO : avoid use of IAttributePayload, reuse IPublicKey and IServiceEndpoint
-*/
+ */
 export interface IAttributePayload {
   id?: string;
   type?: string;
@@ -53,12 +54,26 @@ export interface IAttributePayload {
  */
 export interface IUpdateData {
   encoding?: Encoding;
-  algo?: Algorithms;
+  algo?: KeyType;
   type: PubKeyType | DIDAttribute;
   value?: IAttributePayload;
   delegate?: string;
 }
 
-export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & { value: IAttributePayload };
+export type IUpdateAttributeData = Omit<IUpdateData, 'delegate'> & {
+  value: IAttributePayload;
+};
 
-export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & { delegate: string };
+export type IUpdateDelegateData = Omit<IUpdateData, 'value'> & {
+  delegate: string;
+};
+
+export const PublicKeyEncoding = {
+  detect: (publicKey: string): Encoding | undefined => {
+    if (publicKey.match(/^0x[\da-f]+$/i)) return Encoding.HEX;
+    if (publicKey.match(/^-+BEGIN CERTIFICATE-+.*?-+END CERTIFICATE-+$/))
+      return Encoding.PEM;
+    if (publicKey.match(/^[a-zA-Z0-9+/]+={0,2}$/i)) return Encoding.BASE64;
+    return undefined;
+  },
+};

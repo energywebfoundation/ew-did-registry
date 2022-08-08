@@ -1,7 +1,6 @@
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { expect } from 'chai';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
@@ -18,8 +17,10 @@ import { deployRegistry } from '../../../tests/init-ganache';
 import { EwSigner } from '../src/implementations';
 
 const keys = new Keys({
-  privateKey: '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
-  publicKey: '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
+  privateKey:
+    '49d484400c2b86a89d54f26424c8cbd66a477a6310d7d4a3ab9cbd89633b902c',
+  publicKey:
+    '023d6e5b341099c21cd4093ebe3228dc80a2785479b8211d20399698f61ee264d0',
 });
 
 const providerSettings: ProviderSettings = {
@@ -37,32 +38,32 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
   const did = `did:${Methods.Erc1056}:${identity}`;
 
   before(async () => {
-    registry = await deployRegistry([identity, '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7']);
-    operator = new Operator(
-      owner,
-      { address: registry },
-    );
+    registry = await deployRegistry([
+      identity,
+      '0xe8Aa15Dd9DCf8C96cb7f75d095DE21c308D483F7',
+    ]);
+    operator = new Operator(owner, { address: registry });
   });
 
   it('readAttribute should read public key by its hex value and type', async () => {
     const attribute = DIDAttribute.PublicKey;
     const k = new Keys();
     const updateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${k.publicKey}`, tag: 'key-1' },
     };
     await operator.update(did, attribute, updateData, validity);
-    const publicKeyAttr = await operator.readAttribute(
-      did,
-      {
-        publicKey: {
-          publicKeyHex: updateData.value.publicKey, type: `${updateData.algo}${updateData.type}`,
-        },
+    const publicKeyAttr = await operator.readAttribute(did, {
+      publicKey: {
+        publicKeyHex: updateData.value.publicKey,
+        type: `${updateData.algo}${updateData.type}`,
       },
+    });
+    expect(
+      publicKeyAttr && publicKeyAttr.publicKeyHex === updateData.value.publicKey
     );
-    expect(publicKeyAttr && publicKeyAttr.publicKeyHex === updateData.value.publicKey);
   });
 
   it('readAttribute should read service endpoint', async () => {
@@ -78,33 +79,35 @@ describe('[DID-RESOLVER-READ-ATTRIBUTES]', function () {
       },
     };
     await operator.update(did, attribute, updateData, validity);
-    const serviceEndpointAttr = await operator.readAttribute(did, {
+    const serviceEndpointAttr = (await operator.readAttribute(did, {
       service: { serviceEndpoint: `${updateData.value.serviceEndpoint}` },
-    }) as IServiceEndpoint;
-    expect(serviceEndpointAttr.serviceEndpoint === updateData.value.serviceEndpoint);
+    })) as IServiceEndpoint;
+    expect(
+      serviceEndpointAttr.serviceEndpoint === updateData.value.serviceEndpoint
+    );
   });
 
   it('readAttribute should read delegate by given Ethereum address', async () => {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Keys();
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.getAddress(),
     };
     await operator.update(did, attribute, updateData, validity);
     await operator.read(did);
-    const delegateAttr = await operator.readAttribute(did, {
+    const delegateAttr = (await operator.readAttribute(did, {
       publicKey: {
         ethereumAddress: `${delegate.getAddress()}`,
       },
-    }) as IAuthentication;
+    })) as IAuthentication;
     expect(delegateAttr.publicKey === updateData.delegate);
   });
 
   it('resolver should read did owner public key', async () => {
     await operator.create();
-    expect((await operator.readOwnerPubKey(did))).equal(keys.publicKey);
+    expect(await operator.readOwnerPubKey(did)).equal(keys.publicKey);
   });
 });

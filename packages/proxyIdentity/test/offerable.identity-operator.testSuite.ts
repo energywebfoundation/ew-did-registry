@@ -1,10 +1,7 @@
 import { expect } from 'chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
+import { Contract, ContractFactory, providers, utils } from 'ethers';
 import {
-  Contract, ContractFactory, providers, utils,
-} from 'ethers';
-import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   PubKeyType,
@@ -12,9 +9,7 @@ import {
   ProviderTypes,
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
-import {
-  EwSigner,
-} from '@ew-did-registry/did-ethr-resolver';
+import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
@@ -22,7 +17,7 @@ import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
 const { parseEther } = utils;
 
 const { PublicKey } = DIDAttribute;
-const { Secp256k1, ED25519 } = Algorithms;
+const { Secp256k1, ED25519 } = KeyType;
 const { VerificationKey2018 } = PubKeyType;
 const { HEX } = Encoding;
 
@@ -40,9 +35,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let erc1056: Contract;
 
   before(async function () {
-    ({
-      identityFactory, manager, provider, erc1056,
-    } = this);
+    ({ identityFactory, manager, provider, erc1056 } = this);
     const providerSettings: ProviderSettings = {
       type: ProviderTypes.HTTP,
     };
@@ -56,12 +49,13 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     did = `did:${Methods.Erc1056}:${identity.address}`;
 
     await provider.getSigner(0).sendTransaction({
-      to: ownerAddr, value: parseEther('1.0'),
+      to: ownerAddr,
+      value: parseEther('1.0'),
     });
     operator = new OfferableIdenitytOperator(
       owner,
       { address: erc1056.address },
-      identity.address,
+      identity.address
     );
   });
 
@@ -77,7 +71,7 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     const document = await operator.read(did);
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
@@ -97,9 +91,8 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
-    expect(document.service.find(
-      (sv) => sv.serviceEndpoint === endpoint,
-    )).not.undefined;
+    expect(document.service.find((sv) => sv.serviceEndpoint === endpoint)).not
+      .undefined;
   });
 
   it('public key can be revoked', async () => {
@@ -114,14 +107,14 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).to.be.not.null;
     const revoked = await operator.revokeAttribute(did, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).to.be.undefined;
   });

@@ -2,15 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "typeRoots": [
-      "../../node_modules/@types",
-      "../../typings"
-    ]
+    "typeRoots": ["../../node_modules/@types", "../../typings"]
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "./src/**/*.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts"]
 }

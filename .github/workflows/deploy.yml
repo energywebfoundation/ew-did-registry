@@ -20,11 +20,15 @@ jobs:
     if: "!contains(github.event.head_commit.author.name, 'GITHUB_ACTION')"
     runs-on: ubuntu-latest
     needs: cancel-previous
+    permissions:
+      contents: write
+      deployments: write
+      packages: write
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN_CI }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14.17.6'
@@ -59,7 +63,7 @@ jobs:
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RUN_NUMBER: ${{ github.run_number }}
         run: |
@@ -68,7 +72,7 @@ jobs:
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CI }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config user.name "GITHUB_ACTION"
@@ -78,12 +82,16 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     needs: deploy
+    permissions:
+      contents: write
+      deployments: write
+      packages: write
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: development
-          token: ${{ secrets.GH_TOKEN_CI }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit to develop branch and merge to master branch
         run: |

@@ -6,11 +6,12 @@
   },
   "description": "The package exposes functionality needed to create, inspect, approve, and verify Private and Public claims",
   "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -28,6 +29,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@ew-did-registry/credentials-interface": "0.1.0",
     "@ew-did-registry/did": "0.6.0",
     "@ew-did-registry/did-document": "0.6.1",
     "@ew-did-registry/did-ethr-resolver": "0.6.1",
@@ -36,12 +38,20 @@
     "@ew-did-registry/did-store-interface": "0.6.0",
     "@ew-did-registry/jwt": "0.6.0",
     "@ew-did-registry/keys": "0.6.0",
-    "@types/sjcl": "1.0.28",
+    "base64url": "^3.0.1",
     "eciesjs": "^0.3.4",
-    "sjcl": "npm:sjcl-complete@1.0.0"
+    "ethers": "^5.6.1",
+    "sjcl": "npm:sjcl-complete@1.0.0",
+    "@types/sjcl": "1.0.28"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
     "ganache-cli": "^6.12.2",
-    "run-with-testrpc": "0.3.1"
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "run-with-testrpc": "0.3.1",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   }
 }

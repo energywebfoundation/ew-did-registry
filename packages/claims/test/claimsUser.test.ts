@@ -1,15 +1,16 @@
 import { decrypt } from 'eciesjs';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Methods } from '@ew-did-registry/did';
 import {
-  Operator, EwSigner, compressedSecp256k1KeyLength,
+  Operator,
+  EwSigner,
+  compressedSecp256k1KeyLength,
 } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IUpdateData,
@@ -19,9 +20,17 @@ import {
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  ClaimsUser, IClaimsUser, IPrivateClaim, IProofClaim,
+  ClaimsUser,
+  IClaimsUser,
+  IPrivateClaim,
+  IProofClaim,
+  ProofVerifier,
 } from '../src';
-import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
+import {
+  deployRegistry,
+  shutDownIpfsDaemon,
+  spawnIpfsDaemon,
+} from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -40,11 +49,15 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   const userAddress = userKeys.getAddress();
   const userDid = `did:${Methods.Erc1056}:${userAddress}`;
   const user = EwSigner.fromPrivateKey(userKeys.privateKey, providerSettings);
+  let userDoc: DIDDocumentFull;
 
   const issuerKeys = new Keys();
   const issuerAddress = issuerKeys.getAddress();
   const issuerDid = `did:${Methods.Erc1056}:${issuerAddress}`;
-  const issuer = EwSigner.fromPrivateKey(issuerKeys.privateKey, providerSettings);
+  const issuer = EwSigner.fromPrivateKey(
+    issuerKeys.privateKey,
+    providerSettings
+  );
 
   const hexPrefixKeys = new Keys();
   const hexPrefixAddress = hexPrefixKeys.getAddress();
@@ -54,25 +67,23 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   let registry: string;
 
   before(async () => {
-    registry = await deployRegistry([issuerAddress, userAddress, hexPrefixAddress]);
+    registry = await deployRegistry([
+      issuerAddress,
+      userAddress,
+      hexPrefixAddress,
+    ]);
     console.log(`registry: ${registry}`);
 
     store = new DidStore(await spawnIpfsDaemon());
-    const userDoc = new DIDDocumentFull(
+    userDoc = new DIDDocumentFull(
       userDid,
-      new Operator(
-        user,
-        { address: registry },
-      ),
+      new Operator(user, { address: registry })
     );
     userClaims = new ClaimsUser(user, userDoc, store);
 
     const issuerDoc = new DIDDocumentFull(
       issuerDid,
-      new Operator(
-        issuer,
-        { address: registry },
-      ),
+      new Operator(issuer, { address: registry })
     );
 
     await userDoc.create();
@@ -88,10 +99,12 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
       name: 'John',
     };
     const token = await userClaims.createPublicClaim(publicData);
-    (await userClaims.verifyPublicClaim(token, publicData)).should.be.true;
-    const claim = await userClaims.jwt.verify(
-      token, userClaims.keys.publicKey, { noTimestamp: true },
-    );
+    const proofVerifier = new ProofVerifier(await userDoc.read());
+    expect(await proofVerifier.verifyAssertionProof(token)).not.null;
+    const claim = (await userClaims.jwt.verify(
+      token,
+      userClaims.keys.publicKey
+    )) as Record<string, unknown>;
     claim.should.deep.include({
       did: userDid,
       signer: userDid,
@@ -104,22 +117,27 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     for (let i = 0; i < 100; i++) {
       const data = { name: 'John', lastName: 'Doe', index: i };
       // eslint-disable-next-line no-await-in-loop
-      claims.push({ token: (await userClaims.createPublicClaim(data)), data });
+      claims.push({ token: await userClaims.createPublicClaim(data), data });
     }
     // eslint-disable-next-line no-restricted-syntax
     for (const { token, data } of claims) {
       // eslint-disable-next-line no-await-in-loop
-      (await userClaims.verifyPublicClaim(token, data)).should.be.true;
+      userClaims.verifyClaimContent(token, data);
+      const proofVerifier = new ProofVerifier(await userDoc.read());
+      expect(await proofVerifier.verifyAssertionProof(token)).not.null;
     }
   });
 
   it('createPrivateToken should create token with data decryptable by issuer', async () => {
     const secret = '123';
-    const { token, saltedFields } = await userClaims.createPrivateClaim({ secret }, issuerDid);
-    const claim = userClaims.jwt.decode(token, { noTimestamp: true }) as IPrivateClaim;
+    const { token, saltedFields } = await userClaims.createPrivateClaim(
+      { secret },
+      issuerDid
+    );
+    const claim = userClaims.jwt.decode(token) as IPrivateClaim;
     const decrypted = decrypt(
       issuerKeys.privateKey,
-      Buffer.from(claim.claimData.secret as string, 'hex'),
+      Buffer.from(claim.claimData.secret as string, 'hex')
     );
     decrypted.toString().should.equal(saltedFields.secret);
   });
@@ -128,10 +146,17 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     const claimUrl = 'http://test.com';
     const proofData = { secret: { value: '123abc', encrypted: true } };
     const token = await userClaims.createProofClaim(claimUrl, proofData);
-    const claim = await userClaims.jwt.verify(token, userClaims.keys.publicKey, { noTimestamp: true }) as IProofClaim;
+    const claim = (await userClaims.jwt.verify(
+      token,
+      userClaims.keys.publicKey
+    )) as IProofClaim;
     claim.should.include({ did: userDid, signer: userDid, claimUrl });
-    claim.should.have.nested.property('proofData.secret.value.h').which.instanceOf(Array);
-    claim.should.have.nested.property('proofData.secret.value.s').which.instanceOf(Array);
+    claim.should.have.nested
+      .property('proofData.secret.value.h')
+      .which.instanceOf(Array);
+    claim.should.have.nested
+      .property('proofData.secret.value.s')
+      .which.instanceOf(Array);
   });
 
   it('self signed claim should be verified', async () => {
@@ -152,20 +177,20 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
    */
   it('verifies claim of user with secp256k1 key with 0x prefix', async () => {
     const did = `did:${Methods.Erc1056}:${hexPrefixAddress}`;
-    const signer = EwSigner.fromPrivateKey(hexPrefixKeys.privateKey, providerSettings);
+    const signer = EwSigner.fromPrivateKey(
+      hexPrefixKeys.privateKey,
+      providerSettings
+    );
     const doc = new DIDDocumentFull(
       did,
-      new Operator(
-        signer,
-        { address: registry },
-      ),
+      new Operator(signer, { address: registry })
     );
 
     // Manually doing "create" as need to add hex prefix
     const pubKey = signer.publicKey;
     pubKey.length.should.equal(compressedSecp256k1KeyLength);
     const updateData: IUpdateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       // Adding hex prefix to simulate an owner key with a hex prefix

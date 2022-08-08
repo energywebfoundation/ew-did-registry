@@ -1,6 +1,4 @@
-import {
-  Contract, ethers, providers, utils, BigNumber,
-} from 'ethers';
+import { Contract, ethers, providers, utils, BigNumber } from 'ethers';
 
 import {
   IDIDDocument,
@@ -15,8 +13,8 @@ import {
   DelegateChangedEvent,
   DidEventNames,
 } from '@ew-did-registry/did-resolver-interface';
-import { DIDPattern } from '@ew-did-registry/did';
 import { attributeNamePattern } from '../constants';
+import { addressOf, matchDIDPattern } from '../utils';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -32,12 +30,17 @@ const handleDelegateChange = (
   did: string,
   document: IDIDLogData,
   validTo: BigNumber,
-  block: number,
+  block: number
 ): IDIDLogData => {
-  const stringDelegateType = ethers.utils.parseBytes32String(event.values.delegateType);
+  const stringDelegateType = ethers.utils.parseBytes32String(
+    event.values.delegateType
+  );
   const publicKeyID = `${did}#delegate-${stringDelegateType}-${event.values.delegate}`;
-  if (document.publicKey[publicKeyID] === undefined
-    || document.publicKey[publicKeyID].block < block) {
+  const publicKeyBlock = document.publicKey[publicKeyID]?.block;
+  if (
+    document.publicKey[publicKeyID] === undefined ||
+    (publicKeyBlock !== undefined && publicKeyBlock < block)
+  ) {
     switch (stringDelegateType) {
       case 'sigAuth':
         document.authentication[publicKeyID] = {
@@ -78,16 +81,13 @@ const handleAttributeChange = (
   did: string,
   document: IDIDLogData,
   validTo: BigNumber,
-  block: number,
+  block: number
 ): IDIDLogData => {
-  let match = did.match(DIDPattern);
-  if (!match) {
-    throw new Error('Invalid DID');
-  }
-  const identity = match[1];
+  const matchDID = matchDIDPattern(did);
+  const identity = matchDID[1];
   const attributeType = event.values.name;
   const stringAttributeType = ethers.utils.parseBytes32String(attributeType);
-  match = stringAttributeType.match(attributeNamePattern);
+  const match = stringAttributeType.match(attributeNamePattern);
   if (match) {
     const section = match[1];
     const algo = match[2];
@@ -96,7 +96,9 @@ const handleAttributeChange = (
     if (section === 'pub') {
       let publicKeysPayload: IAttributePayload;
       try {
-        const parsed = JSON.parse(Buffer.from(event.values.value.slice(2), 'hex').toString());
+        const parsed = JSON.parse(
+          Buffer.from(event.values.value.slice(2), 'hex').toString()
+        );
         if (typeof parsed === 'object') {
           publicKeysPayload = parsed;
         } else {
@@ -112,8 +114,11 @@ const handleAttributeChange = (
         validity: validTo,
         block,
       };
-      if ((document.publicKey[pk.id] === undefined
-        || document.publicKey[pk.id].block < block)) {
+      const publicKeyBlock = document.publicKey[pk.id]?.block;
+      if (
+        document.publicKey[pk.id] === undefined ||
+        (publicKeyBlock !== undefined && publicKeyBlock < block)
+      ) {
         switch (encoding) {
           case null:
           case undefined:
@@ -123,13 +128,13 @@ const handleAttributeChange = (
           case 'base64':
             pk.publicKeyBase64 = Buffer.from(
               event.values.value.slice(2),
-              'hex',
+              'hex'
             ).toString('base64');
             break;
           case 'pem':
             pk.publicKeyPem = Buffer.from(
               event.values.value.slice(2),
-              'hex',
+              'hex'
             ).toString();
             break;
           default:
@@ -140,23 +145,26 @@ const handleAttributeChange = (
       return document;
     }
     if (section === 'svc') {
-      const servicePoint: IServiceEndpoint = JSON.parse(Buffer.from(
-        event.values.value.slice(2),
-        'hex',
-      ).toString());
+      const servicePoint: IServiceEndpoint = JSON.parse(
+        Buffer.from(event.values.value.slice(2), 'hex').toString()
+      );
 
       servicePoint.validity = validTo;
       servicePoint.block = block;
 
-      if ((document.service[servicePoint.id] === undefined
-        || document.service[servicePoint.id].block < block)) {
+      const serviceEndpointBlock = document.service[servicePoint.id]?.block;
+      if (
+        document.service[servicePoint.id] === undefined ||
+        (serviceEndpointBlock !== undefined && serviceEndpointBlock < block)
+      ) {
         document.service[servicePoint.id] = servicePoint;
       }
       return document;
     }
     return document;
   }
-  const attrBlock = document.attributes.get(stringAttributeType)?.block as number;
+  const attrBlock = document.attributes.get(stringAttributeType)
+    ?.block as number;
   if (!attrBlock || attrBlock < block) {
     const attributeData = {
       attribute: Buffer.from(event.values.value.slice(2), 'hex').toString(),
@@ -182,7 +190,7 @@ const updateDocument = (
   event: AttributeChangedEvent | DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
-  block: number,
+  block: number
 ): IDIDLogData => {
   const { validTo } = event.values;
 
@@ -216,33 +224,43 @@ const getEventsFromBlock = (
   document: IDIDLogData,
   provider: ethers.providers.Provider,
   contractInterface: utils.Interface,
-  address: string,
-): Promise<unknown> => new Promise((resolve, reject) => {
-  const [, , identity] = did.split(':');
+  address: string
+): Promise<unknown> =>
+  new Promise((resolve, reject) => {
+    const identity = addressOf(did);
 
-  provider.getLogs({
-    address,
-    fromBlock: block.toNumber(),
-    toBlock: block.toNumber(),
-    topics: [null, `0x000000000000000000000000${identity.slice(2).toLowerCase()}`] as string[],
-  }).then((log) => {
-    const {
-      name, args, signature, topic,
-    } = contractInterface.parseLog(log[0]);
-    const event = {
-      name, values: args, signature, topic,
-    } as unknown as AttributeChangedEvent |
-      DelegateChangedEvent;
-    updateDocument(event, did, document, block.toNumber());
+    provider
+      .getLogs({
+        address,
+        fromBlock: block.toNumber(),
+        toBlock: block.toNumber(),
+        topics: [
+          null,
+          `0x000000000000000000000000${identity.slice(2).toLowerCase()}`,
+        ] as string[],
+      })
+      .then((log) => {
+        const { name, args, signature, topic } = contractInterface.parseLog(
+          log[0]
+        );
+        const event = {
+          name,
+          values: args,
+          signature,
+          topic,
+        } as unknown as AttributeChangedEvent | DelegateChangedEvent;
+        updateDocument(event, did, document, block.toNumber());
 
-    resolve(event.values.previousChange);
-  }).catch((error) => {
-    reject(error);
+        resolve(event.values.previousChange);
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
-});
 
 export const query = (
-  document: IDIDDocument, selector: DocumentSelector,
+  document: IDIDDocument,
+  selector: DocumentSelector
 ): IPublicKey | IServiceEndpoint | IAuthentication | undefined => {
   const attrName = Object.keys(selector)[0] as keyof DocumentSelector;
   const attributes = Object.values(document[attrName]);
@@ -251,9 +269,13 @@ export const query = (
   }
   const filter = Object.entries(
     selector[attrName] as
-    Partial<IPublicKey> | Partial<IAuthentication> | Partial<IServiceEndpoint>,
+      | Partial<IPublicKey>
+      | Partial<IAuthentication>
+      | Partial<IServiceEndpoint>
   );
-  return attributes.find((a) => filter.every(([prop, val]) => a[prop] && a[prop] === val));
+  return attributes.find((a) =>
+    filter.every(([prop, val]) => a[prop] && a[prop] === val)
+  );
 };
 
 /**
@@ -271,9 +293,9 @@ export const fetchDataFromEvents = async (
   registrySettings: Required<RegistrySettings>,
   contract: Contract,
   provider: providers.Provider,
-  selector?: DocumentSelector,
+  selector?: DocumentSelector
 ): Promise<void> => {
-  const [, , identity] = did.split(':');
+  const identity = addressOf(did);
   let nextBlock;
   let topBlock;
   try {
@@ -285,15 +307,17 @@ export const fetchDataFromEvents = async (
 
   if (nextBlock) {
     document.owner = await contract.owners(identity);
-  } else {
+  } else if (identity) {
     document.owner = identity;
   }
 
-  const contractInterface = new ethers.utils.Interface(JSON.stringify(registrySettings.abi));
+  const contractInterface = new ethers.utils.Interface(
+    JSON.stringify(registrySettings.abi)
+  );
   const { address } = registrySettings;
   while (
-    nextBlock.toNumber() !== 0
-    && nextBlock.toNumber() >= document.topBlock.toNumber()
+    nextBlock.toNumber() !== 0 &&
+    nextBlock.toNumber() >= document.topBlock.toNumber()
   ) {
     // eslint-disable-next-line no-await-in-loop
     nextBlock = await getEventsFromBlock(
@@ -302,7 +326,7 @@ export const fetchDataFromEvents = async (
       document,
       provider,
       contractInterface,
-      address,
+      address
     );
     if (selector) {
       const attribute = query(document as unknown as IDIDDocument, selector);
@@ -312,6 +336,36 @@ export const fetchDataFromEvents = async (
     }
   }
   document.topBlock = topBlock;
+};
+
+/**
+ * The logs from ERC1056 have a validity and a block number
+ */
+interface ILogWithValidityAndBlock {
+  validity?: BigNumber;
+  block?: number;
+}
+
+/**
+ * Makes a copy of a log event and remove the validity and block
+ * The log is used to construct DID Document,
+ * but we don't want to include validity and block in DID Document.
+ * It ,akes a copy of the logs so as to not remove from the original log
+ * (as that log maybe need those properties elsewhere)
+ * @param log log event from ERC1056
+ * @returns copy of log without validity and block
+ */
+const copyAndRemoveValidityAndBlock = <T extends ILogWithValidityAndBlock>(
+  log: T
+): Omit<T, 'validity' | 'block'> => {
+  const copy = { ...log };
+  if (log.block) {
+    delete copy.block;
+  }
+  if (log.validity) {
+    delete copy.validity;
+  }
+  return copy;
 };
 
 /**
@@ -325,12 +379,11 @@ export const fetchDataFromEvents = async (
 export const wrapDidDocument = (
   did: string,
   document: IDIDLogData,
-  context = 'https://www.w3.org/ns/did/v1',
+  context = 'https://www.w3.org/ns/did/v1'
 ): IDIDDocument => {
   const now = BigNumber.from(Math.floor(new Date().getTime() / 1000));
 
-  const publicKey: IPublicKey[] = [
-  ];
+  const publicKey: IPublicKey[] = [];
 
   const authentication = [
     {
@@ -352,33 +405,31 @@ export const wrapDidDocument = (
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.publicKey) {
     const pubKey = document.publicKey[key];
-    if (pubKey.validity.gt(now)) {
-      const pubKeyCopy = { ...pubKey };
-      delete pubKeyCopy.validity;
-      delete pubKeyCopy.block;
-      didDocument.publicKey.push(pubKeyCopy);
+    const pubKeyValidity = pubKey.validity?.gt(now);
+    if (pubKeyValidity) {
+      const pubKeyCopy = copyAndRemoveValidityAndBlock(pubKey);
+      didDocument.publicKey.push(pubKeyCopy as IPublicKey);
     }
   }
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.authentication) {
     const authenticator = document.authentication[key];
-    if (authenticator.validity.gt(now)) {
-      const authenticatorCopy = { ...authenticator };
-      delete authenticatorCopy.validity;
-      delete authenticatorCopy.block;
-      didDocument.authentication.push(authenticatorCopy);
+    const authenticatorValidity = authenticator.validity?.gt(now);
+    if (authenticatorValidity) {
+      const authenticatorCopy = copyAndRemoveValidityAndBlock(authenticator);
+      didDocument.authentication.push(authenticatorCopy as IAuthentication);
     }
   }
 
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const key in document.service) {
     const serviceEndpoint = document.service[key];
-    if (serviceEndpoint.validity.gt(now)) {
-      const serviceEndpointCopy = { ...serviceEndpoint };
-      delete serviceEndpointCopy.validity;
-      delete serviceEndpointCopy.block;
-      didDocument.service.push(serviceEndpointCopy);
+    const serviceEndpointValidity = serviceEndpoint.validity?.gt(now);
+    if (serviceEndpointValidity) {
+      const serviceEndpointCopy =
+        copyAndRemoveValidityAndBlock(serviceEndpoint);
+      didDocument.service.push(serviceEndpointCopy as IServiceEndpoint);
     }
   }
 
@@ -392,21 +443,21 @@ export const wrapDidDocument = (
  */
 export const mergeLogs = (logs: IDIDLogData[]): IDIDLogData => {
   logs = logs.sort((a, b) => a.topBlock.sub(b.topBlock).toNumber());
-  return logs.reduce(
-    (doc, log) => {
-      doc.service = { ...doc.service, ...log.service };
+  return logs.reduce((doc, log) => {
+    doc.service = { ...doc.service, ...log.service };
 
-      doc.publicKey = { ...doc.publicKey, ...log.publicKey };
+    doc.publicKey = { ...doc.publicKey, ...log.publicKey };
 
-      doc.authentication = { ...doc.authentication, ...log.authentication };
+    doc.authentication = { ...doc.authentication, ...log.authentication };
 
-      return doc;
-    },
-    logs[0],
-  );
+    return doc;
+  }, logs[0]);
 };
 
-export const documentFromLogs = (did: string, logs: IDIDLogData[]): IDIDDocument => {
+export const documentFromLogs = (
+  did: string,
+  logs: IDIDLogData[]
+): IDIDDocument => {
   const mergedLogs: IDIDLogData = mergeLogs(logs);
 
   return wrapDidDocument(did, mergedLogs);

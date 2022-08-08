@@ -4,12 +4,16 @@ import { Methods } from '@ew-did-registry/did';
 import { Operator, EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import { Claims, IClaims } from '../src';
 import {
-  Claims,
-  IClaims,
-} from '../src';
-import { deployRegistry, shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
-import { ProviderSettings, ProviderTypes } from '@ew-did-registry/did-resolver-interface';
+  deployRegistry,
+  shutDownIpfsDaemon,
+  spawnIpfsDaemon,
+} from '../../../tests';
+import {
+  ProviderSettings,
+  ProviderTypes,
+} from '@ew-did-registry/did-resolver-interface';
 
 chai.should();
 
@@ -28,10 +32,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
     const registry = await deployRegistry([userAddress]);
     const store = new DidStore(await spawnIpfsDaemon());
     const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
-    const operator = new Operator(
-      signer,
-      { address: registry },
-    );
+    const operator = new Operator(signer, { address: registry });
     const userDoc = new DIDDocumentFull(userDid, operator);
     claims = new Claims(signer, userDoc, store);
 

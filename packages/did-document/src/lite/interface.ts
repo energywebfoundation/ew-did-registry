@@ -13,10 +13,9 @@ import { BigNumber } from 'ethers';
  * Interface describes the lite version of DID Document with only read functionality
  */
 export interface IDIDDocumentLite {
-
   /**
- * DID used in read methods if not provided explicitly
- */
+   * DID used in read methods if not provided explicitly
+   */
   did: string;
 
   /**
@@ -44,7 +43,9 @@ export interface IDIDDocumentLite {
    * @returns {Promise<boolean>}
    */
   isValidDelegate(
-    delegateType: DelegateTypes, delegateDID: string, did?: string,
+    delegateType: DelegateTypes,
+    delegateDID: string,
+    did?: string
   ): Promise<boolean>;
 
   /**
@@ -59,7 +60,8 @@ export interface IDIDDocumentLite {
    * @returns {object | null}
    */
   readAttribute(
-    selector: DocumentSelector, did?: string,
+    selector: DocumentSelector,
+    did?: string
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined>;
 
   /**
@@ -71,10 +73,7 @@ export interface IDIDDocumentLite {
 
   lastBlock(did?: string): Promise<BigNumber>;
 
-  readFromBlock(
-    did: string,
-    from: BigNumber,
-  ): Promise<IDIDLogData>;
+  readFromBlock(did: string, from: BigNumber): Promise<IDIDLogData>;
 
   fromLogs(logs: IDIDLogData[], did?: string): IDIDDocument;
 }

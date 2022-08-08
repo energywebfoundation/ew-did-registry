@@ -1,10 +1,8 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { assert, expect, use } from 'chai';
 import sinonChai from 'sinon-chai';
-import { Keys } from '@ew-did-registry/keys';
+import { Keys, KeyType } from '@ew-did-registry/keys';
 import { Wallet } from 'ethers';
 import {
-  Algorithms,
   DIDAttribute,
   Encoding,
   IAuthentication,
@@ -25,23 +23,22 @@ use(sinonChai);
 
 const { fail } = assert;
 
-const keys = new Keys({
-  privateKey: '3f8118bf3224a722e55eface0c04bc8bbb7a725b3a6e38744fbfed900bbf3e7b',
-});
+const keys = new Keys({});
 const providerSettings: ProviderSettings = {
   type: ProviderTypes.HTTP,
 };
 const owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
 
-const newOwnerKeys = new Keys({
-  privateKey: 'd2d5411f96d851280a86c5c4ec23698a9fcbc630e4c5e5970d5ca55df99467ed',
-  publicKey: '03c3fdf52c3897c0ee138ec5f3281919a73dbc06a2a57a2ce0c1e76b466be043ac',
-});
-const newOwner = EwSigner.fromPrivateKey(newOwnerKeys.privateKey, providerSettings);
+const newOwnerKeys = new Keys({});
+const newOwner = EwSigner.fromPrivateKey(
+  newOwnerKeys.privateKey,
+  providerSettings
+);
 
 const identity = keys.getAddress();
 const validity = 10 * 60 * 1000;
 const did = `did:ethr:${identity}`;
+const ewcDID = `did:ethr:ewc:${identity}`;
 let operator: Operator;
 let registry: string;
 let registrySettings: RegistrySettings;
@@ -55,6 +52,10 @@ const testSuite = (): void => {
 
   it('readOwnerPubKey should give same publicKey', async () => {
     expect(await operator.readOwnerPubKey(did)).equal(keys.publicKey);
+  });
+
+  it('readOwnerPubKey should give same publicKey for ewc did', async () => {
+    expect(await operator.readOwnerPubKey(ewcDID)).equal(keys.publicKey);
   });
 
   /**
@@ -71,17 +72,17 @@ const testSuite = (): void => {
   it('updating an attribute without providing validity should update the document with maximum validity', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.Secp256k1,
+      algo: KeyType.Secp256k1,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
     };
     await operator.update(did, attribute, updateData);
-    const document: IDIDDocument = await operator.read(did) as IDIDDocument;
+    const document: IDIDDocument = (await operator.read(did)) as IDIDDocument;
 
     expect(document.id).equal(did);
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
@@ -89,7 +90,7 @@ const testSuite = (): void => {
   it('setting public key attribute should update public keys of DID document', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-2' },
@@ -99,40 +100,58 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
 
     const publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey,
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
     );
     expect(publicKey).is.not.undefined;
   });
 
-  it('adding a delegate with a delegation type of VerificationKey should add a public key',
-    async () => {
-      const attribute = DIDAttribute.Authenticate;
-      const delegate = new Wallet(new Keys().privateKey);
-      const updateData = {
-        algo: Algorithms.ED25519,
-        type: PubKeyType.VerificationKey2018,
-        encoding: Encoding.HEX,
-        delegate: delegate.address,
-      };
-      await operator.update(did, attribute, updateData, validity);
-      const document = await operator.read(did);
-      expect(document.id).equal(did);
-      const authMethod = document.publicKey.find(
-        (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
-      );
-      expect(authMethod).include({
-        type: 'Secp256k1VerificationKey2018',
-        controller: did,
-        ethereumAddress: updateData.delegate,
-      });
+  it('setting public key attribute should update public keys of DID document of ewc did', async () => {
+    const attribute = DIDAttribute.PublicKey;
+    const updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-2' },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    const document = await operator.read(ewcDID);
+    expect(document.id).equal(ewcDID);
+
+    const publicKey = document.publicKey.find(
+      (pk) => pk.publicKeyHex === updateData.value.publicKey
+    );
+    expect(publicKey).is.not.undefined;
+  });
+
+  it('adding a delegate with a delegation type of VerificationKey should add a public key', async () => {
+    const attribute = DIDAttribute.Authenticate;
+    const delegate = new Wallet(new Keys().privateKey);
+    const updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    await operator.update(did, attribute, updateData, validity);
+    const document = await operator.read(did);
+    expect(document.id).equal(did);
+    const authMethod = document.publicKey.find(
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
+    );
+    expect(authMethod).include({
+      type: 'Secp256k1VerificationKey2018',
+      controller: did,
+      ethereumAddress: updateData.delegate,
     });
+  });
 
   it(`Adding a delegate with a delegation type of SignatureAuthentication should add a public
        key and reference on it in authentication section of the DID document`, async () => {
     const attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.SignatureAuthentication2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -142,11 +161,11 @@ const testSuite = (): void => {
     expect(document.id).equal(did);
     const publicKeyId = `${did}#delegate-${updateData.type}-${updateData.delegate}`;
     const auth = document.authentication.find(
-      (a) => (a as IAuthentication).publicKey === publicKeyId,
+      (a) => (a as IAuthentication).publicKey === publicKeyId
     );
     expect(auth).not.undefined;
     const publicKey = document.publicKey.find(
-      (pk: { id: string }) => pk.id === publicKeyId,
+      (pk: { id: string }) => pk.id === publicKeyId
     );
     expect(publicKey).include({
       type: 'Secp256k1VerificationKey2018',
@@ -170,16 +189,38 @@ const testSuite = (): void => {
     await operator.update(did, attribute, updateData, validity);
     const document = await operator.read(did);
     expect(document.id).equal(did);
-    expect(document.service.find(
-      (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint,
-    )).not.undefined;
+    expect(
+      document.service.find(
+        (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint
+      )
+    ).not.undefined;
+  });
+
+  it('It should not be possible to add service without service endpoint', async () => {
+    const attribute = DIDAttribute.ServicePoint;
+    const serviceId = 'UserClaimURL2';
+    const updateData: IUpdateData = {
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+      },
+    };
+    try {
+      await operator.update(did, attribute, updateData, validity);
+      fail('Error was not thrown');
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Service Endpoint is required');
+      }
+    }
   });
 
   it('setting attribute on invalid did should throw an error', async () => {
     const invalidDid = `did:${identity}`;
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-3' },
@@ -187,26 +228,28 @@ const testSuite = (): void => {
     try {
       await operator.update(invalidDid, attribute, updateData, validity);
       fail('Error was not thrown');
-    } catch (e) {
-      expect(e.message).to.equal('Invalid DID');
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Invalid DID');
+      }
     }
   });
 
   it('setting attribute with negative validity should throw an error', async () => {
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-4' },
     };
     try {
       await operator.update(did, attribute, updateData, -100);
-      fail(
-        'Error was not thrown',
-      );
-    } catch (e) {
-      expect(e.message).to.equal('Validity must be non negative value');
+      fail('Error was not thrown');
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Validity must be non negative value');
+      }
     }
   });
 
@@ -214,7 +257,7 @@ const testSuite = (): void => {
     // add public key
     let attribute = DIDAttribute.PublicKey;
     let updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-5' },
@@ -224,7 +267,7 @@ const testSuite = (): void => {
     attribute = DIDAttribute.Authenticate;
     const delegate = new Wallet(new Keys().privateKey);
     updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.SignatureAuthentication2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -250,12 +293,52 @@ const testSuite = (): void => {
     expect(document.authentication.length).equal(1);
   });
 
+  it('deactivating of document should revoke all of its attributes for ewc did', async () => {
+    // add public key
+    let attribute = DIDAttribute.PublicKey;
+    let updateData: IUpdateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.VerificationKey2018,
+      encoding: Encoding.HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-5' },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    // add authentication method
+    attribute = DIDAttribute.Authenticate;
+    const delegate = new Wallet(new Keys().privateKey);
+    updateData = {
+      algo: KeyType.ED25519,
+      type: PubKeyType.SignatureAuthentication2018,
+      encoding: Encoding.HEX,
+      delegate: delegate.address,
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    // add service endpoint
+    attribute = DIDAttribute.ServicePoint;
+    const endpoint = 'https://example.com';
+    const serviceId = 'AssetClaimURL2';
+    updateData = {
+      type: attribute,
+      value: {
+        id: `${ewcDID}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
+    };
+    await operator.update(ewcDID, attribute, updateData, validity);
+    await operator.deactivate(ewcDID);
+    const document = await operator.read(ewcDID);
+    expect(document.service).to.be.empty;
+    expect(document.publicKey).to.be.empty;
+    expect(document.authentication.length).equal(1);
+  });
+
   it('delegate update and revocation makes no changes to the document', async () => {
     const attribute = DIDAttribute.Authenticate;
     const keysDelegate = new Keys();
     const delegate = new Wallet(keysDelegate.privateKey);
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       delegate: delegate.address,
@@ -264,7 +347,8 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let authMethod = document.publicKey.find(
-      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).include({
       type: 'Secp256k1VerificationKey2018',
@@ -273,11 +357,16 @@ const testSuite = (): void => {
     });
 
     const delegateDid = `did:ethr:${delegate.address}`;
-    const revoked = await operator.revokeDelegate(did, PubKeyType.VerificationKey2018, delegateDid);
+    const revoked = await operator.revokeDelegate(
+      did,
+      PubKeyType.VerificationKey2018,
+      delegateDid
+    );
     expect(revoked).to.be.true;
     document = await operator.read(did);
     authMethod = document.publicKey.find(
-      (pk: { id: string }) => pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`,
+      (pk: { id: string }) =>
+        pk.id === `${did}#delegate-${updateData.type}-${updateData.delegate}`
     );
     expect(authMethod).to.be.undefined;
   });
@@ -286,7 +375,7 @@ const testSuite = (): void => {
     const keysAttribute = new Keys();
     const attribute = DIDAttribute.PublicKey;
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: keysAttribute.publicKey, tag: 'key-6' },
@@ -295,21 +384,21 @@ const testSuite = (): void => {
     let document = await operator.read(did);
     expect(document.id).equal(did);
     let publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.not.null;
     const revoked = await operator.revokeAttribute(did, attribute, updateData);
     expect(revoked).to.be.true;
     document = await operator.read(did);
     publicKey = document.publicKey.find(
-      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2),
+      (pk) => pk.publicKeyHex === updateData.value.publicKey.slice(2)
     );
     expect(publicKey).to.be.undefined;
   });
 
   it('public key with invalid value should be ignored', async () => {
     const updateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: '0x123abc', tag: 'key-6' },
@@ -319,23 +408,30 @@ const testSuite = (): void => {
   });
 
   it('owner change should lead to expected result', async () => {
-    const newOwnerOperator = new Operator(
-      newOwner,
-      { address: registry },
+    const newOwnerOperator = new Operator(newOwner, { address: registry });
+
+    await operator.changeOwner(
+      `did:ethr:${identity}`,
+      `did:ethr:${newOwnerKeys.getAddress()}`
+    );
+    expect(newOwnerKeys.getAddress()).to.be.eql(
+      await operator.identityOwner(`did:ethr:${identity}`)
     );
 
-    await operator.changeOwner(`did:ethr:${identity}`, `did:ethr:${newOwnerKeys.getAddress()}`);
-    expect(newOwnerKeys.getAddress()).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
-
-    await newOwnerOperator.changeOwner(`did:ethr:${identity}`, `did:ethr:${identity}`);
-    expect(identity).to.be.eql(await operator.identityOwner(`did:ethr:${identity}`));
+    await newOwnerOperator.changeOwner(
+      `did:ethr:${identity}`,
+      `did:ethr:${identity}`
+    );
+    expect(identity).to.be.eql(
+      await operator.identityOwner(`did:ethr:${identity}`)
+    );
   });
 
   it('each identity update should increment its last block', async () => {
     const from = await operator.lastBlock(did);
 
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-1' },
@@ -352,7 +448,7 @@ const testSuite = (): void => {
     const tag = 'key-2';
     const attribute = DIDAttribute.PublicKey;
     const updateData: IUpdateData = {
-      algo: Algorithms.ED25519,
+      algo: KeyType.ED25519,
       type: PubKeyType.VerificationKey2018,
       encoding: Encoding.HEX,
       value: { publicKey: `0x${new Keys().publicKey}`, tag },
@@ -360,7 +456,9 @@ const testSuite = (): void => {
 
     await operator.update(did, attribute, updateData, validity);
     await operator.update(did, attribute, updateData, 0);
-    const pubKey = await operator.readAttribute(did, { publicKey: { id: `${did}#${tag}` } });
+    const pubKey = await operator.readAttribute(did, {
+      publicKey: { id: `${did}#${tag}` },
+    });
 
     expect(pubKey).undefined;
   });
@@ -371,11 +469,12 @@ describe('[RESOLVER PACKAGE]: DID-OPERATOR', function didOperatorTests() {
 
   beforeEach(async () => {
     registry = await deployRegistry([identity, newOwnerKeys.getAddress()]);
-    registrySettings = { method: Methods.Erc1056, abi: ethrReg.abi, address: registry };
-    operator = new Operator(
-      owner,
-      registrySettings,
-    );
+    registrySettings = {
+      method: Methods.Erc1056,
+      abi: ethrReg.abi,
+      address: registry,
+    };
+    operator = new Operator(owner, registrySettings);
     await operator.create();
   });
 

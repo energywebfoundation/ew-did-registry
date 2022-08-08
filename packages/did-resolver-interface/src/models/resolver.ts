@@ -1,9 +1,5 @@
-import {
-  utils,
-  BigNumber,
-  providers,
-  ContractInterface,
-} from 'ethers';
+/* eslint-disable no-shadow */
+import { utils, BigNumber, providers, ContractInterface } from 'ethers';
 import { Methods } from '@ew-did-registry/did';
 
 /**
@@ -45,25 +41,7 @@ export interface IServiceEndpoint {
   validity: BigNumber;
   block: number;
   hash?: string; // hash of the content located at service endpoint
-  [key: string]: string | BigNumber | number | undefined;
-}
-
-/**
- * The interface of DID Document is compliant with W3C specification.
- * https://w3c.github.io/did-core/
- * The link above will be the best point of reference for the interface below, including
- * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
- */
-export interface IDIDDocument {
-  '@context': string;
-  id: string;
-  publicKey: IPublicKey[];
-  authentication: Array<IAuthentication | string>;
-  delegates?: string[];
-  service: IServiceEndpoint[];
-  created?: string;
-  updated?: string;
-  proof?: ILinkedDataProof;
+  [key: string]: string | BigNumber | number | undefined | { nodes: string[] };
 }
 
 export interface IPublicKey {
@@ -99,7 +77,7 @@ export interface ILinkedDataProof {
 
 export enum DidEventNames {
   AttributeChanged = 'DIDAttributeChanged',
-  DelegateChanged = 'DIDDelegateChanged'
+  DelegateChanged = 'DIDDelegateChanged',
 }
 
 /**
@@ -167,4 +145,22 @@ export type DocumentSelector = Partial<{
   publicKey: Partial<IPublicKey>;
   service: Partial<IServiceEndpoint>;
   authentication: Partial<IAuthentication>;
-}>
+}>;
+
+/**
+ * The interface of DID Document is compliant with W3C specification.
+ * https://w3c.github.io/did-core/
+ * The link above will be the best point of reference for the interface below, including
+ * IServiceEndpoint, IPublicKey, IAuthentication, ILinkedDataProof
+ */
+export interface IDIDDocument {
+  '@context': string;
+  id: string;
+  publicKey: IPublicKey[];
+  authentication: Array<IAuthentication | string>;
+  delegates?: string[];
+  service: IServiceEndpoint[];
+  created?: string;
+  updated?: string;
+  proof?: ILinkedDataProof;
+}

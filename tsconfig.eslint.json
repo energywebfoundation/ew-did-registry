@@ -1,0 +1,10 @@
+{
+  "include": [
+    ".eslintrc.js",
+    ".prettierrc.js",
+    "tests/**/*.ts",
+    "typings/**/*.ts",
+    "scripts/**/*.ts",
+    "packages/**/*.ts"
+  ]
+}

@@ -1,5 +1,8 @@
 import { IDID, Methods } from '@ew-did-registry/did';
-import { IDIDDocumentFull, IDIDDocumentLite } from '@ew-did-registry/did-document';
+import {
+  IDIDDocumentFull,
+  IDIDDocumentLite,
+} from '@ew-did-registry/did-document';
 import { IClaimsFactory } from '@ew-did-registry/claims';
 import { IOperator } from '@ew-did-registry/did-resolver-interface';
 import { IKeys } from '@ew-did-registry/keys';

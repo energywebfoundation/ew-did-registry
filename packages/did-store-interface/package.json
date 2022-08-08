@@ -6,9 +6,10 @@
   },
   "description": "The package describes CRUD operations on claims",
   "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -22,5 +23,12 @@
     "name": "EnergyWeb",
     "url": "https://www.energyweb.org/"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
+  }
 }

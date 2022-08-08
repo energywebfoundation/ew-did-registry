@@ -1,6 +1,4 @@
-import {
-  Contract, utils, BigNumber,
-} from 'ethers';
+import { Contract, utils, BigNumber } from 'ethers';
 import {
   DIDAttribute,
   IUpdateData,
@@ -9,7 +7,10 @@ import {
   IUpdateDelegateData,
 } from '@ew-did-registry/did-resolver-interface';
 import {
-  Operator, EwSigner, hexify, addressOf,
+  Operator,
+  EwSigner,
+  hexify,
+  addressOf,
 } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
@@ -29,7 +30,7 @@ export class OfferableIdenitytOperator extends Operator {
   constructor(
     owner: EwSigner,
     settings: RegistrySettings,
-    identityAddr: string,
+    identityAddr: string
   ) {
     super(owner, settings);
     this.identity = new Contract(identityAddr, identityAbi, owner);
@@ -42,7 +43,7 @@ export class OfferableIdenitytOperator extends Operator {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   async changeOwner(
     identityDID: string,
-    newOwnerDid: string,
+    newOwnerDid: string
   ): Promise<boolean> {
     throw new Error('Not supported');
   }
@@ -63,7 +64,7 @@ export class OfferableIdenitytOperator extends Operator {
     await this.identity.offer(
       new Interface(identityAbi).encodeFunctionData('offer', [offerTo]),
       this.settings.address,
-      0,
+      0
     );
     return true;
   }
@@ -73,7 +74,7 @@ export class OfferableIdenitytOperator extends Operator {
     did: string,
     didAttribute: DIDAttribute,
     updateData: IUpdateData,
-    validity?: number,
+    validity?: number
   ): Promise<BigNumber> {
     const identity = addressOf(did);
     const attributeName = this._composeAttributeName(didAttribute, updateData);
@@ -81,19 +82,26 @@ export class OfferableIdenitytOperator extends Operator {
     const bytesOfValue = hexify(
       didAttribute === PublicKey || didAttribute === ServicePoint
         ? (updateData as IUpdateAttributeData).value
-        : (updateData as IUpdateDelegateData).delegate,
+        : (updateData as IUpdateDelegateData).delegate
     );
     const params = [identity, bytesOfAttribute, bytesOfValue];
     if (validity && validity > 0) {
       params.push(validity.toString());
     }
     const data = new Interface(erc1056Abi).encodeFunctionData(method, params);
+    let receipt;
     try {
-      const tx = await this.identity.sendTransaction(this._contract.address, data, 0);
-      const receipt = await tx.wait();
-      return BigNumber.from(receipt.blockNumber);
-    } catch (e) {
-      throw new Error(e);
+      const tx = await this.identity.sendTransaction(
+        this._contract.address,
+        data,
+        0
+      );
+      receipt = await tx.wait();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
+    return BigNumber.from(receipt.blockNumber);
   }
 }

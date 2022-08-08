@@ -1,0 +1,59 @@
+{
+  "name": "@ew-did-registry/revocation",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "The package provides revocation features for claims",
+  "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
+  "types": "./dist/src/index.d.ts",
+  "scripts": {
+    "build": "npm run build:typechain:credentialRevocationRegistry && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
+    "compile": "npm run compile:contracts && npm run build",
+    "test": "../../node_modules/.bin/mocha --timeout 0 -r ts-node/register test/**/*.test.ts",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test \"",
+    "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
+    "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
+    "lint": "../../node_modules/.bin/eslint src/**/*.ts",
+    "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix",
+    "build:typechain:credentialRevocationRegistry": "typechain --target ethers-v5 --out-dir ethers './build/contracts/CredentialRevocationRegistry.json'"
+  },
+  "keywords": [
+    "Energy",
+    "EnergyWeb",
+    "EW",
+    "Revocation"
+  ],
+  "author": {
+    "name": "EnergyWeb",
+    "url": "https://www.energyweb.org/"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@ew-did-registry/credentials-interface": "0.1.0",
+    "@ew-did-registry/did": "0.6.0",
+    "@ew-did-registry/did-ethr-resolver": "0.6.0",
+    "@ew-did-registry/did-resolver-interface": "0.6.0",
+    "@ew-did-registry/keys": "0.6.0",
+    "axios": "^0.27.2",
+    "didkit-wasm-node": "^0.1.6",
+    "ethers": "^5.6.1"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "4.4.1",
+    "@typechain/ethers-v5": "7.2.0",
+    "@types/pako": "^2.0.0",
+    "@types/sinon": "^10.0.2",
+    "@types/sinon-chai": "^3.2.5",
+    "chai": "4.2.0",
+    "didkit-wasm-node": "^0.1.6",
+    "ganache-cli": "^6.12.2",
+    "nock": "^13.2.7",
+    "run-with-testrpc": "0.3.1",
+    "sinon": "^11.1.2",
+    "sinon-chai": "^3.7.0",
+    "solhint": "3.3.4",
+    "typechain": "5.2.0"
+  }
+}

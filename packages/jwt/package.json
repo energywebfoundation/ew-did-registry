@@ -6,10 +6,11 @@
   },
   "description": "The package manages JWTs",
   "main": "./dist/index.js",
+  "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
-    "compile": "../../node_modules/.bin/tsc",
+    "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"
   },
@@ -27,13 +28,21 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/keys": "0.6.0",
-    "@types/jsonwebtoken": "8.5.0",
-    "@types/promise.allsettled": "^1.0.3",
     "base64url": "^3.0.1",
+    "ec-key": "0.0.4",
     "ethereumjs-util": "^7.0.5",
-    "ethers": "^5.4.6",
+    "ethers": "^5.6.1",
     "jsonwebtoken": "^8.5.1",
-    "key-encoder": "^2.0.3",
     "promise.allsettled": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/mocha": "^9.1.1",
+    "@types/promise.allsettled": "^1.0.3",
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   }
 }

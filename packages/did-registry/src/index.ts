@@ -6,7 +6,10 @@ import {
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
 import { IDID, Methods, DID } from '@ew-did-registry/did';
-import { DIDDocumentFactory, IDIDDocumentFull } from '@ew-did-registry/did-document';
+import {
+  DIDDocumentFactory,
+  IDIDDocumentFull,
+} from '@ew-did-registry/did-document';
 import { ClaimsFactory, IClaimsFactory } from '@ew-did-registry/claims';
 import { IJWT, JWT } from '@ew-did-registry/jwt';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
@@ -33,7 +36,7 @@ class DIDRegistry implements IDIDRegistry {
     did: string,
     private operator: IOperator,
     public store: IDidStore,
-    _providerSettings: ProviderSettings,
+    _providerSettings: ProviderSettings
   ) {
     const [, method] = did.split(':');
     this.did.set(did);
@@ -47,7 +50,12 @@ class DIDRegistry implements IDIDRegistry {
 
     this.jwt = new JWT(keys);
     this.document = new DIDDocumentFactory(did).createFull(operator);
-    this.claims = new ClaimsFactory(keys, this.document, store, _providerSettings);
+    this.claims = new ClaimsFactory(
+      keys,
+      this.document,
+      store,
+      _providerSettings
+    );
     this.operator = operator;
     this.providerSettings = _providerSettings;
   }
@@ -81,7 +89,12 @@ class DIDRegistry implements IDIDRegistry {
       return;
     }
     this.document = new DIDDocumentFactory(did).createFull(operator);
-    this.claims = new ClaimsFactory(keys, this.document, this.store, this.providerSettings);
+    this.claims = new ClaimsFactory(
+      keys,
+      this.document,
+      this.store,
+      this.providerSettings
+    );
     this.operator = operator;
   }
 
@@ -105,7 +118,9 @@ class DIDRegistry implements IDIDRegistry {
       if (!encoding) {
         throw new Error('Unknown encoding');
       }
-      const value = pubKey[`publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`] as string;
+      const value = pubKey[
+        `publicKey${encoding[0].toUpperCase()}${encoding.slice(1)}`
+      ] as string;
 
       this.keyStore.set(publicKeyTag, new Keys({ publicKey: value.slice(2) }));
     }

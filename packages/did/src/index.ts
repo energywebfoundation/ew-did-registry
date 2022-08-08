@@ -1,5 +1,5 @@
 import { IDID } from './interface';
-import { DID_SCHEME_PATTERNS, Methods } from './models';
+import { DID_SCHEME_PATTERNS, Methods, Chain } from './models';
 
 /* eslint-disable no-underscore-dangle */
 class DID implements IDID {
@@ -63,38 +63,62 @@ class DID implements IDID {
    * ```
    *
    * @param { Methods } method
+   * @param {string} chain
    * @param {string} id
    *
    * @returns {void}
    */
   // eslint-disable-next-line no-dupe-class-members
-  set(method: Methods | string, id?: string): IDID {
+  set(method: Methods | string, chain?: string, id?: string): IDID {
     if (method.startsWith('did:')) {
       return this._setDid(method);
     }
-    return this._setDid(`did:${method}:${id}`);
+    if (id !== undefined) {
+      return this._setDid(`did:${method}:${chain}:${id}`);
+    }
+    return this._setDid(`did:${method}:${chain}`);
   }
 
   private _setDid(did: string): IDID {
-    const [, method, id] = did.split(':');
-    if (id === undefined) {
-      throw new Error('DID must consist of three parts separated by a colon');
+    if (did.split(':').length > 3) {
+      const [, method, chain, id] = did.split(':');
+      if (id === undefined) {
+        throw new Error('Identity cannot be undefined');
+      }
+      if (!DID_SCHEME_PATTERNS.NETWORK.test(`${method}:${chain}`)) {
+        throw new Error(
+          'Network must not be empty and consist only of lowcase alphanumerical characters'
+        );
+      }
+      if (id !== undefined && !DID_SCHEME_PATTERNS.ID.test(id)) {
+        throw new Error(
+          'Id must consist only of alphanumerical characters, dots, minuses and underscores'
+        );
+      }
+      this._dids.set(method, did);
+      return this;
+    } else {
+      const [, method, id] = did.split(':');
+      if (id === undefined) {
+        throw new Error('DID must consist of three parts separated by a colon');
+      }
+      if (!DID_SCHEME_PATTERNS.NETWORK.test(method)) {
+        throw new Error(
+          'Network must not be empty and consist only of lowcase alphanumerical characters'
+        );
+      }
+      if (!DID_SCHEME_PATTERNS.ID.test(id)) {
+        throw new Error(
+          'Id must consist only of alphanumerical characters, dots, minuses and underscores'
+        );
+      }
+      this._dids.set(method, did);
+      return this;
     }
-    if (!DID_SCHEME_PATTERNS.NETWORK.test(method)) {
-      throw new Error('Network must not be empty and consist only of lowcase alphanumerical characters');
-    }
-    if (!DID_SCHEME_PATTERNS.ID.test(id)) {
-      throw new Error('Id must consist only of alphanumerical characters, dots, minuses and underscores');
-    }
-    this._dids.set(method, did);
-    return this;
   }
 }
 
-export {
-  IDID,
-  DID,
-  Methods,
-};
+export { IDID, DID, Methods, Chain };
 
 export * from './utils/validation';
+export * from './utils/parser';
