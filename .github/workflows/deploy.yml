@@ -28,20 +28,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14.17.6'
           registry-url: https://registry.npmjs.org/
-
-      - name: Configure Git
-        run: |
-          git config --global user.email ${{ secrets.GH_EMAIL }}
-          git config --global user.name ${{ secrets.GH_USER }}
-          git remote set-url origin "https://${{ secrets.GH_TOKEN_CI }}@github.com/energywebfoundation/ew-did-registry.git" > /dev/null 2>&1
-          git reset --hard
-          git fetch -u origin master:master
-          git fetch -u origin development:development
 
       - name: Set npm credentials
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
@@ -63,7 +54,6 @@ jobs:
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RUN_NUMBER: ${{ github.run_number }}
         run: |
@@ -72,7 +62,6 @@ jobs:
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config user.name "GITHUB_ACTION"
@@ -91,7 +80,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: development
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Commit to develop branch and merge to master branch
         run: |
