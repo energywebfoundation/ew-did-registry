@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* remove support for DWN service endpoints ([994bb6f](https://github.com/energywebfoundation/ew-did-registry/commit/994bb6f22f0f7746a96edea52d57628828ed0f74))
+* **serviceEndpoint:** Service should have service endpoint ([67db59a](https://github.com/energywebfoundation/ew-did-registry/commit/67db59ac568ef87a1d2320cc1fd5957b9d81d93c))
+* validate credential status without status list ([4308f21](https://github.com/energywebfoundation/ew-did-registry/commit/4308f21a86ddd543365d9a24f7ffab8903ea0941))
+* **wrapDidDocument:** actually make copy ([68529df](https://github.com/energywebfoundation/ew-did-registry/commit/68529df0a3d8ad209873b40c73e7e13a4e79a629))
+
+
+### Features
+
+* **@ew-did-registry/jwt:** verify ES256 ([028fb9c](https://github.com/energywebfoundation/ew-did-registry/commit/028fb9cd9ad5f123ecd47c5842bf8e5d21e2c022))
+* **build:** config packages webpack ([33ae38d](https://github.com/energywebfoundation/ew-did-registry/commit/33ae38d72027c262c0e80e96c9a7fefc7bb5bd90))
+* **build:** polyfill Node.js modules ([42c5e23](https://github.com/energywebfoundation/ew-did-registry/commit/42c5e23d6c8356ec473d2730beeb1d7b8c3208ed))
+
+
+### BREAKING CHANGES
+
+* **@ew-did-registry/jwt:** JWT initialized from Keys and Signer are non-standard ES256K
+
+
+
+
+
 ## [0.6.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.6.1) (2021-10-08)
 
 **Note:** Version bump only for package @ew-did-registry/did-ethr-resolver

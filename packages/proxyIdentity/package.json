@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/proxyidentity",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "publishConfig": {
     "access": "public"
   },
@@ -24,9 +24,9 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@ew-did-registry/did-ethr-resolver": "0.6.1",
-    "@ew-did-registry/did-resolver-interface": "0.6.0",
-    "@ew-did-registry/keys": "0.6.0",
+    "@ew-did-registry/did-ethr-resolver": "0.7.0",
+    "@ew-did-registry/did-resolver-interface": "0.7.0",
+    "@ew-did-registry/keys": "0.7.0",
     "ethers": "^5.6.1"
   },
   "devDependencies": {

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* fix i and open-zeppelin vulnerabilities ([3dd879e](https://github.com/energywebfoundation/ew-did-registry/commit/3dd879e3b54113ddb075f45afaacf20c169602c7))
+* validate credential status without status list ([4308f21](https://github.com/energywebfoundation/ew-did-registry/commit/4308f21a86ddd543365d9a24f7ffab8903ea0941))
+
+
+### Features
+
+* **@ew-did-registry/jwt:** verify ES256 ([028fb9c](https://github.com/energywebfoundation/ew-did-registry/commit/028fb9cd9ad5f123ecd47c5842bf8e5d21e2c022))
+* **build:** config packages webpack ([33ae38d](https://github.com/energywebfoundation/ew-did-registry/commit/33ae38d72027c262c0e80e96c9a7fefc7bb5bd90))
+* **build:** polyfill Node.js modules ([42c5e23](https://github.com/energywebfoundation/ew-did-registry/commit/42c5e23d6c8356ec473d2730beeb1d7b8c3208ed))
+
+
+### BREAKING CHANGES
+
+* **@ew-did-registry/jwt:** JWT initialized from Keys and Signer are non-standard ES256K
+
+
+
+
+
 ## [0.6.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.1...v0.6.2) (2021-10-21)
 
 **Note:** Version bump only for package @ew-did-registry/proxyidentity

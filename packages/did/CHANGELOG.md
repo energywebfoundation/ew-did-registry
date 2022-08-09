@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* validate credential status without status list ([4308f21](https://github.com/energywebfoundation/ew-did-registry/commit/4308f21a86ddd543365d9a24f7ffab8903ea0941))
+
+
+### Features
+
+* **build:** config packages webpack ([33ae38d](https://github.com/energywebfoundation/ew-did-registry/commit/33ae38d72027c262c0e80e96c9a7fefc7bb5bd90))
+* **build:** separate node and web configs ([aa14bd3](https://github.com/energywebfoundation/ew-did-registry/commit/aa14bd38b4eac92dfa5cf3c5aa574c17bfcd0eac))
+* update `isValidErc1056` to accept DID address with chain name ([90b1c59](https://github.com/energywebfoundation/ew-did-registry/commit/90b1c59c76ad7e0528e969723b960fe0a4d1c9d8))
+
+
+
+
+
 # [0.6.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.5.1...v0.6.0) (2021-10-06)
 
 

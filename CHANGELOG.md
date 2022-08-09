@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/claims:** mv sjcl types to dev deps ([866ddbf](https://github.com/energywebfoundation/ew-did-registry/commit/866ddbf9fd11a4dbeff9dfb1b8e23410f26fd2a9))
+* **@ew-did-registry/credentials-governance:** add vprequest to exchange selection ([be00f68](https://github.com/energywebfoundation/ew-did-registry/commit/be00f680d841975d2c4b950d88ee77eedf02a10d))
+* **@ew-did-registry/credentials-interface:** change status list 2021 entry ([1c815f5](https://github.com/energywebfoundation/ew-did-registry/commit/1c815f550a0b1a5231522d276e5cc6156ae69d99))
+* **@ew-did-registry/credentials-interface:** presentation definitionf from pex ([7992b92](https://github.com/energywebfoundation/ew-did-registry/commit/7992b92bd0cb66f57a62750840875ea9fd5db284))
+* **@ew-did-registry/jwt:** replace deep import from ([10f155b](https://github.com/energywebfoundation/ew-did-registry/commit/10f155b5b3cf4e8446236c4a0788e76c9b0eeaa4))
+* **@ew-did-registry/verification:** join status list errors ([ebcc9b2](https://github.com/energywebfoundation/ew-did-registry/commit/ebcc9b2b96a3261800ec35672419d780961ab1af))
+* add sjcl types to dependencies ([994a040](https://github.com/energywebfoundation/ew-did-registry/commit/994a040b2daf5fb0283ce238ebd6e8fb347993d9))
+* credential extends type ([bca04ff](https://github.com/energywebfoundation/ew-did-registry/commit/bca04ff681ab57b0d063f2e9fea53b8f1b17e7e7))
+* **deploy.yml:** preventing double run ([#348](https://github.com/energywebfoundation/ew-did-registry/issues/348)) ([eb2ebbc](https://github.com/energywebfoundation/ew-did-registry/commit/eb2ebbc922a6aad792018a1db14c8230de190748))
+* fix i and open-zeppelin vulnerabilities ([3dd879e](https://github.com/energywebfoundation/ew-did-registry/commit/3dd879e3b54113ddb075f45afaacf20c169602c7))
+* **GH_Action:** setting permissions on GITHUB_TOKEN to replace Personal Access Token usage ([#345](https://github.com/energywebfoundation/ew-did-registry/issues/345)) ([57e0fe5](https://github.com/energywebfoundation/ew-did-registry/commit/57e0fe57816101797a8623b09dd9a8fb675caff5))
+* **jwy:** remove fractional digits from `exp` ([7e183b8](https://github.com/energywebfoundation/ew-did-registry/commit/7e183b884cc9f012550fbbe6622bea55dc7f02f5))
+* **proofVerifier:** using addressOf() to get address ([b19681f](https://github.com/energywebfoundation/ew-did-registry/commit/b19681fc24074679abb9508db15e41c34448fda2))
+* remove support for DWN service endpoints ([994bb6f](https://github.com/energywebfoundation/ew-did-registry/commit/994bb6f22f0f7746a96edea52d57628828ed0f74))
+* **serviceEndpoint:** Service should have service endpoint ([67db59a](https://github.com/energywebfoundation/ew-did-registry/commit/67db59ac568ef87a1d2320cc1fd5957b9d81d93c))
+* **types:** update pex types ([83b3eb6](https://github.com/energywebfoundation/ew-did-registry/commit/83b3eb6cf8669b5578c85fa93462b0ff0a3ef8ba))
+* validate credential status without status list ([4308f21](https://github.com/energywebfoundation/ew-did-registry/commit/4308f21a86ddd543365d9a24f7ffab8903ea0941))
+* **wrapDidDocument:** actually make copy ([68529df](https://github.com/energywebfoundation/ew-did-registry/commit/68529df0a3d8ad209873b40c73e7e13a4e79a629))
+
+
+### Features
+
+* **@ew-did-registry/claims:** verify assertion by address ([bd38798](https://github.com/energywebfoundation/ew-did-registry/commit/bd387982a8cd094ac278828d819c53205ca3042e))
+* **@ew-did-registry/credentials-interface:** add exchange types ([0083119](https://github.com/energywebfoundation/ew-did-registry/commit/0083119d1e22bbb157a553ef0aef83006617d730))
+* **@ew-did-registry/credentials-interface:** status list types ([b902b07](https://github.com/energywebfoundation/ew-did-registry/commit/b902b07edba1dd3bdd9df124143409f71914399b))
+* **@ew-did-registry/jwt:** verify ES256 ([028fb9c](https://github.com/energywebfoundation/ew-did-registry/commit/028fb9cd9ad5f123ecd47c5842bf8e5d21e2c022))
+* **@ew-did-registry/revocation:** verify credential status ([d848ba6](https://github.com/energywebfoundation/ew-did-registry/commit/d848ba60e5bf73ea821c3aa8de1bad9f57bf0d88))
+* add exchange continue types ([dcbe407](https://github.com/energywebfoundation/ew-did-registry/commit/dcbe407556bde773bd0e26e785a68e16b71345f7))
+* **build:** config packages webpack ([33ae38d](https://github.com/energywebfoundation/ew-did-registry/commit/33ae38d72027c262c0e80e96c9a7fefc7bb5bd90))
+* **build:** polyfill Node.js modules ([42c5e23](https://github.com/energywebfoundation/ew-did-registry/commit/42c5e23d6c8356ec473d2730beeb1d7b8c3208ed))
+* **build:** separate node and web configs ([aa14bd3](https://github.com/energywebfoundation/ew-did-registry/commit/aa14bd38b4eac92dfa5cf3c5aa574c17bfcd0eac))
+* **claim:** add credentialstatus prop to ipublicclaim ([aee7959](https://github.com/energywebfoundation/ew-did-registry/commit/aee7959c294084d3e1832be09cdb63cdbb163ed0))
+* **claim:** add expiration timestamp to public claims ([69b56a4](https://github.com/energywebfoundation/ew-did-registry/commit/69b56a4a82e6eafbfce3dd36f9663cd63bd97dfe))
+* **credentials-interface:** add `credentials-interface` package ([9003e31](https://github.com/energywebfoundation/ew-did-registry/commit/9003e3176355ee88f72a0b7723c6146ef2ac46e8))
+* **credentials-interface:** add exchange type validation ([a70a57c](https://github.com/energywebfoundation/ew-did-registry/commit/a70a57cc52d2a6e9eda46095f9f17afcd350ecca))
+* **credentials-interface:** export utils ([1481a5b](https://github.com/energywebfoundation/ew-did-registry/commit/1481a5b236f6a23cfbb5aaec6a74de5f748317a4))
+* **did:** updatePublicKey and updateDelegate in did ([9b0ba02](https://github.com/energywebfoundation/ew-did-registry/commit/9b0ba020d6bd8faaee1c28f1a0b3ab86e4b753df))
+* **jwt:** add jwt expiration ([4ee1c65](https://github.com/energywebfoundation/ew-did-registry/commit/4ee1c65fac8e74e834f5fc12ecb799607f7ab817))
+* rename vc api exchange ([a36dc3c](https://github.com/energywebfoundation/ew-did-registry/commit/a36dc3cbaee1488bc7e6fde96b3e2ecb818e2601))
+* **revocation:** add cred status to signed data ([eccad52](https://github.com/energywebfoundation/ew-did-registry/commit/eccad522b083ea80d527ebec065e4815224750b7))
+* **revocation:** remove not null check ([9253447](https://github.com/energywebfoundation/ew-did-registry/commit/925344737b67935635b119107d4ae0a59f156b2f))
+* **revocation:** remove onchain claim revocation code ([294da8d](https://github.com/energywebfoundation/ew-did-registry/commit/294da8dc58e7f493cd5e9dac332c41b0f7e49ee4))
+* **revocation:** update naming convention in context to credentials ([b76c93b](https://github.com/energywebfoundation/ew-did-registry/commit/b76c93bd25238f057504dbf098d68cc10c53e5eb))
+* **status-list-entry:** make fetchStatusListCredential public ([2c295a8](https://github.com/energywebfoundation/ew-did-registry/commit/2c295a83070b55b02d53ebe9506d139aaa479f84))
+* update `isValidErc1056` to accept DID address with chain name ([90b1c59](https://github.com/energywebfoundation/ew-did-registry/commit/90b1c59c76ad7e0528e969723b960fe0a4d1c9d8))
+
+
+### BREAKING CHANGES
+
+* **@ew-did-registry/jwt:** JWT initialized from Keys and Signer are non-standard ES256K
+
+
+
+
+
 ## [0.6.2](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.1...v0.6.2) (2021-10-21)
 
 

@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* **@ew-did-registry/claims:** mv sjcl types to dev deps ([866ddbf](https://github.com/energywebfoundation/ew-did-registry/commit/866ddbf9fd11a4dbeff9dfb1b8e23410f26fd2a9))
+* add sjcl types to dependencies ([994a040](https://github.com/energywebfoundation/ew-did-registry/commit/994a040b2daf5fb0283ce238ebd6e8fb347993d9))
+* **proofVerifier:** using addressOf() to get address ([b19681f](https://github.com/energywebfoundation/ew-did-registry/commit/b19681fc24074679abb9508db15e41c34448fda2))
+* validate credential status without status list ([4308f21](https://github.com/energywebfoundation/ew-did-registry/commit/4308f21a86ddd543365d9a24f7ffab8903ea0941))
+
+
+### Features
+
+* **@ew-did-registry/claims:** verify assertion by address ([bd38798](https://github.com/energywebfoundation/ew-did-registry/commit/bd387982a8cd094ac278828d819c53205ca3042e))
+* **@ew-did-registry/jwt:** verify ES256 ([028fb9c](https://github.com/energywebfoundation/ew-did-registry/commit/028fb9cd9ad5f123ecd47c5842bf8e5d21e2c022))
+* **build:** config packages webpack ([33ae38d](https://github.com/energywebfoundation/ew-did-registry/commit/33ae38d72027c262c0e80e96c9a7fefc7bb5bd90))
+* **build:** polyfill Node.js modules ([42c5e23](https://github.com/energywebfoundation/ew-did-registry/commit/42c5e23d6c8356ec473d2730beeb1d7b8c3208ed))
+* **claim:** add credentialstatus prop to ipublicclaim ([aee7959](https://github.com/energywebfoundation/ew-did-registry/commit/aee7959c294084d3e1832be09cdb63cdbb163ed0))
+* **claim:** add expiration timestamp to public claims ([69b56a4](https://github.com/energywebfoundation/ew-did-registry/commit/69b56a4a82e6eafbfce3dd36f9663cd63bd97dfe))
+* **credentials-interface:** add `credentials-interface` package ([9003e31](https://github.com/energywebfoundation/ew-did-registry/commit/9003e3176355ee88f72a0b7723c6146ef2ac46e8))
+* **revocation:** add cred status to signed data ([eccad52](https://github.com/energywebfoundation/ew-did-registry/commit/eccad522b083ea80d527ebec065e4815224750b7))
+* **revocation:** remove not null check ([9253447](https://github.com/energywebfoundation/ew-did-registry/commit/925344737b67935635b119107d4ae0a59f156b2f))
+
+
+### BREAKING CHANGES
+
+* **@ew-did-registry/jwt:** JWT initialized from Keys and Signer are non-standard ES256K
+
+
+
+
+
 ## [0.6.1](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.0...v0.6.1) (2021-10-08)
 
 **Note:** Version bump only for package @ew-did-registry/claims
