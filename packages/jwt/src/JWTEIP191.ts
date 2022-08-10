@@ -72,7 +72,7 @@ export class JWT extends JwtBase implements IJWT {
       if (expirationTimestamp < Date.now()) {
         throw new Error('Expiration timestamp is in the past');
       }
-      payload.exp = Math.trunc(expirationTimestamp / 1000);
+      payload.exp = expirationTimestamp;
     }
     const encodedPayload = base64url(JSON.stringify(payload));
     const msg = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString(

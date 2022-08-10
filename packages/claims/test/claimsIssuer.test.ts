@@ -116,7 +116,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
       Buffer.from(payload, 'base64').toString('utf8')
     );
 
-    expect(decodedPayload.exp).to.eq(Math.trunc(expirationTimestamp / 1000));
+    expect(decodedPayload.exp).to.eq(expirationTimestamp);
   });
 
   it('claim issued by delegate should be verified', async () => {
