@@ -1,23 +1,34 @@
-import Ctl from 'ipfsd-ctl';
 import path from 'path';
-import ipfsHttpModule from 'ipfs-http-client';
+import type { Controller } from 'ipfsd-ctl';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let ipfsd: any;
+let ipfsDaemon: Controller;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function spawnIpfsDaemon(): Promise<any> {
+/**
+ * Spawn local ipfs
+ *
+ * @returns address of spawned ipfs daemon
+ */
+export async function spawnIpfsDaemon(): Promise<string> {
+  // https://github.com/microsoft/TypeScript/issues/43329
+  const ipfsHttpModule = await (eval(`import('ipfs-http-client')`) as Promise<
+    typeof import('ipfs-http-client')
+  >);
   const ipfsBin = path.resolve(__dirname, '../', 'node_modules/.bin', 'jsipfs');
-  ipfsd = await Ctl.createController({
+  const Ctl = await (eval(`import('ipfsd-ctl')`) as Promise<
+    typeof import('ipfsd-ctl')
+  >);
+  ipfsDaemon = await Ctl.createController({
     type: 'js',
     disposable: true,
     test: true,
     ipfsBin,
     ipfsHttpModule,
   });
-  return ipfsd.apiAddr;
+  return ipfsDaemon.apiAddr.toString();
 }
 
 export async function shutDownIpfsDaemon(): Promise<void> {
-  return ipfsd && ipfsd.stop();
+  if (ipfsDaemon !== undefined) {
+    ipfsDaemon.stop();
+  }
 }

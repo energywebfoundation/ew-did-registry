@@ -1,22 +1,24 @@
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import type { Options } from 'ipfs-http-client';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import { DidStore } from '../src/didStore';
 import { shutDownIpfsDaemon, spawnIpfsDaemon } from '../../../tests';
 
 const testSaveGet = function () {
-  it('get() should fetch claim by uri returned from save()', async function () {
-    const claim = 'TEST CLAIM';
-    const cid = await this.store.save(claim);
-    const stored = await this.store.get(cid);
-    expect(stored).equal(claim);
+  it('should persist multiple claims sequentially', async function () {
+    for (const i of '0123456789') {
+      const claim = `TEST CLAIM ${i}`;
+      const cid = await this.store.save(claim);
+      const stored = await this.store.get(cid);
+      expect(stored).equal(claim);
+    }
   });
 
-  it('get() should fetch a big claim by uri returned from save()', async function () {
+  it('should persist big claim', async function () {
     const claim = fs.readFileSync('./test/big-claim.txt').toString('utf8');
     const cid = await this.store.save(claim);
     const stored = await this.store.get(cid);
+    expect(stored.length).equal(claim.length);
     expect(stored).equal(claim);
   });
 };
@@ -26,8 +28,9 @@ describe('[DID-STORE-PACKAGE]', function () {
 
   describe('construct store with config object', async () => {
     before('start ipfs daemon', async function () {
-      const api = await spawnIpfsDaemon();
-      this.store = new DidStore(api);
+      const url = await spawnIpfsDaemon();
+      const opts: Options = { url };
+      this.store = new DidStore(opts);
     });
 
     testSaveGet();
@@ -37,10 +40,10 @@ describe('[DID-STORE-PACKAGE]', function () {
     });
   });
 
-  describe('construct store with node url', async () => {
-    before('start ipfs daemon', async function () {
-      const api = await spawnIpfsDaemon();
-      this.store = new DidStore(api);
+  describe('construct store with ipfs url', async () => {
+    before(async function () {
+      const url = await spawnIpfsDaemon();
+      this.store = new DidStore(url);
     });
 
     testSaveGet();
