@@ -1,4 +1,4 @@
-import { providers, ContractFactory } from 'ethers';
+import { providers, ContractFactory, Wallet } from 'ethers';
 import {
   abi as IMAbi,
   bytecode as IMBytecode,
@@ -13,16 +13,15 @@ import {
 } from '../constants/ERC1056.json';
 import { identityTestSuite } from './offerable.identity.testSuite';
 import { offerableIdentityOperatorTestSuite } from './offerable.identity-operator.testSuite';
-
-const { JsonRpcProvider } = providers;
+import { createWallet, replenish } from '../../../tests/init-ganache';
 
 describe('[PROXY IDENTITY PACKAGE]', function () {
   this.timeout(0);
-  const provider = new JsonRpcProvider('http://localhost:8544');
-  const deployer = provider.getSigner(0);
+  // const provider = new JsonRpcProvider('http://localhost:8544');
 
   before(async function () {
-    const owner = provider.getSigner(1);
+    const deployer = await createWallet();
+    const owner = await createWallet();
 
     const identityFactory = new ContractFactory(
       identityAbi,
@@ -48,7 +47,7 @@ describe('[PROXY IDENTITY PACKAGE]', function () {
 
     Object.assign(this, {
       manager,
-      provider,
+      // provider,
       identityFactory,
       owner,
       erc1056,
