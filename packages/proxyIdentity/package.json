@@ -27,7 +27,7 @@
     "@ew-did-registry/did-ethr-resolver": "0.7.0",
     "@ew-did-registry/did-resolver-interface": "0.7.0",
     "@ew-did-registry/keys": "0.7.0",
-    "ethers": "^5.6.1"
+    "ethers": "^5.7.0"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.4.1",

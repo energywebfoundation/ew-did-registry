@@ -29,9 +29,9 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16.10.0'
+          node-version: 16
           registry-url: https://registry.npmjs.org/
 
       - name: Set npm credentials
