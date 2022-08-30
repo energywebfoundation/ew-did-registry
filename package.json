@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "lerna run test",
-    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 -e 100000 \"lerna run test\" ",
+    "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 --chain.asyncRequestProcessing=\"false\" -e 100000 \"lerna run test\" ",
     "setup": "lerna bootstrap --hoist --ci",
     "build": "rm -rf build docs packages/*/dist && lerna run compile",
     "compile": "lerna run compile",
