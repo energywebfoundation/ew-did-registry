@@ -14,7 +14,7 @@ import {
   ProviderTypes,
   ProviderSettings,
 } from '@ew-did-registry/did-resolver-interface';
-import { ClaimsFactory, IClaimsIssuer, IClaimsUser } from '../src';
+import { ClaimsFactory, IClaimsIssuer, IClaimsUser, IPublicClaim } from '../src';
 import {
   deployRegistry,
   shutDownIpfsDaemon,
@@ -24,6 +24,7 @@ import {
   CredentialStatusPurpose,
   StatusListEntryType,
 } from '@ew-did-registry/credentials-interface';
+import * as jwt from 'jsonwebtoken';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -103,20 +104,19 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   });
 
   it('should add expiration timestamp to issued claim', async () => {
-    const signedClaim = await claimsUser.createPublicClaim({ name: 'John' });
     const expirationTimestamp = Date.now() + 1000;
-    const issuedToken = await claimsIssuer.issuePublicClaim(
-      signedClaim,
-      expirationTimestamp
-    );
+    const unsignedClaim = {
+      claimData: { name: 'John' },
+      did: claimsUser.did,
+      signer: claimsUser.did,
+      exp: expirationTimestamp
+    };
+    const issuedToken = await claimsIssuer.issuePublicClaim(unsignedClaim);
     expect(issuedToken).to.exist;
 
-    const { 1: payload } = issuedToken.split('.');
-    const decodedPayload = JSON.parse(
-      Buffer.from(payload, 'base64').toString('utf8')
-    );
+    const decodedPayload = jwt.decode(issuedToken) as IPublicClaim;
 
-    expect(decodedPayload.exp).to.eq(Math.trunc(expirationTimestamp / 1000));
+    expect(decodedPayload.exp).to.eq(expirationTimestamp);
   });
 
   it('claim issued by delegate should be verified', async () => {
