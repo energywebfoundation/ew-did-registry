@@ -1,0 +1,108 @@
+# This configuration is based on https://github.com/ipfs-cluster/ipfs-cluster/blob/master/docker-compose.yml
+
+version: '3.4'
+
+services:
+  cluster_proxy:
+    container_name: cluster_proxy
+    image: nginx:alpine
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - cluster0
+      - ipfs0
+
+  ##################################################################################
+  ## Cluster PEER 0 ################################################################
+  ##################################################################################
+
+  ipfs0:
+    container_name: ipfs0
+    image: ipfs/go-ipfs:latest
+    expose:
+      - "8080"
+    # ports:
+    #     - "4001:4001" # ipfs swarm - expose if needed/wanted
+    #     - "5001:5001" # ipfs api - expose if needed/wanted
+    #     - "8080:8080" # ipfs gateway - expose if needed/wanted
+    volumes:
+      - ./compose/ipfs0:/data/ipfs
+
+  cluster0:
+    container_name: cluster0
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs0
+    environment:
+      CLUSTER_PEERNAME: cluster0
+      CLUSTER_SECRET: ${CLUSTER_SECRET} # From shell variable if set
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    expose:
+      - "9094"
+      # ports:
+      # Open API port (allows ipfs-cluster-ctl usage on host)
+      # - "127.0.0.1:9094:9094"
+      # The cluster swarm port would need  to be exposed if this container
+      # was to connect to cluster peers on other hosts.
+      # But this is just a testing cluster.
+      # - "9095:9095" # Cluster IPFS Proxy endpoint
+      # - "9096:9096" # Cluster swarm endpoint
+    volumes:
+      - ./compose/cluster0:/data/ipfs-cluster
+
+  ##################################################################################
+  ## Cluster PEER 1 ################################################################
+  ##################################################################################
+
+  # See Cluster PEER 0 for comments (all removed here and below)
+  ipfs1:
+    container_name: ipfs1
+    image: ipfs/go-ipfs:latest
+    volumes:
+      - ./compose/ipfs1:/data/ipfs
+
+  cluster1:
+    container_name: cluster1
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs1
+    environment:
+      CLUSTER_PEERNAME: cluster1
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs1/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    volumes:
+      - ./compose/cluster1:/data/ipfs-cluster
+
+  ##################################################################################
+  ## Cluster PEER 2 ################################################################
+  ##################################################################################
+
+  # See Cluster PEER 0 for comments (all removed here and below)
+  ipfs2:
+    container_name: ipfs2
+    image: ipfs/go-ipfs:latest
+    volumes:
+      - ./compose/ipfs2:/data/ipfs
+
+  cluster2:
+    container_name: cluster2
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs2
+    environment:
+      CLUSTER_PEERNAME: cluster2
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs2/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    volumes:
+      - ./compose/cluster2:/data/ipfs-cluster
+    # For adding more peers, copy PEER 1 and rename things to ipfs2, cluster2.
+    # Keep bootstrapping to cluster0.

@@ -53,7 +53,6 @@ const nodeConfig = merge(baseConfig, {
     base64url: 'base64url',
     sjcl: 'sjcl',
     '@types/sjcl': '@types/sjcl',
-    'ipfs-http-client': 'ipfs-http-client',
   },
 });
 const webConfig = merge(baseConfig, {
