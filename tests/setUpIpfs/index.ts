@@ -11,8 +11,8 @@ export async function spawnIpfs() {
   shudownNodes();
 
   const cluster = execFile(
-    'docker-compose',
-    ['up', '--force-recreate', 'cluster_proxy'],
+    'docker',
+    ['compose', 'up', '--force-recreate', 'cluster_proxy'],
     { cwd: path.join(__dirname) },
     (error) => {
       if (error) {
@@ -45,7 +45,7 @@ export function shutdownIpfs(cluster?: ChildProcess) {
 }
 
 function shudownNodes() {
-  execFileSync('docker-compose', ['down'], {
+  execFileSync('docker', ['compose', 'down'], {
     cwd: path.join(__dirname),
     stdio: 'pipe',
   });

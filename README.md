@@ -43,7 +43,7 @@ npm run build
 
 ### Test
 
-Install docker-compose
+Install docker
 
 ```bash
 npm run test-rpc
