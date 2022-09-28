@@ -11,3 +11,4 @@ dist
 packages/proxyIdentity/index.js
 ethers
 .openzeppelin
+tests/setUpIpfs/compose

@@ -1,4 +1,4 @@
-import { providers, ContractFactory, Wallet } from 'ethers';
+import { ContractFactory } from 'ethers';
 import {
   abi as IMAbi,
   bytecode as IMBytecode,
@@ -13,7 +13,7 @@ import {
 } from '../constants/ERC1056.json';
 import { identityTestSuite } from './offerable.identity.testSuite';
 import { offerableIdentityOperatorTestSuite } from './offerable.identity-operator.testSuite';
-import { createWallet, replenish } from '../../../tests/init-ganache';
+import { createWallet } from '../../../tests/init-ganache';
 
 describe('[PROXY IDENTITY PACKAGE]', function () {
   this.timeout(0);

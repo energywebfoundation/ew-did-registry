@@ -4,12 +4,9 @@ import { Methods } from '@ew-did-registry/did';
 import { Operator, EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import { DIDDocumentFull } from '@ew-did-registry/did-document';
+import { ChildProcess } from 'child_process';
 import { Claims, IClaims } from '../src';
-import {
-  deployRegistry,
-  shutDownIpfsDaemon,
-  spawnIpfsDaemon,
-} from '../../../tests';
+import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
 import {
   ProviderSettings,
   ProviderTypes,
@@ -27,10 +24,12 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
   };
 
   let claims: IClaims;
+  let cluster: ChildProcess;
 
   before(async () => {
     const registry = await deployRegistry([userAddress]);
-    const store = new DidStore(await spawnIpfsDaemon());
+    cluster = await spawnIpfs();
+    const store = new DidStore('http://localhost:8080');
     const signer = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     const operator = new Operator(signer, { address: registry });
     const userDoc = new DIDDocumentFull(userDid, operator);
@@ -40,7 +39,7 @@ describe('[CLAIMS PACKAGE/CLAIMS]', function () {
   });
 
   after(async () => {
-    await shutDownIpfsDaemon();
+    shutdownIpfs(cluster);
   });
 
   it('Claims instance should have public key', async () => {

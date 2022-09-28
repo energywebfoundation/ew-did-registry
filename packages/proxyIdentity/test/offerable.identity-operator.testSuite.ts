@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Keys, KeyType } from '@ew-did-registry/keys';
-import { Contract, ContractFactory, providers, utils } from 'ethers';
+import { Contract, ContractFactory } from 'ethers';
 import {
   DIDAttribute,
   Encoding,
