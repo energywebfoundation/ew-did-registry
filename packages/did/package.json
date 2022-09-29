@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -27,7 +27,7 @@
   },
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@ew-did-registry/keys": "0.7.0",
+    "@ew-did-registry/keys": "0.8.0",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "ts-loader": "^9.2.6",
     "webpack": "^5.68.0",
