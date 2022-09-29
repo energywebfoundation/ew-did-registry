@@ -27,25 +27,24 @@ export class ClaimsIssuer extends Claims implements IClaimsIssuer {
    * @returns { Promise<string> } issued token
    */
   async issuePublicClaim(
-    claim: string | IPublicClaim,
-    expirationTimestamp?: number
+    claim: string | IPublicClaim
   ): Promise<string> {
     if (typeof claim === 'string') {
       claim = this.jwt.decode(claim) as IPublicClaim;
     }
-    const { claimData, did, credentialStatus } = claim;
+    const { claimData, did, credentialStatus, exp } = claim;
     const dataToSign = {
       claimData,
       did,
       signer: this.did,
       ...(credentialStatus && { credentialStatus }),
+      exp,
     };
     const signedToken = await this.jwt.sign(dataToSign, {
       algorithm: Algorithms.ES256,
       issuer: this.did,
       subject: claim.did,
       noTimestamp: true,
-      expirationTimestamp,
     });
     return signedToken;
   }

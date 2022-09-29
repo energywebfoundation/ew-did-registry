@@ -6,11 +6,13 @@ import {
   ethers,
   utils,
   constants,
+  Wallet,
 } from 'ethers';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { createIdentityTests } from './createIdentityTests';
 import { abi as identityAbi } from '../build/contracts/IdentityManager.json';
+import { createWallet } from '../../../tests/init-ganache';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -24,22 +26,21 @@ export function identityTestSuite(): void {
   let manager: Contract;
   let owner: ethers.Signer;
   let ownerAddr: string;
-  let provider: providers.JsonRpcProvider;
   const identityInterface = new utils.Interface(identityAbi);
 
   before(async function () {
-    ({ identityFactory, ownerAddr, manager, owner, provider } = this);
+    ({ identityFactory, ownerAddr, manager, owner } = this);
     ownerAddr = await owner.getAddress();
   });
 
   describe('[Identity Create]', createIdentityTests);
 
   describe('[Identity Transfer]', async () => {
-    let receiver: providers.JsonRpcSigner;
+    let receiver: Wallet;
     let receiverAddr: string;
 
     before(async function () {
-      receiver = provider.getSigner(2);
+      receiver = await createWallet();
       receiverAddr = await receiver.getAddress();
     });
 
@@ -86,14 +87,14 @@ export function identityTestSuite(): void {
     });
 
     it("Can't accept identity offered to other", async () => {
-      const nonReceiver = provider.getSigner(3);
+      const nonReceiver = await createWallet();
 
       await identity.connect(owner).offer(receiverAddr);
       return identity.connect(nonReceiver).acceptOffer().should.be.rejected;
     });
 
     it("Can't reject identity offered to other", async () => {
-      const nonReceiver = provider.getSigner(3);
+      const nonReceiver = await createWallet();
 
       await identity.connect(owner).offer(receiverAddr);
       return identity.connect(nonReceiver).rejectOffer().should.be.rejected;
@@ -115,7 +116,7 @@ export function identityTestSuite(): void {
       expect(await identity.owner()).equal(receiverAddr);
       expect(await manager.identityOwner(identity.address)).equal(receiverAddr);
 
-      const receiver2 = provider.getSigner(3);
+      const receiver2 = await createWallet();
       const receiver2Addr = await receiver2.getAddress();
       await identity.connect(receiver).offer(receiver2Addr);
       await identity.connect(receiver2).acceptOffer();

@@ -10,7 +10,6 @@ import {
 } from '../src';
 import {
   credentialStatus,
-  statusListWithNonRevokedStatus,
   statusListWithRevokedStatus,
 } from './fixtures/credentials';
 

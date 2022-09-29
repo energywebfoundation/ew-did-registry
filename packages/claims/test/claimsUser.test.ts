@@ -19,6 +19,7 @@ import {
   ProviderTypes,
   PubKeyType,
 } from '@ew-did-registry/did-resolver-interface';
+import { ChildProcess } from 'child_process';
 import {
   ClaimsUser,
   IClaimsUser,
@@ -26,11 +27,7 @@ import {
   IProofClaim,
   ProofVerifier,
 } from '../src';
-import {
-  deployRegistry,
-  shutDownIpfsDaemon,
-  spawnIpfsDaemon,
-} from '../../../tests';
+import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -65,6 +62,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   let userClaims: IClaimsUser;
   let store: DidStore;
   let registry: string;
+  let cluster: ChildProcess;
 
   before(async () => {
     registry = await deployRegistry([
@@ -74,7 +72,8 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     ]);
     console.log(`registry: ${registry}`);
 
-    store = new DidStore(await spawnIpfsDaemon());
+    cluster = await spawnIpfs();
+    store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
       new Operator(user, { address: registry })
@@ -91,7 +90,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   });
 
   after(async () => {
-    await shutDownIpfsDaemon();
+    shutdownIpfs(cluster);
   });
 
   it('createPublicClaim should create token with claim data', async () => {

@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'development', 'master' ]
+    branches: ['development', 'master']
   pull_request:
-    branches: [ 'development', 'master' ]
+    branches: ['development', 'master']
 
 jobs:
   cancel-previous:
@@ -29,9 +29,9 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14.17.6'
+          node-version: 16
           registry-url: https://registry.npmjs.org/
 
       - name: Set npm credentials
@@ -66,8 +66,8 @@ jobs:
         run: |
           git config user.name "GITHUB_ACTION"
           npm run publish:release
-        
-  sync_master_to_development_branch :
+
+  sync_master_to_development_branch:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     needs: deploy

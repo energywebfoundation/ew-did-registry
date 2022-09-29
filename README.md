@@ -42,6 +42,9 @@ npm run build
 ```
 
 ### Test
+
+Install docker
+
 ```bash
 npm run test-rpc
 ```

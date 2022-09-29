@@ -54,3 +54,9 @@ export async function replenish(accs: string[]) {
     });
   }
 }
+
+export async function createWallet() {
+  const w = Wallet.createRandom().connect(provider);
+  await replenish([w.address]);
+  return w;
+}

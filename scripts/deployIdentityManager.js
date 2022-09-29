@@ -1,6 +1,6 @@
-const {JsonRpcProvider} = require('ethers/providers');
+const { JsonRpcProvider } = require('ethers/providers');
 
-const {ContractFactory, Wallet} = require('ethers');
+const { ContractFactory, Wallet } = require('ethers');
 const {
   abi,
   bytecode,
@@ -9,11 +9,9 @@ const {
   abi: abiOfferable,
   bytecode: bytecodeOfferable,
 } = require('../packages/proxyIdentity/build/contracts/OfferableIdentity.json');
+const { createWallet } = require('../tests/init-ganache');
 
-const deployer = new Wallet(
-  '9d69bf3c7bda0fc771a59818e5a7f894f3b4fbd3114891db3d4de7f46aa71ca8',
-  new JsonRpcProvider('')
-);
+const deployer = await createWallet();
 
 const identityManagerFactory = new ContractFactory(abi, bytecode, deployer);
 const identityLibraryFactory = new ContractFactory(

@@ -8,6 +8,7 @@ import {
   DIDDocumentFull,
   IDIDDocumentFull,
 } from '@ew-did-registry/did-document';
+import { ChildProcess } from 'child_process';
 import {
   ClaimsFactory,
   IClaimsIssuer,
@@ -15,11 +16,7 @@ import {
   IClaimsVerifier,
   IProofData,
 } from '../src';
-import {
-  deployRegistry,
-  shutDownIpfsDaemon,
-  spawnIpfsDaemon,
-} from '../../../tests';
+import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
 import {
   ProviderSettings,
   ProviderTypes,
@@ -59,6 +56,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   let claimsVerifier: IClaimsVerifier;
 
   let userDoc: IDIDDocumentFull;
+  let cluster: ChildProcess;
 
   before(async () => {
     const registry = await deployRegistry([
@@ -67,7 +65,8 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
       verifierAddress,
     ]);
     console.log(`registry: ${registry}`);
-    const store = new DidStore(await spawnIpfsDaemon());
+    cluster = await spawnIpfs();
+    const store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
       new Operator(user, { address: registry })
@@ -107,7 +106,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   });
 
   after(async () => {
-    await shutDownIpfsDaemon();
+    shutdownIpfs(cluster);
   });
 
   it('workflow of private claim generation, issuance and presentation should pass', async () => {

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Keys, KeyType } from '@ew-did-registry/keys';
-import { Contract, ContractFactory, providers, utils } from 'ethers';
+import { Contract, ContractFactory } from 'ethers';
 import {
   DIDAttribute,
   Encoding,
@@ -13,8 +13,7 @@ import { EwSigner } from '@ew-did-registry/did-ethr-resolver';
 import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@ew-did-registry/did';
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
-
-const { parseEther } = utils;
+import { replenish } from '../../../tests/init-ganache';
 
 const { PublicKey } = DIDAttribute;
 const { Secp256k1, ED25519 } = KeyType;
@@ -31,27 +30,23 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let manager: Contract;
   let owner: EwSigner;
   let ownerAddr: string;
-  let provider: providers.JsonRpcProvider;
   let erc1056: Contract;
 
   before(async function () {
-    ({ identityFactory, manager, provider, erc1056 } = this);
+    ({ identityFactory, manager, erc1056 } = this);
     const providerSettings: ProviderSettings = {
       type: ProviderTypes.HTTP,
     };
     const keys = new Keys();
     owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     ownerAddr = await owner.getAddress();
+    await replenish([ownerAddr]);
 
     const txReceipt = await manager.createIdentity(ownerAddr);
     const identityAddr = (await txReceipt.wait()).events[0].args.identity;
     identity = identityFactory.attach(identityAddr);
     did = `did:${Methods.Erc1056}:${identity.address}`;
 
-    await provider.getSigner(0).sendTransaction({
-      to: ownerAddr,
-      value: parseEther('1.0'),
-    });
     operator = new OfferableIdenitytOperator(
       owner,
       { address: erc1056.address },

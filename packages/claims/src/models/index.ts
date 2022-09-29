@@ -6,7 +6,8 @@ export interface IPublicClaim{
   signer: string;
   claimData: object;
   credentialStatus?: StatusList2021Entry;
-  [key: string]: string | object | undefined;
+  exp?: number,
+  [key: string]: string | object | undefined | number;
 }
 
 export interface IPrivateClaim {
