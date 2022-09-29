@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/did-ipfs-store",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publishConfig": {
     "access": "public"
   },
@@ -26,7 +26,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/did-store-interface": "0.7.0",
+    "@ew-did-registry/did-store-interface": "0.8.0",
     "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web-std/fetch": "^4.1.0",
     "@web-std/file": "^3.0.2",

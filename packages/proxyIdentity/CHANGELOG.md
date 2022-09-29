@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.7.0...v0.8.0) (2022-09-29)
+
+
+### Code Refactoring
+
+* **@ew-did-registry/did-ipfs-store:** change infura ipfs on hosted cluster ([4d5c031](https://github.com/energywebfoundation/ew-did-registry/commit/4d5c031309b5a34bac474c215df83191477495cf))
+
+
+### BREAKING CHANGES
+
+* **@ew-did-registry/did-ipfs-store:** initializer of did store changed from ipfs node url to ipfs cluster root
+
+
+
+
+
 # [0.7.0](https://github.com/energywebfoundation/ew-did-registry/compare/v0.6.2...v0.7.0) (2022-08-09)
 
 
