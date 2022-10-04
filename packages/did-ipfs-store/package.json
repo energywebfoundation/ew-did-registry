@@ -27,7 +27,6 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did-store-interface": "0.8.0",
-    "@nftstorage/ipfs-cluster": "^5.0.1",
     "@web-std/fetch": "^4.1.0",
     "@web-std/file": "^3.0.2",
     "@web-std/form-data": "^3.0.2",
