@@ -1,4 +1,3 @@
-import { Cluster } from '@nftstorage/ipfs-cluster';
 import { IDidStore } from '@ew-did-registry/did-store-interface';
 import fetch from '@web-std/fetch';
 import { FormData } from '@web-std/form-data';
@@ -11,7 +10,12 @@ Object.assign(global, { fetch, File, Blob, FormData });
  * Implements decentralized storage in IPFS cluster. Storing data in cluster allows to provide required degree of data availability
  */
 export class DidStore implements IDidStore {
-  private cluster: Cluster | undefined;
+  private params = this.encodeParams({
+    ...this.encodePinOptions(),
+    'stream-channels': false,
+    'raw-leaves': true,
+    'cid-version': 1,
+  });
 
   /**
    * @param url Ipfs cluster root
@@ -23,9 +27,8 @@ export class DidStore implements IDidStore {
   ) {}
 
   async save(claim: string): Promise<string> {
-    const cluster = await this.getCluster();
     const blob = new Blob([claim]);
-    const { cid } = await cluster.add(blob);
+    const { cid } = await this.add(blob);
     return cid.toString();
   }
 
@@ -41,17 +44,65 @@ export class DidStore implements IDidStore {
     throw new Error('Not supported yet');
   }
 
-  /**
-   * Imports ESM module `ipfs-cluster` from commonjs https://www.typescriptlang.org/docs/handbook/esm-node.html
-   */
-  private async getCluster() {
-    if (!this.cluster) {
-      const { Cluster } = await (eval(
-        `import('@nftstorage/ipfs-cluster')`
-      ) as Promise<typeof import('@nftstorage/ipfs-cluster')>);
-
-      this.cluster = new Cluster(this.url, { headers: this.headers });
+  // Inspired by https://github.com/nftstorage/ipfs-cluster/blob/02a4c1d0f4cbe86557abd738be83bb2de25ccec0/src/index.js#L63
+  private async add(file: File | Blob) {
+    const body = new FormData();
+    body.append('file', file);
+    try {
+      const result = await this.request(body);
+      const data = result[0];
+      return { ...data, cid: data.cid };
+    } catch (err) {
+      const error = err as Error & { response?: Response };
+      if (error?.response?.ok) {
+        throw new Error(
+          `failed to parse response body from cluster add ${error?.stack}`
+        );
+      } else {
+        throw error;
+      }
     }
-    return this.cluster;
+  }
+
+  private async request(body: FormData) {
+    const endpoint = new URL('add', this.url);
+    for (const [key, value] of Object.entries(this.params)) {
+      if (value != null) {
+        endpoint.searchParams.set(key, String(value));
+      }
+    }
+
+    const response = await fetch(endpoint.href, {
+      method: 'POST',
+      headers: this.headers,
+      body,
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw Object.assign(
+        new Error(`${response.status}: ${response.statusText}`),
+        { response }
+      );
+    }
+  }
+
+  private encodeParams(options: Record<string, unknown>) {
+    return Object.fromEntries(
+      Object.entries(options).filter(([, v]) => v != null)
+    );
+  }
+
+  private encodePinOptions() {
+    return this.encodeParams({
+      ...this.encodeMetadata(),
+    });
+  }
+
+  private encodeMetadata(metadata: Record<string, string> = {}) {
+    return Object.fromEntries(
+      Object.entries(metadata).map(([k, v]) => [`meta-${k}`, v])
+    );
   }
 }
