@@ -3,6 +3,7 @@ import fetch from '@web-std/fetch';
 import { FormData } from '@web-std/form-data';
 import { File, Blob } from '@web-std/file';
 import axios from 'axios';
+import util from 'util';
 
 Object.assign(global, { fetch, File, Blob, FormData });
 
@@ -36,7 +37,15 @@ export class DidStore implements IDidStore {
     const { data: content } = await axios.get(`${this.url}/ipfs/${cid}`, {
       headers: this.headers,
     });
-    return Buffer.from(content).toString();
+
+    switch (typeof content) {
+      case 'string':
+        return content;
+      case 'object':
+        return JSON.stringify(content);
+      default:
+        throw new Error('Unsupported claim content type');
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
