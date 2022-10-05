@@ -3,6 +3,8 @@ import fetch from '@web-std/fetch';
 import { FormData } from '@web-std/form-data';
 import { File, Blob } from '@web-std/file';
 import axios from 'axios';
+import { values } from 'lodash';
+import { StatusResponse, TrackerStatus } from './ipfs.types';
 
 Object.assign(global, { fetch, File, Blob, FormData });
 
@@ -16,7 +18,6 @@ export class DidStore implements IDidStore {
     'raw-leaves': true,
     'cid-version': 1,
   });
-
   /**
    * @param url Ipfs cluster root
    * @param headers Http request headers
@@ -26,9 +27,22 @@ export class DidStore implements IDidStore {
     private headers: Record<string, string> = {}
   ) {}
 
-  async save(claim: string): Promise<string> {
+  /**
+   * @param claim stringified claim. Supported types of claim content are `string` and `object`
+   * @param pinTimeout Defines how to long to wait for pinning completion before throwing error, seconds
+   */
+  async save(claim: string, pinTimeout = 5): Promise<string> {
     const blob = new Blob([claim]);
     const { cid } = await this.add(blob);
+
+    const { default: waitFor } = await (eval('import(`p-wait-for`)') as Promise<
+      typeof import('p-wait-for')
+    >);
+
+    await waitFor(async () => await this.isPinned(cid), {
+      timeout: { milliseconds: pinTimeout * 1000 },
+    });
+
     return cid.toString();
   }
 
@@ -36,7 +50,39 @@ export class DidStore implements IDidStore {
     const { data: content } = await axios.get(`${this.url}/ipfs/${cid}`, {
       headers: this.headers,
     });
-    return Buffer.from(content).toString();
+
+    switch (typeof content) {
+      case 'string':
+        return content;
+      case 'object':
+        return JSON.stringify(content);
+      default:
+        throw new Error('Unsupported claim content type');
+    }
+  }
+
+  /**
+   * Checks if file is pinned on cluster
+   * @param cid CID
+   */
+  async isPinned(cid: string): Promise<boolean> {
+    return values((await this.status(cid)).peer_map).some(
+      (pinInfo) => pinInfo.status === TrackerStatus.Pinned
+    );
+  }
+
+  /**
+   * Returns pin status
+   * @param cid The CID to get pin status information for
+   */
+  async status(cid: string): Promise<StatusResponse> {
+    const path = `pins/${cid}`;
+
+    const data = await this.request(path, {
+      method: 'GET',
+      params: this.params,
+    });
+    return data;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,7 +95,11 @@ export class DidStore implements IDidStore {
     const body = new FormData();
     body.append('file', file);
     try {
-      const result = await this.request(body);
+      const result = await this.request('add', {
+        method: 'POST',
+        body,
+        params: this.params,
+      });
       const data = result[0];
       return { ...data, cid: data.cid };
     } catch (err) {
@@ -64,16 +114,27 @@ export class DidStore implements IDidStore {
     }
   }
 
-  private async request(body: FormData) {
-    const endpoint = new URL('add', this.url);
-    for (const [key, value] of Object.entries(this.params)) {
+  private async request(
+    path: string,
+    {
+      method,
+      body,
+      params = {},
+    }: {
+      method: string;
+      body?: FormData;
+      params?: Record<string, unknown>;
+    }
+  ) {
+    const endpoint = new URL(path, this.url);
+    for (const [key, value] of Object.entries(params)) {
       if (value != null) {
         endpoint.searchParams.set(key, String(value));
       }
     }
 
     const response = await fetch(endpoint.href, {
-      method: 'POST',
+      method,
       headers: this.headers,
       body,
     });
@@ -81,14 +142,15 @@ export class DidStore implements IDidStore {
     if (response.ok) {
       return await response.json();
     } else {
-      throw Object.assign(
-        new Error(`${response.status}: ${response.statusText}`),
-        { response }
+      throw new Error(
+        `Can not perform ${method} on endpoint ${endpoint.href}:${response.status}: ${response.statusText}`
       );
     }
   }
 
-  private encodeParams(options: Record<string, unknown>) {
+  private encodeParams(
+    options: Record<string, unknown>
+  ): Record<string, unknown> {
     return Object.fromEntries(
       Object.entries(options).filter(([, v]) => v != null)
     );
