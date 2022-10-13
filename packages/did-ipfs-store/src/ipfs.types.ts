@@ -15,3 +15,23 @@ export type PinInfo = {
 export enum TrackerStatus {
   Pinned = 'pinned',
 }
+
+export type PinResponse = {
+  replication_factor_min: number;
+  replication_factor_max: number;
+};
+
+export type AddResponse = {
+  cid: string;
+  name?: string;
+  size?: number | string;
+  bytes?: number | string;
+};
+
+export enum REPLICATION {
+  LOCAL,
+  MIN,
+  MAX,
+}
+
+export const PIN_TIMEOUT = 3;

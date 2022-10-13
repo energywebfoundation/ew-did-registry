@@ -30,8 +30,7 @@
     "@web-std/fetch": "^4.1.0",
     "@web-std/file": "^3.0.2",
     "@web-std/form-data": "^3.0.2",
-    "axios": "^0.27.2",
-    "p-wait-for": "^5.0.0"
+    "axios": "^0.27.2"
   },
   "devDependencies": {
     "@types/node": "^15.12.3",

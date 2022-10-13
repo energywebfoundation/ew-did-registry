@@ -54,6 +54,7 @@ describe('[DID-STORE-PACKAGE]', function () {
 
     after(() => {
       shutdownIpfs(cluster);
+      console.log('cluster has been shutdown');
     });
   });
 
