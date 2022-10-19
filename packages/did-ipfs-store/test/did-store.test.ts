@@ -10,6 +10,7 @@ const testSaveGet = function () {
     for (const i of '0123456789') {
       const claim = `TEST CLAIM ${i}`;
       const cid = await this.store.save(claim);
+      expect(await this.store.isPinned(cid)).true;
       const stored = await this.store.get(cid);
       expect(stored).equal(claim);
     }
@@ -53,6 +54,7 @@ describe('[DID-STORE-PACKAGE]', function () {
 
     after(() => {
       shutdownIpfs(cluster);
+      console.log('cluster has been shutdown');
     });
   });
 

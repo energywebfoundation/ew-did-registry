@@ -2,7 +2,6 @@
 import {
   Contract,
   ContractFactory,
-  providers,
   ethers,
   utils,
   constants,

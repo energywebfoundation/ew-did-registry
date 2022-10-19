@@ -35,6 +35,7 @@
   "devDependencies": {
     "@types/node": "^15.12.3",
     "ganache-cli": "^6.12.2",
+    "lodash": "^4.17.21",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
     "ts-loader": "^9.2.6",
