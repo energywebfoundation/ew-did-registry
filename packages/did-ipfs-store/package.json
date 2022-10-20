@@ -33,8 +33,11 @@
     "axios": "^0.27.2"
   },
   "devDependencies": {
+    "@types/chance": "^1.1.3",
     "@types/node": "^15.12.3",
+    "chance": "^1.1.9",
     "ganache-cli": "^6.12.2",
+    "ipfs-only-hash": "^4.0.0",
     "lodash": "^4.17.21",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "run-with-testrpc": "0.3.1",
