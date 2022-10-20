@@ -73,9 +73,20 @@ export class DidStore implements IDidStore {
    * @param cid CID
    * @param replicationFactor specifies on how many nodes data should be pinned https://ipfscluster.io/documentation/guides/pinning/#replication-factors
    */
-  async isPinned(cid: string, replicationFactor = REPLICATION.MIN): Promise<boolean> {
-    const { replication_factor_min, replication_factor_max } =
-      await this.allocations(cid);
+  async isPinned(
+    cid: string,
+    replicationFactor = REPLICATION.MIN
+  ): Promise<boolean> {
+    const response = await this.allocations(cid);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return false;
+      } else {
+        throw new Error(response.statusText);
+      }
+    }
+    const allocations = (await response.json()) as PinResponse;
+    const { replication_factor_min, replication_factor_max } = allocations;
     const expectedReplicationFactor =
       replicationFactor === REPLICATION.LOCAL
         ? 1
@@ -97,11 +108,15 @@ export class DidStore implements IDidStore {
   async status(cid: string): Promise<StatusResponse> {
     const path = `pins/${cid}`;
 
-    const data = await this.request<StatusResponse>(path, {
+    const response = await this.request(path, {
       method: 'GET',
       params: this.params,
     });
-    return data;
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -114,13 +129,15 @@ export class DidStore implements IDidStore {
     const body = new FormData();
     body.append('file', file);
     try {
-      const result = await this.request<AddResponse[]>('add', {
+      const response = await this.request('add', {
         method: 'POST',
         body,
         params: this.params,
       });
-
-      const data = result[0];
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = (await response.json())[0];
       return { ...data, cid: data.cid };
     } catch (err) {
       const error = err as Error & { response?: Response };
@@ -140,7 +157,7 @@ export class DidStore implements IDidStore {
     });
   }
 
-  private async request<T>(
+  private async request(
     path: string,
     {
       method,
@@ -151,7 +168,7 @@ export class DidStore implements IDidStore {
       body?: FormData;
       params?: Record<string, unknown>;
     }
-  ) {
+  ): Promise<Response> {
     const endpoint = new URL(path, this.url);
     for (const [key, value] of Object.entries(params)) {
       if (value != null) {
@@ -159,24 +176,20 @@ export class DidStore implements IDidStore {
       }
     }
 
-    const response = await fetch(endpoint.href, {
+    return fetch(endpoint.href, {
       method,
       headers: this.headers,
       body,
     });
-
-    if (response.ok) {
-      return (await response.json()) as T;
-    } else {
-      throw new Error(
-        `Can not perform ${method} on endpoint ${endpoint.href}:${response.status}: ${response.statusText}`
-      );
-    }
   }
 
-  private async allocations(cid: string): Promise<PinResponse> {
+  private async allocations(cid: string): Promise<Response> {
     const path = `allocations/${cid}`;
-    return this.request(path, { method: 'GET', params: this.params });
+
+    return this.request(path, {
+      method: 'GET',
+      params: this.params,
+    });
   }
 
   private encodeParams(

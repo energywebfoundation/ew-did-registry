@@ -1,11 +1,20 @@
 import { expect } from 'chai';
+import { Chance } from 'chance';
+import Hash from 'ipfs-only-hash';
 import * as fs from 'fs';
 import { DidStore } from '../src/didStore';
 import { shutdownIpfs, spawnIpfs } from '../../../tests';
 import { ChildProcess } from 'child_process';
 import { credential } from './verifiable-credential';
 
+const chance = new Chance();
+
 const testSaveGet = function () {
+  it('pin status of not persisted data should be false', async function () {
+    const cid = await Hash.of(chance.string());
+    expect(await this.store.isPinned(cid)).false;
+  });
+
   it('should persist multiple claims sequentially', async function () {
     for (const i of '0123456789') {
       const claim = `TEST CLAIM ${i}`;
@@ -60,9 +69,13 @@ describe('[DID-STORE-PACKAGE]', function () {
 
   xdescribe('energy web ipfs', async () => {
     before(async function () {
-      const url = '';
-      const Authorization = `Basic ${Buffer.from('').toString('base64')}`;
-      this.store = new DidStore(url, {
+      const IPFS_CLUSTER_ROOT = '';
+      const IPFS_CLUSTER_USER = '';
+      const IPFS_CLUSTER_PASSWORD = '';
+      const Authorization = `Basic ${Buffer.from(
+        `${IPFS_CLUSTER_USER}:${IPFS_CLUSTER_PASSWORD}`
+      ).toString('base64')}`;
+      this.store = new DidStore(IPFS_CLUSTER_ROOT, {
         Authorization,
       });
     });
