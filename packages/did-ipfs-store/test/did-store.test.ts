@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { Chance } from 'chance';
 import Hash from 'ipfs-only-hash';
 import * as fs from 'fs';
@@ -6,6 +7,9 @@ import { DidStore } from '../src/didStore';
 import { shutdownIpfs, spawnIpfs } from '../../../tests';
 import { ChildProcess } from 'child_process';
 import { credential } from './verifiable-credential';
+import { ContentNotFound } from '../src/errorrs';
+
+chai.use(chaiAsPromised);
 
 const chance = new Chance();
 
@@ -13,6 +17,11 @@ const testSaveGet = function () {
   it('pin status of not persisted data should be false', async function () {
     const cid = await Hash.of(chance.string());
     expect(await this.store.isPinned(cid)).false;
+  });
+
+  it('get() should throw error if data was not persisted', async function () {
+    const cid = await Hash.of(chance.string());
+    return expect(this.store.get(cid)).to.be.rejectedWith(ContentNotFound);
   });
 
   it('should persist multiple claims sequentially', async function () {
@@ -63,7 +72,6 @@ describe('[DID-STORE-PACKAGE]', function () {
 
     after(() => {
       shutdownIpfs(cluster);
-      console.log('cluster has been shutdown');
     });
   });
 

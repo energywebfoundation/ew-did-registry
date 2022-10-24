@@ -2,7 +2,7 @@ import { IDidStore } from '@ew-did-registry/did-store-interface';
 import fetch from '@web-std/fetch';
 import { FormData } from '@web-std/form-data';
 import { Blob } from '@web-std/file';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { values } from 'lodash';
 import {
   AddResponse,
@@ -13,6 +13,7 @@ import {
   REPLICATION,
 } from './ipfs.types';
 import { waitFor } from './utils';
+import { ContentNotFound } from './errorrs';
 
 /**
  * Implements decentralized storage in IPFS cluster. Storing data in cluster allows to provide required degree of data availability
@@ -31,7 +32,7 @@ export class DidStore implements IDidStore {
   constructor(
     private url: string,
     private headers: Record<string, string> = {}
-  ) {}
+  ) { }
 
   /**
    * @param claim stringified claim. Supported types of claim content are `string` and `object`
@@ -54,9 +55,22 @@ export class DidStore implements IDidStore {
   }
 
   async get(cid: string): Promise<string> {
-    const { data: content } = await axios.get(`${this.url}/ipfs/${cid}`, {
-      headers: this.headers,
-    });
+    let content: any;
+    try {
+      ({ data: content } = await axios.get(`${this.url}/ipfs/${cid}`, {
+        headers: this.headers,
+      }));
+    } catch (e) {
+      const { response } = <AxiosError>e;
+      // 504 is the expected response code when IPFS gateway is unable to provide content within time limit
+      // https://github.com/ipfs/specs/blob/main/http-gateways/PATH_GATEWAY.md#504-gateway-timeout
+      // In other words, this is the expected response code if the traversal of the DHT fails to find the content
+      if (response?.status === 504) {
+        throw new ContentNotFound(cid, response.statusText);
+      } else {
+        throw e;
+      }
+    }
 
     switch (typeof content) {
       case 'string':
@@ -91,8 +105,8 @@ export class DidStore implements IDidStore {
       replicationFactor === REPLICATION.LOCAL
         ? 1
         : replicationFactor === REPLICATION.MIN
-        ? replication_factor_min
-        : replication_factor_max;
+          ? replication_factor_min
+          : replication_factor_max;
 
     return (
       values((await this.status(cid)).peer_map).filter(
