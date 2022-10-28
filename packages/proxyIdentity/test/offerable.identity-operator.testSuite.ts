@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Keys, KeyType } from '@ew-did-registry/keys';
-import { Contract, ContractFactory } from 'ethers';
+import { Contract, ContractFactory, Wallet } from 'ethers';
 import {
   DIDAttribute,
   Encoding,
@@ -14,6 +14,7 @@ import { Methods } from '@ew-did-registry/did-resolver-interface/node_modules/@e
 import { Suite } from 'mocha';
 import { OfferableIdenitytOperator } from '../src/offerableIdentityOperator';
 import { replenish } from '../../../tests/init-ganache';
+import { OnlyOwnerAllowed } from '../src/errors';
 
 const { PublicKey } = DIDAttribute;
 const { Secp256k1, ED25519 } = KeyType;
@@ -31,12 +32,12 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
   let owner: EwSigner;
   let ownerAddr: string;
   let erc1056: Contract;
+  const providerSettings: ProviderSettings = {
+    type: ProviderTypes.HTTP,
+  };
 
-  before(async function () {
+  beforeEach(async function () {
     ({ identityFactory, manager, erc1056 } = this);
-    const providerSettings: ProviderSettings = {
-      type: ProviderTypes.HTTP,
-    };
     const keys = new Keys();
     owner = EwSigner.fromPrivateKey(keys.privateKey, providerSettings);
     ownerAddr = await owner.getAddress();
@@ -52,6 +53,19 @@ export function offerableIdentityOperatorTestSuite(this: Suite): void {
       { address: erc1056.address },
       identity.address
     );
+  });
+
+  it('updating of non-owned identity should be rejected', async () => {
+    const updateData = {
+      algo: Secp256k1,
+      type: VerificationKey2018,
+      encoding: HEX,
+      value: { publicKey: `0x${new Keys().publicKey}`, tag: 'key-0' },
+    };
+    const did = `did:${Methods.Erc1056}:${Wallet.createRandom().address}`;
+    return expect(
+      operator.update(did, PublicKey, updateData, validity)
+    ).rejectedWith(OnlyOwnerAllowed);
   });
 
   it('public key can be added', async () => {
