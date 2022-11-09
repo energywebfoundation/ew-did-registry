@@ -50,14 +50,14 @@ module.exports = {
     },
     volta: {
       provider: function () {
-          return new HDWalletProvider(
-              'private key of the deployer to execute transaction',
-              'https://volta-rpc.energyweb.org'
-          );
+        return new HDWalletProvider(
+          'private key of the deployer to execute transaction',
+          'https://volta-rpc.energyweb.org'
+        );
       },
       network_id: 73799,
       timeoutBlocks: 200,
-      networkCheckTimeout: 10000
+      networkCheckTimeout: 10000,
     },
 
     // Another network with more advanced options...
