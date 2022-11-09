@@ -9,13 +9,16 @@
   "browser": "dist/index.esm.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
-    "compile": "npm run compile:contracts && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
+    "compile": "npm run compile:contracts && npm run build:typechain && copyfiles build/contracts/*.json dist && webpack --config ../../webpack.config.js",
+    "build:typechain": "npm run build:typechain:identitymanager",
+    "build:typechain:identitymanager": "typechain --target ethers-v5 --out-dir ethers './build/contracts/IdentityManager.json'",
     "test-rpc": "run-with-testrpc -m \"candy maple cake sugar pudding cream honey rich smooth crumble sweet treat\" --port 8544 --accounts 20 --networkId=9 --gasLimit=10000000 \"npm run test\" ",
     "test": "../../node_modules/.bin/mocha -r ts-node/register test/*test.ts",
     "compile:contracts": "npm run lint:contracts && ../../node_modules/.bin/truffle compile",
     "lint:contracts": "solhint --formatter unix --fix \"contracts/**/*.sol\"",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix",
+    "transfer:identitymanager": "node -r ts-node/register ./scripts/transfer-ownership-identitymanager",
     "truffle": "rm -rf build/contracts && ts-node test/truffle/upgradeContract.ts && truffle test test/truffle/IdentityManager.upgrade.test.ts && rm -rf contracts/IdentityManagerUpgradeTest.sol"
   },
   "author": {
