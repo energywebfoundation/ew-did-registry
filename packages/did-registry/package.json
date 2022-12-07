@@ -41,12 +41,12 @@
     "@ew-did-registry/proxyidentity": "0.8.0"
   },
   "devDependencies": {
-    "ganache-cli": "^6.12.2",
-    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ganache-cli": "6.12.2",
+    "node-polyfill-webpack-plugin": "1.1.4",
     "run-with-testrpc": "0.3.1",
-    "ts-loader": "^9.2.6",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-merge": "^5.8.0"
+    "ts-loader": "9.2.6",
+    "webpack": "5.68.0",
+    "webpack-cli": "4.9.2",
+    "webpack-merge": "5.8.0"
   }
 }

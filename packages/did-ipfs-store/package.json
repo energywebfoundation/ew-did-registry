@@ -27,25 +27,25 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@ew-did-registry/did-store-interface": "0.8.0",
-    "@web-std/fetch": "^4.1.0",
-    "@web-std/file": "^3.0.2",
-    "@web-std/form-data": "^3.0.2",
-    "axios": "^0.27.2"
+    "@web-std/fetch": "4.1.0",
+    "@web-std/file": "3.0.2",
+    "@web-std/form-data": "3.0.2",
+    "axios": "0.27.2"
   },
   "devDependencies": {
-    "@types/chance": "^1.1.3",
-    "@types/node": "^15.12.3",
-    "chai-as-promised": "^7.1.1",
-    "chance": "^1.1.9",
-    "ganache-cli": "^6.12.2",
-    "ipfs-only-hash": "^4.0.0",
-    "lodash": "^4.17.21",
-    "node-polyfill-webpack-plugin": "^1.1.4",
+    "@types/chance": "1.1.3",
+    "@types/node": "15.12.3",
+    "chai-as-promised": "7.1.1",
+    "chance": "1.1.9",
+    "ganache-cli": "6.12.2",
+    "ipfs-only-hash": "4.0.0",
+    "lodash": "4.17.21",
+    "node-polyfill-webpack-plugin": "1.1.4",
     "run-with-testrpc": "0.3.1",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.9.1",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-merge": "^5.8.0"
+    "ts-loader": "9.2.6",
+    "ts-node": "10.9.1",
+    "webpack": "5.68.0",
+    "webpack-cli": "4.9.2",
+    "webpack-merge": "5.8.0"
   }
 }
