@@ -28,7 +28,7 @@
   "dependencies": {
     "@ew-did-registry/did": "0.8.0",
     "@ew-did-registry/keys": "0.8.0",
-    "ethers": "^5.7.0"
+    "ethers": "^5.7.2"
   },
   "devDependencies": {
     "node-polyfill-webpack-plugin": "^1.1.4",

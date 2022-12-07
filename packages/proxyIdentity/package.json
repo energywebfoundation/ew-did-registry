@@ -30,14 +30,14 @@
     "@ew-did-registry/did-ethr-resolver": "0.8.0",
     "@ew-did-registry/did-resolver-interface": "0.8.0",
     "@ew-did-registry/keys": "0.8.0",
-    "ethers": "^5.7.0"
+    "ethers": "^5.7.2"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "4.4.1",
-    "@openzeppelin/contracts-upgradeable": "4.4.1",
-    "@openzeppelin/truffle-upgrades": "1.10.0",
-    "@truffle/deployer": "3.2.61",
-    "@truffle/hdwallet-provider": "1.7.0",
+    "@openzeppelin/contracts": "4.8.0",
+    "@openzeppelin/contracts-upgradeable": "4.8.0",
+    "@openzeppelin/truffle-upgrades": "1.17.0",
+    "@truffle/deployer": "3.2.105",
+    "@truffle/hdwallet-provider": "2.1.2",
     "chai": "4.2.0",
     "chai-arrays": "2.2.0",
     "chai-as-promised": "7.1.1",
