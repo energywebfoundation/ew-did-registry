@@ -56,7 +56,7 @@
     "del": "5.1.0",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
-    "ethers": "^5.7.0",
+    "ethers": "^5.7.2",
     "ganache-cli": "^6.12.2",
     "husky": "3.1.0",
     "i": "^0.3.7",
@@ -67,9 +67,9 @@
     "run-with-testrpc": "0.3.1",
     "truffle": "^5.2.4",
     "tsify": "4.0.1",
-    "typedoc": "^0.20.34",
-    "typedoc-plugin-markdown": "3.6.0",
-    "typescript": "^4.2.3",
+    "typedoc": "^0.23.21",
+    "typedoc-plugin-markdown": "^3.14.0",
+    "typescript": "^4.9.3",
     "wait-on": "^6.0.1"
   },
   "husky": {
