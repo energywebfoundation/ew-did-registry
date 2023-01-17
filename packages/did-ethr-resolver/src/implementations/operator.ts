@@ -150,8 +150,16 @@ export class Operator extends Resolver implements IOperator {
     if (validity < 0) {
       throw new Error('Validity must be non negative value');
     }
-    if (didAttribute === ServicePoint && !updateData.value?.serviceEndpoint) {
-      throw new Error('Service Endpoint is required');
+    if (didAttribute === ServicePoint) {
+      if (!updateData.value?.serviceEndpoint) {
+        throw new Error('Service Endpoint is required');
+      }
+      const userDIDDoc = await this.read(did);
+      for (const svc of userDIDDoc.service) {
+        if (svc.serviceEndpoint === updateData.value?.serviceEndpoint) {
+          throw new Error('Service Endpoint already exist');
+        }
+      }
     }
     return this._sendTransaction(
       method,
