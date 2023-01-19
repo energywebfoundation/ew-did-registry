@@ -18,7 +18,11 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { ChildProcess } from 'child_process';
 import DIDRegistry from '../src';
-import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
+import {
+  deployRegistry,
+  shutdownIpfsCluster,
+  spawnIpfsCluster,
+} from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -66,7 +70,7 @@ describe('[REGISTRY PACKAGE]', function () {
       issuerAddress,
       verifierAddress,
     ]);
-    cluster = await spawnIpfs();
+    cluster = await spawnIpfsCluster();
     const store: DidStore = new DidStore('http://localhost:8080');
 
     userOperator = new Operator(user, { address: registry });
@@ -105,7 +109,7 @@ describe('[REGISTRY PACKAGE]', function () {
   });
 
   after(async () => {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
   });
 
   it('user public claim should be issued and verified', async () => {

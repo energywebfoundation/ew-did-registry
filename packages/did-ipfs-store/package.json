@@ -37,6 +37,7 @@
     "@types/node": "^15.12.3",
     "chai-as-promised": "^7.1.1",
     "chance": "^1.1.9",
+    "dotenv": "^16.0.3",
     "ganache-cli": "^6.12.2",
     "ipfs-only-hash": "^4.0.0",
     "lodash": "^4.17.21",

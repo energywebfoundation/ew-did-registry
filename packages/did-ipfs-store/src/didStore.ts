@@ -2,134 +2,68 @@ import { IDidStore } from '@ew-did-registry/did-store-interface';
 import fetch from '@web-std/fetch';
 import { FormData } from '@web-std/form-data';
 import { Blob } from '@web-std/file';
-import axios, { AxiosError } from 'axios';
-import { values } from 'lodash';
-import {
-  AddResponse,
-  PinResponse,
-  StatusResponse,
-  TrackerStatus,
-  PIN_TIMEOUT,
-  REPLICATION,
-} from './ipfs.types';
-import { waitFor } from './utils';
-import { ContentNotFound } from './errorrs';
+import { AbortErrorName, ContentNotFound } from './errorrs';
+import { IpfsClientOptions } from './ipfs.types';
 
 /**
- * Implements decentralized storage in IPFS cluster. Storing data in cluster allows to provide required degree of data availability
+ * Implements decentralized storage in IPFS
  */
 export class DidStore implements IDidStore {
+  private headers?: Headers | Record<string, string>;
+  private apiPath: string;
+  private readonly DEFAULT_GET_TIMEOUT = 30000;
+  private readonly DEFAULT_IPFS_API_PATH = 'ipfs';
+
   private params = this.encodeParams({
-    ...this.encodePinOptions(),
     'stream-channels': false,
     'raw-leaves': true,
     'cid-version': 1,
   });
   /**
-   * @param url Ipfs cluster root
-   * @param headers Http request headers
+   * @param baseUrl Base url of IPFS API endpoint
+   * @param opts Connection options of endpoint exposing IPFS API. When connecting to IPFS gateway only `get` method should be used
    */
-  constructor(
-    private url: string,
-    private headers: Record<string, string> = {}
-  ) { }
+  constructor(private baseUrl: string | URL, opts: IpfsClientOptions = {}) {
+    const { headers, apiPath } = opts;
+    this.headers = headers;
+    this.apiPath = apiPath || this.DEFAULT_IPFS_API_PATH;
+  }
 
   /**
-   * @param claim stringified claim. Supported types of claim content are `string` and `object`
-   * @param waitForPinned checker of claim availability. Replication of claim requires time. This parameter allows to configure degree of availability after `save` returns. By default `save` waits until claim is pinned on `replication_factor_min` nodes
+   * @param claim stringified content
    */
-  async save(
-    claim: string,
-    waitForPinned?: (cid: string) => Promise<void>
-  ): Promise<string> {
+  async save(claim: string): Promise<string> {
     const blob = new Blob([claim]);
-    let { cid } = await this.add(blob);
-    cid = cid.toString();
+    const { cid } = await this.add(blob);
 
-    if (!waitForPinned) {
-      waitForPinned = async (cid) => await this.waitForPinned(cid);
-    }
-    await waitForPinned(cid);
-
-    return cid;
+    return cid.toString();
   }
 
-  async get(cid: string): Promise<string> {
-    let content: any;
+  /**
+   * Looks up content identified by `cid`. If no content found during `timeout`, then `ContentNotFound` error is thrown.
+   * @param cid CID of the content
+   * @param timeout time limit for getting response, milliseconds
+   * @returns stringified content
+   */
+  async get(cid: string, timeout = this.DEFAULT_GET_TIMEOUT): Promise<string> {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), timeout);
+
     try {
-      ({ data: content } = await axios.get(`${this.url}/ipfs/${cid}`, {
-        headers: this.headers,
-      }));
-    } catch (e) {
-      const { response } = <AxiosError>e;
-      // 504 is the expected response code when IPFS gateway is unable to provide content within time limit
-      // https://github.com/ipfs/specs/blob/main/http-gateways/PATH_GATEWAY.md#504-gateway-timeout
-      // In other words, this is the expected response code if the traversal of the DHT fails to find the content
-      if (response?.status === 504) {
+      const response = await this.request(`${this.apiPath}/${cid}`, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+      const status = response.status;
+      if (status !== 200) {
         throw new ContentNotFound(cid, response.statusText);
-      } else {
-        throw e;
       }
-    }
-
-    switch (typeof content) {
-      case 'string':
-        return content;
-      case 'object':
-        return JSON.stringify(content);
-      default:
-        throw new Error('Unsupported claim content type');
-    }
-  }
-
-  /**
-   * Checks if file is pinned on cluster
-   * @param cid CID
-   * @param replicationFactor specifies on how many nodes data should be pinned https://ipfscluster.io/documentation/guides/pinning/#replication-factors
-   */
-  async isPinned(
-    cid: string,
-    replicationFactor = REPLICATION.MIN
-  ): Promise<boolean> {
-    const response = await this.allocations(cid);
-    if (!response.ok) {
-      if (response.status === 404) {
-        return false;
-      } else {
-        throw new Error(response.statusText);
+      return response.text();
+    } catch (e) {
+      if ((<Error>e).name === AbortErrorName) {
+        throw new ContentNotFound(cid, `Timeout ${timeout} msec expired`);
       }
-    }
-    const allocations = (await response.json()) as PinResponse;
-    const { replication_factor_min, replication_factor_max } = allocations;
-    const expectedReplicationFactor =
-      replicationFactor === REPLICATION.LOCAL
-        ? 1
-        : replicationFactor === REPLICATION.MIN
-          ? replication_factor_min
-          : replication_factor_max;
-
-    return (
-      values((await this.status(cid)).peer_map).filter(
-        (pinInfo) => pinInfo.status === TrackerStatus.Pinned
-      ).length >= expectedReplicationFactor
-    );
-  }
-
-  /**
-   * Returns pin status
-   * @param cid The CID to get pin status information for
-   */
-  async status(cid: string): Promise<StatusResponse> {
-    const path = `pins/${cid}`;
-
-    const response = await this.request(path, {
-      method: 'GET',
-      params: this.params,
-    });
-    if (response.ok) {
-      return response.json();
-    } else {
-      throw new Error(response.statusText);
+      throw e;
     }
   }
 
@@ -165,25 +99,21 @@ export class DidStore implements IDidStore {
     }
   }
 
-  private async waitForPinned(cid: string): Promise<void> {
-    await waitFor(async () => await this.isPinned(cid), {
-      timeout: PIN_TIMEOUT * 1000,
-    });
-  }
-
   private async request(
     path: string,
     {
       method,
       body,
       params = {},
+      signal,
     }: {
       method: string;
       body?: FormData;
       params?: Record<string, unknown>;
+      signal?: AbortSignal;
     }
   ): Promise<Response> {
-    const endpoint = new URL(path, this.url);
+    const endpoint = new URL(path, this.baseUrl);
     for (const [key, value] of Object.entries(params)) {
       if (value != null) {
         endpoint.searchParams.set(key, String(value));
@@ -194,15 +124,7 @@ export class DidStore implements IDidStore {
       method,
       headers: this.headers,
       body,
-    });
-  }
-
-  private async allocations(cid: string): Promise<Response> {
-    const path = `allocations/${cid}`;
-
-    return this.request(path, {
-      method: 'GET',
-      params: this.params,
+      signal,
     });
   }
 
@@ -211,18 +133,6 @@ export class DidStore implements IDidStore {
   ): Record<string, unknown> {
     return Object.fromEntries(
       Object.entries(options).filter(([, v]) => v != null)
-    );
-  }
-
-  private encodePinOptions() {
-    return this.encodeParams({
-      ...this.encodeMetadata(),
-    });
-  }
-
-  private encodeMetadata(metadata: Record<string, string> = {}) {
-    return Object.fromEntries(
-      Object.entries(metadata).map(([k, v]) => [`meta-${k}`, v])
     );
   }
 }
