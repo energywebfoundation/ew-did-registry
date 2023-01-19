@@ -27,7 +27,11 @@ import {
   IProofClaim,
   ProofVerifier,
 } from '../src';
-import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
+import {
+  deployRegistry,
+  shutdownIpfsCluster,
+  spawnIpfsCluster,
+} from '../../../tests';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -72,7 +76,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
     ]);
     console.log(`registry: ${registry}`);
 
-    cluster = await spawnIpfs();
+    cluster = await spawnIpfsCluster();
     store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
@@ -90,7 +94,7 @@ describe('[CLAIMS PACKAGE/USER CLAIMS]', function () {
   });
 
   after(async () => {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
   });
 
   it('createPublicClaim should create token with claim data', async () => {

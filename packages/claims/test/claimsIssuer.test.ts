@@ -20,7 +20,11 @@ import {
   IClaimsUser,
   IPublicClaim,
 } from '../src';
-import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
+import {
+  deployRegistry,
+  shutdownIpfsCluster,
+  spawnIpfsCluster,
+} from '../../../tests';
 import {
   CredentialStatusPurpose,
   StatusListEntryType,
@@ -64,7 +68,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   before(async () => {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
-    cluster = await spawnIpfs();
+    cluster = await spawnIpfsCluster();
     const store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
@@ -93,7 +97,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   });
 
   after(async () => {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
   });
 
   it('both signed and unsigned claims can be issued', async () => {
