@@ -30,7 +30,7 @@
   "dependencies": {
     "bn.js": "5.2.0",
     "ec-key": "0.0.4",
-    "eciesjs": "^0.3.4",
+    "eciesjs": "^0.3.16",
     "elliptic": "^6.5.2",
     "ethers": "^5.7.2",
     "key-encoder": "^2.0.3"
