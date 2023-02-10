@@ -20,7 +20,7 @@ const testSuite = function () {
     const infuraCid = cidPinnedInInfura;
     const claim = await this.gateway.get(infuraCid);
     const clusterCid = await this.cluster.save(claim);
-    expect(await this.cluster.get(infuraCid)).equal(claim);
+    expect(await this.cluster.get(infuraCid, 120000)).equal(claim);
     expect(await this.cluster.get(clusterCid)).equal(claim);
   });
 
