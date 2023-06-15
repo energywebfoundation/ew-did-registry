@@ -1,6 +1,10 @@
-import { ICredentialStatus, ICredentialSubject, IProof } from '@sphereon/pex';
-import { ICredential } from '@sphereon/pex/dist/main/lib/types';
-import { ICredentialContextType } from '@sphereon/pex/dist/main/lib/types/SSI.types';
+import {
+  ICredential,
+  ICredentialStatus,
+  ICredentialSubject,
+  IProof,
+  ICredentialContextType,
+} from '@sphereon/ssi-types';
 import { EIP712Proof } from './eip712proof.types';
 
 export type CredentialSubject = ICredentialSubject;
