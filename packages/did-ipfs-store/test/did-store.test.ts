@@ -20,15 +20,15 @@ const testSuite = function () {
     const infuraCid = cidPinnedInInfura;
     const claim = await this.gateway.get(infuraCid);
     const clusterCid = await this.cluster.save(claim);
-    expect(await this.cluster.get(infuraCid, 120000)).equal(claim);
-    expect(await this.cluster.get(clusterCid)).equal(claim);
+    expect(await this.cluster.get(infuraCid)).equal(claim);
+    expect(await this.cluster.get(clusterCid, 60_000)).equal(claim);
   });
 
   it('get() should throw error if data was not persisted', async function () {
     const cid = await Hash.of(chance.string());
     return Promise.all([
-      expect(this.cluster.get(cid)).to.be.rejectedWith(ContentNotFound),
-      expect(this.gateway.get(cid)).to.be.rejectedWith(ContentNotFound),
+      expect(this.cluster.get(cid, 1_000)).to.be.rejectedWith(ContentNotFound),
+      expect(this.gateway.get(cid, 1_000)).to.be.rejectedWith(ContentNotFound),
     ]);
   });
 
