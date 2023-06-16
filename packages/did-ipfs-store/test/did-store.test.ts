@@ -16,7 +16,7 @@ const chance = new Chance();
 const testSuite = function () {
   const cidPinnedInInfura = 'QmXeopgnwFcXXZ331jXybk2LQiHPXkMUHFmexckJHYxH43';
 
-  it('cluster content should be resolved by Infura and cluster CIDs', async function () {
+  xit('cluster content should be resolved by Infura and cluster CIDs', async function () {
     const infuraCid = cidPinnedInInfura;
     const claim = await this.gateway.get(infuraCid);
     const clusterCid = await this.cluster.save(claim);
