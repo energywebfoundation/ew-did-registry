@@ -50,7 +50,7 @@
     "@sphereon/pex": "^2.0.1",
     "@sphereon/pex-models": "^2.0.2",
     "@sphereon/ssi-types": "^0.11.0",
-    "@types/lodash": "^4.14.181",
+    "@types/lodash": "^4.14.195",
     "joi": "^17.6.0",
     "lodash": "^4.17.21"
   }
