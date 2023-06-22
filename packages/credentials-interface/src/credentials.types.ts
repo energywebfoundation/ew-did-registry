@@ -21,6 +21,7 @@ export enum CredentialType {
   EWFRole = 'EWFRole',
 }
 export interface Credential<T extends CredentialSubject> extends ICredential {
+  id: string;
   '@context': ICredentialContextType[];
   credentialSubject: T;
   credentialStatus?: StatusList2021Entry;
