@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.8.0
+      - uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
 
@@ -47,6 +47,10 @@ jobs:
 
       - name: Npm run test
         run: npm run test-rpc
+        env:
+          IPFS_CLUSTER_BASE_URL: ${{ secrets.IPFS_CLUSTER_BASE_URL }}
+          IPFS_CLUSTER_USER: ${{ secrets.IPFS_CLUSTER_USER }}
+          IPFS_CLUSTER_PASSWORD: ${{ secrets.IPFS_CLUSTER_PASSWORD }}
 
       - name: Output Run number
         run: echo ${{ github.run_number }}

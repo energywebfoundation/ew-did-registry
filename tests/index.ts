@@ -1,2 +1,2 @@
 export * from './init-ganache';
-export * from './setUpIpfs';
+export * from './setUpIpfsCluster';

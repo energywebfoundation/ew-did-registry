@@ -31,12 +31,12 @@
     "base64url": "^3.0.1",
     "ec-key": "0.0.4",
     "ethereumjs-util": "^7.0.5",
-    "ethers": "^5.7.0",
-    "jsonwebtoken": "^8.5.1",
-    "promise.allsettled": "^1.0.2"
+    "ethers": "^5.7.2",
+    "jsonwebtoken": "^9.0.0",
+    "promise.allsettled": "^1.0.6"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "8.5.0",
+    "@types/jsonwebtoken": "8.5.9",
     "@types/mocha": "^9.1.1",
     "@types/promise.allsettled": "^1.0.3",
     "node-polyfill-webpack-plugin": "^1.1.4",

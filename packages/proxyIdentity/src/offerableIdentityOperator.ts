@@ -14,6 +14,7 @@ import {
 } from '@ew-did-registry/did-ethr-resolver';
 import { abi as identityAbi } from '../build/contracts/OfferableIdentity.json';
 import { abi as erc1056Abi } from '../constants/ERC1056.json';
+import { OnlyOwnerAllowed } from './errors';
 
 const { Interface, formatBytes32String } = utils;
 const { PublicKey, ServicePoint } = DIDAttribute;
@@ -28,7 +29,7 @@ export class OfferableIdenitytOperator extends Operator {
    * @param identityAddr - Address of controlled offerable identity
    */
   constructor(
-    owner: EwSigner,
+    private owner: EwSigner,
     settings: RegistrySettings,
     identityAddr: string
   ) {
@@ -40,6 +41,10 @@ export class OfferableIdenitytOperator extends Operator {
     throw new Error('Not supported');
   }
 
+  async getOwnerAddress() {
+    return this.owner.getAddress();
+  }
+
   /* eslint-disable @typescript-eslint/no-unused-vars */
   async changeOwner(
     identityDID: string,
@@ -47,6 +52,7 @@ export class OfferableIdenitytOperator extends Operator {
   ): Promise<boolean> {
     throw new Error('Not supported');
   }
+
   /* eslint-enable @typescript-eslint/no-unused-vars */
 
   /**
@@ -77,6 +83,9 @@ export class OfferableIdenitytOperator extends Operator {
     validity?: number
   ): Promise<BigNumber> {
     const identity = addressOf(did);
+    if (!(await this.identityOwner(did) === this.identity.address)) {
+      throw new OnlyOwnerAllowed(identity, await this.getOwnerAddress());
+    }
     const attributeName = this._composeAttributeName(didAttribute, updateData);
     const bytesOfAttribute = formatBytes32String(attributeName);
     const bytesOfValue = hexify(

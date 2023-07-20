@@ -16,7 +16,11 @@ import {
   IClaimsVerifier,
   IProofData,
 } from '../src';
-import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
+import {
+  deployRegistry,
+  shutdownIpfsCluster,
+  spawnIpfsCluster,
+} from '../../../tests';
 import {
   ProviderSettings,
   ProviderTypes,
@@ -65,7 +69,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
       verifierAddress,
     ]);
     console.log(`registry: ${registry}`);
-    cluster = await spawnIpfs();
+    cluster = await spawnIpfsCluster();
     const store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
@@ -106,7 +110,7 @@ describe('[CLAIMS PACKAGE/FACTORY CLAIMS]', function () {
   });
 
   after(async () => {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
   });
 
   it('workflow of private claim generation, issuance and presentation should pass', async () => {

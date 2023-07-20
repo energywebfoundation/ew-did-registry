@@ -2,7 +2,7 @@ export interface IDidStore {
   /**
    * stores data in decentralized store
    *
-   * @param claim {string} stringified claim
+   * @param claim {string} stringified claim. Supported types of claim content are `string` and `object`
    */
   save(claim: string): Promise<string>;
 

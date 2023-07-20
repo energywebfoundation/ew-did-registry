@@ -7,8 +7,9 @@ dist
 *.d.ts
 !typings/**/*.d.ts
 .npmrc
-.log
+**/*.log
 packages/proxyIdentity/index.js
 ethers
 .openzeppelin
-tests/setUpIpfs/compose
+tests/setUpIpfsCluster/compose
+packages/did-ipfs-store/test/.env

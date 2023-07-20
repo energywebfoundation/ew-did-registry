@@ -7,7 +7,7 @@ import waitOn from 'wait-on';
  *
  * @returns uri of the cluster root
  */
-export async function spawnIpfs() {
+export async function spawnIpfsCluster() {
   shudownNodes();
 
   const cluster = execFile(
@@ -31,12 +31,12 @@ export async function spawnIpfs() {
 
     return cluster;
   } catch (error) {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
     throw error;
   }
 }
 
-export function shutdownIpfs(cluster?: ChildProcess) {
+export function shutdownIpfsCluster(cluster?: ChildProcess) {
   shudownNodes();
 
   if (cluster !== undefined) {

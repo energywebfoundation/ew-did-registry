@@ -216,6 +216,36 @@ const testSuite = (): void => {
     }
   });
 
+  it('Should not add service endpoint if it exists in service section of the DID document', async () => {
+    const attribute = DIDAttribute.ServicePoint;
+    const endpoint = 'https://test.algo.com';
+    const serviceId = 'UserClaimURL1';
+    const updateData: IUpdateData = {
+      type: attribute,
+      value: {
+        id: `${did}#service-${serviceId}`,
+        type: 'ClaimStore',
+        serviceEndpoint: endpoint,
+      },
+    };
+    await operator.update(did, attribute, updateData, validity);
+    const document = await operator.read(did);
+    expect(document.id).equal(did);
+    expect(
+      document.service.find(
+        (sv: { serviceEndpoint: string }) => sv.serviceEndpoint === endpoint
+      )
+    ).not.undefined;
+
+    try {
+      await operator.update(did, attribute, updateData, validity);
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Service Endpoint already exist');
+      }
+    }
+  });
+
   it('setting attribute on invalid did should throw an error', async () => {
     const invalidDid = `did:${identity}`;
     const attribute = DIDAttribute.PublicKey;

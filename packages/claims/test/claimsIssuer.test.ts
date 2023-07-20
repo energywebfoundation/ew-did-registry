@@ -20,12 +20,16 @@ import {
   IClaimsUser,
   IPublicClaim,
 } from '../src';
-import { deployRegistry, shutdownIpfs, spawnIpfs } from '../../../tests';
+import {
+  deployRegistry,
+  shutdownIpfsCluster,
+  spawnIpfsCluster,
+} from '../../../tests';
 import {
   CredentialStatusPurpose,
   StatusListEntryType,
 } from '@ew-did-registry/credentials-interface';
-import * as jwt from 'jsonwebtoken';
+import { decode } from 'jsonwebtoken';
 import { ChildProcess } from 'child_process';
 
 chai.use(chaiAsPromised);
@@ -64,7 +68,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   before(async () => {
     const registry = await deployRegistry([userAddress, issuerAddress]);
     console.log(`registry: ${registry}`);
-    cluster = await spawnIpfs();
+    cluster = await spawnIpfsCluster();
     const store = new DidStore('http://localhost:8080');
     userDoc = new DIDDocumentFull(
       userDid,
@@ -93,7 +97,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
   });
 
   after(async () => {
-    shutdownIpfs(cluster);
+    shutdownIpfsCluster(cluster);
   });
 
   it('both signed and unsigned claims can be issued', async () => {
@@ -119,7 +123,7 @@ describe('[CLAIMS PACKAGE/ISSUER CLAIMS]', function () {
     const issuedToken = await claimsIssuer.issuePublicClaim(unsignedClaim);
     expect(issuedToken).to.exist;
 
-    const decodedPayload = jwt.decode(issuedToken) as IPublicClaim;
+    const decodedPayload = decode(issuedToken) as IPublicClaim;
 
     expect(decodedPayload.exp).to.eq(expirationTimestamp);
   });
