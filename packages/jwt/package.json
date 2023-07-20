@@ -36,7 +36,7 @@
     "promise.allsettled": "^1.0.6"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "8.5.0",
+    "@types/jsonwebtoken": "8.5.9",
     "@types/mocha": "^9.1.1",
     "@types/promise.allsettled": "^1.0.3",
     "node-polyfill-webpack-plugin": "^1.1.4",
