@@ -1,6 +1,6 @@
 {
   "name": "@ew-did-registry/claims",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "publishConfig": {
     "access": "public"
   },
@@ -29,15 +29,15 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@ew-did-registry/credentials-interface": "0.8.0",
-    "@ew-did-registry/did": "0.8.0",
-    "@ew-did-registry/did-document": "0.8.0",
-    "@ew-did-registry/did-ethr-resolver": "0.8.0",
-    "@ew-did-registry/did-ipfs-store": "0.8.0",
-    "@ew-did-registry/did-resolver-interface": "0.8.0",
-    "@ew-did-registry/did-store-interface": "0.8.0",
-    "@ew-did-registry/jwt": "0.8.0",
-    "@ew-did-registry/keys": "0.8.0",
+    "@ew-did-registry/credentials-interface": "0.9.0",
+    "@ew-did-registry/did": "0.9.0",
+    "@ew-did-registry/did-document": "0.9.0",
+    "@ew-did-registry/did-ethr-resolver": "0.9.0",
+    "@ew-did-registry/did-ipfs-store": "0.9.0",
+    "@ew-did-registry/did-resolver-interface": "0.9.0",
+    "@ew-did-registry/did-store-interface": "0.9.0",
+    "@ew-did-registry/jwt": "0.9.0",
+    "@ew-did-registry/keys": "0.9.0",
     "@types/sjcl": "1.0.30",
     "base64url": "^3.0.1",
     "eciesjs": "^0.4.0",
