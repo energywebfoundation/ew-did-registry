@@ -33,7 +33,7 @@
   "dependencies": {
     "@ew-did-registry/credentials-interface": "0.9.0",
     "@ew-did-registry/did": "0.9.0",
-    "@ew-did-registry/did-ethr-resolver": "0.6.0",
+    "@ew-did-registry/did-ethr-resolver": "0.8.0",
     "@ew-did-registry/did-resolver-interface": "0.9.0",
     "@ew-did-registry/keys": "0.9.0",
     "axios": "^0.27.2",
