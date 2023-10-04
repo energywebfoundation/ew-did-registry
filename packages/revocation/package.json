@@ -33,7 +33,7 @@
   "dependencies": {
     "@ew-did-registry/credentials-interface": "0.9.0",
     "@ew-did-registry/did": "0.9.0",
-    "@ew-did-registry/did-ethr-resolver": "0.6.0",
+    "@ew-did-registry/did-ethr-resolver": "0.9.0",
     "@ew-did-registry/did-resolver-interface": "0.9.0",
     "@ew-did-registry/keys": "0.9.0",
     "axios": "^0.27.2",
@@ -46,7 +46,7 @@
     "@types/pako": "^2.0.0",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
-    "chai": "4.3.8",
+    "chai": "4.3.10",
     "didkit-wasm-node": "^0.1.6",
     "ganache-cli": "^6.12.2",
     "nock": "^13.2.7",
