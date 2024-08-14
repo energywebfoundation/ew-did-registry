@@ -31,7 +31,7 @@
     "base64url": "^3.0.1",
     "ec-key": "0.0.4",
     "ethereumjs-util": "^7.0.5",
-    "ethers": "^5.7.2",
+    "ethers": "^6.0.0",
     "jsonwebtoken": "^9.0.0",
     "promise.allsettled": "^1.0.6"
   },
