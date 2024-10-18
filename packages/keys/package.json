@@ -29,7 +29,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "bn.js": "5.2.1",
-    "ec-key": "0.0.4",
+    "ec-key": "0.0.6",
     "eciesjs": "^0.4.0",
     "elliptic": "^6.5.2",
     "ethers": "^5.7.2",
