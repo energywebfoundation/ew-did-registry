@@ -41,7 +41,7 @@
     "@types/sjcl": "1.0.32",
     "base64url": "^3.0.1",
     "eciesjs": "^0.4.0",
-    "ethers": "^5.7.2",
+    "ethers": "^6.0.0",
     "sjcl": "npm:sjcl-complete@1.0.0"
   },
   "devDependencies": {
