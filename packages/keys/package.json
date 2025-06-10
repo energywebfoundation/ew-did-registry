@@ -32,7 +32,7 @@
     "ec-key": "0.0.4",
     "eciesjs": "^0.4.0",
     "elliptic": "^6.5.2",
-    "ethers": "^5.7.2",
+    "ethers": "^6.0.0",
     "key-encoder": "^2.0.3"
   },
   "devDependencies": {
