@@ -25,6 +25,7 @@ import {
   ProviderSettings,
   ProviderTypes,
 } from '@ew-did-registry/did-resolver-interface';
+import { Context } from 'mocha';
 
 chai.use(chaiAsPromised);
 chai.should();

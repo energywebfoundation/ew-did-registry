@@ -11,6 +11,8 @@ import {
   shutdownIpfsCluster,
   spawnIpfsCluster,
 } from '../../../tests';
+import { Context } from 'mocha';
+
 import {
   ProviderSettings,
   ProviderTypes,

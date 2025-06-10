@@ -19,6 +19,7 @@ import { mergeLogs } from '@ew-did-registry/did-ethr-resolver/src';
 import DIDDocumentFull from '../src/full/documentFull';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { IDIDDocumentFull } from '../src/full/interface';
+import { Context } from 'mocha';
 
 should();
 chai.use(chaiAsPromised);
