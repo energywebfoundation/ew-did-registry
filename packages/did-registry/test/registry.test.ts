@@ -23,6 +23,7 @@ import {
   shutdownIpfsCluster,
   spawnIpfsCluster,
 } from '../../../tests';
+import { Context } from 'mocha';
 
 chai.use(chaiAsPromised);
 chai.should();

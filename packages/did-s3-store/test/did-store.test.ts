@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { DidStore } from '../src';
 import { credential } from './verifiable-credential';
+import { Context } from 'mocha';
 
 chai.use(chaiAsPromised);
 

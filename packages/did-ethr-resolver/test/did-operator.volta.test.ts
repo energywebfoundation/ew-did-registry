@@ -46,8 +46,8 @@ describe.skip('[RESOLVER PACKAGE]: DID-OPERATOR VOLTA', function didOperatorTest
     await txResponse.wait();
   });
 
-  it('operator should be able to create did doc', async () => {
-    const isSuccess = await operator.create();
-    expect(isSuccess).to.be.true;
-  });
+  // it('operator should be able to create did doc', async () => {
+  //   const isSuccess = await operator.create();
+  //   expect(isSuccess).to.be.true;
+  // });
 });

@@ -11,6 +11,7 @@ import { Keys, KeyType } from '@ew-did-registry/keys';
 import { EwSigner, Operator } from '@ew-did-registry/did-ethr-resolver';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { DIDDocumentLite, IDIDDocumentLite } from '../src';
+import { Context } from 'mocha';
 
 describe('[DID DOCUMENT LITE PACKAGE]', function () {
   this.timeout(0);

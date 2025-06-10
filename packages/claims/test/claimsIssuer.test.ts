@@ -31,6 +31,7 @@ import {
 } from '@ew-did-registry/credentials-interface';
 import { decode } from 'jsonwebtoken';
 import { ChildProcess } from 'child_process';
+import { Context } from 'mocha';
 
 chai.use(chaiAsPromised);
 chai.should();

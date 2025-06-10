@@ -8,6 +8,7 @@ import { ContentNotFound, DidStore } from '../src';
 import { shutdownIpfsCluster, spawnIpfsCluster } from '../../../tests';
 import { ChildProcess } from 'child_process';
 import { credential } from './verifiable-credential';
+import { Context } from 'mocha';
 
 chai.use(chaiAsPromised);
 

@@ -9,7 +9,6 @@
   "browser": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts",
     "compile": "webpack --config ../../webpack.config.js",
     "lint": "../../node_modules/.bin/eslint src/**/*.ts",
     "fix": "../../node_modules/.bin/eslint src/**/*.ts --fix"

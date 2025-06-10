@@ -18,6 +18,7 @@ import { createSandbox } from 'sinon';
 import { Operator, ethrReg } from '../src';
 import { deployRegistry } from '../../../tests/init-ganache';
 import { EwSigner } from '../src/implementations';
+import { Context } from 'mocha';
 
 use(sinonChai);
 
