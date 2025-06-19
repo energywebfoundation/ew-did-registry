@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ['development', 'master']
+    branches: ['development', 'master', 'feat/s3-ssi-hub']
   pull_request:
-    branches: ['development', 'master']
+    branches: ['development', 'master', 'feat/s3-ssi-hub']
 
 jobs:
   cancel-previous:
@@ -54,6 +54,14 @@ jobs:
 
       - name: Output Run number
         run: echo ${{ github.run_number }}
+
+      - name: Deploy on feat/s3-ssi-hub branch
+        if: github.ref == 'refs/heads/feat/s3-ssi-hub'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          npm run publish:canary  
 
       - name: Deploy on development branch
         if: github.ref == 'refs/heads/development'
