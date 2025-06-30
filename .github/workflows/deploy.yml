@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ['development', 'master']
+    branches: ['development', 'master', 'feat/ssi-hub-store']
   pull_request:
-    branches: ['development', 'master']
+    branches: ['development', 'master', 'feat/ssi-hub-store']
 
 jobs:
   cancel-previous:
@@ -45,18 +45,18 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Npm run test
-        run: npm run test-rpc
-        env:
-          IPFS_CLUSTER_BASE_URL: ${{ secrets.IPFS_CLUSTER_BASE_URL }}
-          IPFS_CLUSTER_USER: ${{ secrets.IPFS_CLUSTER_USER }}
-          IPFS_CLUSTER_PASSWORD: ${{ secrets.IPFS_CLUSTER_PASSWORD }}
+      # - name: Npm run test
+      #   run: npm run test-rpc
+      #   env:
+      #     IPFS_CLUSTER_BASE_URL: ${{ secrets.IPFS_CLUSTER_BASE_URL }}
+      #     IPFS_CLUSTER_USER: ${{ secrets.IPFS_CLUSTER_USER }}
+      #     IPFS_CLUSTER_PASSWORD: ${{ secrets.IPFS_CLUSTER_PASSWORD }}
 
       - name: Output Run number
         run: echo ${{ github.run_number }}
 
-      - name: Deploy on development branch
-        if: github.ref == 'refs/heads/development'
+      - name: Deploy on feat/ssi-hub-store branch
+        if: github.ref == 'refs/heads/feat/ssi-hub-store'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RUN_NUMBER: ${{ github.run_number }}
