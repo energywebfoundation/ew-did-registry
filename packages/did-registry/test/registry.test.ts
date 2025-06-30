@@ -9,7 +9,6 @@ import {
   IProofData,
   IPublicClaim,
 } from '@ew-did-registry/claims/';
-import { DidStore } from '@ew-did-registry/did-ipfs-store';
 import {
   DIDAttribute,
   PubKeyType,
@@ -24,6 +23,7 @@ import {
   spawnIpfsCluster,
 } from '../../../tests';
 import { Context } from 'mocha';
+import { DidStore } from '../../did-s3-store/src/didStore';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -72,7 +72,7 @@ describe('[REGISTRY PACKAGE]', function () {
       verifierAddress,
     ]);
     cluster = await spawnIpfsCluster();
-    const store: DidStore = new DidStore('http://localhost:8080');
+    const store: DidStore = new DidStore('http://localhost:8080', {});
 
     userOperator = new Operator(user, { address: registry });
 
