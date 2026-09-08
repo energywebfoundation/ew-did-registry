@@ -53,10 +53,9 @@ export class CredentialRevocation {
       credentialHash
     );
     const { 0: revokers, 1: timeStamps } = result;
-    const revokedTimeStamp = [];
-    for (let i = 0; i <= timeStamps.length; i++) {
-      revokedTimeStamp[i] = (Number(timeStamps[i]?._hex), 10).toString();
-    }
+    const revokedTimeStamp = timeStamps.map((timeStamp) =>
+      timeStamp.toString()
+    );
     return [revokers, revokedTimeStamp];
   }
 }
