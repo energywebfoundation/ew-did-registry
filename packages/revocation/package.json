@@ -36,9 +36,9 @@
     "@ew-did-registry/did-ethr-resolver": "0.9.0",
     "@ew-did-registry/did-resolver-interface": "0.9.0",
     "@ew-did-registry/keys": "0.9.0",
-    "axios": "^0.27.2",
+    "axios": "^0.34.0",
     "didkit-wasm-node": "^0.1.6",
-    "ethers": "^5.7.2"
+    "ethers": "^5.8.0"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.8.0",
@@ -55,5 +55,11 @@
     "sinon-chai": "^3.7.0",
     "solhint": "3.6.2",
     "typechain": "5.2.0"
+  },
+  "overrides": {
+    "@ethersproject/providers": {
+      "ws": "^8.21.0"
+    },
+    "elliptic": "^6.6.1"
   }
 }

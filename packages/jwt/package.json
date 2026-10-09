@@ -31,7 +31,7 @@
     "base64url": "^3.0.1",
     "ec-key": "0.0.4",
     "ethereumjs-util": "^7.0.5",
-    "ethers": "^5.7.2",
+    "ethers": "^5.8.0",
     "jsonwebtoken": "^9.0.0",
     "promise.allsettled": "^1.0.6"
   },
@@ -44,5 +44,11 @@
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
+  },
+  "overrides": {
+    "@ethersproject/providers": {
+      "ws": "^8.21.0"
+    },
+    "elliptic": "^6.6.1"
   }
 }
