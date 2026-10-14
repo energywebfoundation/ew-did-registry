@@ -57,6 +57,37 @@
     "@ethersproject/providers": {
       "ws": "^8.21.0"
     },
-    "elliptic": "^6.6.1"
+    "elliptic": "^6.6.1",
+    "@truffle/dashboard-message-bus-client": {
+      "axios@>=1.2.4 <2.0.0": "^1.20.0"
+    },
+    "ethjs-unit": {
+      "bn.js@>=4.11.6 <5.0.0": "^4.12.3"
+    },
+    "number-to-bn": {
+      "bn.js@>=4.11.6 <5.0.0": "^4.12.3"
+    },
+    "mocha": {
+      "debug@>=3.2.6 <4.0.0": "^3.2.7",
+      "diff@>=5.0.0 <6.0.0": "^5.2.2",
+      "js-yaml@>=3.13.1 <4.0.0": "^3.15.2",
+      "js-yaml@>=4.1.0 <5.0.0": "^4.3.2",
+      "minimatch@>=3.0.4 <4.0.0": "^3.1.4",
+      "minimatch@>=5.0.1 <6.0.0": "^5.1.8",
+      "nanoid@>=3.3.3 <4.0.0": "^3.3.18"
+    },
+    "request": {
+      "form-data@>=2.3.3 <3.0.0": "^2.5.6",
+      "qs@>=6.5.5 <7.0.0": "^6.16.0"
+    },
+    "@truffle/codec": {
+      "semver@>=7.3.7 <8.0.0": "^7.5.2"
+    },
+    "@truffle/debugger": {
+      "semver@>=7.3.7 <8.0.0": "^7.5.2"
+    },
+    "@trufflesuite/uws-js-unofficial": {
+      "ws@>=8.2.3 <9.0.0": "^8.21.0"
+    }
   }
 }

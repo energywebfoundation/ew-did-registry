@@ -53,6 +53,9 @@
     "@ethersproject/providers": {
       "ws": "^8.21.0"
     },
-    "elliptic": "^6.6.1"
+    "elliptic": "^6.6.1",
+    "@ew-did-registry/did-ipfs-store": {
+      "axios@>=0.27.2 <1.0.0": "^0.34.0"
+    }
   }
 }
