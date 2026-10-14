@@ -131,7 +131,8 @@ export class ClaimsUser extends Claims implements IClaimsUser {
       const salt = crypto.randomBytes(32).toString('base64');
       const saltedValue = value + salt;
       const encryptedValue = encrypt(issuerPK, Buffer.from(saltedValue));
-      claim.claimData[key] = encryptedValue.toString('hex');
+      // eciesjs >= 0.4.18 types the result as Uint8Array (and returns one from 0.5.0)
+      claim.claimData[key] = Buffer.from(encryptedValue).toString('hex');
       saltedFields[key] = saltedValue;
     });
     const token = await this.jwt.sign(claim, {
