@@ -71,7 +71,8 @@ class Keys implements IKeys {
     const encryptedBuffer = Buffer.from(encrypted, 'hex');
     const privateKeyBuffer = Buffer.from(this.privateKey, 'hex');
     const data = await decrypt(privateKeyBuffer, encryptedBuffer);
-    return data.toString();
+    // eciesjs >= 0.4.18 types the result as Uint8Array (and returns one from 0.5.0)
+    return Buffer.from(data).toString();
   }
 
   /**
@@ -96,7 +97,8 @@ class Keys implements IKeys {
     const publicKeyToBuffer = Buffer.from(publicKeyTo || this.publicKey, 'hex');
     const dataBuffer = Buffer.from(data);
     const encrypted = await encrypt(publicKeyToBuffer, dataBuffer);
-    return encrypted.toString('hex');
+    // eciesjs >= 0.4.18 types the result as Uint8Array (and returns one from 0.5.0)
+    return Buffer.from(encrypted).toString('hex');
   }
 
   /**

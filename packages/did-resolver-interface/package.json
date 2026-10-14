@@ -41,6 +41,9 @@
     "@ethersproject/providers": {
       "ws": "^8.21.0"
     },
-    "elliptic": "^6.6.1"
+    "elliptic": "^6.6.1",
+    "@ew-did-registry/keys": {
+      "bn.js@>=5.2.1 <6.0.0": "^5.2.3"
+    }
   }
 }
