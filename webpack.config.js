@@ -32,6 +32,7 @@ const baseConfig = {
       '@ew-did-registry/did-resolver-interface',
     '@ew-did-registry/did-ipfs-store': '@ew-did-registry/did-ipfs-store',
     '@ew-did-registry/did-s3-store': '@ew-did-registry/did-s3-store',
+    '@ew-did-registry/did-ssi-hub-store': '@ew-did-registry/did-ssi-hub-store',
     '@ew-did-registry/did-store-interface':
       '@ew-did-registry/did-store-interface',
     '@ew-did-registry/did-document': '@ew-did-registry/did-document',
