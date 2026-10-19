@@ -88,6 +88,9 @@
     },
     "@trufflesuite/uws-js-unofficial": {
       "ws@>=8.2.3 <9.0.0": "^8.21.0"
+    },
+    "@ew-did-registry/keys": {
+      "bn.js@>=5.2.1 <6.0.0": "^5.2.3"
     }
   }
 }
