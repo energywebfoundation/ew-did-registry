@@ -52,7 +52,7 @@
   "dependencies": {
     "@sphereon/pex": "^2.0.1",
     "@sphereon/pex-models": "^2.0.2",
-    "@sphereon/ssi-types": "^0.17.0",
+    "@sphereon/ssi-types": "^0.40.0",
     "@types/lodash": "^4.14.195",
     "ethers": "^6.17.0",
     "joi": "^17.13.8",
