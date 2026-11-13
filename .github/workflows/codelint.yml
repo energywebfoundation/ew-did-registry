@@ -6,13 +6,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       - name: Install modules
         run: npm ci
       - name: Run ESLint
         run: npx eslint --output-file eslint_report.json --format json packages tests
       - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@1.2.0
+        uses: ataylorme/eslint-annotate-action@a1bf7cb320a18aa53cb848a267ce9b7417221526 # 1.2.0
         if: always()
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
