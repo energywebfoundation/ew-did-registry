@@ -1,0 +1,11 @@
+# Accepted SCA findings. Trivy loads this file by default during `trivy fs`,
+# so .github/workflows/security-scan.yml does not need a flag change.
+# Add `exp:YYYY-MM-DD` after an ID if the acceptance should lapse.
+
+# follow-redirects 1.16.1: information disclosure via cross-origin redirects.
+# Fixed in 1.16.2. Accepted for the current lockfiles.
+CVE-2026-116689
+
+# joi 17.13.8: denial of service via an inefficient regular expression in email validation.
+# Fixed in 17.13.9 and 18.3.1. Accepted for the current lockfiles.
+CVE-2026-118772
