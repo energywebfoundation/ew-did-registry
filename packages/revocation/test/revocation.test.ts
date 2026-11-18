@@ -60,4 +60,22 @@ describe('[CREDENTIAL REVOCATION]', function () {
     expect(result[0][0]).equal(revokerAddress);
     expect(result[0][1]).equal(revokerAddress);
   });
+
+  it('returns one real block timestamp per revocation', async () => {
+    expect(await revocationRegistry.revokeCredential(credential)).true;
+    expect(await revocationRegistry.revokeCredential(credential)).true;
+    const [revokers, timeStamps] = await revocationRegistry.getRevocations(
+      credential
+    );
+
+    // one timestamp per revoker, no trailing off-by-one element
+    expect(timeStamps.length).to.equal(revokers.length);
+    expect(timeStamps.length).to.equal(2);
+
+    timeStamps.forEach((ts) => {
+      expect(ts).to.match(/^[0-9]+$/);
+      // an actual unix timestamp, not the constant `10` the comma operator produced
+      expect(Number(ts)).to.be.greaterThan(1_600_000_000);
+    });
+  });
 });
