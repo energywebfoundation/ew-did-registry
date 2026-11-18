@@ -104,3 +104,39 @@ describe('[JWT PACKAGE]', () => {
     });
   });
 });
+
+describe('[JWT iat/exp timestamps]', () => {
+  const signer = new JWT(new Keys());
+  // `sign` mutates its payload argument, so each test uses a fresh object
+  const freshPayload = () => ({ claim: 'test' });
+
+  it('`iat` should be a NumericDate in seconds, not milliseconds (RFC 7519)', async () => {
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const token = await signer.sign(freshPayload());
+    const { iat } = signer.decode(token) as { iat: number };
+
+    expect(iat).to.be.a('number');
+    expect(Number.isInteger(iat)).to.equal(true);
+    // within a 5s window of "now" expressed in seconds; a milliseconds value
+    // would be ~1000x larger and fail this by many orders of magnitude
+    expect(Math.abs(iat - nowSeconds)).to.be.lessThan(5);
+  });
+
+  it('`iat` and `exp` should use the same unit', async () => {
+    const token = await signer.sign(freshPayload(), {
+      expirationTimestamp: Date.now() + 60_000,
+    });
+    const { iat, exp } = signer.decode(token) as { iat: number; exp: number };
+
+    expect(exp - iat).to.be.greaterThan(0);
+    // exp is ~60s after iat; if iat were in ms the gap would be hugely negative
+    expect(exp - iat).to.be.lessThan(120);
+  });
+
+  it('`iat` is omitted when noTimestamp is set', async () => {
+    const token = await signer.sign(freshPayload(), { noTimestamp: true });
+    const decoded = signer.decode(token) as { iat?: number };
+
+    expect(decoded.iat).to.equal(undefined);
+  });
+});

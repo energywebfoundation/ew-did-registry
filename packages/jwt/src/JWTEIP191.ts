@@ -66,7 +66,10 @@ export class JWT extends JwtBase implements IJWT {
       payload.sub = subject;
     }
     if (!noTimestamp) {
-      payload.iat = new Date().getTime();
+      // `iat` is a NumericDate: seconds since the epoch (RFC 7519, 4.1.6 / 2).
+      // `Date.now()` returns milliseconds, which is ~1000x too large and
+      // inconsistent with `exp` below (and with `jsonwebtoken`-issued tokens).
+      payload.iat = Math.floor(Date.now() / 1000);
     }
     if (expirationTimestamp) {
       if (expirationTimestamp < Date.now()) {
