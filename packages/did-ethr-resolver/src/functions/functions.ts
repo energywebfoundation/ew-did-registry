@@ -1,4 +1,4 @@
-import { Contract, ethers, providers, utils, BigNumber } from 'ethers';
+import { ethers, providers, utils, BigNumber } from 'ethers';
 
 import {
   IDIDDocument,
@@ -6,7 +6,6 @@ import {
   IPublicKey,
   IAttributePayload,
   IServiceEndpoint,
-  RegistrySettings,
   IAuthentication,
   DocumentSelector,
   AttributeChangedEvent,
@@ -14,7 +13,7 @@ import {
   DidEventNames,
 } from '@ew-did-registry/did-resolver-interface';
 import { attributeNamePattern } from '../constants';
-import { addressOf, matchDIDPattern } from '../utils';
+import { matchDIDPattern } from '../utils';
 
 /**
  * This function updates the document if the event type is 'DelegateChange'
@@ -181,7 +180,6 @@ const handleAttributeChange = (
  * passes the event parsing to the handler
  *
  * @param event
- * @param eventName
  * @param did
  * @param document
  * @param block
@@ -190,68 +188,80 @@ const updateDocument = (
   event: AttributeChangedEvent | DelegateChangedEvent,
   did: string,
   document: IDIDLogData,
-  block: number
+  block: BigNumber
 ): IDIDLogData => {
   const { validTo } = event.values;
 
   if (validTo) {
     switch (event.name) {
       case DidEventNames.AttributeChanged:
-        return handleAttributeChange(event, did, document, validTo, block);
+        return handleAttributeChange(
+          event,
+          did,
+          document,
+          validTo,
+          block.toNumber()
+        );
       case DidEventNames.DelegateChanged:
-        return handleDelegateChange(event, did, document, validTo, block);
+        return handleDelegateChange(
+          event,
+          did,
+          document,
+          validTo,
+          block.toNumber()
+        );
       default:
         return document;
     }
   }
+  document.topBlock = block;
+
   return document;
 };
 
 /**
- * Given a certain block from the chain, this function returns the events
- * associated with the did within the block
+ * Get contract events emitted in \[`bottomBlock`, `topBlock`\]
  *
- * @param block
- * @param did
- * @param document
+ * @param bottomBlock
+ * @param topBlock
  * @param provider
  * @param contractInterface
- * @param address
+ * @param contractddress
  */
-const getEventsFromBlock = (
-  block: ethers.BigNumber,
-  did: string,
-  document: IDIDLogData,
+export const getEventsFromBlocks = (
+  bottomBlock: BigNumber,
+  topBlock: BigNumber,
   provider: ethers.providers.Provider,
   contractInterface: utils.Interface,
-  address: string
-): Promise<unknown> =>
+  contractAddress: string
+): Promise<
+  { block: BigNumber; event: AttributeChangedEvent | DelegateChangedEvent }[]
+> =>
   new Promise((resolve, reject) => {
-    const identity = addressOf(did);
-
+    const events: {
+      block: BigNumber;
+      event: AttributeChangedEvent | DelegateChangedEvent;
+    }[] = [];
     provider
       .getLogs({
-        address,
-        fromBlock: block.toNumber(),
-        toBlock: block.toNumber(),
-        topics: [
-          null,
-          `0x000000000000000000000000${identity.slice(2).toLowerCase()}`,
-        ] as string[],
+        address: contractAddress,
+        fromBlock: bottomBlock.toNumber(),
+        toBlock: topBlock.toNumber(),
+        topics: undefined,
       })
-      .then((log) => {
-        const { name, args, signature, topic } = contractInterface.parseLog(
-          log[0]
-        );
-        const event = {
-          name,
-          values: args,
-          signature,
-          topic,
-        } as unknown as AttributeChangedEvent | DelegateChangedEvent;
-        updateDocument(event, did, document, block.toNumber());
-
-        resolve(event.values.previousChange);
+      .then((logs) => {
+        for (const log of logs) {
+          const { name, args, signature, topic } =
+            contractInterface.parseLog(log);
+          const event = {
+            name,
+            values: args,
+            signature,
+            topic,
+          } as unknown as AttributeChangedEvent | DelegateChangedEvent;
+          events.push({ block: BigNumber.from(log.blockNumber), event });
+        }
+        resolve(events);
       })
       .catch((error) => {
         reject(error);
@@ -279,63 +289,24 @@ export const query = (
 };
 
 /**
- * A high level function that manages the flow to read data from the blockchain
+ * Updates document log data from all events
  *
  * @param did
+ * @param events
  * @param document
- * @param registrySettings
- * @param contract
- * @param provider
  */
-export const fetchDataFromEvents = async (
+export const createLogsFromEvents = async (
   did: string,
-  document: IDIDLogData,
-  registrySettings: Required<RegistrySettings>,
-  contract: Contract,
-  provider: providers.Provider,
-  selector?: DocumentSelector
+  events: {
+    block: BigNumber;
+    event: AttributeChangedEvent | DelegateChangedEvent;
+  }[],
+  document: IDIDLogData
 ): Promise<void> => {
-  const identity = addressOf(did);
-  let nextBlock;
-  let topBlock;
-  try {
-    nextBlock = await contract.changed(identity);
-    topBlock = nextBlock;
-  } catch (error) {
-    throw new Error('Blockchain address did not interact with smart contract');
+  for (const event of events) {
+    updateDocument(event.event, did, document, event.block);
+    document.topBlock = event.block;
   }
-
-  if (nextBlock) {
-    document.owner = await contract.owners(identity);
-  } else if (identity) {
-    document.owner = identity;
-  }
-
-  const contractInterface = new ethers.utils.Interface(
-    JSON.stringify(registrySettings.abi)
-  );
-  const { address } = registrySettings;
-  while (
-    nextBlock.toNumber() !== 0 &&
-    nextBlock.toNumber() >= document.topBlock.toNumber()
-  ) {
-    // eslint-disable-next-line no-await-in-loop
-    nextBlock = await getEventsFromBlock(
-      nextBlock,
-      did,
-      document,
-      provider,
-      contractInterface,
-      address
-    );
-    if (selector) {
-      const attribute = query(document as unknown as IDIDDocument, selector);
-      if (attribute) {
-        return;
-      }
-    }
-  }
-  document.topBlock = topBlock;
 };
 
 /**

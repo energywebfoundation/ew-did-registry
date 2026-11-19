@@ -13,8 +13,13 @@ import {
 } from '@ew-did-registry/did-resolver-interface';
 import { Methods } from '@ew-did-registry/did';
 import { ethrReg } from '../constants';
-import { fetchDataFromEvents, wrapDidDocument, query } from '../functions';
-import { addressOf, compressedSecp256k1KeyLength, matchDIDPattern } from '..';
+import {
+  createLogsFromEvents,
+  wrapDidDocument,
+  query,
+  getEventsFromBlocks,
+} from '../functions';
+import { addressOf, compressedSecp256k1KeyLength } from '..';
 
 const { formatBytes32String } = utils;
 
@@ -75,15 +80,13 @@ class Resolver implements IResolver {
    * @param did - entity identifier, which is associated with DID Document
    * @returns {Promise<IDIDDocument>}
    */
-  private async _read(
-    did: string,
-    selector?: DocumentSelector
-  ): Promise<IDIDDocument> {
-    const match = matchDIDPattern(did);
-    const address = match[1];
+  private async _read(did: string): Promise<IDIDDocument> {
+    const identity = addressOf(did);
+    const { address: contractAddress, abi } = this.settings;
+    const contractInterface = new utils.Interface(JSON.stringify(abi));
 
     const _document = {
-      owner: address,
+      owner: identity,
       topBlock: BigNumber.from(0),
       authentication: {},
       publicKey: {},
@@ -91,14 +94,17 @@ class Resolver implements IResolver {
       attributes: new Map(),
     };
     try {
-      await fetchDataFromEvents(
-        did,
-        _document,
-        this.settings,
-        this._contract,
+      const events = await getEventsFromBlocks(
+        _document.topBlock,
+        await this._contract.changed(identity),
         this._provider,
-        selector
+        contractInterface,
+        contractAddress
       );
+      const relatedEvents = events.filter(
+        (event) => event.event.values.identity === identity
+      );
+      createLogsFromEvents(did, relatedEvents, _document);
       const document = wrapDidDocument(did, _document);
       return document;
     } catch (error) {
@@ -122,7 +128,7 @@ class Resolver implements IResolver {
     did: string,
     selector: DocumentSelector
   ): Promise<IPublicKey | IServiceEndpoint | IAuthentication | undefined> {
-    const doc = await this._read(did, selector);
+    const doc = await this._read(did);
     return query(doc, selector);
   }
 
@@ -151,7 +157,7 @@ class Resolver implements IResolver {
    *
    * @param { string } identityDID - did of identity of interest
    * @param { DelegateTypes } delegateType - type of delegate of interest
-   * @param { delegateDID } did - did of delegate of interest
+   * @param { delegateDID } delegateDID - did of delegate of interest
    * @returns Promise<boolean>
    */
   async validDelegate(
@@ -202,24 +208,77 @@ class Resolver implements IResolver {
     return undefined;
   }
 
-  async readFromBlock(did: string, topBlock: BigNumber): Promise<IDIDLogData> {
-    const address = addressOf(did);
-    const _document = {
-      owner: address,
-      topBlock,
+  /**
+   * Reads logs from `block` up to last change
+   */
+  async readFromBlock(did: string, block: BigNumber): Promise<IDIDLogData> {
+    const identity = addressOf(did);
+    const document = {
+      owner: identity,
+      topBlock: block,
       authentication: {},
       publicKey: {},
       service: {},
       attributes: new Map(),
     };
-    await fetchDataFromEvents(
-      did,
-      _document,
-      this.settings,
-      this._contract,
-      this._provider
+    const { address: contractAddress, abi } = this.settings;
+    const contractInterface = new utils.Interface(JSON.stringify(abi));
+    const events = await getEventsFromBlocks(
+      document.topBlock,
+      await this._contract.changed(identity),
+      this._provider,
+      contractInterface,
+      contractAddress
     );
-    return { ..._document };
+    const relatedEvents = events.filter(
+      (event) => event.event.values.identity === identity
+    );
+    createLogsFromEvents(did, relatedEvents, document);
+
+    return document;
+  }
+
+  /**
+   * Reads logs of all `dids` from `block` to their last changes
+   */
+  async readFromBlockBatch(
+    dids: string[],
+    block: BigNumber
+  ): Promise<{ did: string; document: IDIDLogData }[]> {
+    const documents = await Promise.all(
+      dids.map((did) => ({
+        did,
+        document: {
+          owner: addressOf(did),
+          topBlock: this._contract.changed(addressOf(did)),
+          authentication: {},
+          publicKey: {},
+          service: {},
+          attributes: new Map(),
+        },
+      }))
+    );
+    const topBlock = documents
+      .map((document) => document.document.topBlock)
+      .sort((a, b) => (a.gt(b) ? 1 : a.eq(b) ? 0 : -1))
+      .pop();
+    const { address: contractAddress, abi } = this.settings;
+    const contractInterface = new utils.Interface(JSON.stringify(abi));
+    const events = await getEventsFromBlocks(
+      block,
+      topBlock,
+      this._provider,
+      contractInterface,
+      contractAddress
+    );
+    for (const data of documents) {
+      const relatedEvents = events.filter(
+        (event) => event.event.values.identity === data.document.owner
+      );
+      createLogsFromEvents(data.did, relatedEvents, data.document);
+    }
+
+    return documents;
   }
 
   async lastBlock(did: string): Promise<BigNumber> {
